@@ -2042,11 +2042,11 @@ export default function Home() {
         </svg>
       </a>
 
-      {/* Install App Floating Button - Always visible on mobile */}
-      {isMobile && (
+      {/* Install App Floating Button - Visible on all devices */}
+      {(isMobile || true) && (
         <button
           onClick={handleInstallApp}
-          className="fixed bottom-24 left-6 z-50 w-12 h-12 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white shadow-lg shadow-cyan-500/25 flex items-center justify-center transition-all hover:scale-110"
+          className="fixed bottom-24 left-6 z-50 w-12 h-12 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white shadow-lg shadow-cyan-500/25 flex items-center justify-center transition-all hover:scale-110 md:bottom-28"
           aria-label={lang === 'bn' ? 'অ্যাপ ইনস্টল করুন' : 'Install App'}
           title={lang === 'bn' ? 'অ্যাপ ইনস্টল করুন' : 'Install App'}
         >
