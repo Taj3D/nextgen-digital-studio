@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import ZAI from 'z-ai-web-dev-sdk';
 
 // AI Sales Agent System Prompt
 const SALES_AGENT_PROMPT = `তুমি "বুদ্ধিদীপ্ত" - NextGen Digital Studio এর AI সেলস এজেন্ট। তুমি একজন বুদ্ধিমান, বন্ধুত্বপূর্ণ এবং পেশাদার সেলস এক্সিকিউটিভ।
@@ -87,12 +86,31 @@ interface ChatMessage {
   content: string;
 }
 
+// Fallback response
+const FALLBACK_RESPONSE = `⚠️ সংযোগে সাময়িক সমস্যা হয়েছে।
+
+আমাদের সার্ভিস সম্পর্কে জানতে সরাসরি যোগাযোগ করুন:
+
+📞 ফোন: +8801711731354
+📱 WhatsApp: wa.me/8801711731354
+📧 ইমেইল: concept11art@gmail.com
+
+🏢 **অফিস**: পুরাতন কসবা, ঘোষপাড়া, যশোর
+⏰ **সময়**: সকাল ১০টা - রাত ১০টা
+
+ইঞ্জিনিয়ার তাজ ভাই সরাসরি আপনার সাথে কথা বলবেন! 🎯`;
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { messages, newMessage } = body;
 
-    const zai = await ZAI.create();
+    console.log('📥 Chat Request:', { 
+      hasMessages: !!messages, 
+      messagesCount: messages?.length || 0,
+      hasNewMessage: !!newMessage,
+      newMessagePreview: newMessage?.substring(0, 50)
+    });
 
     // Build conversation with proper typing
     const conversationMessages: ChatMessage[] = [
@@ -121,34 +139,106 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Call AI
-    const completion = await zai.chat.completions.create({
-      messages: conversationMessages,
-      temperature: 0.8,
-      max_tokens: 800,
-    });
+    console.log('📤 Sending to AI:', { messageCount: conversationMessages.length });
 
-    const response = completion.choices[0]?.message?.content || 
-      'আমি এই মুহূর্তে উত্তর দিতে পারছি না। WhatsApp এ যোগাযোগ করুন: +8801711731354';
+    let response: string | null = null;
 
-    return NextResponse.json({ message: response });
-  } catch (error) {
-    console.error('Chat API error:', error);
+    // Try DeepSeek API first
+    const deepseekKey = process.env.DEEPSEEK_API_KEY;
+    if (deepseekKey) {
+      try {
+        console.log('🔄 Trying DeepSeek API...');
+        const res = await fetch('https://api.deepseek.com/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${deepseekKey}`
+          },
+          body: JSON.stringify({
+            model: 'deepseek-chat',
+            messages: conversationMessages,
+            temperature: 0.8,
+            max_tokens: 800
+          })
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          response = data.choices?.[0]?.message?.content;
+          console.log('✅ DeepSeek Response received');
+        } else {
+          console.log('❌ DeepSeek failed:', res.status);
+        }
+      } catch (e) {
+        console.log('❌ DeepSeek error:', e);
+      }
+    }
+
+    // Try OpenRouter API if DeepSeek failed
+    if (!response) {
+      const openrouterKey = process.env.OPENROUTER_API_KEY;
+      if (openrouterKey) {
+        try {
+          console.log('🔄 Trying OpenRouter API...');
+          const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${openrouterKey}`,
+              'HTTP-Referer': 'https://nextgen-digital-studio.vercel.app',
+              'X-Title': 'NextGen Digital Studio'
+            },
+            body: JSON.stringify({
+              model: 'deepseek/deepseek-chat',
+              messages: conversationMessages,
+              temperature: 0.8,
+              max_tokens: 800
+            })
+          });
+
+          if (res.ok) {
+            const data = await res.json();
+            response = data.choices?.[0]?.message?.content;
+            console.log('✅ OpenRouter Response received');
+          } else {
+            console.log('❌ OpenRouter failed:', res.status);
+          }
+        } catch (e) {
+          console.log('❌ OpenRouter error:', e);
+        }
+      }
+    }
+
+    // Try Z-AI SDK as last resort (works locally)
+    if (!response) {
+      try {
+        console.log('🔄 Trying Z-AI SDK...');
+        const ZAI = (await import('z-ai-web-dev-sdk')).default;
+        const zai = await ZAI.create();
+        const completion = await zai.chat.completions.create({
+          messages: conversationMessages,
+          temperature: 0.8,
+          max_tokens: 800,
+        });
+        response = completion.choices?.[0]?.message?.content;
+        console.log('✅ Z-AI SDK Response received');
+      } catch (e) {
+        console.log('❌ Z-AI SDK error:', e);
+      }
+    }
+
+    // Return response or fallback
+    const finalResponse = response || FALLBACK_RESPONSE;
+    console.log('📤 Final response length:', finalResponse.length);
+
+    return NextResponse.json({ message: finalResponse });
     
-    // Default fallback
+  } catch (error: unknown) {
+    console.error('❌ Chat API error:', error);
+    
     return NextResponse.json({ 
-      message: `⚠️ সংযোগে সাময়িক সমস্যা হয়েছে।
-
-আমাদের সার্ভিস সম্পর্কে জানতে সরাসরি যোগাযোগ করুন:
-
-📞 ফোন: +8801711731354
-📱 WhatsApp: wa.me/8801711731354
-📧 ইমেইল: concept11art@gmail.com
-
-🏢 **অফিস**: পুরাতন কসবা, ঘোষপাড়া, যশোর
-⏰ **সময়**: সকাল ১০টা - রাত ১০টা
-
-ইঞ্জিনিয়ার তাজ ভাই সরাসরি আপনার সাথে কথা বলবেন! 🎯`
+      message: FALLBACK_RESPONSE,
+      error: error instanceof Error ? error.message : 'Unknown error'
     });
   }
 }

@@ -989,8 +989,14 @@ export default function Home() {
       });
       
       const data = await response.json();
+      
+      if (data.error) {
+        console.error('Chat API returned error:', data.error);
+      }
+      
       setMessages(prev => [...prev, { role: 'assistant', content: data.message }]);
-    } catch {
+    } catch (err) {
+      console.error('Chat fetch error:', err);
       setMessages(prev => [...prev, { 
         role: 'assistant', 
         content: 'দুঃখিত, সংযোগে সমস্যা হয়েছে। অনুগ্রহ করে WhatsApp এ যোগাযোগ করুন: +8801711731354' 
