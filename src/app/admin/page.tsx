@@ -38,11 +38,33 @@ interface Stats {
 }
 
 export default function AdminDashboard() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const [stats, setStats] = useState<Stats | null>(null);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
+
+  const ADMIN_PASSWORD = '@taj921988';
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password === ADMIN_PASSWORD) {
+      setIsAuthenticated(true);
+      setError('');
+      localStorage.setItem('adminAuth', 'true');
+    } else {
+      setError('ভুল পাসওয়ার্ড! আবার চেষ্টা করুন।');
+    }
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    localStorage.removeItem('adminAuth');
+    setPassword('');
+  };
 
   const fetchData = async () => {
     try {
@@ -60,13 +82,6 @@ export default function AdminDashboard() {
     }
   };
 
-  useEffect(() => {
-    fetchData();
-    // Auto refresh every 30 seconds
-    const interval = setInterval(fetchData, 30000);
-    return () => clearInterval(interval);
-  }, []);
-
   const updateStatus = async (type: 'lead' | 'booking', id: string, status: string) => {
     try {
       await fetch('/api/admin', {
@@ -77,6 +92,19 @@ export default function AdminDashboard() {
       fetchData();
     } catch (error) {
       console.error('Failed to update:', error);
+    }
+  };
+
+  const deleteEntry = async (type: 'lead' | 'booking', id: string) => {
+    if (!confirm('আপনি কি নিশ্চিত এটি ডিলিট করতে চান?')) return;
+    
+    try {
+      await fetch(`/api/admin?type=${type}&id=${id}`, {
+        method: 'DELETE'
+      });
+      fetchData();
+    } catch (error) {
+      console.error('Failed to delete:', error);
     }
   };
 
@@ -104,6 +132,74 @@ export default function AdminDashboard() {
     }
   };
 
+  const getWhatsAppLink = (mobile: string, name: string) => {
+    const cleanMobile = mobile.replace(/[^0-9]/g, '');
+    const phone = cleanMobile.startsWith('880') ? cleanMobile : `880${cleanMobile}`;
+    return `https://wa.me/${phone}?text=হ্যালো ${name}, NextGen Digital Studio থেকে কল করছি।`;
+  };
+
+  // Check for existing session
+  useEffect(() => {
+    const auth = localStorage.getItem('adminAuth');
+    if (auth === 'true') {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
+  // Fetch data when authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchData();
+      const interval = setInterval(fetchData, 30000);
+      return () => clearInterval(interval);
+    }
+  }, [isAuthenticated]);
+
+  // Login Screen
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center p-4">
+        <Card className="w-full max-w-md bg-[#141414] border-[#333]">
+          <CardHeader className="text-center">
+            <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center justify-center">
+              <span className="text-3xl">🔐</span>
+            </div>
+            <CardTitle className="text-white text-2xl">Admin লগইন</CardTitle>
+            <p className="text-gray-400 text-sm">NextGen Digital Studio</p>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div>
+                <label className="text-gray-300 text-sm mb-2 block">পাসওয়ার্ড দিন</label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-4 py-3 rounded-lg bg-[#0a0a0a] border border-[#333] text-white focus:border-cyan-500 focus:outline-none"
+                  placeholder="পাসওয়ার্ড..."
+                  autoFocus
+                />
+              </div>
+              {error && (
+                <p className="text-red-400 text-sm text-center">{error}</p>
+              )}
+              <Button
+                type="submit"
+                className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white py-3"
+              >
+                🚀 লগইন করুন
+              </Button>
+            </form>
+            <p className="text-gray-500 text-xs text-center mt-6">
+              তাজ ভাই | যশোরের প্রথম ডিজিটাল ইঞ্জিনিয়ার
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // Loading Screen
   if (loading) {
     return (
       <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
@@ -115,6 +211,7 @@ export default function AdminDashboard() {
     );
   }
 
+  // Dashboard
   return (
     <div className="min-h-screen bg-[#0a0a0a] p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
@@ -126,9 +223,14 @@ export default function AdminDashboard() {
             </h1>
             <p className="text-gray-400">ক্লায়েন্ট ডাটা ম্যানেজমেন্ট ড্যাশবোর্ড</p>
           </div>
-          <Button onClick={fetchData} variant="outline" className="border-cyan-500 text-cyan-400">
-            🔄 রিফ্রেশ করুন
-          </Button>
+          <div className="flex gap-2">
+            <Button onClick={fetchData} variant="outline" className="border-cyan-500 text-cyan-400">
+              🔄 রিফ্রেশ করুন
+            </Button>
+            <Button onClick={handleLogout} variant="outline" className="border-red-500 text-red-400">
+              🚪 লগআউট
+            </Button>
+          </div>
         </div>
 
         {/* Stats */}
@@ -197,6 +299,22 @@ export default function AdminDashboard() {
                         <div className="text-sm text-gray-400">
                           📱 {lead.mobile} | 🎯 {lead.service}
                         </div>
+                        <div className="flex gap-2 mt-2">
+                          <a
+                            href={getWhatsAppLink(lead.mobile, lead.name)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs px-2 py-1 rounded bg-green-500/20 text-green-400 hover:bg-green-500/30"
+                          >
+                            💬 WhatsApp
+                          </a>
+                          <a
+                            href={`tel:${lead.mobile}`}
+                            className="text-xs px-2 py-1 rounded bg-cyan-500/20 text-cyan-400 hover:bg-cyan-500/30"
+                          >
+                            📞 কল
+                          </a>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -221,6 +339,22 @@ export default function AdminDashboard() {
                         </div>
                         <div className="text-sm text-gray-400">
                           📅 {booking.date} | ⏰ {booking.time} | 🎯 {booking.service}
+                        </div>
+                        <div className="flex gap-2 mt-2">
+                          <a
+                            href={getWhatsAppLink(booking.mobile, booking.name)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs px-2 py-1 rounded bg-green-500/20 text-green-400 hover:bg-green-500/30"
+                          >
+                            💬 WhatsApp
+                          </a>
+                          <a
+                            href={`tel:${booking.mobile}`}
+                            className="text-xs px-2 py-1 rounded bg-cyan-500/20 text-cyan-400 hover:bg-cyan-500/30"
+                          >
+                            📞 কল
+                          </a>
                         </div>
                       </div>
                     ))}
@@ -254,7 +388,18 @@ export default function AdminDashboard() {
                         <tr key={lead.id} className="border-b border-[#333] hover:bg-[#1a1a1a]">
                           <td className="p-3 text-white">{lead.name}</td>
                           <td className="p-3">
-                            <a href={`tel:${lead.mobile}`} className="text-cyan-400 hover:underline">{lead.mobile}</a>
+                            <div className="flex items-center gap-2">
+                              <a href={`tel:${lead.mobile}`} className="text-cyan-400 hover:underline">{lead.mobile}</a>
+                              <a
+                                href={getWhatsAppLink(lead.mobile, lead.name)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-green-400 hover:text-green-300"
+                                title="WhatsApp এ মেসেজ পাঠান"
+                              >
+                                💬
+                              </a>
+                            </div>
                           </td>
                           <td className="p-3 text-gray-300">{lead.service}</td>
                           <td className="p-3">
@@ -262,7 +407,7 @@ export default function AdminDashboard() {
                           </td>
                           <td className="p-3 text-gray-400 text-sm">{formatDate(lead.createdAt)}</td>
                           <td className="p-3">
-                            <div className="flex gap-2">
+                            <div className="flex gap-1 flex-wrap">
                               <Button size="sm" variant="outline" className="border-green-500 text-green-400 h-8 text-xs"
                                 onClick={() => updateStatus('lead', lead.id, 'contacted')}>
                                 কল করেছে
@@ -270,6 +415,10 @@ export default function AdminDashboard() {
                               <Button size="sm" variant="outline" className="border-blue-500 text-blue-400 h-8 text-xs"
                                 onClick={() => updateStatus('lead', lead.id, 'completed')}>
                                 সম্পন্ন
+                              </Button>
+                              <Button size="sm" variant="outline" className="border-red-500 text-red-400 h-8 text-xs"
+                                onClick={() => deleteEntry('lead', lead.id)}>
+                                🗑️
                               </Button>
                             </div>
                           </td>
@@ -306,7 +455,18 @@ export default function AdminDashboard() {
                         <tr key={booking.id} className="border-b border-[#333] hover:bg-[#1a1a1a]">
                           <td className="p-3 text-white">{booking.name}</td>
                           <td className="p-3">
-                            <a href={`tel:${booking.mobile}`} className="text-cyan-400 hover:underline">{booking.mobile}</a>
+                            <div className="flex items-center gap-2">
+                              <a href={`tel:${booking.mobile}`} className="text-cyan-400 hover:underline">{booking.mobile}</a>
+                              <a
+                                href={getWhatsAppLink(booking.mobile, booking.name)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-green-400 hover:text-green-300"
+                                title="WhatsApp এ মেসেজ পাঠান"
+                              >
+                                💬
+                              </a>
+                            </div>
                           </td>
                           <td className="p-3 text-gray-300">{booking.service}</td>
                           <td className="p-3 text-gray-300">
@@ -317,7 +477,7 @@ export default function AdminDashboard() {
                             <Badge className={getStatusColor(booking.status)}>{booking.status}</Badge>
                           </td>
                           <td className="p-3">
-                            <div className="flex gap-2">
+                            <div className="flex gap-1 flex-wrap">
                               <Button size="sm" variant="outline" className="border-blue-500 text-blue-400 h-8 text-xs"
                                 onClick={() => updateStatus('booking', booking.id, 'confirmed')}>
                                 কনফার্ম
@@ -325,6 +485,10 @@ export default function AdminDashboard() {
                               <Button size="sm" variant="outline" className="border-green-500 text-green-400 h-8 text-xs"
                                 onClick={() => updateStatus('booking', booking.id, 'completed')}>
                                 সম্পন্ন
+                              </Button>
+                              <Button size="sm" variant="outline" className="border-red-500 text-red-400 h-8 text-xs"
+                                onClick={() => deleteEntry('booking', booking.id)}>
+                                🗑️
                               </Button>
                             </div>
                           </td>
