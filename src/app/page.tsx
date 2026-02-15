@@ -2042,19 +2042,17 @@ export default function Home() {
         </svg>
       </a>
 
-      {/* Install App Floating Button - Visible on all devices */}
-      {(isMobile || true) && (
-        <button
-          onClick={handleInstallApp}
-          className="fixed bottom-24 left-6 z-50 w-12 h-12 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white shadow-lg shadow-cyan-500/25 flex items-center justify-center transition-all hover:scale-110 md:bottom-28"
-          aria-label={lang === 'bn' ? 'অ্যাপ ইনস্টল করুন' : 'Install App'}
-          title={lang === 'bn' ? 'অ্যাপ ইনস্টল করুন' : 'Install App'}
-        >
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-          </svg>
-        </button>
-      )}
+      {/* Install App Floating Button - Always visible */}
+      <button
+        onClick={handleInstallApp}
+        className="fixed bottom-24 left-6 z-50 w-14 h-14 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white shadow-lg shadow-cyan-500/25 flex items-center justify-center transition-all hover:scale-110 animate-pulse"
+        aria-label={lang === 'bn' ? 'অ্যাপ ইনস্টল করুন' : 'Install App'}
+        title={lang === 'bn' ? 'অ্যাপ ইনস্টল করুন' : 'Install App'}
+      >
+        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        </svg>
+      </button>
 
       {/* Install Instructions Modal for iOS/Safari */}
       <Dialog open={showInstallModal} onOpenChange={setShowInstallModal}>

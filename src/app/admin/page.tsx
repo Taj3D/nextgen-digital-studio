@@ -54,7 +54,7 @@ export default function AdminDashboard() {
     if (password === ADMIN_PASSWORD) {
       setIsAuthenticated(true);
       setError('');
-      localStorage.setItem('adminAuth_v2', 'true');
+      localStorage.setItem('adminAuth_v3', 'true');
     } else {
       setError('ভুল পাসওয়ার্ড! আবার চেষ্টা করুন।');
     }
@@ -62,7 +62,7 @@ export default function AdminDashboard() {
 
   const handleLogout = () => {
     setIsAuthenticated(false);
-    localStorage.removeItem('adminAuth_v2');
+    localStorage.removeItem('adminAuth_v3');
     setPassword('');
   };
 
@@ -140,7 +140,7 @@ export default function AdminDashboard() {
 
   // Check for existing session
   useEffect(() => {
-    const auth = localStorage.getItem('adminAuth_v2');
+    const auth = localStorage.getItem('adminAuth_v3');
     if (auth === 'true') {
       setIsAuthenticated(true);
     }
