@@ -143,38 +143,61 @@ export async function POST(request: NextRequest) {
 
     let response: string | null = null;
 
-    // Try DeepSeek API first
-    const deepseekKey = process.env.DEEPSEEK_API_KEY;
-    if (deepseekKey) {
-      try {
-        console.log('🔄 Trying DeepSeek API...');
-        const res = await fetch('https://api.deepseek.com/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${deepseekKey}`
-          },
-          body: JSON.stringify({
-            model: 'deepseek-chat',
-            messages: conversationMessages,
-            temperature: 0.8,
-            max_tokens: 800
-          })
-        });
+    // Try Z-AI SDK first (works locally and on Vercel with internal config)
+    try {
+      console.log('🔄 Trying Z-AI SDK...');
+      const ZAI = (await import('z-ai-web-dev-sdk')).default;
+      const zai = await ZAI.create();
+      const completion = await zai.chat.completions.create({
+        messages: conversationMessages,
+        temperature: 0.8,
+        max_tokens: 800,
+      });
+      response = completion.choices?.[0]?.message?.content;
+      if (response) {
+        console.log('✅ Z-AI SDK Response received');
+      }
+    } catch (e) {
+      console.log('❌ Z-AI SDK error:', e);
+    }
 
-        if (res.ok) {
-          const data = await res.json();
-          response = data.choices?.[0]?.message?.content;
-          console.log('✅ DeepSeek Response received');
-        } else {
-          console.log('❌ DeepSeek failed:', res.status);
+    // Try DeepSeek API if Z-AI failed
+    if (!response) {
+      const deepseekKey = process.env.DEEPSEEK_API_KEY;
+      if (deepseekKey) {
+        try {
+          console.log('🔄 Trying DeepSeek API...');
+          const res = await fetch('https://api.deepseek.com/chat/completions', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${deepseekKey}`
+            },
+            body: JSON.stringify({
+              model: 'deepseek-chat',
+              messages: conversationMessages,
+              temperature: 0.8,
+              max_tokens: 800
+            })
+          });
+
+          if (res.ok) {
+            const data = await res.json();
+            response = data.choices?.[0]?.message?.content;
+            if (response) {
+              console.log('✅ DeepSeek Response received');
+            }
+          } else {
+            const errorData = await res.json().catch(() => ({}));
+            console.log('❌ DeepSeek failed:', res.status, errorData);
+          }
+        } catch (e) {
+          console.log('❌ DeepSeek error:', e);
         }
-      } catch (e) {
-        console.log('❌ DeepSeek error:', e);
       }
     }
 
-    // Try OpenRouter API if DeepSeek failed
+    // Try OpenRouter API if previous methods failed
     if (!response) {
       const openrouterKey = process.env.OPENROUTER_API_KEY;
       if (openrouterKey) {
@@ -189,7 +212,7 @@ export async function POST(request: NextRequest) {
               'X-Title': 'NextGen Digital Studio'
             },
             body: JSON.stringify({
-              model: 'deepseek/deepseek-chat',
+              model: 'google/gemini-2.0-flash-exp:free',
               messages: conversationMessages,
               temperature: 0.8,
               max_tokens: 800
@@ -199,31 +222,16 @@ export async function POST(request: NextRequest) {
           if (res.ok) {
             const data = await res.json();
             response = data.choices?.[0]?.message?.content;
-            console.log('✅ OpenRouter Response received');
+            if (response) {
+              console.log('✅ OpenRouter Response received');
+            }
           } else {
-            console.log('❌ OpenRouter failed:', res.status);
+            const errorData = await res.json().catch(() => ({}));
+            console.log('❌ OpenRouter failed:', res.status, errorData);
           }
         } catch (e) {
           console.log('❌ OpenRouter error:', e);
         }
-      }
-    }
-
-    // Try Z-AI SDK as last resort (works locally)
-    if (!response) {
-      try {
-        console.log('🔄 Trying Z-AI SDK...');
-        const ZAI = (await import('z-ai-web-dev-sdk')).default;
-        const zai = await ZAI.create();
-        const completion = await zai.chat.completions.create({
-          messages: conversationMessages,
-          temperature: 0.8,
-          max_tokens: 800,
-        });
-        response = completion.choices?.[0]?.message?.content;
-        console.log('✅ Z-AI SDK Response received');
-      } catch (e) {
-        console.log('❌ Z-AI SDK error:', e);
       }
     }
 
