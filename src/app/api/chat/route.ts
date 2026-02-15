@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import ZAI from 'z-ai-web-dev-sdk';
 
 // AI Sales Agent System Prompt
 const SALES_AGENT_PROMPT = `তুমি "বুদ্ধিদীপ্ত" - NextGen Digital Studio এর AI সেলস এজেন্ট। তুমি একজন বুদ্ধিমান, বন্ধুত্বপূর্ণ এবং পেশাদার সেলস এক্সিকিউটিভ।
@@ -100,10 +101,9 @@ const FALLBACK_RESPONSE = `⚠️ সংযোগে সাময়িক স�
 
 ইঞ্জিনিয়ার তাজ ভাই সরাসরি আপনার সাথে কথা বলবেন! 🎯`;
 
-// OpenRouter API Keys (rotate between them for higher limits)
-const OPENROUTER_KEYS = [
-  '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'
-];
+// Z.ai API Configuration
+const ZAI_BASE_URL = process.env.ZAI_BASE_URL || 'https://api.z-ai.space/v1';
+const ZAI_API_KEY = process.env.ZAI_API_KEY || '';
 
 export async function POST(request: NextRequest) {
   try {
@@ -148,60 +148,44 @@ export async function POST(request: NextRequest) {
 
     let response: string | null = null;
 
-    // Try Z-AI SDK first (works locally)
-    try {
-      console.log('🔄 Trying Z-AI SDK...');
-      const ZAI = (await import('z-ai-web-dev-sdk')).default;
-      const zai = await ZAI.create();
-      const completion = await zai.chat.completions.create({
-        messages: conversationMessages,
-        temperature: 0.8,
-        max_tokens: 800,
-      });
-      response = completion.choices?.[0]?.message?.content;
-      if (response) {
-        console.log('✅ Z-AI SDK Response received');
+    // Method 1: Try Z.ai with environment variables (for Vercel)
+    if (ZAI_API_KEY) {
+      try {
+        console.log('🔄 Trying Z.ai with env config...');
+        const zai = await ZAI.create({
+          baseUrl: ZAI_BASE_URL,
+          apiKey: ZAI_API_KEY
+        });
+        const completion = await zai.chat.completions.create({
+          messages: conversationMessages,
+          temperature: 0.8,
+          max_tokens: 800,
+        });
+        response = completion.choices?.[0]?.message?.content;
+        if (response) {
+          console.log('✅ Z.ai Response received (env config)');
+        }
+      } catch (e) {
+        console.log('❌ Z.ai env config error:', e);
       }
-    } catch (e) {
-      console.log('❌ Z-AI SDK error:', e);
     }
 
-    // Try OpenRouter API if Z-AI failed
+    // Method 2: Try Z-AI SDK with config file (for local development)
     if (!response) {
-      // Try each OpenRouter key
-      for (const key of OPENROUTER_KEYS) {
-        try {
-          console.log('🔄 Trying OpenRouter API...');
-          const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${key}`,
-              'HTTP-Referer': 'https://nextgen-digital-studio.vercel.app',
-              'X-Title': 'NextGen Digital Studio'
-            },
-            body: JSON.stringify({
-              model: 'deepseek/deepseek-chat',
-              messages: conversationMessages,
-              temperature: 0.8,
-              max_tokens: 800
-            })
-          });
-
-          if (res.ok) {
-            const data = await res.json();
-            response = data.choices?.[0]?.message?.content;
-            if (response) {
-              console.log('✅ OpenRouter Response received');
-              break;
-            }
-          } else {
-            const errorData = await res.json().catch(() => ({}));
-            console.log('❌ OpenRouter failed:', res.status, errorData);
-          }
-        } catch (e) {
-          console.log('❌ OpenRouter error:', e);
+      try {
+        console.log('🔄 Trying Z-AI SDK with config file...');
+        const zai = await ZAI.create();
+        const completion = await zai.chat.completions.create({
+          messages: conversationMessages,
+          temperature: 0.8,
+          max_tokens: 800,
+        });
+        response = completion.choices?.[0]?.message?.content;
+        if (response) {
+          console.log('✅ Z-AI SDK Response received (config file)');
         }
+      } catch (e) {
+        console.log('❌ Z-AI SDK config file error:', e);
       }
     }
 
