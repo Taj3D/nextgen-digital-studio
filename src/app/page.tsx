@@ -823,11 +823,28 @@ export default function Home() {
   // PWA Install state
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const [showInstallModal, setShowInstallModal] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [scrolled, setScrolled] = useState(false);
 
   const typingText = useTypingEffect(t.hero.typingTexts, 80, 1500);
+
+  // Detect mobile device and iOS
+  useEffect(() => {
+    const checkMobile = () => {
+      const userAgent = navigator.userAgent || navigator.vendor;
+      const isMobileDevice = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent.toLowerCase());
+      const isIOSDevice = /ipad|iphone|ipod/i.test(userAgent.toLowerCase());
+      setIsMobile(isMobileDevice);
+      setIsIOS(isIOSDevice);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // PWA Service Worker Registration & Install Prompt
   useEffect(() => {
@@ -860,7 +877,7 @@ export default function Home() {
       });
     }
 
-    // PWA Install Prompt
+    // PWA Install Prompt - only for Chrome/Android
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e);
@@ -876,13 +893,16 @@ export default function Home() {
 
   // PWA Install Handler
   const handleInstallApp = async () => {
-    if (!deferredPrompt) return;
-    
-    deferredPrompt.prompt();
-    await deferredPrompt.userChoice;
-    
-    setDeferredPrompt(null);
-    setShowInstallPrompt(false);
+    // If browser supports native install prompt (Chrome/Android)
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      await deferredPrompt.userChoice;
+      setDeferredPrompt(null);
+      setShowInstallPrompt(false);
+    } else {
+      // For iOS/Safari - show instructions modal
+      setShowInstallModal(true);
+    }
   };
 
   // Preloader effect
@@ -2020,17 +2040,109 @@ export default function Home() {
       </a>
 
       {/* Install App Floating Button - Always visible on mobile */}
-      {showInstallPrompt && (
+      {isMobile && (
         <button
           onClick={handleInstallApp}
-          className="fixed bottom-24 left-6 z-50 w-14 h-14 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white shadow-lg shadow-cyan-500/25 flex items-center justify-center transition-all hover:scale-110"
+          className="fixed bottom-24 left-6 z-50 w-12 h-12 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white shadow-lg shadow-cyan-500/25 flex items-center justify-center transition-all hover:scale-110"
           aria-label={lang === 'bn' ? 'অ্যাপ ইনস্টল করুন' : 'Install App'}
+          title={lang === 'bn' ? 'অ্যাপ ইনস্টল করুন' : 'Install App'}
         >
-          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
           </svg>
         </button>
       )}
+
+      {/* Install Instructions Modal for iOS/Safari */}
+      <Dialog open={showInstallModal} onOpenChange={setShowInstallModal}>
+        <DialogContent className="max-w-sm bg-[#0a0a0a] border-[#333]">
+          <DialogHeader>
+            <DialogTitle className="text-white text-center text-lg">
+              {lang === 'bn' ? '📱 অ্যাপ ইনস্টল করুন' : '📱 Install App'}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="py-4 space-y-4">
+            {isIOS ? (
+              <>
+                <p className="text-gray-300 text-sm text-center">
+                  {lang === 'bn' 
+                    ? 'আপনার iPhone/iPad এ NextGen অ্যাপ ইনস্টল করতে নিচের ধাপগুলো অনুসরণ করুন:' 
+                    : 'Follow these steps to install NextGen app on your iPhone/iPad:'}
+                </p>
+                <div className="space-y-3 text-sm">
+                  <div className="flex items-start gap-3 p-3 rounded-lg bg-[#141414] border border-[#333]">
+                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-cyan-500 text-white text-xs flex items-center justify-center font-bold">১</span>
+                    <div>
+                      <p className="text-white font-medium">{lang === 'bn' ? 'শেয়ার বাটনে ট্যাপ করুন' : 'Tap Share Button'}</p>
+                      <p className="text-gray-400 text-xs mt-1">
+                        {lang === 'bn' ? 'নিচের মেনু থেকে ' : 'From the bottom menu, tap '}
+                        <span className="inline-flex items-center text-cyan-400">
+                          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z"/>
+                          </svg>
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3 p-3 rounded-lg bg-[#141414] border border-[#333]">
+                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-cyan-500 text-white text-xs flex items-center justify-center font-bold">২</span>
+                    <div>
+                      <p className="text-white font-medium">{lang === 'bn' ? '"হোম স্ক্রিনে যোগ করুন" নির্বাচন করুন' : 'Select "Add to Home Screen"'}</p>
+                      <p className="text-gray-400 text-xs mt-1">
+                        {lang === 'bn' ? 'স্ক্রল করে ' : 'Scroll and find '}
+                        <span className="text-cyan-400">+ {lang === 'bn' ? 'হোম স্ক্রিনে যোগ করুন' : 'Add to Home Screen'}</span>
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3 p-3 rounded-lg bg-[#141414] border border-[#333]">
+                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-cyan-500 text-white text-xs flex items-center justify-center font-bold">৩</span>
+                    <div>
+                      <p className="text-white font-medium">{lang === 'bn' ? '"যোগ" এ ট্যাপ করুন' : 'Tap "Add"'}</p>
+                      <p className="text-gray-400 text-xs mt-1">{lang === 'bn' ? 'অ্যাপ আপনার হোম স্ক্রিনে যোগ হবে!' : 'App will be added to your home screen!'}</p>
+                    </div>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <p className="text-gray-300 text-sm text-center">
+                  {lang === 'bn' 
+                    ? 'আপনার ফোনে NextGen অ্যাপ ইনস্টল করতে নিচের ধাপগুলো অনুসরণ করুন:' 
+                    : 'Follow these steps to install NextGen app on your phone:'}
+                </p>
+                <div className="space-y-3 text-sm">
+                  <div className="flex items-start gap-3 p-3 rounded-lg bg-[#141414] border border-[#333]">
+                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-cyan-500 text-white text-xs flex items-center justify-center font-bold">১</span>
+                    <div>
+                      <p className="text-white font-medium">{lang === 'bn' ? 'ব্রাউজার মেনু খুলুন' : 'Open Browser Menu'}</p>
+                      <p className="text-gray-400 text-xs mt-1">{lang === 'bn' ? 'উপরে ডান কোণায় ⋮ বা ☰ এ ট্যাপ করুন' : 'Tap on ⋮ or ☰ at top right corner'}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3 p-3 rounded-lg bg-[#141414] border border-[#333]">
+                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-cyan-500 text-white text-xs flex items-center justify-center font-bold">২</span>
+                    <div>
+                      <p className="text-white font-medium">{lang === 'bn' ? '"অ্যাপ ইনস্টল করুন" বা "Add to Home Screen" নির্বাচন করুন' : 'Select "Install App" or "Add to Home Screen"'}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3 p-3 rounded-lg bg-[#141414] border border-[#333]">
+                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-cyan-500 text-white text-xs flex items-center justify-center font-bold">৩</span>
+                    <div>
+                      <p className="text-white font-medium">{lang === 'bn' ? '"ইনস্টল" এ ট্যাপ করুন' : 'Tap "Install"'}</p>
+                      <p className="text-gray-400 text-xs mt-1">{lang === 'bn' ? 'অ্যাপ আপনার হোম স্ক্রিনে যোগ হবে!' : 'App will be added to your home screen!'}</p>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+          <Button 
+            onClick={() => setShowInstallModal(false)} 
+            className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white"
+          >
+            {lang === 'bn' ? 'বুঝেছি' : 'Got it'}
+          </Button>
+        </DialogContent>
+      </Dialog>
 
       {/* Portfolio Modal */}
       {portfolioItem && (
