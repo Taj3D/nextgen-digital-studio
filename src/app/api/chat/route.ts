@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import ZAI from 'z-ai-web-dev-sdk';
 
 // AI Sales Agent System Prompt
 const SALES_AGENT_PROMPT = `তুমি "বুদ্ধিদীপ্ত" - NextGen Digital Studio এর AI সেলস এজেন্ট। তুমি একজন বুদ্ধিমান, বন্ধুত্বপূর্ণ এবং পেশাদার সেলস এক্সিকিউটিভ।
@@ -101,9 +100,10 @@ const FALLBACK_RESPONSE = `⚠️ সংযোগে সাময়িক স�
 
 ইঞ্জিনিয়ার তাজ ভাই সরাসরি আপনার সাথে কথা বলবেন! 🎯`;
 
-// Z.ai API Configuration
-const ZAI_BASE_URL = process.env.ZAI_BASE_URL || 'https://api.z-ai.space/v1';
-const ZAI_API_KEY = process.env.ZAI_API_KEY || '';
+// GitHub Models API Configuration
+const GITHUB_MODELS_URL = 'https://models.inference.ai.azure.com/chat/completions';
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN || '';
+const GITHUB_MODEL = process.env.GITHUB_MODEL || 'DeepSeek-V3-0324';
 
 export async function POST(request: NextRequest) {
   try {
@@ -148,32 +148,44 @@ export async function POST(request: NextRequest) {
 
     let response: string | null = null;
 
-    // Method 1: Try Z.ai with environment variables (for Vercel)
-    if (ZAI_API_KEY) {
+    // Method 1: Try GitHub Models API (Free with GitHub PAT)
+    if (GITHUB_TOKEN) {
       try {
-        console.log('🔄 Trying Z.ai with env config...');
-        const zai = await ZAI.create({
-          baseUrl: ZAI_BASE_URL,
-          apiKey: ZAI_API_KEY
+        console.log('🔄 Trying GitHub Models API...');
+        const res = await fetch(GITHUB_MODELS_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${GITHUB_TOKEN}`
+          },
+          body: JSON.stringify({
+            model: GITHUB_MODEL,
+            messages: conversationMessages,
+            temperature: 0.8,
+            max_tokens: 800,
+          })
         });
-        const completion = await zai.chat.completions.create({
-          messages: conversationMessages,
-          temperature: 0.8,
-          max_tokens: 800,
-        });
-        response = completion.choices?.[0]?.message?.content;
-        if (response) {
-          console.log('✅ Z.ai Response received (env config)');
+
+        if (res.ok) {
+          const data = await res.json();
+          response = data.choices?.[0]?.message?.content;
+          if (response) {
+            console.log('✅ GitHub Models Response received');
+          }
+        } else {
+          const errorText = await res.text();
+          console.log('❌ GitHub Models error:', res.status, errorText);
         }
       } catch (e) {
-        console.log('❌ Z.ai env config error:', e);
+        console.log('❌ GitHub Models error:', e);
       }
     }
 
-    // Method 2: Try Z-AI SDK with config file (for local development)
+    // Method 2: Try Internal Z-AI SDK (for local development)
     if (!response) {
       try {
-        console.log('🔄 Trying Z-AI SDK with config file...');
+        console.log('🔄 Trying Z-AI SDK...');
+        const ZAI = (await import('z-ai-web-dev-sdk')).default;
         const zai = await ZAI.create();
         const completion = await zai.chat.completions.create({
           messages: conversationMessages,
@@ -182,10 +194,10 @@ export async function POST(request: NextRequest) {
         });
         response = completion.choices?.[0]?.message?.content;
         if (response) {
-          console.log('✅ Z-AI SDK Response received (config file)');
+          console.log('✅ Z-AI SDK Response received');
         }
       } catch (e) {
-        console.log('❌ Z-AI SDK config file error:', e);
+        console.log('❌ Z-AI SDK error:', e);
       }
     }
 
@@ -204,3 +216,4 @@ export async function POST(request: NextRequest) {
     });
   }
 }
+
