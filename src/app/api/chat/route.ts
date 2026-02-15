@@ -100,6 +100,11 @@ const FALLBACK_RESPONSE = `⚠️ সংযোগে সাময়িক স�
 
 ইঞ্জিনিয়ার তাজ ভাই সরাসরি আপনার সাথে কথা বলবেন! 🎯`;
 
+// OpenRouter API Keys (rotate between them for higher limits)
+const OPENROUTER_KEYS = [
+  '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'
+];
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -143,7 +148,7 @@ export async function POST(request: NextRequest) {
 
     let response: string | null = null;
 
-    // Try Z-AI SDK first (works locally and on Vercel with internal config)
+    // Try Z-AI SDK first (works locally)
     try {
       console.log('🔄 Trying Z-AI SDK...');
       const ZAI = (await import('z-ai-web-dev-sdk')).default;
@@ -161,53 +166,17 @@ export async function POST(request: NextRequest) {
       console.log('❌ Z-AI SDK error:', e);
     }
 
-    // Try DeepSeek API if Z-AI failed
+    // Try OpenRouter API if Z-AI failed
     if (!response) {
-      const deepseekKey = process.env.DEEPSEEK_API_KEY;
-      if (deepseekKey) {
-        try {
-          console.log('🔄 Trying DeepSeek API...');
-          const res = await fetch('https://api.deepseek.com/chat/completions', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${deepseekKey}`
-            },
-            body: JSON.stringify({
-              model: 'deepseek-chat',
-              messages: conversationMessages,
-              temperature: 0.8,
-              max_tokens: 800
-            })
-          });
-
-          if (res.ok) {
-            const data = await res.json();
-            response = data.choices?.[0]?.message?.content;
-            if (response) {
-              console.log('✅ DeepSeek Response received');
-            }
-          } else {
-            const errorData = await res.json().catch(() => ({}));
-            console.log('❌ DeepSeek failed:', res.status, errorData);
-          }
-        } catch (e) {
-          console.log('❌ DeepSeek error:', e);
-        }
-      }
-    }
-
-    // Try OpenRouter API if previous methods failed
-    if (!response) {
-      const openrouterKey = process.env.OPENROUTER_API_KEY;
-      if (openrouterKey) {
+      // Try each OpenRouter key
+      for (const key of OPENROUTER_KEYS) {
         try {
           console.log('🔄 Trying OpenRouter API...');
           const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `Bearer ${openrouterKey}`,
+              'Authorization': `Bearer ${key}`,
               'HTTP-Referer': 'https://nextgen-digital-studio.vercel.app',
               'X-Title': 'NextGen Digital Studio'
             },
@@ -224,6 +193,7 @@ export async function POST(request: NextRequest) {
             response = data.choices?.[0]?.message?.content;
             if (response) {
               console.log('✅ OpenRouter Response received');
+              break;
             }
           } else {
             const errorData = await res.json().catch(() => ({}));
