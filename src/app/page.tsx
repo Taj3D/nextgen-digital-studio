@@ -982,7 +982,10 @@ export default function Home() {
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: [...messages, userMessage].map(m => ({ role: m.role, content: m.content })) })
+        body: JSON.stringify({ 
+          messages: messages.map(m => ({ role: m.role, content: m.content })),
+          newMessage: text
+        })
       });
       
       const data = await response.json();
