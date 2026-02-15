@@ -212,7 +212,7 @@ export async function POST(request: NextRequest) {
               'X-Title': 'NextGen Digital Studio'
             },
             body: JSON.stringify({
-              model: 'google/gemini-2.0-flash-exp:free',
+              model: 'deepseek/deepseek-chat',
               messages: conversationMessages,
               temperature: 0.8,
               max_tokens: 800
