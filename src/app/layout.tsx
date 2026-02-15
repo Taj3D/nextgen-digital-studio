@@ -21,6 +21,13 @@ export const metadata: Metadata = {
   creator: "ইঞ্জিনিয়ার মোঃ নাজমুল ইসলাম তাজ",
   publisher: "NextGen Digital Studio",
   robots: { index: true, follow: true },
+  manifest: "/manifest.json",
+  themeColor: "#06b6d4",
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+  },
   icons: {
     icon: "/logo.png",
     apple: "/logo.png",
