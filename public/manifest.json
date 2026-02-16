@@ -1,0 +1,45 @@
+{
+  "name": "NextGen Digital Studio - তাজ ভাই",
+  "short_name": "NextGen Digital",
+  "description": "যশোরের প্রথম ডিজিটাল ইঞ্জিনিয়ার - AI, ওয়েবসাইট, মোবাইল অ্যাপ, ৩ডি সিএনসি ডিজাইন সেবা",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#06b6d4",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "bn",
+  "categories": ["business", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "AI চ্যাট",
+      "short_name": "চ্যাট",
+      "description": "বুদ্ধিদীপ্ত AI এর সাথে কথা বলুন",
+      "url": "/?chat=true",
+      "icons": [{ "src": "/logo.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "যোগাযোগ",
+      "short_name": "যোগাযোগ",
+      "description": "আমাদের সাথে যোগাযোগ করুন",
+      "url": "/?contact=true",
+      "icons": [{ "src": "/logo.png", "sizes": "96x96" }]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
+}
