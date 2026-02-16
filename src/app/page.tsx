@@ -689,7 +689,30 @@ const blogPostsData = {
       category: 'টেকনোলজি',
       date: '২০২৫ ফেব্রুয়ারি ১৫',
       readTime: '৫ মিনিট',
-      image: '/portfolio/cnc-design-1.png'
+      image: '/portfolio/cnc-design-1.png',
+      content: `৩ডি সিএনসি (CNC - Computer Numerical Control) ডিজাইন প্রযুক্তি বর্তমানে খোদাই শিল্পে বিপ্লব ঘটিয়েছে। এই প্রযুক্তির মাধ্যমে কম্পিউটার নিয়ন্ত্রিত মেশিন ব্যবহার করে অত্যন্ত জটিল ও সুন্দর ডিজাইন তৈরি করা সম্ভব হচ্ছে।
+
+## সিএনসি প্রযুক্তির সুবিধা
+
+**১. নিখুঁত নির্ভুলতা:** হাতের খোদাইয়ের তুলনায় সিএনসি ডিজাইন অনেক বেশি নির্ভুল। প্রতিটি কাট সঠিক মাপে হয়।
+
+**২. সময় সাশ্রয়:** জটিল ডিজাইন যা হাতে করতে সপ্তাহ লাগত, সিএনসিতে মাত্র কয়েক ঘণ্টায় সম্ভব।
+
+**৩. পুনরাবৃত্তি:** একই ডিজাইন বারবার তৈরি করতে হলে সিএনসি অতুলনীয়।
+
+**৪. জটিল প্যাটার্ন:** ৩ডি রিলিফ, জ্যামিতিক নকশা, পোর্ট্রেট - সবই সম্ভব।
+
+## আমাদের সিএনসি সার্ভিস
+
+NextGen Digital Studio এ আমরা ১০+ বছরের অভিজ্ঞতা নিয়ে সিএনসি ডিজাইন সার্ভিস দিয়ে থাকি। আমাদের সার্ভিসের মধ্যে রয়েছে:
+
+- ফার্নিচার ডিজাইন
+- পোর্ট্রেট আর্ট
+- ইসলামিক ক্যালিগ্রাফি
+- ৩ডি রিলিফ ডিজাইন
+- কাস্টম গিফট আইটেম
+
+যোগাযোগ করুন: +8801711731354`
     },
     {
       id: 2,
@@ -698,7 +721,27 @@ const blogPostsData = {
       category: 'এআই',
       date: '২০২৫ ফেব্রুয়ারি ১০',
       readTime: '৭ মিনিট',
-      image: '/portfolio/ai-design-1.png'
+      image: '/portfolio/ai-design-1.png',
+      content: `এআই চ্যাটবট বর্তমানে ব্যবসায়িক প্রতিষ্ঠানগুলোর জন্য অপরিহার্য হয়ে উঠেছে। এটি ২৪/৭ কাস্টমার সার্ভিস নিশ্চিত করে এবং ব্যবসার খরচ উল্লেখযোগ্য পরিমাণে কমায়।
+
+## এআই চ্যাটবটের সুবিধা
+
+**১. ২৪/৭ সার্ভিস:** চ্যাটবট ঘুমায় না, ছুটি করে না - সবসময় কাস্টমারের প্রশ্নের উত্তর দেয়।
+
+**২. খরচ সাশ্রয়:** একজন কাস্টমার সার্ভিস রিপ্রেজেন্টেটিভ এর বেতনের তুলনায় চ্যাটবট অনেক সাশ্রয়ী।
+
+**৩. তাৎক্ষণিক উত্তর:** কাস্টমারদের অপেক্ষা করতে হয় না, সাথে সাথে উত্তর পায়।
+
+**৪. মাল্টিলিঙ্গুয়াল:** বাংলা, ইংরেজি সহ যেকোনো ভাষায় কথা বলতে পারে।
+
+## আমাদের এআই সার্ভিস
+
+- কাস্টম AI চ্যাটবট ডেভেলপমেন্ট
+- WhatsApp বট ইন্টিগ্রেশন
+- অর্ডার ম্যানেজমেন্ট সিস্টেম
+- লিড জেনারেশন বট
+
+আপনার ব্যবসার জন্য AI চ্যাটবট তৈরি করতে যোগাযোগ করুন!`
     },
     {
       id: 3,
@@ -707,7 +750,37 @@ const blogPostsData = {
       category: 'টিউটোরিয়াল',
       date: '২০২৫ ফেব্রুয়ারি ০৫',
       readTime: '১০ মিনিট',
-      image: '/portfolio/ai-design-2.png'
+      image: '/portfolio/ai-design-2.png',
+      content: `২০২৫ সালে ওয়েবসাইট ডেভেলপমেন্ট অনেক উন্নত হয়েছে। নতুন টেকনোলজি ও টুলস এর কারণে এখন অল্প সময়েই প্রফেশনাল ওয়েবসাইট তৈরি করা সম্ভব।
+
+## জনপ্রিয় টেকনোলজি
+
+**ফ্রন্টএন্ড:**
+- Next.js / React
+- Tailwind CSS
+- TypeScript
+
+**ব্যাকএন্ড:**
+- Node.js
+- Python / Django
+- PHP / Laravel
+
+**ডাটাবেস:**
+- PostgreSQL
+- MongoDB
+- Firebase
+
+## একটি ভালো ওয়েবসাইটের বৈশিষ্ট্য
+
+১. **রেসপনসিভ ডিজাইন:** মোবাইল, ট্যাবলেট, ডেস্কটপ - সব ডিভাইসে সুন্দর দেখাবে।
+
+২. **দ্রুত লোডিং:** ৩ সেকেন্ডের মধ্যে পেজ লোড হওয়া উচিত।
+
+৩. **SEO ফ্রেন্ডলি:** গুগলে সহজে পাওয়া যাবে।
+
+৪. **সিকিউরিটি:** ডাটা সুরক্ষিত থাকবে।
+
+আপনার ব্যবসার জন্য প্রফেশনাল ওয়েবসাইট তৈরি করতে আমাদের সাথে যোগাযোগ করুন!`
     },
     {
       id: 4,
@@ -716,7 +789,34 @@ const blogPostsData = {
       category: 'মার্কেটিং',
       date: '২০২৫ জানুয়ারি ২৮',
       readTime: '৬ মিনিট',
-      image: '/portfolio/ai-design-3.png'
+      image: '/portfolio/ai-design-3.png',
+      content: `ডিজিটাল মার্কেটিং বর্তমানে ব্যবসায়িক সাফল্যের চাবিকাঠি। সঠিক কৌশল অবলম্বন করলে অল্প খরচে বিশাল কাস্টমার রিচ করা সম্ভব।
+
+## প্রধান ডিজিটাল মার্কেটিং কৌশল
+
+**১. সোশ্যাল মিডিয়া মার্কেটিং:**
+- Facebook, Instagram এ নিয়মিত পোস্ট
+- এনগেজিং কনটেন্ট তৈরি
+- টার্গেটেড এড ক্যাম্পেইন
+
+**২. SEO (সার্চ ইঞ্জিন অপটিমাইজেশন):**
+- গুগলে প্রথম পাতায় আসা
+- অর্গানিক ট্রাফিক বৃদ্ধি
+- লং-টার্ম রেজাল্ট
+
+**৩. কনটেন্ট মার্কেটিং:**
+- ব্লগ পোস্ট
+- ভিডিও কনটেন্ট
+- ইনফোগ্রাফিক্স
+
+**৪. ইমেইল মার্কেটিং:**
+- নিউজলেটার
+- প্রমোশনাল অফার
+- কাস্টমার রিটেনশন
+
+## আমাদের মার্কেটিং সার্ভিস
+
+আমরা আপনার ব্যবসার জন্য সম্পূর্ণ ডিজিটাল মার্কেটিং সলিউশন দিয়ে থাকি। ফ্রি কনসালটেশনের জন্য যোগাযোগ করুন!`
     }
   ],
   en: [
@@ -727,7 +827,30 @@ const blogPostsData = {
       category: 'Technology',
       date: 'February 15, 2025',
       readTime: '5 min read',
-      image: '/portfolio/cnc-design-1.png'
+      image: '/portfolio/cnc-design-1.png',
+      content: `3D CNC (Computer Numerical Control) design technology has revolutionized the carving art industry. Through this technology, complex and beautiful designs can be created using computer-controlled machines.
+
+## Benefits of CNC Technology
+
+**1. Precision Accuracy:** CNC design is much more precise compared to hand carving. Each cut is exact.
+
+**2. Time Saving:** Complex designs that took weeks by hand can be done in hours with CNC.
+
+**3. Repeatability:** CNC is unmatched for creating the same design multiple times.
+
+**4. Complex Patterns:** 3D relief, geometric patterns, portraits - everything is possible.
+
+## Our CNC Services
+
+At NextGen Digital Studio, we provide CNC design services with 10+ years of experience. Our services include:
+
+- Furniture Design
+- Portrait Art
+- Islamic Calligraphy
+- 3D Relief Design
+- Custom Gift Items
+
+Contact us: +8801711731354`
     },
     {
       id: 2,
@@ -736,7 +859,27 @@ const blogPostsData = {
       category: 'AI',
       date: 'February 10, 2025',
       readTime: '7 min read',
-      image: '/portfolio/ai-design-1.png'
+      image: '/portfolio/ai-design-1.png',
+      content: `AI chatbots have become essential for businesses today. It ensures 24/7 customer service and significantly reduces business costs.
+
+## Benefits of AI Chatbot
+
+**1. 24/7 Service:** Chatbots don't sleep, don't take holidays - always answer customer questions.
+
+**2. Cost Savings:** Chatbots are much more economical compared to a customer service representative's salary.
+
+**3. Instant Response:** Customers don't have to wait, they get answers immediately.
+
+**4. Multilingual:** Can speak in Bengali, English and any language.
+
+## Our AI Services
+
+- Custom AI Chatbot Development
+- WhatsApp Bot Integration
+- Order Management System
+- Lead Generation Bot
+
+Contact us to create an AI chatbot for your business!`
     },
     {
       id: 3,
@@ -745,7 +888,37 @@ const blogPostsData = {
       category: 'Tutorial',
       date: 'February 5, 2025',
       readTime: '10 min read',
-      image: '/portfolio/ai-design-2.png'
+      image: '/portfolio/ai-design-2.png',
+      content: `Website development has advanced significantly in 2025. Due to new technologies and tools, professional websites can now be created in less time.
+
+## Popular Technologies
+
+**Frontend:**
+- Next.js / React
+- Tailwind CSS
+- TypeScript
+
+**Backend:**
+- Node.js
+- Python / Django
+- PHP / Laravel
+
+**Database:**
+- PostgreSQL
+- MongoDB
+- Firebase
+
+## Features of a Good Website
+
+1. **Responsive Design:** Looks beautiful on mobile, tablet, desktop - all devices.
+
+2. **Fast Loading:** Page should load within 3 seconds.
+
+3. **SEO Friendly:** Easy to find on Google.
+
+4. **Security:** Data will be protected.
+
+Contact us to create a professional website for your business!`
     },
     {
       id: 4,
@@ -754,7 +927,34 @@ const blogPostsData = {
       category: 'Marketing',
       date: 'January 28, 2025',
       readTime: '6 min read',
-      image: '/portfolio/ai-design-3.png'
+      image: '/portfolio/ai-design-3.png',
+      content: `Digital marketing is the key to business success today. With the right strategy, huge customer reach is possible at low cost.
+
+## Key Digital Marketing Strategies
+
+**1. Social Media Marketing:**
+- Regular posts on Facebook, Instagram
+- Creating engaging content
+- Targeted ad campaigns
+
+**2. SEO (Search Engine Optimization):**
+- Coming to Google's first page
+- Increasing organic traffic
+- Long-term results
+
+**3. Content Marketing:**
+- Blog posts
+- Video content
+- Infographics
+
+**4. Email Marketing:**
+- Newsletters
+- Promotional offers
+- Customer retention
+
+## Our Marketing Services
+
+We provide complete digital marketing solutions for your business. Contact us for a free consultation!`
     }
   ]
 };
@@ -1085,6 +1285,7 @@ export default function Home() {
   const [formSubmitting, setFormSubmitting] = useState(false);
   const [formSuccess, setFormSuccess] = useState(false);
   const [portfolioItem, setPortfolioItem] = useState<{ src: string; title: string } | null>(null);
+  const [selectedBlogPost, setSelectedBlogPost] = useState<typeof blogPosts[0] | null>(null);
   
   // PWA Install state
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
@@ -2099,12 +2300,15 @@ export default function Home() {
                       {post.title}
                     </h3>
                     <p className="text-gray-400 text-sm line-clamp-2 mb-3">{post.excerpt}</p>
-                    <a href="https://www.facebook.com/mdnajmulislam.taj.33" target="_blank" rel="noopener noreferrer">
-                      <Button variant="outline" size="sm" className="w-full border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10">
-                        {t.blog.readMore}
-                        <ChevronRight className="w-4 h-4 ml-1" aria-hidden="true" />
-                      </Button>
-                    </a>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10"
+                      onClick={() => setSelectedBlogPost(post)}
+                    >
+                      {t.blog.readMore}
+                      <ChevronRight className="w-4 h-4 ml-1" aria-hidden="true" />
+                    </Button>
                   </CardContent>
                 </Card>
               ))}
@@ -3001,7 +3205,55 @@ export default function Home() {
                 </Button>
               </a>
               <Button variant="outline" onClick={() => setPortfolioItem(null)} className="flex-1 border-[#333] text-gray-300 hover:bg-[#1a1a1a]">
-                বন্ধ করুন
+                {lang === 'bn' ? 'বন্ধ করুন' : 'Close'}
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
+
+      {/* Blog Post Modal */}
+      {selectedBlogPost && (
+        <Dialog open={!!selectedBlogPost} onOpenChange={() => setSelectedBlogPost(null)}>
+          <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto bg-[#0a0a0a] border-[#333]">
+            <DialogHeader>
+              <div className="flex items-center gap-2 mb-2">
+                <Badge className="bg-purple-500/80 text-white">{selectedBlogPost.category}</Badge>
+                <span className="text-gray-500 text-xs">{selectedBlogPost.date} • {selectedBlogPost.readTime}</span>
+              </div>
+              <DialogTitle className="text-white text-xl md:text-2xl">{selectedBlogPost.title}</DialogTitle>
+            </DialogHeader>
+            <div className="relative h-48 md:h-64 rounded-xl overflow-hidden mb-4">
+              <Image src={selectedBlogPost.image} alt={selectedBlogPost.title} fill className="object-cover" />
+            </div>
+            <div className="prose prose-invert prose-sm max-w-none">
+              <div className="text-gray-300 whitespace-pre-line leading-relaxed">
+                {selectedBlogPost.content?.split('\n').map((line, i) => {
+                  if (line.startsWith('## ')) {
+                    return <h2 key={i} className="text-cyan-400 text-lg font-bold mt-4 mb-2">{line.replace('## ', '')}</h2>;
+                  }
+                  if (line.startsWith('**') && line.endsWith('**')) {
+                    return <p key={i} className="font-semibold text-white my-1">{line.replace(/\*\*/g, '')}</p>;
+                  }
+                  if (line.startsWith('- ')) {
+                    return <li key={i} className="text-gray-400 ml-4">{line.replace('- ', '')}</li>;
+                  }
+                  if (line.trim() === '') {
+                    return <br key={i} />;
+                  }
+                  return <p key={i} className="my-1">{line}</p>;
+                })}
+              </div>
+            </div>
+            <div className="flex gap-4 mt-6">
+              <a href="https://wa.me/8801711731354?text=হ্যালো, আমি ব্লগ পোস্ট পড়ে আগ্রহী" target="_blank" rel="noopener noreferrer" className="flex-1">
+                <Button className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-400 hover:to-green-500 text-white">
+                  <MessageCircle className="w-4 h-4 mr-2" aria-hidden="true" />
+                  {lang === 'bn' ? 'যোগাযোগ করুন' : 'Contact Us'}
+                </Button>
+              </a>
+              <Button variant="outline" onClick={() => setSelectedBlogPost(null)} className="flex-1 border-[#333] text-gray-300 hover:bg-[#1a1a1a]">
+                {lang === 'bn' ? 'বন্ধ করুন' : 'Close'}
               </Button>
             </div>
           </DialogContent>
