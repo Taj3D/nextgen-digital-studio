@@ -37,6 +37,16 @@ interface Stats {
   pendingBookings: number;
 }
 
+interface AIAnalytics {
+  totalChats: number;
+  totalMessages: number;
+  sessionsCount: number;
+  topicsAsked: { topic: string; count: number }[];
+  feedbackStats: { positive: number; negative: number };
+  averageMessagesPerSession: number;
+  lastUpdated: string;
+}
+
 export default function AdminDashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
@@ -46,6 +56,7 @@ export default function AdminDashboard() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
+  const [aiAnalytics, setAiAnalytics] = useState<AIAnalytics | null>(null);
 
   const ADMIN_PASSWORD = '@taj921988';
 
@@ -150,10 +161,24 @@ export default function AdminDashboard() {
   useEffect(() => {
     if (isAuthenticated) {
       fetchData();
+      loadAIAnalytics();
       const interval = setInterval(fetchData, 30000);
       return () => clearInterval(interval);
     }
   }, [isAuthenticated]);
+
+  // Load AI Analytics from localStorage
+  const loadAIAnalytics = () => {
+    try {
+      const saved = localStorage.getItem('nextgen_analytics');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        setAiAnalytics(parsed);
+      }
+    } catch (e) {
+      console.error('Failed to load AI analytics:', e);
+    }
+  };
 
   // Login Screen
   if (!isAuthenticated) {
@@ -269,6 +294,9 @@ export default function AdminDashboard() {
             <TabsTrigger value="overview" className="data-[state=active]:bg-cyan-500/20 data-[state=active]:text-cyan-400">
               📊 ওভারভিউ
             </TabsTrigger>
+            <TabsTrigger value="ai-analytics" className="data-[state=active]:bg-cyan-500/20 data-[state=active]:text-cyan-400">
+              🤖 AI অ্যানালিটিক্স
+            </TabsTrigger>
             <TabsTrigger value="leads" className="data-[state=active]:bg-cyan-500/20 data-[state=active]:text-cyan-400">
               📋 লিড ({leads.length})
             </TabsTrigger>
@@ -361,6 +389,126 @@ export default function AdminDashboard() {
                   </div>
                 </CardContent>
               </Card>
+            </div>
+          </TabsContent>
+
+          {/* AI Analytics Tab */}
+          <TabsContent value="ai-analytics">
+            <div className="space-y-6">
+              <div className="flex justify-between items-center">
+                <h2 className="text-xl font-bold text-white">🤖 বুদ্ধিদীপ্ত AI অ্যানালিটিক্স</h2>
+                <Button onClick={loadAIAnalytics} variant="outline" className="border-cyan-500 text-cyan-400">
+                  🔄 রিফ্রেশ
+                </Button>
+              </div>
+              
+              {!aiAnalytics ? (
+                <Card className="bg-[#141414] border-[#333]">
+                  <CardContent className="p-8 text-center text-gray-400">
+                    <p>এখনো কোনো AI চ্যাট ডাটা নেই</p>
+                    <p className="text-sm mt-2">ওয়েবসাইটে AI চ্যাট ব্যবহার হলে এখানে ডাটা দেখাবে</p>
+                  </CardContent>
+                </Card>
+              ) : (
+                <>
+                  {/* Stats Grid */}
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <Card className="bg-[#141414] border-[#333]">
+                      <CardContent className="p-4 text-center">
+                        <div className="text-3xl font-bold text-cyan-400">{aiAnalytics.totalChats}</div>
+                        <div className="text-gray-400 text-sm">মোট চ্যাট</div>
+                      </CardContent>
+                    </Card>
+                    <Card className="bg-[#141414] border-[#333]">
+                      <CardContent className="p-4 text-center">
+                        <div className="text-3xl font-bold text-green-400">{aiAnalytics.totalMessages}</div>
+                        <div className="text-gray-400 text-sm">মোট মেসেজ</div>
+                      </CardContent>
+                    </Card>
+                    <Card className="bg-[#141414] border-[#333]">
+                      <CardContent className="p-4 text-center">
+                        <div className="text-3xl font-bold text-yellow-400">{aiAnalytics.feedbackStats.positive}</div>
+                        <div className="text-gray-400 text-sm">👍 পজিটিভ ফিডব্যাক</div>
+                      </CardContent>
+                    </Card>
+                    <Card className="bg-[#141414] border-[#333]">
+                      <CardContent className="p-4 text-center">
+                        <div className="text-3xl font-bold text-red-400">{aiAnalytics.feedbackStats.negative}</div>
+                        <div className="text-gray-400 text-sm">👎 নেগেটিভ ফিডব্যাক</div>
+                      </CardContent>
+                    </Card>
+                  </div>
+
+                  {/* Topics Asked */}
+                  <Card className="bg-[#141414] border-[#333]">
+                    <CardHeader>
+                      <CardTitle className="text-white">📊 সবচেয়ে জিজ্ঞাসিত টপিক</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      {aiAnalytics.topicsAsked.length === 0 ? (
+                        <p className="text-gray-400 text-center py-4">এখনো কোনো টপিক ডাটা নেই</p>
+                      ) : (
+                        <div className="space-y-3">
+                          {aiAnalytics.topicsAsked
+                            .sort((a, b) => b.count - a.count)
+                            .slice(0, 10)
+                            .map((topic, i) => {
+                              const maxCount = Math.max(...aiAnalytics.topicsAsked.map(t => t.count));
+                              const percentage = (topic.count / maxCount) * 100;
+                              return (
+                                <div key={i} className="flex items-center gap-3">
+                                  <span className="w-32 text-gray-300 text-sm">{topic.topic}</span>
+                                  <div className="flex-1 h-4 bg-[#0a0a0a] rounded-full overflow-hidden">
+                                    <div 
+                                      className="h-full bg-gradient-to-r from-cyan-500 to-cyan-400 rounded-full transition-all"
+                                      style={{ width: `${percentage}%` }}
+                                    />
+                                  </div>
+                                  <span className="text-cyan-400 font-medium">{topic.count}</span>
+                                </div>
+                              );
+                            })}
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+
+                  {/* Feedback Stats */}
+                  <Card className="bg-[#141414] border-[#333]">
+                    <CardHeader>
+                      <CardTitle className="text-white">⭐ ফিডব্যাক পরিসংখ্যান</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="flex items-center justify-center gap-8">
+                        <div className="text-center">
+                          <div className="w-24 h-24 rounded-full bg-green-500/20 flex items-center justify-center mb-2">
+                            <span className="text-4xl">👍</span>
+                          </div>
+                          <div className="text-2xl font-bold text-green-400">{aiAnalytics.feedbackStats.positive}</div>
+                          <div className="text-gray-400 text-sm">সন্তুষ্ট</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="w-24 h-24 rounded-full bg-red-500/20 flex items-center justify-center mb-2">
+                            <span className="text-4xl">👎</span>
+                          </div>
+                          <div className="text-2xl font-bold text-red-400">{aiAnalytics.feedbackStats.negative}</div>
+                          <div className="text-gray-400 text-sm">অসন্তুষ্ট</div>
+                        </div>
+                      </div>
+                      {(aiAnalytics.feedbackStats.positive + aiAnalytics.feedbackStats.negative) > 0 && (
+                        <div className="mt-6 text-center">
+                          <div className="text-lg text-white">
+                            সন্তুষ্টির হার: {' '}
+                            <span className="text-green-400 font-bold">
+                              {Math.round((aiAnalytics.feedbackStats.positive / (aiAnalytics.feedbackStats.positive + aiAnalytics.feedbackStats.negative)) * 100)}%
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                </>
+              )}
             </div>
           </TabsContent>
 

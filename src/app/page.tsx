@@ -35,7 +35,15 @@ import {
   Crown,
   Clock,
   Sparkles,
-  Cpu
+  Cpu,
+  Mic,
+  MicOff,
+  ThumbsUp,
+  ThumbsDown,
+  Share2,
+  History,
+  Copy,
+  Trash2
 } from 'lucide-react';
 
 // Pricing packages - Multilingual
@@ -767,9 +775,64 @@ function useTypingEffect(texts: string[], speed = 100, delay = 2000) {
 
 // Chat message type
 interface Message {
+  id: string;
   role: 'user' | 'assistant';
   content: string;
+  timestamp: Date;
+  feedback?: 'positive' | 'negative' | null;
 }
+
+// Chat session type for history
+interface ChatSession {
+  id: string;
+  title: string;
+  messages: Message[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// Feedback data type
+interface FeedbackData {
+  messageId: string;
+  feedback: 'positive' | 'negative';
+  timestamp: Date;
+}
+
+// Analytics data type for tracking
+interface AnalyticsData {
+  totalChats: number;
+  totalMessages: number;
+  sessionsCount: number;
+  topicsAsked: { topic: string; count: number }[];
+  feedbackStats: { positive: number; negative: number };
+  averageMessagesPerSession: number;
+  lastUpdated: Date;
+}
+
+// Generate unique ID
+const generateId = () => Math.random().toString(36).substring(2) + Date.now().toString(36);
+
+// Local Storage Keys
+const STORAGE_KEYS = {
+  CHAT_HISTORY: 'nextgen_chat_history',
+  ANALYTICS: 'nextgen_analytics',
+  FEEDBACK: 'nextgen_feedback',
+  CURRENT_SESSION: 'nextgen_current_session'
+};
+
+// Topics to track for analytics
+const TRACKED_TOPICS = [
+  { keywords: ['ওয়েবসাইট', 'website', 'ওয়েব', 'সাইট'], topic: 'ওয়েবসাইট' },
+  { keywords: ['মোবাইল অ্যাপ', 'অ্যাপ', 'app', 'mobile', 'android', 'ios'], topic: 'মোবাইল অ্যাপ' },
+  { keywords: ['সিএনসি', 'cnc', 'ডিজাইন', 'design', 'খোদাই'], topic: 'সিএনসি ডিজাইন' },
+  { keywords: ['এআই', 'ai', 'চ্যাটবট', 'chatbot', 'বট'], topic: 'এআই এজেন্ট' },
+  { keywords: ['মূল্য', 'দাম', 'price', 'কত', 'টাকা'], topic: 'মূল্য জিজ্ঞাসা' },
+  { keywords: ['সোশ্যাল', 'social', 'ফেসবুক', 'facebook', 'ইনস্টাগ্রাম'], topic: 'সোশ্যাল মিডিয়া' },
+  { keywords: ['ভিডিও', 'video', 'এডিট', 'edit'], topic: 'ভিডিও এডিটিং' },
+  { keywords: ['গ্রাফিক', 'graphic', 'লোগো', 'logo', 'ব্যানার'], topic: 'গ্রাফিক ডিজাইন' },
+  { keywords: ['মার্কেটিং', 'marketing', 'seo', 'এড'], topic: 'ডিজিটাল মার্কেটিং' },
+  { keywords: ['যোগাযোগ', 'contact', 'ফোন', 'phone', 'whatsapp'], topic: 'যোগাযোগ' }
+];
 
 // Form validation
 interface FormErrors {
@@ -802,11 +865,33 @@ export default function Home() {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [policyModal, setPolicyModal] = useState<'privacy' | 'terms' | 'refund' | null>(null);
   
-  const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: 'আসসালামু আলাইকুম! 👋 আমি NextGen Digital Studio এর AI সহায়িকা। আপনাকে কীভাবে সাহায্য করতে পারি?' }
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  
+  // Voice Input State
+  const [isListening, setIsListening] = useState(false);
+  const [voiceSupported, setVoiceSupported] = useState(false);
+  const voiceRecognitionRef = useRef<any>(null);
+  
+  // Chat History State
+  const [chatHistory, setChatHistory] = useState<ChatSession[]>([]);
+  const [showHistory, setShowHistory] = useState(false);
+  const [currentSessionId, setCurrentSessionId] = useState<string>('');
+  
+  // Analytics State
+  const [analytics, setAnalytics] = useState<AnalyticsData>({
+    totalChats: 0,
+    totalMessages: 0,
+    sessionsCount: 0,
+    topicsAsked: [],
+    feedbackStats: { positive: 0, negative: 0 },
+    averageMessagesPerSession: 0,
+    lastUpdated: new Date()
+  });
+  
+  // Share State
+  const [showShareMenu, setShowShareMenu] = useState<string | null>(null);
   
   const [formData, setFormData] = useState({
     name: '',
@@ -941,6 +1026,240 @@ export default function Home() {
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
+  // Initialize Chat Session
+  useEffect(() => {
+    // Load chat history from localStorage
+    const savedHistory = localStorage.getItem(STORAGE_KEYS.CHAT_HISTORY);
+    if (savedHistory) {
+      try {
+        const parsed = JSON.parse(savedHistory);
+        const mappedHistory = parsed.map((s: any) => ({
+          ...s,
+          createdAt: new Date(s.createdAt),
+          updatedAt: new Date(s.updatedAt),
+          messages: s.messages.map((m: any) => ({
+            ...m,
+            timestamp: new Date(m.timestamp)
+          }))
+        }));
+        // Use flushSync pattern - set in a microtask
+        setTimeout(() => setChatHistory(mappedHistory), 0);
+      } catch (e) {
+        console.error('Failed to parse chat history:', e);
+      }
+    }
+    
+    // Load analytics from localStorage
+    const savedAnalytics = localStorage.getItem(STORAGE_KEYS.ANALYTICS);
+    if (savedAnalytics) {
+      try {
+        const parsed = JSON.parse(savedAnalytics);
+        setTimeout(() => setAnalytics({
+          ...parsed,
+          lastUpdated: new Date(parsed.lastUpdated)
+        }), 0);
+      } catch (e) {
+        console.error('Failed to parse analytics:', e);
+      }
+    }
+    
+    // Start new session
+    const newSessionId = generateId();
+    setCurrentSessionId(newSessionId);
+    
+    // Initialize with welcome message
+    setMessages([{
+      id: generateId(),
+      role: 'assistant',
+      content: 'আসসালামু আলাইকুম! 👋 আমি NextGen Digital Studio এর AI সহায়িকা "বুদ্ধিদীপ্ত"। আপনাকে কীভাবে সাহায্য করতে পারি?',
+      timestamp: new Date()
+    }]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Voice Recognition Setup
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      if (SpeechRecognition) {
+        const recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = true;
+        recognition.lang = 'bn-BD';
+        
+        recognition.onresult = (event: any) => {
+          const transcript = event.results[0][0].transcript;
+          setInputMessage(transcript);
+        };
+        
+        recognition.onend = () => {
+          setIsListening(false);
+        };
+        
+        recognition.onerror = () => {
+          setIsListening(false);
+        };
+        
+        voiceRecognitionRef.current = recognition;
+        // Set voice supported after recognition is initialized
+        setTimeout(() => setVoiceSupported(true), 0);
+      }
+    }
+    
+    return () => {
+      if (voiceRecognitionRef.current) {
+        voiceRecognitionRef.current.stop();
+      }
+    };
+  }, []);
+
+  // Save messages to history when session ends
+  useEffect(() => {
+    if (messages.length > 1 && currentSessionId) {
+      const session: ChatSession = {
+        id: currentSessionId,
+        title: messages[1]?.content.substring(0, 50) || 'নতুন চ্যাট',
+        messages,
+        createdAt: chatHistory.find(s => s.id === currentSessionId)?.createdAt || new Date(),
+        updatedAt: new Date()
+      };
+      
+      setChatHistory(prev => {
+        const existing = prev.findIndex(s => s.id === currentSessionId);
+        if (existing >= 0) {
+          const updated = [...prev];
+          updated[existing] = session;
+          return updated.slice(0, 10); // Keep last 10 sessions
+        }
+        return [session, ...prev].slice(0, 10);
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [messages.length, currentSessionId]);
+
+  // Save history to localStorage
+  useEffect(() => {
+    if (chatHistory.length > 0) {
+      localStorage.setItem(STORAGE_KEYS.CHAT_HISTORY, JSON.stringify(chatHistory));
+    }
+  }, [chatHistory]);
+
+  // Save analytics to localStorage
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.ANALYTICS, JSON.stringify(analytics));
+  }, [analytics]);
+
+  // Voice Input Toggle
+  const toggleVoiceInput = () => {
+    if (!voiceRecognitionRef.current) return;
+    
+    if (isListening) {
+      voiceRecognitionRef.current.stop();
+      setIsListening(false);
+    } else {
+      // Try Bengali first, fallback to English
+      try {
+        voiceRecognitionRef.current.lang = 'bn-BD';
+        voiceRecognitionRef.current.start();
+        setIsListening(true);
+      } catch {
+        try {
+          voiceRecognitionRef.current.lang = 'en-US';
+          voiceRecognitionRef.current.start();
+          setIsListening(true);
+        } catch (e) {
+          console.error('Voice recognition failed:', e);
+        }
+      }
+    }
+  };
+
+  // Track topic for analytics
+  const trackTopic = (message: string) => {
+    const lowerMessage = message.toLowerCase();
+    for (const { keywords, topic } of TRACKED_TOPICS) {
+      if (keywords.some(kw => lowerMessage.includes(kw.toLowerCase()))) {
+        setAnalytics(prev => {
+          const existing = prev.topicsAsked.find(t => t.topic === topic);
+          if (existing) {
+            return {
+              ...prev,
+              topicsAsked: prev.topicsAsked.map(t => 
+                t.topic === topic ? { ...t, count: t.count + 1 } : t
+              )
+            };
+          }
+          return {
+            ...prev,
+            topicsAsked: [...prev.topicsAsked, { topic, count: 1 }]
+          };
+        });
+        break;
+      }
+    }
+  };
+
+  // Handle Feedback
+  const handleFeedback = (messageId: string, feedback: 'positive' | 'negative') => {
+    setMessages(prev => prev.map(m => 
+      m.id === messageId ? { ...m, feedback } : m
+    ));
+    
+    setAnalytics(prev => ({
+      ...prev,
+      feedbackStats: {
+        ...prev.feedbackStats,
+        [feedback]: prev.feedbackStats[feedback] + 1
+      }
+    }));
+  };
+
+  // Share Chat
+  const shareChat = (message: Message, platform: 'whatsapp' | 'facebook' | 'copy') => {
+    const text = `🤖 NextGen AI সহায়িকা:\n\nপ্রশ্ন: ${messages.find(m => m.id === message.id && m.role === 'user')?.content || ''}\n\nউত্তর: ${message.content}\n\n📞 যোগাযোগ: +8801711731354`;
+    
+    if (platform === 'whatsapp') {
+      window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+    } else if (platform === 'facebook') {
+      window.open(`https://www.facebook.com/sharer/sharer.php?quote=${encodeURIComponent(text)}`, '_blank');
+    } else {
+      navigator.clipboard.writeText(text);
+      alert('চ্যাট কপি হয়েছে!');
+    }
+    setShowShareMenu(null);
+  };
+
+  // Load Chat Session
+  const loadChatSession = (session: ChatSession) => {
+    setMessages(session.messages);
+    setCurrentSessionId(session.id);
+    setShowHistory(false);
+  };
+
+  // New Chat
+  const startNewChat = () => {
+    const newSessionId = generateId();
+    setCurrentSessionId(newSessionId);
+    setMessages([{
+      id: generateId(),
+      role: 'assistant',
+      content: 'আসসালামু আলাইকুম! 👋 আমি NextGen Digital Studio এর AI সহায়িকা "বুদ্ধিদীপ্ত"। আপনাকে কীভাবে সাহায্য করতে পারি?',
+      timestamp: new Date()
+    }]);
+    setShowHistory(false);
+  };
+
+  // Delete Chat History
+  const deleteChatSession = (sessionId: string) => {
+    setChatHistory(prev => prev.filter(s => s.id !== sessionId));
+  };
+
+  // Clear All History
+  const clearAllHistory = () => {
+    setChatHistory([]);
+    localStorage.removeItem(STORAGE_KEYS.CHAT_HISTORY);
+  };
+
   // Validate form
   const validateForm = (): boolean => {
     const errors: FormErrors = {};
@@ -973,10 +1292,25 @@ export default function Home() {
     const text = messageText || inputMessage;
     if (!text.trim()) return;
 
-    const userMessage: Message = { role: 'user', content: text };
+    const userMessage: Message = { 
+      id: generateId(),
+      role: 'user', 
+      content: text, 
+      timestamp: new Date() 
+    };
     setMessages(prev => [...prev, userMessage]);
     setInputMessage('');
     setIsLoading(true);
+    
+    // Track analytics
+    setAnalytics(prev => ({
+      ...prev,
+      totalMessages: prev.totalMessages + 1,
+      totalChats: prev.totalChats + 1
+    }));
+    
+    // Track topic
+    trackTopic(text);
 
     try {
       const response = await fetch('/api/chat', {
@@ -994,12 +1328,20 @@ export default function Home() {
         console.error('Chat API returned error:', data.error);
       }
       
-      setMessages(prev => [...prev, { role: 'assistant', content: data.message }]);
+      const assistantMessage: Message = { 
+        id: generateId(),
+        role: 'assistant', 
+        content: data.message,
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, assistantMessage]);
     } catch (err) {
       console.error('Chat fetch error:', err);
       setMessages(prev => [...prev, { 
+        id: generateId(),
         role: 'assistant', 
-        content: 'দুঃখিত, সংযোগে সমস্যা হয়েছে। অনুগ্রহ করে WhatsApp এ যোগাযোগ করুন: +8801711731354' 
+        content: 'দুঃখিত, সংযোগে সমস্যা হয়েছে। অনুগ্রহ করে WhatsApp এ যোগাযোগ করুন: +8801711731354',
+        timestamp: new Date()
       }]);
     }
 
@@ -1925,50 +2267,183 @@ export default function Home() {
       {/* AI Chat Widget */}
       <div className="fixed bottom-6 right-6 z-50">
         {chatOpen && (
-          <div className="absolute bottom-20 right-0 w-[350px] max-w-[calc(100vw-3rem)] rounded-2xl bg-[#141414] border border-[#333] shadow-2xl overflow-hidden animate-in slide-in-from-bottom-4" role="dialog" aria-label="AI চ্যাট">
+          <div className="absolute bottom-20 right-0 w-[380px] max-w-[calc(100vw-3rem)] rounded-2xl bg-[#141414] border border-[#333] shadow-2xl overflow-hidden animate-in slide-in-from-bottom-4" role="dialog" aria-label="AI চ্যাট">
             {/* Chat Header */}
-            <div className="bg-gradient-to-r from-cyan-500 to-cyan-600 p-4">
+            <div className="bg-gradient-to-r from-cyan-500 to-cyan-600 p-3">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                <div className="flex items-center gap-2">
+                  <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center">
                     <Bot className="w-5 h-5 text-white" aria-hidden="true" />
                   </div>
                   <div>
-                    <div className="font-semibold text-black">NextGen AI সহায়িকা</div>
+                    <div className="font-semibold text-black text-sm">বুদ্ধিদীপ্ত - AI সহায়িকা</div>
                     <div className="text-xs text-black/70 flex items-center gap-1">
                       <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" aria-hidden="true" />
                       সবসময় অনলাইন
                     </div>
                   </div>
                 </div>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  onClick={() => setChatOpen(false)}
-                  className="text-black/70 hover:text-black hover:bg-white/20"
-                  aria-label="চ্যাট বন্ধ করুন"
-                >
-                  <X className="w-5 h-5" aria-hidden="true" />
-                </Button>
+                <div className="flex items-center gap-1">
+                  {/* History Button */}
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    onClick={() => setShowHistory(!showHistory)}
+                    className="text-black/70 hover:text-black hover:bg-white/20 h-8 w-8"
+                    aria-label="চ্যাট ইতিহাস"
+                  >
+                    <History className="w-4 h-4" aria-hidden="true" />
+                  </Button>
+                  {/* New Chat Button */}
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    onClick={startNewChat}
+                    className="text-black/70 hover:text-black hover:bg-white/20 h-8 w-8"
+                    aria-label="নতুন চ্যাট"
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                  </Button>
+                  {/* Close Button */}
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    onClick={() => setChatOpen(false)}
+                    className="text-black/70 hover:text-black hover:bg-white/20 h-8 w-8"
+                    aria-label="চ্যাট বন্ধ করুন"
+                  >
+                    <X className="w-4 h-4" aria-hidden="true" />
+                  </Button>
+                </div>
               </div>
             </div>
 
+            {/* Chat History Panel */}
+            {showHistory && (
+              <div className="bg-[#0a0a0a] border-b border-[#333] max-h-48 overflow-y-auto">
+                <div className="p-2 flex items-center justify-between">
+                  <span className="text-xs text-gray-400 font-medium">চ্যাট ইতিহাস</span>
+                  {chatHistory.length > 0 && (
+                    <button 
+                      onClick={clearAllHistory}
+                      className="text-xs text-red-400 hover:text-red-300"
+                    >
+                      সব মুছুন
+                    </button>
+                  )}
+                </div>
+                {chatHistory.length === 0 ? (
+                  <div className="p-4 text-center text-gray-500 text-sm">কোনো ইতিহাস নেই</div>
+                ) : (
+                  <div className="space-y-1 p-2">
+                    {chatHistory.map((session) => (
+                      <div 
+                        key={session.id}
+                        className="flex items-center justify-between p-2 rounded-lg hover:bg-[#1a1a1a] cursor-pointer group"
+                      >
+                        <div className="flex-1 min-w-0" onClick={() => loadChatSession(session)}>
+                          <p className="text-sm text-white truncate">{session.title}</p>
+                          <p className="text-xs text-gray-500">
+                            {session.updatedAt.toLocaleDateString('bn-BD')}
+                          </p>
+                        </div>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); deleteChatSession(session.id); }}
+                          className="opacity-0 group-hover:opacity-100 p-1 text-red-400 hover:text-red-300"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* Chat Messages */}
-            <div className="h-80 overflow-y-auto p-4 space-y-4" role="log" aria-live="polite">
-              {messages.map((msg, i) => (
-                <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                  <div className={`max-w-[80%] p-3 rounded-2xl whitespace-pre-wrap ${
-                    msg.role === 'user' 
-                      ? 'bg-cyan-500 text-black rounded-br-sm' 
-                      : 'bg-[#0a0a0a] text-white border border-[#333] rounded-bl-sm'
-                  }`}>
-                    <p className="text-sm">{msg.content}</p>
+            <div className="h-72 overflow-y-auto p-3 space-y-3" role="log" aria-live="polite">
+              {messages.map((msg) => (
+                <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`max-w-[85%] ${msg.role === 'user' ? 'order-2' : 'order-1'}`}>
+                    <div className={`p-2.5 rounded-2xl whitespace-pre-wrap text-sm ${
+                      msg.role === 'user' 
+                        ? 'bg-cyan-500 text-black rounded-br-sm' 
+                        : 'bg-[#0a0a0a] text-white border border-[#333] rounded-bl-sm'
+                    }`}>
+                      <p>{msg.content}</p>
+                    </div>
+                    {/* Feedback & Share buttons for AI messages */}
+                    {msg.role === 'assistant' && (
+                      <div className="flex items-center gap-1 mt-1 ml-1">
+                        {/* Feedback */}
+                        <button
+                          onClick={() => handleFeedback(msg.id, 'positive')}
+                          className={`p-1 rounded transition-colors ${
+                            msg.feedback === 'positive' 
+                              ? 'text-green-400 bg-green-400/20' 
+                              : 'text-gray-500 hover:text-green-400 hover:bg-green-400/10'
+                          }`}
+                          aria-label="ভালো উত্তর"
+                        >
+                          <ThumbsUp className="w-3 h-3" />
+                        </button>
+                        <button
+                          onClick={() => handleFeedback(msg.id, 'negative')}
+                          className={`p-1 rounded transition-colors ${
+                            msg.feedback === 'negative' 
+                              ? 'text-red-400 bg-red-400/20' 
+                              : 'text-gray-500 hover:text-red-400 hover:bg-red-400/10'
+                          }`}
+                          aria-label="খারাপ উত্তর"
+                        >
+                          <ThumbsDown className="w-3 h-3" />
+                        </button>
+                        {/* Share */}
+                        <div className="relative">
+                          <button
+                            onClick={() => setShowShareMenu(showShareMenu === msg.id ? null : msg.id)}
+                            className="p-1 rounded text-gray-500 hover:text-cyan-400 hover:bg-cyan-400/10 transition-colors"
+                            aria-label="শেয়ার করুন"
+                          >
+                            <Share2 className="w-3 h-3" />
+                          </button>
+                          {showShareMenu === msg.id && (
+                            <div className="absolute bottom-full left-0 mb-1 bg-[#1a1a1a] border border-[#333] rounded-lg shadow-lg overflow-hidden flex">
+                              <button
+                                onClick={() => shareChat(msg, 'whatsapp')}
+                                className="p-2 text-green-400 hover:bg-green-400/10"
+                                title="WhatsApp"
+                              >
+                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                                </svg>
+                              </button>
+                              <button
+                                onClick={() => shareChat(msg, 'copy')}
+                                className="p-2 text-gray-400 hover:bg-gray-400/10"
+                                title="কপি করুন"
+                              >
+                                <Copy className="w-4 h-4" />
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                        {/* Feedback confirmation */}
+                        {msg.feedback && (
+                          <span className="text-xs text-gray-500 ml-1">
+                            {msg.feedback === 'positive' ? '✓ ধন্যবাদ!' : '✓ মন্তব্যের জন্য ধন্যবাদ'}
+                          </span>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
               {isLoading && (
                 <div className="flex justify-start">
-                  <div className="bg-[#0a0a0a] border border-[#333] p-3 rounded-2xl rounded-bl-sm">
+                  <div className="bg-[#0a0a0a] border border-[#333] p-2.5 rounded-2xl rounded-bl-sm">
                     <div className="flex gap-1" aria-label="টাইপ করছে...">
                       <div className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
                       <div className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
@@ -1981,12 +2456,12 @@ export default function Home() {
             </div>
 
             {/* Quick Replies */}
-            <div className="px-4 pb-2 flex flex-wrap gap-2">
+            <div className="px-3 pb-2 flex flex-wrap gap-1.5">
               {quickReplies.map((reply, i) => (
                 <button
                   key={i}
                   onClick={() => sendMessage(reply.text)}
-                  className="px-3 py-1.5 text-xs rounded-full bg-cyan-500/10 text-cyan-400 hover:bg-cyan-500/20 transition-colors flex items-center gap-1"
+                  className="px-2.5 py-1 text-xs rounded-full bg-cyan-500/10 text-cyan-400 hover:bg-cyan-500/20 transition-colors flex items-center gap-1"
                 >
                   <span>{reply.icon}</span>
                   <span>{reply.text}</span>
@@ -1995,28 +2470,53 @@ export default function Home() {
             </div>
 
             {/* Chat Input */}
-            <div className="p-4 border-t border-[#333]">
+            <div className="p-3 border-t border-[#333]">
               <form 
                 onSubmit={(e) => { e.preventDefault(); sendMessage(); }} 
-                className="flex gap-2"
+                className="flex gap-2 items-center"
               >
-                <Input
-                  value={inputMessage}
-                  onChange={(e) => setInputMessage(e.target.value)}
-                  placeholder="আপনার প্রশ্ন লিখুন..."
-                  className="flex-1 bg-[#0a0a0a] border-[#333] text-white focus:border-cyan-500"
-                  aria-label="চ্যাট মেসেজ"
-                />
+                <div className="relative flex-1">
+                  <Input
+                    value={inputMessage}
+                    onChange={(e) => setInputMessage(e.target.value)}
+                    placeholder="আপনার প্রশ্ন লিখুন..."
+                    className="w-full bg-[#0a0a0a] border-[#333] text-white focus:border-cyan-500 pr-10 text-sm"
+                    aria-label="চ্যাট মেসেজ"
+                    disabled={isLoading}
+                  />
+                  {/* Voice Input Button */}
+                  {voiceSupported && (
+                    <button
+                      type="button"
+                      onClick={toggleVoiceInput}
+                      className={`absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full transition-colors ${
+                        isListening 
+                          ? 'bg-red-500 text-white animate-pulse' 
+                          : 'text-gray-400 hover:text-cyan-400'
+                      }`}
+                      aria-label={isListening ? 'ভয়েস বন্ধ করুন' : 'ভয়েস ইনপুট'}
+                    >
+                      {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+                    </button>
+                  )}
+                </div>
                 <Button 
                   type="submit" 
                   size="icon" 
-                  className="bg-cyan-500 hover:bg-cyan-600 text-black"
-                  disabled={isLoading}
+                  className="bg-cyan-500 hover:bg-cyan-600 text-black h-9 w-9 shrink-0"
+                  disabled={isLoading || !inputMessage.trim()}
                   aria-label="মেসেজ পাঠান"
                 >
                   <Send className="w-4 h-4" aria-hidden="true" />
                 </Button>
               </form>
+              {/* Voice status */}
+              {isListening && (
+                <div className="flex items-center gap-2 mt-2 text-xs text-cyan-400">
+                  <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+                  বলুন... (বাংলা/ইংরেজি)
+                </div>
+              )}
             </div>
           </div>
         )}
