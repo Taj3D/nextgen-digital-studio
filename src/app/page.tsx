@@ -252,7 +252,13 @@ const translations = {
         submitting: 'পাঠানো হচ্ছে...',
         success: 'ধন্যবাদ!',
         successNote: 'আপনার অনুরোধ সফলভাবে জমা হয়েছে। ইঞ্জিনিয়ার তাজ ভাই শীঘ্রই যোগাযোগ করবেন।',
-        anotherRequest: 'আরেকটি অনুরোধ পাঠান'
+        anotherRequest: 'আরেকটি অনুরোধ পাঠান',
+        errorNameRequired: 'নাম আবশ্যক',
+        errorNameLength: 'নাম কমপক্ষে ৩ অক্ষর হতে হবে',
+        errorMobileRequired: 'মোবাইল নম্বর আবশ্যক',
+        errorMobileInvalid: 'সঠিক মোবাইল নম্বর দিন (০১XXXXXXXXX)',
+        errorEmailInvalid: 'সঠিক ইমেইল দিন',
+        errorServiceRequired: 'সার্ভিস নির্বাচন করুন'
       }
     },
     footer: {
@@ -428,7 +434,13 @@ const translations = {
         submitting: 'Submitting...',
         success: 'Thank You!',
         successNote: 'Your request has been submitted successfully. Engineer Taj Bhai will contact you soon.',
-        anotherRequest: 'Send Another Request'
+        anotherRequest: 'Send Another Request',
+        errorNameRequired: 'Name is required',
+        errorNameLength: 'Name must be at least 3 characters',
+        errorMobileRequired: 'Mobile number is required',
+        errorMobileInvalid: 'Enter valid mobile number (01XXXXXXXXX)',
+        errorEmailInvalid: 'Enter valid email address',
+        errorServiceRequired: 'Please select a service'
       }
     },
     footer: {
@@ -1729,23 +1741,23 @@ export default function Home() {
     const errors: FormErrors = {};
     
     if (!formData.name.trim()) {
-      errors.name = 'নাম আবশ্যক';
+      errors.name = t.contact.form.errorNameRequired;
     } else if (formData.name.length < 3) {
-      errors.name = 'নাম কমপক্ষে ৩ অক্ষর হতে হবে';
+      errors.name = t.contact.form.errorNameLength;
     }
     
     if (!formData.mobile.trim()) {
-      errors.mobile = 'মোবাইল নম্বর আবশ্যক';
+      errors.mobile = t.contact.form.errorMobileRequired;
     } else if (!/^01[3-9]\d{8}$/.test(formData.mobile.replace(/\D/g, ''))) {
-      errors.mobile = 'সঠিক মোবাইল নম্বর দিন (০১XXXXXXXXX)';
+      errors.mobile = t.contact.form.errorMobileInvalid;
     }
     
     if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      errors.email = 'সঠিক ইমেইল দিন';
+      errors.email = t.contact.form.errorEmailInvalid;
     }
     
     if (!formData.service) {
-      errors.service = 'সার্ভিস নির্বাচন করুন';
+      errors.service = t.contact.form.errorServiceRequired;
     }
     
     setFormErrors(errors);
@@ -3207,26 +3219,26 @@ export default function Home() {
 
       {/* Install Instructions Modal for iOS/Safari */}
       <Dialog open={showInstallModal} onOpenChange={setShowInstallModal}>
-        <DialogContent className="max-w-sm bg-[#0a0a0a] border-[#333]">
+        <DialogContent className="max-w-sm bg-card border-border">
           <DialogHeader>
-            <DialogTitle className="text-white text-center text-lg">
+            <DialogTitle className="text-foreground text-center text-lg">
               {lang === 'bn' ? '📱 অ্যাপ ইনস্টল করুন' : '📱 Install App'}
             </DialogTitle>
           </DialogHeader>
           <div className="py-4 space-y-4">
             {isIOS ? (
               <>
-                <p className="text-gray-300 text-sm text-center">
+                <p className="text-muted-foreground text-sm text-center">
                   {lang === 'bn' 
                     ? 'আপনার iPhone/iPad এ NextGen অ্যাপ ইনস্টল করতে নিচের ধাপগুলো অনুসরণ করুন:' 
                     : 'Follow these steps to install NextGen app on your iPhone/iPad:'}
                 </p>
                 <div className="space-y-3 text-sm">
-                  <div className="flex items-start gap-3 p-3 rounded-lg bg-[#141414] border border-[#333]">
+                  <div className="flex items-start gap-3 p-3 rounded-lg bg-muted border border-border">
                     <span className="flex-shrink-0 w-6 h-6 rounded-full bg-cyan-500 text-white text-xs flex items-center justify-center font-bold">১</span>
                     <div>
-                      <p className="text-white font-medium">{lang === 'bn' ? 'শেয়ার বাটনে ট্যাপ করুন' : 'Tap Share Button'}</p>
-                      <p className="text-gray-400 text-xs mt-1">
+                      <p className="text-foreground font-medium">{lang === 'bn' ? 'শেয়ার বাটনে ট্যাপ করুন' : 'Tap Share Button'}</p>
+                      <p className="text-muted-foreground text-xs mt-1">
                         {lang === 'bn' ? 'নিচের মেনু থেকে ' : 'From the bottom menu, tap '}
                         <span className="inline-flex items-center text-cyan-400">
                           <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
@@ -3236,21 +3248,21 @@ export default function Home() {
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-3 p-3 rounded-lg bg-[#141414] border border-[#333]">
+                  <div className="flex items-start gap-3 p-3 rounded-lg bg-muted border border-border">
                     <span className="flex-shrink-0 w-6 h-6 rounded-full bg-cyan-500 text-white text-xs flex items-center justify-center font-bold">২</span>
                     <div>
-                      <p className="text-white font-medium">{lang === 'bn' ? '"হোম স্ক্রিনে যোগ করুন" নির্বাচন করুন' : 'Select "Add to Home Screen"'}</p>
-                      <p className="text-gray-400 text-xs mt-1">
+                      <p className="text-foreground font-medium">{lang === 'bn' ? '"হোম স্ক্রিনে যোগ করুন" নির্বাচন করুন' : 'Select "Add to Home Screen"'}</p>
+                      <p className="text-muted-foreground text-xs mt-1">
                         {lang === 'bn' ? 'স্ক্রল করে ' : 'Scroll and find '}
                         <span className="text-cyan-400">+ {lang === 'bn' ? 'হোম স্ক্রিনে যোগ করুন' : 'Add to Home Screen'}</span>
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-3 p-3 rounded-lg bg-[#141414] border border-[#333]">
+                  <div className="flex items-start gap-3 p-3 rounded-lg bg-muted border border-border">
                     <span className="flex-shrink-0 w-6 h-6 rounded-full bg-cyan-500 text-white text-xs flex items-center justify-center font-bold">৩</span>
                     <div>
-                      <p className="text-white font-medium">{lang === 'bn' ? '"যোগ" এ ট্যাপ করুন' : 'Tap "Add"'}</p>
-                      <p className="text-gray-400 text-xs mt-1">{lang === 'bn' ? 'অ্যাপ আপনার হোম স্ক্রিনে যোগ হবে!' : 'App will be added to your home screen!'}</p>
+                      <p className="text-foreground font-medium">{lang === 'bn' ? '"যোগ" এ ট্যাপ করুন' : 'Tap "Add"'}</p>
+                      <p className="text-muted-foreground text-xs mt-1">{lang === 'bn' ? 'অ্যাপ আপনার হোম স্ক্রিনে যোগ হবে!' : 'App will be added to your home screen!'}</p>
                     </div>
                   </div>
                 </div>
@@ -3263,24 +3275,24 @@ export default function Home() {
                     : 'Follow these steps to install NextGen app on your phone:'}
                 </p>
                 <div className="space-y-3 text-sm">
-                  <div className="flex items-start gap-3 p-3 rounded-lg bg-[#141414] border border-[#333]">
+                  <div className="flex items-start gap-3 p-3 rounded-lg bg-muted border border-border">
                     <span className="flex-shrink-0 w-6 h-6 rounded-full bg-cyan-500 text-white text-xs flex items-center justify-center font-bold">১</span>
                     <div>
-                      <p className="text-white font-medium">{lang === 'bn' ? 'ব্রাউজার মেনু খুলুন' : 'Open Browser Menu'}</p>
-                      <p className="text-gray-400 text-xs mt-1">{lang === 'bn' ? 'উপরে ডান কোণায় ⋮ বা ☰ এ ট্যাপ করুন' : 'Tap on ⋮ or ☰ at top right corner'}</p>
+                      <p className="text-foreground font-medium">{lang === 'bn' ? 'ব্রাউজার মেনু খুলুন' : 'Open Browser Menu'}</p>
+                      <p className="text-muted-foreground text-xs mt-1">{lang === 'bn' ? 'উপরে ডান কোণায় ⋮ বা ☰ এ ট্যাপ করুন' : 'Tap on ⋮ or ☰ at top right corner'}</p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-3 p-3 rounded-lg bg-[#141414] border border-[#333]">
+                  <div className="flex items-start gap-3 p-3 rounded-lg bg-muted border border-border">
                     <span className="flex-shrink-0 w-6 h-6 rounded-full bg-cyan-500 text-white text-xs flex items-center justify-center font-bold">২</span>
                     <div>
-                      <p className="text-white font-medium">{lang === 'bn' ? '"অ্যাপ ইনস্টল করুন" বা "Add to Home Screen" নির্বাচন করুন' : 'Select "Install App" or "Add to Home Screen"'}</p>
+                      <p className="text-foreground font-medium">{lang === 'bn' ? '"অ্যাপ ইনস্টল করুন" বা "Add to Home Screen" নির্বাচন করুন' : 'Select "Install App" or "Add to Home Screen"'}</p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-3 p-3 rounded-lg bg-[#141414] border border-[#333]">
+                  <div className="flex items-start gap-3 p-3 rounded-lg bg-muted border border-border">
                     <span className="flex-shrink-0 w-6 h-6 rounded-full bg-cyan-500 text-white text-xs flex items-center justify-center font-bold">৩</span>
                     <div>
-                      <p className="text-white font-medium">{lang === 'bn' ? '"ইনস্টল" এ ট্যাপ করুন' : 'Tap "Install"'}</p>
-                      <p className="text-gray-400 text-xs mt-1">{lang === 'bn' ? 'অ্যাপ আপনার হোম স্ক্রিনে যোগ হবে!' : 'App will be added to your home screen!'}</p>
+                      <p className="text-foreground font-medium">{lang === 'bn' ? '"ইনস্টল" এ ট্যাপ করুন' : 'Tap "Install"'}</p>
+                      <p className="text-muted-foreground text-xs mt-1">{lang === 'bn' ? 'অ্যাপ আপনার হোম স্ক্রিনে যোগ হবে!' : 'App will be added to your home screen!'}</p>
                     </div>
                   </div>
                 </div>
@@ -3299,10 +3311,10 @@ export default function Home() {
       {/* Portfolio Modal */}
       {portfolioItem && (
         <Dialog open={!!portfolioItem} onOpenChange={() => setPortfolioItem(null)}>
-          <DialogContent className="max-w-4xl bg-[#0a0a0a] border-[#333]">
+          <DialogContent className="max-w-4xl bg-card border-border">
             <DialogHeader>
-              <DialogTitle className="text-white">{portfolioItem.title}</DialogTitle>
-              <DialogDescription className="sr-only">পোর্টফোলিও ছবি দেখুন</DialogDescription>
+              <DialogTitle className="text-foreground">{portfolioItem.title}</DialogTitle>
+              <DialogDescription className="sr-only">{lang === 'bn' ? 'পোর্টফোলিও ছবি দেখুন' : 'View portfolio image'}</DialogDescription>
             </DialogHeader>
             <div className="relative aspect-square rounded-xl overflow-hidden">
               <Image src={portfolioItem.src} alt={portfolioItem.title} fill className="object-cover" />
@@ -3311,11 +3323,11 @@ export default function Home() {
               <a href="https://wa.me/8801711731354?text=এই%20ধরনের%20ডিজাইন%20দরকার" target="_blank" rel="noopener noreferrer" className="flex-1">
                 <Button className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-400 hover:to-green-500 text-white">
                   <MessageCircle className="w-4 h-4 mr-2" aria-hidden="true" />
-                  WhatsApp এ জানুন
+                  {t.common.contactOnWhatsApp}
                 </Button>
               </a>
-              <Button variant="outline" onClick={() => setPortfolioItem(null)} className="flex-1 border-[#333] text-gray-300 hover:bg-[#1a1a1a]">
-                {lang === 'bn' ? 'বন্ধ করুন' : 'Close'}
+              <Button variant="outline" onClick={() => setPortfolioItem(null)} className="flex-1 border-border text-muted-foreground hover:bg-muted">
+                {t.common.close}
               </Button>
             </div>
           </DialogContent>
@@ -3325,28 +3337,28 @@ export default function Home() {
       {/* Blog Post Modal */}
       {selectedBlogPost && (
         <Dialog open={!!selectedBlogPost} onOpenChange={() => setSelectedBlogPost(null)}>
-          <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto bg-[#0a0a0a] border-[#333]">
+          <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto bg-card border-border">
             <DialogHeader>
               <div className="flex items-center gap-2 mb-2">
                 <Badge className="bg-purple-500/80 text-white">{selectedBlogPost.category}</Badge>
-                <span className="text-gray-500 text-xs">{selectedBlogPost.date} • {selectedBlogPost.readTime}</span>
+                <span className="text-muted-foreground text-xs">{selectedBlogPost.date} • {selectedBlogPost.readTime}</span>
               </div>
-              <DialogTitle className="text-white text-xl md:text-2xl">{selectedBlogPost.title}</DialogTitle>
+              <DialogTitle className="text-foreground text-xl md:text-2xl">{selectedBlogPost.title}</DialogTitle>
             </DialogHeader>
             <div className="relative h-48 md:h-64 rounded-xl overflow-hidden mb-4">
               <Image src={selectedBlogPost.image} alt={selectedBlogPost.title} fill className="object-cover" />
             </div>
             <div className="prose prose-invert prose-sm max-w-none">
-              <div className="text-gray-300 whitespace-pre-line leading-relaxed">
+              <div className="text-muted-foreground whitespace-pre-line leading-relaxed">
                 {selectedBlogPost.content?.split('\n').map((line, i) => {
                   if (line.startsWith('## ')) {
                     return <h2 key={i} className="text-cyan-400 text-lg font-bold mt-4 mb-2">{line.replace('## ', '')}</h2>;
                   }
                   if (line.startsWith('**') && line.endsWith('**')) {
-                    return <p key={i} className="font-semibold text-white my-1">{line.replace(/\*\*/g, '')}</p>;
+                    return <p key={i} className="font-semibold text-foreground my-1">{line.replace(/\*\*/g, '')}</p>;
                   }
                   if (line.startsWith('- ')) {
-                    return <li key={i} className="text-gray-400 ml-4">{line.replace('- ', '')}</li>;
+                    return <li key={i} className="text-muted-foreground ml-4">{line.replace('- ', '')}</li>;
                   }
                   if (line.trim() === '') {
                     return <br key={i} />;
@@ -3359,11 +3371,11 @@ export default function Home() {
               <a href="https://wa.me/8801711731354?text=হ্যালো, আমি ব্লগ পোস্ট পড়ে আগ্রহী" target="_blank" rel="noopener noreferrer" className="flex-1">
                 <Button className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-400 hover:to-green-500 text-white">
                   <MessageCircle className="w-4 h-4 mr-2" aria-hidden="true" />
-                  {lang === 'bn' ? 'যোগাযোগ করুন' : 'Contact Us'}
+                  {t.about.cta1}
                 </Button>
               </a>
-              <Button variant="outline" onClick={() => setSelectedBlogPost(null)} className="flex-1 border-[#333] text-gray-300 hover:bg-[#1a1a1a]">
-                {lang === 'bn' ? 'বন্ধ করুন' : 'Close'}
+              <Button variant="outline" onClick={() => setSelectedBlogPost(null)} className="flex-1 border-border text-muted-foreground hover:bg-muted">
+                {t.common.close}
               </Button>
             </div>
           </DialogContent>
