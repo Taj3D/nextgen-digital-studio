@@ -239,14 +239,20 @@ const translations = {
       form: {
         title: 'ফ্রি কনসালটেশন',
         name: 'আপনার নাম',
+        namePlaceholder: 'আপনার পুরো নাম',
         mobile: 'মোবাইল নম্বর',
+        mobilePlaceholder: '০১XXXXXXXXX',
         email: 'ইমেইল (ঐচ্ছিক)',
-        service: 'সার্ভিস নির্বাচন করুন',
+        emailPlaceholder: 'example@email.com',
+        service: 'সার্ভিস নির্বাচন',
         selectService: 'সার্ভিস নির্বাচন করুন',
         message: 'আপনার মেসেজ',
-        submit: 'পাঠান',
-        success: 'আপনার অনুরোধ সফলভাবে জমা হয়েছে!',
-        successNote: 'আমরা শীঘ্রই যোগাযোগ করব।'
+        messagePlaceholder: 'আপনার প্রজেক্ট সম্পর্কে বিস্তারিত লিখুন...',
+        submit: 'ফ্রি কনসালটেন্সি বুক করুন',
+        submitting: 'পাঠানো হচ্ছে...',
+        success: 'ধন্যবাদ!',
+        successNote: 'আপনার অনুরোধ সফলভাবে জমা হয়েছে। ইঞ্জিনিয়ার তাজ ভাই শীঘ্রই যোগাযোগ করবেন।',
+        anotherRequest: 'আরেকটি অনুরোধ পাঠান'
       }
     },
     footer: {
@@ -257,13 +263,62 @@ const translations = {
       terms: 'শর্তাবলী',
       refund: 'রিফান্ড পলিসি',
       copyright: 'সর্বস্বত্ব সংরক্ষিত।',
-      credit: 'ইঞ্জিনিয়ার মোঃ নাজমুল ইসলাম তাজ (তাজ ভাই) | যশোর, বাংলাদেশ'
+      credit: 'ইঞ্জিনিয়ার মোঃ নাজমুল ইসলাম তাজ (তাজ ভাই) | যশোর, বাংলাদেশ',
+      services: 'সার্ভিস',
+      packages: 'প্যাকেজ',
+      about: 'সম্পর্কে',
+      contact: 'যোগাযোগ',
+      downloadApp: 'অ্যাপ ডাউনলোড',
+      installApp: 'ইনস্টল করুন',
+      free: 'ফ্রি',
+      comingSoon: 'শীঘ্রই আসছে'
     },
     chat: {
       title: 'AI সহায়িকা',
       placeholder: 'আপনার মেসেজ লিখুন...',
       send: 'পাঠান',
-      typing: 'টাইপ করছে...'
+      typing: 'টাইপ করছে...',
+      online: 'সবসময় অনলাইন',
+      chatHistory: 'চ্যাট ইতিহাস',
+      deleteAll: 'সব মুছুন',
+      noHistory: 'কোনো ইতিহাস নেই',
+      newChat: 'নতুন চ্যাট',
+      closeChat: 'চ্যাট বন্ধ করুন',
+      openChat: 'AI চ্যাট খুলুন',
+      goodAnswer: 'ভালো উত্তর',
+      badAnswer: 'খারাপ উত্তর',
+      share: 'শেয়ার করুন',
+      copy: 'কপি করুন',
+      copied: 'চ্যাট কপি হয়েছে!',
+      thanks: 'ধন্যবাদ!',
+      thanksForFeedback: 'মন্তব্যের জন্য ধন্যবাদ',
+      saySomething: 'বলুন... (বাংলা/ইংরেজি)',
+      voiceOn: 'ভয়েস বন্ধ করুন',
+      voiceOff: 'ভয়েস ইনপুট'
+    },
+    common: {
+      close: 'বন্ধ করুন',
+      gotIt: 'বুঝেছি',
+      installApp: 'অ্যাপ ইনস্টল করুন',
+      installSteps: 'আপনার ফোনে NextGen অ্যাপ ইনস্টল করতে নিচের ধাপগুলো অনুসরণ করুন:',
+      installStepsIOS: 'আপনার iPhone/iPad এ NextGen অ্যাপ ইনস্টল করতে নিচের ধাপগুলো অনুসরণ করুন:',
+      tapShare: 'শেয়ার বাটনে ট্যাপ করুন',
+      tapShareDesc: 'নিচের মেনু থেকে ',
+      selectAddToHome: '"হোম স্ক্রিনে যোগ করুন" নির্বাচন করুন',
+      selectAddToHomeDesc: 'স্ক্রল করে ',
+      tapAdd: '"যোগ" এ ট্যাপ করুন',
+      tapAddDesc: 'অ্যাপ আপনার হোম স্ক্রিনে যোগ হবে!',
+      openBrowserMenu: 'ব্রাউজার মেনু খুলুন',
+      openBrowserMenuDesc: 'উপরে ডান কোণায় ⋮ বা ☰ এ ট্যাপ করুন',
+      selectInstallApp: '"অ্যাপ ইনস্টল করুন" বা "Add to Home Screen" নির্বাচন করুন',
+      tapInstall: '"ইনস্টল" এ ট্যাপ করুন',
+      tapInstallDesc: 'অ্যাপ আপনার হোম স্ক্রিনে যোগ হবে!',
+      lightMode: 'লাইট মোডে যান',
+      darkMode: 'ডার্ক মোডে যান',
+      loading: 'লোড হচ্ছে...',
+      verified: 'যাচাইকৃত',
+      contactOnWhatsApp: 'WhatsApp এ জানুন',
+      goToMain: 'মূল বিষয়ে যান'
     }
   },
   en: {
@@ -360,14 +415,20 @@ const translations = {
       form: {
         title: 'Free Consultation',
         name: 'Your Name',
+        namePlaceholder: 'Your full name',
         mobile: 'Mobile Number',
+        mobilePlaceholder: '01XXXXXXXXX',
         email: 'Email (Optional)',
+        emailPlaceholder: 'example@email.com',
         service: 'Select Service',
         selectService: 'Select a Service',
         message: 'Your Message',
-        submit: 'Submit',
-        success: 'Your request has been submitted successfully!',
-        successNote: 'We will contact you soon.'
+        messagePlaceholder: 'Write details about your project...',
+        submit: 'Book Free Consultation',
+        submitting: 'Submitting...',
+        success: 'Thank You!',
+        successNote: 'Your request has been submitted successfully. Engineer Taj Bhai will contact you soon.',
+        anotherRequest: 'Send Another Request'
       }
     },
     footer: {
@@ -378,13 +439,62 @@ const translations = {
       terms: 'Terms of Service',
       refund: 'Refund Policy',
       copyright: 'All Rights Reserved.',
-      credit: 'Engineer Md. Nazmul Islam Taj | Jessore, Bangladesh'
+      credit: 'Engineer Md. Nazmul Islam Taj | Jessore, Bangladesh',
+      services: 'Services',
+      packages: 'Packages',
+      about: 'About',
+      contact: 'Contact',
+      downloadApp: 'Download App',
+      installApp: 'Install App',
+      free: 'Free',
+      comingSoon: 'Coming Soon'
     },
     chat: {
       title: 'AI Assistant',
-      placeholder: 'Type your message...',
+      placeholder: 'Type your question...',
       send: 'Send',
-      typing: 'Typing...'
+      typing: 'Typing...',
+      online: 'Always Online',
+      chatHistory: 'Chat History',
+      deleteAll: 'Delete All',
+      noHistory: 'No history',
+      newChat: 'New Chat',
+      closeChat: 'Close Chat',
+      openChat: 'Open AI Chat',
+      goodAnswer: 'Good Answer',
+      badAnswer: 'Bad Answer',
+      share: 'Share',
+      copy: 'Copy',
+      copied: 'Chat copied!',
+      thanks: 'Thanks!',
+      thanksForFeedback: 'Thanks for feedback',
+      saySomething: 'Say... (Bengali/English)',
+      voiceOn: 'Turn off voice',
+      voiceOff: 'Voice input'
+    },
+    common: {
+      close: 'Close',
+      gotIt: 'Got it',
+      installApp: 'Install App',
+      installSteps: 'Follow these steps to install NextGen app on your phone:',
+      installStepsIOS: 'Follow these steps to install NextGen app on your iPhone/iPad:',
+      tapShare: 'Tap Share Button',
+      tapShareDesc: 'From the bottom menu, tap ',
+      selectAddToHome: 'Select "Add to Home Screen"',
+      selectAddToHomeDesc: 'Scroll and find ',
+      tapAdd: 'Tap "Add"',
+      tapAddDesc: 'App will be added to your home screen!',
+      openBrowserMenu: 'Open Browser Menu',
+      openBrowserMenuDesc: 'Tap on ⋮ or ☰ at top right corner',
+      selectInstallApp: 'Select "Install App" or "Add to Home Screen"',
+      tapInstall: 'Tap "Install"',
+      tapInstallDesc: 'App will be added to your home screen!',
+      lightMode: 'Switch to Light Mode',
+      darkMode: 'Switch to Dark Mode',
+      loading: 'Loading...',
+      verified: 'Verified',
+      contactOnWhatsApp: 'Contact on WhatsApp',
+      goToMain: 'Go to main content'
     }
   }
 };
@@ -1736,59 +1846,59 @@ export default function Home() {
   // Preloader
   if (loading) {
     return (
-      <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-[#0a0a0a]" role="status" aria-label="লোড হচ্ছে">
+      <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-background" role="status" aria-label={t.common.loading}>
         <div className="text-center">
           <div className="text-4xl md:text-5xl font-extrabold mb-6">
             <span className="text-cyan-400">NextGen</span>
             <span className="text-yellow-400">Digital</span>
           </div>
-          <div className="w-64 md:w-80 h-2 bg-[#333] rounded-full overflow-hidden">
+          <div className="w-64 md:w-80 h-2 bg-muted rounded-full overflow-hidden">
             <div 
               className="h-full bg-gradient-to-r from-cyan-400 to-yellow-400 transition-all duration-300"
               style={{ width: `${Math.min(loadingProgress, 100)}%` }}
             />
           </div>
-          <p className="text-gray-400 mt-4">⏳ লোড হচ্ছে... v2.0</p>
+          <p className="text-muted-foreground mt-4">⏳ {t.common.loading} v2.0</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'bg-[#0a0a0a]' : 'bg-gray-50'}`}>
+    <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
       {/* Skip to main content link for accessibility */}
       <a 
         href="#main-content" 
         className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[99999] focus:bg-cyan-500 focus:text-black focus:px-4 focus:py-2 focus:rounded-lg"
       >
-        মূল বিষয়ে যান
+        {t.common.goToMain}
       </a>
 
       {/* Navigation */}
       <nav 
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? (isDarkMode ? 'bg-[#0a0a0a]/95' : 'bg-white/95') + ' backdrop-blur-md shadow-lg shadow-cyan-500/10' : 'bg-transparent'}`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-background/95 backdrop-blur-md shadow-lg shadow-cyan-500/10' : 'bg-transparent'}`}
         role="navigation"
-        aria-label="প্রধান নেভিগেশন"
+        aria-label={t.nav.services}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 md:h-20">
             {/* Logo */}
-            <a href="#home" className="flex items-center gap-3 group" aria-label="NextGen Digital - হোম">
+            <a href="#home" className="flex items-center gap-3 group" aria-label="NextGen Digital - Home">
               <div className="relative w-10 h-10 md:w-12 md:h-12 rounded-xl overflow-hidden bg-gradient-to-br from-cyan-400 to-cyan-600 p-0.5 group-hover:shadow-lg group-hover:shadow-cyan-500/30 transition-all">
                 <Image src="/logo.png" alt="NextGen Logo" fill className="object-cover rounded-lg" />
               </div>
               <div className="hidden sm:block">
-                <span className={`text-lg md:text-xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>NextGen <span className="text-cyan-400">Digital</span></span>
-                <p className={`text-[10px] ${isDarkMode ? 'text-gray-400' : 'text-gray-500'} -mt-1`}>যশোরের প্রথম ডিজিটাল ইঞ্জিনিয়ার</p>
+                <span className="text-lg md:text-xl font-bold text-foreground">NextGen <span className="text-cyan-400">Digital</span></span>
+                <p className="text-[10px] text-muted-foreground -mt-1">{t.about.badge}</p>
               </div>
             </a>
             
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-8">
-              <a href="#services" className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} hover:text-cyan-400 transition-colors`}>{t.nav.services}</a>
-              <a href="#pricing" className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} hover:text-cyan-400 transition-colors`}>{t.nav.pricing}</a>
-              <a href="#about" className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} hover:text-cyan-400 transition-colors`}>{t.nav.about}</a>
-              <a href="#contact" className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} hover:text-cyan-400 transition-colors`}>{t.nav.contact}</a>
+              <a href="#services" className="text-muted-foreground hover:text-cyan-400 transition-colors">{t.nav.services}</a>
+              <a href="#pricing" className="text-muted-foreground hover:text-cyan-400 transition-colors">{t.nav.pricing}</a>
+              <a href="#about" className="text-muted-foreground hover:text-cyan-400 transition-colors">{t.nav.about}</a>
+              <a href="#contact" className="text-muted-foreground hover:text-cyan-400 transition-colors">{t.nav.contact}</a>
             </div>
             
             {/* CTA & Mobile Menu */}
@@ -1796,8 +1906,8 @@ export default function Home() {
               {/* Theme Toggle */}
               <button
                 onClick={toggleTheme}
-                className="p-2 rounded-lg bg-[#1a1a1a] border border-[#333] text-white hover:border-cyan-500/50 transition-colors"
-                aria-label={isDarkMode ? 'লাইট মোডে যান' : 'ডার্ক মোডে যান'}
+                className="p-2 rounded-lg bg-secondary border border-border text-foreground hover:border-cyan-500/50 transition-colors"
+                aria-label={isDarkMode ? t.common.lightMode : t.common.darkMode}
               >
                 {isDarkMode ? <Sun className="w-5 h-5 text-yellow-400" /> : <Moon className="w-5 h-5 text-cyan-400" />}
               </button>
@@ -1805,14 +1915,14 @@ export default function Home() {
               {/* Language Toggle */}
               <button
                 onClick={() => setLang(lang === 'bn' ? 'en' : 'bn')}
-                className="px-3 py-1.5 rounded-lg bg-[#1a1a1a] border border-[#333] text-sm font-medium text-white hover:border-cyan-500/50 transition-colors flex items-center gap-1.5"
+                className="px-3 py-1.5 rounded-lg bg-secondary border border-border text-sm font-medium text-foreground hover:border-cyan-500/50 transition-colors flex items-center gap-1.5"
                 aria-label={lang === 'bn' ? 'Switch to English' : 'বাংলায় স্যুইচ করুন'}
               >
                 <span className="text-base">{lang === 'bn' ? '🇬🇧' : '🇧🇩'}</span>
                 <span className="hidden sm:inline">{lang === 'bn' ? 'EN' : 'বাংলা'}</span>
               </button>
               
-              <a href="https://wa.me/8801711731354" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp এ যোগাযোগ করুন">
+              <a href="https://wa.me/8801711731354" target="_blank" rel="noopener noreferrer" aria-label={t.common.contactOnWhatsApp}>
                 <Button className="bg-green-600 hover:bg-green-700 text-white gap-2">
                   <MessageCircle className="w-4 h-4" aria-hidden="true" />
                   <span className="hidden sm:inline">WhatsApp</span>
@@ -1825,7 +1935,7 @@ export default function Home() {
                 className="md:hidden p-2 text-cyan-400 hover:bg-cyan-400/10 rounded-lg transition-colors"
                 aria-expanded={mobileMenuOpen}
                 aria-controls="mobile-menu"
-                aria-label={mobileMenuOpen ? 'মেনু বন্ধ করুন' : 'মেনু খুলুন'}
+                aria-label={mobileMenuOpen ? (lang === 'bn' ? 'মেনু বন্ধ করুন' : 'Close Menu') : (lang === 'bn' ? 'মেনু খুলুন' : 'Open Menu')}
               >
                 {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
               </button>
@@ -1839,11 +1949,11 @@ export default function Home() {
           className={`md:hidden overflow-hidden transition-all duration-500 ease-out ${mobileMenuOpen ? 'max-h-96 opacity-100 translate-y-0' : 'max-h-0 opacity-0 -translate-y-4'}`}
           role="menu"
         >
-          <div className="bg-[#0a0a0a]/95 backdrop-blur-md border-t border-[#333] px-4 py-4 space-y-2">
-            <a href="#services" onClick={() => setMobileMenuOpen(false)} className="block py-3 px-4 text-gray-300 hover:text-cyan-400 hover:bg-cyan-400/10 rounded-lg transition-all duration-200 hover:translate-x-2" role="menuitem">{t.nav.services}</a>
-            <a href="#pricing" onClick={() => setMobileMenuOpen(false)} className="block py-3 px-4 text-gray-300 hover:text-cyan-400 hover:bg-cyan-400/10 rounded-lg transition-all duration-200 hover:translate-x-2" role="menuitem">{t.nav.pricing}</a>
-            <a href="#about" onClick={() => setMobileMenuOpen(false)} className="block py-3 px-4 text-gray-300 hover:text-cyan-400 hover:bg-cyan-400/10 rounded-lg transition-all duration-200 hover:translate-x-2" role="menuitem">{t.nav.about}</a>
-            <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="block py-3 px-4 text-gray-300 hover:text-cyan-400 hover:bg-cyan-400/10 rounded-lg transition-all duration-200 hover:translate-x-2" role="menuitem">{t.nav.contact}</a>
+          <div className="bg-background/95 backdrop-blur-md border-t border-border px-4 py-4 space-y-2">
+            <a href="#services" onClick={() => setMobileMenuOpen(false)} className="block py-3 px-4 text-muted-foreground hover:text-cyan-400 hover:bg-cyan-400/10 rounded-lg transition-all duration-200 hover:translate-x-2" role="menuitem">{t.nav.services}</a>
+            <a href="#pricing" onClick={() => setMobileMenuOpen(false)} className="block py-3 px-4 text-muted-foreground hover:text-cyan-400 hover:bg-cyan-400/10 rounded-lg transition-all duration-200 hover:translate-x-2" role="menuitem">{t.nav.pricing}</a>
+            <a href="#about" onClick={() => setMobileMenuOpen(false)} className="block py-3 px-4 text-muted-foreground hover:text-cyan-400 hover:bg-cyan-400/10 rounded-lg transition-all duration-200 hover:translate-x-2" role="menuitem">{t.nav.about}</a>
+            <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="block py-3 px-4 text-muted-foreground hover:text-cyan-400 hover:bg-cyan-400/10 rounded-lg transition-all duration-200 hover:translate-x-2" role="menuitem">{t.nav.contact}</a>
             <button 
               onClick={() => { setChatOpen(true); setMobileMenuOpen(false); }}
               className="w-full py-3 px-4 text-left text-cyan-400 hover:bg-cyan-400/10 rounded-lg transition-all duration-200 hover:translate-x-2 flex items-center gap-2"
@@ -1859,7 +1969,7 @@ export default function Home() {
       {/* Hero Section */}
       <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 md:pt-20">
         <Particles />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0a0a0a]/50 to-[#0a0a0a] z-10" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background z-10" />
         
         <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="mb-6 animate-fade-in">
@@ -1879,14 +1989,14 @@ export default function Home() {
             </div>
           </div>
           
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 animate-fade-in-up">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6 animate-fade-in-up">
             {t.hero.title}{' '}
             <span className="bg-gradient-to-r from-cyan-400 via-cyan-300 to-yellow-400 bg-clip-text text-transparent">
               {t.hero.name}
             </span>
           </h1>
           
-          <div className="text-xl md:text-2xl lg:text-3xl text-gray-300 mb-8 h-10 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+          <div className="text-xl md:text-2xl lg:text-3xl text-muted-foreground mb-8 h-10 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
             <span className="text-cyan-400">{typingText}</span>
             <span className="animate-pulse">|</span>
           </div>
@@ -1913,10 +2023,10 @@ export default function Home() {
               { value: lang === 'bn' ? '৭,৫০০+' : '7,500+', label: t.hero.stats.clients, icon: User },
               { value: lang === 'bn' ? '৫০+' : '50+', label: t.hero.stats.countries, icon: Globe }
             ].map((stat, i) => (
-              <div key={i} className="p-4 md:p-6 rounded-2xl bg-[#141414]/80 backdrop-blur border border-[#333] hover:border-cyan-500/50 transition-all group">
+              <div key={i} className="p-4 md:p-6 rounded-2xl bg-card/80 backdrop-blur border border-border hover:border-cyan-500/50 transition-all group">
                 <stat.icon className="w-6 h-6 md:w-8 md:h-8 text-cyan-400 mx-auto mb-2 group-hover:scale-110 transition-transform" aria-hidden="true" />
-                <div className="text-2xl md:text-4xl font-bold text-white">{stat.value}</div>
-                <div className="text-xs md:text-sm text-gray-400">{stat.label}</div>
+                <div className="text-2xl md:text-4xl font-bold text-foreground">{stat.value}</div>
+                <div className="text-xs md:text-sm text-muted-foreground">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -1934,7 +2044,7 @@ export default function Home() {
       <main id="main-content">
         {/* Profile Section */}
         <section id="about" className="py-16 md:py-24 relative" aria-labelledby="about-heading">
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-[#0f1419] to-[#0a0a0a]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background via-card to-background" />
           
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
@@ -1942,10 +2052,10 @@ export default function Home() {
                 <Crown className="w-4 h-4 mr-1" aria-hidden="true" />
                 {t.about.badge}
               </Badge>
-              <h2 id="about-heading" className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+              <h2 id="about-heading" className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
                 {t.about.name} <span className="text-cyan-400">তাজ</span>
               </h2>
-              <p className="text-gray-400 text-lg">
+              <p className="text-muted-foreground text-lg">
                 {t.about.title}
               </p>
             </div>
@@ -1954,14 +2064,14 @@ export default function Home() {
             <div className="flex justify-center mb-12">
               <div className="relative group">
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-400 to-yellow-400 rounded-full blur-2xl opacity-30 group-hover:opacity-50 animate-pulse transition-opacity" aria-hidden="true" />
-                <div className="relative w-48 h-48 md:w-64 md:h-64 rounded-full overflow-hidden border-4 border-cyan-500/30 group-hover:border-cyan-500/50 transition-colors bg-[#141414]">
+                <div className="relative w-48 h-48 md:w-64 md:h-64 rounded-full overflow-hidden border-4 border-cyan-500/30 group-hover:border-cyan-500/50 transition-colors bg-card">
                   <Image src="/taj-bhai.jpg" alt="Engineer Md. Nazmul Islam Taj" fill className="object-cover" priority />
                 </div>
                 {/* Verified Badge */}
                 <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-cyan-500 to-cyan-600 rounded-full shadow-lg">
                   <span className="text-black text-xs font-bold flex items-center gap-1">
                     <Check className="w-3 h-3" aria-hidden="true" />
-                    {lang === 'bn' ? 'যাচাইকৃত' : 'Verified'}
+                    {t.common.verified}
                   </span>
                 </div>
               </div>
@@ -1969,7 +2079,7 @@ export default function Home() {
 
             {/* Timeline */}
             <div className="max-w-3xl mx-auto">
-              <h3 className="text-xl font-bold text-white mb-6 text-center">{t.about.timeline_title}</h3>
+              <h3 className="text-xl font-bold text-foreground mb-6 text-center">{t.about.timeline_title}</h3>
               <div className="space-y-4">
                 {timeline.map((item, i) => (
                   <div key={i} className="flex items-center gap-4 group">
@@ -1980,12 +2090,12 @@ export default function Home() {
                         <div className="absolute top-4 left-1/2 -translate-x-1/2 w-0.5 h-12 bg-gradient-to-b from-cyan-400 to-transparent" aria-hidden="true" />
                       )}
                     </div>
-                    <div className="flex-1 p-4 rounded-xl bg-[#141414] border border-[#333] group-hover:border-cyan-500/50 transition-all">
+                    <div className="flex-1 p-4 rounded-xl bg-card border border-border group-hover:border-cyan-500/50 transition-all">
                       <div className="flex items-center gap-2 mb-1">
                         <item.icon className="w-4 h-4 text-cyan-400" aria-hidden="true" />
-                        <span className="font-semibold text-white">{item.title}</span>
+                        <span className="font-semibold text-foreground">{item.title}</span>
                       </div>
-                      <div className="text-sm text-gray-400">{item.desc}</div>
+                      <div className="text-sm text-muted-foreground">{item.desc}</div>
                     </div>
                   </div>
                 ))}
@@ -2012,17 +2122,17 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <Badge className="bg-cyan-500/20 text-cyan-400 mb-4">{t.services.badge}</Badge>
-              <h2 id="services-heading" className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+              <h2 id="services-heading" className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
                 {t.services.title} <span className="text-cyan-400">{t.services.titleHighlight}</span>
               </h2>
-              <p className="text-gray-400 max-w-2xl mx-auto">
+              <p className="text-muted-foreground max-w-2xl mx-auto">
                 {t.services.subtitle}
               </p>
             </div>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {services.map((service, i) => (
-                <Card key={i} className="bg-[#141414] border-[#333] hover:border-cyan-500/50 transition-all duration-300 group overflow-hidden">
+                <Card key={i} className="bg-card border-border hover:border-cyan-500/50 transition-all duration-300 group overflow-hidden">
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between mb-4">
                       <div className="text-4xl">{service.icon}</div>
@@ -2030,13 +2140,13 @@ export default function Home() {
                         <Badge className="bg-yellow-500/20 text-yellow-400 text-xs">{service.badge}</Badge>
                       )}
                     </div>
-                    <h3 className="text-xl font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors">
+                    <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-cyan-400 transition-colors">
                       {service.title}
                     </h3>
-                    <p className="text-gray-400 text-sm mb-4">{service.description}</p>
+                    <p className="text-muted-foreground text-sm mb-4">{service.description}</p>
                     <ul className="space-y-1 mb-4">
                       {service.features.slice(0, 3).map((feature, j) => (
-                        <li key={j} className="flex items-center gap-2 text-gray-500 text-xs">
+                        <li key={j} className="flex items-center gap-2 text-muted-foreground text-xs">
                           <Check className="w-3 h-3 text-cyan-400 flex-shrink-0" aria-hidden="true" />
                           {feature}
                         </li>
@@ -2061,14 +2171,14 @@ export default function Home() {
         </section>
 
         {/* Portfolio Gallery Section */}
-        <section id="portfolio" className="py-16 md:py-24 bg-gradient-to-b from-[#0a0a0a] via-[#0f1419] to-[#0a0a0a]" aria-labelledby="portfolio-heading">
+        <section id="portfolio" className="py-16 md:py-24 bg-gradient-to-b from-background via-card to-background" aria-labelledby="portfolio-heading">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <Badge className="bg-yellow-500/20 text-yellow-400 mb-4">{t.portfolio.badge}</Badge>
-              <h2 id="portfolio-heading" className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+              <h2 id="portfolio-heading" className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
                 {t.portfolio.title} <span className="text-cyan-400">{t.portfolio.titleHighlight}</span>
               </h2>
-              <p className="text-gray-400 max-w-2xl mx-auto">
+              <p className="text-muted-foreground max-w-2xl mx-auto">
                 {t.portfolio.subtitle}
               </p>
             </div>
@@ -2102,7 +2212,7 @@ export default function Home() {
                 { src: '/portfolio/wood-art-1.png', title: lang === 'bn' ? 'উড আর্ট' : 'Wood Art', category: '🎨 CNC', desc: lang === 'bn' ? 'খোদাই' : 'Carving' },
                 { src: '/portfolio/facebook-work-1.jpg', title: lang === 'bn' ? 'সোশ্যাল মিডিয়া' : 'Social Media', category: '📱 Social', desc: lang === 'bn' ? 'কনটেন্ট' : 'Content' },
               ].map((item, i) => (
-                <div key={i} className="group relative aspect-square rounded-xl overflow-hidden bg-[#141414] border border-[#333] hover:border-cyan-500/50 transition-all cursor-pointer" onClick={() => setPortfolioItem({ src: item.src, title: item.title })}>
+                <div key={i} className="group relative aspect-square rounded-xl overflow-hidden bg-card border border-border hover:border-cyan-500/50 transition-all cursor-pointer" onClick={() => setPortfolioItem({ src: item.src, title: item.title })}>
                   <Image src={item.src} alt={item.title} fill className="object-cover group-hover:scale-110 transition-transform duration-500" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
                     <div className="absolute bottom-0 left-0 right-0 p-3">
@@ -2118,10 +2228,10 @@ export default function Home() {
             {/* Category Info */}
             <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
               {portfolioCategories.map((cat, i) => (
-                <div key={i} className={`p-4 rounded-xl bg-gradient-to-br ${cat.color} border border-[#333] text-center`}>
+                <div key={i} className={`p-4 rounded-xl bg-gradient-to-br ${cat.color} border border-border text-center`}>
                   <div className="text-2xl mb-2">{cat.icon}</div>
-                  <h4 className="text-white font-semibold text-sm">{cat.title}</h4>
-                  <p className="text-gray-400 text-xs">{cat.count}</p>
+                  <h4 className="text-foreground font-semibold text-sm">{cat.title}</h4>
+                  <p className="text-muted-foreground text-xs">{cat.count}</p>
                 </div>
               ))}
             </div>
@@ -2143,22 +2253,22 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <Badge className="bg-cyan-500/20 text-cyan-400 mb-4">{t.whyUs.badge}</Badge>
-              <h2 id="why-us-heading" className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+              <h2 id="why-us-heading" className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
                 {t.whyUs.title} <span className="text-cyan-400">{t.whyUs.titleHighlight}</span> {t.whyUs.titleEnd}
               </h2>
-              <p className="text-gray-400 max-w-2xl mx-auto">
+              <p className="text-muted-foreground max-w-2xl mx-auto">
                 {t.whyUs.subtitle}
               </p>
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {whyUs.map((item, i) => (
-                <div key={i} className="text-center p-6 rounded-2xl bg-[#141414] border border-[#333] hover:border-cyan-500/50 transition-all group">
+                <div key={i} className="text-center p-6 rounded-2xl bg-card border border-border hover:border-cyan-500/50 transition-all group">
                   <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-yellow-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
                     <item.icon className="w-8 h-8 text-cyan-400" aria-hidden="true" />
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-2">{item.title}</h3>
-                  <p className="text-gray-400 text-sm">{item.desc}</p>
+                  <h3 className="text-xl font-bold text-foreground mb-2">{item.title}</h3>
+                  <p className="text-muted-foreground text-sm">{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -2166,7 +2276,7 @@ export default function Home() {
             {/* Trust Badges */}
             <div className="mt-12 flex flex-wrap justify-center gap-6">
               {trustBadges.map((badge, i) => (
-                <div key={i} className="px-4 py-2 rounded-full bg-[#141414] border border-[#333] text-gray-300 text-sm">
+                <div key={i} className="px-4 py-2 rounded-full bg-card border border-border text-muted-foreground text-sm">
                   {badge}
                 </div>
               ))}
@@ -2175,14 +2285,14 @@ export default function Home() {
         </section>
 
         {/* Testimonials Section */}
-        <section id="testimonials" className="py-16 md:py-24 bg-gradient-to-b from-[#0a0a0a] via-[#0f1419] to-[#0a0a0a]" aria-labelledby="testimonials-heading">
+        <section id="testimonials" className="py-16 md:py-24 bg-gradient-to-b from-background via-card to-background" aria-labelledby="testimonials-heading">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <Badge className="bg-yellow-500/20 text-yellow-400 mb-4">{t.testimonials.badge}</Badge>
-              <h2 id="testimonials-heading" className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+              <h2 id="testimonials-heading" className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
                 {t.testimonials.title} <span className="text-cyan-400">{t.testimonials.titleHighlight}</span>
               </h2>
-              <p className="text-gray-400 max-w-2xl mx-auto">
+              <p className="text-muted-foreground max-w-2xl mx-auto">
                 {t.testimonials.subtitle}
               </p>
             </div>
@@ -2194,7 +2304,7 @@ export default function Home() {
                 <div className="flex transition-transform duration-500 ease-in-out" style={{ transform: `translateX(-${activeTestimonial * 100}%)` }}>
                   {testimonials.map((testimonial, i) => (
                     <div key={i} className="w-full flex-shrink-0 px-4">
-                      <Card className="bg-[#141414] border-[#333] hover:border-cyan-500/50 transition-all max-w-2xl mx-auto">
+                      <Card className="bg-card border-border hover:border-cyan-500/50 transition-all max-w-2xl mx-auto">
                         <CardContent className="p-8">
                           <Quote className="w-10 h-10 text-cyan-500/30 mb-4" aria-hidden="true" />
                           <div className="flex items-center gap-1 mb-4">
@@ -2202,11 +2312,11 @@ export default function Home() {
                               <Star key={j} className="w-5 h-5 text-yellow-400 fill-yellow-400" aria-hidden="true" />
                             ))}
                           </div>
-                          <p className="text-gray-300 text-lg mb-6 leading-relaxed">"{testimonial.text}"</p>
+                          <p className="text-muted-foreground text-lg mb-6 leading-relaxed">"{testimonial.text}"</p>
                           <div className="flex items-center justify-between">
                             <div>
-                              <div className="text-white font-bold text-lg">{testimonial.name}</div>
-                              <div className="text-gray-500">{testimonial.location}</div>
+                              <div className="text-foreground font-bold text-lg">{testimonial.name}</div>
+                              <div className="text-muted-foreground">{testimonial.location}</div>
                             </div>
                             <Badge className="bg-cyan-500/20 text-cyan-400">{testimonial.service}</Badge>
                           </div>
@@ -2224,7 +2334,7 @@ export default function Home() {
                     key={i}
                     onClick={() => setActiveTestimonial(i)}
                     className={`w-3 h-3 rounded-full transition-all ${
-                      activeTestimonial === i ? 'bg-cyan-400 w-8' : 'bg-gray-600 hover:bg-gray-500'
+                      activeTestimonial === i ? 'bg-cyan-400 w-8' : 'bg-muted-foreground hover:bg-muted-foreground/70'
                     }`}
                     aria-label={`Testimonial ${i + 1}`}
                   />
@@ -2234,14 +2344,14 @@ export default function Home() {
               {/* Navigation Arrows */}
               <button
                 onClick={() => setActiveTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length)}
-                className="absolute left-0 top-1/2 -translate-y-1/2 p-2 rounded-full bg-[#141414] border border-[#333] text-white hover:border-cyan-500/50 transition-all hidden md:block"
+                className="absolute left-0 top-1/2 -translate-y-1/2 p-2 rounded-full bg-card border border-border text-foreground hover:border-cyan-500/50 transition-all hidden md:block"
                 aria-label="Previous testimonial"
               >
                 <ChevronLeft className="w-6 h-6" />
               </button>
               <button
                 onClick={() => setActiveTestimonial((prev) => (prev + 1) % testimonials.length)}
-                className="absolute right-0 top-1/2 -translate-y-1/2 p-2 rounded-full bg-[#141414] border border-[#333] text-white hover:border-cyan-500/50 transition-all hidden md:block"
+                className="absolute right-0 top-1/2 -translate-y-1/2 p-2 rounded-full bg-card border border-border text-foreground hover:border-cyan-500/50 transition-all hidden md:block"
                 aria-label="Next testimonial"
               >
                 <ChevronRight className="w-6 h-6" />
@@ -2256,10 +2366,10 @@ export default function Home() {
                 { value: '৫০+', label: lang === 'bn' ? 'দেশে সেবা' : 'Countries Served', icon: Globe },
                 { value: '১৭+', label: lang === 'bn' ? 'বছর অভিজ্ঞতা' : 'Years Experience', icon: Award },
               ].map((stat, i) => (
-                <div key={i} className="text-center p-4 rounded-xl bg-[#141414] border border-[#333]">
+                <div key={i} className="text-center p-4 rounded-xl bg-card border border-border">
                   <stat.icon className="w-6 h-6 text-cyan-400 mx-auto mb-2" aria-hidden="true" />
-                  <div className="text-2xl font-bold text-white">{stat.value}</div>
-                  <div className="text-gray-400 text-sm">{stat.label}</div>
+                  <div className="text-2xl font-bold text-foreground">{stat.value}</div>
+                  <div className="text-muted-foreground text-sm">{stat.label}</div>
                 </div>
               ))}
             </div>
@@ -2271,17 +2381,17 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <Badge className="bg-purple-500/20 text-purple-400 mb-4">{t.blog.badge}</Badge>
-              <h2 id="blog-heading" className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+              <h2 id="blog-heading" className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
                 {t.blog.title} <span className="text-cyan-400">{t.blog.titleHighlight}</span>
               </h2>
-              <p className="text-gray-400 max-w-2xl mx-auto">
+              <p className="text-muted-foreground max-w-2xl mx-auto">
                 {t.blog.subtitle}
               </p>
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {blogPosts.map((post, i) => (
-                <Card key={post.id} className="bg-[#141414] border-[#333] hover:border-cyan-500/50 transition-all duration-300 group overflow-hidden">
+                <Card key={post.id} className="bg-card border-border hover:border-cyan-500/50 transition-all duration-300 group overflow-hidden">
                   <div className="relative h-48 overflow-hidden">
                     <Image src={post.image} alt={post.title} fill className="object-cover group-hover:scale-110 transition-transform duration-500" />
                     <div className="absolute top-3 left-3">
@@ -2289,17 +2399,17 @@ export default function Home() {
                     </div>
                   </div>
                   <CardContent className="p-4">
-                    <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
                       <Calendar className="w-3 h-3" aria-hidden="true" />
                       <span>{post.date}</span>
                       <span>•</span>
                       <Clock className="w-3 h-3" aria-hidden="true" />
                       <span>{post.readTime}</span>
                     </div>
-                    <h3 className="text-white font-semibold mb-2 group-hover:text-cyan-400 transition-colors line-clamp-2">
+                    <h3 className="text-foreground font-semibold mb-2 group-hover:text-cyan-400 transition-colors line-clamp-2">
                       {post.title}
                     </h3>
-                    <p className="text-gray-400 text-sm line-clamp-2 mb-3">{post.excerpt}</p>
+                    <p className="text-muted-foreground text-sm line-clamp-2 mb-3">{post.excerpt}</p>
                     <Button 
                       variant="outline" 
                       size="sm" 
@@ -2331,19 +2441,19 @@ export default function Home() {
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <Badge className="bg-cyan-500/20 text-cyan-400 mb-4">{t.faq.badge}</Badge>
-              <h2 id="faq-heading" className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+              <h2 id="faq-heading" className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
                 {t.faq.title} <span className="text-cyan-400">{t.faq.titleHighlight}</span>
               </h2>
             </div>
 
             <div className="space-y-4">
               {faq.map((item, i) => (
-                <details key={i} className="group bg-[#141414] border border-[#333] rounded-xl overflow-hidden">
-                  <summary className="flex items-center justify-between p-5 cursor-pointer hover:bg-[#1a1a1a] transition-colors">
-                    <span className="text-white font-semibold pr-4">{item.q}</span>
+                <details key={i} className="group bg-card border border-border rounded-xl overflow-hidden">
+                  <summary className="flex items-center justify-between p-5 cursor-pointer hover:bg-muted transition-colors">
+                    <span className="text-foreground font-semibold pr-4">{item.q}</span>
                     <ChevronDown className="w-5 h-5 text-cyan-400 group-open:rotate-180 transition-transform flex-shrink-0" aria-hidden="true" />
                   </summary>
-                  <div className="px-5 pb-5 text-gray-400 text-sm leading-relaxed border-t border-[#333]">
+                  <div className="px-5 pb-5 text-muted-foreground text-sm leading-relaxed border-t border-border">
                     {item.a}
                   </div>
                 </details>
@@ -2352,7 +2462,7 @@ export default function Home() {
 
             {/* Still have questions */}
             <div className="text-center mt-10 p-6 rounded-2xl bg-gradient-to-r from-cyan-500/10 to-yellow-500/10 border border-cyan-500/30">
-              <p className="text-white mb-4">{t.faq.stillQuestions}</p>
+              <p className="text-foreground mb-4">{t.faq.stillQuestions}</p>
               <a href="https://wa.me/8801711731354" target="_blank" rel="noopener noreferrer">
                 <Button className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-400 hover:to-green-500 text-white font-semibold">
                   <MessageCircle className="w-5 h-5 mr-2" aria-hidden="true" />
@@ -2364,14 +2474,14 @@ export default function Home() {
         </section>
 
         {/* Pricing Section */}
-        <section id="pricing" className="py-16 md:py-24 bg-gradient-to-b from-[#0a0a0a] via-[#0f1419] to-[#0a0a0a]" aria-labelledby="pricing-heading">
+        <section id="pricing" className="py-16 md:py-24 bg-gradient-to-b from-background via-card to-background" aria-labelledby="pricing-heading">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <Badge className="bg-yellow-500/20 text-yellow-400 mb-4">{t.pricing.badge}</Badge>
-              <h2 id="pricing-heading" className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+              <h2 id="pricing-heading" className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
                 {t.pricing.title} <span className="text-cyan-400">{t.pricing.titleHighlight}</span>
               </h2>
-              <p className="text-gray-400 max-w-2xl mx-auto">
+              <p className="text-muted-foreground max-w-2xl mx-auto">
                 {t.pricing.subtitle}
               </p>
             </div>
@@ -2380,7 +2490,7 @@ export default function Home() {
               {pricingPackages.map((pkg, i) => (
                 <Card 
                   key={i} 
-                  className={`relative bg-[#141414] border-[#333] transition-all duration-300 ${
+                  className={`relative bg-card border-border transition-all duration-300 ${
                     pkg.popular 
                       ? 'border-cyan-500 md:scale-105 shadow-xl shadow-cyan-500/10' 
                       : 'hover:border-cyan-500/50'
@@ -2395,14 +2505,14 @@ export default function Home() {
                   )}
                   <CardContent className="p-6 md:p-8">
                     <div className="text-4xl mb-4">{pkg.icon}</div>
-                    <h3 className="text-2xl font-bold text-white mb-2">{pkg.name}</h3>
+                    <h3 className="text-2xl font-bold text-foreground mb-2">{pkg.name}</h3>
                     <div className="text-4xl font-bold text-cyan-400 mb-6">
                       ৳{pkg.price}
                     </div>
                     
                     <ul className="space-y-3 mb-8" role="list">
                       {pkg.features.map((feature, j) => (
-                        <li key={j} className="flex items-center gap-2 text-gray-300">
+                        <li key={j} className="flex items-center gap-2 text-muted-foreground">
                           <Check className="w-5 h-5 text-cyan-400 flex-shrink-0" aria-hidden="true" />
                           <span className="text-sm">{feature}</span>
                         </li>
@@ -2414,7 +2524,7 @@ export default function Home() {
                         className={`w-full ${
                           pkg.popular 
                             ? 'bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-400 hover:to-cyan-500 text-black font-semibold' 
-                            : 'bg-[#333] hover:bg-[#444] text-white'
+                            : 'bg-secondary hover:bg-muted text-foreground'
                         }`}
                       >
                         {pkg.cta || (lang === 'bn' ? 'এখনই শুরু করুন' : 'Start Now')}
@@ -2430,16 +2540,16 @@ export default function Home() {
               <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                 <div>
                   <Badge className="bg-yellow-500/20 text-yellow-400 mb-2">🏆 CNC {lang === 'bn' ? 'স্পেশাল' : 'Special'} - {lang === 'bn' ? '১০+ বছর এক্সপার্ট' : '10+ Years Expert'}</Badge>
-                  <h3 className="text-2xl font-bold text-white mb-2">{lang === 'bn' ? '৩ডি সিএনসি ডিজাইন' : '3D CNC Design'}</h3>
-                  <p className="text-gray-400">{lang === 'bn' ? 'যশোরের প্রথম সিএনসি মাস্টার। ৩ডি রিলিফ, ফার্নিচার, পোর্ট্রেট, মেটাল কাটিং ডিজাইন।' : "Jessore's first CNC Master. 3D Relief, Furniture, Portrait, Metal Cutting Design."}</p>
+                  <h3 className="text-2xl font-bold text-foreground mb-2">{lang === 'bn' ? '৩ডি সিএনসি ডিজাইন' : '3D CNC Design'}</h3>
+                  <p className="text-muted-foreground">{lang === 'bn' ? 'যশোরের প্রথম সিএনসি মাস্টার। ৩ডি রিলিফ, ফার্নিচার, পোর্ট্রেট, মেটাল কাটিং ডিজাইন।' : "Jessore's first CNC Master. 3D Relief, Furniture, Portrait, Metal Cutting Design."}</p>
                 </div>
                 <div className="text-center">
                   <div className="text-3xl font-bold text-yellow-400">৳{lang === 'bn' ? '২,০০০ - ২০,০০০' : '2,000 - 20,000'}</div>
-                  <p className="text-gray-400 text-sm">{lang === 'bn' ? 'ডিজাইনের জটিলতা অনুযায়ী' : 'Based on design complexity'}</p>
+                  <p className="text-muted-foreground text-sm">{lang === 'bn' ? 'ডিজাইনের জটিলতা অনুযায়ী' : 'Based on design complexity'}</p>
                 </div>
                 <a href="https://wa.me/8801711731354?text=সিএনসি%20ডিজাইন%20সম্পর্কে%20জানতে%20চাই" target="_blank" rel="noopener noreferrer">
                   <Button className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-black font-semibold">
-                    {lang === 'bn' ? 'WhatsApp এ জানুন' : 'Learn on WhatsApp'}
+                    {t.common.contactOnWhatsApp}
                   </Button>
                 </a>
               </div>
@@ -2452,10 +2562,10 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <Badge className="bg-cyan-500/20 text-cyan-400 mb-4">{t.contact.badge}</Badge>
-              <h2 id="contact-heading" className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+              <h2 id="contact-heading" className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
                 {t.contact.title} <span className="text-cyan-400">{t.contact.titleHighlight}</span> {t.contact.titleEnd}
               </h2>
-              <p className="text-gray-400 max-w-2xl mx-auto">
+              <p className="text-muted-foreground max-w-2xl mx-auto">
                 {t.contact.subtitle}
               </p>
             </div>
@@ -2469,9 +2579,9 @@ export default function Home() {
                     <Image src="/taj-bhai.jpg" alt="Engineer Taj" fill className="object-cover" />
                   </div>
                   <div>
-                    <h3 className="text-white font-bold text-lg">{lang === 'bn' ? 'ইঞ্জিনিয়ার মোঃ নাজমুল ইসলাম তাজ' : 'Engineer Md. Nazmul Islam Taj'}</h3>
+                    <h3 className="text-foreground font-bold text-lg">{lang === 'bn' ? 'ইঞ্জিনিয়ার মোঃ নাজমুল ইসলাম তাজ' : 'Engineer Md. Nazmul Islam Taj'}</h3>
                     <p className="text-cyan-400 text-sm">{t.about.badge}</p>
-                    <p className="text-gray-400 text-xs mt-1">{lang === 'bn' ? '১৭+ বছর অভিজ্ঞতা | ৭,৫০০+ ক্লায়েন্ট' : '17+ Years Experience | 7,500+ Clients'}</p>
+                    <p className="text-muted-foreground text-xs mt-1">{lang === 'bn' ? '১৭+ বছর অভিজ্ঞতা | ৭,৫০০+ ক্লায়েন্ট' : '17+ Years Experience | 7,500+ Clients'}</p>
                   </div>
                 </div>
                 
@@ -2479,8 +2589,8 @@ export default function Home() {
                   <div className="flex items-center gap-3">
                     <Clock className="w-6 h-6 text-cyan-400" aria-hidden="true" />
                     <div>
-                      <strong className="text-white">⏰ {t.contact.responseTime}</strong>
-                      <p className="text-gray-400 text-sm">{t.contact.responseNote}</p>
+                      <strong className="text-foreground">⏰ {t.contact.responseTime}</strong>
+                      <p className="text-muted-foreground text-sm">{t.contact.responseNote}</p>
                     </div>
                   </div>
                 </div>
@@ -2491,18 +2601,18 @@ export default function Home() {
                   { icon: MapPin, title: t.contact.office, value: lang === 'bn' ? 'পুরাতন কসবা, ঘোষপাড়া, যশোর সদর' : 'Puratan Kosba, Ghoshpara, Jessore Sadar', link: null },
                   { icon: Globe, title: t.contact.serviceArea, value: t.contact.serviceAreaValue, link: null }
                 ].map((item, i) => (
-                  <div key={i} className="flex items-start gap-4 p-4 rounded-xl bg-[#141414] border border-[#333] hover:border-cyan-500/50 transition-all group">
+                  <div key={i} className="flex items-start gap-4 p-4 rounded-xl bg-card border border-border hover:border-cyan-500/50 transition-all group">
                     <div className="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center group-hover:bg-cyan-500/20 transition-colors">
                       <item.icon className="w-6 h-6 text-cyan-400" aria-hidden="true" />
                     </div>
                     <div>
-                      <div className="text-gray-400 text-sm">{item.title}</div>
+                      <div className="text-muted-foreground text-sm">{item.title}</div>
                       {item.link ? (
-                        <a href={item.link} className="text-white font-semibold hover:text-cyan-400 transition-colors">
+                        <a href={item.link} className="text-foreground font-semibold hover:text-cyan-400 transition-colors">
                           {item.value}
                         </a>
                       ) : (
-                        <div className="text-white font-semibold">{item.value}</div>
+                        <div className="text-foreground font-semibold">{item.value}</div>
                       )}
                     </div>
                   </div>
@@ -2523,74 +2633,74 @@ export default function Home() {
               </div>
 
               {/* Contact Form */}
-              <Card className="bg-[#141414] border-[#333]">
+              <Card className="bg-card border-border">
                 <CardContent className="p-6 md:p-8">
                   {formSuccess ? (
                     <div className="text-center py-12">
                       <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-4">
                         <Check className="w-8 h-8 text-green-400" aria-hidden="true" />
                       </div>
-                      <h3 className="text-xl font-bold text-white mb-2">ধন্যবাদ!</h3>
-                      <p className="text-gray-400">আপনার অনুরোধ সফলভাবে জমা হয়েছে। ইঞ্জিনিয়ার তাজ ভাই শীঘ্রই যোগাযোগ করবেন।</p>
+                      <h3 className="text-xl font-bold text-foreground mb-2">{t.contact.form.success}</h3>
+                      <p className="text-muted-foreground">{t.contact.form.successNote}</p>
                       <Button 
                         onClick={() => setFormSuccess(false)} 
                         variant="outline" 
                         className="mt-4 border-cyan-500 text-cyan-400"
                       >
-                        আরেকটি অনুরোধ পাঠান
+                        {t.contact.form.anotherRequest}
                       </Button>
                     </div>
                   ) : (
                     <form onSubmit={handleFormSubmit} className="space-y-4" noValidate>
                       <div>
-                        <Label htmlFor="name" className="text-gray-300">আপনার নাম *</Label>
+                        <Label htmlFor="name" className="text-foreground">{t.contact.form.name} *</Label>
                         <Input
                           id="name"
                           value={formData.name}
                           onChange={(e) => { setFormData({ ...formData, name: e.target.value }); setFormErrors({ ...formErrors, name: undefined }); }}
-                          className={`bg-[#0a0a0a] border-[#333] text-white focus:border-cyan-500 ${formErrors.name ? 'border-red-500' : ''}`}
-                          placeholder="আপনার পুরো নাম"
+                          className={`bg-background border-border text-foreground focus:border-cyan-500 ${formErrors.name ? 'border-red-500' : ''}`}
+                          placeholder={t.contact.form.namePlaceholder}
                           aria-invalid={!!formErrors.name}
                           aria-describedby={formErrors.name ? 'name-error' : undefined}
                         />
                         {formErrors.name && <p id="name-error" className="text-red-400 text-sm mt-1">{formErrors.name}</p>}
                       </div>
                       <div>
-                        <Label htmlFor="mobile" className="text-gray-300">মোবাইল নম্বর *</Label>
+                        <Label htmlFor="mobile" className="text-foreground">{t.contact.form.mobile} *</Label>
                         <Input
                           id="mobile"
                           value={formData.mobile}
                           onChange={(e) => { setFormData({ ...formData, mobile: e.target.value }); setFormErrors({ ...formErrors, mobile: undefined }); }}
-                          className={`bg-[#0a0a0a] border-[#333] text-white focus:border-cyan-500 ${formErrors.mobile ? 'border-red-500' : ''}`}
-                          placeholder="০১XXXXXXXXX"
+                          className={`bg-background border-border text-foreground focus:border-cyan-500 ${formErrors.mobile ? 'border-red-500' : ''}`}
+                          placeholder={t.contact.form.mobilePlaceholder}
                           aria-invalid={!!formErrors.mobile}
                           aria-describedby={formErrors.mobile ? 'mobile-error' : undefined}
                         />
                         {formErrors.mobile && <p id="mobile-error" className="text-red-400 text-sm mt-1">{formErrors.mobile}</p>}
                       </div>
                       <div>
-                        <Label htmlFor="email" className="text-gray-300">ইমেইল (ঐচ্ছিক)</Label>
+                        <Label htmlFor="email" className="text-foreground">{t.contact.form.email}</Label>
                         <Input
                           id="email"
                           type="email"
                           value={formData.email}
                           onChange={(e) => { setFormData({ ...formData, email: e.target.value }); setFormErrors({ ...formErrors, email: undefined }); }}
-                          className={`bg-[#0a0a0a] border-[#333] text-white focus:border-cyan-500 ${formErrors.email ? 'border-red-500' : ''}`}
-                          placeholder="example@email.com"
+                          className={`bg-background border-border text-foreground focus:border-cyan-500 ${formErrors.email ? 'border-red-500' : ''}`}
+                          placeholder={t.contact.form.emailPlaceholder}
                           aria-invalid={!!formErrors.email}
                           aria-describedby={formErrors.email ? 'email-error' : undefined}
                         />
                         {formErrors.email && <p id="email-error" className="text-red-400 text-sm mt-1">{formErrors.email}</p>}
                       </div>
                       <div>
-                        <Label htmlFor="service" className="text-gray-300">সার্ভিস নির্বাচন *</Label>
+                        <Label htmlFor="service" className="text-foreground">{t.contact.form.service} *</Label>
                         <Select value={formData.service} onValueChange={(value) => { setFormData({ ...formData, service: value }); setFormErrors({ ...formErrors, service: undefined }); }}>
-                          <SelectTrigger className={`bg-[#0a0a0a] border-[#333] text-white focus:border-cyan-500 ${formErrors.service ? 'border-red-500' : ''}`} aria-invalid={!!formErrors.service}>
-                            <SelectValue placeholder="সার্ভিস নির্বাচন করুন" />
+                          <SelectTrigger className={`bg-background border-border text-foreground focus:border-cyan-500 ${formErrors.service ? 'border-red-500' : ''}`} aria-invalid={!!formErrors.service}>
+                            <SelectValue placeholder={t.contact.form.selectService} />
                           </SelectTrigger>
-                          <SelectContent className="bg-[#141414] border-[#333]">
+                          <SelectContent className="bg-card border-border">
                             {services.map((s, i) => (
-                              <SelectItem key={i} value={s.title} className="text-white hover:bg-[#333]">
+                              <SelectItem key={i} value={s.title} className="text-foreground hover:bg-muted">
                                 {s.icon} {s.title}
                               </SelectItem>
                             ))}
@@ -2599,13 +2709,13 @@ export default function Home() {
                         {formErrors.service && <p className="text-red-400 text-sm mt-1">{formErrors.service}</p>}
                       </div>
                       <div>
-                        <Label htmlFor="message" className="text-gray-300">আপনার প্রয়োজন</Label>
+                        <Label htmlFor="message" className="text-foreground">{t.contact.form.message}</Label>
                         <Textarea
                           id="message"
                           value={formData.message}
                           onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                          className="bg-[#0a0a0a] border-[#333] text-white focus:border-cyan-500 min-h-[100px]"
-                          placeholder="আপনার প্রজেক্ট সম্পর্কে বিস্তারিত লিখুন..."
+                          className="bg-background border-border text-foreground focus:border-cyan-500 min-h-[100px]"
+                          placeholder={t.contact.form.messagePlaceholder}
                         />
                       </div>
                       <Button 
@@ -2616,12 +2726,12 @@ export default function Home() {
                         {formSubmitting ? (
                           <span className="flex items-center gap-2">
                             <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" aria-hidden="true" />
-                            পাঠানো হচ্ছে...
+                            {t.contact.form.submitting}
                           </span>
                         ) : (
                           <span className="flex items-center gap-2">
                             <Send className="w-5 h-5" aria-hidden="true" />
-                            ফ্রি কনসালটেন্সি বুক করুন
+                            {t.contact.form.submit}
                           </span>
                         )}
                       </Button>
@@ -2635,7 +2745,7 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="py-12 bg-[#0a0a0a] border-t border-[#222]" role="contentinfo">
+      <footer className="py-12 bg-background border-t border-border" role="contentinfo">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             {/* Logo & About */}
@@ -2645,24 +2755,24 @@ export default function Home() {
                   <Image src="/logo.png" alt="NextGen Logo" fill className="object-cover rounded-lg" />
                 </div>
                 <div>
-                  <span className="text-xl font-bold text-white">NextGen <span className="text-cyan-400">Digital</span></span>
-                  <p className="text-xs text-gray-400">যশোরের প্রথম ডিজিটাল ইঞ্জিনিয়ার</p>
+                  <span className="text-xl font-bold text-foreground">NextGen <span className="text-cyan-400">Digital</span></span>
+                  <p className="text-xs text-muted-foreground">{t.about.badge}</p>
                 </div>
               </div>
-              <p className="text-gray-400 mb-4">
-                যশোরের প্রথম ডিজিটাল ইঞ্জিনিয়ার ইঞ্জিনিয়ার মোঃ নাজমুল ইসলাম তাজ (তাজ ভাই) এর ডিজিটাল স্টুডিও। ১৭+ বছরের অভিজ্ঞতায় আধুনিক ডিজিটাল সেবা।
+              <p className="text-muted-foreground mb-4">
+                {t.footer.description}
               </p>
               <div className="flex gap-4">
-                <a href="https://wa.me/8801711731354" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-green-400 transition-colors" aria-label="WhatsApp">
+                <a href="https://wa.me/8801711731354" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-green-400 transition-colors" aria-label="WhatsApp">
                   <MessageCircle className="w-5 h-5" aria-hidden="true" />
                 </a>
-                <a href={socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-400 transition-colors" aria-label="Facebook Profile">
+                <a href={socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-blue-400 transition-colors" aria-label="Facebook Profile">
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
                 </a>
-                <a href={`mailto:${socialLinks.email}`} className="text-gray-400 hover:text-red-400 transition-colors" aria-label="Email">
+                <a href={`mailto:${socialLinks.email}`} className="text-muted-foreground hover:text-red-400 transition-colors" aria-label="Email">
                   <Mail className="w-5 h-5" aria-hidden="true" />
                 </a>
-                <a href={`tel:${socialLinks.phone}`} className="text-gray-400 hover:text-green-400 transition-colors" aria-label="Phone">
+                <a href={`tel:${socialLinks.phone}`} className="text-muted-foreground hover:text-green-400 transition-colors" aria-label="Phone">
                   <Phone className="w-5 h-5" aria-hidden="true" />
                 </a>
               </div>
@@ -2670,31 +2780,31 @@ export default function Home() {
 
             {/* Quick Links */}
             <div>
-              <h4 className="text-white font-semibold mb-4">দ্রুত লিংক</h4>
+              <h4 className="text-foreground font-semibold mb-4">{t.footer.quickLinks}</h4>
               <ul className="space-y-2">
-                <li><a href="#services" className="text-gray-400 hover:text-cyan-400 transition-colors">সার্ভিস</a></li>
-                <li><a href="#pricing" className="text-gray-400 hover:text-cyan-400 transition-colors">প্যাকেজ</a></li>
-                <li><a href="#about" className="text-gray-400 hover:text-cyan-400 transition-colors">সম্পর্কে</a></li>
-                <li><a href="#contact" className="text-gray-400 hover:text-cyan-400 transition-colors">যোগাযোগ</a></li>
+                <li><a href="#services" className="text-muted-foreground hover:text-cyan-400 transition-colors">{t.footer.services}</a></li>
+                <li><a href="#pricing" className="text-muted-foreground hover:text-cyan-400 transition-colors">{t.footer.packages}</a></li>
+                <li><a href="#about" className="text-muted-foreground hover:text-cyan-400 transition-colors">{t.footer.about}</a></li>
+                <li><a href="#contact" className="text-muted-foreground hover:text-cyan-400 transition-colors">{t.footer.contact}</a></li>
               </ul>
             </div>
 
             {/* Policies */}
             <div>
-              <h4 className="text-white font-semibold mb-4">{lang === 'bn' ? 'পলিসি' : 'Policies'}</h4>
+              <h4 className="text-foreground font-semibold mb-4">{t.footer.policies}</h4>
               <ul className="space-y-2">
                 <li>
-                  <button onClick={() => setPolicyModal('privacy')} className="text-gray-400 hover:text-cyan-400 transition-colors">
+                  <button onClick={() => setPolicyModal('privacy')} className="text-muted-foreground hover:text-cyan-400 transition-colors">
                     {t.footer.privacy}
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => setPolicyModal('terms')} className="text-gray-400 hover:text-cyan-400 transition-colors">
+                  <button onClick={() => setPolicyModal('terms')} className="text-muted-foreground hover:text-cyan-400 transition-colors">
                     {t.footer.terms}
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => setPolicyModal('refund')} className="text-gray-400 hover:text-cyan-400 transition-colors">
+                  <button onClick={() => setPolicyModal('refund')} className="text-muted-foreground hover:text-cyan-400 transition-colors">
                     {t.footer.refund}
                   </button>
                 </li>
@@ -2703,23 +2813,23 @@ export default function Home() {
 
             {/* Download App */}
             <div>
-              <h4 className="text-white font-semibold mb-4">{lang === 'bn' ? 'অ্যাপ ডাউনলোড' : 'Download App'}</h4>
+              <h4 className="text-foreground font-semibold mb-4">{t.footer.downloadApp}</h4>
               <div className="space-y-3">
                 <button 
                   onClick={handleInstallApp}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#141414] border border-[#333] hover:border-cyan-500/50 transition-all group w-full"
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-card border border-border hover:border-cyan-500/50 transition-all group w-full"
                 >
                   <span className="text-2xl group-hover:scale-110 transition-transform animate-bounce">📱</span>
                   <div className="text-left">
-                    <div className="text-white text-sm font-medium">{lang === 'bn' ? 'ইনস্টল করুন' : 'Install App'}</div>
-                    <div className="text-gray-500 text-xs">PWA • {lang === 'bn' ? 'ফ্রি' : 'Free'}</div>
+                    <div className="text-foreground text-sm font-medium">{t.footer.installApp}</div>
+                    <div className="text-muted-foreground text-xs">PWA • {t.footer.free}</div>
                   </div>
                 </button>
-                <a href="https://play.google.com/store" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#141414] border border-[#333] hover:border-green-500/50 transition-all group">
+                <a href="https://play.google.com/store" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 rounded-lg bg-card border border-border hover:border-green-500/50 transition-all group">
                   <span className="text-2xl group-hover:scale-110 transition-transform">▶️</span>
                   <div className="text-left">
-                    <div className="text-white text-sm font-medium">Google Play</div>
-                    <div className="text-gray-500 text-xs">{lang === 'bn' ? 'শীঘ্রই আসছে' : 'Coming Soon'}</div>
+                    <div className="text-foreground text-sm font-medium">Google Play</div>
+                    <div className="text-muted-foreground text-xs">{t.footer.comingSoon}</div>
                   </div>
                 </a>
               </div>
@@ -2728,17 +2838,17 @@ export default function Home() {
 
           {/* Admin Link */}
           <div className="mt-6 text-center">
-            <a href="/admin" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1a1a1a] border border-[#333] text-gray-500 hover:text-cyan-400 hover:border-cyan-500/30 transition-all text-sm">
+            <a href="/admin" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-muted border border-border text-muted-foreground hover:text-cyan-400 hover:border-cyan-500/30 transition-all text-sm">
               <Shield className="w-4 h-4" aria-hidden="true" />
               <span>Admin</span>
             </a>
           </div>
 
-          <div className="pt-8 border-t border-[#222] text-center">
-            <p className="text-gray-500">
+          <div className="pt-8 border-t border-border text-center">
+            <p className="text-muted-foreground">
               © {new Date().getFullYear()} NextGen Digital Studio. {t.footer.copyright}
             </p>
-            <p className="text-gray-600 text-sm mt-2">
+            <p className="text-muted-foreground/60 text-sm mt-2">
               {t.footer.credit}
             </p>
           </div>
@@ -2747,7 +2857,7 @@ export default function Home() {
 
       {/* Policy Modal */}
       <Dialog open={!!policyModal} onOpenChange={() => setPolicyModal(null)}>
-        <DialogContent className="bg-[#141414] border-[#333] text-white max-w-lg">
+        <DialogContent className="bg-card border-border text-foreground max-w-lg">
           {policyModal && (
             <>
               <DialogHeader>
@@ -2762,7 +2872,7 @@ export default function Home() {
               <DialogDescription asChild>
                 <ul className="space-y-3 mt-4">
                   {policies[policyModal].content.map((item, i) => (
-                    <li key={i} className="flex items-start gap-2 text-gray-300">
+                    <li key={i} className="flex items-start gap-2 text-muted-foreground">
                       <Check className="w-5 h-5 text-cyan-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
                       <span>{item}</span>
                     </li>
@@ -2770,7 +2880,7 @@ export default function Home() {
                 </ul>
               </DialogDescription>
               <Button onClick={() => setPolicyModal(null)} className="mt-6 w-full bg-cyan-500 text-black hover:bg-cyan-400">
-                বন্ধ করুন
+                {t.common.close}
               </Button>
             </>
           )}
@@ -2789,7 +2899,7 @@ export default function Home() {
       {/* AI Chat Widget */}
       <div className="fixed bottom-6 right-6 z-50">
         {chatOpen && (
-          <div className="absolute bottom-20 right-0 w-[380px] max-w-[calc(100vw-3rem)] rounded-2xl bg-[#141414] border border-[#333] shadow-2xl overflow-hidden animate-in slide-in-from-bottom-4" role="dialog" aria-label="AI চ্যাট">
+          <div className="absolute bottom-20 right-0 w-[380px] max-w-[calc(100vw-3rem)] rounded-2xl bg-card border border-border shadow-2xl overflow-hidden animate-in slide-in-from-bottom-4" role="dialog" aria-label={t.chat.title}>
             {/* Chat Header */}
             <div className="bg-gradient-to-r from-cyan-500 to-cyan-600 p-3">
               <div className="flex items-center justify-between">
@@ -2800,11 +2910,11 @@ export default function Home() {
                   <div>
                     <div className="font-semibold text-black text-sm flex items-center gap-1.5">
                       <span className="inline-block animate-pulse">✨</span>
-                      NextGen AI সহায়িকা
+                      NextGen AI {lang === 'bn' ? 'সহায়িকা' : 'Assistant'}
                     </div>
                     <div className="text-xs text-black/70 flex items-center gap-1">
                       <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" aria-hidden="true" />
-                      সবসময় অনলাইন
+                      {t.chat.online}
                     </div>
                   </div>
                 </div>
@@ -2815,7 +2925,7 @@ export default function Home() {
                     size="icon" 
                     onClick={() => setShowHistory(!showHistory)}
                     className="text-black/70 hover:text-black hover:bg-white/20 h-8 w-8"
-                    aria-label="চ্যাট ইতিহাস"
+                    aria-label={t.chat.chatHistory}
                   >
                     <History className="w-4 h-4" aria-hidden="true" />
                   </Button>
@@ -2825,7 +2935,7 @@ export default function Home() {
                     size="icon" 
                     onClick={startNewChat}
                     className="text-black/70 hover:text-black hover:bg-white/20 h-8 w-8"
-                    aria-label="নতুন চ্যাট"
+                    aria-label={t.chat.newChat}
                   >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -2837,7 +2947,7 @@ export default function Home() {
                     size="icon" 
                     onClick={() => setChatOpen(false)}
                     className="text-black/70 hover:text-black hover:bg-white/20 h-8 w-8"
-                    aria-label="চ্যাট বন্ধ করুন"
+                    aria-label={t.chat.closeChat}
                   >
                     <X className="w-4 h-4" aria-hidden="true" />
                   </Button>
@@ -2847,30 +2957,30 @@ export default function Home() {
 
             {/* Chat History Panel */}
             {showHistory && (
-              <div className="bg-[#0a0a0a] border-b border-[#333] max-h-48 overflow-y-auto">
+              <div className="bg-background border-b border-border max-h-48 overflow-y-auto">
                 <div className="p-2 flex items-center justify-between">
-                  <span className="text-xs text-gray-400 font-medium">চ্যাট ইতিহাস</span>
+                  <span className="text-xs text-muted-foreground font-medium">{t.chat.chatHistory}</span>
                   {chatHistory.length > 0 && (
                     <button 
                       onClick={clearAllHistory}
                       className="text-xs text-red-400 hover:text-red-300"
                     >
-                      সব মুছুন
+                      {t.chat.deleteAll}
                     </button>
                   )}
                 </div>
                 {chatHistory.length === 0 ? (
-                  <div className="p-4 text-center text-gray-500 text-sm">কোনো ইতিহাস নেই</div>
+                  <div className="p-4 text-center text-muted-foreground text-sm">{t.chat.noHistory}</div>
                 ) : (
                   <div className="space-y-1 p-2">
                     {chatHistory.map((session) => (
                       <div 
                         key={session.id}
-                        className="flex items-center justify-between p-2 rounded-lg hover:bg-[#1a1a1a] cursor-pointer group"
+                        className="flex items-center justify-between p-2 rounded-lg hover:bg-muted cursor-pointer group"
                       >
                         <div className="flex-1 min-w-0" onClick={() => loadChatSession(session)}>
-                          <p className="text-sm text-white truncate">{session.title}</p>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-sm text-foreground truncate">{session.title}</p>
+                          <p className="text-xs text-muted-foreground">
                             {session.updatedAt.toLocaleDateString('bn-BD')}
                           </p>
                         </div>
@@ -2895,7 +3005,7 @@ export default function Home() {
                     <div className={`p-2.5 rounded-2xl whitespace-pre-wrap text-sm ${
                       msg.role === 'user' 
                         ? 'bg-cyan-500 text-black rounded-br-sm' 
-                        : 'bg-[#0a0a0a] text-white border border-[#333] rounded-bl-sm'
+                        : 'bg-background text-foreground border border-border rounded-bl-sm'
                     }`}>
                       <p>{msg.content}</p>
                     </div>
@@ -2910,7 +3020,7 @@ export default function Home() {
                               ? 'text-green-400 bg-green-400/20' 
                               : 'text-gray-500 hover:text-green-400 hover:bg-green-400/10'
                           }`}
-                          aria-label="ভালো উত্তর"
+                          aria-label={t.chat.goodAnswer}
                         >
                           <ThumbsUp className="w-3 h-3" />
                         </button>
@@ -2921,7 +3031,7 @@ export default function Home() {
                               ? 'text-red-400 bg-red-400/20' 
                               : 'text-gray-500 hover:text-red-400 hover:bg-red-400/10'
                           }`}
-                          aria-label="খারাপ উত্তর"
+                          aria-label={t.chat.badAnswer}
                         >
                           <ThumbsDown className="w-3 h-3" />
                         </button>
@@ -2929,13 +3039,13 @@ export default function Home() {
                         <div className="relative">
                           <button
                             onClick={() => setShowShareMenu(showShareMenu === msg.id ? null : msg.id)}
-                            className="p-1 rounded text-gray-500 hover:text-cyan-400 hover:bg-cyan-400/10 transition-colors"
-                            aria-label="শেয়ার করুন"
+                            className="p-1 rounded text-muted-foreground hover:text-cyan-400 hover:bg-cyan-400/10 transition-colors"
+                            aria-label={t.chat.share}
                           >
                             <Share2 className="w-3 h-3" />
                           </button>
                           {showShareMenu === msg.id && (
-                            <div className="absolute bottom-full left-0 mb-1 bg-[#1a1a1a] border border-[#333] rounded-lg shadow-lg overflow-hidden flex">
+                            <div className="absolute bottom-full left-0 mb-1 bg-card border border-border rounded-lg shadow-lg overflow-hidden flex">
                               <button
                                 onClick={() => shareChat(msg, 'whatsapp')}
                                 className="p-2 text-green-400 hover:bg-green-400/10"
@@ -2947,8 +3057,8 @@ export default function Home() {
                               </button>
                               <button
                                 onClick={() => shareChat(msg, 'copy')}
-                                className="p-2 text-gray-400 hover:bg-gray-400/10"
-                                title="কপি করুন"
+                                className="p-2 text-muted-foreground hover:bg-muted"
+                                title={t.chat.copy}
                               >
                                 <Copy className="w-4 h-4" />
                               </button>
@@ -2957,8 +3067,8 @@ export default function Home() {
                         </div>
                         {/* Feedback confirmation */}
                         {msg.feedback && (
-                          <span className="text-xs text-gray-500 ml-1">
-                            {msg.feedback === 'positive' ? '✓ ধন্যবাদ!' : '✓ মন্তব্যের জন্য ধন্যবাদ'}
+                          <span className="text-xs text-muted-foreground ml-1">
+                            {msg.feedback === 'positive' ? `✓ ${t.chat.thanks}` : `✓ ${t.chat.thanksForFeedback}`}
                           </span>
                         )}
                       </div>
@@ -2968,8 +3078,8 @@ export default function Home() {
               ))}
               {isLoading && (
                 <div className="flex justify-start">
-                  <div className="bg-[#0a0a0a] border border-[#333] p-2.5 rounded-2xl rounded-bl-sm">
-                    <div className="flex gap-1" aria-label="টাইপ করছে...">
+                  <div className="bg-background border border-border p-2.5 rounded-2xl rounded-bl-sm">
+                    <div className="flex gap-1" aria-label={t.chat.typing}>
                       <div className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
                       <div className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
                       <div className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
@@ -2995,7 +3105,7 @@ export default function Home() {
             </div>
 
             {/* Chat Input */}
-            <div className="p-3 border-t border-[#333]">
+            <div className="p-3 border-t border-border">
               <form 
                 onSubmit={(e) => { e.preventDefault(); sendMessage(); }} 
                 className="flex gap-2 items-center"
@@ -3004,9 +3114,9 @@ export default function Home() {
                   <Input
                     value={inputMessage}
                     onChange={(e) => setInputMessage(e.target.value)}
-                    placeholder="আপনার প্রশ্ন লিখুন..."
-                    className="w-full bg-[#0a0a0a] border-[#333] text-white focus:border-cyan-500 pr-10 text-sm"
-                    aria-label="চ্যাট মেসেজ"
+                    placeholder={t.chat.placeholder}
+                    className="w-full bg-background border-border text-foreground focus:border-cyan-500 pr-10 text-sm"
+                    aria-label={t.chat.title}
                     disabled={isLoading}
                   />
                   {/* Voice Input Button */}
@@ -3017,9 +3127,9 @@ export default function Home() {
                       className={`absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full transition-colors ${
                         isListening 
                           ? 'bg-red-500 text-white animate-pulse' 
-                          : 'text-gray-400 hover:text-cyan-400'
+                          : 'text-muted-foreground hover:text-cyan-400'
                       }`}
-                      aria-label={isListening ? 'ভয়েস বন্ধ করুন' : 'ভয়েস ইনপুট'}
+                      aria-label={isListening ? t.chat.voiceOn : t.chat.voiceOff}
                     >
                       {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
                     </button>
@@ -3030,7 +3140,7 @@ export default function Home() {
                   size="icon" 
                   className="bg-cyan-500 hover:bg-cyan-600 text-black h-9 w-9 shrink-0"
                   disabled={isLoading || !inputMessage.trim()}
-                  aria-label="মেসেজ পাঠান"
+                  aria-label={t.chat.send}
                 >
                   <Send className="w-4 h-4" aria-hidden="true" />
                 </Button>
@@ -3039,7 +3149,7 @@ export default function Home() {
               {isListening && (
                 <div className="flex items-center gap-2 mt-2 text-xs text-cyan-400">
                   <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-                  বলুন... (বাংলা/ইংরেজি)
+                  {t.chat.saySomething}
                 </div>
               )}
             </div>
@@ -3050,10 +3160,10 @@ export default function Home() {
           onClick={() => setChatOpen(!chatOpen)}
           className={`w-14 h-14 rounded-full shadow-lg relative overflow-hidden ${
             chatOpen 
-              ? 'bg-[#333] hover:bg-[#444]' 
+              ? 'bg-muted hover:bg-muted/80' 
               : 'bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-400 hover:to-cyan-500'
           } text-white shadow-cyan-500/25`}
-          aria-label={chatOpen ? 'চ্যাট বন্ধ করুন' : 'AI চ্যাট খুলুন'}
+          aria-label={chatOpen ? t.chat.closeChat : t.chat.openChat}
           aria-expanded={chatOpen}
         >
           {!chatOpen && (
