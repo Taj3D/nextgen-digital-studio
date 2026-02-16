@@ -57,6 +57,12 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
   const [aiAnalytics, setAiAnalytics] = useState<AIAnalytics | null>(null);
+  
+  // Push Notifications State
+  const [notificationEnabled, setNotificationEnabled] = useState(false);
+  const [notificationPermission, setNotificationPermission] = useState<NotificationPermission>('default');
+  const [lastLeadCount, setLastLeadCount] = useState(0);
+  const [lastBookingCount, setLastBookingCount] = useState(0);
 
   const ADMIN_PASSWORD = '@taj921988';
 
@@ -180,6 +186,94 @@ export default function AdminDashboard() {
     }
   };
 
+  // Request Notification Permission
+  const requestNotificationPermission = async () => {
+    if (!('Notification' in window)) {
+      alert('এই ব্রাউজারে নোটিফিকেশন সাপোর্ট করে না');
+      return;
+    }
+
+    const permission = await Notification.requestPermission();
+    setNotificationPermission(permission);
+    
+    if (permission === 'granted') {
+      setNotificationEnabled(true);
+      localStorage.setItem('nextgen_notifications', 'enabled');
+      new Notification('🔔 নোটিফিকেশন সক্রিয়!', {
+        body: 'এখন নতুন লিড বা বুকিং এলে আপনাকে জানানো হবে',
+        icon: '/logo.png'
+      });
+    }
+  };
+
+  // Toggle Notifications
+  const toggleNotifications = () => {
+    if (notificationEnabled) {
+      setNotificationEnabled(false);
+      localStorage.setItem('nextgen_notifications', 'disabled');
+    } else {
+      requestNotificationPermission();
+    }
+  };
+
+  // Send Notification
+  const sendNotification = (title: string, body: string) => {
+    if (notificationEnabled && notificationPermission === 'granted') {
+      new Notification(title, {
+        body,
+        icon: '/logo.png',
+        tag: 'nextgen-notification',
+        requireInteraction: true
+      });
+    }
+  };
+
+  // Check for new leads/bookings
+  useEffect(() => {
+    if (isAuthenticated && notificationEnabled) {
+      // Store initial counts
+      if (lastLeadCount === 0 && stats) {
+        setLastLeadCount(stats.totalLeads);
+        setLastBookingCount(stats.totalBookings);
+      }
+    }
+  }, [isAuthenticated, notificationEnabled, stats, lastLeadCount, lastBookingCount]);
+
+  // Check for new leads on data fetch
+  useEffect(() => {
+    if (stats && notificationEnabled && lastLeadCount > 0) {
+      if (stats.totalLeads > lastLeadCount) {
+        const newLeadsCount = stats.totalLeads - lastLeadCount;
+        sendNotification(
+          '🆕 নতুন লিড এসেছে!',
+          `${newLeadsCount}টি নতুন লিড এসেছে। এখনই দেখুন!`
+        );
+        setLastLeadCount(stats.totalLeads);
+      }
+      if (stats.totalBookings > lastBookingCount) {
+        const newBookingsCount = stats.totalBookings - lastBookingCount;
+        sendNotification(
+          '📅 নতুন বুকিং এসেছে!',
+          `${newBookingsCount}টি নতুন বুকিং এসেছে। এখনই দেখুন!`
+        );
+        setLastBookingCount(stats.totalBookings);
+      }
+    }
+  }, [stats, notificationEnabled, lastLeadCount, lastBookingCount]);
+
+  // Load notification preference
+  useEffect(() => {
+    if (isAuthenticated) {
+      const savedPref = localStorage.getItem('nextgen_notifications');
+      if (savedPref === 'enabled' && 'Notification' in window) {
+        setNotificationPermission(Notification.permission);
+        if (Notification.permission === 'granted') {
+          setNotificationEnabled(true);
+        }
+      }
+    }
+  }, [isAuthenticated]);
+
   // Login Screen
   if (!isAuthenticated) {
     return (
@@ -248,7 +342,15 @@ export default function AdminDashboard() {
             </h1>
             <p className="text-gray-400">ক্লায়েন্ট ডাটা ম্যানেজমেন্ট ড্যাশবোর্ড</p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
+            {/* Notification Toggle */}
+            <Button 
+              onClick={toggleNotifications} 
+              variant="outline" 
+              className={`${notificationEnabled ? 'border-green-500 text-green-400' : 'border-gray-500 text-gray-400'}`}
+            >
+              {notificationEnabled ? '🔔 নোটিফিকেশন চালু' : '🔕 নোটিফিকেশন বন্ধ'}
+            </Button>
             <Button onClick={fetchData} variant="outline" className="border-cyan-500 text-cyan-400">
               🔄 রিফ্রেশ করুন
             </Button>
@@ -514,11 +616,86 @@ export default function AdminDashboard() {
 
           {/* Leads Tab */}
           <TabsContent value="leads">
-            <Card className="bg-[#141414] border-[#333]">
-              <CardHeader>
-                <CardTitle className="text-white">📋 সকল লিড ({leads.length})</CardTitle>
-              </CardHeader>
-              <CardContent>
+            <div className="space-y-6">
+              {/* Lead Stats Chart */}
+              <Card className="bg-[#141414] border-[#333]">
+                <CardHeader>
+                  <CardTitle className="text-white">📈 লিড স্ট্যাটাস বিশ্লেষণ</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {[
+                      { label: 'নতুন', count: leads.filter(l => l.status === 'new').length, color: 'bg-yellow-500' },
+                      { label: 'কল করেছে', count: leads.filter(l => l.status === 'contacted').length, color: 'bg-blue-500' },
+                      { label: 'সম্পন্ন', count: leads.filter(l => l.status === 'completed').length, color: 'bg-green-500' },
+                      { label: 'বাতিল', count: leads.filter(l => l.status === 'cancelled').length, color: 'bg-red-500' },
+                    ].map((stat, i) => {
+                      const maxCount = Math.max(leads.length, 1);
+                      const percentage = (stat.count / maxCount) * 100;
+                      return (
+                        <div key={i} className="text-center">
+                          <div className="text-2xl font-bold text-white mb-2">{stat.count}</div>
+                          <div className="h-2 bg-[#0a0a0a] rounded-full overflow-hidden mb-2">
+                            <div className={`h-full ${stat.color} rounded-full transition-all`} style={{ width: `${percentage}%` }} />
+                          </div>
+                          <div className="text-gray-400 text-sm">{stat.label}</div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Service Distribution */}
+              <Card className="bg-[#141414] border-[#333]">
+                <CardHeader>
+                  <CardTitle className="text-white">🎯 সার্ভিস অনুযায়ী লিড</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {leads.length === 0 ? (
+                    <p className="text-gray-400 text-center py-4">কোনো লিড নেই</p>
+                  ) : (
+                    <div className="space-y-3">
+                      {Object.entries(
+                        leads.reduce((acc, lead) => {
+                          acc[lead.service] = (acc[lead.service] || 0) + 1;
+                          return acc;
+                        }, {} as Record<string, number>)
+                      )
+                        .sort((a, b) => b[1] - a[1])
+                        .slice(0, 8)
+                        .map(([service, count], i) => {
+                          const maxCount = Math.max(...Object.values(leads.reduce((acc, lead) => {
+                            acc[lead.service] = (acc[lead.service] || 0) + 1;
+                            return acc;
+                          }, {} as Record<string, number>)));
+                          const percentage = (count / maxCount) * 100;
+                          const colors = ['from-cyan-500 to-cyan-400', 'from-yellow-500 to-yellow-400', 'from-green-500 to-green-400', 'from-purple-500 to-purple-400', 'from-pink-500 to-pink-400', 'from-blue-500 to-blue-400', 'from-orange-500 to-orange-400', 'from-teal-500 to-teal-400'];
+                          return (
+                            <div key={i} className="flex items-center gap-3">
+                              <span className="w-40 text-gray-300 text-sm truncate">{service}</span>
+                              <div className="flex-1 h-6 bg-[#0a0a0a] rounded-full overflow-hidden relative">
+                                <div 
+                                  className={`h-full bg-gradient-to-r ${colors[i % colors.length]} rounded-full transition-all flex items-center justify-end pr-2`}
+                                  style={{ width: `${Math.max(percentage, 15)}%` }}
+                                >
+                                  <span className="text-xs text-white font-medium">{count}</span>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Leads Table */}
+              <Card className="bg-[#141414] border-[#333]">
+                <CardHeader>
+                  <CardTitle className="text-white">📋 সকল লিড ({leads.length})</CardTitle>
+                </CardHeader>
+                <CardContent>
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead>
@@ -577,15 +754,47 @@ export default function AdminDashboard() {
                 </div>
               </CardContent>
             </Card>
+            </div>
           </TabsContent>
 
           {/* Bookings Tab */}
           <TabsContent value="bookings">
-            <Card className="bg-[#141414] border-[#333]">
-              <CardHeader>
-                <CardTitle className="text-white">📅 সকল বুকিং ({bookings.length})</CardTitle>
-              </CardHeader>
-              <CardContent>
+            <div className="space-y-6">
+              {/* Booking Stats Chart */}
+              <Card className="bg-[#141414] border-[#333]">
+                <CardHeader>
+                  <CardTitle className="text-white">📈 বুকিং স্ট্যাটাস বিশ্লেষণ</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {[
+                      { label: 'পেন্ডিং', count: bookings.filter(b => b.status === 'pending').length, color: 'bg-yellow-500' },
+                      { label: 'কনফার্ম', count: bookings.filter(b => b.status === 'confirmed').length, color: 'bg-blue-500' },
+                      { label: 'সম্পন্ন', count: bookings.filter(b => b.status === 'completed').length, color: 'bg-green-500' },
+                      { label: 'বাতিল', count: bookings.filter(b => b.status === 'cancelled').length, color: 'bg-red-500' },
+                    ].map((stat, i) => {
+                      const maxCount = Math.max(bookings.length, 1);
+                      const percentage = (stat.count / maxCount) * 100;
+                      return (
+                        <div key={i} className="text-center">
+                          <div className="text-2xl font-bold text-white mb-2">{stat.count}</div>
+                          <div className="h-2 bg-[#0a0a0a] rounded-full overflow-hidden mb-2">
+                            <div className={`h-full ${stat.color} rounded-full transition-all`} style={{ width: `${percentage}%` }} />
+                          </div>
+                          <div className="text-gray-400 text-sm">{stat.label}</div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Bookings Table */}
+              <Card className="bg-[#141414] border-[#333]">
+                <CardHeader>
+                  <CardTitle className="text-white">📅 সকল বুকিং ({bookings.length})</CardTitle>
+                </CardHeader>
+                <CardContent>
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead>
@@ -647,6 +856,7 @@ export default function AdminDashboard() {
                 </div>
               </CardContent>
             </Card>
+            </div>
           </TabsContent>
         </Tabs>
 

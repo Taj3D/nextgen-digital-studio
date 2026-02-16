@@ -43,7 +43,13 @@ import {
   Share2,
   History,
   Copy,
-  Trash2
+  Trash2,
+  Sun,
+  Moon,
+  ZoomIn,
+  ChevronLeft,
+  Quote,
+  ImageIcon
 } from 'lucide-react';
 
 // Pricing packages - Multilingual
@@ -641,6 +647,22 @@ const portfolioCategoriesData = {
   ]
 };
 
+// Portfolio Gallery Images
+const portfolioImages = [
+  { src: '/portfolio/cnc-design-1.png', category: 'cnc', title: 'CNC রিলিফ ডিজাইন' },
+  { src: '/portfolio/cnc-design-2.png', category: 'cnc', title: 'জটিল প্যাটার্ন ডিজাইন' },
+  { src: '/portfolio/cnc-design-3.png', category: 'cnc', title: '৩ডি ফুলের নকশা' },
+  { src: '/portfolio/portrait-1.png', category: 'portrait', title: 'কাঠে খোদাই পোর্ট্রেট' },
+  { src: '/portfolio/portrait-2.png', category: 'portrait', title: 'প্রিয়জনের ছবি' },
+  { src: '/portfolio/portrait-3.png', category: 'portrait', title: 'মেমোরিয়াল আর্ট' },
+  { src: '/portfolio/furniture-1.png', category: 'furniture', title: 'ফার্নিচার ডিজাইন' },
+  { src: '/portfolio/islamic-art-1.png', category: 'islamic', title: 'ইসলামিক ক্যালিগ্রাফি' },
+  { src: '/portfolio/calligraphy-1.png', category: 'islamic', title: 'আরবি ক্যালিগ্রাফি' },
+  { src: '/portfolio/calligraphy-2.png', category: 'islamic', title: 'সুন্দর নকশা' },
+  { src: '/portfolio/wood-art-1.png', category: 'cnc', title: 'কাঠের আর্টওয়ার্ক' },
+  { src: '/portfolio/relief-1.png', category: 'cnc', title: 'রিলিফ কারুকাজ' },
+];
+
 // Particle component with reduced motion support
 function Particles() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -893,6 +915,16 @@ export default function Home() {
   // Share State
   const [showShareMenu, setShowShareMenu] = useState<string | null>(null);
   
+  // Theme State
+  const [isDarkMode, setIsDarkMode] = useState(true);
+  
+  // Portfolio Gallery State
+  const [selectedPortfolioImage, setSelectedPortfolioImage] = useState<string | null>(null);
+  const [portfolioCategory, setPortfolioCategory] = useState<string>('all');
+  
+  // Testimonials State
+  const [activeTestimonial, setActiveTestimonial] = useState(0);
+  
   const [formData, setFormData] = useState({
     name: '',
     mobile: '',
@@ -930,6 +962,31 @@ export default function Home() {
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  // Theme Toggle
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('nextgen_theme');
+    if (savedTheme) {
+      setIsDarkMode(savedTheme === 'dark');
+    }
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', isDarkMode);
+    localStorage.setItem('nextgen_theme', isDarkMode ? 'dark' : 'light');
+  }, [isDarkMode]);
+
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+
+  // Testimonials Auto-slide
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveTestimonial((prev) => (prev + 1) % testimonials.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [testimonials.length]);
 
   // PWA Service Worker Registration & Install Prompt
   useEffect(() => {
@@ -1439,6 +1496,15 @@ export default function Home() {
             
             {/* CTA & Mobile Menu */}
             <div className="flex items-center gap-3">
+              {/* Theme Toggle */}
+              <button
+                onClick={toggleTheme}
+                className="p-2 rounded-lg bg-[#1a1a1a] border border-[#333] text-white hover:border-cyan-500/50 transition-colors"
+                aria-label={isDarkMode ? 'লাইট মোডে যান' : 'ডার্ক মোডে যান'}
+              >
+                {isDarkMode ? <Sun className="w-5 h-5 text-yellow-400" /> : <Moon className="w-5 h-5 text-cyan-400" />}
+              </button>
+              
               {/* Language Toggle */}
               <button
                 onClick={() => setLang(lang === 'bn' ? 'en' : 'bn')}
@@ -1812,25 +1878,80 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-6">
-              {testimonials.map((testimonial, i) => (
-                <Card key={i} className="bg-[#141414] border-[#333] hover:border-cyan-500/50 transition-all">
-                  <CardContent className="p-6">
-                    <div className="flex items-center gap-1 mb-3">
-                      {[...Array(testimonial.rating)].map((_, j) => (
-                        <Star key={j} className="w-4 h-4 text-yellow-400 fill-yellow-400" aria-hidden="true" />
-                      ))}
+            {/* Testimonials Carousel */}
+            <div className="relative">
+              {/* Main Carousel */}
+              <div className="overflow-hidden">
+                <div className="flex transition-transform duration-500 ease-in-out" style={{ transform: `translateX(-${activeTestimonial * 100}%)` }}>
+                  {testimonials.map((testimonial, i) => (
+                    <div key={i} className="w-full flex-shrink-0 px-4">
+                      <Card className="bg-[#141414] border-[#333] hover:border-cyan-500/50 transition-all max-w-2xl mx-auto">
+                        <CardContent className="p-8">
+                          <Quote className="w-10 h-10 text-cyan-500/30 mb-4" aria-hidden="true" />
+                          <div className="flex items-center gap-1 mb-4">
+                            {[...Array(testimonial.rating)].map((_, j) => (
+                              <Star key={j} className="w-5 h-5 text-yellow-400 fill-yellow-400" aria-hidden="true" />
+                            ))}
+                          </div>
+                          <p className="text-gray-300 text-lg mb-6 leading-relaxed">"{testimonial.text}"</p>
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <div className="text-white font-bold text-lg">{testimonial.name}</div>
+                              <div className="text-gray-500">{testimonial.location}</div>
+                            </div>
+                            <Badge className="bg-cyan-500/20 text-cyan-400">{testimonial.service}</Badge>
+                          </div>
+                        </CardContent>
+                      </Card>
                     </div>
-                    <p className="text-gray-300 text-sm mb-4 leading-relaxed">"{testimonial.text}"</p>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="text-white font-semibold">{testimonial.name}</div>
-                        <div className="text-gray-500 text-xs">{testimonial.location}</div>
-                      </div>
-                      <Badge className="bg-cyan-500/20 text-cyan-400 text-xs">{testimonial.service}</Badge>
-                    </div>
-                  </CardContent>
-                </Card>
+                  ))}
+                </div>
+              </div>
+
+              {/* Navigation Dots */}
+              <div className="flex justify-center gap-2 mt-6">
+                {testimonials.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setActiveTestimonial(i)}
+                    className={`w-3 h-3 rounded-full transition-all ${
+                      activeTestimonial === i ? 'bg-cyan-400 w-8' : 'bg-gray-600 hover:bg-gray-500'
+                    }`}
+                    aria-label={`Testimonial ${i + 1}`}
+                  />
+                ))}
+              </div>
+
+              {/* Navigation Arrows */}
+              <button
+                onClick={() => setActiveTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length)}
+                className="absolute left-0 top-1/2 -translate-y-1/2 p-2 rounded-full bg-[#141414] border border-[#333] text-white hover:border-cyan-500/50 transition-all hidden md:block"
+                aria-label="Previous testimonial"
+              >
+                <ChevronLeft className="w-6 h-6" />
+              </button>
+              <button
+                onClick={() => setActiveTestimonial((prev) => (prev + 1) % testimonials.length)}
+                className="absolute right-0 top-1/2 -translate-y-1/2 p-2 rounded-full bg-[#141414] border border-[#333] text-white hover:border-cyan-500/50 transition-all hidden md:block"
+                aria-label="Next testimonial"
+              >
+                <ChevronRight className="w-6 h-6" />
+              </button>
+            </div>
+
+            {/* Trust Stats */}
+            <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
+              {[
+                { value: '৫.০', label: lang === 'bn' ? 'গড় রেটিং' : 'Average Rating', icon: Star },
+                { value: '৭,৫০০+', label: lang === 'bn' ? 'সন্তুষ্ট ক্লায়েন্ট' : 'Happy Clients', icon: User },
+                { value: '৫০+', label: lang === 'bn' ? 'দেশে সেবা' : 'Countries Served', icon: Globe },
+                { value: '১৭+', label: lang === 'bn' ? 'বছর অভিজ্ঞতা' : 'Years Experience', icon: Award },
+              ].map((stat, i) => (
+                <div key={i} className="text-center p-4 rounded-xl bg-[#141414] border border-[#333]">
+                  <stat.icon className="w-6 h-6 text-cyan-400 mx-auto mb-2" aria-hidden="true" />
+                  <div className="text-2xl font-bold text-white">{stat.value}</div>
+                  <div className="text-gray-400 text-sm">{stat.label}</div>
+                </div>
               ))}
             </div>
           </div>
