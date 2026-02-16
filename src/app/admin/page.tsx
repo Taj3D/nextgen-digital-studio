@@ -47,6 +47,18 @@ interface AIAnalytics {
   lastUpdated: string;
 }
 
+interface Testimonial {
+  id: string;
+  name: string;
+  location: string;
+  rating: number;
+  text: string;
+  service: string;
+  avatar: string | null;
+  approved: boolean;
+  createdAt: string;
+}
+
 export default function AdminDashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
@@ -57,6 +69,7 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
   const [aiAnalytics, setAiAnalytics] = useState<AIAnalytics | null>(null);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   
   // Push Notifications State
   const [notificationEnabled, setNotificationEnabled] = useState(false);
@@ -168,10 +181,49 @@ export default function AdminDashboard() {
     if (isAuthenticated) {
       fetchData();
       loadAIAnalytics();
+      fetchTestimonials();
       const interval = setInterval(fetchData, 30000);
       return () => clearInterval(interval);
     }
   }, [isAuthenticated]);
+
+  // Fetch Testimonials
+  const fetchTestimonials = async () => {
+    try {
+      const res = await fetch('/api/testimonials');
+      const data = await res.json();
+      if (data.success) {
+        setTestimonials(data.testimonials);
+      }
+    } catch (error) {
+      console.error('Failed to fetch testimonials:', error);
+    }
+  };
+
+  // Approve Testimonial
+  const approveTestimonial = async (id: string) => {
+    try {
+      await fetch('/api/testimonials', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, approved: true })
+      });
+      fetchTestimonials();
+    } catch (error) {
+      console.error('Failed to approve:', error);
+    }
+  };
+
+  // Delete Testimonial
+  const deleteTestimonial = async (id: string) => {
+    if (!confirm('আপনি কি নিশ্চিত এটি ডিলিট করতে চান?')) return;
+    try {
+      await fetch(`/api/testimonials?id=${id}`, { method: 'DELETE' });
+      fetchTestimonials();
+    } catch (error) {
+      console.error('Failed to delete:', error);
+    }
+  };
 
   // Load AI Analytics from localStorage
   const loadAIAnalytics = () => {
@@ -404,6 +456,9 @@ export default function AdminDashboard() {
             </TabsTrigger>
             <TabsTrigger value="bookings" className="data-[state=active]:bg-cyan-500/20 data-[state=active]:text-cyan-400">
               📅 বুকিং ({bookings.length})
+            </TabsTrigger>
+            <TabsTrigger value="testimonials" className="data-[state=active]:bg-cyan-500/20 data-[state=active]:text-cyan-400">
+              ⭐ টেস্টিমোনিয়াল ({testimonials.filter(t => !t.approved).length})
             </TabsTrigger>
           </TabsList>
 
@@ -856,6 +911,95 @@ export default function AdminDashboard() {
                 </div>
               </CardContent>
             </Card>
+            </div>
+          </TabsContent>
+
+          {/* Testimonials Tab */}
+          <TabsContent value="testimonials">
+            <div className="space-y-6">
+              {/* Stats */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <Card className="bg-[#141414] border-[#333]">
+                  <CardContent className="p-4 text-center">
+                    <div className="text-3xl font-bold text-cyan-400">{testimonials.length}</div>
+                    <div className="text-gray-400 text-sm">মোট রিভিউ</div>
+                  </CardContent>
+                </Card>
+                <Card className="bg-[#141414] border-[#333]">
+                  <CardContent className="p-4 text-center">
+                    <div className="text-3xl font-bold text-yellow-400">{testimonials.filter(t => !t.approved).length}</div>
+                    <div className="text-gray-400 text-sm">অপেক্ষমান</div>
+                  </CardContent>
+                </Card>
+                <Card className="bg-[#141414] border-[#333]">
+                  <CardContent className="p-4 text-center">
+                    <div className="text-3xl font-bold text-green-400">{testimonials.filter(t => t.approved).length}</div>
+                    <div className="text-gray-400 text-sm">অনুমোদিত</div>
+                  </CardContent>
+                </Card>
+                <Card className="bg-[#141414] border-[#333]">
+                  <CardContent className="p-4 text-center">
+                    <div className="text-3xl font-bold text-orange-400">
+                      {testimonials.length > 0 ? (testimonials.reduce((sum, t) => sum + t.rating, 0) / testimonials.length).toFixed(1) : '0'}
+                    </div>
+                    <div className="text-gray-400 text-sm">গড় রেটিং</div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Testimonials List */}
+              <Card className="bg-[#141414] border-[#333]">
+                <CardHeader>
+                  <CardTitle className="text-white">⭐ সকল টেস্টিমোনিয়াল ({testimonials.length})</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {testimonials.length === 0 ? (
+                    <p className="text-gray-400 text-center py-8">কোনো টেস্টিমোনিয়াল নেই</p>
+                  ) : (
+                    <div className="space-y-4">
+                      {testimonials.map((testimonial) => (
+                        <div key={testimonial.id} className={`p-4 rounded-lg border ${testimonial.approved ? 'border-green-500/30 bg-green-500/5' : 'border-yellow-500/30 bg-yellow-500/5'}`}>
+                          <div className="flex items-start justify-between mb-2">
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <span className="text-white font-semibold">{testimonial.name}</span>
+                                <span className="text-gray-400 text-sm">({testimonial.location})</span>
+                                {testimonial.approved ? (
+                                  <Badge className="bg-green-500/20 text-green-400 text-xs">✓ অনুমোদিত</Badge>
+                                ) : (
+                                  <Badge className="bg-yellow-500/20 text-yellow-400 text-xs">⏳ অপেক্ষমান</Badge>
+                                )}
+                              </div>
+                              <div className="flex items-center gap-1 mt-1">
+                                {[...Array(5)].map((_, i) => (
+                                  <span key={i} className={i < testimonial.rating ? 'text-yellow-400' : 'text-gray-600'}>★</span>
+                                ))}
+                              </div>
+                            </div>
+                            <Badge className="bg-cyan-500/20 text-cyan-400">{testimonial.service}</Badge>
+                          </div>
+                          <p className="text-gray-300 text-sm mb-3">"{testimonial.text}"</p>
+                          <div className="flex items-center justify-between">
+                            <span className="text-gray-500 text-xs">{formatDate(testimonial.createdAt)}</span>
+                            <div className="flex gap-2">
+                              {!testimonial.approved && (
+                                <Button size="sm" variant="outline" className="border-green-500 text-green-400 h-8 text-xs"
+                                  onClick={() => approveTestimonial(testimonial.id)}>
+                                  ✓ অনুমোদন
+                                </Button>
+                              )}
+                              <Button size="sm" variant="outline" className="border-red-500 text-red-400 h-8 text-xs"
+                                onClick={() => deleteTestimonial(testimonial.id)}>
+                                🗑️
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
             </div>
           </TabsContent>
         </Tabs>
