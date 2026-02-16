@@ -110,13 +110,6 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { messages, newMessage } = body;
 
-    console.log('📥 Chat Request:', { 
-      hasMessages: !!messages, 
-      messagesCount: messages?.length || 0,
-      hasNewMessage: !!newMessage,
-      newMessagePreview: newMessage?.substring(0, 50)
-    });
-
     // Build conversation with proper typing
     const conversationMessages: ChatMessage[] = [
       { role: 'system', content: SALES_AGENT_PROMPT }
@@ -144,14 +137,11 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    console.log('📤 Sending to AI:', { messageCount: conversationMessages.length });
-
     let response: string | null = null;
 
     // Method 1: Try GitHub Models API (Free with GitHub PAT)
     if (GITHUB_TOKEN) {
       try {
-        console.log('🔄 Trying GitHub Models API...');
         const res = await fetch(GITHUB_MODELS_URL, {
           method: 'POST',
           headers: {
@@ -169,22 +159,15 @@ export async function POST(request: NextRequest) {
         if (res.ok) {
           const data = await res.json();
           response = data.choices?.[0]?.message?.content;
-          if (response) {
-            console.log('✅ GitHub Models Response received');
-          }
-        } else {
-          const errorText = await res.text();
-          console.log('❌ GitHub Models error:', res.status, errorText);
         }
-      } catch (e) {
-        console.log('❌ GitHub Models error:', e);
+      } catch {
+        // Continue to next method
       }
     }
 
     // Method 2: Try Internal Z-AI SDK (for local development)
     if (!response) {
       try {
-        console.log('🔄 Trying Z-AI SDK...');
         const ZAI = (await import('z-ai-web-dev-sdk')).default;
         const zai = await ZAI.create();
         const completion = await zai.chat.completions.create({
@@ -193,23 +176,17 @@ export async function POST(request: NextRequest) {
           max_tokens: 800,
         });
         response = completion.choices?.[0]?.message?.content;
-        if (response) {
-          console.log('✅ Z-AI SDK Response received');
-        }
-      } catch (e) {
-        console.log('❌ Z-AI SDK error:', e);
+      } catch {
+        // Use fallback response
       }
     }
 
     // Return response or fallback
     const finalResponse = response || FALLBACK_RESPONSE;
-    console.log('📤 Final response length:', finalResponse.length);
 
     return NextResponse.json({ message: finalResponse });
     
   } catch (error: unknown) {
-    console.error('❌ Chat API error:', error);
-    
     return NextResponse.json({ 
       message: FALLBACK_RESPONSE,
       error: error instanceof Error ? error.message : 'Unknown error'

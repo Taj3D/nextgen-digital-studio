@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { db } from '@/lib/db';
 
 // Simple auth check (in production, use proper authentication)
 function checkAuth(request: NextRequest) {
@@ -24,7 +22,7 @@ export async function GET(request: NextRequest) {
 
     // Fetch leads
     if (type === 'all' || type === 'leads') {
-      leads = await prisma.lead.findMany({
+      leads = await db.lead.findMany({
         where: status ? { status } : undefined,
         orderBy: { createdAt: 'desc' },
         take: limit
@@ -33,7 +31,7 @@ export async function GET(request: NextRequest) {
 
     // Fetch bookings
     if (type === 'all' || type === 'bookings') {
-      bookings = await prisma.booking.findMany({
+      bookings = await db.booking.findMany({
         where: status ? { status } : undefined,
         orderBy: { createdAt: 'desc' },
         take: limit
@@ -41,10 +39,10 @@ export async function GET(request: NextRequest) {
     }
 
     // Stats
-    const totalLeads = await prisma.lead.count();
-    const totalBookings = await prisma.booking.count();
-    const newLeads = await prisma.lead.count({ where: { status: 'new' } });
-    const pendingBookings = await prisma.booking.count({ where: { status: 'pending' } });
+    const totalLeads = await db.lead.count();
+    const totalBookings = await db.booking.count();
+    const newLeads = await db.lead.count({ where: { status: 'new' } });
+    const pendingBookings = await db.booking.count({ where: { status: 'pending' } });
 
     return NextResponse.json({
       success: true,
@@ -74,13 +72,13 @@ export async function PUT(request: NextRequest) {
     }
 
     if (type === 'lead') {
-      const updated = await prisma.lead.update({
+      const updated = await db.lead.update({
         where: { id },
         data: { status }
       });
       return NextResponse.json({ success: true, lead: updated });
     } else if (type === 'booking') {
-      const updated = await prisma.booking.update({
+      const updated = await db.booking.update({
         where: { id },
         data: { status }
       });
@@ -106,9 +104,9 @@ export async function DELETE(request: NextRequest) {
     }
 
     if (type === 'lead') {
-      await prisma.lead.delete({ where: { id } });
+      await db.lead.delete({ where: { id } });
     } else if (type === 'booking') {
-      await prisma.booking.delete({ where: { id } });
+      await db.booking.delete({ where: { id } });
     }
 
     return NextResponse.json({ success: true });

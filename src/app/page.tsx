@@ -887,7 +887,15 @@ export default function Home() {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [policyModal, setPolicyModal] = useState<'privacy' | 'terms' | 'refund' | null>(null);
   
-  const [messages, setMessages] = useState<Message[]>([]);
+  // Generate unique ID
+  const generateId = () => Math.random().toString(36).substring(2) + Date.now().toString(36);
+  
+  const [messages, setMessages] = useState<Message[]>(() => [{
+    id: Math.random().toString(36).substring(2) + Date.now().toString(36),
+    role: 'assistant' as const,
+    content: 'আসসালামু আলাইকুম! 👋 আমি NextGen Digital Studio এর AI সহায়িকা "বুদ্ধিদীপ্ত"। আপনাকে কীভাবে সাহায্য করতে পারি?',
+    timestamp: new Date()
+  }]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   
@@ -896,27 +904,71 @@ export default function Home() {
   const [voiceSupported, setVoiceSupported] = useState(false);
   const voiceRecognitionRef = useRef<any>(null);
   
-  // Chat History State
-  const [chatHistory, setChatHistory] = useState<ChatSession[]>([]);
+  // Chat History State - lazy initialization from localStorage
+  const [chatHistory, setChatHistory] = useState<ChatSession[]>(() => {
+    if (typeof window === 'undefined') return [];
+    const saved = localStorage.getItem('nextgen_chat_history');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch {
+        return [];
+      }
+    }
+    return [];
+  });
   const [showHistory, setShowHistory] = useState(false);
-  const [currentSessionId, setCurrentSessionId] = useState<string>('');
+  const [currentSessionId, setCurrentSessionId] = useState<string>(() => generateId());
   
-  // Analytics State
-  const [analytics, setAnalytics] = useState<AnalyticsData>({
-    totalChats: 0,
-    totalMessages: 0,
-    sessionsCount: 0,
-    topicsAsked: [],
-    feedbackStats: { positive: 0, negative: 0 },
-    averageMessagesPerSession: 0,
-    lastUpdated: new Date()
+  // Analytics State - lazy initialization from localStorage
+  const [analytics, setAnalytics] = useState<AnalyticsData>(() => {
+    if (typeof window === 'undefined') {
+      return {
+        totalChats: 0,
+        totalMessages: 0,
+        sessionsCount: 0,
+        topicsAsked: [],
+        feedbackStats: { positive: 0, negative: 0 },
+        averageMessagesPerSession: 0,
+        lastUpdated: new Date()
+      };
+    }
+    const saved = localStorage.getItem('nextgen_analytics');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch {
+        return {
+          totalChats: 0,
+          totalMessages: 0,
+          sessionsCount: 0,
+          topicsAsked: [],
+          feedbackStats: { positive: 0, negative: 0 },
+          averageMessagesPerSession: 0,
+          lastUpdated: new Date()
+        };
+      }
+    }
+    return {
+      totalChats: 0,
+      totalMessages: 0,
+      sessionsCount: 0,
+      topicsAsked: [],
+      feedbackStats: { positive: 0, negative: 0 },
+      averageMessagesPerSession: 0,
+      lastUpdated: new Date()
+    };
   });
   
   // Share State
   const [showShareMenu, setShowShareMenu] = useState<string | null>(null);
   
-  // Theme State
-  const [isDarkMode, setIsDarkMode] = useState(true);
+  // Theme State - lazy initialization from localStorage
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    if (typeof window === 'undefined') return true;
+    const savedTheme = localStorage.getItem('nextgen_theme');
+    return savedTheme ? savedTheme === 'dark' : true;
+  });
   
   // Portfolio Gallery State
   const [selectedPortfolioImage, setSelectedPortfolioImage] = useState<string | null>(null);
@@ -961,14 +1013,6 @@ export default function Home() {
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  // Theme Toggle
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('nextgen_theme');
-    if (savedTheme) {
-      setIsDarkMode(savedTheme === 'dark');
-    }
   }, []);
 
   useEffect(() => {
@@ -1083,57 +1127,6 @@ export default function Home() {
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
-  // Initialize Chat Session
-  useEffect(() => {
-    // Load chat history from localStorage
-    const savedHistory = localStorage.getItem(STORAGE_KEYS.CHAT_HISTORY);
-    if (savedHistory) {
-      try {
-        const parsed = JSON.parse(savedHistory);
-        const mappedHistory = parsed.map((s: any) => ({
-          ...s,
-          createdAt: new Date(s.createdAt),
-          updatedAt: new Date(s.updatedAt),
-          messages: s.messages.map((m: any) => ({
-            ...m,
-            timestamp: new Date(m.timestamp)
-          }))
-        }));
-        // Use flushSync pattern - set in a microtask
-        setTimeout(() => setChatHistory(mappedHistory), 0);
-      } catch (e) {
-        console.error('Failed to parse chat history:', e);
-      }
-    }
-    
-    // Load analytics from localStorage
-    const savedAnalytics = localStorage.getItem(STORAGE_KEYS.ANALYTICS);
-    if (savedAnalytics) {
-      try {
-        const parsed = JSON.parse(savedAnalytics);
-        setTimeout(() => setAnalytics({
-          ...parsed,
-          lastUpdated: new Date(parsed.lastUpdated)
-        }), 0);
-      } catch (e) {
-        console.error('Failed to parse analytics:', e);
-      }
-    }
-    
-    // Start new session
-    const newSessionId = generateId();
-    setCurrentSessionId(newSessionId);
-    
-    // Initialize with welcome message
-    setMessages([{
-      id: generateId(),
-      role: 'assistant',
-      content: 'আসসালামু আলাইকুম! 👋 আমি NextGen Digital Studio এর AI সহায়িকা "বুদ্ধিদীপ্ত"। আপনাকে কীভাবে সাহায্য করতে পারি?',
-      timestamp: new Date()
-    }]);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   // Voice Recognition Setup
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -1170,9 +1163,12 @@ export default function Home() {
     };
   }, []);
 
-  // Save messages to history when session ends
+  // Save messages to history when session ends - using microtask to avoid cascading renders
+  const prevMessagesLengthRef = useRef(messages.length);
+  
   useEffect(() => {
-    if (messages.length > 1 && currentSessionId) {
+    // Only update if messages length actually increased
+    if (messages.length > 1 && messages.length > prevMessagesLengthRef.current && currentSessionId) {
       const session: ChatSession = {
         id: currentSessionId,
         title: messages[1]?.content.substring(0, 50) || 'নতুন চ্যাট',
@@ -1181,18 +1177,21 @@ export default function Home() {
         updatedAt: new Date()
       };
       
-      setChatHistory(prev => {
-        const existing = prev.findIndex(s => s.id === currentSessionId);
-        if (existing >= 0) {
-          const updated = [...prev];
-          updated[existing] = session;
-          return updated.slice(0, 10); // Keep last 10 sessions
-        }
-        return [session, ...prev].slice(0, 10);
+      // Use microtask to defer state update
+      queueMicrotask(() => {
+        setChatHistory(prev => {
+          const existing = prev.findIndex(s => s.id === currentSessionId);
+          if (existing >= 0) {
+            const updated = [...prev];
+            updated[existing] = session;
+            return updated.slice(0, 10);
+          }
+          return [session, ...prev].slice(0, 10);
+        });
       });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [messages.length, currentSessionId]);
+    prevMessagesLengthRef.current = messages.length;
+  }, [messages, currentSessionId, chatHistory]);
 
   // Save history to localStorage
   useEffect(() => {
@@ -1539,17 +1538,17 @@ export default function Home() {
         {/* Mobile Menu */}
         <div 
           id="mobile-menu"
-          className={`md:hidden transition-all duration-300 overflow-hidden ${mobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}
+          className={`md:hidden overflow-hidden transition-all duration-500 ease-out ${mobileMenuOpen ? 'max-h-96 opacity-100 translate-y-0' : 'max-h-0 opacity-0 -translate-y-4'}`}
           role="menu"
         >
           <div className="bg-[#0a0a0a]/95 backdrop-blur-md border-t border-[#333] px-4 py-4 space-y-2">
-            <a href="#services" onClick={() => setMobileMenuOpen(false)} className="block py-3 px-4 text-gray-300 hover:text-cyan-400 hover:bg-cyan-400/10 rounded-lg transition-colors" role="menuitem">{t.nav.services}</a>
-            <a href="#pricing" onClick={() => setMobileMenuOpen(false)} className="block py-3 px-4 text-gray-300 hover:text-cyan-400 hover:bg-cyan-400/10 rounded-lg transition-colors" role="menuitem">{t.nav.pricing}</a>
-            <a href="#about" onClick={() => setMobileMenuOpen(false)} className="block py-3 px-4 text-gray-300 hover:text-cyan-400 hover:bg-cyan-400/10 rounded-lg transition-colors" role="menuitem">{t.nav.about}</a>
-            <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="block py-3 px-4 text-gray-300 hover:text-cyan-400 hover:bg-cyan-400/10 rounded-lg transition-colors" role="menuitem">{t.nav.contact}</a>
+            <a href="#services" onClick={() => setMobileMenuOpen(false)} className="block py-3 px-4 text-gray-300 hover:text-cyan-400 hover:bg-cyan-400/10 rounded-lg transition-all duration-200 hover:translate-x-2" role="menuitem">{t.nav.services}</a>
+            <a href="#pricing" onClick={() => setMobileMenuOpen(false)} className="block py-3 px-4 text-gray-300 hover:text-cyan-400 hover:bg-cyan-400/10 rounded-lg transition-all duration-200 hover:translate-x-2" role="menuitem">{t.nav.pricing}</a>
+            <a href="#about" onClick={() => setMobileMenuOpen(false)} className="block py-3 px-4 text-gray-300 hover:text-cyan-400 hover:bg-cyan-400/10 rounded-lg transition-all duration-200 hover:translate-x-2" role="menuitem">{t.nav.about}</a>
+            <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="block py-3 px-4 text-gray-300 hover:text-cyan-400 hover:bg-cyan-400/10 rounded-lg transition-all duration-200 hover:translate-x-2" role="menuitem">{t.nav.contact}</a>
             <button 
               onClick={() => { setChatOpen(true); setMobileMenuOpen(false); }}
-              className="w-full py-3 px-4 text-left text-cyan-400 hover:bg-cyan-400/10 rounded-lg transition-colors flex items-center gap-2"
+              className="w-full py-3 px-4 text-left text-cyan-400 hover:bg-cyan-400/10 rounded-lg transition-all duration-200 hover:translate-x-2 flex items-center gap-2"
               role="menuitem"
             >
               <Bot className="w-5 h-5" aria-hidden="true" />

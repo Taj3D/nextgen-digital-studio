@@ -64,7 +64,7 @@ export default function AdminDashboard() {
   const [lastLeadCount, setLastLeadCount] = useState(0);
   const [lastBookingCount, setLastBookingCount] = useState(0);
 
-  const ADMIN_PASSWORD = '@taj921988';
+  const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || '@taj921988';
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
