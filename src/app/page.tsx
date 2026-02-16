@@ -1547,7 +1547,7 @@ export default function Home() {
               style={{ width: `${Math.min(loadingProgress, 100)}%` }}
             />
           </div>
-          <p className="text-gray-400 mt-4">লোড হচ্ছে...</p>
+          <p className="text-gray-400 mt-4">⏳ লোড হচ্ছে... v2.0</p>
         </div>
       </div>
     );
