@@ -202,6 +202,14 @@ const translations = {
       titleHighlight: 'কী বলেন?',
       subtitle: '৭,৫০০+ সন্তুষ্ট ক্লায়েন্টের মতামত'
     },
+    blog: {
+      badge: 'আমাদের ব্লগ',
+      title: 'জ্ঞান',
+      titleHighlight: 'ভান্ডার',
+      subtitle: 'ডিজিটাল সার্ভিস, টেকনোলজি ও ব্যবসায়িক টিপস',
+      readMore: 'বিস্তারিত পড়ুন',
+      viewAll: 'সব পোস্ট দেখুন'
+    },
     faq: {
       badge: 'সাধারণ প্রশ্ন',
       title: 'প্রায়শই জিজ্ঞাসিত',
@@ -314,6 +322,14 @@ const translations = {
       title: 'What Our',
       titleHighlight: 'Clients Say?',
       subtitle: 'Feedback from 7,500+ satisfied clients'
+    },
+    blog: {
+      badge: 'Our Blog',
+      title: 'Knowledge',
+      titleHighlight: 'Hub',
+      subtitle: 'Digital services, technology & business tips',
+      readMore: 'Read More',
+      viewAll: 'View All Posts'
     },
     faq: {
       badge: 'Common Questions',
@@ -663,6 +679,86 @@ const portfolioImages = [
   { src: '/portfolio/relief-1.png', category: 'cnc', title: 'রিলিফ কারুকাজ' },
 ];
 
+// Blog posts - Multilingual
+const blogPostsData = {
+  bn: [
+    {
+      id: 1,
+      title: 'CNC ডিজাইন: আধুনিক খোদাই শিল্পের যুগ',
+      excerpt: '৩ডি সিএনসি ডিজাইন কীভাবে প্রথাগত খোদাই শিল্পকে বদলে দিচ্ছে। জানুন সিএনসি প্রযুক্তির সুবিধা ও ব্যবহার।',
+      category: 'টেকনোলজি',
+      date: '২০২৫ ফেব্রুয়ারি ১৫',
+      readTime: '৫ মিনিট',
+      image: '/portfolio/cnc-design-1.png'
+    },
+    {
+      id: 2,
+      title: 'AI চ্যাটবট: ব্যবসার ডিজিটাল সহকারী',
+      excerpt: 'এআই চ্যাটবট কীভাবে আপনার ব্যবসায় ২৪/৭ কাস্টমার সার্ভিস নিশ্চিত করে এবং খরচ কমায়।',
+      category: 'এআই',
+      date: '২০২৫ ফেব্রুয়ারি ১০',
+      readTime: '৭ মিনিট',
+      image: '/portfolio/ai-design-1.png'
+    },
+    {
+      id: 3,
+      title: 'ওয়েবসাইট ডেভেলপমেন্ট গাইড ২০২৫',
+      excerpt: 'আধুনিক ওয়েবসাইট তৈরির জন্য প্রয়োজনীয় টেকনোলজি ও বেস্ট প্র্যাকটিস সম্পর্কে জানুন।',
+      category: 'টিউটোরিয়াল',
+      date: '২০২৫ ফেব্রুয়ারি ০৫',
+      readTime: '১০ মিনিট',
+      image: '/portfolio/ai-design-2.png'
+    },
+    {
+      id: 4,
+      title: 'ডিজিটাল মার্কেটিং স্ট্র্যাটেজি',
+      excerpt: 'সফল ডিজিটাল মার্কেটিং এর জন্য গুরুত্বপূর্ণ টিপস ও কৌশল যা আপনার ব্যবসাকে এগিয়ে নেবে।',
+      category: 'মার্কেটিং',
+      date: '২০২৫ জানুয়ারি ২৮',
+      readTime: '৬ মিনিট',
+      image: '/portfolio/ai-design-3.png'
+    }
+  ],
+  en: [
+    {
+      id: 1,
+      title: 'CNC Design: The Era of Modern Carving Art',
+      excerpt: 'How 3D CNC design is transforming traditional carving art. Learn about CNC technology benefits and applications.',
+      category: 'Technology',
+      date: 'February 15, 2025',
+      readTime: '5 min read',
+      image: '/portfolio/cnc-design-1.png'
+    },
+    {
+      id: 2,
+      title: 'AI Chatbot: Digital Assistant for Business',
+      excerpt: 'How AI chatbots ensure 24/7 customer service for your business and reduce costs.',
+      category: 'AI',
+      date: 'February 10, 2025',
+      readTime: '7 min read',
+      image: '/portfolio/ai-design-1.png'
+    },
+    {
+      id: 3,
+      title: 'Website Development Guide 2025',
+      excerpt: 'Learn about essential technologies and best practices for modern website development.',
+      category: 'Tutorial',
+      date: 'February 5, 2025',
+      readTime: '10 min read',
+      image: '/portfolio/ai-design-2.png'
+    },
+    {
+      id: 4,
+      title: 'Digital Marketing Strategy',
+      excerpt: 'Important tips and strategies for successful digital marketing to grow your business.',
+      category: 'Marketing',
+      date: 'January 28, 2025',
+      readTime: '6 min read',
+      image: '/portfolio/ai-design-3.png'
+    }
+  ]
+};
+
 // Particle component with reduced motion support
 function Particles() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -874,6 +970,7 @@ export default function Home() {
   const quickReplies = quickRepliesData[lang];
   const policies = policiesData[lang];
   const testimonials = testimonialsData[lang];
+  const blogPosts = blogPostsData[lang];
   const faq = faqData[lang];
   const whyUs = whyUsData[lang];
   const trustBadges = trustBadgesData[lang];
@@ -893,7 +990,7 @@ export default function Home() {
   const [messages, setMessages] = useState<Message[]>(() => [{
     id: Math.random().toString(36).substring(2) + Date.now().toString(36),
     role: 'assistant' as const,
-    content: 'আসসালামু আলাইকুম! 👋 আমি NextGen Digital Studio এর AI সহায়িকা "বুদ্ধিদীপ্ত"। আপনাকে কীভাবে সাহায্য করতে পারি?',
+    content: 'আসসালামু আলাইকুম! 👋 আমি NextGen Digital Studio এর NextGen AI সহায়িকা। আপনাকে কীভাবে সাহায্য করতে পারি?',
     timestamp: new Date()
   }]);
   const [inputMessage, setInputMessage] = useState('');
@@ -1299,7 +1396,7 @@ export default function Home() {
     setMessages([{
       id: generateId(),
       role: 'assistant',
-      content: 'আসসালামু আলাইকুম! 👋 আমি NextGen Digital Studio এর AI সহায়িকা "বুদ্ধিদীপ্ত"। আপনাকে কীভাবে সাহায্য করতে পারি?',
+      content: 'আসসালামু আলাইকুম! 👋 আমি NextGen Digital Studio এর NextGen AI সহায়িকা। আপনাকে কীভাবে সাহায্য করতে পারি?',
       timestamp: new Date()
     }]);
     setShowHistory(false);
@@ -1457,7 +1554,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen" style={{ background: '#0a0a0a' }}>
+    <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'bg-[#0a0a0a]' : 'bg-gray-50'}`}>
       {/* Skip to main content link for accessibility */}
       <a 
         href="#main-content" 
@@ -1468,7 +1565,7 @@ export default function Home() {
 
       {/* Navigation */}
       <nav 
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-[#0a0a0a]/95 backdrop-blur-md shadow-lg shadow-cyan-500/10' : 'bg-transparent'}`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? (isDarkMode ? 'bg-[#0a0a0a]/95' : 'bg-white/95') + ' backdrop-blur-md shadow-lg shadow-cyan-500/10' : 'bg-transparent'}`}
         role="navigation"
         aria-label="প্রধান নেভিগেশন"
       >
@@ -1480,17 +1577,17 @@ export default function Home() {
                 <Image src="/logo.png" alt="NextGen Logo" fill className="object-cover rounded-lg" />
               </div>
               <div className="hidden sm:block">
-                <span className="text-lg md:text-xl font-bold text-white">NextGen <span className="text-cyan-400">Digital</span></span>
-                <p className="text-[10px] text-gray-400 -mt-1">যশোরের প্রথম ডিজিটাল ইঞ্জিনিয়ার</p>
+                <span className={`text-lg md:text-xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>NextGen <span className="text-cyan-400">Digital</span></span>
+                <p className={`text-[10px] ${isDarkMode ? 'text-gray-400' : 'text-gray-500'} -mt-1`}>যশোরের প্রথম ডিজিটাল ইঞ্জিনিয়ার</p>
               </div>
             </a>
             
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-8">
-              <a href="#services" className="text-gray-300 hover:text-cyan-400 transition-colors">{t.nav.services}</a>
-              <a href="#pricing" className="text-gray-300 hover:text-cyan-400 transition-colors">{t.nav.pricing}</a>
-              <a href="#about" className="text-gray-300 hover:text-cyan-400 transition-colors">{t.nav.about}</a>
-              <a href="#contact" className="text-gray-300 hover:text-cyan-400 transition-colors">{t.nav.contact}</a>
+              <a href="#services" className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} hover:text-cyan-400 transition-colors`}>{t.nav.services}</a>
+              <a href="#pricing" className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} hover:text-cyan-400 transition-colors`}>{t.nav.pricing}</a>
+              <a href="#about" className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} hover:text-cyan-400 transition-colors`}>{t.nav.about}</a>
+              <a href="#contact" className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} hover:text-cyan-400 transition-colors`}>{t.nav.contact}</a>
             </div>
             
             {/* CTA & Mobile Menu */}
@@ -1968,6 +2065,63 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Blog Section */}
+        <section id="blog" className="py-16 md:py-24" aria-labelledby="blog-heading">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <Badge className="bg-purple-500/20 text-purple-400 mb-4">{t.blog.badge}</Badge>
+              <h2 id="blog-heading" className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+                {t.blog.title} <span className="text-cyan-400">{t.blog.titleHighlight}</span>
+              </h2>
+              <p className="text-gray-400 max-w-2xl mx-auto">
+                {t.blog.subtitle}
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {blogPosts.map((post, i) => (
+                <Card key={post.id} className="bg-[#141414] border-[#333] hover:border-cyan-500/50 transition-all duration-300 group overflow-hidden">
+                  <div className="relative h-48 overflow-hidden">
+                    <Image src={post.image} alt={post.title} fill className="object-cover group-hover:scale-110 transition-transform duration-500" />
+                    <div className="absolute top-3 left-3">
+                      <Badge className="bg-purple-500/80 text-white text-xs">{post.category}</Badge>
+                    </div>
+                  </div>
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
+                      <Calendar className="w-3 h-3" aria-hidden="true" />
+                      <span>{post.date}</span>
+                      <span>•</span>
+                      <Clock className="w-3 h-3" aria-hidden="true" />
+                      <span>{post.readTime}</span>
+                    </div>
+                    <h3 className="text-white font-semibold mb-2 group-hover:text-cyan-400 transition-colors line-clamp-2">
+                      {post.title}
+                    </h3>
+                    <p className="text-gray-400 text-sm line-clamp-2 mb-3">{post.excerpt}</p>
+                    <a href="https://www.facebook.com/mdnajmulislam.taj.33" target="_blank" rel="noopener noreferrer">
+                      <Button variant="outline" size="sm" className="w-full border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10">
+                        {t.blog.readMore}
+                        <ChevronRight className="w-4 h-4 ml-1" aria-hidden="true" />
+                      </Button>
+                    </a>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            {/* View All Posts */}
+            <div className="text-center mt-10">
+              <a href="https://www.facebook.com/mdnajmulislam.taj.33" target="_blank" rel="noopener noreferrer">
+                <Button variant="outline" className="border-purple-500 text-purple-400 hover:bg-purple-500/10">
+                  {t.blog.viewAll}
+                  <ChevronRight className="w-4 h-4 ml-2" aria-hidden="true" />
+                </Button>
+              </a>
+            </div>
+          </div>
+        </section>
+
         {/* FAQ Section */}
         <section id="faq" className="py-16 md:py-24" aria-labelledby="faq-heading">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -2323,33 +2477,65 @@ export default function Home() {
 
             {/* Policies */}
             <div>
-              <h4 className="text-white font-semibold mb-4">পলিসি</h4>
+              <h4 className="text-white font-semibold mb-4">{lang === 'bn' ? 'পলিসি' : 'Policies'}</h4>
               <ul className="space-y-2">
                 <li>
                   <button onClick={() => setPolicyModal('privacy')} className="text-gray-400 hover:text-cyan-400 transition-colors">
-                    প্রাইভেসি পলিসি
+                    {t.footer.privacy}
                   </button>
                 </li>
                 <li>
                   <button onClick={() => setPolicyModal('terms')} className="text-gray-400 hover:text-cyan-400 transition-colors">
-                    শর্তাবলী
+                    {t.footer.terms}
                   </button>
                 </li>
                 <li>
                   <button onClick={() => setPolicyModal('refund')} className="text-gray-400 hover:text-cyan-400 transition-colors">
-                    রিফান্ড পলিসি
+                    {t.footer.refund}
                   </button>
                 </li>
               </ul>
             </div>
+
+            {/* Download App */}
+            <div>
+              <h4 className="text-white font-semibold mb-4">{lang === 'bn' ? 'অ্যাপ ডাউনলোড' : 'Download App'}</h4>
+              <div className="space-y-3">
+                <button 
+                  onClick={handleInstallApp}
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#141414] border border-[#333] hover:border-cyan-500/50 transition-all group w-full"
+                >
+                  <span className="text-2xl group-hover:scale-110 transition-transform animate-bounce">📱</span>
+                  <div className="text-left">
+                    <div className="text-white text-sm font-medium">{lang === 'bn' ? 'ইনস্টল করুন' : 'Install App'}</div>
+                    <div className="text-gray-500 text-xs">PWA • {lang === 'bn' ? 'ফ্রি' : 'Free'}</div>
+                  </div>
+                </button>
+                <a href="https://play.google.com/store" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#141414] border border-[#333] hover:border-green-500/50 transition-all group">
+                  <span className="text-2xl group-hover:scale-110 transition-transform">▶️</span>
+                  <div className="text-left">
+                    <div className="text-white text-sm font-medium">Google Play</div>
+                    <div className="text-gray-500 text-xs">{lang === 'bn' ? 'শীঘ্রই আসছে' : 'Coming Soon'}</div>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Admin Link */}
+          <div className="mt-6 text-center">
+            <a href="/admin" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1a1a1a] border border-[#333] text-gray-500 hover:text-cyan-400 hover:border-cyan-500/30 transition-all text-sm">
+              <Shield className="w-4 h-4" aria-hidden="true" />
+              <span>Admin</span>
+            </a>
           </div>
 
           <div className="pt-8 border-t border-[#222] text-center">
             <p className="text-gray-500">
-              © {new Date().getFullYear()} NextGen Digital Studio. সর্বস্বত্ব সংরক্ষিত।
+              © {new Date().getFullYear()} NextGen Digital Studio. {t.footer.copyright}
             </p>
             <p className="text-gray-600 text-sm mt-2">
-              ইঞ্জিনিয়ার মোঃ নাজমুল ইসলাম তাজ (তাজ ভাই) | যশোর, বাংলাদেশ
+              {t.footer.credit}
             </p>
           </div>
         </div>
@@ -2408,7 +2594,10 @@ export default function Home() {
                     <Bot className="w-5 h-5 text-white" aria-hidden="true" />
                   </div>
                   <div>
-                    <div className="font-semibold text-black text-sm">বুদ্ধিদীপ্ত - AI সহায়িকা</div>
+                    <div className="font-semibold text-black text-sm flex items-center gap-1.5">
+                      <span className="inline-block animate-pulse">✨</span>
+                      NextGen AI সহায়িকা
+                    </div>
                     <div className="text-xs text-black/70 flex items-center gap-1">
                       <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" aria-hidden="true" />
                       সবসময় অনলাইন
@@ -2655,15 +2844,25 @@ export default function Home() {
         
         <Button
           onClick={() => setChatOpen(!chatOpen)}
-          className={`w-14 h-14 rounded-full shadow-lg ${
+          className={`w-14 h-14 rounded-full shadow-lg relative overflow-hidden ${
             chatOpen 
               ? 'bg-[#333] hover:bg-[#444]' 
-              : 'bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-400 hover:to-cyan-500 animate-pulse'
+              : 'bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-400 hover:to-cyan-500'
           } text-white shadow-cyan-500/25`}
           aria-label={chatOpen ? 'চ্যাট বন্ধ করুন' : 'AI চ্যাট খুলুন'}
           aria-expanded={chatOpen}
         >
-          {chatOpen ? <X className="w-6 h-6" aria-hidden="true" /> : <Bot className="w-6 h-6" aria-hidden="true" />}
+          {!chatOpen && (
+            <span className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-blue-500 animate-pulse opacity-50" />
+          )}
+          {!chatOpen && (
+            <span className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-ping" />
+          )}
+          {chatOpen ? <X className="w-6 h-6 relative z-10" aria-hidden="true" /> : (
+            <span className="relative z-10 flex items-center justify-center">
+              <Bot className="w-6 h-6" aria-hidden="true" />
+            </span>
+          )}
         </Button>
       </div>
 
