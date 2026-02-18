@@ -2,10 +2,27 @@
 
 import Script from 'next/script';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 
 // Google Analytics 4 Measurement ID
-const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_ID || 'G-XXXXXXXXXX';
+// Set NEXT_PUBLIC_GA_ID in your .env file with your actual GA4 measurement ID
+// Example: NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
+const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_ID || '';
+
+// Check if GA is enabled (has valid ID)
+const isGAEnabled = GA_MEASUREMENT_ID && GA_MEASUREMENT_ID.startsWith('G-') && GA_MEASUREMENT_ID !== 'G-XXXXXXXXXX';
+
+// Declare gtag function type
+declare global {
+  interface Window {
+    gtag: (
+      command: 'config' | 'event' | 'set',
+      targetIdOrParams: string | Record<string, unknown>,
+      params?: Record<string, unknown>
+    ) => void;
+    dataLayer: Record<string, unknown>[];
+  }
+}
 
 // Track page views
 export function usePageView() {
@@ -13,14 +30,14 @@ export function usePageView() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.gtag) {
-      const url = pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : '');
-      
-      window.gtag('config', GA_MEASUREMENT_ID, {
-        page_path: url,
-        page_title: document.title,
-      });
-    }
+    if (!isGAEnabled || typeof window === 'undefined' || !window.gtag) return;
+    
+    const url = pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : '');
+    
+    window.gtag('config', GA_MEASUREMENT_ID, {
+      page_path: url,
+      page_title: document.title,
+    });
   }, [pathname, searchParams]);
 }
 
@@ -31,13 +48,13 @@ export function trackEvent(
   label?: string,
   value?: number
 ) {
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', action, {
-      event_category: category,
-      event_label: label,
-      value: value,
-    });
-  }
+  if (!isGAEnabled || typeof window === 'undefined' || !window.gtag) return;
+  
+  window.gtag('event', action, {
+    event_category: category,
+    event_label: label,
+    value: value,
+  });
 }
 
 // Track form submissions
@@ -85,19 +102,10 @@ export function trackTimeOnPage(seconds: number) {
   trackEvent('time_on_page', 'engagement', undefined, seconds);
 }
 
-// Declare gtag function type
-declare global {
-  interface Window {
-    gtag: (
-      command: 'config' | 'event' | 'set',
-      targetIdOrParams: string | Record<string, unknown>,
-      params?: Record<string, unknown>
-    ) => void;
-    dataLayer: Record<string, unknown>[];
-  }
-}
-
 export default function GoogleAnalytics() {
+  // Don't render if GA is not configured
+  if (!isGAEnabled) return null;
+
   return (
     <>
       {/* Google Analytics Script */}

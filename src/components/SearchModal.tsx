@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { Search, X, ArrowRight, Clock, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { trackEvent } from '@/components/GoogleAnalytics';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 interface SearchResult {
   id: string;
@@ -58,47 +59,21 @@ const searchContent = {
   ]
 };
 
-const recentSearches: Record<'bn' | 'en', string[]> = {
+const defaultRecentSearches: Record<'bn' | 'en', string[]> = {
   bn: ['এআই চ্যাটবট', 'ওয়েবসাইট মূল্য', 'সিএনসি ডিজাইন'],
   en: ['AI Chatbot', 'Website Price', 'CNC Design']
 };
 
 export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const [query, setQuery] = useState('');
+  const [language] = useLocalStorage<'bn' | 'en'>('nextgen_language', 'bn');
+  const [recent, setRecent] = useLocalStorage<string[]>('nextgen_recent_searches', defaultRecentSearches['bn']);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Lazy initialization for language
-  const [language] = useState<'bn' | 'en'>(() => {
-    if (typeof window === 'undefined') return 'bn';
-    const savedLang = localStorage.getItem('nextgen_language');
-    if (savedLang === 'en' || savedLang === 'bn') {
-      return savedLang;
-    }
-    return 'bn';
-  });
+  // Focus input when modal opens using autoFocus attribute
+  // Auto-focus is handled by the input's autoFocus prop
 
   const content = searchContent[language];
-  const recentDefault = recentSearches[language];
-  
-  // Lazy initialization for recent searches
-  const [recent, setRecent] = useState<string[]>(() => {
-    if (typeof window === 'undefined') return recentDefault;
-    const saved = localStorage.getItem('nextgen_recent_searches');
-    if (saved) {
-      try {
-        return JSON.parse(saved).slice(0, 5);
-      } catch {
-        return recentDefault;
-      }
-    }
-    return recentDefault;
-  });
-
-  useEffect(() => {
-    if (isOpen && inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, [isOpen]);
 
   // Use useMemo for derived search results
   const results = useMemo(() => {
@@ -111,20 +86,19 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     );
   }, [query, content]);
 
-  const handleSearch = (searchQuery: string) => {
+  const handleSearch = useCallback((searchQuery: string) => {
     // Save to recent searches
     const updatedRecent = [searchQuery, ...recent.filter(s => s !== searchQuery)].slice(0, 5);
     setRecent(updatedRecent);
-    localStorage.setItem('nextgen_recent_searches', JSON.stringify(updatedRecent));
 
     // Track search
     trackEvent('search', 'engagement', searchQuery);
 
     // Trigger search
     setQuery(searchQuery);
-  };
+  }, [recent, setRecent]);
 
-  const handleResultClick = (result: SearchResult) => {
+  const handleResultClick = useCallback((result: SearchResult) => {
     // Track result click
     trackEvent('search_result_click', 'engagement', result.title);
 
@@ -134,27 +108,43 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     // Close modal
     onClose();
     
-    // Navigate using router
+    // Navigate
     setTimeout(() => {
       window.location.href = result.href;
     }, 100);
-  };
+  }, [handleSearch, onClose]);
+
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      onClose();
+    }
+  }, [onClose]);
 
   if (!isOpen) return null;
 
+  const popularSearches = language === 'bn' 
+    ? ['ওয়েবসাইট', 'এআই এজেন্ট', 'সিএনসি', 'মোবাইল অ্যাপ']
+    : ['Website', 'AI Agent', 'CNC', 'Mobile App'];
+
   return (
-    <div className="fixed inset-0 z-[9999] flex items-start justify-center pt-20 px-4">
+    <div className="fixed inset-0 z-[9999] flex items-start justify-center pt-20 px-4" onKeyDown={handleKeyDown}>
       {/* Backdrop */}
       <div 
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
         onClick={onClose}
+        aria-hidden="true"
       />
 
       {/* Modal */}
-      <div className="relative w-full max-w-2xl bg-white dark:bg-gray-900 rounded-2xl shadow-2xl overflow-hidden">
+      <div 
+        className="relative w-full max-w-2xl bg-white dark:bg-gray-900 rounded-2xl shadow-2xl overflow-hidden"
+        role="dialog"
+        aria-modal="true"
+        aria-label={language === 'bn' ? 'অনুসন্ধান' : 'Search'}
+      >
         {/* Search Input */}
         <div className="flex items-center gap-3 p-4 border-b border-gray-200 dark:border-gray-700">
-          <Search className="w-5 h-5 text-gray-400" />
+          <Search className="w-5 h-5 text-gray-400" aria-hidden="true" />
           <input
             ref={inputRef}
             type="text"
@@ -162,12 +152,15 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
             onChange={(e) => setQuery(e.target.value)}
             placeholder={language === 'bn' ? 'কী খুঁজছেন?...' : 'What are you looking for?...'}
             className="flex-1 bg-transparent border-none outline-none text-lg dark:text-white placeholder-gray-400"
+            aria-label={language === 'bn' ? 'অনুসন্ধান করুন' : 'Search'}
+            autoFocus
           />
           <Button
             variant="ghost"
             size="sm"
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600"
+            aria-label={language === 'bn' ? 'বন্ধ করুন' : 'Close'}
           >
             <X className="w-5 h-5" />
           </Button>
@@ -227,10 +220,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                   {language === 'bn' ? 'জনপ্রিয় অনুসন্ধান' : 'Popular Searches'}
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  {(language === 'bn' 
-                    ? ['ওয়েবসাইট', 'এআই এজেন্ট', 'সিএনসি', 'মোবাইল অ্যাপ']
-                    : ['Website', 'AI Agent', 'CNC', 'Mobile App']
-                  ).map((search, i) => (
+                  {popularSearches.map((search, i) => (
                     <button
                       key={i}
                       onClick={() => handleSearch(search)}

@@ -2,17 +2,25 @@
 
 import Script from 'next/script';
 
-// Microsoft Clarity
+// Microsoft Clarity Project ID
+// Set NEXT_PUBLIC_CLARITY_ID in your .env file
+// Get your ID from: https://clarity.microsoft.com/
 const CLARITY_PROJECT_ID = process.env.NEXT_PUBLIC_CLARITY_ID || '';
 
-// Hotjar
+// Hotjar Site ID
+// Set NEXT_PUBLIC_HOTJAR_ID in your .env file
+// Get your ID from: https://www.hotjar.com/
 const HOTJAR_SITE_ID = process.env.NEXT_PUBLIC_HOTJAR_ID || '';
+
+// Check if analytics are enabled
+const isClarityEnabled = CLARITY_PROJECT_ID && CLARITY_PROJECT_ID.length > 5;
+const isHotjarEnabled = HOTJAR_SITE_ID && HOTJAR_SITE_ID.length > 3;
 
 export default function AnalyticsProvider() {
   return (
     <>
-      {/* Microsoft Clarity */}
-      {CLARITY_PROJECT_ID && (
+      {/* Microsoft Clarity - Heatmaps & Session Recordings */}
+      {isClarityEnabled && (
         <Script id="clarity-script" strategy="afterInteractive">
           {`
             (function(c,l,a,r,i,t,y){
@@ -25,7 +33,7 @@ export default function AnalyticsProvider() {
       )}
 
       {/* Hotjar Tracking */}
-      {HOTJAR_SITE_ID && (
+      {isHotjarEnabled && (
         <Script id="hotjar-script" strategy="afterInteractive">
           {`
             (function(h,o,t,j,a,r){

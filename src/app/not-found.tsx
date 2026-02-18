@@ -3,14 +3,49 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Home, ArrowLeft, MessageCircle, Search } from 'lucide-react';
-import { useMemo } from 'react';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
+
+// Translations for 404 page
+const translations = {
+  bn: {
+    title: 'পেজটি খুঁজে পাওয়া যায়নি!',
+    description: 'দুঃখিত, আপনি যে পেজটি খুঁজছেন তা বিদ্যমান নেই বা সরানো হয়েছে।',
+    homeButton: 'হোমপেজে যান',
+    contactButton: 'যোগাযোগ করুন',
+    popularPages: 'জনপ্রিয় পেজ:',
+    services: 'সার্ভিস',
+    pricing: 'প্রাইসিং',
+    portfolio: 'পোর্টফোলিও',
+    contact: 'যোগাযোগ',
+    backLink: 'আগের পেজে ফিরে যান'
+  },
+  en: {
+    title: 'Page Not Found!',
+    description: 'Sorry, the page you are looking for does not exist or has been moved.',
+    homeButton: 'Go to Homepage',
+    contactButton: 'Contact Us',
+    popularPages: 'Popular Pages:',
+    services: 'Services',
+    pricing: 'Pricing',
+    portfolio: 'Portfolio',
+    contact: 'Contact',
+    backLink: 'Go back to previous page'
+  }
+};
 
 export default function NotFound() {
-  const isDark = useMemo(() => {
-    if (typeof window === 'undefined') return true;
-    const theme = localStorage.getItem('nextgen_theme');
-    return theme !== 'light';
-  }, []);
+  const [theme] = useLocalStorage<string>('nextgen_theme', 'dark');
+  const [language] = useLocalStorage<'bn' | 'en'>('nextgen_language', 'bn');
+
+  const isDark = theme !== 'light';
+  const t = translations[language];
+
+  const quickLinks = [
+    { name: t.services, href: '/#services' },
+    { name: t.pricing, href: '/#pricing' },
+    { name: t.portfolio, href: '/#portfolio' },
+    { name: t.contact, href: '/#contact' },
+  ];
 
   return (
     <div className={`min-h-screen flex items-center justify-center ${
@@ -37,12 +72,12 @@ export default function NotFound() {
         <h2 className={`text-2xl md:text-4xl font-bold mb-4 ${
           isDark ? 'text-white' : 'text-gray-900'
         }`}>
-          পেজটি খুঁজে পাওয়া যায়নি!
+          {t.title}
         </h2>
         <p className={`text-lg mb-8 ${
           isDark ? 'text-gray-400' : 'text-gray-600'
         }`}>
-          দুঃখিত, আপনি যে পেজটি খুঁজছেন তা বিদ্যমান নেই বা সরানো হয়েছে।
+          {t.description}
         </p>
 
         {/* Action Buttons */}
@@ -54,7 +89,7 @@ export default function NotFound() {
                 : 'bg-cyan-500 hover:bg-cyan-600 text-white'
             } px-8 py-6 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300`}>
               <Home className="w-5 h-5 mr-2" />
-              হোমপেজে যান
+              {t.homeButton}
             </Button>
           </Link>
 
@@ -65,7 +100,7 @@ export default function NotFound() {
                 : 'border-gray-300 text-gray-700 hover:bg-gray-100'
             }`}>
               <MessageCircle className="w-5 h-5 mr-2" />
-              যোগাযোগ করুন
+              {t.contactButton}
             </Button>
           </Link>
         </div>
@@ -77,15 +112,10 @@ export default function NotFound() {
           <h3 className={`text-lg font-semibold mb-4 ${
             isDark ? 'text-white' : 'text-gray-900'
           }`}>
-            জনপ্রিয় পেজ:
+            {t.popularPages}
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {[
-              { name: 'সার্ভিস', href: '/#services' },
-              { name: 'প্রাইসিং', href: '/#pricing' },
-              { name: 'পোর্টফোলিও', href: '/#portfolio' },
-              { name: 'যোগাযোগ', href: '/#contact' },
-            ].map((link) => (
+            {quickLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -109,7 +139,7 @@ export default function NotFound() {
           } transition-colors`}
         >
           <ArrowLeft className="w-4 h-4" />
-          আগের পেজে ফিরে যান
+          {t.backLink}
         </button>
       </div>
     </div>
