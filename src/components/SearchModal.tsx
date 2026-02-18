@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { Search, X, ArrowRight, Clock, TrendingUp } from 'lucide-react';
-import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
 import { trackEvent } from '@/components/GoogleAnalytics';
 
@@ -65,9 +64,18 @@ const recentSearches: Record<'bn' | 'en', string[]> = {
 };
 
 export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
-  const { language } = useLanguage();
   const [query, setQuery] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Lazy initialization for language
+  const [language] = useState<'bn' | 'en'>(() => {
+    if (typeof window === 'undefined') return 'bn';
+    const savedLang = localStorage.getItem('nextgen_language');
+    if (savedLang === 'en' || savedLang === 'bn') {
+      return savedLang;
+    }
+    return 'bn';
+  });
 
   const content = searchContent[language];
   const recentDefault = recentSearches[language];

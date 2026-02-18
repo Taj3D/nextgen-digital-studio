@@ -1,9 +1,10 @@
 'use client';
 
-import { useLanguage } from '@/contexts/LanguageContext';
-
 export default function SkipToContent() {
-  const { language } = useLanguage();
+  // Lazy initialization for language - read once
+  const language: 'bn' | 'en' = typeof window !== 'undefined' 
+    ? (localStorage.getItem('nextgen_language') as 'bn' | 'en') || 'bn'
+    : 'bn';
 
   const text = language === 'bn' 
     ? 'মূল বিষয়ে যান' 
