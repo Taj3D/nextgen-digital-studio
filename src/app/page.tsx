@@ -49,8 +49,11 @@ import {
   ZoomIn,
   ChevronLeft,
   Quote,
-  ImageIcon
+  ImageIcon,
+  Search
 } from 'lucide-react';
+import SearchModal from '@/components/SearchModal';
+import { trackEvent, trackFormSubmit, trackWhatsAppClick, trackChatInteraction, trackLanguageSwitch, trackThemeChange } from '@/components/GoogleAnalytics';
 
 // Pricing packages - Multilingual
 const pricingPackagesData = {
@@ -1406,6 +1409,7 @@ export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [policyModal, setPolicyModal] = useState<'privacy' | 'terms' | 'refund' | null>(null);
+  const [searchOpen, setSearchOpen] = useState(false);
   
   // Generate unique ID
   const generateId = () => Math.random().toString(36).substring(2) + Date.now().toString(36);
@@ -2016,6 +2020,15 @@ export default function Home() {
             
             {/* CTA & Mobile Menu */}
             <div className="flex items-center gap-3">
+              {/* Search Button */}
+              <button
+                onClick={() => setSearchOpen(true)}
+                className="p-2 rounded-lg bg-secondary border border-border text-foreground hover:border-cyan-500/50 transition-colors"
+                aria-label={lang === 'bn' ? 'অনুসন্ধান করুন' : 'Search'}
+              >
+                <Search className="w-5 h-5" />
+              </button>
+              
               {/* Theme Toggle */}
               <button
                 onClick={toggleTheme}
@@ -3482,6 +3495,9 @@ export default function Home() {
           </DialogContent>
         </Dialog>
       )}
+
+      {/* Search Modal */}
+      <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
 
       {/* Styles */}
       <style jsx global>{`

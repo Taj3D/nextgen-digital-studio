@@ -3,6 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
+import SkipToContent from "@/components/SkipToContent";
+import AnalyticsProvider from "@/components/AnalyticsProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -194,10 +197,17 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
         style={{ fontFamily: "'Hind Siliguri', sans-serif" }}
       >
+        {/* Skip to Content Link for Accessibility */}
+        <SkipToContent />
+        
         <ErrorBoundary>
           {children}
         </ErrorBoundary>
         <Toaster />
+        
+        {/* Analytics - Google Analytics, Clarity, Hotjar */}
+        <GoogleAnalytics />
+        <AnalyticsProvider />
       </body>
     </html>
   );

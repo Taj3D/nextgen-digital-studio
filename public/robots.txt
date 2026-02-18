@@ -1,14 +1,45 @@
+# Robots.txt for NextGen Digital Studio
+# https://taj-digital-studio.vercel.app
+
+# Allow all search engines
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://taj-digital-studio.vercel.app/sitemap.xml
+
+# Crawl delay (optional, for server performance)
+Crawl-delay: 1
+
+# Allow important pages
+Allow: /
+Allow: /manifest.json
+Allow: /logo.png
+
+# Disallow admin/private areas (if any)
+Disallow: /api/
+Disallow: /admin/
+
+# Google specific
 User-agent: Googlebot
 Allow: /
 
+# Bing specific
 User-agent: Bingbot
 Allow: /
 
-User-agent: Twitterbot
-Allow: /
-
+# Facebook crawler
 User-agent: facebookexternalhit
 Allow: /
 
-User-agent: *
+# Twitter crawler
+User-agent: Twitterbot
+Allow: /
+
+# LinkedIn crawler
+User-agent: LinkedInBot
+Allow: /
+
+# Pinterest
+User-agent: Pinterest
 Allow: /
