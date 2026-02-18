@@ -100,10 +100,13 @@ const FALLBACK_RESPONSE = `⚠️ সংযোগে সাময়িক স�
 
 ইঞ্জিনিয়ার তাজ ভাই সরাসরি আপনার সাথে কথা বলবেন! 🎯`;
 
-// GitHub Models API Configuration
-const GITHUB_MODELS_URL = 'https://models.inference.ai.azure.com/chat/completions';
-const GITHUB_TOKEN = process.env.GITHUB_TOKEN || '';
-const GITHUB_MODEL = process.env.GITHUB_MODEL || 'DeepSeek-V3-0324';
+// DeepSeek API Configuration
+const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY || '';
+const DEEPSEEK_API_URL = 'https://api.deepseek.com/chat/completions';
+
+// OpenRouter API Configuration (Backup)
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || '';
+const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
 export async function POST(request: NextRequest) {
   try {
@@ -139,17 +142,17 @@ export async function POST(request: NextRequest) {
 
     let response: string | null = null;
 
-    // Method 1: Try GitHub Models API (Free with GitHub PAT)
-    if (GITHUB_TOKEN) {
+    // Method 1: Try DeepSeek API (Primary)
+    if (DEEPSEEK_API_KEY) {
       try {
-        const res = await fetch(GITHUB_MODELS_URL, {
+        const res = await fetch(DEEPSEEK_API_URL, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${GITHUB_TOKEN}`
+            'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
           },
           body: JSON.stringify({
-            model: GITHUB_MODEL,
+            model: 'deepseek-chat',
             messages: conversationMessages,
             temperature: 0.8,
             max_tokens: 800,
@@ -165,7 +168,35 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Method 2: Try Internal Z-AI SDK (for local development)
+    // Method 2: Try OpenRouter API (Backup)
+    if (!response && OPENROUTER_API_KEY) {
+      try {
+        const res = await fetch(OPENROUTER_API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+            'HTTP-Referer': 'https://taj-digital-studio.vercel.app',
+            'X-Title': 'NextGen Digital Studio'
+          },
+          body: JSON.stringify({
+            model: 'deepseek/deepseek-chat',
+            messages: conversationMessages,
+            temperature: 0.8,
+            max_tokens: 800,
+          })
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          response = data.choices?.[0]?.message?.content;
+        }
+      } catch {
+        // Continue to next method
+      }
+    }
+
+    // Method 3: Try Internal Z-AI SDK (for local development)
     if (!response) {
       try {
         const ZAI = (await import('z-ai-web-dev-sdk')).default;
@@ -194,4 +225,4 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// v2.0
+// v2.1 - Added DeepSeek & OpenRouter API support
