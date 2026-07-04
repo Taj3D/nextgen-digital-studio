@@ -8,6 +8,7 @@ import { LanguageProvider } from "@/components/site/language-provider";
 import { BookingProvider } from "@/components/site/booking-modal";
 import { AnalyticsPixels } from "@/components/site/analytics-pixels";
 import { siteConfig, faqs } from "@/lib/site-data";
+import { Analytics } from "@vercel/analytics/next";
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
@@ -229,6 +230,7 @@ export default function RootLayout({
             </BookingProvider>
           </LanguageProvider>
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );
