@@ -6,7 +6,10 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  // SQLite locally (db/custom.db) for fast preview panel development.
+  // On Vercel: change provider to "postgresql" and set DATABASE_URL env var
+  // to your Vercel Postgres connection string.
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 

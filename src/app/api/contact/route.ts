@@ -29,20 +29,28 @@ export async function POST(req: Request) {
       );
     }
 
-    const lead = await db.lead.create({
-      data: {
-        name,
-        email,
-        phone,
-        company: company ?? undefined,
-        service: service ?? undefined,
-        message: message ?? undefined,
-        source,
-        status: "new",
-      },
-    });
+    // Try to save to database (may fail if DB not configured — Google Sheets is the source of truth)
+    let leadId = "sheets-only";
+    try {
+      const lead = await db.lead.create({
+        data: {
+          name,
+          email,
+          phone,
+          company: company ?? undefined,
+          service: service ?? undefined,
+          message: message ?? undefined,
+          source,
+          status: "new",
+        },
+      });
+      leadId = lead.id;
+    } catch (dbErr) {
+      console.error("[contact] DB save failed (lead will still go to Google Sheets)", dbErr);
+    }
 
-    // Fire-and-forget: Google Sheets sync (saves to Sheet + sends email to customer + owner via Apps Script)
+    // Google Sheets sync (saves to Sheet + sends email to customer + owner via Apps Script)
+    // This is the primary lead capture — works even without DB.
     sendToGoogleSheets({
       name,
       email,
@@ -51,7 +59,7 @@ export async function POST(req: Request) {
       service: service ?? "",
       message: message ?? "",
       source,
-      leadId: lead.id,
+      leadId,
       submittedAt: new Date().toISOString(),
     }).catch((err) => console.error("[contact] google sheets error", err));
 
@@ -63,10 +71,10 @@ export async function POST(req: Request) {
       phone,
       name,
       page: "/api/contact",
-      meta: { service: service ?? null, leadId: lead.id },
+      meta: { service: service ?? null, leadId },
     }).catch((err) => console.error("[contact] tracking error", err));
 
-    return NextResponse.json({ ok: true, id: lead.id });
+    return NextResponse.json({ ok: true, id: leadId });
   } catch (err) {
     console.error("[contact] error", err);
     return NextResponse.json(
