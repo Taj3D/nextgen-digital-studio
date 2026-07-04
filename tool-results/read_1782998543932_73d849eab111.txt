@@ -1,0 +1,1050 @@
+     1→import {
+     2→  Bot,
+     3→  MessageSquare,
+     4→  PhoneCall,
+     5→  Workflow,
+     6→  MessagesSquare,
+     7→  Target,
+     8→  TrendingUp,
+     9→  Filter,
+    10→  Cpu,
+    11→  Globe,
+    12→  LayoutTemplate,
+    13→  BrainCircuit,
+    14→  Building2,
+    15→  ShoppingBag,
+    16→  Stethoscope,
+    17→  GraduationCap,
+    18→  Home,
+    19→  Factory,
+    20→  Briefcase,
+    21→  type LucideIcon,
+    22→} from 'lucide-react'
+    23→
+    24→export type Service = {
+    25→  slug: string
+    26→  title: string
+    27→  icon: LucideIcon
+    28→  short: string
+    29→  description: string
+    30→  features: string[]
+    31→  gradient: string
+    32→}
+    33→
+    34→export const services: Service[] = [
+    35→  {
+    36→    slug: 'ai-sales-automation',
+    37→    title: 'AI Sales Automation',
+    38→    icon: Bot,
+    39→    short: 'Close more deals with AI-driven outreach, follow-ups & pipeline nurturing.',
+    40→    description:
+    41→      'End-to-end AI sales engines that qualify leads, send personalised follow-ups, and hand hot prospects to your team — 24/7.',
+    42→    features: ['AI lead scoring', 'Auto follow-up sequences', 'CRM pipeline sync', 'Meeting booking'],
+    43→    gradient: 'from-blue-500 to-indigo-500',
+    44→  },
+    45→  {
+    46→    slug: 'ai-chat-agent',
+    47→    title: 'AI Chat Agent',
+    48→    icon: MessageSquare,
+    49→    short: 'A 24/7 AI chatbot trained on your business that converts visitors into leads.',
+    50→    description:
+    51→      'Deploy a GPT-powered chat agent on your website & WhatsApp that answers questions, captures leads and books calls instantly.',
+    52→    features: ['Trained on your data', 'Multilingual', 'Lead capture & routing', 'Human handoff'],
+    53→    gradient: 'from-cyan-500 to-blue-500',
+    54→  },
+    55→  {
+    56→    slug: 'ai-voice-agent',
+    57→    title: 'AI Voice Agent',
+    58→    icon: PhoneCall,
+    59→    short: 'Human-sounding AI voice agents for inbound & outbound calls.',
+    60→    description:
+    61→      'Automate call handling, appointment booking and customer support with natural-sounding AI voice agents in Bangla & English.',
+    62→    features: ['Inbound & outbound', 'Bangla + English', 'Appointment booking', 'CRM logging'],
+    63→    gradient: 'from-violet-500 to-purple-500',
+    64→  },
+    65→  {
+    66→    slug: 'crm-automation',
+    67→    title: 'CRM Automation',
+    68→    icon: Workflow,
+    69→    short: 'Turn your CRM into an autopilot that never drops a lead.',
+    70→    description:
+    71→      'We automate your HubSpot, GoHighLevel or custom CRM so every lead is nurtured, tagged and followed up automatically.',
+    72→    features: ['Pipeline automation', 'Smart tagging', 'Task reminders', 'Revenue reporting'],
+    73→    gradient: 'from-emerald-500 to-teal-500',
+    74→  },
+    75→  {
+    76→    slug: 'whatsapp-automation',
+    77→    title: 'WhatsApp Automation',
+    78→    icon: MessagesSquare,
+    79→    short: 'Reach customers on Bangladesh’s #1 messaging app — automatically.',
+    80→    description:
+    81→      'Official WhatsApp Business API flows for marketing blasts, order updates, support and abandoned-cart recovery.',
+    82→    features: ['Broadcast campaigns', 'Chatbots & menus', 'Template messages', 'Click-to-chat ads'],
+    83→    gradient: 'from-green-500 to-emerald-500',
+    84→  },
+    85→  {
+    86→    slug: 'lead-generation',
+    87→    title: 'Lead Generation',
+    88→    icon: Target,
+    89→    short: 'Predictable, qualified leads on autopilot — every single month.',
+    90→    description:
+    91→      'Multi-channel lead generation systems combining paid ads, SEO, scraping and AI outreach to fill your pipeline.',
+    92→    features: ['B2B & B2C leads', 'Verified contact data', 'AI cold outreach', 'Conversion tracking'],
+    93→    gradient: 'from-orange-500 to-amber-500',
+    94→  },
+    95→  {
+    96→    slug: 'performance-marketing',
+    97→    title: 'Performance Marketing',
+    98→    icon: TrendingUp,
+    99→    short: 'Meta, Google & TikTok ads engineered for measurable ROI.',
+   100→    description:
+   101→      'Full-funnel paid media management with creative testing, audience scaling and relentless optimisation.',
+   102→    features: ['Meta & Google Ads', 'Creative production', 'Conversion tracking', 'ROAS reporting'],
+   103→    gradient: 'from-rose-500 to-pink-500',
+   104→  },
+   105→  {
+   106→    slug: 'sales-funnel-development',
+   107→    title: 'Sales Funnel Development',
+   108→    icon: Filter,
+   109→    short: 'High-converting funnels that turn cold traffic into booked calls.',
+   110→    description:
+   111→      'We design, build and optimise complete sales funnels — from landing pages to email sequences to booking.',
+   112→    features: ['Funnel strategy', 'Landing pages', 'Email/SMS sequences', 'A/B testing'],
+   113→    gradient: 'from-blue-500 to-cyan-500',
+   114→  },
+   115→  {
+   116→    slug: 'business-automation',
+   117→    title: 'Business Automation',
+   118→    icon: Cpu,
+   119→    short: 'Automate repetitive operations with n8n, Zapier & custom workflows.',
+   120→    description:
+   121→      'Connect your tools and eliminate manual work with intelligent automation workflows across your entire business.',
+   122→    features: ['n8n & Zapier', 'API integrations', 'Document automation', 'Workflow audit'],
+   123→    gradient: 'from-slate-500 to-gray-600',
+   124→  },
+   125→  {
+   126→    slug: 'website-development',
+   127→    title: 'Website Development',
+   128→    icon: Globe,
+   129→    short: 'Lightning-fast, SEO-ready websites built on Next.js.',
+   130→    description:
+   131→      'Premium, conversion-focused websites and web apps built with modern tech — optimised for speed, SEO and sales.',
+   132→    features: ['Next.js & React', 'SEO optimised', 'CMS integration', 'Core Web Vitals'],
+   133→    gradient: 'from-indigo-500 to-blue-600',
+   134→  },
+   135→  {
+   136→    slug: 'landing-page-design',
+   137→    title: 'Landing Page Design',
+   138→    icon: LayoutTemplate,
+   139→    short: 'High-converting landing pages built to turn clicks into customers.',
+   140→    description:
+   141→      'Persuasive, fast-loading landing pages designed around your offer and engineered to maximise conversions.',
+   142→    features: ['Copywriting', 'Conversion design', 'A/B variants', 'Analytics setup'],
+   143→    gradient: 'from-fuchsia-500 to-pink-500',
+   144→  },
+   145→  {
+   146→    slug: 'ai-consultation',
+   147→    title: 'AI Consultation',
+   148→    icon: BrainCircuit,
+   149→    short: 'A clear AI roadmap to cut costs, scale revenue and automate operations.',
+   150→    description:
+   151→      'Strategy sessions where we audit your business and design a custom AI + automation roadmap with measurable ROI.',
+   152→    features: ['Business audit', 'AI opportunity map', 'ROI modelling', 'Implementation plan'],
+   153→    gradient: 'from-teal-500 to-cyan-500',
+   154→  },
+   155→]
+   156→
+   157→export type Industry = {
+   158→  slug: string
+   159→  name: string
+   160→  icon: LucideIcon
+   161→  blurb: string
+   162→  outcomes: string[]
+   163→}
+   164→
+   165→export const industries: Industry[] = [
+   166→  {
+   167→    slug: 'small-medium-business',
+   168→    name: 'Small & Medium Businesses',
+   169→    icon: Briefcase,
+   170→    blurb: 'Automate sales & support to compete with the big players — without the big team.',
+   171→    outcomes: ['3x faster lead response', 'Cut manual tasks 60%', 'More booked appointments'],
+   172→  },
+   173→  {
+   174→    slug: 'corporate',
+   175→    name: 'Corporate Companies',
+   176→    icon: Building2,
+   177→    blurb: 'Enterprise-grade automation that scales across departments and geographies.',
+   178→    outcomes: ['Unified data pipelines', 'Automated reporting', 'Department-wide AI'],
+   179→  },
+   180→  {
+   181→    slug: 'real-estate',
+   182→    name: 'Real Estate',
+   183→    icon: Home,
+   184→    blurb: 'Capture, qualify and nurture property leads automatically from first click to closing.',
+   185→    outcomes: ['Instant lead follow-up', 'Automated site-visit booking', 'Agent productivity up 2x'],
+   186→  },
+   187→  {
+   188→    slug: 'hospitals',
+   189→    name: 'Hospitals & Clinics',
+   190→    icon: Stethoscope,
+   191→    blurb: 'AI receptionists, appointment automation and patient follow-up that never sleeps.',
+   192→    outcomes: ['24/7 appointment booking', 'Reduced no-shows', 'Patient engagement flows'],
+   193→  },
+   194→  {
+   195→    slug: 'schools',
+   196→    name: 'Schools & Education',
+   197→    icon: GraduationCap,
+   198→    blurb: 'Automate admissions enquiries, parent communication and student support.',
+   199→    outcomes: ['Admissions enquiry bot', 'Parent WhatsApp updates', 'Fee reminder automation'],
+   200→  },
+   201→  {
+   202→    slug: 'ecommerce',
+   203→    name: 'E-commerce',
+   204→    icon: ShoppingBag,
+   205→    blurb: 'Recover lost sales with cart abandonment, order updates and AI product recommendations.',
+   206→    outcomes: ['Cart recovery flows', 'Order updates on WhatsApp', 'AI product search'],
+   207→  },
+   208→  {
+   209→    slug: 'agencies',
+   210→    name: 'Agencies',
+   211→    icon: Briefcase,
+   212→    blurb: 'White-label AI services and automation to scale your agency without scaling headcount.',
+   213→    outcomes: ['White-label AI agents', 'Client onboarding automation', 'Recurring service revenue'],
+   214→  },
+   215→  {
+   216→    slug: 'manufacturing',
+   217→    name: 'Manufacturing',
+   218→    icon: Factory,
+   219→    blurb: 'Automate procurement, inventory and supplier communication end-to-end.',
+   220→    outcomes: ['Inventory alerts', 'Supplier follow-ups', 'Order status automation'],
+   221→  },
+   222→]
+   223→
+   224→export type Testimonial = {
+   225→  name: string
+   226→  role: string
+   227→  company: string
+   228→  quote: string
+   229→  rating: number
+   230→  initials: string
+   231→}
+   232→
+   233→export const testimonials: Testimonial[] = [
+   234→  {
+   235→    name: 'Tanvir Ahmed',
+   236→    role: 'Founder',
+   237→    company: 'Dhaka Realty Group',
+   238→    quote:
+   239→      'NextGen Digital Studio built our AI chat agent and within 6 weeks our qualified leads tripled. The bot books site visits while we sleep. Genuinely game-changing.',
+   240→    rating: 5,
+   241→    initials: 'TA',
+   242→  },
+   243→  {
+   244→    name: 'Dr. Nusrat Jahan',
+   245→    role: 'Director',
+   246→    company: 'Medicare Hospital',
+   247→    quote:
+   248→      'Their AI voice agent now handles every appointment call in Bangla and English. No-shows dropped 38% and our reception team can finally breathe.',
+   249→    rating: 5,
+   250→    initials: 'NJ',
+   251→  },
+   252→  {
+   253→    name: 'Rakib Hasan',
+   254→    role: 'CEO',
+   255→    company: 'ShopSmart BD',
+   256→    quote:
+   257→      'The WhatsApp automation recovered over 12,000 abandoned carts in the first quarter alone. ROI was clear in the first month. Best agency we’ve worked with.',
+   258→    rating: 5,
+   259→    initials: 'RH',
+   260→  },
+   261→  {
+   262→    name: 'Farhana Karim',
+   263→    role: 'Marketing Head',
+   264→    company: 'EduFirst School Network',
+   265→    quote:
+   266→      'Admissions enquiries are now handled instantly by AI. Parents love the fast response on WhatsApp and our enrolment grew 45% this year.',
+   267→    rating: 5,
+   268→    initials: 'FK',
+   269→  },
+   270→  {
+   271→    name: 'Sajid Rahman',
+   272→    role: 'Managing Director',
+   273→    company: 'NovaCorp Bangladesh',
+   274→    quote:
+   275→      'They automated our entire sales pipeline on GoHighLevel. We went from chaotic spreadsheets to a predictable lead machine. Highly recommended.',
+   276→    rating: 5,
+   277→    initials: 'SR',
+   278→  },
+   279→  {
+   280→    name: 'Maliha Chowdhury',
+   281→    role: 'Founder',
+   282→    company: 'Bloom Agency',
+   283→    quote:
+   284→      'We white-labelled their AI agents for our clients. The tech is world-class and the team is genuinely invested in our success. A real partnership.',
+   285→    rating: 5,
+   286→    initials: 'MC',
+   287→  },
+   288→]
+   289→
+   290→export type PricingPlan = {
+   291→  name: string
+   292→  tagline: string
+   293→  price: string
+   294→  period: string
+   295→  popular?: boolean
+   296→  features: string[]
+   297→  cta: string
+   298→}
+   299→
+   300→export const pricingPlans: PricingPlan[] = [
+   301→  {
+   302→    name: 'Starter',
+   303→    tagline: 'For small businesses ready to automate.',
+   304→    price: '৳25,000',
+   305→    period: '/month',
+   306→    features: [
+   307→      '1 AI Chat Agent (website)',
+   308→      'WhatsApp automation (1 number)',
+   309→      'Lead capture & CRM setup',
+   310→      '2,000 AI conversations/mo',
+   311→      'Monthly strategy call',
+   312→      'Email support',
+   313→    ],
+   314→    cta: 'Start with Starter',
+   315→  },
+   316→  {
+   317→    name: 'Growth',
+   318→    tagline: 'For scaling companies that need a full system.',
+   319→    price: '৳60,000',
+   320→    period: '/month',
+   321→    popular: true,
+   322→    features: [
+   323→      'AI Chat + Voice Agent',
+   324→      'WhatsApp + SMS automation',
+   325→      'CRM automation (GHL/HubSpot)',
+   326→      '10,000 AI conversations/mo',
+   327→      'Landing page + funnel build',
+   328→      'Performance marketing management',
+   329→      'Weekly strategy calls',
+   330→      'Priority support',
+   331→    ],
+   332→    cta: 'Scale with Growth',
+   333→  },
+   334→  {
+   335→    name: 'Enterprise',
+   336→    tagline: 'Custom AI infrastructure for large organisations.',
+   337→    price: 'Custom',
+   338→    period: '',
+   339→    features: [
+   340→      'Unlimited AI agents & channels',
+   341→      'Custom AI model training',
+   342→      'Full business automation suite',
+   343→      'Dedicated automation engineer',
+   344→      'API & system integrations',
+   345→      'Unlimited strategy sessions',
+   346→      'SLA & 24/7 support',
+   347→      'White-label options',
+   348→    ],
+   349→    cta: 'Talk to Sales',
+   350→  },
+   351→]
+   352→
+   353→export type CaseStudy = {
+   354→  slug: string
+   355→  client: string
+   356→  industry: string
+   357→  title: string
+   358→  summary: string
+   359→  metrics: { label: string; value: string }[]
+   360→  services: string[]
+   361→  challenge?: string
+   362→  solution?: string
+   363→  results?: string
+   364→  testimonial?: { quote: string; name: string; role: string }
+   365→  // Inline Bangla translations (used when lang === 'bn')
+   366→  challengeBn?: string
+   367→  solutionBn?: string
+   368→  resultsBn?: string
+   369→  testimonialBn?: { quote: string }
+   370→}
+   371→
+   372→export const caseStudies: CaseStudy[] = [
+   373→  {
+   374→    slug: 'dhaka-realty',
+   375→    client: 'Dhaka Realty Group',
+   376→    industry: 'Real Estate',
+   377→    title: 'Tripled qualified property leads with an AI sales agent',
+   378→    summary:
+   379→      'We deployed an AI chat agent on their website and WhatsApp that instantly qualifies buyers, answers property questions and books site visits — 24/7.',
+   380→    metrics: [
+   381→      { label: 'Qualified leads', value: '+212%' },
+   382→      { label: 'Response time', value: '-94%' },
+   383→      { label: 'Site visits booked', value: '+168%' },
+   384→    ],
+   385→    services: ['AI Chat Agent', 'WhatsApp Automation', 'CRM Automation'],
+   386→    challenge: 'Dhaka Realty Group was losing qualified property buyers because their sales team took 4–24 hours to respond to website and Facebook enquiries. By the time they replied, buyers had already booked site visits with competitors. They had no after-hours coverage and no way to qualify leads before a phone call.',
+   387→    solution: 'We deployed an AI chat agent on their website trained on every property listing, price, and floor plan. It answers buyer questions in Bangla or English, qualifies budget and timeline, and books site visits directly into the team’s calendar. A WhatsApp follow-up sequence nurtures every lead until the visit. The CRM auto-tags leads as hot/warm/cold based on conversation content.',
+   388→    results: 'Within 60 days, qualified leads tripled (+212%) and site visit bookings grew 168%. Response time dropped from 4 hours to under 5 seconds. The sales team now only talks to pre-qualified hot prospects, freeing 20+ hours per week. The system pays for itself 6x over in commission from booked visits.',
+   389→    testimonial: { quote: 'NextGen turned our sales team into a 24/7 machine. We book site visits at 2am now — that used to be impossible.', name: 'Rakib Ahmed', role: 'Sales Director, Dhaka Realty Group' },
+   390→    challengeBn: 'ঢাকা রিয়েলটি গ্রুপ যোগ্য সম্পত্তি ক্রেতা হারাচ্ছিল কারণ তাদের সেলস টিম ওয়েবসাইট ও ফেসবুক অনুসন্ধানে উত্তর দিতে ৪–২৪ ঘন্টা নিত। তারা উত্তর দেওয়ার আগেই ক্রেতারা প্রতিযোগীদের সাথে সাইট ভিজিট বুক করে ফেলত। তাদের অফিস-বহির্ভূত কভারেজ ছিল না এবং ফোন কলের আগে লিড যোগ্যতা যাচাইয়ের কোনো উপায় ছিল না।',
+   391→    solutionBn: 'আমরা তাদের ওয়েবসাইটে একটি এআই চ্যাট এজেন্ট স্থাপন করি যা প্রতিটি সম্পত্তি লিস্টিং, দাম ও ফ্লোর প্ল্যানে প্রশিক্ষিত। এটি ক্রেতার প্রশ্নের বাংলা বা ইংরেজিতে উত্তর দেয়, বাজেট ও সময়রেখা যাচাই করে, এবং সাইট ভিজিট সরাসরি টিমের ক্যালেন্ডারে বুক করে। একটি হোয়াটসঅ্যাপ ফলো-আপ সিকোয়েন্স প্রতিটি লিডকে ভিজিট পর্যন্ত নার্সার করে। CRM কথোপকথনের কনটেন্ট অনুযায়ী লিডকে হট/ওয়ার্ম/কোল্ড হিসেবে অটো-ট্যাগ করে।',
+   392→    resultsBn: '৬০ দিনের মধ্যে যোগ্য লিড তিনগুণ (+২১২%) এবং সাইট ভিজিট বুকিং ১৬৮% বৃদ্ধি পায়। রেসপন্স টাইম ৪ ঘন্টা থেকে ৫ সেকেন্ডে নেমে আসে। সেলস টিম এখন শুধু প্রি-কোয়ালিফাইড হট প্রসপেক্টের সাথে কথা বলে, প্রতি সপ্তাহে ২০+ ঘন্টা মুক্ত হয়। সিস্টেমটি বুকড ভিজিট থেকে কমিশনে ৬x ফেরত দেয়।',
+   393→    testimonialBn: { quote: 'NextGen আমাদের সেলস টিমকে ২৪/৭ মেশিনে পরিণত করেছে। আমরা এখন রাত ২টায় সাইট ভিজিট বুক করি — যা আগে অসম্ভব ছিল।' },
+   394→  },
+   395→  {
+   396→    slug: 'medicare-hospital',
+   397→    client: 'Medicare Hospital',
+   398→    industry: 'Healthcare',
+   399→    title: 'AI voice agent cut appointment no-shows by 38%',
+   400→    summary:
+   401→      'A bilingual (Bangla/English) AI voice agent now handles every appointment call, sends reminders and reschedules automatically — easing pressure on front desk staff.',
+   402→    metrics: [
+   403→      { label: 'No-show rate', value: '-38%' },
+   404→      { label: 'Calls automated', value: '4,200/mo' },
+   405→      { label: 'Patient satisfaction', value: '+27%' },
+   406→    ],
+   407→    services: ['AI Voice Agent', 'CRM Automation', 'Business Automation'],
+   408→    challenge: 'Medicare Hospital’s front desk was overwhelmed. They missed 40+ appointment calls per day — patients calling after hours, during prayer times, or when all lines were busy. No-show rates hit 32% because reminder calls were inconsistent. Patient satisfaction scores had dropped to 3.8/5.',
+   409→    solution: 'A bilingual (Bangla/English) AI voice agent now answers every call within 1 ring, 24/7. It books appointments directly into the hospital management system, sends WhatsApp confirmations with a reschedule link, and routes urgent cases to the on-call doctor. Automated reminders go out 24 hours and 1 hour before each appointment.',
+   410→    results: 'After 90 days: no-show rate dropped 38% (from 32% to 20%), after-hours booking increased 5x, and patient satisfaction rose from 3.8 to 4.6/5. The front desk handles 70% fewer routine calls, focusing on in-person patients. The system automates 4,200 calls/month — the equivalent of 3 full-time receptionists.',
+   411→    testimonial: { quote: 'Patients no longer wait on hold. The AI agent books their appointment in 90 seconds and they love it.', name: 'Dr. Sumaiya Karim', role: 'Operations Head, Medicare Hospital' },
+   412→    challengeBn: 'মেডিকেয়ার হাসপাতালের ফ্রন্ট ডেস্ক অভিভূত ছিল। তারা প্রতিদিন ৪০+ অ্যাপয়েন্টমেন্ট কল মিস করত — রোগীরা অফিসের বাইরে, নামাজের সময়, বা সব লাইন ব্যস্ত থাকলে কল করত। নো-শো রেট ৩২% এ পৌঁছায় কারণ রিমাইন্ডার কল অনিয়মিত ছিল। রোগী সন্তুষ্টি স্কোর ৩.৮/৫ এ নেমে এসেছিল।',
+   413→    solutionBn: 'একটি দ্বিভাষিক (বাংলা/ইংরেজি) এআই ভয়েস এজেন্ট এখন প্রতিটি কল ১ রিং-এ উত্তর দেয়, ২৪/৭। এটি অ্যাপয়েন্টমেন্ট সরাসরি হাসপাতাল ম্যানেজমেন্ট সিস্টেমে বুক করে, হোয়াটসঅ্যাপে কনফার্মেশন ও রিশিডিউল লিংক পাঠায়, এবং জরুরি কেস অন-কল ডাক্তারের কাছে রুট করে। স্বয়ংক্রিয় রিমাইন্ডার প্রতিটি অ্যাপয়েন্টমেন্টের ২৪ ঘন্টা ও ১ ঘন্টা আগে যায়।',
+   414→    resultsBn: '৯০ দিন পর: নো-শো রেট ৩৮% কমে (৩২% থেকে ২০%), অফিস-বহির্ভূত বুকিং ৫x বৃদ্ধি, এবং রোগী সন্তুষ্টি ৩.৮ থেকে ৪.৬/৫ এ উঠে। ফ্রন্ট ডেস্ক ৭০% কম রুটিন কল সামলায়, ইন-পারসন রোগীতে মনোযোগ দেয়। সিস্টেমটি মাসে ৪,২০০ কল অটোমেট করে — ৩ জন ফুল-টাইম রিসেপশনিস্টের সমতুল্য।',
+   415→    testimonialBn: { quote: 'রোগীরা আর হোল্ডে অপেক্ষা করে না। এআই এজেন্ট ৯০ সেকেন্ডে তাদের অ্যাপয়েন্টমেন্ট বুক করে এবং তারা এটা পছন্দ করে।' },
+   416→  },
+   417→  {
+   418→    slug: 'shopsmart-bd',
+   419→    client: 'ShopSmart BD',
+   420→    industry: 'E-commerce',
+   421→    title: 'Recovered 12,000+ abandoned carts in one quarter',
+   422→    summary:
+   423→      'A full WhatsApp automation flow re-engages every abandoned cart with personalised offers and order updates — recovering revenue that was previously lost.',
+   424→    metrics: [
+   425→      { label: 'Carts recovered', value: '12,400' },
+   426→      { label: 'Revenue recovered', value: '৳48L' },
+   427→      { label: 'ROI', value: '7.2x' },
+   428→    ],
+   429→    services: ['WhatsApp Automation', 'Sales Funnel', 'Performance Marketing'],
+   430→    challenge: 'ShopSmart BD was losing 68% of carts to abandonment. Email reminders had a 12% open rate and recovered almost nothing. They had no way to reach buyers on WhatsApp — the channel they actually check — and no personalised follow-up flow.',
+   431→    solution: 'We built a WhatsApp Business API flow: 30 minutes after abandonment, a personalised template message goes out with the cart contents and a one-tap checkout link. If no response, a second message 24 hours later offers a time-limited discount. Recovered buyers get an order-update sequence that reduces support tickets.',
+   432→    results: 'In one quarter: 12,400 carts recovered, generating ৳48 lakh in additional revenue. ROI of 7.2x on the automation cost. Support ticket volume dropped 40% because proactive order updates eliminated “where is my order” queries. The flow now runs fully autonomously.',
+   433→    testimonial: { quote: 'We recovered 48 lakh in revenue we didn’t even know we were losing. The ROI was obvious in week one.', name: 'Tanvir Hossain', role: 'Founder, ShopSmart BD' },
+   434→    challengeBn: 'শপস্মার্ট বিডি ৬৮% কার্ট পরিত্যক্তি হারাচ্ছিল। ইমেইল রিমাইন্ডারে ১২% ওপেন রেট ছিল এবং প্রায় কিছুই রিকভার করত না। তাদের হোয়াটসঅ্যাপে ক্রেতাদের পৌঁছানোর কোনো উপায় ছিল না — যে চ্যানেল তারা আসলে চেক করে — এবং কোনো পার্সোনালাইজড ফলো-আপ ফ্লো ছিল না।',
+   435→    solutionBn: 'আমরা একটি WhatsApp Business API ফ্লো তৈরি করি: পরিত্যক্তির ৩০ মিনিট পর একটি পার্সোনালাইজড টেমপ্লেট মেসেজ কার্টের কনটেন্ট ও এক-ট্যাপ চেকআউট লিংক সহ যায়। কোনো সাড়া না পেলে ২৪ ঘন্টা পর দ্বিতীয় মেসেজ একটি সময়-সীমিত ছাড়ের অফার দেয়। রিকভার হওয়া ক্রেতারা একটি অর্ডার-আপডেট সিকোয়েন্স পায় যা সাপোর্ট টিকিট কমায়।',
+   436→    resultsBn: 'এক তিন মাসে: ১২,৪০০ কার্ট রিকভার হয়, ৳৪৮ লক্ষ অতিরিক্ত রাজস্ব তৈরি হয়। অটোমেশন খরচে ৭.২x ROI। সাপোর্ট টিকিট ভলিউম ৪০% কমে কারণ সক্রিয় অর্ডার আপডেটে “আমার অর্ডার কোথায়” প্রশ্ন দূর হয়। ফ্লোটি এখন সম্পূর্ণ স্বায়ত্তশাসিত।',
+   437→    testimonialBn: { quote: 'আমরা ৪৮ লক্ষ রাজস্ব রিকভার করেছি যা হারাচ্ছিল তা জানতামও না। ROI প্রথম সপ্তাহেই স্পষ্ট ছিল।' },
+   438→  },
+   439→  {
+   440→    slug: 'edufirst',
+   441→    client: 'EduFirst School Network',
+   442→    industry: 'Education',
+   443→    title: 'Admissions grew 45% with instant AI enquiry handling',
+   444→    summary:
+   445→      'An AI agent now answers every admissions enquiry in seconds across web and WhatsApp, nurturing parents from first question to enrolment.',
+   446→    metrics: [
+   447→      { label: 'Enrolment growth', value: '+45%' },
+   448→      { label: 'Enquiry response', value: '<5s' },
+   449→      { label: 'Parent NPS', value: '72' },
+   450→    ],
+   451→    services: ['AI Chat Agent', 'Lead Generation', 'WhatsApp Automation'],
+   452→    challenge: 'EduFirst School Network received 200+ admission enquiries per month during peak season across Facebook, website, and phone. Their counsellors could not keep up — enquiries went unanswered for days, and parents chose competing schools. They had no way to nurture parents from first question to enrolment.',
+   453→    solution: 'An AI chat agent now answers every enquiry in under 5 seconds on web and WhatsApp — covering fees, curriculum, admission dates, and campus facilities. It qualifies parents by child’s age and grade, books campus tours, and triggers a 5-day nurture sequence (WhatsApp + email) with parent testimonials and a clear apply-now CTA.',
+   454→    results: 'Admissions grew 45% in one admission cycle. Enquiry response time dropped from 2 days to under 5 seconds. Parent NPS hit 72 (industry average is 31). The admissions team now only handles tours and final enrolment — the AI handles everything before that. 60% of enrolled parents said the instant response was why they chose EduFirst.',
+   455→    testimonial: { quote: 'Parents told us they chose our school because we replied first. The AI made that possible.', name: 'Nusrat Jahan', role: 'Admissions Director, EduFirst' },
+   456→    challengeBn: 'এডুফার্স্ট স্কুল নেটওয়ার্ক পিক সিজনে ফেসবুক, ওয়েবসাইট ও ফোন জুড়ে মাসে ২০০+ ভর্তি অনুসন্ধান পেত। তাদের কাউন্সিলররা সামলাতে পারত না — অনুসন্ধান কয়েক দিন উত্তরহীন থাকত, এবং অভিভাবকরা প্রতিযোগী স্কুল বেছে নিত। প্রথম প্রশ্ন থেকে ভর্তি পর্যন্ত অভিভাবকদের নার্সার করার কোনো উপায় ছিল না।',
+   457→    solutionBn: 'একটি এআই চ্যাট এজেন্ট এখন প্রতিটি অনুসন্ধানে ৫ সেকেন্ডের কম সময়ে ওয়েব ও হোয়াটসঅ্যাপে উত্তর দেয় — ফি, কারিকুলাম, ভর্তি তারিখ ও ক্যাম্পাস সুবিধা কভার করে। এটি শিশুর বয়স ও শ্রেণী অনুযায়ী অভিভাবকদের যাচাই করে, ক্যাম্পাস ট্যুর বুক করে, এবং একটি ৫-দিনের নার্সার সিকোয়েন্স (হোয়াটসঅ্যাপ + ইমেইল) অভিভাবক টেস্টিমোনিয়াল ও স্পষ্ট apply-now CTA সহ ট্রিগার করে।',
+   458→    resultsBn: 'এক ভর্তি সাইকেলে ভর্তি ৪৫% বৃদ্ধি পায়। অনুসন্ধান রেসপন্স টাইম ২ দিন থেকে ৫ সেকেন্ডে নেমে আসে। অভিভাবক NPS ৭২ হয় (ইন্ডাস্ট্রি গড় ৩১)। ভর্তি টিম এখন শুধু ট্যুর ও চূড়ান্ত ভর্তি সামলায় — এআই এর আগের সব কিছু সামলায়। ৬০% ভর্তিকৃত অভিভাবক বলেছেন তাৎক্ষণিক রেসপন্সই তারা EduFirst বেছে নেওয়ার কারণ।',
+   459→    testimonialBn: { quote: 'অভিভাবকরা বলেছেন তারা আমাদের স্কুল বেছে নিয়েছেন কারণ আমরা প্রথমে উত্তর দিয়েছি। এআই এটা সম্ভব করেছে।' },
+   460→  },
+   461→]
+   462→
+   463→export type Faq = { q: string; a: string }
+   464→
+   465→export const pricingFaqs: Faq[] = [
+   466→  {
+   467→    q: 'Are there any setup fees?',
+   468→    a: 'No hidden setup fees. The monthly price covers build, integration, hosting and ongoing optimisation. You only pay the monthly plan price.',
+   469→  },
+   470→  {
+   471→    q: 'Can I cancel anytime?',
+   472→    a: 'Yes. All plans are month-to-month with no lock-in contracts. Cancel anytime and we will wind down your automations gracefully.',
+   473→  },
+   474→  {
+   475→    q: 'What happens if I exceed the AI conversation limit?',
+   476→    a: 'You will be notified at 80% and 100% usage. Extra conversations are billed at ৳2/conversation on Starter and ৳1.5/conversation on Growth. Enterprise has unlimited conversations.',
+   477→  },
+   478→  {
+   479→    q: 'Do you offer custom Enterprise pricing?',
+   480→    a: 'Absolutely. Enterprise plans are tailored to your volume, integrations and SLA requirements. Book a strategy call for a custom quote.',
+   481→  },
+   482→  {
+   483→    q: 'Is there a free trial?',
+   484→    a: 'Instead of a trial, we offer a 30-Day ROI Promise: if you do not see qualified leads in your first month, we keep working for free until you do.',
+   485→  },
+   486→  {
+   487→    q: 'What payment methods do you accept?',
+   488→    a: 'We accept bKash, Nagad, bank transfer, and international cards via Stripe. Invoicing is available for Enterprise clients.',
+   489→  },
+   490→  {
+   491→    q: 'Can I upgrade or downgrade later?',
+   492→    a: 'Yes, you can change plans anytime. Upgrades take effect immediately; downgrades take effect at the next billing cycle.',
+   493→  },
+   494→  {
+   495→    q: 'Do you work with businesses outside Bangladesh?',
+   496→    a: 'Our primary focus is Bangladesh, but we serve clients globally. Our AI agents support English, Bangla and many other languages.',
+   497→  },
+   498→]
+   499→
+   500→export const faqs: Faq[] = [
+   501→  {
+   502→    q: 'What exactly does NextGen Digital Studio do?',
+   503→    a: 'We help businesses in Bangladesh automate marketing, sales, customer communication and operations using AI and business automation. Think AI chat agents, voice agents, WhatsApp automation, CRM automation, lead generation and full sales funnels — all designed to generate qualified leads and book strategy calls.',
+   504→  },
+   505→  {
+   506→    q: 'Which industries do you work with?',
+   507→    a: 'We work with small & medium businesses, corporate companies, real estate, hospitals, schools, e-commerce stores and agencies. Our automations are custom-built around each industry’s workflow.',
+   508→  },
+   509→  {
+   510→    q: 'Can your AI agents speak Bangla?',
+   511→    a: 'Yes. Our AI chat and voice agents are fully bilingual in Bangla and English, which is essential for the Bangladesh market. They can switch languages mid-conversation.',
+   512→  },
+   513→  {
+   514→    q: 'How long does it take to launch?',
+   515→    a: 'Most AI chat agents and WhatsApp automations go live within 2–3 weeks. Larger CRM and funnel builds typically take 4–6 weeks depending on scope.',
+   516→  },
+   517→  {
+   518→    q: 'Do I need technical knowledge to use this?',
+   519→    a: 'Not at all. We handle everything end-to-end — strategy, build, integration, training and ongoing optimisation. You just receive qualified leads and booked calls.',
+   520→  },
+   521→  {
+   522→    q: 'What tools and platforms do you use?',
+   523→    a: 'We build on Next.js, GoHighLevel, HubSpot, the WhatsApp Business API, n8n, Zapier and modern LLMs (GPT-4 class models). We pick the right stack for your goals and budget.',
+   524→  },
+   525→  {
+   526→    q: 'How much does it cost?',
+   527→    a: 'Plans start at ৳25,000/month for the Starter package. Growth is ৳60,000/month and Enterprise is custom-quoted. You can see full pricing in the pricing section above.',
+   528→  },
+   529→  {
+   530→    q: 'How do I get started?',
+   531→    a: 'Book a free strategy call using the “Book Strategy Call” button. We’ll audit your business and design a custom AI + automation roadmap with clear ROI projections — no obligation.',
+   532→  },
+   533→]
+   534→
+   535→export type NavItem = {
+   536→  label: string
+   537→  href: string
+   538→  children?: { label: string; href: string; desc: string }[]
+   539→}
+   540→
+   541→export const navMenu: NavItem[] = [
+   542→  { label: 'About', href: '#about' },
+   543→  {
+   544→    label: 'Services',
+   545→    href: '#services',
+   546→    children: services.slice(0, 8).map((s) => ({
+   547→      label: s.title,
+   548→      href: `#services`,
+   549→      desc: s.short,
+   550→    })),
+   551→  },
+   552→  {
+   553→    label: 'Industries',
+   554→    href: '#industries',
+   555→    children: industries.slice(0, 6).map((i) => ({
+   556→      label: i.name,
+   557→      href: '#industries',
+   558→      desc: i.blurb,
+   559→    })),
+   560→  },
+   561→  { label: 'Case Studies', href: '#case-studies' },
+   562→  { label: 'Pricing', href: '#pricing' },
+   563→  { label: 'Why Us', href: '#comparison' },
+   564→  { label: 'Blog', href: '#blog' },
+   565→  { label: 'Contact', href: '#contact' },
+   566→]
+   567→
+   568→export const clientLogos = [
+   569→  'Dhaka Realty',
+   570→  'Medicare',
+   571→  'ShopSmart BD',
+   572→  'EduFirst',
+   573→  'NovaCorp',
+   574→  'Bloom Agency',
+   575→  'UrbanNest',
+   576→  'TechBd',
+   577→]
+   578→
+   579→export const stats = [
+   580→  { value: '120+', label: 'Businesses Automated' },
+   581→  { value: '2.4M+', label: 'AI Conversations' },
+   582→  { value: '7.2x', label: 'Average ROI' },
+   583→  { value: '38%', label: 'Avg. Cost Reduction' },
+   584→]
+   585→
+   586→// Numeric versions for animated count-up (suffix carried separately)
+   587→export const statsNumeric = [
+   588→  { num: 120, suffix: '+', label: 'Businesses Automated', icon: 'building' },
+   589→  { num: 2.4, suffix: 'M+', label: 'AI Conversations', icon: 'chat', decimals: 1 },
+   590→  { num: 7.2, suffix: 'x', label: 'Average ROI', icon: 'trending', decimals: 1 },
+   591→  { num: 38, suffix: '%', label: 'Avg. Cost Reduction', icon: 'piggy' },
+   592→]
+   593→
+   594→export const byTheNumbers = [
+   595→  { num: 2.4, suffix: 'M+', label: 'AI conversations handled', decimals: 1 },
+   596→  { num: 120, suffix: '+', label: 'Businesses automated' },
+   597→  { num: 7.2, suffix: 'x', label: 'Average client ROI', decimals: 1 },
+   598→  { num: 4.9, suffix: '/5', label: 'Average client rating', decimals: 1 },
+   599→  { num: 38, suffix: '%', label: 'Average cost reduction' },
+   600→  { num: 5, suffix: 's', label: 'Average response time' },
+   601→]
+   602→
+   603→export const comparisonRows = [
+   604→  {
+   605→    feature: 'AI chat agent on your website',
+   606→    nextgen: '24/7, trained on your business, Bangla + English',
+   607→    others: 'Generic chatbot or none',
+   608→  },
+   609→  {
+   610→    feature: 'Lead response time',
+   611→    nextgen: 'Under 5 seconds, fully automated',
+   612→    others: 'Hours or days, manual',
+   613→  },
+   614→  {
+   615→    feature: 'CRM automation',
+   616→    nextgen: 'Full pipeline auto-nurture & tagging',
+   617→    others: 'Basic setup or manual data entry',
+   618→  },
+   619→  {
+   620→    feature: 'WhatsApp Business API',
+   621→    nextgen: 'Official API, broadcasts, chatbots',
+   622→    others: 'Personal WhatsApp or none',
+   623→  },
+   624→  {
+   625→    feature: 'Bilingual AI (Bangla)',
+   626→    nextgen: 'Native Bangla + English switching',
+   627→    others: 'English-only or template messages',
+   628→  },
+   629→  {
+   630→    feature: 'Pricing transparency',
+   631→    nextgen: 'Clear monthly plans from ৳25,000',
+   632→    others: 'Opaque quotes, hidden fees',
+   633→  },
+   634→  {
+   635→    feature: 'Local Bangladesh team',
+   636→    nextgen: 'Dhaka-based, understands local market',
+   637→    others: 'Overseas or generic agency',
+   638→  },
+   639→  {
+   640→    feature: 'ROI reporting',
+   641→    nextgen: 'Leads, calls & revenue tracked',
+   642→    others: 'Vanity metrics or nothing',
+   643→  },
+   644→]
+   645→
+   646→export const teamMembers = [
+   647→  {
+   648→    name: 'ইঞ্জিনিয়ার মোঃ নাজমুল ইসলাম তাজ',
+   649→    role: 'প্রতিষ্ঠাতা · যশোরের প্রথম ডিজিটাল ইঞ্জিনিয়ার',
+   650→    bio: '১৭+ বছরের ইঞ্জিনিয়ারিং অভিজ্ঞতা, ৫০০+ সফল প্রজেক্ট, ১০+ বছর CNC বিশেষজ্ঞ। AI এজেন্ট, ওয়েবসাইট ও ডিজিটাল সলিউশনে যশোরের অগ্রগণ্য ইঞ্জিনিয়ার।',
+   651→    initials: 'NG',
+   652→    image: '/founder.png',
+   653→  },
+   654→  {
+   655→    name: 'AI Engineer',
+   656→    role: 'LLM & Automation',
+   657→    bio: 'Builds GPT-class chat agents, voice agents and n8n workflows that run 24/7 without human intervention.',
+   658→    initials: 'AE',
+   659→  },
+   660→  {
+   661→    name: 'Growth Specialist',
+   662→    role: 'Performance Marketing',
+   663→    bio: 'Manages Meta, Google & TikTok ad funnels engineered for qualified leads — not just clicks.',
+   664→    initials: 'GS',
+   665→  },
+   666→  {
+   667→    name: 'Automation Architect',
+   668→    role: 'CRM & Integrations',
+   669→    bio: 'Designs GoHighLevel, HubSpot & WhatsApp API flows that never drop a lead across the entire journey.',
+   670→    initials: 'AA',
+   671→  },
+   672→]
+   673→
+   674→export const guarantees = [
+   675→  { title: '30-Day ROI Promise', desc: 'See qualified leads in the first month or we work free until you do.' },
+   676→  { title: 'No Long Lock-in', desc: 'Monthly plans. Cancel anytime — no multi-year contracts holding you hostage.' },
+   677→  { title: 'Bank-grade Security', desc: 'Your data is encrypted, never sold. Official APIs only — no shady shortcuts.' },
+   678→  { title: 'Dhaka-based Support', desc: 'A local team that understands your market and responds in Bangla.' },
+   679→]
+   680→
+   681→export type ConfiguratorItem = {
+   682→  id: string
+   683→  name: string
+   684→  desc: string
+   685→  price: number
+   686→  category: 'AI Agents' | 'Automation' | 'Marketing' | 'Web'
+   687→  icon: string
+   688→  popular?: boolean
+   689→}
+   690→
+   691→export const configuratorItems: ConfiguratorItem[] = [
+   692→  { id: 'chat-agent', name: 'AI Chat Agent', desc: '24/7 website chatbot trained on your business', price: 15000, category: 'AI Agents', icon: 'chat', popular: true },
+   693→  { id: 'voice-agent', name: 'AI Voice Agent', desc: 'Bilingual voice agent for inbound & outbound calls', price: 22000, category: 'AI Agents', icon: 'phone' },
+   694→  { id: 'whatsapp-bot', name: 'WhatsApp Bot', desc: 'Official WhatsApp Business API chatbot & broadcasts', price: 12000, category: 'AI Agents', icon: 'whatsapp', popular: true },
+   695→  { id: 'crm-auto', name: 'CRM Automation', desc: 'GoHighLevel/HubSpot pipeline & follow-up automation', price: 18000, category: 'Automation', icon: 'crm' },
+   696→  { id: 'lead-gen', name: 'Lead Generation', desc: 'Multi-channel lead gen with AI outreach', price: 25000, category: 'Marketing', icon: 'target', popular: true },
+   697→  { id: 'funnel', name: 'Sales Funnel', desc: 'Landing page + email/SMS sequence build', price: 20000, category: 'Marketing', icon: 'funnel' },
+   698→  { id: 'perf-ads', name: 'Performance Marketing', desc: 'Meta & Google Ads management + creatives', price: 30000, category: 'Marketing', icon: 'trending' },
+   699→  { id: 'website', name: 'Website Development', desc: 'Premium Next.js website with SEO', price: 35000, category: 'Web', icon: 'globe' },
+   700→  { id: 'landing', name: 'Landing Page', desc: 'High-converting standalone landing page', price: 12000, category: 'Web', icon: 'layout' },
+   701→  { id: 'consult', name: 'AI Consultation', desc: 'Strategy session + custom AI roadmap', price: 8000, category: 'Automation', icon: 'brain' },
+   702→]
+   703→
+   704→export const awards = [
+   705→  { title: 'Top AI Agency 2024', org: 'Bangladesh Tech Awards', year: '2024' },
+   706→  { title: 'Best Automation Studio', org: 'Dhaka Business Review', year: '2024' },
+   707→  { title: 'Fastest Growing Tech Co.', org: 'Startup BD', year: '2023' },
+   708→  { title: 'Innovation Excellence', org: 'ICT Division Bangladesh', year: '2023' },
+   709→]
+   710→
+   711→export const certifications = [
+   712→  { name: 'WhatsApp Business Partner', desc: 'Official API access' },
+   713→  { name: 'Meta Business Partner', desc: 'Certified ads management' },
+   714→  { name: 'Google Partner', desc: 'Premier ads & analytics' },
+   715→  { name: 'GoHighLevel Pro', desc: 'Certified SaaS automation' },
+   716→  { name: 'HubSpot Solutions', desc: 'Certified CRM partner' },
+   717→  { name: 'OpenAI API', desc: 'Authorized integration' },
+   718→]
+   719→
+   720→export type VideoTestimonial = {
+   721→  name: string
+   722→  role: string
+   723→  company: string
+   724→  quote: string
+   725→  duration: string
+   726→  gradient: string
+   727→  initials: string
+   728→  metric: string
+   729→}
+   730→
+   731→export const videoTestimonials: VideoTestimonial[] = [
+   732→  {
+   733→    name: 'Tanvir Ahmed',
+   734→    role: 'Founder',
+   735→    company: 'Dhaka Realty Group',
+   736→    quote: 'NextGen tripled our qualified leads in 6 weeks. The AI agent books site visits while we sleep.',
+   737→    duration: '2:14',
+   738→    gradient: 'from-blue-600 to-cyan-500',
+   739→    initials: 'TA',
+   740→    metric: '+212% leads',
+   741→  },
+   742→  {
+   743→    name: 'Dr. Nusrat Jahan',
+   744→    role: 'Director',
+   745→    company: 'Medicare Hospital',
+   746→    quote: 'The AI voice agent handles every appointment call in Bangla. No-shows dropped 38%.',
+   747→    duration: '1:48',
+   748→    gradient: 'from-violet-500 to-purple-500',
+   749→    initials: 'NJ',
+   750→    metric: '-38% no-shows',
+   751→  },
+   752→  {
+   753→    name: 'Rakib Hasan',
+   754→    role: 'CEO',
+   755→    company: 'ShopSmart BD',
+   756→    quote: 'WhatsApp automation recovered 12,000+ abandoned carts in one quarter. 7x ROI.',
+   757→    duration: '2:32',
+   758→    gradient: 'from-emerald-500 to-teal-500',
+   759→    initials: 'RH',
+   760→    metric: '7.2x ROI',
+   761→  },
+   762→]
+   763→
+   764→export type KnowledgeArticle = {
+   765→  title: string
+   766→  category: string
+   767→  excerpt: string
+   768→  readTime: string
+   769→  icon: string
+   770→}
+   771→
+   772→export const knowledgeArticles: KnowledgeArticle[] = [
+   773→  { title: 'How to Set Up WhatsApp Business API in Bangladesh', category: 'WhatsApp', excerpt: 'A step-by-step guide to getting official WhatsApp Business API access and sending your first broadcast.', readTime: '8 min', icon: 'whatsapp' },
+   774→  { title: 'AI Chatbot vs AI Voice Agent: Which Is Right for You?', category: 'AI Agents', excerpt: 'Compare the pros, cons and use cases of chat vs voice AI for your business.', readTime: '6 min', icon: 'bot' },
+   775→  { title: 'CRM Automation Checklist for 2025', category: 'Automation', excerpt: 'The exact 12-point checklist we use to audit and automate any CRM pipeline.', readTime: '10 min', icon: 'crm' },
+   776→  { title: 'Lead Generation Strategies for Bangladeshi SMEs', category: 'Marketing', excerpt: '7 proven lead gen tactics that work specifically in the Bangladesh market.', readTime: '7 min', icon: 'target' },
+   777→  { title: 'Understanding n8n vs Zapier: A Practical Comparison', category: 'Automation', excerpt: 'Which automation platform should you choose? A developer-friendly breakdown.', readTime: '9 min', icon: 'workflow' },
+   778→  { title: 'How AI is Transforming Real Estate in Dhaka', category: 'Industry', excerpt: 'Real examples of how real estate agencies use AI to close more deals.', readTime: '5 min', icon: 'building' },
+   779→]
+   780→
+   781→export type FreeResource = {
+   782→  id: string
+   783→  title: string
+   784→  desc: string
+   785→  type: 'Template' | 'Checklist' | 'Ebook' | 'Calculator' | 'Swipe File'
+   786→  size: string
+   787→  downloads: string
+   788→  icon: string
+   789→  color: string
+   790→}
+   791→
+   792→export const freeResources: FreeResource[] = [
+   793→  { id: 'crm-checklist', title: 'CRM Automation Checklist', desc: '12-point audit to find every automation gap in your sales pipeline.', type: 'Checklist', size: 'PDF · 8 pages', downloads: '3.2k', icon: 'checklist', color: 'from-blue-600 to-cyan-500' },
+   794→  { id: 'whatsapp-templates', title: '30 WhatsApp Message Templates', desc: 'Ready-to-use broadcast & follow-up templates for Bangladeshi businesses.', type: 'Template', size: 'PDF · 24 templates', downloads: '5.1k', icon: 'whatsapp', color: 'from-green-500 to-emerald-500' },
+   795→  { id: 'ai-readiness-ebook', title: 'AI Readiness Ebook 2025', desc: 'The complete guide to assessing & implementing AI in your business.', type: 'Ebook', size: 'PDF · 42 pages', downloads: '2.8k', icon: 'book', color: 'from-violet-500 to-purple-500' },
+   796→  { id: 'funnel-swipe', title: '6 High-Converting Funnel Swipe File', desc: 'Real funnel breakdowns from our top-performing client campaigns.', type: 'Swipe File', size: 'PDF · 18 pages', downloads: '1.9k', icon: 'funnel', color: 'from-amber-500 to-orange-500' },
+   797→  { id: 'lead-gen-calculator', title: 'Lead Gen ROI Calculator', desc: 'Spreadsheet that models your lead gen ROI with AI automation.', type: 'Calculator', size: 'XLSX · interactive', downloads: '4.4k', icon: 'calculator', color: 'from-rose-500 to-pink-500' },
+   798→  { id: 'voice-agent-script', title: 'AI Voice Agent Script Library', desc: 'Proven call scripts for appointment booking, support & follow-up.', type: 'Template', size: 'PDF · 15 scripts', downloads: '1.5k', icon: 'phone', color: 'from-teal-500 to-cyan-500' },
+   799→]
+   800→
+   801→export type Integration = {
+   802→  name: string
+   803→  category: 'AI & LLM' | 'CRM' | 'Messaging' | 'Marketing' | 'Automation' | 'Analytics' | 'Web'
+   804→  emoji: string
+   805→  desc: string
+   806→}
+   807→
+   808→export const integrations: Integration[] = [
+   809→  { name: 'OpenAI GPT-4', category: 'AI & LLM', emoji: '🤖', desc: 'GPT-class models for chat & content' },
+   810→  { name: 'Anthropic Claude', category: 'AI & LLM', emoji: '🧠', desc: 'Advanced reasoning AI' },
+   811→  { name: 'Gemini', category: 'AI & LLM', emoji: '✨', desc: 'Google multimodal AI' },
+   812→  { name: 'ElevenLabs', category: 'AI & LLM', emoji: '🗣️', desc: 'Realistic AI voice generation' },
+   813→  { name: 'GoHighLevel', category: 'CRM', emoji: '📈', desc: 'All-in-one CRM & automation' },
+   814→  { name: 'HubSpot', category: 'CRM', emoji: '🎯', desc: 'Inbound marketing CRM' },
+   815→  { name: 'Salesforce', category: 'CRM', emoji: '☁️', desc: 'Enterprise CRM platform' },
+   816→  { name: 'Pipedrive', category: 'CRM', emoji: '🔧', desc: 'Sales pipeline management' },
+   817→  { name: 'WhatsApp Business API', category: 'Messaging', emoji: '💬', desc: 'Official WhatsApp automation' },
+   818→  { name: 'Telegram Bot API', category: 'Messaging', emoji: '✈️', desc: 'Telegram chatbot integration' },
+   819→  { name: 'Twilio', category: 'Messaging', emoji: '📞', desc: 'SMS & voice programmable API' },
+   820→  { name: 'SendGrid', category: 'Messaging', emoji: '📧', desc: 'Email delivery & automation' },
+   821→  { name: 'Meta Ads', category: 'Marketing', emoji: '📘', desc: 'Facebook & Instagram ads' },
+   822→  { name: 'Google Ads', category: 'Marketing', emoji: '🔍', desc: 'Search & display advertising' },
+   823→  { name: 'TikTok Ads', category: 'Marketing', emoji: '🎵', desc: 'Short-form video ads' },
+   824→  { name: 'LinkedIn Ads', category: 'Marketing', emoji: '💼', desc: 'B2B professional ads' },
+   825→  { name: 'n8n', category: 'Automation', emoji: '🔗', desc: 'Open-source workflow automation' },
+   826→  { name: 'Zapier', category: 'Automation', emoji: '⚡', desc: 'No-code app integrations' },
+   827→  { name: 'Make (Integromat)', category: 'Automation', emoji: '🔄', desc: 'Visual automation builder' },
+   828→  { name: 'ActiveCampaign', category: 'Automation', emoji: '📨', desc: 'Email & marketing automation' },
+   829→  { name: 'Google Analytics 4', category: 'Analytics', emoji: '📊', desc: 'Next-gen web analytics' },
+   830→  { name: 'Mixpanel', category: 'Analytics', emoji: '🔬', desc: 'Product & event analytics' },
+   831→  { name: 'Hotjar', category: 'Analytics', emoji: '🔥', desc: 'Heatmaps & session recordings' },
+   832→  { name: 'Next.js', category: 'Web', emoji: '▲', desc: 'React framework for web apps' },
+   833→  { name: 'Vercel', category: 'Web', emoji: '✦', desc: 'Deploy & hosting platform' },
+   834→  { name: 'Supabase', category: 'Web', emoji: '🗄️', desc: 'Postgres backend & auth' },
+   835→  { name: 'Stripe', category: 'Web', emoji: '💳', desc: 'Payment processing' },
+   836→]
+   837→
+   838→export type JobOpening = {
+   839→  id: string
+   840→  title: string
+   841→  department: string
+   842→  type: string
+   843→  location: string
+   844→  desc: string
+   845→  emoji: string
+   846→}
+   847→
+   848→export const jobOpenings: JobOpening[] = [
+   849→  { id: 'ai-engineer', title: 'AI Engineer', department: 'Engineering', type: 'Full-time', location: 'Dhaka (Hybrid)', desc: 'Build GPT-class chat agents, voice agents & automation workflows for clients across Bangladesh.', emoji: '🤖' },
+   850→  { id: 'automation-specialist', title: 'Automation Specialist', department: 'Engineering', type: 'Full-time', location: 'Remote', desc: 'Design and build n8n/Zapier workflows that connect CRMs, messaging & AI for our clients.', emoji: '🔗' },
+   851→  { id: 'growth-marketer', title: 'Growth Marketer', department: 'Marketing', type: 'Full-time', location: 'Dhaka (Hybrid)', desc: 'Manage Meta, Google & TikTok ad funnels engineered for qualified leads and clear ROI.', emoji: '📈' },
+   852→  { id: 'frontend-developer', title: 'Frontend Developer', department: 'Engineering', type: 'Full-time', location: 'Remote', desc: 'Build premium, high-converting websites and landing pages with Next.js, React & Tailwind.', emoji: '🎨' },
+   853→  { id: 'sales-executive', title: 'Sales Executive', department: 'Sales', type: 'Full-time', location: 'Dhaka', desc: 'Convert inbound leads into clients. Manage the pipeline, give demos and close deals.', emoji: '💼' },
+   854→  { id: 'content-writer', title: 'Content Writer (Bangla/English)', department: 'Marketing', type: 'Part-time', location: 'Remote', desc: 'Write blog posts, case studies and WhatsApp templates in both Bangla and English.', emoji: '✍️' },
+   855→]
+   856→
+   857→
+   858→
+   859→
+   860→
+   861→
+   862→
+   863→export const processSteps = [
+   864→  {
+   865→    step: '01',
+   866→    title: 'Discovery & Audit',
+   867→    desc: 'We analyse your sales process, customer journey and tools to find the highest-ROI automation opportunities.',
+   868→  },
+   869→  {
+   870→    step: '02',
+   871→    title: 'Strategy & Roadmap',
+   872→    desc: 'You receive a custom AI + automation roadmap with clear timelines, costs and projected ROI.',
+   873→  },
+   874→  {
+   875→    step: '03',
+   876→    title: 'Build & Integrate',
+   877→    desc: 'We design, build and integrate your AI agents, automations and funnels into your existing stack.',
+   878→  },
+   879→  {
+   880→    step: '04',
+   881→    title: 'Launch & Optimise',
+   882→    desc: 'We go live, monitor performance and continuously optimise to maximise leads, calls and revenue.',
+   883→  },
+   884→]
+   885→
+   886→export const whyChooseUs = [
+   887→  {
+   888→    title: 'Bangladesh-First AI',
+   889→    desc: 'Bilingual Bangla & English AI agents built specifically for the local market — not generic global tools.',
+   890→    icon: 'globe',
+   891→  },
+   892→  {
+   893→    title: 'Done-For-You System',
+   894→    desc: 'We handle strategy, build, integration and optimisation end-to-end. You focus on closing deals.',
+   895→    icon: 'rocket',
+   896→  },
+   897→  {
+   898→    title: 'Measurable ROI',
+   899→    desc: 'Every automation is tied to revenue. We report on leads, calls and conversions — not vanity metrics.',
+   900→    icon: 'trending',
+   901→  },
+   902→  {
+   903→    title: 'Enterprise-Grade Tech',
+   904→    desc: 'GPT-class models, official WhatsApp API and modern infrastructure trusted by corporates.',
+   905→    icon: 'shield',
+   906→  },
+   907→  {
+   908→    title: 'Fast Time-To-Value',
+   909→    desc: 'Most systems go live in 2–4 weeks. You see qualified leads within the first month.',
+   910→    icon: 'zap',
+   911→  },
+   912→  {
+   913→    title: 'Local Support Team',
+   914→    desc: 'A Dhaka-based team that understands your market, your customers and your business culture.',
+   915→    icon: 'users',
+   916→  },
+   917→]
+   918→
+   919→export type BlogPost = {
+   920→  slug: string
+   921→  title: string
+   922→  excerpt: string
+   923→  category: string
+   924→  readTime: string
+   925→  date: string
+   926→  content: string[]
+   927→  contentBn?: string[]
+   928→}
+   929→
+   930→export const blogPosts: BlogPost[] = [
+   931→  {
+   932→    slug: 'ai-sales-automation-bangladesh',
+   933→    title: 'How AI Sales Automation is Reshaping Bangladeshi SMEs in 2025',
+   934→    excerpt:
+   935→      'A practical breakdown of how small businesses in Bangladesh are using AI to respond to leads instantly, cut costs and 3x their conversions.',
+   936→    category: 'AI Automation',
+   937→    readTime: '7 min read',
+   938→    date: 'Jan 12, 2025',
+   939→    content: [
+   940→      'The shift is already happening. Across Dhaka, Chittagong and Jessore, small and medium businesses are replacing manual lead-follow-up with AI agents that respond in under 5 seconds — in Bangla or English — at 3am or 3pm.',
+   941→      'The economics are brutal for slow responders. Research from Harvard Business Review shows that leads contacted within 5 minutes are 21x more likely to convert. Yet the average Bangladeshi SME takes 4–47 hours to reply to a Facebook message or website form. That gap is where revenue leaks.',
+   942→      'In 2025, the winning stack is: (1) a website chatbot trained on your business, (2) WhatsApp Business API for instant follow-up, (3) CRM automation that tags and nurtures every lead, and (4) AI voice agents for inbound calls. Together they turn a 2-person sales team into a 24/7 growth engine.',
+   943→      'A Jessore real-estate client deployed this exact stack and tripled qualified property-view bookings in 60 days — without hiring. The AI handled initial qualification, booked site visits, and only handed hot prospects to the human team.',
+   944→      'The takeaway: AI sales automation is no longer a luxury for corporates. For Bangladeshi SMEs, it is the cheapest way to 2–5x revenue without growing headcount.',
+   945→    ],
+   946→    contentBn: [
+   947→      'পরিবর্তনটি ইতিমধ্যে হচ্ছে। ঢাকা, চট্টগ্রাম ও যশোরে ছোট ও মাঝারি ব্যবসা ম্যানুয়াল লিড-ফলো-আপকে এআই এজেন্ট দিয়ে প্রতিস্থাপন করছে যা ৫ সেকেন্ডের কম সময়ে সাড়া দেয় — বাংলা বা ইংরেজিতে — রাত ৩টায় বা দুপুর ৩টায়।',
+   948→      'ধীর রেসপন্ডারদের জন্য অর্থনীতি নিষ্ঠুর। হারভার্ড বিজনেস রিভিউ গবেষণা দেখায় যে ৫ মিনিটের মধ্যে যোগাযোগ করা লিড ২১x বেশি কনভার্ট হয়। কিন্তু বাংলাদেশি এসএমই গড়ে একটি ফেসবুক মেসেজ বা ওয়েবসাইট ফর্মে উত্তর দিতে ৪–৪৭ ঘন্টা নেয়। এই ফাঁকেই রাজস্ব লিক হয়।',
+   949→      '২০২৫ সালে বিজয়ী স্ট্যাক হলো: (১) আপনার ব্যবসায় প্রশিক্ষিত একটি ওয়েবসাইট চ্যাটবট, (২) তাৎক্ষণিক ফলো-আপের জন্য WhatsApp Business API, (৩) প্রতিটি লিড ট্যাগ ও নার্সার করে এমন CRM অটোমেশন, এবং (৪) ইনবাউন্ড কলের জন্য এআই ভয়েস এজেন্ট। একসাথে এগুলো ২-জনের সেলস টিমকে ২৪/৭ গ্রোথ ইঞ্জিনে পরিণত করে।',
+   950→      'একটি যশোর রিয়েল-এস্টেট ক্লায়েন্ট এই সঠিক স্ট্যাক ডিপ্লয় করে এবং ৬০ দিনে যোগ্য সম্পত্তি-ভিউ বুকিং তিনগুণ করে — কোনো নিয়োগ ছাড়াই। এআই প্রাথমিক যোগ্যতা যাচাই করে, সাইট ভিজিট বুক করে, এবং শুধু হট প্রসপেক্ট হিউম্যান টিমের কাছে হস্তান্তর করে।',
+   951→      'উপসংহার: এআই সেলস অটোমেশন আর কর্পোরেটদের বিলাসবস্তু নয়। বাংলাদেশি এসএমই-দের জন্য এটি হেডকাউন্ট বাড়ানো ছাড়া রাজস্ব ২–৫x করার সবচেয়ে সস্তা উপায়।',
+   952→    ],
+   953→  },
+   954→  {
+   955→    slug: 'whatsapp-business-api-guide',
+   956→    title: 'The Complete WhatsApp Business API Guide for Bangladeshi E-commerce',
+   957→    excerpt:
+   958→      'Everything you need to know about using WhatsApp automation to recover carts, send order updates and blast promotions legally and effectively.',
+   959→    category: 'WhatsApp',
+   960→    readTime: '9 min read',
+   961→    date: 'Jan 5, 2025',
+   962→    content: [
+   963→      'WhatsApp is Bangladesh\'s #1 messaging app — over 110 million users. For e-commerce, it beats SMS (open rate 98% vs 20%) and email (open rate 35%). The WhatsApp Business API unlocks this channel programmatically.',
+   964→      'The API has three message types: (1) Template messages — pre-approved promotional or transactional messages you can send to any user, (2) Session messages — free-flowing messages within 24 hours of a user messaging you, (3) Interactive messages — buttons, lists, and single/multi-select for richer UX.',
+   965→      'For cart recovery: trigger a template message 30 minutes after abandonment with a one-tap checkout button. A Bangladeshi fashion e-commerce client recovered 12,000+ carts in 6 months — adding 18% to monthly revenue.',
+   966→      'Compliance matters. Meta requires explicit opt-in for marketing templates. Use a checkbox at checkout or a "click to chat" button that records consent. Never buy lists — Meta bans accounts that spam, and reinstatement takes weeks.',
+   967→      'Cost structure: ~৳0.7–1.5 per marketing message (varies by country code), free for the first 1,000 service conversations/month. For most Bangladeshi SMEs, ROI is positive within the first 100 messages sent.',
+   968→    ],
+   969→    contentBn: [
+   970→      'হোয়াটসঅ্যাপ বাংলাদেশের #১ মেসেজিং অ্যাপ — ১১০ মিলিয়ন+ ব্যবহারকারী। ই-কমার্সের জন্য এটি SMS (ওপেন রেট ৯৮% vs ২০%) এবং ইমেইল (ওপেন রেট ৩৫%) কে হারায়। WhatsApp Business API এই চ্যানেলটিকে প্রোগ্রাম্যাটিকভাবে আনলক করে।',
+   971→      'API-তে তিন ধরনের মেসেজ আছে: (১) টেমপ্লেট মেসেজ — পূর্ব-অনুমোদিত প্রমোশনাল বা ট্রানজেকশনাল মেসেজ যা যেকোনো ব্যবহারকারীকে পাঠানো যায়, (২) সেশন মেসেজ — ব্যবহারকারী আপনাকে মেসেজ করার ২৪ ঘন্টার মধ্যে ফ্রি-ফ্লোয়িং মেসেজ, (৩) ইন্টারঅ্যাকটিভ মেসেজ — বোতাম, লিস্ট, এবং সিঙ্গেল/মাল্টি-সিলেক্ট সমৃদ্ধ UX-এর জন্য।',
+   972→      'কার্ট রিকভারির জন্য: পরিত্যক্তির ৩০ মিনিট পর একটি পার্সোনালাইজড টেমপ্লেট মেসেজ এক-ট্যাপ চেকআউট বোতাম সহ যায়। একটি বাংলাদেশি ফ্যাশন ই-কমার্স ক্লায়েন্ট ৬ মাসে ১২,০০০+ কার্ট রিকভার করে — মাসিক রাজস্বে ১৮% যোগ করে।',
+   973→      'কমপ্লায়েন্স গুরুত্বপূর্ণ। মার্কেটিং টেমপ্লেটের জন্য Meta স্পষ্ট অপ্ট-ইন প্রয়োজন। চেকআউটে একটি চেকবক্স বা একটি "ক্লিক টু চ্যাট" বোতাম ব্যবহার করুন যা সম্মতি রেকর্ড করে। কখনো লিস্ট কিনবেন না — Meta স্প্যাম করা অ্যাকাউন্ট ব্যান করে, এবং পুনরুদ্ধারে সপ্তাহ লাগে।',
+   974→      'খরচ কাঠামো: প্রতি মার্কেটিং মেসেজে ~৳০.৭–১.৫ (কান্ট্রি কোড অনুযায়ী ভিন্ন), প্রথম ১,০০০ সার্ভিস কনভার্সেশন/মাস ফ্রি। বেশিরভাগ বাংলাদেশি এসএমই-দের জন্য প্রথম ১০০ মেসেজ পাঠানোর মধ্যেই ROI পজিটিভ হয়।',
+   975→    ],
+   976→  },
+   977→  {
+   978→    slug: 'ai-voice-agent-healthcare',
+   979→    title: 'Why Hospitals in Bangladesh Are Switching to AI Voice Agents',
+   980→    excerpt:
+   981→      'Case study-driven look at how AI voice agents reduce no-shows, handle 24/7 appointment booking and improve patient satisfaction.',
+   982→    category: 'AI Voice',
+   983→    readTime: '6 min read',
+   984→    date: 'Dec 28, 2024',
+   985→    content: [
+   986→      'A 200-bed hospital in Khulna was missing 40+ appointment calls per day — patients calling after hours, during prayer times, or when the front desk was overwhelmed. Each missed call was a lost patient and a lost procedure.',
+   987→      'AI voice agents solve this. They answer every call within 1 ring, 24/7, in Bangla or English. They book appointments directly into the hospital\'s system, send WhatsApp confirmations, and route urgent cases to on-call doctors.',
+   988→      'The implementation: (1) train the voice agent on the hospital\'s departments, doctors, and slot availability, (2) integrate with the existing HMS via API, (3) set escalation rules for emergencies. The agent handles 70% of calls autonomously; the rest go to humans with full context.',
+   989→      'Results after 90 days: appointment no-shows dropped 38% (automated WhatsApp reminders + reschedule option), after-hours booking increased 5x, and patient satisfaction scores rose from 3.8 to 4.6 out of 5.',
+   990→      'The key insight: patients do not mind talking to AI — they mind waiting on hold. A Bangla-fluent AI agent that resolves their request in 90 seconds beats a human who takes 9 minutes after a 6-minute hold.',
+   991→    ],
+   992→    contentBn: [
+   993→      'খুলনার একটি ২০০-বেডের হাসপাতাল প্রতিদিন ৪০+ অ্যাপয়েন্টমেন্ট কল মিস করছিল — রোগীরা অফিসের বাইরে, নামাজের সময়, বা ফ্রন্ট ডেস্ক অভিভূত থাকলে কল করত। প্রতিটি মিস কল একটি হারানো রোগী এবং একটি হারানো চিকিৎসা প্রক্রিয়া।',
+   994→      'এআই ভয়েস এজেন্ট এটি সমাধান করে। তারা প্রতিটি কল ১ রিং-এ উত্তর দেয়, ২৪/৭, বাংলা বা ইংরেজিতে। তারা অ্যাপয়েন্টমেন্ট সরাসরি হাসপাতালের সিস্টেমে বুক করে, হোয়াটসঅ্যাপ কনফার্মেশন পাঠায়, এবং জরুরি কেস অন-কল ডাক্তারের কাছে রুট করে।',
+   995→      'বাস্তবায়ন: (১) ভয়েস এজেন্টকে হাসপাতালের বিভাগ, ডাক্তার ও স্লট প্রাপ্যতায় প্রশিক্ষণ দেওয়া, (২) বিদ্যমান HMS-এর সাথে API ইন্টিগ্রেশন, (৩) জরুরি অবস্থার জন্য এসকেলেশন নিয়ম সেট করা। এজেন্ট ৭০% কল স্বায়ত্তশাসিতভাবে সামলায়; বাকিগুলো পূর্ণ কনটেক্সট সহ মানুষের কাছে যায়।',
+   996→      '৯০ দিন পর ফলাফল: অ্যাপয়েন্টমেন্ট নো-শো ৩৮% কমে (স্বয়ংক্রিয় হোয়াটসঅ্যাপ রিমাইন্ডার + রিশিডিউল অপশন), অফিস-বহির্ভূত বুকিং ৫x বৃদ্ধি, এবং রোগী সন্তুষ্টি স্কোর ৩.৮ থেকে ৪.৬/৫ এ উঠে।',
+   997→      'মূল অন্তর্দৃষ্টি: রোগীরা এআই-এর সাথে কথা বলতে আপত্তি করে না — তারা হোল্ডে অপেক্ষা করতে আপত্তি করে। একটি বাংলা-সাবলীল এআই এজেন্ট যা ৯০ সেকেন্ডে তাদের অনুরোধ পূরণ করে, তার চেয়ে ভালো যে মানুষ ৬ মিনিট হোল্ডের পর ৯ মিনিট নেয়।',
+   998→    ],
+   999→  },
+  1000→  {
+  1001→    slug: 'crm-automation-playbook',
+  1002→    title: 'The CRM Automation Playbook: Never Drop a Lead Again',
+  1003→    excerpt:
+  1004→      'A step-by-step framework to automate your CRM so every lead is nurtured, tagged and followed up — automatically.',
+  1005→    category: 'Automation',
+  1006→    readTime: '8 min read',
+  1007→    date: 'Dec 15, 2024',
+  1008→    content: [
+  1009→      'The average sales team forgets to follow up with 44% of leads. Not out of laziness — out of chaos. No CRM tagging, no reminders, no sequence. The lead sits in a pipeline until it goes cold and buys from a competitor who replied faster.',
+  1010→      'CRM automation fixes this with three layers: (1) Capture — every lead (form, chat, call, WhatsApp) auto-creates a CRM record with source + timestamp, (2) Tag — AI categorizes the lead by intent (hot/warm/cold) and industry, (3) Nurture — a multi-step sequence (email + WhatsApp + voice) runs automatically until the lead books a call or opts out.',
+  1011→      'Step 1: Connect your intake channels. Every form submission, chat conversation, and inbound call should push to the CRM via webhook or API. No manual entry.',
+  1012→      'Step 2: Define lead scoring rules. Hot = requested pricing + phone number. Warm = asked a specific question. Cold = generic inquiry. AI can auto-score based on message content — 90% accuracy with 200+ historical examples.',
+  1013→      'Step 3: Build nurture sequences. Hot leads get a WhatsApp message within 5 minutes + a voice call within 1 hour. Warm leads get a 3-day email sequence. Cold leads go into a monthly newsletter. Every touchpoint has a clear CTA: book a call.',
+  1014→      'The result: a Dhaka B2B client went from 12% lead-to-call conversion to 34% in 4 months — same lead volume, same sales team, just automation that never forgets and never sleeps.',
+  1015→    ],
+  1016→    contentBn: [
+  1017→      'গড় সেলস টিম ৪৪% লিডের ফলো-আপ ভুলে যায়। অলসতা থেকে নয় — বিশৃঙ্খলা থেকে। কোনো CRM ট্যাগিং নেই, কোনো রিমাইন্ডার নেই, কোনো সিকোয়েন্স নেই। লিড একটি পাইপলাইনে পড়ে থাকে যতক্ষণ না তা ঠান্ডা হয়ে যায় এবং দ্রুত সাড়া দেওয়া প্রতিযোগীর কাছ থেকে কেনে।',
+  1018→      'CRM অটোমেশন তিনটি স্তরে এটি ঠিক করে: (১) ক্যাপচার — প্রতিটি লিড (ফর্ম, চ্যাট, কল, হোয়াটসঅ্যাপ) স্বয়ংক্রিয়ভাবে একটি CRM রেকর্ড তৈরি করে সোর্স + টাইমস্ট্যাম্প সহ, (২) ট্যাগ — এআই লিডকে ইনটেন্ট (হট/ওয়ার্ম/কোল্ড) এবং ইন্ডাস্ট্রি অনুযায়ী শ্রেণীবদ্ধ করে, (৩) নার্সার — একটি মাল্টি-স্টেপ সিকোয়েন্স (ইমেইল + হোয়াটসঅ্যাপ + ভয়েস) স্বয়ংক্রিয়ভাবে চলে যতক্ষণ না লিড একটি কল বুক করে বা অপ্ট-আউট করে।',
+  1019→      'ধাপ ১: আপনার ইনটেক চ্যানেল সংযুক্ত করুন। প্রতিটি ফর্ম সাবমিশন, চ্যাট কথোপকথন এবং ইনবাউন্ড কল webhook বা API-এর মাধ্যমে CRM-এ পুশ করবে। কোনো ম্যানুয়াল এন্ট্রি নয়।',
+  1020→      'ধাপ ২: লিড স্কোরিং নিয়ম সংজ্ঞায়িত করুন। হট = দাম চেয়েছে + ফোন নম্বর দিয়েছে। ওয়ার্ম = নির্দিষ্ট প্রশ্ন করেছে। কোল্ড = সাধারণ অনুসন্ধান। এআই মেসেজ কনটেন্টের উপর ভিত্তি করে অটো-স্কোর করতে পারে — ২০০+ ঐতিহাসিক উদাহরণ সহ ৯০% নির্ভুলতা।',
+  1021→      'ধাপ ৩: নার্সার সিকোয়েন্স তৈরি করুন। হট লিড ৫ মিনিটের মধ্যে একটি হোয়াটসঅ্যাপ মেসেজ + ১ ঘন্টার মধ্যে একটি ভয়েস কল পায়। ওয়ার্ম লিড ৩-দিনের ইমেইল সিকোয়েন্স পায়। কোল্ড লিড মাসিক নিউজলেটারে যায়। প্রতিটি টাচপয়েন্টে একটি স্পষ্ট CTA: কল বুক করুন।',
+  1022→      'ফলাফল: একটি ঢাকা B2B ক্লায়েন্ট ৪ মাসে ১২% লিড-টু-কল কনভার্সন থেকে ৩৪% এ গেছে — একই লিড ভলিউম, একই সেলস টিম, শুধু অটোমেশন যা কখনো ভোলে না এবং কখনো ঘুমায় না।',
+  1023→    ],
+  1024→  },
+  1025→]
+  1026→
+  1027→export const siteConfig = {
+  1028→  name: 'NextGen Digital Studio',
+  1029→  shortName: 'NextGen',
+  1030→  url: 'https://nextgendigitalstudio.com',
+  1031→  tagline: 'AI Sales Automation Agency in Bangladesh',
+  1032→  description:
+  1033→    'NextGen Digital Studio helps businesses in Bangladesh automate marketing, sales, customer communication and operations using Artificial Intelligence and Business Automation. Generate qualified leads and book strategy calls.',
+  1034→  email: 'nextgendigitalstudio1@gmail.com',
+  1035→  phone: '+880 1711 731354',
+  1036→  whatsapp: '8801711731354',
+  1037→  address: 'মিয়া বাড়ীর মোড়, শেখহাটি, নিউমার্কেট, যশোর, বাংলাদেশ',
+  1038→  founder: 'ইঞ্জিনিয়ার মোঃ নাজমুল ইসলাম তাজ (তাজ ভাই)',
+  1039→  founderTitle: 'যশোরের প্রথম ডিজিটাল ইঞ্জিনিয়ার',
+  1040→  slogan: 'ইঞ্জিনিয়ারিং প্রিসিশনে ডিজিটাল সলিউশন',
+  1041→  facebook: 'https://www.facebook.com/nextgendigitalstudio',
+  1042→  linkedin: 'https://www.linkedin.com/in/nextgen-digital-studio',
+  1043→  github: 'https://github.com/Taj3D',
+  1044→  instagram: 'https://instagram.com/nextgendigitalstudio1',
+  1045→  threads: 'https://threads.net/nextgendigitalstudio1',
+  1046→  youtube: 'https://www.youtube.com/@NextGenDigitalStudio1',
+  1047→  twitter: 'https://x.com/NextGenDigit',
+  1048→  mapsQuery: 'নিউমার্কেট, যশোর, বাংলাদেশ',
+  1049→}
+  1050→

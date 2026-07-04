@@ -1,0 +1,1033 @@
+     1→'use client'
+     2→
+     3→import * as React from "react"
+     4→
+     5→export type Lang = 'en' | 'bn'
+     6→
+     7→type Ctx = {
+     8→  lang: Lang
+     9→  setLang: (l: Lang) => void
+    10→  toggle: () => void
+    11→  t: (key: string) => string
+    12→}
+    13→
+    14→const LanguageContext = React.createContext<Ctx | null>(null)
+    15→
+    16→const STORAGE_KEY = 'nextgen-lang'
+    17→
+    18→// Full translation dictionary for the entire site
+    19→const translations: Record<Lang, Record<string, string>> = {
+    20→  en: {
+    21→    // Navigation
+    22→    'nav.about': 'About',
+    23→    'nav.services': 'Services',
+    24→    'nav.industries': 'Industries',
+    25→    'nav.caseStudies': 'Case Studies',
+    26→    'nav.pricing': 'Pricing',
+    27→    'nav.whyUs': 'Why Us',
+    28→    'nav.blog': 'Blog',
+    29→    'nav.contact': 'Contact',
+    30→
+    31→    // CTAs
+    32→    'cta.bookCall': 'Book Strategy Call',
+    33→    'cta.bookFreeCall': 'Book a Free Strategy Call',
+    34→    'cta.exploreServices': 'Explore Services',
+    35→    'cta.startFreeAudit': 'Start free audit',
+    36→    'cta.getThisStack': 'Get this stack',
+    37→    'cta.startRiskFree': 'Start risk-free',
+    38→    'cta.getMyRoadmap': 'Get my custom roadmap',
+    39→    'cta.buildThisForMe': 'Build this for me',
+    40→    'cta.tryOnMyBusiness': 'Try it on my business',
+    41→    'cta.workWithOurTeam': 'Work with our team',
+    42→    'cta.viewAllServices': 'View all',
+    43→    'cta.viewAllIndustries': 'View all',
+    44→    'cta.viewOutcomes': 'View outcomes',
+    45→    'cta.becomeOurNextSuccess': 'Become our next success story',
+    46→    'cta.getMyDetailedROI': 'Get my detailed ROI breakdown',
+    47→    'cta.getSimilarResults': 'Get similar results for my business',
+    48→    'cta.readFullCaseStudy': 'Read full case study',
+    49→    'cta.readArticle': 'Read article',
+    50→    'cta.requestIntegration': 'Request integration',
+    51→    'cta.buildThisIntegration': 'Build this integration',
+    52→    'cta.getFullGuide': 'Get the full guide',
+    53→    'cta.applyAs': 'Apply as',
+    54→    'cta.getDashboard': 'Get your dashboard',
+    55→    'cta.bookNow': 'Book Now',
+    56→    'cta.orderNow': 'অর্ডার করুন',
+    57→    'cta.downloadNow': 'Download now',
+    58→    'cta.startFreeAuditBtn': 'Start free audit',
+    59→    'cta.emailMeMyReport': 'Email me my report',
+    60→    'cta.confirmStrategyCall': 'Confirm Strategy Call',
+    61→    'cta.sendMessage': 'Send Message',
+    62→    'cta.subscribe': 'Subscribe',
+    63→    'cta.done': 'Done',
+    64→
+    65→    // Hero
+    66→    'hero.badge': 'AI Sales Automation Agency · Bangladesh',
+    67→    'hero.title1': 'Turn Your Business into an',
+    68→    'hero.title2': 'AI-Powered Sales Machine',
+    69→    'hero.subtitle': 'We help businesses in Bangladesh automate marketing, sales, customer communication and operations with Artificial Intelligence — so you generate qualified leads and book calls 24/7, on autopilot.',
+    70→    'hero.trustedBy': 'Trusted by 120+ leading businesses across Bangladesh',
+    71→    'hero.trustedByText': 'Trusted by',
+    72→    'hero.businesses': '120+ businesses',
+    73→    'hero.freeCall': '30-min free call',
+    74→    'hero.noCommitment': 'No commitment',
+    75→    'hero.bilingual': 'Bangla & English',
+    76→
+    77→    // Problem
+    78→    'problem.eyebrow': 'The Problem',
+    79→    'problem.title1': 'Running a business the old way is',
+    80→    'problem.title2': 'expensive',
+    81→    'problem.title3': '& slow',
+    82→    'problem.subtitle': "While you're stuck doing manual work, your competitors are using AI to respond instantly, automate everything and win your customers.",
+    83→    'problem.warning': "Every day you wait, you're losing qualified leads and revenue to competitors who already automated.",
+    84→
+    85→    // Solution
+    86→    'solution.eyebrow': 'Our Solution',
+    87→    'solution.title1': 'One AI-powered system that',
+    88→    'solution.title2': 'runs your growth',
+    89→    'solution.title3': 'on autopilot',
+    90→    'solution.subtitle': "We design, build and manage your entire AI + automation stack — from first click to closed deal — so you can scale without scaling headcount.",
+    91→    'solution.capabilitiesTitle': 'Everything you need to automate growth — in one place',
+    92→    'solution.capabilitiesSubtitle': 'No juggling multiple vendors or tools. We deliver a complete, integrated system tailored to your business goals.',
+    93→
+    94→    // Services
+    95→    'services.eyebrow': 'What We Do',
+    96→    'services.title1': 'AI & automation services that',
+    97→    'services.title2': 'drive revenue',
+    98→    'services.subtitle': 'Twelve specialised services covering the entire customer journey — from generating leads to closing deals and automating operations.',
+    99→
+   100→    // Industries
+   101→    'industries.eyebrow': 'Industries We Serve',
+   102→    'industries.title1': 'Built for the businesses that',
+   103→    'industries.title2': 'power Bangladesh',
+   104→    'industries.subtitle': "From small businesses to corporates, we tailor AI + automation to your industry's exact workflows and customer expectations.",
+   105→    'industries.viewOutcomes': 'View outcomes',
+   106→
+   107→    // How It Works
+   108→    'howItWorks.eyebrow': 'How It Works',
+   109→    'howItWorks.title1': 'From first call to',
+   110→    'howItWorks.title2': 'automated growth',
+   111→    'howItWorks.title3': 'in 4 steps',
+   112→    'howItWorks.subtitle': 'A proven, transparent process that gets your AI systems live in weeks — not months.',
+   113→
+   114→    // By The Numbers
+   115→    'byNumbers.eyebrow': 'By the Numbers',
+   116→    'byNumbers.title1': 'Results that speak',
+   117→    'byNumbers.title2': 'louder than promises',
+   118→    'byNumbers.subtitle': 'Real outcomes from real Bangladeshi businesses we\'ve automated with AI over the past two years.',
+   119→
+   120→    // ROI Calculator
+   121→    'roi.eyebrow': 'ROI Calculator',
+   122→    'roi.title1': 'See your potential',
+   123→    'roi.title2': 'ROI in 10 seconds',
+   124→    'roi.subtitle': 'Adjust the sliders to estimate how much extra revenue and time AI automation could generate for your business.',
+   125→    'roi.businessSize': '1. What best describes your business?',
+   126→    'roi.leadResponse': 'Lead Response Improvement',
+   127→    'roi.leadResponseHint': 'Faster AI response typically converts 20–200% more leads',
+   128→    'roi.hoursSaved': 'Hours Saved Per Week',
+   129→    'roi.hoursSavedHint': 'Time freed from manual follow-ups, data entry & support',
+   130→    'roi.disclaimer': 'Estimates based on industry benchmarks from our 120+ client deployments across Bangladesh. Actual results vary.',
+   131→    'roi.yourProjected': 'YOUR PROJECTED YEARLY IMPACT',
+   132→    'roi.totalValue': 'Total value created per year',
+   133→    'roi.extraLeads': 'Extra qualified leads / mo',
+   134→    'roi.revenueUplift': 'Revenue uplift / year',
+   135→    'roi.hoursSavedYear': 'Hours saved / year',
+   136→    'roi.labourSaved': 'Labour cost saved',
+   137→    'roi.roiMultiple': 'Estimated ROI multiple',
+   138→    'roi.getDetailedROI': 'Get my detailed ROI breakdown',
+   139→
+   140→    // AI Audit
+   141→    'audit.eyebrow': 'Free AI Audit Tool',
+   142→    'audit.title1': 'How much revenue is',
+   143→    'audit.title2': 'slipping through the cracks?',
+   144→    'audit.subtitle': 'Answer 4 quick questions and get an instant AI-readiness score plus a personalised report on where you\'re losing leads.',
+   145→    'audit.getScore': 'Get your free AI-readiness score',
+   146→    'audit.takesSeconds': 'Takes 60 seconds. No signup required to see your score. Get a personalised report on where AI can grow your revenue.',
+   147→    'audit.4questions': '4 questions',
+   148→    'audit.instantScore': 'Instant score',
+   149→    'audit.freeReport': 'Free report',
+   150→    'audit.startFreeAudit': 'Start free audit',
+   151→    'audit.yourScore': 'YOUR AI-READINESS SCORE',
+   152→    'audit.opportunities': 'BIGGEST OPPORTUNITIES FOR YOU',
+   153→    'audit.getFullReport': 'Get my full report',
+   154→    'audit.bookCallInstead': 'Book a strategy call instead',
+   155→    'audit.reportOnItsWay': 'Your report is on its way!',
+   156→    'audit.checkInbox': 'Check your inbox in the next few minutes.',
+   157→    'audit.fastTrack': 'Want to fast-track your results?',
+   158→    'audit.bookStrategyCall': 'Book my strategy call',
+   159→    'audit.getReport': 'Get your full audit report',
+   160→    'audit.emailReport': "We'll email you a detailed breakdown of your score plus 3 personalised AI automation recommendations.",
+   161→    'audit.fullName': 'Full name',
+   162→    'audit.phone': 'Phone / WhatsApp',
+   163→    'audit.email': 'Email',
+   164→    'audit.company': 'Company',
+   165→    'audit.yourIndustry': 'Your industry',
+   166→    'audit.emailMeReport': 'Email me my report',
+   167→    'audit.noSpam': 'By booking, you agree to be contacted by NextGen Digital Studio.',
+   168→
+   169→    // Configurator
+   170→    'configurator.eyebrow': 'Build Your Stack',
+   171→    'configurator.title1': 'Design your custom',
+   172→    'configurator.title2': 'AI automation stack',
+   173→    'configurator.subtitle': 'Pick the services you need and see your monthly price update live. Bundle 2+ services for automatic discounts — no hidden fees.',
+   174→    'configurator.yourStack': 'Your Stack',
+   175→    'configurator.reset': 'Reset',
+   176→    'configurator.monthlyTotal': 'Monthly total',
+   177→    'configurator.subtotal': 'Subtotal',
+   178→    'configurator.youSave': 'You save',
+   179→    'configurator.getThisStack': 'Get this stack',
+   180→    'configurator.bundleDiscount': 'bundle discount unlocked!',
+   181→    'configurator.freeCall': 'Free strategy call · No commitment · Cancel anytime',
+   182→    'configurator.selectServices': 'Select services to build your custom stack →',
+   183→
+   184→    // Workflow Builder
+   185→    'workflow.eyebrow': 'Workflow Builder',
+   186→    'workflow.title1': 'Visualize your',
+   187→    'workflow.title2': 'AI sales funnel',
+   188→    'workflow.subtitle': 'Drag to reorder steps, add new ones, and run the flow to see how an AI-powered funnel turns visitors into booked calls — automatically.',
+   189→    'workflow.yourFunnel': 'Your Funnel',
+   190→    'workflow.steps': 'steps',
+   191→    'workflow.reset': 'Reset',
+   192→    'workflow.runFlow': 'Run Flow',
+   193→    'workflow.running': 'Running...',
+   194→    'workflow.addStep': 'Add a step',
+   195→    'workflow.available': 'available',
+   196→    'workflow.emptyFunnel': 'Your funnel is empty. Add steps from the library →',
+   197→    'workflow.addSteps': 'Add steps',
+   198→    'workflow.funnelProjection': 'FUNNEL PROJECTION',
+   199→    'workflow.automationSteps': 'Automation steps',
+   200→    'workflow.alwaysRunning': 'Always running',
+   201→    'workflow.leadResponse': 'Lead response',
+   202→    'workflow.estConversion': 'Est. conversion lift',
+   203→    'workflow.howThisWorks': 'How this funnel works',
+   204→    'workflow.buildForMe': 'Build this for me',
+   205→    'workflow.step1': 'A visitor lands on your site',
+   206→    'workflow.step2': 'AI engages them instantly in Bangla/English',
+   207→    'workflow.step3': 'Lead is qualified & tagged automatically',
+   208→    'workflow.step4': 'Follow-ups run until a call is booked',
+   209→
+   210→    // Testimonials
+   211→    'testimonials.eyebrow': 'Testimonials',
+   212→    'testimonials.title1': 'Loved by businesses',
+   213→    'testimonials.title2': 'across Bangladesh',
+   214→    'testimonials.subtitle': "Don't take our word for it — hear what our clients say about working with NextGen Digital Studio.",
+   215→
+   216→    // Video Testimonials
+   217→    'videoTest.eyebrow': 'Video Stories',
+   218→    'videoTest.title1': 'Hear it straight from',
+   219→    'videoTest.title2': 'our clients',
+   220→    'videoTest.subtitle': 'Real Bangladeshi business owners share how NextGen Digital Studio transformed their growth with AI automation.',
+   221→    'videoTest.becomeNext': 'Become our next success story',
+   222→
+   223→    // Pricing
+   224→    'pricing.eyebrow': 'Pricing',
+   225→    'pricing.title1': 'Simple, transparent',
+   226→    'pricing.title2': 'monthly plans',
+   227→    'pricing.subtitle': "No hidden fees, no long lock-ins. Pick a plan, we build your system, and you only pay while it's generating ROI.",
+   228→    'pricing.mostPopular': 'Most Popular',
+   229→    'pricing.needCustom': 'Need something custom?',
+   230→
+   231→    // Pricing FAQ
+   232→    'pricingFaq.eyebrow': 'Pricing Questions',
+   233→    'pricingFaq.title1': 'Everything you need to know about',
+   234→    'pricingFaq.title2': 'pricing',
+   235→    'pricingFaq.subtitle': 'Still have questions? Book a free strategy call and we\'ll answer everything.',
+   236→    'pricingFaq.stillHaveQuestions': 'Still have questions? Talk to us',
+   237→
+   238→    // Guarantees
+   239→    'guarantees.eyebrow': 'Our Promises to You',
+   240→
+   241→    // Comparison
+   242→    'comparison.eyebrow': 'Why We\'re Different',
+   243→    'comparison.title1': 'NextGen vs.',
+   244→    'comparison.title2': 'the rest',
+   245→    'comparison.subtitle': 'Most agencies sell hours. We sell automated outcomes. Here\'s exactly how working with us compares to the alternatives.',
+   246→    'comparison.feature': 'Feature',
+   247→    'comparison.nextgen': 'NextGen',
+   248→    'comparison.nextgenSub': 'AI Automation Agency',
+   249→    'comparison.others': 'Typical Agencies',
+   250→    'comparison.othersSub': '& freelancers',
+   251→    'comparison.roiPromise': '30-Day ROI Promise',
+   252→    'comparison.roiDesc': 'See qualified leads in your first month — or we keep working free until you do.',
+   253→    'comparison.startRiskFree': 'Start risk-free',
+   254→
+   255→    // Case Studies
+   256→    'caseStudies.eyebrow': 'Case Studies',
+   257→    'caseStudies.title1': 'Real businesses.',
+   258→    'caseStudies.title2': 'Real results.',
+   259→    'caseStudies.subtitle': 'See how Bangladeshi companies are generating more leads, cutting costs and scaling with our AI + automation systems.',
+   260→
+   261→    // Awards
+   262→    'awards.eyebrow': 'Awards & Recognition',
+   263→    'awards.title1': 'Recognised for',
+   264→    'awards.title2': 'delivering results',
+   265→    'awards.subtitle': "We're proud to be recognised by Bangladesh's tech and business community — and certified by the platforms we build on.",
+   266→    'awards.certifiedPartners': 'Certified & Authorized Partners',
+   267→
+   268→    // Team
+   269→    'team.eyebrow': 'Our Story',
+   270→    'team.title1': 'The team building',
+   271→    'team.title2': "Bangladesh's AI future",
+   272→    'team.subtitle': "We're a Dhaka-based squad of AI engineers, growth specialists and automation architects obsessed with one thing: your revenue.",
+   273→    'team.mission': 'Mission',
+   274→    'team.vision': 'Vision',
+   275→    'team.values': 'Values',
+   276→    'team.meetPeople': 'Meet the people behind the AI',
+   277→    'team.teamDesc': 'A focused team — no bloat, no handoffs, just specialists who ship.',
+   278→    'team.workWithUs': 'Work with our team',
+   279→
+   280→    // Partner Program
+   281→    'partner.eyebrow': 'Partner Program',
+   282→    'partner.title1': 'Earn while you',
+   283→    'partner.title2': 'refer',
+   284→    'partner.subtitle': 'Join 40+ agencies and consultants earning recurring commission by referring Bangladeshi businesses to NextGen Digital Studio.',
+   285→    'partner.commission': 'commission',
+   286→    'partner.trackEarnings': 'Already referring? Track your earnings in real-time.',
+   287→    'partner.getDashboard': 'Get your dashboard',
+   288→
+   289→    // Tech Stack
+   290→    'techStack.eyebrow': 'Our Tech Stack',
+   291→    'techStack.title1': 'Powered by the world\'s best',
+   292→    'techStack.title2': 'AI & automation tools',
+   293→    'techStack.subtitle': 'We integrate enterprise-grade platforms to build systems that are reliable, scalable and future-proof.',
+   294→
+   295→    // Knowledge Base
+   296→    'kb.eyebrow': 'Knowledge Base',
+   297→    'kb.title1': 'Learn how to',
+   298→    'kb.title2': 'automate your business',
+   299→    'kb.subtitle': 'Practical guides, tutorials and playbooks on AI, automation and growth — written for Bangladeshi businesses.',
+   300→    'kb.searchPlaceholder': 'Search articles... (e.g. WhatsApp, CRM, leads)',
+   301→    'kb.read': 'Read',
+   302→    'kb.readTime': 'read',
+   303→    'kb.bookCall': 'Want a personalised automation plan?',
+   304→    'kb.bookCallLink': 'Book a free strategy call',
+   305→
+   306→    // Free Tools
+   307→    'freeTools.eyebrow': 'Free Tools & Resources',
+   308→    'freeTools.title1': 'Download free tools to',
+   309→    'freeTools.title2': 'automate smarter',
+   310→    'freeTools.subtitle': 'Templates, checklists, ebooks and calculators — battle-tested with 120+ Bangladeshi businesses. Free to download.',
+   311→    'freeTools.download': 'downloads',
+   312→    'freeTools.downloadFree': 'Download free',
+   313→    'freeTools.enterDetails': 'Enter your details — we\'ll email the file + automation tips.',
+   314→    'freeTools.fullName': 'Full name',
+   315→    'freeTools.email': 'Email',
+   316→    'freeTools.whatsapp': 'WhatsApp (optional)',
+   317→    'freeTools.downloadNow': 'Download now',
+   318→    'freeTools.noSpam': 'No spam. Unsubscribe anytime. We respect your privacy.',
+   319→    'freeTools.downloadUnlocked': 'Download unlocked!',
+   320→    'freeTools.checkInbox': 'is on its way to your inbox.',
+   321→
+   322→    // System Toolkit
+   323→    'toolkit.eyebrow': 'আমাদের প্রোডাক্ট',
+   324→    'toolkit.title1': 'System Toolkit —',
+   325→    'toolkit.title2': '১১৫+ টুল এক প্যাকেজে',
+   326→    'toolkit.subtitle': 'আপনার সিস্টেম অপ্টিমাইজ, ক্লিন, রিপেয়ার ও সিকিউর করুন। ৫০০০+ ইউজার বিশ্বস্ত। এখন ৫০% ছাড়ে পান।',
+   327→
+   328→    // Integrations
+   329→    'integrations.eyebrow': 'Integrations Directory',
+   330→    'integrations.title1': 'We connect with',
+   331→    'integrations.title2': '27+ tools',
+   332→    'integrations.title3': 'you already use',
+   333→    'integrations.subtitle': 'Your AI automation stack is only as good as its integrations. We plug into the platforms your business runs on — seamlessly.',
+   334→    'integrations.searchPlaceholder': 'Search 27+ integrations...',
+   335→    'integrations.dontSeeTool': "Don't see your tool?",
+   336→    'integrations.dontSeeDesc': 'We build custom integrations for any platform with an API.',
+   337→    'integrations.requestIntegration': 'Request integration',
+   338→    'integrations.buildIntegration': 'Build this integration',
+   339→    'integrations.noResults': 'No integrations found. We can still build a custom integration for you.',
+   340→    'integrations.certifiedTo': 'Our team is certified to build & maintain',
+   341→
+   342→    // Careers
+   343→    'careers.eyebrow': 'Careers',
+   344→    'careers.title1': 'Build the future of',
+   345→    'careers.title2': 'AI in Bangladesh',
+   346→    'careers.subtitle': 'We are looking for sharp, passionate people who want to ship real AI products that grow Bangladeshi businesses. Join us.',
+   347→    'careers.openPositions': 'Open positions',
+   348→    'careers.dontSeeRole': "Do not see your role?",
+   349→    'careers.sendGeneral': 'Send a general application',
+   350→    'careers.submitApplication': 'Submit application',
+   351→    'careers.applicationSent': 'Application sent!',
+   352→    'careers.willBeInTouch': 'We will be in touch within 5 business days.',
+   353→    'careers.whyGreatFit': 'Why are you a great fit?',
+   354→    'careers.portfolio': 'Portfolio / LinkedIn / GitHub',
+   355→    'careers.fullName': 'Full name',
+   356→    'careers.email': 'Email',
+   357→    'careers.phone': 'Phone',
+   358→    'careers.noAIScreening': 'We review every application personally. No AI screening.',
+   359→
+   360→    // Status Page
+   361→    'status.eyebrow': 'System Status',
+   362→    'status.title1': 'All systems',
+   363→    'status.title2': 'operational',
+   364→    'status.subtitle': 'We monitor our platform 24/7. Here\'s the real-time status of every service we run for our clients.',
+   365→    'status.allOperational': 'All Systems Operational',
+   366→    'status.updatedJustNow': 'Updated just now · 99.96% uptime over the last 30 days',
+   367→    'status.uptime30day': '30-day uptime',
+   368→    'status.operational': 'Operational',
+   369→    'status.recentIncidents': 'Recent Incidents',
+   370→    'status.haveIssue': 'Have an issue?',
+   371→
+   372→    // Blog
+   373→    'blog.eyebrow': 'Insights',
+   374→    'blog.title1': 'From the',
+   375→    'blog.title2': 'NextGen blog',
+   376→    'blog.subtitle': 'Practical guides on AI, automation and growth for Bangladeshi businesses.',
+   377→    'blog.subscribeUpdates': 'Subscribe to updates',
+   378→    'blog.readArticle': 'Read article',
+   379→
+   380→    // FAQ
+   381→    'faq.eyebrow': 'FAQ',
+   382→    'faq.title1': 'Questions?',
+   383→    'faq.title2': "We've got answers.",
+   384→    'faq.subtitle': 'Everything you need to know about working with NextGen Digital Studio. Still curious? Book a free strategy call and we\'ll answer everything.',
+   385→    'faq.stillQuestions': 'Still have questions?',
+   386→    'faq.stillQuestionsDesc': 'Get a free 30-min consultation.',
+   387→    'faq.askExpert': 'Ask an expert',
+   388→
+   389→    // CTA Band
+   390→    'ctaBand.title': 'Ready to automate your growth?',
+   391→    'ctaBand.subtitle': 'Book a free 30-minute strategy call. We\'ll audit your business and design a custom AI + automation roadmap — no obligation.',
+   392→    'ctaBand.freeCall': '30-min free call',
+   393→    'ctaBand.noCommitment': 'No commitment',
+   394→    'ctaBand.repliesWithin': 'Replies within 2 hours · Jessore, Bangladesh',
+   395→
+   396→    // Contact
+   397→    'contact.eyebrow': 'Contact',
+   398→    'contact.title1': "Let's build your",
+   399→    'contact.title2': 'AI growth engine',
+   400→    'contact.subtitle': 'Send us a message or book a call. We typically reply within 2 hours during business hours.',
+   401→    'contact.fullName': 'Full name',
+   402→    'contact.phone': 'Phone',
+   403→    'contact.email': 'Email',
+   404→    'contact.company': 'Company',
+   405→    'contact.serviceInterested': 'Service interested in',
+   406→    'contact.selectService': 'Select a service',
+   407→    'contact.message': 'Message',
+   408→    'contact.tellAboutProject': 'Tell us about your project and goals...',
+   409→    'contact.sendMessage': 'Send Message',
+   410→    'contact.sending': 'Sending...',
+   411→    'contact.messageSent': 'Message sent!',
+   412→    'contact.sentDesc': 'Thank you for reaching out. Our team will respond within 24 hours.',
+   413→    'contact.sendAnother': 'Send another message',
+   414→    'contact.emailLabel': 'EMAIL',
+   415→    'contact.phoneLabel': 'PHONE',
+   416→    'contact.whatsappLabel': 'WHATSAPP',
+   417→    'contact.whatsappValue': 'Chat with us instantly',
+   418→    'contact.officeLabel': 'OFFICE',
+   419→    'contact.followWork': 'Follow our work',
+   420→
+   421→    // Footer
+   422→    'footer.newsletterTitle': 'Get AI growth insights every week',
+   423→    'footer.newsletterDesc': 'Join 3,000+ Bangladeshi founders getting practical automation & AI tips. No spam, unsubscribe anytime.',
+   424→    'footer.emailPlaceholder': 'Enter your email',
+   425→    'footer.subscribed': 'You\'re subscribed! Check your inbox to confirm.',
+   426→    'footer.aboutDesc': "Bangladesh's premier AI Sales Automation Agency. We help businesses automate marketing, sales and operations with Artificial Intelligence.",
+   427→    'footer.services': 'Services',
+   428→    'footer.company': 'Company',
+   429→    'footer.industries': 'Industries',
+   430→    'footer.privacyPolicy': 'Privacy Policy',
+   431→    'footer.termsOfService': 'Terms of Service',
+   432→    'footer.careers': 'Careers',
+   433→    'footer.apiDocs': 'API Docs',
+   434→    'footer.staff': 'Staff',
+   435→    'footer.madeIn': 'Made in',
+   436→    'footer.bangladesh': 'Bangladesh',
+   437→    'footer.allRights': 'All rights reserved.',
+   438→
+   439→    // Booking Modal
+   440→    'booking.title': 'Book Your Free Strategy Call',
+   441→    'booking.subtitle': 'Get a custom AI + automation roadmap for your business. 30 minutes, zero obligation.',
+   442→    'booking.fullName': 'Full name',
+   443→    'booking.phoneWhatsApp': 'Phone / WhatsApp',
+   444→    'booking.email': 'Email',
+   445→    'booking.company': 'Company',
+   446→    'booking.serviceInterested': 'Service interested in',
+   447→    'booking.selectService': 'Select a service',
+   448→    'booking.notSureYet': 'Not sure yet',
+   449→    'booking.preferredDate': 'Preferred date',
+   450→    'booking.pickDate': 'Pick a date',
+   451→    'booking.message': 'What would you like to automate?',
+   452→    'booking.tellAboutBusiness': "Tell us about your business and what you'd like to achieve...",
+   453→    'booking.confirmStrategyCall': 'Confirm Strategy Call',
+   454→    'booking.booking': 'Booking...',
+   455→    'booking.byBooking': 'By booking, you agree to be contacted by NextGen Digital Studio.',
+   456→    'booking.allSet': "You're all set!",
+   457→    'booking.requestReceived': "We've received your request. Our team will reach out within 2 hours to confirm your strategy call slot.",
+   458→    'booking.done': 'Done',
+   459→
+   460→    // AI Chat Widget
+   461→    'chat.assistantName': 'NextGen AI Assistant',
+   462→    'chat.online': '● Online · replies instantly',
+   463→    'chat.greeting': "Assalamu Alaikum! 👋 I'm the NextGen AI Assistant. I can answer questions about our AI automation services, pricing, and how we can grow your business. How can I help you today?",
+   464→    'chat.typePlaceholder': 'Type your message...',
+   465→    'chat.suggestions1': 'What services do you offer?',
+   466→    'chat.suggestions2': 'How much does it cost?',
+   467→    'chat.suggestions3': 'Can you automate WhatsApp?',
+   468→    'chat.suggestions4': 'I run a real estate business',
+   469→    'chat.bookCall': 'Book a free strategy call',
+   470→    'chat.poweredBy': 'Powered by NextGen AI ·',
+   471→    'chat.callUrgent': 'for urgent enquiries',
+   472→    'chat.clearChat': 'Clear chat history',
+   473→    'chat.closeChat': 'Close chat',
+   474→
+   475→    // Social Proof
+   476→    'socialProof.verified': 'Verified',
+   477→
+   478→    // Sticky Book Bar
+   479→    'sticky.readyToAutomate': 'Ready to automate your growth?',
+   480→    'sticky.freeCall': '30 min · No commitment',
+   481→    'sticky.bookNow': 'Book Now',
+   482→    'sticky.dismiss': 'Dismiss',
+   483→
+   484→    // AI Demo
+   485→    'aiDemo.eyebrow': 'See It In Action',
+   486→    'aiDemo.title1': 'Experience our AI',
+   487→    'aiDemo.title2': 'before you book',
+   488→    'aiDemo.subtitle': "Don't just take our word for it. Watch how our AI agents handle real customer conversations — in Bangla and English, 24/7.",
+   489→    'aiDemo.tryOnBusiness': 'Try it on my business',
+   490→
+   491→    // Client Logos
+   492→    'clientLogos.trustedBy': 'Trusted by 120+ leading businesses across Bangladesh',
+   493→
+   494→    // Scroll Progress / misc
+   495→    'lang.toggle': 'বাংলা',
+   496→
+   497→    // Common
+   498→    'common.perMonth': '/mo',
+   499→    'common.month': '/month',
+   500→    'common.popular': 'Popular',
+   501→    'common.backToTop': 'Scroll to top',
+   502→    'common.close': 'Close',
+   503→    'common.cancel': 'Cancel',
+   504→    'common.save': 'Save',
+   505→    'common.loading': 'Loading...',
+   506→  },
+   507→
+   508→  bn: {
+   509→    // Navigation
+   510→    'nav.about': 'আমাদের সম্পর্কে',
+   511→    'nav.services': 'সেবাসমূহ',
+   512→    'nav.industries': 'শিল্পখাত',
+   513→    'nav.caseStudies': 'কেস স্টাডি',
+   514→    'nav.pricing': 'প্রাইসিং',
+   515→    'nav.whyUs': 'কেন আমরা',
+   516→    'nav.blog': 'ব্লগ',
+   517→    'nav.contact': 'যোগাযোগ',
+   518→
+   519→    // CTAs
+   520→    'cta.bookCall': 'স্ট্র্যাটেজি কল বুক করুন',
+   521→    'cta.bookFreeCall': 'ফ্রি স্ট্র্যাটেজি কল বুক করুন',
+   522→    'cta.exploreServices': 'সেবাসমূহ দেখুন',
+   523→    'cta.startFreeAudit': 'ফ্রি অডিট শুরু করুন',
+   524→    'cta.getThisStack': 'এই স্ট্যাক নিন',
+   525→    'cta.startRiskFree': 'ঝুঁকিমুক্ত শুরু করুন',
+   526→    'cta.getMyRoadmap': 'আমার কাস্টম রোডম্যাপ নিন',
+   527→    'cta.buildThisForMe': 'আমার জন্য তৈরি করুন',
+   528→    'cta.tryOnMyBusiness': 'আমার ব্যবসায় চেষ্টা করুন',
+   529→    'cta.workWithOurTeam': 'আমাদের টিমের সাথে কাজ করুন',
+   530→    'cta.viewAllServices': 'সব দেখুন',
+   531→    'cta.viewAllIndustries': 'সব দেখুন',
+   532→    'cta.viewOutcomes': 'ফলাফল দেখুন',
+   533→    'cta.becomeOurNextSuccess': 'আমাদের পরবর্তী সাফল্যের গল্প হোন',
+   534→    'cta.getMyDetailedROI': 'বিস্তারিত ROI পান',
+   535→    'cta.getSimilarResults': 'আমার ব্যবসার জন্য একই ফলাফল পান',
+   536→    'cta.readFullCaseStudy': 'সম্পূর্ণ কেস স্টাডি পড়ুন',
+   537→    'cta.readArticle': 'আর্টিকেল পড়ুন',
+   538→    'cta.requestIntegration': 'ইন্টিগ্রেশন অনুরোধ করুন',
+   539→    'cta.buildThisIntegration': 'এই ইন্টিগ্রেশন তৈরি করুন',
+   540→    'cta.getFullGuide': 'সম্পূর্ণ গাইড পান',
+   541→    'cta.applyAs': 'আবেদন করুন',
+   542→    'cta.getDashboard': 'আপনার ড্যাশবোর্ড পান',
+   543→    'cta.bookNow': 'বুক করুন',
+   544→    'cta.orderNow': 'অর্ডার করুন',
+   545→    'cta.downloadNow': 'এখনই ডাউনলোড করুন',
+   546→    'cta.startFreeAuditBtn': 'ফ্রি অডিট শুরু করুন',
+   547→    'cta.emailMeMyReport': 'আমাকে রিপোর্ট ইমেইল করুন',
+   548→    'cta.confirmStrategyCall': 'স্ট্র্যাটেজি কল নিশ্চিত করুন',
+   549→    'cta.sendMessage': 'বার্তা পাঠান',
+   550→    'cta.subscribe': 'সাবস্ক্রাইব',
+   551→    'cta.done': 'সম্পন্ন',
+   552→
+   553→    // Hero
+   554→    'hero.badge': 'এআই সেলস অটোমেশন এজেন্সি · বাংলাদেশ',
+   555→    'hero.title1': 'আপনার ব্যবসাকে করুন',
+   556→    'hero.title2': 'এআই-চালিত সেলস মেশিন',
+   557→    'hero.subtitle': 'আমরা বাংলাদেশের ব্যবসাকে মার্কেটিং, সেলস, কাস্টমার কমিউনিকেশন ও অপারেশনস অটোমেট করতে সাহায্য করি কৃত্রিম বুদ্ধিমত্তা দিয়ে — যাতে আপনি যোগ্য লিড পান এবং ২৪/৭ কল বুক করতে পারেন, স্বয়ংক্রিয়ভাবে।',
+   558→    'hero.trustedBy': 'বাংলাদেশের ১২০+ শীর্ষ ব্যবসা আমাদের উপর আস্থা রাখে',
+   559→    'hero.trustedByText': 'বিশ্বস্ত',
+   560→    'hero.businesses': '১২০+ ব্যবসা',
+   561→    'hero.freeCall': '৩০ মিনিট ফ্রি কল',
+   562→    'hero.noCommitment': 'কোনো বাধ্যবাধকতা নেই',
+   563→    'hero.bilingual': 'বাংলা ও ইংরেজি',
+   564→
+   565→    // Problem
+   566→    'problem.eyebrow': 'সমস্যা',
+   567→    'problem.title1': 'পুরনো পদ্ধতিতে ব্যবসা চালানো',
+   568→    'problem.title2': 'ব্যয়বহুল',
+   569→    'problem.title3': 'ও ধীর',
+   570→    'problem.subtitle': 'আপনি ম্যানুয়াল কাজে ব্যস্ত থাকার সময় আপনার প্রতিযোগীরা এআই ব্যবহার করে তাৎক্ষণিক সাড়া দিচ্ছে, সবকিছু অটোমেট করছে এবং আপনার কাস্টমারদের জয় করছে।',
+   571→    'problem.warning': 'প্রতিদিন আপনি অপেক্ষা করছেন, প্রতিদিন আপনি যোগ্য লিড ও রাজস্ব হারাচ্ছেন এমন প্রতিযোগীদের কাছে যারা ইতিমধ্যে অটোমেট করেছে।',
+   572→
+   573→    // Solution
+   574→    'solution.eyebrow': 'আমাদের সমাধান',
+   575→    'solution.title1': 'একটি এআই-চালিত সিস্টেম যা',
+   576→    'solution.title2': 'আপনার বৃদ্ধি চালায়',
+   577→    'solution.title3': 'অটোপাইলটে',
+   578→    'solution.subtitle': 'আমরা আপনার সম্পূর্ণ এআই + অটোমেশন স্ট্যাক ডিজাইন, বিল্ড ও ম্যানেজ করি — প্রথম ক্লিক থেকে ক্লোজড ডিল পর্যন্ত — যাতে আপনি হেডকাউন্ট বাড়ানো ছাড়াই স্কেল করতে পারেন।',
+   579→    'solution.capabilitiesTitle': 'বৃদ্ধি অটোমেট করতে যা যা দরকার — এক জায়গায়',
+   580→    'solution.capabilitiesSubtitle': 'একাধিক ভেন্ডর বা টুল নিয়ে ব্যস্ত না হয়ে। আমরা আপনার ব্যবসার লক্ষ্য অনুযায়ী একটি সম্পূর্ণ, ইন্টিগ্রেটেড সিস্টেম ডেলিভারি করি।',
+   581→
+   582→    // Services
+   583→    'services.eyebrow': 'আমরা যা করি',
+   584→    'services.title1': 'এআই ও অটোমেশন সেবা যা',
+   585→    'services.title2': 'রাজস্ব বাড়ায়',
+   586→    'services.subtitle': 'বারোটি বিশেষায়িত সেবা — লিড জেনারেশন থেকে ডিল ক্লোজ এবং অপারেশনস অটোমেশন পর্যন্ত সম্পূর্ণ কাস্টমার জার্নি কভার করে।',
+   587→
+   588→    // Industries
+   589→    'industries.eyebrow': 'যেসব শিল্পখাতে আমরা কাজ করি',
+   590→    'industries.title1': 'বাংলাদেশের যেসব ব্যবসার জন্য',
+   591→    'industries.title2': 'আমরা তৈরি',
+   592→    'industries.subtitle': 'ছোট ব্যবসা থেকে কর্পোরেট — আমরা আপনার ইন্ডাস্ট্রির সঠিক ওয়ার্কফ্লো ও কাস্টমার প্রত্যাশা অনুযায়ী এআই + অটোমেশন তৈরি করি।',
+   593→    'industries.viewOutcomes': 'ফলাফল দেখুন',
+   594→
+   595→    // How It Works
+   596→    'howItWorks.eyebrow': 'কিভাবে কাজ করে',
+   597→    'howItWorks.title1': 'প্রথম কল থেকে',
+   598→    'howItWorks.title2': 'অটোমেটেড গ্রোথ',
+   599→    'howItWorks.title3': '৪টি ধাপে',
+   600→    'howItWorks.subtitle': 'একটি প্রমাণিত, স্বচ্ছ প্রক্রিয়া যা আপনার এআই সিস্টেম সপ্তাহের মধ্যে লাইভ করে — মাস নয়।',
+   601→
+   602→    // By The Numbers
+   603→    'byNumbers.eyebrow': 'সংখ্যায়',
+   604→    'byNumbers.title1': 'ফলাফল যা প্রতিশ্রুতির চেয়ে',
+   605→    'byNumbers.title2': 'বেশি কথা বলে',
+   606→    'byNumbers.subtitle': 'বাংলাদেশের বাস্তব ব্যবসার বাস্তব ফলাফল — গত দুই বছরে এআই দিয়ে অটোমেট করা।',
+   607→
+   608→    // ROI Calculator
+   609→    'roi.eyebrow': 'ROI ক্যালকুলেটর',
+   610→    'roi.title1': 'আপনার সম্ভাব্য',
+   611→    'roi.title2': 'ROI ১০ সেকেন্ডে দেখুন',
+   612→    'roi.subtitle': 'স্লাইডার সমন্বয় করে অনুমান করুন এআই অটোমেশন আপনার ব্যবসার জন্য কতটা অতিরিক্ত রাজস্ব ও সময় তৈরি করতে পারে।',
+   613→    'roi.businessSize': '১. আপনার ব্যবসার ধরন কোনটি?',
+   614→    'roi.leadResponse': 'লিড রেসপন্স উন্নতি',
+   615→    'roi.leadResponseHint': 'দ্রুত এআই রেসপন্স সাধারণত ২০-২০০% বেশি লিড কনভার্ট করে',
+   616→    'roi.hoursSaved': 'সাপ্তাহিক সাশ্রয়িত সময়',
+   617→    'roi.hoursSavedHint': 'ম্যানুয়াল ফলো-আপ, ডেটা এন্ট্রি ও সাপোর্ট থেকে মুক্ত সময়',
+   618→    'roi.disclaimer': 'বাংলাদেশে আমাদের ১২০+ ক্লায়েন্ট ডিপ্লয়মেন্ট থেকে ইন্ডাস্ট্রি বেঞ্চমার্কের উপর ভিত্তি করে অনুমান। প্রকৃত ফলাফল ভিন্ন হতে পারে।',
+   619→    'roi.yourProjected': 'আপনার প্রজেক্টেড বার্ষিক প্রভাব',
+   620→    'roi.totalValue': 'বার্ষিক মোট মূল্য',
+   621→    'roi.extraLeads': 'অতিরিক্ত যোগ্য লিড / মাস',
+   622→    'roi.revenueUplift': 'রাজস্ব বৃদ্ধি / বছর',
+   623→    'roi.hoursSavedYear': 'সাশ্রয়িত সময় / বছর',
+   624→    'roi.labourSaved': 'শ্রম খরচ সাশ্রয়',
+   625→    'roi.roiMultiple': 'আনুমানিক ROI মাল্টিপল',
+   626→    'roi.getDetailedROI': 'বিস্তারিত ROI ব্রেকডাউন পান',
+   627→
+   628→    // AI Audit
+   629→    'audit.eyebrow': 'ফ্রি এআই অডিট টুল',
+   630→    'audit.title1': 'কতটা রাজস্ব',
+   631→    'audit.title2': 'ফসকে যাচ্ছে?',
+   632→    'audit.subtitle': '৪টি দ্রুত প্রশ্নের উত্তর দিন এবং তাৎক্ষণিক এআই-রেডিনেস স্কোর পান সাথে আপনি কোথায় লিড হারাচ্ছেন তার পার্সোনালাইজড রিপোর্ট।',
+   633→    'audit.getScore': 'ফ্রি এআই-রেডিনেস স্কোর পান',
+   634→    'audit.takesSeconds': '৬০ সেকেন্ড লাগে। স্কোর দেখতে সাইনআপ লাগে না। এআই কোথায় আপনার রাজস্ব বাড়াতে পারে তার পার্সোনালাইজড রিপোর্ট পান।',
+   635→    'audit.4questions': '৪টি প্রশ্ন',
+   636→    'audit.instantScore': 'তাৎক্ষণিক স্কোর',
+   637→    'audit.freeReport': 'ফ্রি রিপোর্ট',
+   638→    'audit.startFreeAudit': 'ফ্রি অডিট শুরু করুন',
+   639→    'audit.yourScore': 'আপনার এআই-রেডিনেস স্কোর',
+   640→    'audit.opportunities': 'আপনার জন্য সবচেয়ে বড় সুযোগ',
+   641→    'audit.getFullReport': 'সম্পূর্ণ রিপোর্ট পান',
+   642→    'audit.bookCallInstead': 'এর পরিবর্তে স্ট্র্যাটেজি কল বুক করুন',
+   643→    'audit.reportOnItsWay': 'আপনার রিপোর্ট পাঠানো হচ্ছে!',
+   644→    'audit.checkInbox': 'পরবর্তী কয়েক মিনিটে আপনার ইনবক্স চেক করুন।',
+   645→    'audit.fastTrack': 'ফলাফল দ্রুত পেতে চান?',
+   646→    'audit.bookStrategyCall': 'স্ট্র্যাটেজি কল বুক করুন',
+   647→    'audit.getReport': 'সম্পূর্ণ অডিট রিপোর্ট পান',
+   648→    'audit.emailReport': 'আপনার ইমেইলে স্কোরের বিস্তারিত ব্রেকডাউন ও ৩টি পার্সোনালাইজড এআই অটোমেশন সুপারিশ পাঠাব।',
+   649→    'audit.fullName': 'পূর্ণ নাম',
+   650→    'audit.phone': 'ফোন / হোয়াটসঅ্যাপ',
+   651→    'audit.email': 'ইমেইল',
+   652→    'audit.company': 'কোম্পানি',
+   653→    'audit.yourIndustry': 'আপনার ইন্ডাস্ট্রি',
+   654→    'audit.emailMeReport': 'রিপোর্ট ইমেইল করুন',
+   655→    'audit.noSpam': 'বুকিং করে আপনি NextGen Digital Studio এর সাথে যোগাযোগে সম্মত হচ্ছেন।',
+   656→
+   657→    // Configurator
+   658→    'configurator.eyebrow': 'আপনার স্ট্যাক তৈরি করুন',
+   659→    'configurator.title1': 'কাস্টম',
+   660→    'configurator.title2': 'এআই অটোমেশন স্ট্যাক ডিজাইন করুন',
+   661→    'configurator.subtitle': 'প্রয়োজনীয় সেবা নির্বাচন করুন এবং মাসিক মূল্য লাইভ দেখুন। ২+ সেবা বান্ডলে স্বয়ংক্রিয় ছাড় — কোনো লুকানো ফি নেই।',
+   662→    'configurator.yourStack': 'আপনার স্ট্যাক',
+   663→    'configurator.reset': 'রিসেট',
+   664→    'configurator.monthlyTotal': 'মাসিক মোট',
+   665→    'configurator.subtotal': 'সাবটোটাল',
+   666→    'configurator.youSave': 'আপনি বাঁচান',
+   667→    'configurator.getThisStack': 'এই স্ট্যাক নিন',
+   668→    'configurator.bundleDiscount': 'বান্ডল ছাড় আনলক হয়েছে!',
+   669→    'configurator.freeCall': 'ফ্রি স্ট্র্যাটেজি কল · কোনো বাধ্যবাধকতা নেই · যেকোনো সময় বাতিল করুন',
+   670→    'configurator.selectServices': 'কাস্টম স্ট্যাক তৈরি করতে সেবা নির্বাচন করুন →',
+   671→
+   672→    // Workflow Builder
+   673→    'workflow.eyebrow': 'ওয়ার্কফ্লো বিল্ডার',
+   674→    'workflow.title1': 'আপনার',
+   675→    'workflow.title2': 'এআই সেলস ফানেল ভিজ্যুয়ালাইজ করুন',
+   676→    'workflow.subtitle': 'ধাপগুলো পুনর্বিন্যাস করুন, নতুন যোগ করুন, এবং ফ্লো রান করে দেখুন কিভাবে এআই-চালিত ফানেল ভিজিটরকে বুকড কলে পরিণত করে — স্বয়ংক্রিয়ভাবে।',
+   677→    'workflow.yourFunnel': 'আপনার ফানেল',
+   678→    'workflow.steps': 'ধাপ',
+   679→    'workflow.reset': 'রিসেট',
+   680→    'workflow.runFlow': 'ফ্লো রান করুন',
+   681→    'workflow.running': 'চলছে...',
+   682→    'workflow.addStep': 'ধাপ যোগ করুন',
+   683→    'workflow.available': 'উপলব্ধ',
+   684→    'workflow.emptyFunnel': 'আপনার ফানেল খালি। লাইব্রেরি থেকে ধাপ যোগ করুন →',
+   685→    'workflow.addSteps': 'ধাপ যোগ করুন',
+   686→    'workflow.funnelProjection': 'ফানেল প্রজেকশন',
+   687→    'workflow.automationSteps': 'অটোমেশন ধাপ',
+   688→    'workflow.alwaysRunning': 'সবসময় চলমান',
+   689→    'workflow.leadResponse': 'লিড রেসপন্স',
+   690→    'workflow.estConversion': 'আনুমানিক কনভার্সন বৃদ্ধি',
+   691→    'workflow.howThisWorks': 'এই ফানেল কিভাবে কাজ করে',
+   692→    'workflow.buildForMe': 'আমার জন্য তৈরি করুন',
+   693→    'workflow.step1': 'একজন ভিজিটর আপনার সাইটে আসে',
+   694→    'workflow.step2': 'এআই তাৎক্ষণিক বাংলা/ইংরেজিতে সাড়া দেয়',
+   695→    'workflow.step3': 'লিড স্বয়ংক্রিয়ভাবে যোগ্য ও ট্যাগড হয়',
+   696→    'workflow.step4': 'কল বুক না হওয়া পর্যন্ত ফলো-আপ চলে',
+   697→
+   698→    // Testimonials
+   699→    'testimonials.eyebrow': 'টেস্টিমোনিয়াল',
+   700→    'testimonials.title1': 'বাংলাদেশের',
+   701→    'testimonials.title2': 'ব্যবসাগুলোর ভালোবাসা পেয়েছি',
+   702→    'testimonials.subtitle': 'আমাদের কথা নয় — শুনুন আমাদের ক্লায়েন্টরা কী বলছেন NextGen Digital Studio এর সাথে কাজ করার অভিজ্ঞতা নিয়ে।',
+   703→
+   704→    // Video Testimonials
+   705→    'videoTest.eyebrow': 'ভিডিও গল্প',
+   706→    'videoTest.title1': 'সরাসরি শুনুন',
+   707→    'videoTest.title2': 'আমাদের ক্লায়েন্টদের কাছ থেকে',
+   708→    'videoTest.subtitle': 'বাংলাদেশের বাস্তব ব্যবসায়ীরা শেয়ার করছেন কিভাবে NextGen Digital Studio এআই অটোমেশন দিয়ে তাদের বৃদ্ধি রূপান্তর করেছে।',
+   709→    'videoTest.becomeNext': 'আমাদের পরবর্তী সাফল্যের গল্প হোন',
+   710→
+   711→    // Pricing
+   712→    'pricing.eyebrow': 'প্রাইসিং',
+   713→    'pricing.title1': 'সহজ, স্বচ্ছ',
+   714→    'pricing.title2': 'মাসিক প্ল্যান',
+   715→    'pricing.subtitle': 'কোনো লুকানো ফি নেই, কোনো দীর্ঘ চুক্তি নেই। প্ল্যান বাছুন, আমরা সিস্টেম তৈরি করি, এবং আপনি শুধু ততক্ষণ পর্যন্ত পরিশোধ করেন যতক্ষণ এটি ROI তৈরি করে।',
+   716→    'pricing.mostPopular': 'সবচেয়ে জনপ্রিয়',
+   717→    'pricing.needCustom': 'কাস্টম কিছু দরকার?',
+   718→
+   719→    // Pricing FAQ
+   720→    'pricingFaq.eyebrow': 'প্রাইসিং প্রশ্ন',
+   721→    'pricingFaq.title1': 'প্রাইসিং সম্পর্কে যা যা',
+   722→    'pricingFaq.title2': 'জানতে চান',
+   723→    'pricingFaq.subtitle': 'এখনও প্রশ্ন আছে? ফ্রি স্ট্র্যাটেজি কল বুক করুন, আমরা সব উত্তর দেব।',
+   724→    'pricingFaq.stillHaveQuestions': 'এখনও প্রশ্ন আছে? আমাদের সাথে কথা বলুন',
+   725→
+   726→    // Guarantees
+   727→    'guarantees.eyebrow': 'আমাদের প্রতিশ্রুতি',
+   728→
+   729→    // Comparison
+   730→    'comparison.eyebrow': 'কেন আমরা আলাদা',
+   731→    'comparison.title1': 'NextGen বনাম',
+   732→    'comparison.title2': 'অন্যরা',
+   733→    'comparison.subtitle': 'বেশিরভাগ এজেন্সি ঘণ্টা বিক্রি করে। আমরা অটোমেটেড ফলাফল বিক্রি করি। আমাদের সাথে কাজ করা কিভাবে অন্যদের তুলনায় আলাদা, তা এখানে।',
+   734→    'comparison.feature': 'ফিচার',
+   735→    'comparison.nextgen': 'NextGen',
+   736→    'comparison.nextgenSub': 'এআই অটোমেশন এজেন্সি',
+   737→    'comparison.others': 'সাধারণ এজেন্সি',
+   738→    'comparison.othersSub': 'ও ফ্রিল্যান্সার',
+   739→    'comparison.roiPromise': '৩০-দিনের ROI প্রতিশ্রুতি',
+   740→    'comparison.roiDesc': 'প্রথম মাসে যোগ্য লিড দেখুন — নাহলে আমরা ফ্রিতে কাজ চালিয়ে যাব।',
+   741→    'comparison.startRiskFree': 'ঝুঁকিমুক্ত শুরু করুন',
+   742→
+   743→    // Case Studies
+   744→    'caseStudies.eyebrow': 'কেস স্টাডি',
+   745→    'caseStudies.title1': 'বাস্তব ব্যবসা।',
+   746→    'caseStudies.title2': 'বাস্তব ফলাফল।',
+   747→    'caseStudies.subtitle': 'দেখুন বাংলাদেশের কোম্পানিগুলো কিভাবে আমাদের এআই + অটোমেশন সিস্টেম দিয়ে বেশি লিড তৈরি, খরচ কমাএবং স্কেল করছে।',
+   748→
+   749→    // Awards
+   750→    'awards.eyebrow': 'পুরস্কার ও স্বীকৃতি',
+   751→    'awards.title1': 'ফলাফল দেওয়ার জন্য',
+   752→    'awards.title2': 'স্বীকৃত',
+   753→    'awards.subtitle': 'বাংলাদেশের টেক ও বিজনেস কমিউনিটি আমাদের স্বীকৃতি দিয়েছে — এবং আমরা যেসব প্ল্যাটফর্মে কাজ করি সেগুলো আমাদের সার্টিফাই করেছে।',
+   754→    'awards.certifiedPartners': 'সার্টিফাইড ও অনুমোদিত পার্টনার',
+   755→
+   756→    // Team
+   757→    'team.eyebrow': 'আমাদের গল্প',
+   758→    'team.title1': 'বাংলাদেশের এআই ভবিষ্যৎ',
+   759→    'team.title2': 'তৈরি করছে যে টিম',
+   760→    'team.subtitle': 'আমরা যশোরভিত্তিক এআই ইঞ্জিনিয়ার, গ্রোথ স্পেশালিস্ট ও অটোমেশন আর্কিটেক্টের একটি টিম — একটি জিনিস নিয়ে আগ্রহী: আপনার রাজস্ব।',
+   761→    'team.mission': 'মিশন',
+   762→    'team.vision': 'ভিশন',
+   763→    'team.values': 'ভ্যালুস',
+   764→    'team.meetPeople': 'এআই-এর পেছনের মানুষদের সাথে পরিচিত হোন',
+   765→    'team.teamDesc': 'একটি ফোকাসড টিম — কোনো ব্লোট নেই, কোনো হ্যান্ডঅফ নেই, শুধু স্পেশালিস্ট যারা ডেলিভারি করে।',
+   766→    'team.workWithUs': 'আমাদের টিমের সাথে কাজ করুন',
+   767→
+   768→    // Partner Program
+   769→    'partner.eyebrow': 'পার্টনার প্রোগ্রাম',
+   770→    'partner.title1': 'রেফার করুন',
+   771→    'partner.title2': 'আয় করুন',
+   772→    'partner.subtitle': 'বাংলাদেশের ব্যবসাগুলোকে NextGen Digital Studio এ রেফার করে ৪০+ এজেন্সি ও কনসালট্যান্ট রিকারিং কমিশন আয় করছে। যোগ দিন।',
+   773→    'partner.commission': 'কমিশন',
+   774→    'partner.trackEarnings': 'ইতিমধ্যে রেফার করছেন? আপনার আয় রিয়েল-টাইমে ট্র্যাক করুন।',
+   775→    'partner.getDashboard': 'আপনার ড্যাশবোর্ড পান',
+   776→
+   777→    // Tech Stack
+   778→    'techStack.eyebrow': 'আমাদের টেক স্ট্যাক',
+   779→    'techStack.title1': 'বিশ্বের সেরা',
+   780→    'techStack.title2': 'এআই ও অটোমেশন টুল দ্বারা চালিত',
+   781→    'techStack.subtitle': 'আমরা এন্টারপ্রাইজ-গ্রেড প্ল্যাটফর্ম ইন্টিগ্রেট করি যা নির্ভরযোগ্য, স্কেলেবল এবং ভবিষ্যত-প্রস্তুত সিস্টেম তৈরি করে।',
+   782→
+   783→    // Knowledge Base
+   784→    'kb.eyebrow': 'নলেজ বেস',
+   785→    'kb.title1': 'শিখুন কিভাবে',
+   786→    'kb.title2': 'আপনার ব্যবসা অটোমেট করবেন',
+   787→    'kb.subtitle': 'এআই, অটোমেশন ও গ্রোথের উপর বাস্তবমুখী গাইড, টিউটোরিয়াল ও প্লেবুক — বাংলাদেশের ব্যবসার জন্য লেখা।',
+   788→    'kb.searchPlaceholder': 'আর্টিকেল খুঁজুন... (যেমন WhatsApp, CRM, লিড)',
+   789→    'kb.read': 'পড়ুন',
+   790→    'kb.readTime': 'পড়ুন',
+   791→    'kb.bookCall': 'পার্সোনালাইজড অটোমেশন প্ল্যান চান?',
+   792→    'kb.bookCallLink': 'ফ্রি স্ট্র্যাটেজি কল বুক করুন',
+   793→
+   794→    // Free Tools
+   795→    'freeTools.eyebrow': 'ফ্রি টুল ও রিসোর্স',
+   796→    'freeTools.title1': 'ফ্রি টুল ডাউনলোড করুন',
+   797→    'freeTools.title2': 'স্মার্ট অটোমেট করতে',
+   798→    'freeTools.subtitle': 'টেমপ্লেট, চেকলিস্ট, ইবুক ও ক্যালকুলেটর — ১২০+ বাংলাদেশি ব্যবসার সাথে পরীক্ষিত। ফ্রি ডাউনলোড।',
+   799→    'freeTools.download': 'ডাউনলোড',
+   800→    'freeTools.downloadFree': 'ফ্রি ডাউনলোড করুন',
+   801→    'freeTools.enterDetails': 'আপনার তথ্য দিন — আমরা ফাইল + অটোমেশন টিপস ইমেইল করব।',
+   802→    'freeTools.fullName': 'পূর্ণ নাম',
+   803→    'freeTools.email': 'ইমেইল',
+   804→    'freeTools.whatsapp': 'হোয়াটসঅ্যাপ (ঐচ্ছিক)',
+   805→    'freeTools.downloadNow': 'এখনই ডাউনলোড করুন',
+   806→    'freeTools.noSpam': 'কোনো স্প্যাম নেই। যেকোনো সময় আনসাবস্ক্রাইব করুন। আপনার প্রাইভেসি আমরা সম্মান করি।',
+   807→    'freeTools.downloadUnlocked': 'ডাউনলোড আনলক হয়েছে!',
+   808→    'freeTools.checkInbox': 'আপনার ইনবক্সে পাঠানো হয়েছে।',
+   809→
+   810→    // System Toolkit
+   811→    'toolkit.eyebrow': 'আমাদের প্রোডাক্ট',
+   812→    'toolkit.title1': 'System Toolkit —',
+   813→    'toolkit.title2': '১১৫+ টুল এক প্যাকেজে',
+   814→    'toolkit.subtitle': 'আপনার সিস্টেম অপ্টিমাইজ, ক্লিন, রিপেয়ার ও সিকিউর করুন। ৫০০০+ ইউজার বিশ্বস্ত। এখন ৫০% ছাড়ে পান।',
+   815→
+   816→    // Integrations
+   817→    'integrations.eyebrow': 'ইন্টিগ্রেশন ডিরেক্টরি',
+   818→    'integrations.title1': 'আমরা সংযুক্ত',
+   819→    'integrations.title2': '২৭+ টুলের সাথে',
+   820→    'integrations.title3': 'যা আপনি ব্যবহার করেন',
+   821→    'integrations.subtitle': 'আপনার এআই অটোমেশন স্ট্যাক তার ইন্টিগ্রেশনের মতোই ভালো। আমরা আপনার ব্যবসা যেসব প্ল্যাটফর্মে চলে সেগুলোর সাথে সংযুক্ত হই — নিরবচ্ছিন্নভাবে।',
+   822→    'integrations.searchPlaceholder': '২৭+ ইন্টিগ্রেশন খুঁজুন...',
+   823→    'integrations.dontSeeTool': 'আপনার টুল দেখছেন না?',
+   824→    'integrations.dontSeeDesc': 'যেকোনো প্ল্যাটফর্মের জন্য কাস্টম ইন্টিগ্রেশন তৈরি করি যার API আছে।',
+   825→    'integrations.requestIntegration': 'ইন্টিগ্রেশন অনুরোধ করুন',
+   826→    'integrations.buildIntegration': 'এই ইন্টিগ্রেশন তৈরি করুন',
+   827→    'integrations.noResults': 'কোনো ইন্টিগ্রেশন পাওয়া যায়নি। আমরা এখনও আপনার জন্য কাস্টম ইন্টিগ্রেশন তৈরি করতে পারি।',
+   828→    'integrations.certifiedTo': 'আমাদের টিম সার্টিফাইড',
+   829→
+   830→    // Careers
+   831→    'careers.eyebrow': 'ক্যারিয়ার',
+   832→    'careers.title1': 'বাংলাদেশের এআই ভবিষ্যৎ',
+   833→    'careers.title2': 'তৈরি করুন',
+   834→    'careers.subtitle': 'আমরা তীক্ষ্ণ, আবেগী মানুষ খুঁজছি যারা বাংলাদেশের ব্যবসা বাড়াতে বাস্তব এআই প্রোডাক্ট তৈরি করতে চান। যোগ দিন।',
+   835→    'careers.openPositions': 'খোলা পদসমূহ',
+   836→    'careers.dontSeeRole': 'আপনার পদ দেখছেন না?',
+   837→    'careers.sendGeneral': 'সাধারণ আবেদন পাঠান',
+   838→    'careers.submitApplication': 'আবেদন জমা দিন',
+   839→    'careers.applicationSent': 'আবেদন পাঠানো হয়েছে!',
+   840→    'careers.willBeInTouch': '৫ কর্মদিবসের মধ্যে আমরা যোগাযোগ করব।',
+   841→    'careers.whyGreatFit': 'আপনি কেন উপযুক্ত?',
+   842→    'careers.portfolio': 'পোর্টফোলিও / লিংকডইন / গিটহাব',
+   843→    'careers.fullName': 'পূর্ণ নাম',
+   844→    'careers.email': 'ইমেইল',
+   845→    'careers.phone': 'ফোন',
+   846→    'careers.noAIScreening': 'প্রতিটি আবেদন আমরা ব্যক্তিগতভাবে পর্যালোচনা করি। কোনো এআই স্ক্রিনিং নেই।',
+   847→
+   848→    // Status Page
+   849→    'status.eyebrow': 'সিস্টেম স্ট্যাটাস',
+   850→    'status.title1': 'সব সিস্টেম',
+   851→    'status.title2': 'চালু',
+   852→    'status.subtitle': 'আমরা আমাদের প্ল্যাটফর্ম ২৪/৭ মনিটর করি। এখানে প্রতিটি সেবার রিয়েল-টাইম স্ট্যাটাস।',
+   853→    'status.allOperational': 'সব সিস্টেম চালু',
+   854→    'status.updatedJustNow': 'এইমাত্র আপডেট হয়েছে · গত ৩০ দিনে ৯৯.৯৬% আপটাইম',
+   855→    'status.uptime30day': '৩০-দিনের আপটাইম',
+   856→    'status.operational': 'চালু',
+   857→    'status.recentIncidents': 'সাম্প্রতিক ঘটনা',
+   858→    'status.haveIssue': 'সমস্যা আছে?',
+   859→
+   860→    // Blog
+   861→    'blog.eyebrow': 'ইনসাইটস',
+   862→    'blog.title1': 'NextGen',
+   863→    'blog.title2': 'ব্লগ থেকে',
+   864→    'blog.subtitle': 'বাংলাদেশের ব্যবসার জন্য এআই, অটোমেশন ও গ্রোথের উপর বাস্তবমুখী গাইড।',
+   865→    'blog.subscribeUpdates': 'আপডেট সাবস্ক্রাইব করুন',
+   866→    'blog.readArticle': 'আর্টিকেল পড়ুন',
+   867→
+   868→    // FAQ
+   869→    'faq.eyebrow': 'প্রশ্নোত্তর',
+   870→    'faq.title1': 'প্রশ্ন আছে?',
+   871→    'faq.title2': 'উত্তর আছে।',
+   872→    'faq.subtitle': 'NextGen Digital Studio এর সাথে কাজ করা সম্পর্কে যা যা জানতে হবে। এখনও জিজ্ঞাসা আছে? ফ্রি স্ট্র্যাটেজি কল বুক করুন, আমরা সব উত্তর দেব।',
+   873→    'faq.stillQuestions': 'এখনও প্রশ্ন আছে?',
+   874→    'faq.stillQuestionsDesc': 'ফ্রি ৩০-মিনিট কনসালটেশন পান।',
+   875→    'faq.askExpert': 'এক্সপার্টকে জিজ্ঞাসা করুন',
+   876→
+   877→    // CTA Band
+   878→    'ctaBand.title': 'আপনার গ্রোথ অটোমেট করতে প্রস্তুত?',
+   879→    'ctaBand.subtitle': 'ফ্রি ৩০-মিনিট স্ট্র্যাটেজি কল বুক করুন। আমরা আপনার ব্যবসা অডিট করে কাস্টম এআই + অটোমেশন রোডম্যাপ তৈরি করব — কোনো বাধ্যবাধকতা নেই।',
+   880→    'ctaBand.freeCall': '৩০ মিনিট ফ্রি কল',
+   881→    'ctaBand.noCommitment': 'কোনো বাধ্যবাধকতা নেই',
+   882→    'ctaBand.repliesWithin': '২ ঘন্টার মধ্যে উত্তর · যশোর, বাংলাদেশ',
+   883→
+   884→    // Contact
+   885→    'contact.eyebrow': 'যোগাযোগ',
+   886→    'contact.title1': 'চলুন তৈরি করি আপনার',
+   887→    'contact.title2': 'এআই গ্রোথ ইঞ্জিন',
+   888→    'contact.subtitle': 'বার্তা পাঠান বা কল বুক করুন। কর্মঘণ্টায় আমরা সাধারণত ২ ঘন্টার মধ্যে উত্তর দেই।',
+   889→    'contact.fullName': 'পূর্ণ নাম',
+   890→    'contact.phone': 'ফোন',
+   891→    'contact.email': 'ইমেইল',
+   892→    'contact.company': 'কোম্পানি',
+   893→    'contact.serviceInterested': 'কোন সেবায় আগ্রহী',
+   894→    'contact.selectService': 'সেবা নির্বাচন করুন',
+   895→    'contact.message': 'বার্তা',
+   896→    'contact.tellAboutProject': 'আপনার প্রজেক্ট ও লক্ষ্য সম্পর্কে বলুন...',
+   897→    'contact.sendMessage': 'বার্তা পাঠান',
+   898→    'contact.sending': 'পাঠানো হচ্ছে...',
+   899→    'contact.messageSent': 'বার্তা পাঠানো হয়েছে!',
+   900→    'contact.sentDesc': 'যোগাযোগের জন্য ধন্যবাদ। আমাদের টিম ২৪ ঘন্টার মধ্যে উত্তর দেবে।',
+   901→    'contact.sendAnother': 'আরেকটি বার্তা পাঠান',
+   902→    'contact.emailLabel': 'ইমেইল',
+   903→    'contact.phoneLabel': 'ফোন',
+   904→    'contact.whatsappLabel': 'হোয়াটসঅ্যাপ',
+   905→    'contact.whatsappValue': 'তাৎক্ষণিক চ্যাট করুন',
+   906→    'contact.officeLabel': 'অফিস',
+   907→    'contact.followWork': 'আমাদের কাজ ফলো করুন',
+   908→
+   909→    // Footer
+   910→    'footer.newsletterTitle': 'প্রতি সপ্তাহে এআই গ্রোথ ইনসাইটস পান',
+   911→    'footer.newsletterDesc': '৩,০০০+ বাংলাদেশি প্রতিষ্ঠাতার সাথে যোগ দিন যারা বাস্তবমুখী অটোমেশন ও এআই টিপস পান। কোনো স্প্যাম নেই।',
+   912→    'footer.emailPlaceholder': 'ইমেইল লিখুন',
+   913→    'footer.subscribed': 'সাবস্ক্রাইব হয়েছে! কনফার্মেশনের জন্য ইনবক্স চেক করুন।',
+   914→    'footer.aboutDesc': 'বাংলাদেশের প্রিমিয়াম এআই সেলস অটোমেশন এজেন্সি। আমরা ব্যবসাকে মার্কেটিং, সেলস ও অপারেশনস অটোমেট করতে সাহায্য করি কৃত্রিম বুদ্ধিমত্তা দিয়ে।',
+   915→    'footer.services': 'সেবাসমূহ',
+   916→    'footer.company': 'কোম্পানি',
+   917→    'footer.industries': 'শিল্পখাত',
+   918→    'footer.privacyPolicy': 'প্রাইভেসি পলিসি',
+   919→    'footer.termsOfService': 'সেবার শর্তাবলী',
+   920→    'footer.careers': 'ক্যারিয়ার',
+   921→    'footer.apiDocs': 'API ডকস',
+   922→    'footer.staff': 'স্টাফ',
+   923→    'footer.madeIn': 'তৈরি',
+   924→    'footer.bangladesh': 'বাংলাদেশে',
+   925→    'footer.allRights': 'সর্বস্বত্ব সংরক্ষিত।',
+   926→
+   927→    // Booking Modal
+   928→    'booking.title': 'ফ্রি স্ট্র্যাটেজি কল বুক করুন',
+   929→    'booking.subtitle': 'আপনার ব্যবসার জন্য কাস্টম এআই + অটোমেশন রোডম্যাপ পান। ৩০ মিনিট, কোনো বাধ্যবাধকতা নেই।',
+   930→    'booking.fullName': 'পূর্ণ নাম',
+   931→    'booking.phoneWhatsApp': 'ফোন / হোয়াটসঅ্যাপ',
+   932→    'booking.email': 'ইমেইল',
+   933→    'booking.company': 'কোম্পানি',
+   934→    'booking.serviceInterested': 'কোন সেবায় আগ্রহী',
+   935→    'booking.selectService': 'সেবা নির্বাচন করুন',
+   936→    'booking.notSureYet': 'এখনও নিশ্চিত নই',
+   937→    'booking.preferredDate': 'পছন্দের তারিখ',
+   938→    'booking.pickDate': 'তারিখ নির্বাচন করুন',
+   939→    'booking.message': 'আপনি কী অটোমেট করতে চান?',
+   940→    'booking.tellAboutBusiness': 'আপনার ব্যবসা ও লক্ষ্য সম্পর্কে বলুন...',
+   941→    'booking.confirmStrategyCall': 'স্ট্র্যাটেজি কল নিশ্চিত করুন',
+   942→    'booking.booking': 'বুক হচ্ছে...',
+   943→    'booking.byBooking': 'বুকিং করে আপনি NextGen Digital Studio এর সাথে যোগাযোগে সম্মত হচ্ছেন।',
+   944→    'booking.allSet': 'সব প্রস্তুত!',
+   945→    'booking.requestReceived': 'আপনার অনুরোধ পেয়েছি। আমাদের টিম ২ ঘন্টার মধ্যে আপনার স্ট্র্যাটেজি কল স্লট নিশ্চিত করতে যোগাযোগ করবে।',
+   946→    'booking.done': 'সম্পন্ন',
+   947→
+   948→    // AI Chat Widget
+   949→    'chat.assistantName': 'NextGen AI অ্যাসিস্ট্যান্ট',
+   950→    'chat.online': '● অনলাইন · তাৎক্ষণিক উত্তর',
+   951→    'chat.greeting': "আসসালামু আলাইকুম! 👋 আমি NextGen AI অ্যাসিস্ট্যান্ট। আমাদের এআই অটোমেশন সেবা, প্রাইসিং এবং কিভাবে আমরা আপনার ব্যবসা বাড়াতে পারি তা নিয়ে প্রশ্নের উত্তর দিতে পারি। কিভাবে সাহায্য করতে পারি?",
+   952→    'chat.typePlaceholder': 'বার্তা লিখুন...',
+   953→    'chat.suggestions1': 'আপনাদের সেবাসমূহ কী কী?',
+   954→    'chat.suggestions2': 'কত খরচ?',
+   955→    'chat.suggestions3': 'হোয়াটসঅ্যাপ অটোমেট করতে পারেন?',
+   956→    'chat.suggestions4': 'আমি রিয়েল এস্টেট ব্যবসা চালাই',
+   957→    'chat.bookCall': 'ফ্রি স্ট্র্যাটেজি কল বুক করুন',
+   958→    'chat.poweredBy': 'NextGen AI দ্বারা চালিত ·',
+   959→    'chat.callUrgent': 'জরুরি প্রশ্নের জন্য',
+   960→    'chat.clearChat': 'চ্যাট হিস্ট্রি মুছুন',
+   961→    'chat.closeChat': 'চ্যাট বন্ধ করুন',
+   962→
+   963→    // Social Proof
+   964→    'socialProof.verified': 'যাচাইকৃত',
+   965→
+   966→    // Sticky Book Bar
+   967→    'sticky.readyToAutomate': 'আপনার গ্রোথ অটোমেট করতে প্রস্তুত?',
+   968→    'sticky.freeCall': '৩০ মিনিট · কোনো বাধ্যবাধকতা নেই',
+   969→    'sticky.bookNow': 'বুক করুন',
+   970→    'sticky.dismiss': 'বাতিল',
+   971→
+   972→    // AI Demo
+   973→    'aiDemo.eyebrow': 'নিজে দেখুন',
+   974→    'aiDemo.title1': 'বুক করার আগে',
+   975→    'aiDemo.title2': 'আমাদের এআই অনুভব করুন',
+   976→    'aiDemo.subtitle': 'শুধু আমাদের কথা বিশ্বাস করবেন না। দেখুন কিভাবে আমাদের এআই এজেন্ট বাস্তব কাস্টমার কথোপকথন পরিচালনা করে — বাংলা ও ইংরেজিতে, ২৪/৭।',
+   977→    'aiDemo.tryOnBusiness': 'আমার ব্যবসায় চেষ্টা করুন',
+   978→
+   979→    // Client Logos
+   980→    'clientLogos.trustedBy': 'বাংলাদেশের ১২০+ শীর্ষ ব্যবসা আমাদের উপর আস্থা রাখে',
+   981→
+   982→    // Scroll Progress / misc
+   983→    'lang.toggle': 'EN',
+   984→
+   985→    // Common
+   986→    'common.perMonth': '/মাস',
+   987→    'common.month': '/মাস',
+   988→    'common.popular': 'জনপ্রিয়',
+   989→    'common.backToTop': 'উপরে যান',
+   990→    'common.close': 'বন্ধ',
+   991→    'common.cancel': 'বাতিল',
+   992→    'common.save': 'সংরক্ষণ',
+   993→    'common.loading': 'লোড হচ্ছে...',
+   994→  },
+   995→}
+   996→
+   997→export function LanguageProvider({ children }: { children: React.ReactNode }) {
+   998→  const [lang, setLangState] = React.useState<Lang>('en')
+   999→  const [mounted, setMounted] = React.useState(false)
+  1000→
+  1001→  React.useEffect(() => {
+  1002→    try {
+  1003→      const saved = localStorage.getItem(STORAGE_KEY) as Lang | null
+  1004→      if (saved === 'en' || saved === 'bn') setLangState(saved)
+  1005→    } catch {}
+  1006→    setMounted(true)
+  1007→  }, [])
+  1008→
+  1009→  const setLang = React.useCallback((l: Lang) => {
+  1010→    setLangState(l)
+  1011→    try { localStorage.setItem(STORAGE_KEY, l) } catch {}
+  1012→    document.documentElement.lang = l
+  1013→  }, [])
+  1014→
+  1015→  const toggle = React.useCallback(() => {
+  1016→    setLang(lang === 'en' ? 'bn' : 'en')
+  1017→  }, [lang, setLang])
+  1018→
+  1019→  const t = React.useCallback((key: string) => {
+  1020→    return translations[lang][key] ?? translations.en[key] ?? key
+  1021→  }, [lang])
+  1022→
+  1023→  const value = React.useMemo(() => ({ lang, setLang, toggle, t }), [lang, setLang, toggle, t])
+  1024→
+  1025→  return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>
+  1026→}
+  1027→
+  1028→export function useLang() {
+  1029→  const ctx = React.useContext(LanguageContext)
+  1030→  if (!ctx) throw new Error('useLang must be used within LanguageProvider')
+  1031→  return ctx
+  1032→}
+  1033→

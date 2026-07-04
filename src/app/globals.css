@@ -1,0 +1,286 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ===== Premium custom fonts =====
+   Mahfuj Lipi  → Bengali text (headings + body), scoped via unicode-range
+   Forzon DEMO  → English display/headings (italic premium look)
+   Browsers auto-pick the right font per character in mixed Bangla/English text.
+*/
+@font-face {
+  font-family: "NextGen Bangla";
+  src: url("/fonts/MahfujLipi.ttf") format("truetype");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+  /* Bengali block + Bengali currency/numerals + ZWNJ/ZWJ + danda */
+  unicode-range: U+0980-09FF, U+0964-0965, U+200C-200D, U+25CC;
+}
+@font-face {
+  font-family: "NextGen Display";
+  src: url("/fonts/ForzonDEMO-Italic.ttf") format("truetype");
+  font-weight: 400;
+  /* The glyph shapes are italic, but we declare font-style: normal so this
+     face matches normal-style requests. Without this, browsers skip the only
+     (italic) face for normal requests and the font never renders. The italic
+     glyph shapes are the intended premium look for short display accents. */
+  font-style: normal;
+  font-display: swap;
+  /* Basic Latin + Latin-1 Supplement + Latin Extended-A/B (English coverage) */
+  unicode-range: U+0000-007F, U+00A0-00FF, U+0100-024F, U+2000-206F;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: "NextGen Bangla", var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "NextGen Bangla", var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-display: "NextGen Display", "NextGen Bangla", var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, monospace;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 10px);
+}
+
+:root {
+  --radius: 0.875rem;
+  /* Premium fonts: Mahfuj Lipi (Bengali) + Forzon DEMO (English display).
+     These mirror @theme inline so var(--font-*) references resolve correctly. */
+  --font-sans: "NextGen Bangla", var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "NextGen Bangla", var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  /* Brand: primary #2563EB, secondary #0F172A, accent #06B6D4, bg white */
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.21 0.034 264);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.21 0.034 264);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.21 0.034 264);
+  --primary: oklch(0.546 0.215 262.88);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0.006 264);
+  --secondary-foreground: oklch(0.21 0.034 264);
+  --muted: oklch(0.97 0.006 264);
+  --muted-foreground: oklch(0.52 0.02 264);
+  --accent: oklch(0.715 0.143 194);
+  --accent-foreground: oklch(0.21 0.034 264);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0.008 264);
+  --input: oklch(0.922 0.008 264);
+  --ring: oklch(0.546 0.215 262.88);
+  --chart-1: oklch(0.546 0.215 262.88);
+  --chart-2: oklch(0.715 0.143 194);
+  --chart-3: oklch(0.646 0.222 41.116);
+  --chart-4: oklch(0.7 0.17 162);
+  --chart-5: oklch(0.627 0.265 303);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.21 0.034 264);
+  --sidebar-primary: oklch(0.546 0.215 262.88);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0.006 264);
+  --sidebar-accent-foreground: oklch(0.21 0.034 264);
+  --sidebar-border: oklch(0.922 0.008 264);
+  --sidebar-ring: oklch(0.546 0.215 262.88);
+}
+
+.dark {
+  --background: oklch(0.17 0.028 264);
+  --foreground: oklch(0.97 0.005 264);
+  --card: oklch(0.215 0.03 264);
+  --card-foreground: oklch(0.97 0.005 264);
+  --popover: oklch(0.215 0.03 264);
+  --popover-foreground: oklch(0.97 0.005 264);
+  --primary: oklch(0.62 0.193 259);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.27 0.03 264);
+  --secondary-foreground: oklch(0.97 0.005 264);
+  --muted: oklch(0.25 0.028 264);
+  --muted-foreground: oklch(0.7 0.025 264);
+  --accent: oklch(0.715 0.143 194);
+  --accent-foreground: oklch(0.12 0.02 264);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 14%);
+  --ring: oklch(0.62 0.193 259);
+  --chart-1: oklch(0.62 0.193 259);
+  --chart-2: oklch(0.715 0.143 194);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.7 0.17 162);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.215 0.03 264);
+  --sidebar-foreground: oklch(0.97 0.005 264);
+  --sidebar-primary: oklch(0.62 0.193 259);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.27 0.03 264);
+  --sidebar-accent-foreground: oklch(0.97 0.005 264);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.62 0.193 259);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
+  }
+  ::selection {
+    background-color: oklch(0.546 0.215 262.88 / 0.25);
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "NextGen Bangla", var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+    letter-spacing: -0.02em;
+  }
+}
+
+/* ===== Brand utilities ===== */
+.font-heading { font-family: "NextGen Bangla", var(--font-jakarta), ui-sans-serif, system-ui, sans-serif; }
+.font-body { font-family: "NextGen Bangla", var(--font-inter), ui-sans-serif, system-ui, sans-serif; }
+/* Premium display accent (Forzon DEMO) — use ONLY on short, letter-only text
+   like the logo wordmark. The font has 59 glyphs (A-Z a-z space comma period),
+   so never apply it to text containing digits, hyphens, apostrophes, etc. */
+.font-display { font-family: "NextGen Display", "NextGen Bangla", var(--font-jakarta), ui-sans-serif, system-ui, sans-serif; }
+
+.text-gradient {
+  background: linear-gradient(110deg, oklch(0.546 0.215 262.88) 0%, oklch(0.715 0.143 194) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.dark .text-gradient {
+  background: linear-gradient(110deg, oklch(0.7 0.17 259) 0%, oklch(0.78 0.13 194) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.bg-grid {
+  background-image:
+    linear-gradient(to right, oklch(0.5 0.02 264 / 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, oklch(0.5 0.02 264 / 0.06) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+.dark .bg-grid {
+  background-image:
+    linear-gradient(to right, oklch(1 0 0 / 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, oklch(1 0 0 / 0.05) 1px, transparent 1px);
+}
+
+.bg-dots {
+  background-image: radial-gradient(oklch(0.5 0.02 264 / 0.12) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+.dark .bg-dots {
+  background-image: radial-gradient(oklch(1 0 0 / 0.08) 1px, transparent 1px);
+}
+
+.glass {
+  background: oklch(1 0 0 / 0.6);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid oklch(0.5 0.02 264 / 0.1);
+}
+.dark .glass {
+  background: oklch(0.18 0.028 264 / 0.55);
+  border: 1px solid oklch(1 0 0 / 0.08);
+}
+
+.glass-strong {
+  background: oklch(1 0 0 / 0.85);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid oklch(0.5 0.02 264 / 0.1);
+}
+.dark .glass-strong {
+  background: oklch(0.19 0.03 264 / 0.8);
+  border: 1px solid oklch(1 0 0 / 0.08);
+}
+
+.glow-primary {
+  box-shadow: 0 0 0 1px oklch(0.546 0.215 262.88 / 0.1), 0 12px 40px -8px oklch(0.546 0.215 262.88 / 0.35);
+}
+
+.card-hover {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s ease;
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+}
+
+/* Animated gradient blob */
+@keyframes blob-float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -40px) scale(1.08); }
+  66% { transform: translate(-25px, 25px) scale(0.96); }
+}
+.animate-blob { animation: blob-float 18s ease-in-out infinite; }
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.animate-marquee { animation: marquee 28s linear infinite; }
+
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.9); opacity: 0.7; }
+  70% { transform: scale(1.6); opacity: 0; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+.animate-pulse-ring { animation: pulse-ring 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.animate-float { animation: float-y 6s ease-in-out infinite; }
+
+/* Custom scrollbar */
+.scroll-area::-webkit-scrollbar { width: 8px; height: 8px; }
+.scroll-area::-webkit-scrollbar-track { background: transparent; }
+.scroll-area::-webkit-scrollbar-thumb { background: oklch(0.5 0.02 264 / 0.2); border-radius: 999px; }
+.scroll-area::-webkit-scrollbar-thumb:hover { background: oklch(0.5 0.02 264 / 0.35); }
+
+.mask-fade-x {
+  -webkit-mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+}
