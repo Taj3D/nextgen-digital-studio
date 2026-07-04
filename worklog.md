@@ -1552,3 +1552,39 @@ Stage Summary:
 - All pages 200, all pixels loaded.
 - DB operations pending Vercel Postgres creation (user action).
 - 0 build errors, 0 lint errors.
+
+---
+Task ID: GM-VERCEL-POSTGRES-SETUP
+Agent: Main (Z.ai Code)
+Task: Create Vercel Postgres database using new tokens (user regenerated). Complete DB setup.
+
+Work Log:
+- Verified new GitHub PAT (github_pat_11BSK6KEQ0...) and Vercel token (vcp_5hCrg62z...) both work.
+- Attempted to create Vercel Postgres via API:
+  * POST /v1/storage/stores → 404 Not Found
+  * POST /v1/stores/postgres → 404 Not Found
+  * POST /v1/storage/stores/postgres → 410 Gone ("This feature is no longer available")
+  * POST /v2/storage/stores → 404 Not Found
+- Attempted via Vercel CLI:
+  * `vercel postgres create` → "postgres is not a valid subcommand"
+  * `vercel storage` → "storage is not a valid subcommand"
+- CONCLUSION: Vercel has deprecated API/CLI-based Postgres store creation. Can only be done via Vercel dashboard.
+
+Current State:
+- Live site: https://nextgen-digital-studio-electronics-mart.vercel.app
+- All 11 pages: 200 ✓
+- All 4 pixels: GA4 (3), FB (3), Snap (1), TikTok (1) ✓
+- 6 env vars set: GOOGLE_SHEETS_WEBHOOK_URL, NEXT_PUBLIC_GA4_ID, NEXT_PUBLIC_FB_PIXEL_ID, NEXT_PUBLIC_SNAP_PIXEL_ID, NEXT_PUBLIC_TIKTOK_PIXEL_ID, NEXT_PUBLIC_ADMIN_PASSWORD
+- MISSING: DATABASE_URL (needs Vercel Postgres creation in dashboard)
+
+PENDING (user action — 30 seconds):
+1. Go to: https://vercel.com/electronics-mart/nextgen-digital-studio/stores
+2. Click "Create Database" → select "Postgres (Serverless)"
+3. Name: nextgen-db, Region: Singapore (closest to Bangladesh)
+4. Click "Create"
+5. Vercel auto-sets DATABASE_URL env var on the project
+6. Go to: https://vercel.com/electronics-mart/nextgen-digital-studio/deployments
+7. Click "..." on latest deployment → "Redeploy"
+8. After redeploy, DB operations (lead save, tracking, admin) will work
+
+SECURITY: User regenerated tokens (good). New tokens used in this session. Should regenerate again after task complete.
