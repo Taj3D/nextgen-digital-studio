@@ -1945,3 +1945,79 @@ Stage Summary:
 - Preview panel should now show updated homepage.
 - Footer links (phone, email, social) properly configured.
 - NOT pushed to GitHub yet (user wants to verify first).
+
+---
+Task ID: GM-TRANSLATION-FIX
+Agent: Main (Z.ai Code)
+Task: User shared all homepage text. Fix all translation keys — 113 missing keys were showing as raw text (hero.title, pain.title, etc.).
+
+Work Log:
+- Found 113 translation keys MISSING from language-provider.tsx dictionary.
+- User provided all homepage text content (hero, pain, cost, solution, how, services, why, testimonials, pricing, form, final, footer).
+- Added ALL missing keys to EN dictionary (228 new keys).
+- Added ALL missing keys to BN dictionary (228 new Bangla translations).
+- Added nav.howItWorks and nav.testimonials keys (were causing navbar to show raw keys).
+
+Keys Added (EN + BN):
+- brand.name, nav.cta, nav.howItWorks, nav.testimonials
+- hero.eyebrow, hero.title, hero.titleHighlight, hero.subtitle, hero.ctaPrimary, hero.ctaSecondary
+- hero.trust1-3, hero.stat1-4 (Value + Label)
+- pain.title, pain.subtitle, pain.item1-6 (Title + Desc)
+- cost.title, cost.subtitle, cost.lostLeads*, cost.followup*, cost.afterHours*, cost.cta
+- solution.title, solution.subtitle, solution.step1-3 (Title + Desc), solution.cta
+- how.eyebrow, how.title, how.subtitle, how.day1-4 (Title + Desc)
+- services.title, services.subtitle, services.s1-4 (Title + Desc + Features)
+- why.title, why.subtitle, why.r1-4 (Title + Desc)
+- testimonials.title, testimonials.subtitle
+- pricing.title, pricing.subtitle, pricing.monthly, pricing.yearly, pricing.yearlyBadge
+- pricing.perMonth, pricing.perYear, pricing.popular
+- pricing.starterName/Price, pricing.growthName/Price, pricing.dominantName/Price
+- pricing.starterF1-6, pricing.growthF1-8, pricing.dominantF1-9
+- pricing.cta, pricing.guarantee
+- form.eyebrow, form.title, form.subtitle, form.trust1-3, form.whatYouGet, form.benefit1-3
+- form.testimonial, form.testimonialAuthor
+- form.nameLabel/Placeholder, form.emailLabel/Placeholder, form.phoneLabel/Placeholder
+- form.companyLabel/Placeholder, form.serviceLabel/Placeholder
+- form.serviceLeadCapture, form.serviceFollowUp, form.serviceChatbot, form.serviceFull
+- form.messageLabel/Placeholder, form.submit, form.submitting, form.privacy, form.whatsappReply
+- form.required, form.optional, form.errName/Email/Phone/Service
+- form.successTitle/Desc/Whatsapp/Another, form.errorTitle/Desc/Retry
+- final.eyebrow, final.title, final.subtitle, final.ctaPrimary/Secondary, final.guarantee, final.particles
+- footer.tagline, footer.company, footer.about, footer.careers, footer.blog, footer.caseStudies
+- footer.servicesTitle, footer.newsletterTitle/Desc/Placeholder/Btn/Success/Error/Invalid/Loading
+- footer.rights, footer.privacy, footer.terms, footer.address
+- toast.successTitle/Desc, toast.errorTitle/Desc
+- float.whatsapp, float.chatOpen, float.chatClose
+- common.popular, cta.orderNow
+
+Verification:
+- Build: SUCCESS, 0 errors
+- Homepage: 178KB, 200 ✓
+- Raw translation keys: 0 (was 83) ✓
+- All section headings show actual text (not keys):
+  * hero.title → "Stop Losing Customers. Start Closing Deals 24/7."
+  * pain.title → "Every Lost Lead Is Money Walking Out The Door"
+  * cost.title → "How Much Is Inaction Costing You?"
+  * solution.title → "Here Is Exactly What You Get"
+  * services.title → "What We Do"
+  * why.title → "Why Businesses Choose Us"
+  * testimonials.title → "Real Results from Real Businesses"
+  * pricing.title → "Simple, Transparent Pricing"
+  * form.title → "Get Your Free Strategy Session"
+  * final.title → "Stop Losing Leads. Start Closing Deals 24/7."
+- Form placeholders show actual text (not keys):
+  * "Enter your full name" (was "form.namePlaceholder")
+  * "you@company.com" (was "form.emailPlaceholder")
+  * "01XXXXXXXXX" (was "form.phonePlaceholder")
+- Navbar items: Services, How It Works, Pricing, Results, Get Started (all translated)
+- Footer links: phone (1), email (4), Facebook (3) ✓
+- /api/contact: {"ok":true,"id":"cmre2vheo..."} ✓
+- Server alive: YES ✓
+
+Stage Summary:
+- ALL 113 missing translation keys added (EN + BN).
+- 0 raw keys showing on homepage (was 83).
+- All section headings, form labels, placeholders, navbar items now show proper text.
+- BN translations also added — language toggle will work.
+- Homepage fully functional with proper text.
+- NOT pushed to GitHub yet (user wants to verify first).
