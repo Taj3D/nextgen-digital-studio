@@ -42,10 +42,6 @@ export function PainPointsSection() {
     <SectionShell id="pain" className="relative">
       {/* Section header */}
       <Reveal className="mx-auto max-w-3xl text-center">
-        <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/5 px-4 py-2 text-amber-500 text-xs sm:text-sm font-semibold uppercase tracking-wider">
-          <AlertTriangle className="h-4 w-4 shrink-0" />
-          <span>{t('pain.eyebrow')}</span>
-        </div>
         <h2 className="mt-5 text-3xl lg:text-4xl font-bold tracking-tight text-foreground">
           {t('pain.title')}
         </h2>

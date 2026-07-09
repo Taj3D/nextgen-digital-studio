@@ -4,7 +4,6 @@ import * as React from 'react'
 import { Logo } from './logo'
 import { ThemeToggle } from './theme-toggle'
 import { LanguageToggle } from './language-toggle'
-import { useBooking } from './booking-modal'
 import { useLang } from './language-provider'
 import { Button } from '@/components/ui/button'
 import { CalendarClock } from 'lucide-react'
@@ -12,11 +11,9 @@ import { cn } from '@/lib/utils'
 
 /**
  * Compact top bar for landing pages.
- * Shows: Logo, theme toggle, language toggle, Book button.
- * Sticky on scroll, transparent over hero, solid background after scroll.
+ * Shows: Logo, theme toggle, language toggle, Book button (scrolls to lead form).
  */
 export function TopBar({ className }: { className?: string }) {
-  const { openWith } = useBooking()
   const { t } = useLang()
   const [scrolled, setScrolled] = React.useState(false)
 
@@ -26,6 +23,13 @@ export function TopBar({ className }: { className?: string }) {
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  const scrollToForm = () => {
+    const form = document.getElementById('order') || document.getElementById('lead-form') || document.getElementById('contact')
+    if (form) {
+      form.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }
 
   return (
     <header
@@ -46,7 +50,7 @@ export function TopBar({ className }: { className?: string }) {
           <ThemeToggle />
           <Button
             type="button"
-            onClick={() => openWith()}
+            onClick={scrollToForm}
             className="h-9 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 px-3 text-xs font-semibold shadow-md shadow-blue-600/20 transition-transform hover:scale-[1.02] sm:px-4 sm:text-sm"
           >
             <CalendarClock className="mr-1.5 h-3.5 w-3.5" />

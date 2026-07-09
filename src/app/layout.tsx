@@ -5,7 +5,6 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as SonnerToaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 import { LanguageProvider } from "@/components/site/language-provider";
-import { BookingProvider } from "@/components/site/booking-modal";
 import { AnalyticsPixels } from "@/components/site/analytics-pixels";
 import { siteConfig, faqs } from "@/lib/site-data";
 
@@ -222,11 +221,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <LanguageProvider>
-            <BookingProvider>
-              {children}
-              <Toaster />
-              <SonnerToaster position="bottom-right" />
-            </BookingProvider>
+            {children}
+            <Toaster />
+            <SonnerToaster position="bottom-right" />
           </LanguageProvider>
         </ThemeProvider>
       </body>

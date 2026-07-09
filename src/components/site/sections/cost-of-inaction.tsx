@@ -50,10 +50,6 @@ export function CostOfInactionSection() {
       <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <Reveal className="mx-auto max-w-3xl text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-red-500/30 bg-red-500/5 px-4 py-2 text-red-400 text-xs sm:text-sm font-semibold uppercase tracking-wider">
-            <TrendingDown className="h-4 w-4 shrink-0" />
-            <span>{t('cost.eyebrow')}</span>
-          </div>
           <h2 className="mt-5 text-3xl lg:text-4xl font-bold tracking-tight text-foreground">
             {t('cost.title')}
           </h2>

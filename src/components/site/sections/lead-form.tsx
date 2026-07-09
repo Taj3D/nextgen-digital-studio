@@ -127,7 +127,7 @@ export function LeadForm() {
 
     setState('submitting')
     try {
-      const res = await fetch('/api/leads', {
+      const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -137,7 +137,7 @@ export function LeadForm() {
           company: values.company,
           service: values.service,
           message: values.message,
-          website: values.website,
+          source: 'homepage_lead_form',
           ...utmRef.current,
         }),
       })

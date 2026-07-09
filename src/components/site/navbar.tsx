@@ -24,7 +24,6 @@ const NAV_ITEMS: NavItem[] = [
   { key: 'nav.howItWorks', href: '#how' },
   { key: 'nav.pricing', href: '#pricing' },
   { key: 'nav.testimonials', href: '#testimonials' },
-  { key: 'nav.faq', href: '#faq' },
 ]
 
 function smoothScrollTo(href: string) {
