@@ -5,8 +5,12 @@ import {
   Facebook,
   Linkedin,
   Instagram,
+  Youtube,
+  Twitter,
   MessageCircle,
   MapPin,
+  Phone,
+  Mail,
   Sparkles,
   Loader2,
   CheckCircle2,
@@ -19,6 +23,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useLang } from '@/components/site/language-provider'
 import { waLink } from '@/lib/whatsapp'
+import { SITE_CONFIG } from '@/lib/site-data'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -175,26 +180,46 @@ export function SiteFooter() {
             </p>
             <div className="flex items-center gap-2.5 pt-1">
               <SocialButton
-                href="https://facebook.com"
+                href={SITE_CONFIG.facebook}
                 label="Facebook"
               >
                 <Facebook className="h-5 w-5" />
               </SocialButton>
               <SocialButton
-                href="https://linkedin.com"
+                href={SITE_CONFIG.linkedin}
                 label="LinkedIn"
               >
                 <Linkedin className="h-5 w-5" />
               </SocialButton>
               <SocialButton
-                href="https://instagram.com"
+                href={SITE_CONFIG.instagram}
                 label="Instagram"
               >
                 <Instagram className="h-5 w-5" />
               </SocialButton>
+              <SocialButton
+                href={SITE_CONFIG.youtube}
+                label="YouTube"
+              >
+                <Youtube className="h-5 w-5" />
+              </SocialButton>
+              <SocialButton
+                href={SITE_CONFIG.twitter}
+                label="X"
+              >
+                <Twitter className="h-5 w-5" />
+              </SocialButton>
               <SocialButton href={waLink()} label={t('float.whatsapp')}>
                 <MessageCircle className="h-5 w-5" />
               </SocialButton>
+            </div>
+            <div className="space-y-1.5 pt-3 text-sm">
+              <a href={`tel:${SITE_CONFIG.phone}`} className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary">
+                <Phone className="h-4 w-4" /> {SITE_CONFIG.phoneDisplay}
+              </a>
+              <a href={`mailto:${SITE_CONFIG.email}`} className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary">
+                <Mail className="h-4 w-4" /> {SITE_CONFIG.email}
+              </a>
             </div>
           </div>
 

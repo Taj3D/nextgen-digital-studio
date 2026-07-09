@@ -1899,3 +1899,49 @@ Stage Summary:
 - Lead form now posts to /api/contact (was /api/leads which is GET only).
 - All other pages and functionality preserved.
 - NOT pushed to GitHub yet (user wants to verify first).
+
+---
+Task ID: GM-PREVIEW-FIX-V2
+Agent: Main (Z.ai Code)
+Task: User reported preview panel still showing old content. Rebuild + verify all changes.
+
+Root Cause:
+- Old server process (PID 3416) was still running with old build.
+- New build wasn't being served because old process held port 3000.
+- Footer had hardcoded social links (facebook.com, linkedin.com) instead of SITE_CONFIG values.
+- Footer was missing phone number and email.
+
+Fixes Applied:
+1. Force killed ALL next processes (kill -9).
+2. Clean rebuild (rm -rf .next && bun run build).
+3. Started fresh production server.
+4. Updated footer.tsx:
+   - Added SITE_CONFIG import.
+   - Added Youtube, Twitter, Phone, Mail icons.
+   - Replaced hardcoded social links with SITE_CONFIG values (facebook, linkedin, instagram, youtube, twitter).
+   - Added phone number (tel: link) and email (mailto: link) to footer.
+5. Verified navbar has only: Services, How It Works, Pricing, Testimonials (NO Case Studies, Why Us, Blog, FAQ).
+
+Final Verification (fresh build, PID 6746):
+- Homepage: 175KB, 200 ✓
+- Navbar: Services (2), How It Works (1), Pricing (3), Testimonials (2) — NO Case Studies/Why Us/Blog ✓
+- AI Sales Agent: 0 ✓ (removed)
+- By the Numbers: 0 ✓ (removed)
+- pain.eyebrow: 0 ✓ (removed)
+- cost.eyebrow: 0 ✓ (removed)
+- Book Your Free Strategy Call: 0 ✓ (removed — now scrolls to lead form)
+- FAQ visible: 0 ✓ (only in JSON-LD for SEO, not visible)
+- Footer phone: 1 ✓
+- Footer email: 4 ✓
+- Footer Facebook: 3 ✓
+- Footer LinkedIn: 3 ✓
+- Footer YouTube: 3 ✓
+- All 7 main pages: 200 ✓
+- /api/contact: {"ok":true,"id":"cmre2ac75..."} ✓
+- Server alive: YES ✓
+
+Stage Summary:
+- ALL requested changes applied and verified.
+- Preview panel should now show updated homepage.
+- Footer links (phone, email, social) properly configured.
+- NOT pushed to GitHub yet (user wants to verify first).
