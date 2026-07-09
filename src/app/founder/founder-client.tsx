@@ -163,7 +163,7 @@ export function FounderClient() {
         </section>
 
         {/* Contact */}
-        <section className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
+        <section id="order" className="mx-auto max-w-3xl scroll-mt-20 px-4 py-12 sm:px-6 sm:py-16">
           <div className="rounded-3xl border border-border/60 bg-card p-6 shadow-lg sm:p-8">
             <div className="text-center">
               <LandingEyebrow>{isBn ? 'সরাসরি কথা বলুন' : 'Talk to me directly'}</LandingEyebrow>

@@ -25,10 +25,24 @@ export function TopBar({ className }: { className?: string }) {
   }, [])
 
   const scrollToForm = () => {
-    const form = document.getElementById('order') || document.getElementById('lead-form') || document.getElementById('contact')
-    if (form) {
-      form.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    // Try multiple possible form section IDs used across landing pages
+    const ids = ['order', 'order-form', 'lead-form', 'contact', 'registration', 'register']
+    for (const id of ids) {
+      const el = document.getElementById(id)
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        return
+      }
     }
+    // Fallback: find the last form element on the page
+    const forms = document.querySelectorAll('form')
+    if (forms.length > 0) {
+      const lastForm = forms[forms.length - 1]
+      lastForm.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      return
+    }
+    // Last resort: scroll to bottom
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
   }
 
   return (
