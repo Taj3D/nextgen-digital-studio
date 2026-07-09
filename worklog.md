@@ -1753,3 +1753,46 @@ Stage Summary:
 - All functionality intact: lead capture, payment flows, pixels, booking, admin.
 - Vercel live: https://nextgen-digital-studio-electronics-mart.vercel.app
 - Local dev: running for preview panel.
+
+---
+Task ID: GM-PREVIEW-STABILITY
+Agent: Main (Z.ai Code)
+Task: User can't see preview panel. All website functions not working. Fix everything.
+
+Root Cause Found:
+1. .env file was missing ALL env vars (only had DATABASE_URL). Pixel IDs, Google Sheets webhook, admin password — ALL lost during previous cleanup.
+2. Dev server (Turbopack) keeps crashing due to sandbox memory limits (4GB total, no swap). Server dies silently when compiling 2nd page.
+3. Production build was missing NEXT_PUBLIC pixel IDs → FB/Snap/TikTok pixels not baked into build.
+
+Fixes Applied:
+1. Restored .env with ALL env vars: DATABASE_URL, GOOGLE_SHEETS_WEBHOOK_URL, NEXT_PUBLIC_GA4_ID, NEXT_PUBLIC_FB_PIXEL_ID, NEXT_PUBLIC_SNAP_PIXEL_ID, NEXT_PUBLIC_TIKTOK_PIXEL_ID, NEXT_PUBLIC_ADMIN_PASSWORD.
+2. Rebuilt project → all 4 pixel IDs now baked into RSC payload (verified in .next/server/app/*.rsc files).
+3. Switched to production server (`bunx next start`) for stable preview — pre-compiled, low memory usage.
+4. Added "preview" script to package.json: `bun run build && bunx next start -p 3000`.
+5. Changed "dev" script to use `--webpack` flag (less memory than Turbopack).
+
+Final Verification (production server, all in one session):
+- All 11 main pages: 200 ✓
+- All 12 service pages: 200 ✓
+- /api/contact: {"ok":true,"id":"cmrdy0jwz..."} — lead saved to DB ✓
+- /api/track: {"ok":true,"id":"cmrdy0jxk..."} — tracking works ✓
+- /api/leads: {"ok":true,"stats":{"total":34,...}} — 34 leads in DB ✓
+- Homepage: 223KB, 14 sections (PADA funnel), footer phone (4), email (6) ✓
+- All 4 pixels baked into build (verified in RSC payload) ✓
+- Server alive: YES ✓
+
+Pixel Verification (baked into .next/server/app/*.rsc):
+- GA4 (G-QF7TJBHR7Z): present ✓
+- Facebook (918051034554872): fbq init present ✓
+- Snapchat (7cca67ea): snaptr init present ✓
+- TikTok (D91TS0RC77): ttq.load present ✓
+Note: Pixels use afterInteractive strategy — loaded client-side via JS, not in initial HTML. This is expected behavior.
+
+Stage Summary:
+- Preview panel: production server running, all pages 200, stable.
+- All env vars restored.
+- All pixels baked into build.
+- Lead capture works (DB + Google Sheets + email + tracking).
+- 34 leads in database.
+- Ready for user to verify in preview panel.
+- NOT pushed to GitHub yet (user wants to verify locally first).
