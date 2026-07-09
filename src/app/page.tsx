@@ -1,33 +1,30 @@
-import { Navbar } from "@/components/site/navbar"
-import { ScrollProgress } from "@/components/site/scroll-progress"
-import { Hero } from "@/components/site/sections/hero"
-import { PainPoints } from "@/components/site/sections/pain-points"
-import { CostOfInaction } from "@/components/site/sections/cost-of-inaction"
-import { Solution } from "@/components/site/sections/solution"
-import { HowItWorks } from "@/components/site/sections/how-it-works"
-import { Services } from "@/components/site/sections/services"
-import { ByTheNumbers } from "@/components/site/sections/by-the-numbers"
-import { WhyChooseUs } from "@/components/site/sections/why-choose-us"
-import { Testimonials } from "@/components/site/sections/testimonials"
-import { Pricing } from "@/components/site/sections/pricing"
-import { Faq } from "@/components/site/sections/faq"
-import { Contact } from "@/components/site/sections/contact"
-import { CtaBand } from "@/components/site/sections/cta-band"
-import { Footer } from "@/components/site/footer"
-import { FloatingButtons } from "@/components/site/floating-buttons"
-import { AiChatWidget } from "@/components/site/ai-chat-widget"
-import { SocialProofNotifications } from "@/components/site/social-proof"
-import { StickyBookBar } from "@/components/site/sticky-book-bar"
+import { Navbar } from "@/components/site/navbar";
+import { SiteFooter } from "@/components/site/footer";
+import { FloatingButtons } from "@/components/site/floating-buttons";
+import { HeroSection } from "@/components/site/sections/hero";
+import { PainPointsSection } from "@/components/site/sections/pain-points";
+import { CostOfInactionSection } from "@/components/site/sections/cost-of-inaction";
+import { Solution } from "@/components/site/sections/solution";
+import { HowItWorks } from "@/components/site/sections/how-it-works";
+import { Services } from "@/components/site/sections/services";
+import { Numbers } from "@/components/site/sections/numbers";
+import { WhyChooseUs } from "@/components/site/sections/why-choose-us";
+import { Testimonials } from "@/components/site/sections/testimonials";
+import { Pricing } from "@/components/site/sections/pricing";
+import { FAQ } from "@/components/site/sections/faq";
+import { LeadForm } from "@/components/site/sections/lead-form";
+import { FinalCta } from "@/components/site/sections/final-cta";
+import { AiChatWidget } from "@/components/site/ai-chat-widget";
 
 // Fully static page — rendered once, served as plain HTML + CSS.
-// No DB calls, no per-request work. Handles 1500 visitors/day effortlessly.
+// No DB calls, no per-request work. Handles 1500 visitors/day effortlessly
+// on a 4GB container.
 export const dynamicParams = false;
 export const revalidate = false;
 
 export default function Home() {
   return (
     <div className="relative flex min-h-screen flex-col bg-background">
-      <ScrollProgress />
       <Navbar />
       <main className="flex-1">
         {/*
@@ -35,27 +32,25 @@ export default function Home() {
           1. PAIN      → "we feel your pain"               (pain-points, cost-of-inaction)
           2. AWARENESS → "this is exactly what you need"   (solution, how-it-works, services)
           3. DESIRE    → proof it works                     (numbers, why-choose-us, testimonials)
-          4. ACTION    → "connect now"                      (pricing, faq, contact, cta-band)
+          4. ACTION    → "connect now"                      (pricing, faq, lead-form, final-cta)
         */}
-        <Hero />
-        <PainPoints />
-        <CostOfInaction />
+        <HeroSection />
+        <PainPointsSection />
+        <CostOfInactionSection />
         <Solution />
         <HowItWorks />
         <Services />
-        <ByTheNumbers />
+        <Numbers />
         <WhyChooseUs />
         <Testimonials />
         <Pricing />
-        <Faq />
-        <Contact />
-        <CtaBand />
+        <FAQ />
+        <LeadForm />
+        <FinalCta />
       </main>
-      <Footer />
+      <SiteFooter />
       <FloatingButtons />
       <AiChatWidget />
-      <SocialProofNotifications />
-      <StickyBookBar />
     </div>
-  )
+  );
 }

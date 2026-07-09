@@ -1,73 +1,64 @@
 'use client'
 
-import * as React from "react"
-import { motion, useInView, type Variants } from "framer-motion"
-import { cn } from "@/lib/utils"
+import * as React from 'react'
+import { motion, type Variants } from 'framer-motion'
 
-export const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 24 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } },
-}
-
-export const fadeIn: Variants = {
-  hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { duration: 0.6 } },
-}
-
-export const stagger: Variants = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.08 } },
-}
-
+/** Reveal — fade + slide up on scroll into view */
 export function Reveal({
   children,
-  className,
   delay = 0,
-  variants = fadeUp,
-  as = "div",
+  y = 24,
+  className,
+  once = true,
 }: {
   children: React.ReactNode
-  className?: string
   delay?: number
-  variants?: Variants
-  as?: "div" | "section" | "li" | "span"
+  y?: number
+  className?: string
+  once?: boolean
 }) {
-  const ref = React.useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { once: true, margin: "-80px" })
-  const MotionTag = motion[as] as typeof motion.div
   return (
-    <MotionTag
-      ref={ref as never}
+    <motion.div
       className={className}
-      variants={variants}
-      initial="hidden"
-      animate={inView ? "show" : "hidden"}
-      transition={{ delay }}
+      initial={{ opacity: 0, y }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once, margin: '-80px' }}
+      transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
-    </MotionTag>
+    </motion.div>
   )
 }
 
-export function Eyebrow({
+export const staggerContainer: Variants = {
+  hidden: {},
+  show: {
+    transition: { staggerChildren: 0.08, delayChildren: 0.05 },
+  },
+}
+
+export const staggerItem: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+  },
+}
+
+/** SectionShell — consistent section padding + optional id for scroll targeting */
+export function SectionShell({
+  id,
   children,
-  className,
+  className = '',
 }: {
+  id?: string
   children: React.ReactNode
   className?: string
 }) {
   return (
-    <span
-      className={cn(
-        "inline-flex items-center gap-2 rounded-full border border-blue-600/20 bg-blue-600/5 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-blue-600",
-        className,
-      )}
-    >
-      <span className="relative flex h-1.5 w-1.5">
-        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-blue-600/60" />
-        <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-blue-600" />
-      </span>
-      {children}
-    </span>
+    <section id={id} className={`relative py-20 sm:py-24 lg:py-28 ${className}`}>
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">{children}</div>
+    </section>
   )
 }

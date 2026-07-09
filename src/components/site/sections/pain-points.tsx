@@ -1,76 +1,90 @@
 'use client'
 
-import { Reveal, Eyebrow } from "../reveal"
-import { useLang } from "../language-provider"
-import { useBooking } from "../booking-modal"
-import { Clock, Users, Eye, Zap, TrendingDown, AlertCircle, ArrowRight, Check } from "lucide-react"
-import { motion } from "framer-motion"
-import { cn } from "@/lib/utils"
+import * as React from 'react'
+import { motion } from 'framer-motion'
+import {
+  AlertTriangle,
+  Clock,
+  Repeat,
+  TrendingDown,
+  CalendarOff,
+  StarOff,
+  type LucideIcon,
+} from 'lucide-react'
+import {
+  Reveal,
+  SectionShell,
+  staggerContainer,
+  staggerItem,
+} from '@/components/site/reveal'
+import { useLang } from '@/components/site/language-provider'
+import { Card, CardContent } from '@/components/ui/card'
 
-const painPoints = [
-  { key: 'pain.1', icon: Clock, color: 'from-rose-500 to-red-500' },
-  { key: 'pain.2', icon: Users, color: 'from-amber-500 to-orange-500' },
-  { key: 'pain.3', icon: Eye, color: 'from-violet-500 to-purple-500' },
-  { key: 'pain.4', icon: Zap, color: 'from-cyan-500 to-blue-500' },
-  { key: 'pain.5', icon: TrendingDown, color: 'from-rose-500 to-pink-500' },
-  { key: 'pain.6', icon: AlertCircle, color: 'from-amber-500 to-yellow-500' },
+type PainItem = {
+  icon: LucideIcon
+  titleKey: string
+  descKey: string
+}
+
+const items: PainItem[] = [
+  { icon: Clock, titleKey: 'pain.item1Title', descKey: 'pain.item1Desc' },
+  { icon: Repeat, titleKey: 'pain.item2Title', descKey: 'pain.item2Desc' },
+  { icon: TrendingDown, titleKey: 'pain.item3Title', descKey: 'pain.item3Desc' },
+  { icon: AlertTriangle, titleKey: 'pain.item4Title', descKey: 'pain.item4Desc' },
+  { icon: CalendarOff, titleKey: 'pain.item5Title', descKey: 'pain.item5Desc' },
+  { icon: StarOff, titleKey: 'pain.item6Title', descKey: 'pain.item6Desc' },
 ]
 
-export function PainPoints() {
+export function PainPointsSection() {
   const { t } = useLang()
-  const { openWith } = useBooking()
 
   return (
-    <section id="pain-points" className="relative scroll-mt-24 overflow-hidden py-20 sm:py-28">
-      <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute left-1/2 top-0 h-72 w-72 -translate-x-1/2 rounded-full bg-rose-500/10 blur-[100px]" />
-      </div>
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <Reveal className="mx-auto max-w-2xl text-center">
-          <Eyebrow className="mx-auto border-rose-500/20 bg-rose-500/5 text-rose-600">
-            {t('pain.eyebrow')}
-          </Eyebrow>
-          <h2 className="mt-5 font-heading text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-[2.75rem]">
-            {t('pain.title1')}{" "}
-            <span className="text-gradient">{t('pain.title2')}</span>
-          </h2>
-          <p className="mt-5 text-lg text-muted-foreground">{t('pain.subtitle')}</p>
-        </Reveal>
+    <SectionShell id="pain" className="relative">
+      {/* Section header */}
+      <Reveal className="mx-auto max-w-3xl text-center">
+        <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/5 px-4 py-2 text-amber-500 text-xs sm:text-sm font-semibold uppercase tracking-wider">
+          <AlertTriangle className="h-4 w-4 shrink-0" />
+          <span>{t('pain.eyebrow')}</span>
+        </div>
+        <h2 className="mt-5 text-3xl lg:text-4xl font-bold tracking-tight text-foreground">
+          {t('pain.title')}
+        </h2>
+        <p className="mt-4 text-muted-foreground text-lg leading-relaxed">
+          {t('pain.subtitle')}
+        </p>
+      </Reveal>
 
-        <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {painPoints.map((p, i) => {
-            const Icon = p.icon
-            return (
-              <Reveal key={p.key} delay={(i % 3) * 0.08}>
-                <div className="group relative h-full overflow-hidden rounded-2xl border border-border/60 bg-card p-6 transition-all hover:border-rose-500/30 hover:shadow-lg hover:shadow-rose-500/5">
-                  <div className={cn("absolute -right-8 -top-8 h-24 w-24 rounded-full bg-gradient-to-br opacity-10 blur-2xl transition-opacity group-hover:opacity-20", p.color)} />
-                  <div className={cn("mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br text-white shadow-lg transition-transform group-hover:scale-110", p.color)}>
+      {/* Pain cards */}
+      <motion.div
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, margin: '-80px' }}
+        className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+      >
+        {items.map((item, i) => {
+          const Icon = item.icon
+          return (
+            <motion.div key={i} variants={staggerItem}>
+              <Card className="h-full border-amber-500/20 bg-card/60 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-amber-500/40 hover:shadow-lg hover:shadow-amber-500/5">
+                <CardContent className="flex flex-col gap-3 px-6">
+                  <div className="grid h-12 w-12 place-items-center rounded-xl bg-amber-500/10 text-amber-500">
                     <Icon className="h-6 w-6" />
                   </div>
-                  <h3 className="font-heading text-base font-bold">{t(`${p.key}.title`)}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t(`${p.key}.desc`)}</p>
-                </div>
-              </Reveal>
-            )
-          })}
-        </div>
-
-        {/* Emotional recognition CTA */}
-        <Reveal delay={0.2} className="mt-12">
-          <div className="flex flex-col items-center gap-4 rounded-3xl border border-blue-600/30 bg-gradient-to-br from-blue-600/[0.06] to-cyan-500/[0.06] p-8 text-center sm:flex-row sm:text-left">
-            <div className="flex-1">
-              <p className="font-heading text-lg font-bold sm:text-xl">{t('pain.recognize')}</p>
-            </div>
-            <button
-              onClick={() => openWith('Pain Points → Solution')}
-              className="flex shrink-0 items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-blue-600/25 transition-transform hover:scale-[1.02]"
-            >
-              {t('pain.seeSolution')}
-              <ArrowRight className="h-4 w-4" />
-            </button>
-          </div>
-        </Reveal>
-      </div>
-    </section>
+                  <h3 className="text-lg font-semibold text-foreground">
+                    {t(item.titleKey)}
+                  </h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {t(item.descKey)}
+                  </p>
+                </CardContent>
+              </Card>
+            </motion.div>
+          )
+        })}
+      </motion.div>
+    </SectionShell>
   )
 }
+
+export default PainPointsSection

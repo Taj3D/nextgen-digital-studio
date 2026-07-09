@@ -1,168 +1,279 @@
 'use client'
 
-import * as React from "react"
-import Link from "next/link"
-import { ArrowRight, Mail, Phone, MapPin, Send, Loader2, CheckCircle2, Facebook, Linkedin, Youtube, Github, Instagram } from "lucide-react"
-import { Logo } from "./logo"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { toast } from "sonner"
-import { siteConfig, services, navMenu } from "@/lib/site-data"
-import { useLang } from "./language-provider"
+import * as React from 'react'
+import {
+  Facebook,
+  Linkedin,
+  Instagram,
+  MessageCircle,
+  MapPin,
+  Sparkles,
+  Loader2,
+  CheckCircle2,
+  ArrowRight,
+} from 'lucide-react'
+import { toast } from 'sonner'
 
-const socials = [
-  { name: "Facebook", icon: Facebook, href: siteConfig.facebook },
-  { name: "LinkedIn", icon: Linkedin, href: siteConfig.linkedin },
-  { name: "Instagram", icon: Instagram, href: siteConfig.instagram },
-  { name: "GitHub", icon: Github, href: siteConfig.github },
-  { name: "YouTube", icon: Youtube, href: siteConfig.youtube },
+import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { useLang } from '@/components/site/language-provider'
+import { waLink } from '@/lib/whatsapp'
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+const COMPANY_LINKS = [
+  { key: 'footer.about', href: '#' },
+  { key: 'footer.careers', href: '#' },
+  { key: 'footer.blog', href: '#' },
+  { key: 'footer.caseStudies', href: '#' },
 ]
 
-export function Footer() {
-  const [email, setEmail] = React.useState("")
-  const [loading, setLoading] = React.useState(false)
-  const [done, setDone] = React.useState(false)
-  const { t, tr } = useLang()
+const SERVICE_KEYS = [
+  'services.s1Title',
+  'services.s2Title',
+  'services.s3Title',
+  'services.s4Title',
+]
 
-  async function subscribe(e: React.FormEvent) {
+function SocialButton({
+  href,
+  label,
+  children,
+}: {
+  href: string
+  label: string
+  children: React.ReactNode
+}) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={label}
+      className="grid h-11 w-11 place-items-center rounded-full border border-border/60 bg-background/40 text-muted-foreground transition-all hover:border-primary/60 hover:bg-primary/15 hover:text-primary"
+    >
+      {children}
+    </a>
+  )
+}
+
+function NewsletterForm() {
+  const { t } = useLang()
+  const [email, setEmail] = React.useState('')
+  const [state, setState] = React.useState<'idle' | 'loading' | 'success' | 'error' | 'invalid'>('idle')
+
+  async function onSubmit(e: React.FormEvent) {
     e.preventDefault()
-    setLoading(true)
+    const trimmed = email.trim()
+    if (!EMAIL_RE.test(trimmed)) {
+      setState('invalid')
+      toast.error(t('footer.newsletterInvalid'))
+      return
+    }
+    setState('loading')
     try {
-      const res = await fetch("/api/newsletter", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+      const res = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: trimmed }),
       })
-      if (!res.ok) throw new Error("failed")
-      setDone(true)
-      toast.success("Subscribed!", { description: "You're on the list for AI growth insights." })
-      setEmail("")
+      if (!res.ok) throw new Error('failed')
+      setState('success')
+      toast.success(t('footer.newsletterSuccess'))
+      setEmail('')
     } catch {
-      toast.error("Could not subscribe", { description: "Please try again." })
-    } finally {
-      setLoading(false)
+      setState('error')
+      toast.error(t('footer.newsletterError'))
     }
   }
 
   return (
-    <footer className="mt-auto border-t border-border/60 bg-muted/30">
-      {/* Newsletter band */}
-      <div className="border-b border-border/60">
-        <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-          <div className="grid items-center gap-6 rounded-3xl bg-gradient-to-br from-blue-600 to-cyan-500 p-7 shadow-xl shadow-blue-600/20 sm:p-9 lg:grid-cols-2 lg:gap-10">
-            <div className="text-white">
-              <h3 className="font-heading text-2xl font-extrabold leading-tight sm:text-3xl">
-                {t('footer.newsletterTitle')}
-              </h3>
-              <p className="mt-2 text-blue-50/90">
-                {t('footer.newsletterDesc')}
-              </p>
-            </div>
-            <div>
-              {done ? (
-                <div className="flex items-center gap-3 rounded-xl bg-white/15 px-4 py-4 text-white backdrop-blur">
-                  <CheckCircle2 className="h-6 w-6 shrink-0" />
-                  <p className="text-sm font-medium">
-                    {t('footer.subscribed')}
-                  </p>
-                </div>
-              ) : (
-                <form onSubmit={subscribe} className="flex flex-col gap-2.5 sm:flex-row">
-                  <Input
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder={t('footer.emailPlaceholder')}
-                    className="h-12 flex-1 border-white/30 bg-white/95 text-foreground placeholder:text-muted-foreground"
-                  />
-                  <Button
-                    type="submit"
-                    disabled={loading}
-                    className="h-12 shrink-0 bg-slate-900 px-6 font-semibold text-white hover:bg-slate-800"
-                  >
-                    {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : (
-                      <>
-                        {t('cta.subscribe')} <Send className="ml-2 h-4 w-4" />
-                      </>
-                    )}
-                  </Button>
-                </form>
-              )}
-            </div>
-          </div>
-        </div>
+    <form onSubmit={onSubmit} className="space-y-2" noValidate>
+      <div className="flex flex-col gap-2 sm:flex-row">
+        <Input
+          type="email"
+          inputMode="email"
+          autoComplete="email"
+          placeholder={t('footer.newsletterPlaceholder')}
+          value={email}
+          onChange={(e) => {
+            setEmail(e.target.value)
+            if (state !== 'idle' && state !== 'loading') setState('idle')
+          }}
+          disabled={state === 'loading' || state === 'success'}
+          aria-label={t('footer.newsletterPlaceholder')}
+          className={cn(
+            'h-11 flex-1 bg-background/60',
+            state === 'invalid' && 'border-destructive/70',
+          )}
+        />
+        <Button
+          type="submit"
+          disabled={state === 'loading' || state === 'success'}
+          className="h-11 gap-1.5 rounded-md border-0 bg-gradient-to-r from-emerald-500 to-teal-500 px-4 text-sm font-semibold text-white hover:from-emerald-400 hover:to-teal-400"
+        >
+          {state === 'loading' ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" />
+              <span className="hidden sm:inline">{t('footer.newsletterLoading')}</span>
+            </>
+          ) : state === 'success' ? (
+            <>
+              <CheckCircle2 className="h-4 w-4" />
+              <span className="hidden sm:inline">{t('footer.newsletterBtn')}</span>
+            </>
+          ) : (
+            <>
+              {t('footer.newsletterBtn')}
+              <ArrowRight className="h-4 w-4" />
+            </>
+          )}
+        </Button>
       </div>
 
-      {/* Main footer */}
-      <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-        <div className="grid gap-10 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
-          <div>
-            <Logo href="/" />
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
-              {t('footer.aboutDesc')}
+      {state === 'success' && (
+        <p className="flex items-center gap-1.5 rounded-md bg-primary/15 px-3 py-2 text-xs font-medium text-primary">
+          <CheckCircle2 className="h-3.5 w-3.5" />
+          {t('footer.newsletterSuccess')}
+        </p>
+      )}
+      {state === 'invalid' && (
+        <p className="text-xs text-destructive">{t('footer.newsletterInvalid')}</p>
+      )}
+      {state === 'error' && (
+        <p className="text-xs text-destructive">{t('footer.newsletterError')}</p>
+      )}
+    </form>
+  )
+}
+
+export function SiteFooter() {
+  const { t } = useLang()
+  const year = new Date().getFullYear()
+
+  return (
+    <footer className="mt-auto w-full border-t border-border/50 bg-card/50 backdrop-blur-sm">
+      {/* Decorative top gradient line */}
+      <div className="h-px w-full gradient-brand" />
+
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.3fr]">
+          {/* Col 1 — Brand */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-2.5">
+              <span className="relative grid h-10 w-10 place-items-center rounded-xl gradient-brand shadow-glow">
+                <span className="text-lg font-black text-white">N</span>
+                <Sparkles className="absolute -right-1 -top-1 h-3.5 w-3.5 text-amber-300" />
+              </span>
+              <span className="text-base font-bold tracking-tight">
+                {t('brand.name')}
+              </span>
+            </div>
+            <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
+              {t('footer.tagline')}
             </p>
-            <div className="mt-5 space-y-2 text-sm">
-              <a href={`mailto:${siteConfig.email}`} className="flex items-center gap-2 text-muted-foreground hover:text-foreground">
-                <Mail className="h-4 w-4 text-blue-600" /> {siteConfig.email}
-              </a>
-              <a href={`tel:${siteConfig.phone.replace(/\s/g, "")}`} className="flex items-center gap-2 text-muted-foreground hover:text-foreground">
-                <Phone className="h-4 w-4 text-blue-600" /> {siteConfig.phone}
-              </a>
-              <p className="flex items-center gap-2 text-muted-foreground">
-                <MapPin className="h-4 w-4 text-blue-600" /> {siteConfig.address}
-              </p>
-            </div>
-            <div className="mt-5 flex gap-2">
-              {socials.map((s) => (
-                <a
-                  key={s.name}
-                  href={s.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label={s.name}
-                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-border/60 text-muted-foreground transition-colors hover:border-blue-600/40 hover:bg-blue-600/10 hover:text-blue-600"
-                >
-                  <s.icon className="h-4 w-4" />
-                </a>
-              ))}
+            <div className="flex items-center gap-2.5 pt-1">
+              <SocialButton
+                href="https://facebook.com"
+                label="Facebook"
+              >
+                <Facebook className="h-5 w-5" />
+              </SocialButton>
+              <SocialButton
+                href="https://linkedin.com"
+                label="LinkedIn"
+              >
+                <Linkedin className="h-5 w-5" />
+              </SocialButton>
+              <SocialButton
+                href="https://instagram.com"
+                label="Instagram"
+              >
+                <Instagram className="h-5 w-5" />
+              </SocialButton>
+              <SocialButton href={waLink()} label={t('float.whatsapp')}>
+                <MessageCircle className="h-5 w-5" />
+              </SocialButton>
             </div>
           </div>
 
-          <FooterCol title={t('footer.services')} links={services.slice(0, 7).map((s) => ({ label: tr(s.title), href: "#services" }))} />
-          <FooterCol title={t('footer.company')} links={navMenu.map((n) => ({ label: tr(n.label), href: n.href }))} />
-          <FooterCol
-            title={t('footer.industries')}
-            links={[
-              { label: tr("Real Estate"), href: "#industries" },
-              { label: tr("Hospitals"), href: "#industries" },
-              { label: tr("E-commerce"), href: "#industries" },
-              { label: tr("Schools"), href: "#industries" },
-              { label: tr("Agencies"), href: "#industries" },
-              { label: tr("Corporate"), href: "#industries" },
-            ]}
-          />
-        </div>
-      </div>
+          {/* Col 2 — Company */}
+          <div className="space-y-3.5">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground">
+              {t('footer.company')}
+            </h3>
+            <ul className="space-y-2">
+              {COMPANY_LINKS.map((item) => (
+                <li key={item.key}>
+                  <a
+                    href={item.href}
+                    className="text-sm text-muted-foreground transition-colors hover:text-primary"
+                  >
+                    {t(item.key)}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-      {/* Bottom bar */}
-      <div className="relative border-t border-border/60">
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-blue-600/40 to-transparent" />
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 py-6 text-sm text-muted-foreground sm:flex-row sm:px-6 lg:px-8">
-          <p className="flex items-center gap-2">
-            <span className="flex h-2 w-2 rounded-full bg-emerald-500" />
-            © {new Date().getFullYear()} {siteConfig.name}. {t('footer.allRights')}
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
-            <Link href="/privacy" className="transition-colors hover:text-blue-600">{t('footer.privacyPolicy')}</Link>
-            <Link href="/terms" className="transition-colors hover:text-blue-600">{t('footer.termsOfService')}</Link>
-            <Link href="#faq" className="transition-colors hover:text-blue-600">FAQ</Link>
-            <Link href="#careers" className="transition-colors hover:text-blue-600">Careers</Link>
-            <Link href="/docs" className="transition-colors hover:text-blue-600">API Docs</Link>
-            <Link href="/admin" className="transition-colors hover:text-blue-600">Staff</Link>
-            <span className="flex items-center gap-1">
-              {t('footer.madeIn')} <span className="font-semibold text-foreground">{t('footer.bangladesh')}</span> 🇧🇩
+          {/* Col 3 — Services */}
+          <div className="space-y-3.5">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground">
+              {t('footer.servicesTitle')}
+            </h3>
+            <ul className="space-y-2">
+              {SERVICE_KEYS.map((key) => (
+                <li key={key}>
+                  <button
+                    onClick={() =>
+                      document
+                        .getElementById('services')
+                        ?.scrollIntoView({ behavior: 'smooth' })
+                    }
+                    className="text-left text-sm text-muted-foreground transition-colors hover:text-primary"
+                  >
+                    {t(key)}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Col 4 — Newsletter */}
+          <div className="space-y-3.5">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground">
+              {t('footer.newsletterTitle')}
+            </h3>
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              {t('footer.newsletterDesc')}
+            </p>
+            <NewsletterForm />
+          </div>
+        </div>
+
+        {/* Bottom bar */}
+        <div className="mt-12 flex flex-col gap-4 border-t border-border/50 pt-6 text-xs text-muted-foreground md:flex-row md:items-center md:justify-between">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <span className="inline-flex items-center gap-1.5">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-60" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
+              </span>
+              © {year} NextGen Digital Studio. {t('footer.rights')}
             </span>
+            <span className="mx-1 hidden text-border md:inline">|</span>
+            <a href="#" className="transition-colors hover:text-primary">
+              {t('footer.privacy')}
+            </a>
+            <span className="mx-1 hidden text-border md:inline">|</span>
+            <a href="#" className="transition-colors hover:text-primary">
+              {t('footer.terms')}
+            </a>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <MapPin className="h-3.5 w-3.5 text-primary" />
+            <span>{t('footer.address')}</span>
           </div>
         </div>
       </div>
@@ -170,25 +281,4 @@ export function Footer() {
   )
 }
 
-function FooterCol({ title, links }: { title: string; links: { label: string; href: string }[] }) {
-  return (
-    <div>
-      <h4 className="font-heading text-sm font-bold uppercase tracking-wider text-foreground">
-        {title}
-      </h4>
-      <ul className="mt-4 space-y-2.5">
-        {links.map((l) => (
-          <li key={l.label}>
-            <Link
-              href={l.href}
-              className="group inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
-            >
-              {l.label}
-              <ArrowRight className="h-3 w-3 opacity-0 transition-opacity group-hover:opacity-100" />
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
-}
+export default SiteFooter

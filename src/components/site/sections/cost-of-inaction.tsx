@@ -1,108 +1,108 @@
 'use client'
 
-import { Reveal, Eyebrow } from "../reveal"
-import { useLang } from "../language-provider"
-import { useBooking } from "../booking-modal"
-import { TrendingDown, ArrowRight, Calculator } from "lucide-react"
-import { motion } from "framer-motion"
-import { useCountUp } from "@/hooks/use-count-up"
-import * as React from "react"
+import * as React from 'react'
+import { motion } from 'framer-motion'
+import { TrendingDown, ArrowRight } from 'lucide-react'
+import {
+  Reveal,
+  staggerContainer,
+  staggerItem,
+} from '@/components/site/reveal'
+import { useLang } from '@/components/site/language-provider'
+import { Button } from '@/components/ui/button'
 
-export function CostOfInaction() {
+function scrollToId(id: string) {
+  if (typeof document === 'undefined') return
+  const el = document.getElementById(id)
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
+
+const stats = [
+  {
+    label: 'cost.lostLeadsLabel',
+    value: 'cost.lostLeadsValue',
+    money: 'cost.lostLeadsMoney',
+  },
+  {
+    label: 'cost.followupLabel',
+    value: 'cost.followupValue',
+    money: 'cost.followupMoney',
+  },
+  {
+    label: 'cost.afterHoursLabel',
+    value: 'cost.afterHoursValue',
+    money: 'cost.afterHoursMoney',
+  },
+] as const
+
+export function CostOfInactionSection() {
   const { t } = useLang()
-  const { openWith } = useBooking()
-  const ref = React.useRef<HTMLDivElement>(null)
-  const inView = React.useRef(false)
-
-  // Simple intersection observer
-  React.useEffect(() => {
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) inView.current = true },
-      { threshold: 0.2 }
-    )
-    if (ref.current) obs.observe(ref.current)
-    return () => obs.disconnect()
-  }, [])
-
-  const leadLoss = useCountUp(15, 1500, true)
-  const monthlyLoss = useCountUp(1.8, 1500, true) // lakh
-  const yearlyLoss = useCountUp(21.6, 1500, true) // lakh
 
   return (
-    <section ref={ref} id="cost-of-inaction" className="relative scroll-mt-24 overflow-hidden py-20 sm:py-28">
-      <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute left-1/3 top-0 h-72 w-72 rounded-full bg-rose-500/10 blur-[100px]" />
-        <div className="absolute right-1/3 bottom-0 h-72 w-72 rounded-full bg-amber-500/10 blur-[100px]" />
-      </div>
-      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-        <Reveal className="mx-auto max-w-2xl text-center">
-          <Eyebrow className="mx-auto border-rose-500/20 bg-rose-500/5 text-rose-600">
-            {t('cost.eyebrow')}
-          </Eyebrow>
-          <h2 className="mt-5 font-heading text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-[2.75rem]">
-            {t('cost.title1')}{" "}
-            <span className="text-rose-500">{t('cost.title2')}</span>
+    <section
+      id="cost"
+      className="relative overflow-hidden bg-card py-20 sm:py-24 lg:py-28"
+      aria-label="Cost of inaction"
+    >
+      {/* Dotted overlay for urgent tone */}
+      <div className="pointer-events-none absolute inset-0 bg-dots opacity-50" aria-hidden />
+
+      <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <Reveal className="mx-auto max-w-3xl text-center">
+          <div className="inline-flex items-center gap-2 rounded-full border border-red-500/30 bg-red-500/5 px-4 py-2 text-red-400 text-xs sm:text-sm font-semibold uppercase tracking-wider">
+            <TrendingDown className="h-4 w-4 shrink-0" />
+            <span>{t('cost.eyebrow')}</span>
+          </div>
+          <h2 className="mt-5 text-3xl lg:text-4xl font-bold tracking-tight text-foreground">
+            {t('cost.title')}
           </h2>
-          <p className="mt-5 text-lg text-muted-foreground">{t('cost.subtitle')}</p>
+          <p className="mt-4 text-muted-foreground text-lg leading-relaxed">
+            {t('cost.subtitle')}
+          </p>
         </Reveal>
 
-        {/* Loss calculator visualization */}
-        <Reveal delay={0.1} className="mt-12">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-            <div className="rounded-2xl border border-rose-500/20 bg-rose-500/[0.04] p-6 text-center">
-              <TrendingDown className="mx-auto h-8 w-8 text-rose-500" />
-              <p className="mt-3 font-heading text-4xl font-extrabold text-rose-500">
-                {leadLoss.toFixed(0)}
-              </p>
-              <p className="mt-1 text-xs text-muted-foreground">{t('cost.losingLeads')}</p>
-            </div>
-            <div className="rounded-2xl border border-amber-500/20 bg-amber-500/[0.04] p-6 text-center">
-              <TrendingDown className="mx-auto h-8 w-8 text-amber-500" />
-              <p className="mt-3 font-heading text-4xl font-extrabold text-amber-500">
-                ৳{monthlyLoss.toFixed(1)}L
-              </p>
-              <p className="mt-1 text-xs text-muted-foreground">{t('cost.losingRevenue')}</p>
-            </div>
-            <div className="rounded-2xl border border-rose-500/20 bg-rose-500/[0.04] p-6 text-center">
-              <TrendingDown className="mx-auto h-8 w-8 text-rose-500" />
-              <p className="mt-3 font-heading text-4xl font-extrabold text-rose-500">
-                ৳{yearlyLoss.toFixed(1)}L
-              </p>
-              <p className="mt-1 text-xs text-muted-foreground">{t('cost.losingYearly')}</p>
-            </div>
-          </div>
-        </Reveal>
-
-        {/* Explanation */}
-        <Reveal delay={0.15} className="mt-6">
-          <div className="rounded-2xl border border-border/60 bg-card p-6">
-            <div className="flex items-start gap-3">
-              <Calculator className="mt-0.5 h-5 w-5 shrink-0 text-blue-600" />
-              <p className="text-sm leading-relaxed text-muted-foreground">{t('cost.calc')}</p>
-            </div>
-          </div>
-        </Reveal>
-
-        {/* Solution contrast */}
-        <Reveal delay={0.2} className="mt-6">
-          <div className="overflow-hidden rounded-3xl border border-emerald-500/30 bg-emerald-500/[0.06] p-6 sm:p-8">
-            <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:text-left">
-              <div className="flex-1">
-                <p className="text-sm font-medium text-emerald-700 dark:text-emerald-400">
-                  {t('cost.automationCost')}
+        {/* Big stat cards */}
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: '-80px' }}
+          className="mt-14 grid gap-6 md:grid-cols-3"
+        >
+          {stats.map((s, i) => (
+            <motion.div key={i} variants={staggerItem}>
+              <div className="relative h-full overflow-hidden rounded-2xl border border-red-500/20 bg-background/60 backdrop-blur-sm p-8 text-center transition-all duration-300 hover:-translate-y-1 hover:border-red-500/40">
+                {/* Decorative red glow */}
+                <div className="pointer-events-none absolute -top-12 left-1/2 h-32 w-32 -translate-x-1/2 rounded-full bg-red-500/10 blur-2xl" aria-hidden />
+                <p className="relative text-sm text-muted-foreground uppercase tracking-wider">
+                  {t(s.label)}
+                </p>
+                <p className="relative mt-3 text-5xl sm:text-6xl font-bold text-red-400">
+                  {t(s.value)}
+                </p>
+                <p className="relative mt-3 text-emerald-400 font-semibold">
+                  {t(s.money)}
                 </p>
               </div>
-              <button
-                onClick={() => openWith('Cost of Inaction → Strategy Call')}
-                className="flex shrink-0 items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-emerald-600/25 transition-transform hover:scale-[1.02]"
-              >
-                {t('cost.stopLosing')}
-                <ArrowRight className="h-4 w-4" />
-              </button>
-            </div>
-          </div>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* CTA */}
+        <Reveal delay={0.2} className="mt-14 flex justify-center">
+          <Button
+            onClick={() => scrollToId('lead-form')}
+            className="gradient-brand animate-pulse-glow h-14 px-8 text-base text-white hover:opacity-95"
+            size="lg"
+          >
+            {t('cost.cta')}
+            <ArrowRight className="h-5 w-5" />
+          </Button>
         </Reveal>
       </div>
     </section>
   )
 }
+
+export default CostOfInactionSection

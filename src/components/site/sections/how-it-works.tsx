@@ -1,62 +1,117 @@
 'use client'
 
-import { Reveal, Eyebrow } from "../reveal"
-import { processSteps } from "@/lib/site-data"
-import { useBooking } from "../booking-modal"
-import { useLang } from "../language-provider"
-import { Button } from "@/components/ui/button"
-import { ArrowRight } from "lucide-react"
+import * as React from 'react'
+import { motion } from 'framer-motion'
+import { Calendar } from 'lucide-react'
+import {
+  Reveal,
+  SectionShell,
+  staggerContainer,
+  staggerItem,
+} from '@/components/site/reveal'
+import { useLang } from '@/components/site/language-provider'
+
+type DayEntry = {
+  titleKey: string
+  descKey: string
+}
+
+const days: DayEntry[] = [
+  { titleKey: 'how.day1Title', descKey: 'how.day1Desc' },
+  { titleKey: 'how.day2Title', descKey: 'how.day2Desc' },
+  { titleKey: 'how.day3Title', descKey: 'how.day3Desc' },
+  { titleKey: 'how.day4Title', descKey: 'how.day4Desc' },
+]
+
+/** Split a "Day N — Title" string into [dayLabel, titleText] using em-dash. */
+function splitDay(full: string): { dayLabel: string; titleText: string } {
+  const idx = full.indexOf('—')
+  if (idx === -1) return { dayLabel: full, titleText: '' }
+  return {
+    dayLabel: full.slice(0, idx).trim(),
+    titleText: full.slice(idx + 1).trim(),
+  }
+}
 
 export function HowItWorks() {
-  const { openWith } = useBooking()
-  const { t, tr } = useLang()
-  return (
-    <section id="how-it-works" className="relative scroll-mt-24 overflow-hidden py-20 sm:py-28">
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-grid [mask-image:radial-gradient(ellipse_at_center,black_20%,transparent_70%)] opacity-60" />
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <Reveal className="mx-auto max-w-2xl text-center">
-          <Eyebrow className="mx-auto">{t('howItWorks.eyebrow')}</Eyebrow>
-          <h2 className="mt-5 font-heading text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-[2.75rem]">
-            {t('howItWorks.title1')}{" "}
-            <span className="text-gradient">{t('howItWorks.title2')}</span>{" "}
-            {t('howItWorks.title3')}
-          </h2>
-          <p className="mt-5 text-lg text-muted-foreground">
-            {t('howItWorks.subtitle')}
-          </p>
-        </Reveal>
+  const { t } = useLang()
 
-        <div className="relative mt-16">
-          {/* connecting line */}
-          <div className="absolute left-0 right-0 top-7 hidden h-px bg-gradient-to-r from-transparent via-border to-transparent lg:block" />
-          <div className="grid gap-8 lg:grid-cols-4">
-            {processSteps.map((s, i) => (
-              <Reveal key={s.step} delay={i * 0.1}>
-                <div className="relative text-center lg:text-left">
-                  <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 to-cyan-500 font-heading text-lg font-extrabold text-white shadow-xl shadow-blue-600/25 lg:mx-0">
-                    {s.step}
-                  </div>
-                  <h3 className="font-heading text-lg font-bold">{tr(s.title)}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                    {tr(s.desc)}
+  return (
+    <SectionShell id="how" className="relative">
+      {/* Header */}
+      <Reveal className="mx-auto max-w-3xl text-center">
+        <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/5 px-4 py-2 text-emerald-500 text-xs sm:text-sm font-semibold uppercase tracking-wider">
+          <Calendar className="h-4 w-4 shrink-0" />
+          <span>{t('how.eyebrow')}</span>
+        </div>
+        <h2 className="mt-5 text-3xl lg:text-4xl font-bold tracking-tight text-foreground">
+          {t('how.title')}
+        </h2>
+        <p className="mt-4 text-muted-foreground text-lg leading-relaxed">
+          {t('how.subtitle')}
+        </p>
+      </Reveal>
+
+      {/* Vertical timeline */}
+      <motion.ol
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, margin: '-80px' }}
+        className="relative mx-auto mt-16 max-w-3xl"
+      >
+        {/* Vertical emerald line */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-2 top-2 bottom-2 w-px bg-gradient-to-b from-emerald-500/40 via-emerald-500/30 to-transparent"
+        />
+
+        {days.map((day, i) => {
+          const { dayLabel, titleText } = splitDay(t(day.titleKey))
+          return (
+            <motion.li
+              key={i}
+              variants={staggerItem}
+              className="relative border-l-2 border-emerald-500/30 pl-8 pb-10 last:pb-0"
+            >
+              {/* Dot */}
+              <span
+                aria-hidden
+                className="absolute -left-[9px] top-2 h-4 w-4 rounded-full gradient-brand shadow-glow ring-4 ring-background"
+              />
+
+              <div className="flex flex-col sm:flex-row sm:items-start sm:gap-5">
+                {/* Day badge */}
+                <div className="mb-3 sm:mb-0 sm:shrink-0">
+                  <span className="inline-flex items-center gap-1.5 rounded-full gradient-brand px-4 py-1.5 text-sm font-semibold text-white shadow-glow">
+                    <Calendar className="h-3.5 w-3.5" />
+                    {dayLabel}
+                  </span>
+                </div>
+
+                {/* Content */}
+                <div className="flex-1">
+                  {titleText && (
+                    <h3 className="text-xl font-semibold text-foreground">
+                      {titleText}
+                    </h3>
+                  )}
+                  {!titleText && (
+                    <h3 className="text-xl font-semibold text-foreground">
+                      {t(day.titleKey)}
+                    </h3>
+                  )}
+                  <p className="mt-2 text-muted-foreground leading-relaxed">
+                    {t(day.descKey)}
                   </p>
                 </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-
-        <Reveal delay={0.2} className="mt-14 text-center">
-          <Button
-            onClick={() => openWith()}
-            size="lg"
-            className="h-13 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 px-7 text-[15px] font-semibold shadow-xl shadow-blue-600/25 transition-transform hover:scale-[1.02]"
-          >
-            Start with a free strategy call
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
-        </Reveal>
-      </div>
-    </section>
+              </div>
+            </motion.li>
+          )
+        })}
+      </motion.ol>
+    </SectionShell>
   )
 }
+
+export default HowItWorks

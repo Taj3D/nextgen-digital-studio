@@ -1,74 +1,71 @@
 'use client'
 
-import { Reveal, Eyebrow } from "../reveal"
+import * as React from 'react'
+import { motion } from 'framer-motion'
+import { HelpCircle } from 'lucide-react'
+import {
+  Reveal,
+  SectionShell,
+  staggerContainer,
+  staggerItem,
+} from '@/components/site/reveal'
+import { useLang } from '@/components/site/language-provider'
+import { FAQS } from '@/lib/site-data'
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion"
-import { faqs } from "@/lib/site-data"
-import { useBooking } from "../booking-modal"
-import { useLang } from "../language-provider"
-import { MessageCircleQuestion, ArrowRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
+} from '@/components/ui/accordion'
 
-export function Faq() {
-  const { openWith } = useBooking()
-  const { t, tr } = useLang()
+export function FAQ() {
+  const { t, lang } = useLang()
+
   return (
-    <section id="faq" className="relative scroll-mt-24 py-20 sm:py-28">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
-          <Reveal>
-            <Eyebrow>{t('faq.eyebrow')}</Eyebrow>
-            <h2 className="mt-5 font-heading text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-[2.5rem]">
-              {t('faq.title1')} <br />
-              <span className="text-gradient">{t('faq.title2')}</span>
-            </h2>
-            <p className="mt-5 text-muted-foreground">
-              {t('faq.subtitle')}
-            </p>
-            <div className="mt-7 rounded-2xl border border-border/60 bg-card p-5">
-              <div className="flex items-center gap-3">
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500 text-white">
-                  <MessageCircleQuestion className="h-5 w-5" />
-                </div>
-                <div>
-                  <p className="font-heading text-sm font-bold">Still have questions?</p>
-                  <p className="text-xs text-muted-foreground">Get a free 30-min consultation.</p>
-                </div>
-              </div>
-              <Button
-                onClick={() => openWith("FAQ question")}
-                className="mt-4 w-full rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 font-semibold shadow-lg shadow-blue-600/25"
-              >
-                Ask an expert
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.1}>
-            <Accordion type="single" collapsible className="flex flex-col gap-3">
-              {faqs.map((f, i) => (
-                <AccordionItem
-                  key={i}
-                  value={`item-${i}`}
-                  className="rounded-2xl border border-border/60 bg-card px-5 data-[state=open]:border-blue-600/30 data-[state=open]:shadow-lg data-[state=open]:shadow-blue-600/5"
-                >
-                  <AccordionTrigger className="text-left font-heading text-[15px] font-bold hover:no-underline">
-                    {tr(f.q)}
-                  </AccordionTrigger>
-                  <AccordionContent className="text-sm leading-relaxed text-muted-foreground">
-                    {tr(f.a)}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </Reveal>
+    <SectionShell id="faq" className="relative">
+      {/* Header */}
+      <Reveal className="mx-auto max-w-3xl text-center">
+        <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/5 px-4 py-2 text-emerald-500 text-xs sm:text-sm font-semibold uppercase tracking-wider">
+          <HelpCircle className="h-4 w-4 shrink-0" />
+          <span>{t('faq.eyebrow')}</span>
         </div>
-      </div>
-    </section>
+        <h2 className="mt-5 text-3xl lg:text-4xl font-bold tracking-tight text-foreground">
+          {t('faq.title')}
+        </h2>
+        <p className="mt-4 text-muted-foreground text-lg leading-relaxed">
+          {t('faq.subtitle')}
+        </p>
+      </Reveal>
+
+      {/* Accordion */}
+      <motion.div
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, margin: '-80px' }}
+        className="mx-auto mt-12 max-w-3xl"
+      >
+        <div className="rounded-2xl border border-border/60 bg-card/60 backdrop-blur-sm px-6 sm:px-8">
+          <Accordion type="single" collapsible className="w-full">
+            {FAQS.map((item, i) => (
+              <AccordionItem
+                key={i}
+                value={`item-${i}`}
+                className="border-border/60"
+              >
+                <AccordionTrigger className="text-left text-base sm:text-lg font-semibold text-foreground hover:text-emerald-500 hover:no-underline py-5">
+                  {lang === 'bn' ? item.q.bn : item.q.en}
+                </AccordionTrigger>
+                <AccordionContent className="text-sm sm:text-base text-muted-foreground leading-relaxed pb-5">
+                  {lang === 'bn' ? item.a.bn : item.a.en}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </div>
+      </motion.div>
+    </SectionShell>
   )
 }
+
+export default FAQ

@@ -1,210 +1,210 @@
 'use client'
 
-import * as React from "react"
-import Link from "next/link"
-import { motion, AnimatePresence } from "framer-motion"
-import { Menu, X, ChevronDown, ArrowRight, Phone } from "lucide-react"
-import { Logo } from "./logo"
-import { ThemeToggle } from "./theme-toggle"
-import { LanguageToggle } from "./language-toggle"
-import { useLang } from "./language-provider"
-import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
-import { navMenu, siteConfig } from "@/lib/site-data"
-import { useBooking } from "./booking-modal"
-import { cn } from "@/lib/utils"
+import * as React from 'react'
+import { Menu, Globe, Sparkles } from 'lucide-react'
+
+import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet'
+import { useLang, type Lang } from '@/components/site/language-provider'
+
+type NavItem = {
+  key: string
+  href: string
+}
+
+const NAV_ITEMS: NavItem[] = [
+  { key: 'nav.services', href: '#services' },
+  { key: 'nav.howItWorks', href: '#how' },
+  { key: 'nav.pricing', href: '#pricing' },
+  { key: 'nav.testimonials', href: '#testimonials' },
+  { key: 'nav.faq', href: '#faq' },
+]
+
+function smoothScrollTo(href: string) {
+  const id = href.replace('#', '')
+  const el = document.getElementById(id)
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+}
+
+function Logo({ onClick }: { onClick?: () => void }) {
+  const { t } = useLang()
+  return (
+    <button
+      onClick={() => {
+        onClick?.()
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }}
+      className="group flex items-center gap-2.5 outline-none"
+      aria-label={t('brand.name')}
+    >
+      <span className="relative grid h-10 w-10 place-items-center rounded-xl gradient-brand shadow-glow transition-transform duration-300 group-hover:scale-105">
+        <span className="text-lg font-black text-white drop-shadow">N</span>
+        <Sparkles className="absolute -right-1 -top-1 h-3.5 w-3.5 text-amber-300" />
+      </span>
+      <span className="hidden text-base font-bold tracking-tight text-foreground sm:block">
+        {t('brand.name')}
+      </span>
+    </button>
+  )
+}
+
+function LangToggle() {
+  const { lang, setLang } = useLang()
+  const options: { code: Lang; label: string }[] = [
+    { code: 'en', label: 'EN' },
+    { code: 'bn', label: 'BN' },
+  ]
+  return (
+    <div className="inline-flex items-center rounded-full border border-border/60 bg-background/40 p-0.5 backdrop-blur">
+      <Globe className="ml-1.5 mr-0.5 h-3.5 w-3.5 text-muted-foreground" />
+      {options.map((opt) => {
+        const active = lang === opt.code
+        return (
+          <button
+            key={opt.code}
+            onClick={() => setLang(opt.code)}
+            aria-pressed={active}
+            className={cn(
+              'min-w-[40px] rounded-full px-2.5 py-1 text-xs font-semibold transition-all',
+              active
+                ? 'bg-primary text-primary-foreground shadow-sm'
+                : 'text-muted-foreground hover:text-foreground',
+            )}
+          >
+            {opt.label}
+          </button>
+        )
+      })}
+    </div>
+  )
+}
+
+function DesktopNav() {
+  const { t } = useLang()
+  return (
+    <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
+      {NAV_ITEMS.map((item) => (
+        <button
+          key={item.key}
+          onClick={() => smoothScrollTo(item.href)}
+          className="relative rounded-full px-3.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+        >
+          {t(item.key)}
+        </button>
+      ))}
+    </nav>
+  )
+}
+
+function CtaButton({ onClick }: { onClick?: () => void }) {
+  const { t } = useLang()
+  return (
+    <Button
+      onClick={() => {
+        onClick?.()
+        smoothScrollTo('#lead-form')
+      }}
+      className="animate-pulse-glow h-10 rounded-full border-0 bg-gradient-to-r from-emerald-500 via-emerald-500 to-teal-500 px-5 text-sm font-semibold text-white shadow-md hover:from-emerald-400 hover:to-teal-400"
+    >
+      {t('nav.cta')}
+    </Button>
+  )
+}
 
 export function Navbar() {
+  const { t } = useLang()
+  const [open, setOpen] = React.useState(false)
   const [scrolled, setScrolled] = React.useState(false)
-  const [mobileOpen, setMobileOpen] = React.useState(false)
-  const [openMenu, setOpenMenu] = React.useState<string | null>(null)
-  const { openWith } = useBooking()
-  const { t, tr } = useLang()
 
   React.useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 16)
+    const onScroll = () => setScrolled(window.scrollY > 20)
     onScroll()
-    window.addEventListener("scroll", onScroll, { passive: true })
-    return () => window.removeEventListener("scroll", onScroll)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
   return (
-    <>
-      <header
-        className={cn(
-          "fixed inset-x-0 top-0 z-50 transition-all duration-300",
-          scrolled ? "py-2.5" : "py-4",
-        )}
-      >
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div
-            className={cn(
-              "flex items-center justify-between rounded-2xl px-4 transition-all duration-300 sm:px-5",
-              scrolled
-                ? "h-14 border border-border/60 bg-background/80 shadow-lg shadow-black/[0.03] backdrop-blur-xl"
-                : "h-16 border border-transparent bg-transparent",
-            )}
-          >
-            <Logo href="/" />
+    <header
+      className={cn(
+        'sticky top-0 z-40 w-full border-b border-border/50 backdrop-blur-xl transition-all duration-300',
+        scrolled
+          ? 'bg-background/85 shadow-[0_8px_30px_-12px_rgba(0,0,0,0.35)]'
+          : 'bg-background/70',
+      )}
+    >
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
+        <Logo />
 
-            {/* Desktop nav */}
-            <nav className="hidden items-center gap-1 lg:flex" onMouseLeave={() => setOpenMenu(null)}>
-              {navMenu.map((item) => (
-                <div
-                  key={item.label}
-                  className="relative"
-                  onMouseEnter={() => setOpenMenu(item.children ? item.label : null)}
-                >
-                  <Link
-                    href={item.href}
-                    className="flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium text-foreground/70 transition-colors hover:text-foreground"
-                  >
-                    {tr(item.label)}
-                    {item.children && (
-                      <ChevronDown
-                        className={cn(
-                          "h-3.5 w-3.5 transition-transform duration-200",
-                          openMenu === item.label && "rotate-180",
-                        )}
-                      />
-                    )}
-                  </Link>
+        <DesktopNav />
 
-                  {item.children && (
-                    <AnimatePresence>
-                      {openMenu === item.label && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 8 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: 8 }}
-                          transition={{ duration: 0.18, ease: "easeOut" }}
-                          className="absolute left-1/2 top-full z-50 w-[34rem] -translate-x-1/2 pt-3"
-                        >
-                          <div className="overflow-hidden rounded-2xl border border-border/60 bg-popover/95 p-2 shadow-2xl shadow-black/10 backdrop-blur-xl">
-                            <div className="grid grid-cols-2 gap-1">
-                              {item.children.map((child) => (
-                                <Link
-                                  key={child.label}
-                                  href={child.href}
-                                  onClick={() => setOpenMenu(null)}
-                                  className="group rounded-xl p-3 transition-colors hover:bg-muted"
-                                >
-                                  <div className="text-sm font-semibold text-foreground group-hover:text-blue-600">
-                                    {tr(child.label)}
-                                  </div>
-                                  <div className="mt-0.5 line-clamp-2 text-xs text-muted-foreground">
-                                    {tr(child.desc)}
-                                  </div>
-                                </Link>
-                              ))}
-                            </div>
-                            <Link
-                              href={item.href}
-                              onClick={() => setOpenMenu(null)}
-                              className="mt-1 flex items-center justify-between rounded-xl bg-gradient-to-r from-blue-600/10 to-cyan-500/10 px-4 py-2.5 text-sm font-semibold text-blue-600 hover:from-blue-600/15 hover:to-cyan-500/15"
-                            >
-                              {t('cta.viewAllServices')} {tr(item.label).toLowerCase()}
-                              <ArrowRight className="h-4 w-4" />
-                            </Link>
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  )}
-                </div>
-              ))}
-            </nav>
+        <div className="flex items-center gap-2 sm:gap-3">
+          <LangToggle />
+          <CtaButton />
 
-            <div className="flex items-center gap-2">
-              <a
-                href={`tel:${siteConfig.phone.replace(/\s/g, "")}`}
-                className="hidden items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium text-foreground/70 transition-colors hover:text-foreground xl:flex"
-              >
-                <Phone className="h-3.5 w-3.5" />
-                {siteConfig.phone}
-              </a>
-              <ThemeToggle />
-              <LanguageToggle />
+          {/* Mobile hamburger */}
+          <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger asChild>
               <Button
-                onClick={() => openWith()}
-                className="hidden h-10 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 px-5 text-sm font-semibold shadow-lg shadow-blue-600/25 transition-transform hover:scale-[1.03] sm:inline-flex"
-              >
-                {t('cta.bookCall')}
-              </Button>
-              <button
+                variant="ghost"
+                size="icon"
+                className="grid h-11 w-11 place-items-center rounded-lg border border-border/50 md:hidden"
                 aria-label="Open menu"
-                onClick={() => setMobileOpen(true)}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-border/60 bg-background/60 text-foreground lg:hidden"
               >
                 <Menu className="h-5 w-5" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
+              </Button>
+            </SheetTrigger>
+            <SheetContent
+              side="right"
+              className="w-[300px] max-w-[85vw] border-l border-border/60 bg-background p-0 sm:max-w-sm"
+            >
+              <SheetHeader className="border-b border-border/50 p-4">
+                <SheetTitle className="flex items-center gap-2">
+                  <span className="grid h-9 w-9 place-items-center rounded-xl gradient-brand">
+                    <span className="text-base font-black text-white">N</span>
+                  </span>
+                  <span className="text-base font-bold">{t('brand.name')}</span>
+                </SheetTitle>
+              </SheetHeader>
 
-      {/* Mobile drawer */}
-      <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-        <SheetContent side="right" className="w-full max-w-sm overflow-y-auto p-0">
-          <SheetHeader className="border-b border-border/60 px-5 py-4">
-            <div className="flex items-center justify-between">
-              <SheetTitle asChild>
-                <div><Logo href="/" /></div>
-              </SheetTitle>
-              <button
-                aria-label="Close menu"
-                onClick={() => setMobileOpen(false)}
-                className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border/60"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-          </SheetHeader>
-          <div className="flex flex-col gap-1 px-3 py-4">
-            {navMenu.map((item) => (
-              <details key={item.label} className="group rounded-xl">
-                <summary className="flex cursor-pointer list-none items-center justify-between rounded-xl px-3 py-3 text-base font-semibold text-foreground hover:bg-muted">
-                  {tr(item.label)}
-                  {item.children && (
-                    <ChevronDown className="h-4 w-4 transition-transform group-open:rotate-180" />
-                  )}
-                </summary>
-                {item.children && (
-                  <div className="mt-1 mb-2 flex flex-col gap-0.5 pl-3">
-                    {item.children.map((c) => (
-                      <Link
-                        key={c.label}
-                        href={c.href}
-                        onClick={() => setMobileOpen(false)}
-                        className="rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
-                      >
-                        {tr(c.label)}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </details>
-            ))}
-          </div>
-          <div className="mt-auto border-t border-border/60 px-5 py-5">
-            <Button
-              onClick={() => {
-                setMobileOpen(false)
-                openWith()
-              }}
-              className="h-12 w-full rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 font-semibold shadow-lg shadow-blue-600/25"
-            >
-              {t('cta.bookCall')}
-            </Button>
-            <a
-              href={`tel:${siteConfig.phone.replace(/\s/g, "")}`}
-              className="mt-3 flex items-center justify-center gap-2 text-sm font-medium text-muted-foreground"
-            >
-              <Phone className="h-4 w-4" /> {siteConfig.phone}
-            </a>
-          </div>
-        </SheetContent>
-      </Sheet>
-    </>
+              <div className="custom-scrollbar flex max-h-[calc(100vh-180px)] flex-1 flex-col gap-1 overflow-y-auto p-4">
+                {NAV_ITEMS.map((item) => (
+                  <button
+                    key={item.key}
+                    onClick={() => {
+                      setOpen(false)
+                      // wait for sheet close before smooth scroll
+                      setTimeout(() => smoothScrollTo(item.href), 80)
+                    }}
+                    className="flex min-h-[48px] items-center rounded-lg px-3 text-left text-base font-medium text-foreground/90 transition-colors hover:bg-accent/60 hover:text-foreground"
+                  >
+                    {t(item.key)}
+                  </button>
+                ))}
+              </div>
+
+              <div className="mt-auto border-t border-border/50 p-4">
+                <CtaButton
+                  onClick={() => {
+                    setOpen(false)
+                    setTimeout(() => smoothScrollTo('#lead-form'), 80)
+                  }}
+                />
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
+      </div>
+    </header>
   )
 }
+
+export default Navbar

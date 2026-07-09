@@ -1,3 +1,311 @@
+// Central site content for NextGen Digital Studio
+// All data is bilingual (English + Bangla) for EN/BN language toggle
+
+export const SITE_CONFIG = {
+  name: 'NextGen Digital Studio',
+  nameBn: 'নেক্সটজেন ডিজিটাল স্টুডিও',
+  phone: '+8801711731354',
+  phoneDisplay: '+880 1711-731354',
+  whatsapp: '8801711731354',
+  email: 'nextgendigitalstudio1@gmail.com',
+  address: 'মিয়া বাড়ীর মোড়, শেখহাটি, নিউমার্কেট, যশোর, বাংলাদেশ',
+  url: 'https://nextgendigitalstudio.com',
+  founded: 2023,
+  facebook: 'https://www.facebook.com/nextgendigitalstudio',
+  linkedin: 'https://www.linkedin.com/in/nextgen-digital-studio',
+  github: 'https://github.com/Taj3D',
+  instagram: 'https://instagram.com/nextgendigitalstudio1',
+  threads: 'https://threads.net/nextgendigitalstudio1',
+  youtube: 'https://www.youtube.com/@NextGenDigitalStudio1',
+  twitter: 'https://x.com/NextGenDigit',
+}
+
+export type Testimonial = {
+  id: string
+  name: string
+  nameBn: string
+  role: string
+  roleBn: string
+  company: string
+  companyBn: string
+  avatar: string
+  quote: string
+  quoteBn: string
+  metric: string
+  metricBn: string
+  rating: number
+}
+
+export const TESTIMONIALS: Testimonial[] = [
+  {
+    id: 't1',
+    name: 'Rakib Hasan',
+    nameBn: 'রাকিব হাসান',
+    role: 'Founder',
+    roleBn: 'প্রতিষ্ঠাতা',
+    company: 'Jessore Electronics',
+    companyBn: 'যশোর ইলেকট্রনিক্স',
+    avatar: 'RH',
+    quote: 'Before NextGen, I was losing 60% of leads after 8 PM. Now my AI replies in 3 seconds — even at midnight. Sales up 240% in 4 months.',
+    quoteBn: 'নেক্সটজেনের আগে আমি রাত ৮টার পর ৬০% লিড হারাতাম। এখন আমার এআই ৩ সেকেন্ডে রিপ্লাই দেয় — মধ্যরাতেও। ৪ মাসে সেলস ২৪০% বেড়েছে।',
+    metric: '240% sales growth',
+    metricBn: '২৪০% সেলস বৃদ্ধি',
+    rating: 5,
+  },
+  {
+    id: 't2',
+    name: 'Shahana Begum',
+    nameBn: 'শাহানা বেগম',
+    role: 'CEO',
+    roleBn: 'সিইও',
+    company: 'Boutique Bhabna',
+    companyBn: 'বুটিক ভাবনা',
+    avatar: 'SB',
+    quote: 'I used to spend 5 hours daily answering the same questions. Now the AI handles 80% of customer chats. I focus on growing my business.',
+    quoteBn: 'আমি প্রতিদিন ৫ ঘন্টা একই প্রশ্নের উত্তর দিতাম। এখন এআই ৮০% কাস্টমার চ্যাট সামলায়। আমি ব্যবসা বড় করায় মনোযোগ দিই।',
+    metric: '5 hrs saved daily',
+    metricBn: 'দৈনিক ৫ ঘন্টা সাশ্রয়',
+    rating: 5,
+  },
+  {
+    id: 't3',
+    name: 'Tanvir Ahmed',
+    nameBn: 'তানভীর আহমেদ',
+    role: 'Director',
+    roleBn: 'পরিচালক',
+    company: 'Khulna Real Estate',
+    companyBn: 'খুলনা রিয়েল এস্টেট',
+    avatar: 'TA',
+    quote: 'We went from 12 to 47 qualified appointments per month. The AI qualifies leads better than my best salesperson — and never takes a day off.',
+    quoteBn: 'আমরা মাসে ১২ থেকে ৪৭ কোয়ালিফাইড অ্যাপয়েন্টমেন্টে গেলাম। এআই আমার সেরা সেলসম্যানের চেয়ে ভালো লিড কোয়ালিফাই করে — আর কখনো ছুটি নেয় না।',
+    metric: '4x more appointments',
+    metricBn: '৪গুণ বেশি অ্যাপয়েন্টমেন্ট',
+    rating: 5,
+  },
+  {
+    id: 't4',
+    name: 'Nusrat Jahan',
+    nameBn: 'নুসরাত জাহান',
+    role: 'Owner',
+    roleBn: 'মালিক',
+    company: 'Beauty by Nusrat',
+    companyBn: 'বিউটি বাই নুসরাত',
+    avatar: 'NJ',
+    quote: 'My salon bookings doubled in 6 weeks. The AI handles bookings in Bangla perfectly — my customers love it. Best investment I ever made.',
+    quoteBn: '৬ সপ্তাহে আমার সেলুন বুকিং দ্বিগুণ হয়েছে। এআই নিখুঁত বাংলায় বুকিং সামলায় — আমার কাস্টমাররা ভালোবাসে। আমার সেরা ইনভেস্টমেন্ট।',
+    metric: '2x bookings in 6 weeks',
+    metricBn: '৬ সপ্তাহে ২গুণ বুকিং',
+    rating: 5,
+  },
+  {
+    id: 't5',
+    name: 'Imran Khan',
+    nameBn: 'ইমরান খান',
+    role: 'Managing Director',
+    roleBn: 'ব্যবস্থাপনা পরিচালক',
+    company: 'Dhaka Auto Parts',
+    companyBn: 'ঢাকা অটো পার্টস',
+    avatar: 'IK',
+    quote: 'We were spending 3 lakh/month on ads with no idea what worked. Now we know exact ROI per taka. Stopped wasting 1.2 lakh/month instantly.',
+    quoteBn: 'আমরা মাসে ৩ লক্ষ অ্যাডে খরচ করতাম, কিছুই বুঝতাম না। এখন প্রতি টাকার সঠিক ROI জানি। মাসে ১.২ লক্ষ নষ্ট করা সাথে সাথে বন্ধ।',
+    metric: '1.2L saved monthly',
+    metricBn: 'মাসে ১.২লক্ষ সাশ্রয়',
+    rating: 5,
+  },
+  {
+    id: 't6',
+    name: 'Farzana Akter',
+    nameBn: 'ফরজানা আক্তার',
+    role: 'Founder',
+    roleBn: 'প্রতিষ্ঠাতা',
+    company: 'Online Pathshala',
+    companyBn: 'অনলাইন পাঠশালা',
+    avatar: 'FA',
+    quote: 'From 30 to 380 student enrollments per month. The AI follows up with every inquiry for weeks. I just check my dashboard and smile.',
+    quoteBn: 'মাসে ৩০ থেকে ৩৮০ স্টুডেন্ট এনরোলমেন্ট। এআই প্রতিটি ইনকোয়ারি সপ্তাহজুড়ে ফলোআপ করে। আমি শুধু ড্যাশবোর্ড দেখে হাসি।',
+    metric: '12x more enrollments',
+    metricBn: '১২গুণ বেশি এনরোলমেন্ট',
+    rating: 5,
+  },
+]
+
+export type PricingPlan = {
+  id: 'starter' | 'growth' | 'dominant'
+  monthly: number
+  yearly: number
+  features: { en: string; bn: string }[]
+  popular?: boolean
+}
+
+export const PRICING_PLANS: PricingPlan[] = [
+  {
+    id: 'starter',
+    monthly: 15000,
+    yearly: 144000,
+    features: [
+      { en: 'AI Lead Capture (1 channel)', bn: 'এআই লিড ক্যাপচার (১ চ্যানেল)' },
+      { en: 'Up to 500 leads/month', bn: 'মাসে ৫০০ লিড পর্যন্ত' },
+      { en: 'Bangla + English AI chatbot', bn: 'বাংলা + ইংরেজি এআই চ্যাটবট' },
+      { en: 'Basic CRM dashboard', bn: 'বেসিক CRM ড্যাশবোর্ড' },
+      { en: 'Email support', bn: 'ইমেইল সাপোর্ট' },
+      { en: '60-day ROI guarantee', bn: '৬০ দিনের ROI গ্যারান্টি' },
+    ],
+  },
+  {
+    id: 'growth',
+    monthly: 35000,
+    yearly: 336000,
+    popular: true,
+    features: [
+      { en: 'AI Lead Capture (3 channels)', bn: 'এআই লিড ক্যাপচার (৩ চ্যানেল)' },
+      { en: 'Up to 2,500 leads/month', bn: 'মাসে ২,৫০০ লিড পর্যন্ত' },
+      { en: 'AI Follow-Up Automation', bn: 'এআই ফলোআপ অটোমেশন' },
+      { en: 'Advanced CRM + Analytics', bn: 'অ্যাডভান্সড CRM + অ্যানালিটিক্স' },
+      { en: 'Weekly performance reports', bn: 'সাপ্তাহিক পারফরম্যান্স রিপোর্ট' },
+      { en: 'Priority WhatsApp support', bn: 'প্রায়োরিটি হোয়াটসঅ্যাপ সাপোর্ট' },
+      { en: 'Monthly strategy call', bn: 'মাসিক স্ট্র্যাটেজি কল' },
+      { en: '60-day ROI guarantee', bn: '৬০ দিনের ROI গ্যারান্টি' },
+    ],
+  },
+  {
+    id: 'dominant',
+    monthly: 75000,
+    yearly: 720000,
+    features: [
+      { en: 'AI Lead Capture (all channels)', bn: 'এআই লিড ক্যাপচার (সব চ্যানেল)' },
+      { en: 'Unlimited leads', bn: 'আনলিমিটেড লিড' },
+      { en: 'Full AI Sales System', bn: 'ফুল এআই সেলস সিস্টেম' },
+      { en: 'Custom AI training', bn: 'কাস্টম এআই ট্রেইনিং' },
+      { en: 'Dedicated account manager', bn: 'ডেডিকেটেড অ্যাকাউন্ট ম্যানেজার' },
+      { en: '24/7 phone support', bn: '২৪/৭ ফোন সাপোর্ট' },
+      { en: 'Weekly strategy calls', bn: 'সাপ্তাহিক স্ট্র্যাটেজি কল' },
+      { en: 'Custom integrations', bn: 'কাস্টম ইন্টিগ্রেশন' },
+      { en: '60-day ROI guarantee', bn: '৬০ দিনের ROI গ্যারান্টি' },
+    ],
+  },
+]
+
+export type FAQ = {
+  q: { en: string; bn: string }
+  a: { en: string; bn: string }
+}
+
+export const FAQS: FAQ[] = [
+  {
+    q: { en: 'How quickly will I see results?', bn: 'কত দ্রুত ফলাফল দেখব?' },
+    a: {
+      en: 'Most clients see first qualified leads within 14 days of launch. Significant revenue impact typically shows in 30-45 days. Full ROI usually achieved within 60 days — guaranteed.',
+      bn: 'বেশিরভাগ ক্লায়েন্ট লঞ্চের ১৪ দিনের মধ্যে প্রথম কোয়ালিফাইড লিড দেখেন। তাৎপর্যপূর্ণ আয়ের প্রভাব সাধারণত ৩০-৪৫ দিনে দেখা যায়। সম্পূর্ণ ROI সাধারণত ৬০ দিনে — গ্যারান্টিড।',
+    },
+  },
+  {
+    q: { en: 'Do I need technical knowledge?', bn: 'আমার কি টেকনিক্যাল জ্ঞান দরকার?' },
+    a: {
+      en: 'Zero. We handle everything — setup, integration, training, optimization. You just approve and watch your dashboard. If you can use WhatsApp, you can use our system.',
+      bn: 'জিরো। আমরা সব সামলাই — সেটআপ, ইন্টিগ্রেশন, ট্রেইনিং, অপটিমাইজেশন। আপনি শুধু অ্যাপ্রুভ করেন আর ড্যাশবোর্ড দেখেন। আপনি হোয়াটসঅ্যাপ চালাতে পারলে, আমাদের সিস্টেম চালাতে পারবেন।',
+    },
+  },
+  {
+    q: { en: 'What if it doesnt work for my business?', bn: 'যদি আমার ব্যবসায় না কাজ করে?' },
+    a: {
+      en: 'Our 60-day ROI guarantee protects you completely. If our system hasnt paid for itself in 60 days, we work for free until it does. No risk, no catch.',
+      bn: 'আমাদের ৬০ দিনের ROI গ্যারান্টি আপনাকে সম্পূর্ণ সুরক্ষা দেয়। ৬০ দিনে আমাদের সিস্টেম নিজের খরচ না তুললে, তুলনা পর্যন্ত আমরা ফ্রিতে কাজ করি। কোনো ঝুঁকি নেই, কোনো ধোঁয়া নেই।',
+    },
+  },
+  {
+    q: { en: 'Can the AI really speak Bangla properly?', bn: 'এআই কি সত্যিই ঠিকমতো বাংলা বলতে পারে?' },
+    a: {
+      en: 'Yes. Our AI is specifically trained on Bangladeshi business conversations — not Google-translated Bangla. It understands local context, cultural nuances, and even regional expressions. Your customers will feel understood.',
+      bn: 'হ্যাঁ। আমাদের এআই বিশেষভাবে বাংলাদেশি ব্যবসায়িক কথোপকথনের উপর ট্রেইনড — গুগল-ট্রান্সলেট বাংলা নয়। এটি লোকাল কনটেক্সট, সাংস্কৃতিক বুদ্ধি, এমনকি আঞ্চলিক ভাষাও বোঝে। আপনার কাস্টমার বোঝা অনুভব করবে।',
+    },
+  },
+  {
+    q: { en: 'What happens after I sign up?', bn: 'সাইন-আপ করার পর কী হয়?' },
+    a: {
+      en: 'Day 1: 30-min audit call. Days 2-5: We build your system. Day 7: We go live. You get a personal WhatsApp group with our team for any questions. Simple.',
+      bn: 'দিন ১: ৩০ মিনিট অডিট কল। দিন ২-৫: আমরা সিস্টেম বানাই। দিন ৭: আমরা লাইভ যাই। যেকোনো প্রশ্নে আমাদের টিমের সাথে পার্সোনাল হোয়াটসঅ্যাপ গ্রুপ পান। সহজ।',
+    },
+  },
+  {
+    q: { en: 'Are there any long-term contracts?', bn: 'কোনো দীর্ঘমেয়াদী চুক্তি আছে?' },
+    a: {
+      en: 'No. All plans are month-to-month. Cancel anytime with 7 days notice. No cancellation fees. We earn your business every month — or you leave. Simple.',
+      bn: 'না। সব প্ল্যান মাসে-মাসে। ৭ দিন নোটিশে যেকোনো সময় ক্যানসেল। কোনো ক্যানসেলেশন ফি নেই। প্রতি মাস আমরা আপনার ব্যবসা অর্জন করি — নাহলে আপনি চলে যান। সহজ।',
+    },
+  },
+  {
+    q: { en: 'Which channels do you support?', bn: 'কোন কোন চ্যানেল সাপোর্ট করেন?' },
+    a: {
+      en: 'Website chat, WhatsApp Business, Facebook Messenger, Instagram DM, and email. We can also integrate with your existing CRM or tools. If you use it, we probably connect to it.',
+      bn: 'ওয়েবসাইট চ্যাট, হোয়াটসঅ্যাপ বিজনেস, ফেসবুক মেসেঞ্জার, ইনস্টাগ্রাম DM, এবং ইমেইল। আপনার বর্তমান CRM বা টুলের সাথেও ইন্টিগ্রেট করতে পারি। আপনি যা ব্যবহার করেন, আমরা সম্ভবত সেটার সাথে কানেক্ট করি।',
+    },
+  },
+  {
+    q: { en: 'Is my customer data safe?', bn: 'আমার কাস্টমার ডাটা কি নিরাপদ?' },
+    a: {
+      en: 'Absolutely. All data is encrypted, stored in compliance with Bangladesh data protection guidelines, and never shared with third parties. You own your data — we just process it for you.',
+      bn: 'একদম। সব ডাটা এনক্রিপ্টেড, বাংলাদেশ ডাটা প্রটেকশন গাইডলাইন অনুযায়ী সংরক্ষিত, কখনো তৃতীয় পক্ষের সাথে শেয়ার হয় না। আপনার ডাটা আপনারই — আমরা শুধু আপনার জন্য প্রসেস করি।',
+    },
+  },
+]
+
+export type ServiceDetail = {
+  id: string
+  icon: string
+  features: { en: string; bn: string }[]
+}
+
+export const SERVICES: ServiceDetail[] = [
+  {
+    id: 'lead-capture',
+    icon: 'Target',
+    features: [
+      { en: '24/7 instant response (under 3 seconds)', bn: '২৪/৭ ইনস্ট্যান্ট রেসপন্স (৩ সেকেন্ডের কম)' },
+      { en: 'Multi-language support (Bangla + English)', bn: 'মাল্টি-ল্যাঙ্গুয়েজ (বাংলা + ইংরেজি)' },
+      { en: 'Smart lead scoring', bn: 'স্মার্ট লিড স্কোরিং' },
+    ],
+  },
+  {
+    id: 'follow-up',
+    icon: 'Repeat',
+    features: [
+      { en: '5+ touchpoint sequences', bn: '৫+ টাচপয়েন্ট সিকোয়েন্স' },
+      { en: 'Personalized at scale', bn: 'স্কেলে পার্সোনালাইজড' },
+      { en: 'Auto-revives dead leads', bn: 'ডেড লিড রিভাইভ করে' },
+    ],
+  },
+  {
+    id: 'chatbot',
+    icon: 'Bot',
+    features: [
+      { en: 'Trained on YOUR business', bn: 'আপনার ব্যবসার উপর ট্রেইনড' },
+      { en: 'Books appointments to your calendar', bn: 'আপনার ক্যালেন্ডারে বুকিং' },
+      { en: 'Hands off to human when needed', bn: 'দরকারে হিউম্যানে হ্যান্ডঅফ' },
+    ],
+  },
+  {
+    id: 'crm',
+    icon: 'BarChart3',
+    features: [
+      { en: 'Live ROI tracking', bn: 'লাইভ ROI ট্র্যাকিং' },
+      { en: 'Pipeline visualization', bn: 'পাইপলাইন ভিজ্যুয়ালাইজেশন' },
+      { en: 'Weekly performance reports', bn: 'সাপ্তাহিক পারফরম্যান্স রিপোর্ট' },
+    ],
+  },
+]
+
+export const TRUST_LOGOS = [
+  'Jessore Electronics',
+  'Boutique Bhabna',
+  'Khulna Real Estate',
+  'Beauty by Nusrat',
+  'Dhaka Auto Parts',
+  'Online Pathshala',
+  'BD Fashion House',
+  'Royal Restaurant',
+]
+
+// === Legacy exports (for other pages: blog, case-studies, admin, etc.) ===
 import {
   Bot,
   MessageSquare,

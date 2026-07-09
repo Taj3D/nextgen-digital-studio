@@ -1796,3 +1796,64 @@ Stage Summary:
 - 34 leads in database.
 - Ready for user to verify in preview panel.
 - NOT pushed to GitHub yet (user wants to verify locally first).
+
+---
+Task ID: GM-HOMEPAGE-DEMO-EXACT
+Agent: Main (Z.ai Code)
+Task: User wants homepage exactly as demo (nextgen-studio-source.zip). Replace all homepage text with demo content, remove all other text. Preserve footer links + env vars + pixels + payment flows.
+
+Work Log:
+- Extracted demo source zip (95 files).
+- Copied all 13 section files from demo to project:
+  * hero.tsx (HeroSection)
+  * pain-points.tsx (PainPointsSection)
+  * cost-of-inaction.tsx (CostOfInactionSection)
+  * solution.tsx (Solution)
+  * how-it-works.tsx (HowItWorks)
+  * services.tsx (Services)
+  * numbers.tsx (Numbers)
+  * why-choose-us.tsx (WhyChooseUs)
+  * testimonials.tsx (Testimonials)
+  * pricing.tsx (Pricing)
+  * faq.tsx (FAQ)
+  * lead-form.tsx (LeadForm)
+  * final-cta.tsx (FinalCta)
+- Copied navbar.tsx, footer.tsx, reveal.tsx, ai-chat-widget.tsx, floating-buttons.tsx from demo.
+- Copied language-provider.tsx (517 lines, full bilingual dictionary).
+- Copied new site-data.ts with SITE_CONFIG, TESTIMONIALS, PRICING_PLANS, FAQS, SERVICES.
+- Updated SITE_CONFIG with REAL contact info (phone, email, social links preserved):
+  * phone: +8801711731354
+  * email: nextgendigitalstudio1@gmail.com
+  * facebook, linkedin, github, instagram, threads, youtube, twitter
+- Merged old site-data.ts exports (caseStudies, blogPosts, industries, etc.) for other pages compatibility.
+- Restored old cache.ts (had cacheGetOrSet function needed by tracking).
+- Updated page.tsx with exact demo structure (13 sections, PADA funnel).
+- Updated layout.tsx to use new components.
+
+Preserved (NOT changed):
+- .env (DATABASE_URL, GOOGLE_SHEETS_WEBHOOK_URL, all NEXT_PUBLIC pixel IDs, ADMIN_PASSWORD)
+- AnalyticsPixels component (GA4 + FB + Snap + TikTok)
+- All API routes (contact, track, leads, etc.)
+- All landing pages (/founder, /3d-portrait, /cnc-design, /pdf-books, /ai-training, /cnc-training)
+- All service pages (/services/[slug])
+- Payment flows (ai-training 1000TK, cnc-training 250TK, cnc-design 150TK)
+- Google Sheets sync + email
+- Admin dashboard
+
+Verification:
+- Build: SUCCESS, 0 errors
+- Homepage: 223KB, 14 sections, h1 present
+- Footer links: phone (4), email (6), Facebook (4), LinkedIn (4), YouTube (4) ✓
+- All 11 main pages: 200 ✓
+- /api/contact: {"ok":true,"id":"cmrdylwu1..."} — lead saved ✓
+- Server alive: YES ✓
+- GA4 pixel: 3 instances in HTML ✓
+
+Stage Summary:
+- Homepage now EXACTLY matches demo (13-section PADA sales funnel).
+- All demo text/content replaced.
+- Footer online links preserved (phone, email, all social media).
+- All env vars preserved.
+- All pixels preserved.
+- All other pages (landing, services, admin) still work.
+- NOT pushed to GitHub yet (user wants to verify first).
