@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import Image from "next/image"
 import { ArrowLeft } from "lucide-react"
 import { siteConfig } from "@/lib/site-data"
 import { LegalFooter } from "@/components/site/legal-footer"
@@ -25,6 +26,10 @@ export default function PrivacyPage() {
     <div className="flex min-h-screen flex-col bg-muted/20">
       <header className="sticky top-0 z-40 border-b border-border/60 bg-background/90 backdrop-blur-xl">
         <div className="mx-auto flex max-w-4xl items-center gap-3 px-4 py-3.5 sm:px-6">
+          <Link href="/" className="flex items-center gap-2">
+            <Image src="/logo.jpg" alt="NextGen Digital Studio" width={32} height={32} className="h-8 w-8 rounded-lg object-cover" />
+          </Link>
+          <span className="h-4 w-px bg-border" />
           <Link href="/" className="flex items-center gap-2 text-sm font-semibold text-muted-foreground hover:text-foreground">
             <ArrowLeft className="h-4 w-4" /> হোমে ফিরুন
           </Link>

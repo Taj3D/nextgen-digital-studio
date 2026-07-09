@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from "react"
+import Image from "next/image"
 import { motion } from "framer-motion"
 import {
   Users, Mail, Phone, MessageSquare, Calendar, Download, Bot,
@@ -221,6 +222,10 @@ export default function AdminDashboard() {
       <header className="sticky top-0 z-40 border-b border-border/60 bg-background/90 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3">
+            <a href="/" className="flex items-center gap-2">
+              <Image src="/logo.jpg" alt="NextGen Digital Studio" width={32} height={32} className="h-8 w-8 rounded-lg object-cover" />
+            </a>
+            <span className="h-4 w-px bg-border" />
             <a href="/" className="flex items-center gap-2 text-sm font-semibold text-muted-foreground hover:text-foreground">
               <ArrowLeft className="h-4 w-4" /> Back to site
             </a>

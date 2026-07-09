@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from "react"
+import Image from "next/image"
 import { Lock, ArrowRight, Loader2 } from "lucide-react"
 
 const STORAGE_KEY = 'nextgen-admin-auth'
@@ -52,9 +53,7 @@ export function AdminGate({ children }: { children: React.ReactNode }) {
       <div className="relative w-full max-w-sm">
         <div className="rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur-xl">
           <div className="mb-6 flex flex-col items-center text-center">
-            <span className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 to-cyan-500 text-white shadow-lg shadow-blue-600/25">
-              <Lock className="h-7 w-7" />
-            </span>
+            <Image src="/logo.jpg" alt="NextGen Digital Studio" width={56} height={56} className="mb-3 h-14 w-14 rounded-2xl object-cover shadow-lg" />
             <h1 className="font-heading text-xl font-bold text-white">Admin Login</h1>
             <p className="mt-1 text-sm text-blue-100/60">NextGen Digital Studio · Lead Dashboard</p>
           </div>

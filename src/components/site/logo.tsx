@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 
 /**
  * Logo — visual wordmark for NextGen Digital Studio.
@@ -19,12 +20,13 @@ export function Logo({
 }) {
   const inner = (
     <>
-      <span className="relative inline-flex h-9 w-9 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500 shadow-lg shadow-blue-600/25 transition-transform duration-300 group-hover:scale-105">
-        <svg viewBox="0 0 64 64" className="h-6 w-6" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M20 44V20h4.6l14.8 16.2V20H44v24h-4.6L24.6 27.8V44H20Z" fill="white" />
-        </svg>
-        <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-cyan-300 ring-2 ring-white/70" />
-      </span>
+      <Image
+        src="/logo.jpg"
+        alt="NextGen Digital Studio"
+        width={36}
+        height={36}
+        className="h-9 w-9 rounded-xl object-cover shadow-lg transition-transform duration-300 group-hover:scale-105"
+      />
       <span className="flex flex-col leading-none">
         <span className="font-display text-[15px] font-extrabold tracking-tight text-foreground">
           NextGen
