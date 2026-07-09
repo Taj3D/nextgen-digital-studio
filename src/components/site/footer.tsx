@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import Image from 'next/image'
 import {
   Facebook,
   Linkedin,
@@ -167,10 +168,13 @@ export function SiteFooter() {
           {/* Col 1 — Brand */}
           <div className="space-y-4">
             <div className="flex items-center gap-2.5">
-              <span className="relative grid h-10 w-10 place-items-center rounded-xl gradient-brand shadow-glow">
-                <span className="text-lg font-black text-white">N</span>
-                <Sparkles className="absolute -right-1 -top-1 h-3.5 w-3.5 text-amber-300" />
-              </span>
+              <Image
+                src="/logo.jpg"
+                alt="NextGen Digital Studio"
+                width={40}
+                height={40}
+                className="h-10 w-10 rounded-xl object-cover shadow-glow"
+              />
               <span className="text-base font-bold tracking-tight">
                 {t('brand.name')}
               </span>

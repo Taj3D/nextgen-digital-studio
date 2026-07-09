@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import Image from 'next/image'
 import { Menu, Globe, Sparkles } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
@@ -45,10 +46,14 @@ function Logo({ onClick }: { onClick?: () => void }) {
       className="group flex items-center gap-2.5 outline-none"
       aria-label={t('brand.name')}
     >
-      <span className="relative grid h-10 w-10 place-items-center rounded-xl gradient-brand shadow-glow transition-transform duration-300 group-hover:scale-105">
-        <span className="text-lg font-black text-white drop-shadow">N</span>
-        <Sparkles className="absolute -right-1 -top-1 h-3.5 w-3.5 text-amber-300" />
-      </span>
+      <Image
+        src="/logo.jpg"
+        alt="NextGen Digital Studio"
+        width={40}
+        height={40}
+        className="h-10 w-10 rounded-xl object-cover shadow-glow transition-transform duration-300 group-hover:scale-105"
+        priority
+      />
       <span className="hidden text-base font-bold tracking-tight text-foreground sm:block">
         {t('brand.name')}
       </span>
@@ -167,9 +172,13 @@ export function Navbar() {
             >
               <SheetHeader className="border-b border-border/50 p-4">
                 <SheetTitle className="flex items-center gap-2">
-                  <span className="grid h-9 w-9 place-items-center rounded-xl gradient-brand">
-                    <span className="text-base font-black text-white">N</span>
-                  </span>
+                  <Image
+                    src="/logo.jpg"
+                    alt="NextGen Digital Studio"
+                    width={36}
+                    height={36}
+                    className="h-9 w-9 rounded-xl object-cover"
+                  />
                   <span className="text-base font-bold">{t('brand.name')}</span>
                 </SheetTitle>
               </SheetHeader>
