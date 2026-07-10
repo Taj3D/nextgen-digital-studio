@@ -1,20 +1,25 @@
-import type { MetadataRoute } from "next";
-import { siteConfig } from "@/lib/site-data";
+import type { MetadataRoute } from 'next'
 
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
       {
-        userAgent: "*",
-        allow: "/",
-        disallow: ["/api/"],
+        userAgent: '*',
+        allow: '/',
+        disallow: ['/api/', '/admin'],
       },
       {
-        userAgent: "Googlebot",
-        allow: "/",
+        userAgent: 'Googlebot',
+        allow: '/',
+        disallow: ['/api/', '/admin'],
+      },
+      {
+        userAgent: 'Bingbot',
+        allow: '/',
+        disallow: ['/api/', '/admin'],
       },
     ],
-    sitemap: `${siteConfig.url}/sitemap.xml`,
-    host: siteConfig.url,
-  };
+    sitemap: 'https://nextgendigitalstudio.com/sitemap.xml',
+    host: 'https://nextgendigitalstudio.com',
+  }
 }
