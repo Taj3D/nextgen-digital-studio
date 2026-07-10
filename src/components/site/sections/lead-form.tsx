@@ -97,7 +97,7 @@ export function LeadForm() {
         email: z.string().regex(EMAIL_RE, t('form.errEmail')),
         phone: z.string().regex(PHONE_RE, t('form.errPhone')),
         company: z.string().optional(),
-        service: z.string().min(1, t('form.errService')),
+        service: z.string().optional(),
         message: z.string().optional(),
         website: z.string().optional(), // honeypot
       }),
