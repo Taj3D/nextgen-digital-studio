@@ -56,7 +56,7 @@ type LeadValues = {
 }
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-const PHONE_RE = /^01[3-9]\d{8}$/
+const PHONE_RE = /^(\+?880|0)?1[3-9]\d{8}$/
 
 const SERVICE_OPTIONS = [
   { value: 'lead-capture', key: 'form.serviceLeadCapture' },

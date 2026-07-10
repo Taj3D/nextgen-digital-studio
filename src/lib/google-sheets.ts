@@ -36,9 +36,12 @@ export async function sendToGoogleSheets(row: LeadRow): Promise<{ ok: boolean; e
   }
 
   try {
+    // Apps Script Web Apps return 302 on POST — use redirect: 'manual' to follow.
+    // Use text/plain content type to avoid CORS preflight (Apps Script doesn't handle OPTIONS).
     const res = await fetch(webhook, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      redirect: 'manual',
       body: JSON.stringify({
         date: new Date().toISOString(),
         name: row.name,
@@ -48,14 +51,18 @@ export async function sendToGoogleSheets(row: LeadRow): Promise<{ ok: boolean; e
         service: row.service ?? '',
         source: row.source,
         message: row.message ?? '',
+        status: 'new',
+        leadId: row.leadId ?? '',
+        submittedAt: row.submittedAt ?? '',
         ...(row.meta ?? {}),
       }),
     })
-    if (!res.ok) {
-      const text = await res.text().catch(() => '')
-      return { ok: false, error: `HTTP ${res.status}: ${text.slice(0, 200)}` }
+    // Apps Script returns 200, 301, or 302 — all are success
+    if (res.status >= 200 && res.status < 400) {
+      return { ok: true }
     }
-    return { ok: true }
+    const text = await res.text().catch(() => '')
+    return { ok: false, error: `HTTP ${res.status}: ${text.slice(0, 200)}` }
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err)
     console.error('[google-sheets] error', msg)
