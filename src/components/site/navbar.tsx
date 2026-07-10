@@ -14,6 +14,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet'
 import { useLang, type Lang } from '@/components/site/language-provider'
+import { ThemeToggle } from '@/components/site/theme-toggle'
 
 type NavItem = {
   key: string
@@ -152,6 +153,7 @@ export function Navbar() {
 
         <div className="flex items-center gap-2 sm:gap-3">
           <LangToggle />
+          <ThemeToggle />
           <CtaButton />
 
           {/* Mobile hamburger */}
