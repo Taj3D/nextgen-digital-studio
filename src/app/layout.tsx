@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Plus_Jakarta_Sans, Inter } from "next/font/google";
+import { Sora, Inter, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as SonnerToaster } from "@/components/ui/sonner";
@@ -8,18 +8,31 @@ import { LanguageProvider } from "@/components/site/language-provider";
 import { AnalyticsPixels } from "@/components/site/analytics-pixels";
 import { siteConfig, faqs } from "@/lib/site-data";
 
-const jakarta = Plus_Jakarta_Sans({
-  variable: "--font-jakarta",
+// Premium font stack:
+//   Sora            → English display/headings (geometric, modern, premium)
+//   Inter           → English body/UI text (industry-standard premium sans)
+//   Plus Jakarta    → English fallback for headings
+//   MahfujLipi      → Bengali text (custom brand font, loaded via @font-face in globals.css)
+//   ForzonDEMO      → English display accent for logo/wordmark (loaded via @font-face)
+const sora = Sora({
+  variable: "--font-sora",
   subsets: ["latin"],
   display: "swap",
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["300", "400", "500", "600", "700", "800"],
 });
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
   display: "swap",
-  weight: ["400", "500", "600", "700"],
+  weight: ["300", "400", "500", "600", "700"],
+});
+
+const jakarta = Plus_Jakarta_Sans({
+  variable: "--font-jakarta",
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -307,7 +320,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${jakarta.variable} ${inter.variable} font-body antialiased bg-background text-foreground`}
+        className={`${sora.variable} ${inter.variable} ${jakarta.variable} font-body antialiased bg-background text-foreground`}
       >
         <AnalyticsPixels />
         <ThemeProvider
