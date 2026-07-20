@@ -100,7 +100,7 @@ export const metadata: Metadata = {
     url: "https://nextgendigitalstudio.com",
     siteName: "NextGen Digital Studio",
     title: "NextGen Digital Studio — AI Sales Automation Agency in Bangladesh",
-    description: "Automate marketing, sales, customer communication and operations with AI. AI chatbots, WhatsApp automation, CRM, lead generation. Generate qualified leads 24/7. Free strategy session. 60-day ROI guarantee. Jessore, Bangladesh.",
+    description: "AI Sales Automation Agency in Bangladesh. AI chatbots, WhatsApp automation, CRM, lead generation. Free strategy session.",
     images: [
       {
         url: "/logo.jpg",
@@ -114,7 +114,14 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "NextGen Digital Studio — AI Sales Automation Agency in Bangladesh",
     description: "AI chatbots, WhatsApp automation, CRM, lead generation. Generate qualified leads 24/7. Free strategy session. Jessore, Bangladesh.",
-    images: ["/logo.jpg"],
+    images: [
+      {
+        url: "/logo.jpg",
+        width: 1200,
+        height: 630,
+        alt: "NextGen Digital Studio",
+      },
+    ],
     creator: "@nextgendigital",
   },
   verification: {
