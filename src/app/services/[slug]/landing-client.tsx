@@ -25,7 +25,7 @@ type LandingClientProps = {
 }
 
 export function LandingClient({ slug, title, short, description, features, gradient }: LandingClientProps) {
-  const { lang, tr } = useLang()
+  const { lang, tr, t } = useLang()
   const isBn = lang === 'bn'
   // Look up the icon on the client (Lucide icons are functions and can't be
   // serialised across the Server→Client boundary).
@@ -57,7 +57,7 @@ export function LandingClient({ slug, title, short, description, features, gradi
           <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 sm:px-6 sm:py-16 md:grid-cols-2 md:py-20">
             <div>
               <LandingEyebrow>
-                <Sparkles className="h-3 w-3" /> {isBn ? 'NextGen সেবা' : 'NextGen Service'}
+                <Sparkles className="h-3 w-3" /> {t('serviceLanding.eyebrow')}
               </LandingEyebrow>
               <h1 className="mt-4 font-heading text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
                 {localisedTitle}
@@ -89,26 +89,26 @@ export function LandingClient({ slug, title, short, description, features, gradi
                   <Icon className="h-10 w-10" />
                 </div>
                 <h2 className="mt-5 font-heading text-2xl font-bold">
-                  {isBn ? 'এই সেবায় যা পাবেন' : 'What this service includes'}
+                  {t('serviceLanding.includesTitle')}
                 </h2>
                 <p className="mt-2 text-sm text-muted-foreground">{localisedShort}</p>
                 <div className="mt-5 grid grid-cols-3 gap-3 text-center">
                   <div className="rounded-xl bg-muted/60 p-3">
                     <Zap className="mx-auto h-5 w-5 text-blue-600" />
                     <div className="mt-1 text-xs font-semibold">
-                      {isBn ? 'দ্রুত সেটআপ' : 'Fast setup'}
+                      {t('serviceLanding.fastSetup')}
                     </div>
                   </div>
                   <div className="rounded-xl bg-muted/60 p-3">
                     <ShieldCheck className="mx-auto h-5 w-5 text-cyan-600" />
                     <div className="mt-1 text-xs font-semibold">
-                      {isBn ? '১০০% গ্যারান্টি' : '100% guarantee'}
+                      {t('serviceLanding.guarantee')}
                     </div>
                   </div>
                   <div className="rounded-xl bg-muted/60 p-3">
                     <Clock className="mx-auto h-5 w-5 text-violet-600" />
                     <div className="mt-1 text-xs font-semibold">
-                      {isBn ? '২৪/৭ সাপোর্ট' : '24/7 support'}
+                      {t('serviceLanding.support247')}
                     </div>
                   </div>
                 </div>
@@ -121,7 +121,7 @@ export function LandingClient({ slug, title, short, description, features, gradi
         <section className="bg-muted/30 py-12 sm:py-16">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
             <div className="text-center">
-              <LandingEyebrow>{isBn ? 'সুবিধা' : 'Benefits'}</LandingEyebrow>
+              <LandingEyebrow>{t('serviceLanding.benefitsEyebrow')}</LandingEyebrow>
               <h2 className="mt-4 font-heading text-3xl font-bold sm:text-4xl">
                 {isBn ? `${localisedTitle} কেন বেছে নেবেন` : `Why choose ${localisedTitle}`}
               </h2>
@@ -141,7 +141,7 @@ export function LandingClient({ slug, title, short, description, features, gradi
                   <div className="mt-3 text-xs font-semibold text-blue-600">
                     #{i + 1}{' '}
                     <span className="text-muted-foreground">
-                      {isBn ? 'প্রায়োরিটি' : 'priority'}
+                      {t('serviceLanding.priority')}
                     </span>
                   </div>
                 </div>
@@ -154,7 +154,7 @@ export function LandingClient({ slug, title, short, description, features, gradi
         <section className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16">
           <div className="rounded-3xl bg-gradient-to-br from-blue-600 to-cyan-500 p-8 text-center text-white shadow-xl sm:p-12">
             <h2 className="font-heading text-3xl font-bold sm:text-4xl">
-              {isBn ? 'প্রস্তুত শুরু করতে?' : 'Ready to get started?'}
+              {t('serviceLanding.readyTitle')}
             </h2>
             <p className="mx-auto mt-3 max-w-xl text-sm text-blue-50">
               {isBn
@@ -172,7 +172,7 @@ export function LandingClient({ slug, title, short, description, features, gradi
                 rel="noreferrer"
                 className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-blue-700 shadow-lg transition-transform hover:scale-[1.02]"
               >
-                {isBn ? 'এখনই চ্যাট করুন' : 'Chat Now'}
+                {t('serviceLanding.chatNow')}
                 <ArrowRight className="h-4 w-4" />
               </a>
             </div>
@@ -183,7 +183,7 @@ export function LandingClient({ slug, title, short, description, features, gradi
         <section id="order" className="mx-auto max-w-3xl scroll-mt-20 px-4 py-12 sm:px-6 sm:py-16">
           <div className="rounded-3xl border border-border/60 bg-card p-6 shadow-lg sm:p-8">
             <div className="text-center">
-              <LandingEyebrow>{isBn ? 'অনুরোধ করুন' : 'Request a Call'}</LandingEyebrow>
+              <LandingEyebrow>{t('serviceLanding.requestCallEyebrow')}</LandingEyebrow>
               <h2 className="mt-4 font-heading text-3xl font-bold">
                 {isBn ? `${localisedTitle} এর জন্য যোগাযোগ করুন` : `Get ${localisedTitle}`}
               </h2>
@@ -198,7 +198,7 @@ export function LandingClient({ slug, title, short, description, features, gradi
                 isBn={isBn}
                 source={`service_${slug}`}
                 serviceName={localisedTitle}
-                submitLabel={isBn ? 'অনুরোধ পাঠান' : 'Send Request'}
+                submitLabel={t('serviceLanding.sendRequest')}
               />
             </div>
           </div>

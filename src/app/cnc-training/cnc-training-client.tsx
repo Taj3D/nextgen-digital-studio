@@ -25,7 +25,7 @@ const CURRICULUM = [
 ]
 
 export function CncTrainingClient() {
-  const { lang } = useLang()
+  const { lang, t } = useLang()
   const isBn = lang === 'bn'
   usePageViewTracking('cnc_training_page')
 
@@ -48,7 +48,7 @@ export function CncTrainingClient() {
 
           <div className="relative mx-auto max-w-4xl px-4 py-12 text-center sm:px-6 sm:py-16 md:py-20">
             <LandingEyebrow>
-              <Gift className="h-3 w-3" /> {isBn ? '+ ফ্রি chair leg design' : '+ Free chair leg design'}
+              <Gift className="h-3 w-3" /> {t('cncTraining.freeBonusEyebrow')}
             </LandingEyebrow>
             <h1 className="mt-4 font-heading text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
               {isBn ? (
@@ -71,20 +71,20 @@ export function CncTrainingClient() {
               <div className="flex items-center gap-2 rounded-2xl border border-border/60 bg-card px-4 py-3 shadow-sm">
                 <Clock className="h-5 w-5 text-amber-600" />
                 <div className="text-left">
-                  <div className="text-xs text-muted-foreground">{isBn ? 'সময়' : 'Time'}</div>
-                  <div className="text-sm font-bold">{isBn ? 'রাত ৯টা' : '9 PM'}</div>
+                  <div className="text-xs text-muted-foreground">{t('cncTraining.timeLabel')}</div>
+                  <div className="text-sm font-bold">{t('cncTraining.timeValue')}</div>
                 </div>
               </div>
               <div className="flex items-center gap-2 rounded-2xl border border-border/60 bg-card px-4 py-3 shadow-sm">
                 <Calendar className="h-5 w-5 text-orange-600" />
                 <div className="text-left">
-                  <div className="text-xs text-muted-foreground">{isBn ? 'সময়কাল' : 'Duration'}</div>
-                  <div className="text-sm font-bold">{isBn ? '৭ দিন' : '7 days'}</div>
+                  <div className="text-xs text-muted-foreground">{t('cncTraining.durationLabel')}</div>
+                  <div className="text-sm font-bold">{t('cncTraining.durationValue')}</div>
                 </div>
               </div>
               <div className="flex items-center gap-2 rounded-2xl border-2 border-amber-500 bg-amber-50 px-4 py-3 dark:bg-amber-950/30">
                 <div className="text-left">
-                  <div className="text-xs text-muted-foreground">{isBn ? 'ফি' : 'Fee'}</div>
+                  <div className="text-xs text-muted-foreground">{t('cncTraining.feeLabel')}</div>
                   <div className="text-sm font-bold text-amber-700 dark:text-amber-300">৳{bn('250')}</div>
                 </div>
               </div>
@@ -99,7 +99,7 @@ export function CncTrainingClient() {
                 }}
                 className="gradient-brand animate-pulse-glow inline-flex items-center gap-2 rounded-full px-7 py-3 text-sm font-bold text-white shadow-lg shadow-amber-600/25 transition-transform hover:scale-[1.02]"
               >
-                {isBn ? 'রেজিস্টার করুন' : 'Register Now'}
+                {t('cncTraining.registerNow')}
                 <ArrowRight className="h-4 w-4" />
               </a>
               <WhatsAppCTA isBn={isBn} />
@@ -121,7 +121,7 @@ export function CncTrainingClient() {
         {/* Curriculum */}
         <section className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
           <div className="text-center">
-            <LandingEyebrow>{isBn ? 'কারিকুলাম' : 'Curriculum'}</LandingEyebrow>
+            <LandingEyebrow>{t('cncTraining.curriculumEyebrow')}</LandingEyebrow>
             <h2 className="mt-4 font-heading text-3xl font-bold sm:text-4xl">
               {isBn ? '৭ দিনে ৭টি প্রজেক্ট' : '7 Projects in 7 Days'}
             </h2>
@@ -156,9 +156,9 @@ export function CncTrainingClient() {
         <section className="bg-muted/30 py-12 sm:py-16">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
             <div className="text-center">
-              <LandingEyebrow>{isBn ? 'আপনি যা পাবেন' : 'What you get'}</LandingEyebrow>
+              <LandingEyebrow>{t('cncTraining.whatYouGetEyebrow')}</LandingEyebrow>
               <h2 className="mt-4 font-heading text-3xl font-bold sm:text-4xl">
-                {isBn ? 'সম্পূর্ণ প্যাকেজ' : 'Complete Package'}
+                {t('cncTraining.completePackage')}
               </h2>
             </div>
             <div className="mt-8 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
@@ -186,7 +186,7 @@ export function CncTrainingClient() {
         <section id="order" className="mx-auto max-w-3xl scroll-mt-20 px-4 py-12 sm:px-6 sm:py-16">
           <div className="rounded-3xl border border-border/60 bg-card p-6 shadow-lg sm:p-8">
             <div className="text-center">
-              <LandingEyebrow>{isBn ? 'রেজিস্ট্রেশন' : 'Registration'}</LandingEyebrow>
+              <LandingEyebrow>{t('cncTraining.registrationEyebrow')}</LandingEyebrow>
               <h2 className="mt-4 font-heading text-3xl font-bold">
                 {isBn ? 'CNC ট্রেইনিংয়ে নাম লেখান' : 'Register for CNC Training'}
               </h2>
@@ -197,7 +197,7 @@ export function CncTrainingClient() {
               </p>
               <div className="mt-4 inline-flex items-baseline gap-1">
                 <span className="text-4xl font-extrabold">৳{bn('250')}</span>
-                <span className="text-sm text-muted-foreground">/{isBn ? 'সম্পূর্ণ কোর্স' : 'full course'}</span>
+                <span className="text-sm text-muted-foreground">/{t('cncTraining.fullCourse')}</span>
               </div>
             </div>
             <div className="mt-8">
@@ -205,7 +205,7 @@ export function CncTrainingClient() {
                 isBn={isBn}
                 source="cnc_training_page"
                 serviceName={isBn ? 'CNC 3D Design Training (250TK, 1 সপ্তাহ)' : 'CNC 3D Design Training (250TK, 1 week)'}
-                submitLabel={isBn ? 'রেজিস্টার করুন' : 'Register Now'}
+                submitLabel={t('cncTraining.registerNow')}
                 paymentAmount={250}
                 paymentNote={isBn ? 'পেমেন্টের পর জুম লিংক + ফ্রি chair leg ফাইল পাবেন' : 'Zoom link + free chair leg file sent after payment'}
               />

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { sendEmail } from "@/lib/email-lead";
 import { rateLimit, getClientIP } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
@@ -51,6 +52,33 @@ export async function POST(req: Request) {
       update: { active: true },
       create: { email, active: true, source: "footer" },
     });
+
+    // Send a bilingual welcome email (logged + persisted as TrackingEvent).
+    // Fire-and-forget — never blocks the response.
+    sendEmail({
+      to: email,
+      subject: "✅ সাবস্ক্রিপশন সফল — NextGen Digital Studio | Welcome to NextGen Digital Studio",
+      body: `প্রিয় গ্রাহক,
+
+আপনি সফলভাবে NextGen Digital Studio-এর নিউজলেটারে সাবস্ক্রাইব করেছেন! আমরা নিয়মিত AI সেলস অটোমেশন, ডিজিটাল মার্কেটিং টিপস এবং বিশেষ অফার পাঠাবো।
+
+ধন্যবাদ! 🚀
+
+— NextGen Digital Studio টিম
+📞 +880 1711-731354
+
+---
+
+Dear Subscriber,
+
+You have successfully subscribed to the NextGen Digital Studio newsletter! We'll regularly send you AI sales automation tips, digital marketing insights, and special offers.
+
+Thank you! 🚀
+
+— NextGen Digital Studio Team
+📞 +880 1711-731354`,
+      source: "newsletter_welcome",
+    }).catch((err) => console.error("[newsletter] welcome email error", err));
 
     return NextResponse.json({ ok: true, id: sub.id });
   } catch (err) {

@@ -11,6 +11,7 @@ import { ScrollProgress } from "@/components/site/scroll-progress";
 import { SocialProof } from "@/components/site/social-proof";
 import { StickyBookBar } from "@/components/site/sticky-book-bar";
 import { AiChatWidget } from "@/components/site/ai-chat-widget";
+import { CookieConsentBanner } from "@/components/site/cookie-consent-banner";
 import { siteConfig, faqs } from "@/lib/site-data";
 
 // Premium font stack:
@@ -43,7 +44,7 @@ const jakarta = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL("https://nextgendigitalstudio.com"),
   title: {
-    default: "NextGen Digital Studio — AI Sales Automation Agency in Bangladesh | AI Chatbot, WhatsApp Automation, Lead Generation",
+    default: "NextGen Digital Studio — AI Sales Automation Bangladesh",
     template: "%s | NextGen Digital Studio",
   },
   description: "AI Sales Automation Agency in Bangladesh. AI chatbots, WhatsApp automation, CRM, lead generation. Free strategy session. 60-day ROI guarantee. Jessore.",
@@ -113,7 +114,7 @@ export const metadata: Metadata = {
     alternateLocale: ["bn_BD"],
     url: "https://nextgendigitalstudio.com",
     siteName: "NextGen Digital Studio",
-    title: "NextGen Digital Studio — AI Sales Automation Agency in Bangladesh",
+    title: "NextGen Digital Studio — AI Sales Automation Bangladesh",
     description: "AI Sales Automation Agency in Bangladesh. AI chatbots, WhatsApp automation, CRM, lead generation. Free strategy session.",
     images: [
       {
@@ -126,7 +127,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "NextGen Digital Studio — AI Sales Automation Agency in Bangladesh",
+    title: "NextGen Digital Studio — AI Sales Automation Bangladesh",
     description: "AI chatbots, WhatsApp automation, CRM, lead generation. Generate qualified leads 24/7. Free strategy session. Jessore, Bangladesh.",
     images: [
       {
@@ -338,6 +339,8 @@ export default function RootLayout({
               <StickyBookBar />
               {/* Floating AI chat widget (bottom-right, above WhatsApp button) */}
               <AiChatWidget />
+              {/* Cookie consent banner (bottom-left, shows on first visit) */}
+              <CookieConsentBanner />
             </BookingModalProvider>
             <Toaster />
             <SonnerToaster position="bottom-right" />

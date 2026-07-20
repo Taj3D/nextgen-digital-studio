@@ -64,7 +64,7 @@ const LEARN = [
 ]
 
 export function TrainingClient() {
-  const { lang } = useLang()
+  const { lang, t } = useLang()
   const isBn = lang === 'bn'
   usePageViewTracking('ai_training_page')
 
@@ -87,7 +87,7 @@ export function TrainingClient() {
 
           <div className="relative mx-auto max-w-4xl px-4 py-12 text-center sm:px-6 sm:py-16 md:py-20">
             <LandingEyebrow>
-              <Sparkles className="h-3 w-3" /> {isBn ? '১ সপ্তাহ · রাত ৯টা · হাতে কলমে' : '1 Week · 9 PM · Hands-on'}
+              <Sparkles className="h-3 w-3" /> {t('aiTraining.heroEyebrow')}
             </LandingEyebrow>
             <h1 className="mt-4 font-heading text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
               {isBn ? (
@@ -113,20 +113,20 @@ export function TrainingClient() {
               <div className="flex items-center gap-2 rounded-2xl border border-border/60 bg-card px-4 py-3 shadow-sm">
                 <Clock className="h-5 w-5 text-blue-600" />
                 <div className="text-left">
-                  <div className="text-xs text-muted-foreground">{isBn ? 'সময়' : 'Time'}</div>
-                  <div className="text-sm font-bold">{isBn ? 'রাত ৯টা' : '9 PM'}</div>
+                  <div className="text-xs text-muted-foreground">{t('aiTraining.timeLabel')}</div>
+                  <div className="text-sm font-bold">{t('aiTraining.timeValue')}</div>
                 </div>
               </div>
               <div className="flex items-center gap-2 rounded-2xl border border-border/60 bg-card px-4 py-3 shadow-sm">
                 <Calendar className="h-5 w-5 text-cyan-600" />
                 <div className="text-left">
-                  <div className="text-xs text-muted-foreground">{isBn ? 'সময়কাল' : 'Duration'}</div>
-                  <div className="text-sm font-bold">{isBn ? '১ সপ্তাহ' : '1 week'}</div>
+                  <div className="text-xs text-muted-foreground">{t('aiTraining.durationLabel')}</div>
+                  <div className="text-sm font-bold">{t('aiTraining.durationValue')}</div>
                 </div>
               </div>
               <div className="flex items-center gap-2 rounded-2xl border-2 border-blue-500 bg-blue-50 px-4 py-3 dark:bg-blue-950/30">
                 <div className="text-left">
-                  <div className="text-xs text-muted-foreground">{isBn ? 'ফি' : 'Fee'}</div>
+                  <div className="text-xs text-muted-foreground">{t('aiTraining.feeLabel')}</div>
                   <div className="text-sm font-bold text-blue-700 dark:text-blue-300">৳{bn('1,000')}</div>
                 </div>
               </div>
@@ -141,7 +141,7 @@ export function TrainingClient() {
                 }}
                 className="gradient-brand animate-pulse-glow inline-flex items-center gap-2 rounded-full px-7 py-3 text-sm font-bold text-white shadow-lg shadow-blue-600/25 transition-transform hover:scale-[1.02]"
               >
-                {isBn ? 'রেজিস্টার করুন' : 'Register Now'}
+                {t('aiTraining.registerNow')}
                 <ArrowRight className="h-4 w-4" />
               </a>
               <WhatsAppCTA isBn={isBn} />
@@ -238,7 +238,7 @@ export function TrainingClient() {
         {/* 5. Price */}
         <section className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
           <div className="rounded-3xl border-2 border-blue-500/40 bg-gradient-to-br from-blue-50 to-cyan-50 p-8 text-center shadow-xl dark:from-blue-950/30 dark:to-cyan-950/20">
-            <LandingEyebrow>{isBn ? 'মূল্য' : 'Price'}</LandingEyebrow>
+            <LandingEyebrow>{t('aiTraining.priceEyebrow')}</LandingEyebrow>
             <div className="mt-4 flex items-baseline justify-center gap-3">
               <span className="text-6xl font-extrabold text-blue-600 dark:text-blue-400">৳{bn('1,000')}</span>
               <span className="text-lg text-muted-foreground line-through">৳{bn('3,000')}</span>
@@ -331,7 +331,7 @@ export function TrainingClient() {
         <section id="order" className="mx-auto max-w-3xl scroll-mt-20 px-4 py-12 sm:px-6 sm:py-16">
           <div className="rounded-3xl border border-border/60 bg-card p-6 shadow-lg sm:p-8">
             <div className="text-center">
-              <LandingEyebrow>{isBn ? 'রেজিস্ট্রেশন' : 'Registration'}</LandingEyebrow>
+              <LandingEyebrow>{t('aiTraining.registrationEyebrow')}</LandingEyebrow>
               <h2 className="mt-4 font-heading text-3xl font-bold">
                 {isBn ? 'AI ট্রেইনিংয়ে নাম লেখান' : 'Register for AI Training'}
               </h2>
@@ -342,7 +342,7 @@ export function TrainingClient() {
               </p>
               <div className="mt-4 inline-flex items-baseline gap-1">
                 <span className="text-4xl font-extrabold">৳{bn('1,000')}</span>
-                <span className="text-sm text-muted-foreground">/{isBn ? 'সম্পূর্ণ কোর্স' : 'full course'}</span>
+                <span className="text-sm text-muted-foreground">/{t('aiTraining.fullCourse')}</span>
               </div>
             </div>
             <div className="mt-8">
@@ -350,7 +350,7 @@ export function TrainingClient() {
                 isBn={isBn}
                 source="ai_training_page"
                 serviceName={isBn ? 'AI ট্রেইনিং (1000TK, 1 সপ্তাহ)' : 'AI Training (1000TK, 1 week)'}
-                submitLabel={isBn ? 'রেজিস্টার করুন' : 'Register Now'}
+                submitLabel={t('aiTraining.registerNow')}
                 paymentAmount={1000}
                 paymentNote={isBn ? 'পেমেন্টের পর জুম লিংক পাবেন' : 'Zoom link sent after payment'}
               />
@@ -364,9 +364,9 @@ export function TrainingClient() {
         {/* 8. Social Links */}
         <section className="bg-muted/30 py-10">
           <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
-            <LandingEyebrow>{isBn ? 'আমাদের অনুসরণ করুন' : 'Follow us'}</LandingEyebrow>
+            <LandingEyebrow>{t('landing.followUs')}</LandingEyebrow>
             <h2 className="mt-3 font-heading text-xl font-bold">
-              {isBn ? 'সোশ্যাল মিডিয়ায় যুক্ত থাকুন' : 'Stay connected on social media'}
+              {t('landing.stayConnected')}
             </h2>
             <div className="mt-4 flex justify-center">
               <LandingSocials />
@@ -391,7 +391,7 @@ export function TrainingClient() {
               href="#order"
               className="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-7 py-3 text-sm font-bold text-blue-600 shadow-lg transition-transform hover:scale-105"
             >
-              {isBn ? 'এখনই রেজিস্টার করুন' : 'Register Now'}
+              {t('aiTraining.registerNow')}
             </a>
           </div>
         </section>

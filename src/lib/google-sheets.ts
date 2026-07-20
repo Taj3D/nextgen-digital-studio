@@ -64,13 +64,45 @@ export async function sendToGoogleSheets(row: LeadRow): Promise<{ ok: boolean; e
       }),
     });
     clearTimeout(timeout);
-    // Apps Script returns 200 after redirect follows
-    if (res.ok) {
-      return { ok: true }
-    }
+
+    // Apps Script returns 200 after redirect follows. BUT: if the Apps Script
+    // deployment is broken (no doPost handler, or "Anyone" access not set),
+    // the redirect target (script.googleusercontent.com) returns a 200 HTML
+    // "page not found" page. We need to detect this false-positive by checking
+    // the response content type + body.
     const text = await res.text().catch(() => '')
-    console.error('[google-sheets] HTTP error', res.status, text.slice(0, 200))
-    return { ok: false, error: `HTTP ${res.status}: ${text.slice(0, 200)}` }
+
+    // Check 1: HTTP status must be 200-299
+    if (!res.ok) {
+      console.error('[google-sheets] HTTP error', res.status, text.slice(0, 200))
+      return { ok: false, error: `HTTP ${res.status}: ${text.slice(0, 200)}` }
+    }
+
+    // Check 2: Response must be JSON (Apps Script returns JSON via ContentService).
+    // If it's HTML, the webhook is broken (redirected to a Google error page).
+    const contentType = res.headers.get('content-type') ?? ''
+    if (contentType.includes('text/html') || text.trimStart().startsWith('<!DOCTYPE') || text.trimStart().startsWith('<html')) {
+      console.error('[google-sheets] Webhook returned HTML (not JSON) — Apps Script deployment is broken. Response:', text.slice(0, 200))
+      return {
+        ok: false,
+        error: 'Webhook returned HTML instead of JSON. The Apps Script deployment needs a doPost(e) handler with "Anyone" access. See src/lib/google-sheets.ts header comment for setup instructions.',
+      }
+    }
+
+    // Check 3: If JSON, verify it contains {ok: true} (Apps Script convention).
+    // Some deployments return {status: 'success'} — accept both.
+    try {
+      const json = JSON.parse(text)
+      if (json.ok === true || json.status === 'success' || json.result === 'success') {
+        return { ok: true }
+      }
+      console.error('[google-sheets] Unexpected JSON response:', text.slice(0, 200))
+      return { ok: false, error: `Unexpected JSON response: ${text.slice(0, 200)}` }
+    } catch {
+      // Not valid JSON — treat as failure
+      console.error('[google-sheets] Non-JSON response:', text.slice(0, 200))
+      return { ok: false, error: `Non-JSON response: ${text.slice(0, 200)}` }
+    }
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err)
     console.error('[google-sheets] error', msg)

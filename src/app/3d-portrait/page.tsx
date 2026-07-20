@@ -6,7 +6,7 @@ const productLd = {
   '@type': 'Product',
   name: 'Custom 3D Portrait & Face Sculpting Service',
   description:
-    'Custom 3D face sculpting, portrait & character modelling service from photo for print, game, animation or social media. MDF base starts at 7500 BDT, mahogany wood premium available.',
+    'Custom 3D face sculpting & portrait modelling from photo. For print, game, animation or social media. MDF base from 7500 BDT. Mahogany wood premium available.',
   brand: {
     '@type': 'Brand',
     name: 'NextGen Digital Studio',

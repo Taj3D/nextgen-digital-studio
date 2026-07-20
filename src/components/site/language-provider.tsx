@@ -21,6 +21,13 @@ const translations: Record<Lang, Record<string, string>> = {
     'nav.about': 'About', 'nav.services': 'Services', 'nav.industries': 'Industries',
     'nav.caseStudies': 'Case Studies', 'nav.pricing': 'Pricing', 'nav.whyUs': 'Why Us',
     'nav.blog': 'Blog', 'nav.contact': 'Contact',
+    'nav.more': 'More',
+    'nav.more.3dPortrait': '3D Portrait',
+    'nav.more.cncDesign': 'CNC Design',
+    'nav.more.aiTraining': 'AI Training',
+    'nav.more.cncTraining': 'CNC Training',
+    'nav.more.pdfBooks': 'PDF Books',
+    'nav.more.founder': 'Founder',
     'cta.bookCall': 'Book Strategy Call', 'cta.bookFreeCall': 'Book a Free Strategy Call',
     'cta.exploreServices': 'Explore Services', 'cta.startFreeAudit': 'Start free audit',
     'cta.getThisStack': 'Get this stack', 'cta.subscribe': 'Subscribe', 'cta.sendMessage': 'Send Message',
@@ -69,6 +76,7 @@ const translations: Record<Lang, Record<string, string>> = {
     'caseStudies.relatedTitle': 'More Case Studies',
     'caseStudies.detailCtaTitle': 'Want the same results?',
     'caseStudies.detailCtaDesc': 'Get a custom AI automation roadmap for your business — book a free strategy call.',
+    'caseStudies.detailCtaButton': 'Book a strategy call',
     'team.eyebrow': 'Our Story', 'team.title1': 'The team building', 'team.title2': "Bangladesh's AI future",
     'team.subtitle': "We're a Jessore-based squad of AI engineers, growth specialists and automation architects obsessed with one thing: your revenue.",
     'faq.eyebrow': 'FAQ', 'faq.title': 'Frequently Asked Questions',
@@ -467,6 +475,7 @@ const translations: Record<Lang, Record<string, string>> = {
     'footer.blog': 'Blog',
     'footer.caseStudies': 'Case Studies',
     'footer.servicesTitle': 'Services',
+    'footer.viewAllServices': 'View all services',
     'footer.newsletterPlaceholder': 'Enter your email',
     'footer.newsletterBtn': 'Subscribe',
     'footer.newsletterSuccess': 'Subscribed! Check your inbox.',
@@ -546,11 +555,126 @@ const translations: Record<Lang, Record<string, string>> = {
     'socialProof.actionReviewed': 'left a 5-star review',
     'socialProof.justNow': 'Just now',
     'socialProof.minutesAgo': 'minutes ago',
+    // === STEP-8: Landing page shared + per-page bilingual strings ===
+    'landing.whatsappDefaultMsg': "Hi NextGen Digital Studio, I'd like to know more about your services.",
+    'landing.whatsappChat': 'Chat on WhatsApp',
+    'landing.toastSuccess': 'Submission successful!',
+    'landing.toastErrorFill': 'Please fill all required fields',
+    'landing.toastErrorGeneric': 'Something went wrong, please try again',
+    'landing.thanksTitle': 'Thank you! We received your request.',
+    'landing.thanksDesc': 'Our team will contact you within 2 hours.',
+    'landing.sendAnother': 'Send another request',
+    'landing.fullNameLabel': 'Full name *',
+    'landing.fullNamePlaceholder': 'Your name',
+    'landing.phoneLabel': 'Phone / WhatsApp *',
+    'landing.emailLabel': 'Email *',
+    'landing.companyLabel': 'Company',
+    'landing.companyPlaceholder': 'Company name',
+    'landing.messageLabel': 'Message',
+    'landing.messagePlaceholder': 'Tell us what you need...',
+    'landing.submitting': 'Submitting...',
+    'landing.placeOrder': 'Place Order',
+    'landing.footerSocials': 'Socials',
+    'landing.footerContact': 'Contact',
+    'landing.footerHome': 'Home',
+    'landing.footerPrivacy': 'Privacy Policy',
+    'landing.footerTerms': 'Terms',
+    'landing.footerRights': 'All rights reserved.',
+    'landing.followUs': 'Follow us',
+    'landing.stayConnected': 'Stay connected on social media',
+    'landing.howToOrder': 'How to order',
+    'landing.just3Steps': 'Just 3 steps',
+    // services/[slug] landing page
+    'serviceLanding.eyebrow': 'NextGen Service',
+    'serviceLanding.includesTitle': 'What this service includes',
+    'serviceLanding.fastSetup': 'Fast setup',
+    'serviceLanding.guarantee': '100% guarantee',
+    'serviceLanding.support247': '24/7 support',
+    'serviceLanding.benefitsEyebrow': 'Benefits',
+    'serviceLanding.priority': 'priority',
+    'serviceLanding.readyTitle': 'Ready to get started?',
+    'serviceLanding.chatNow': 'Chat Now',
+    'serviceLanding.requestCallEyebrow': 'Request a Call',
+    'serviceLanding.sendRequest': 'Send Request',
+    // 3d-portrait page
+    'portrait.campaignEyebrow': '🔥 Campaign — Single face just ৳500',
+    'portrait.subtitleBold': 'CNC 3D Face Sculpting',
+    'portrait.noAdvanceShort': 'No advance payment — just send photo & details',
+    'portrait.photosFadeEyebrow': 'Photos fade away...',
+    'portrait.imagineEyebrow': 'Imagine',
+    'portrait.choosePriceEyebrow': 'Choose Your Price',
+    'portrait.priceCalcTitle': 'Live Price Calculator',
+    'portrait.howManyFaces': 'How many faces?',
+    'portrait.yourSelectedPrice': 'Your selected price',
+    'portrait.campaignOfferBadge': '🔥 Campaign offer (was ৳3,200)',
+    'portrait.proofEyebrow': 'Proof of work',
+    'portrait.workSamplesEyebrow': 'Our Work Samples',
+    'portrait.boardSizesEyebrow': 'Board & Wood Sizes',
+    'portrait.limitedOffer': 'Limited time offer',
+    'portrait.watchOnFacebook': 'Watch on Facebook',
+    'portrait.selectedLabel': 'Selected:',
+    'portrait.confirmOrder': 'Confirm Order',
+    'portrait.sendPhotoWhatsapp': 'Send Photo (WhatsApp)',
+    'portrait.noAdvanceLong': 'No advance payment — pay only after seeing the finished work',
+    // cnc-design page
+    'cncDesign.specialOfferEyebrow': 'Special Offer · 90% OFF',
+    'cncDesign.yourProblemEyebrow': 'Your problem',
+    'cncDesign.solutionEyebrow': 'The solution',
+    'cncDesign.whatsIncludedEyebrow': "What's included",
+    'cncDesign.completePackage': 'Complete Package',
+    'cncDesign.priceEyebrow': 'Price',
+    'cncDesign.bundle': 'Bundle',
+    'cncDesign.fullBundle': 'full bundle',
+    // ai-training page
+    'aiTraining.heroEyebrow': '1 Week · 9 PM · Hands-on',
+    'aiTraining.timeLabel': 'Time',
+    'aiTraining.timeValue': '9 PM',
+    'aiTraining.durationLabel': 'Duration',
+    'aiTraining.durationValue': '1 week',
+    'aiTraining.feeLabel': 'Fee',
+    'aiTraining.priceEyebrow': 'Price',
+    'aiTraining.registerNow': 'Register Now',
+    'aiTraining.registrationEyebrow': 'Registration',
+    'aiTraining.fullCourse': 'full course',
+    // cnc-training page
+    'cncTraining.freeBonusEyebrow': '+ Free chair leg design',
+    'cncTraining.timeLabel': 'Time',
+    'cncTraining.timeValue': '9 PM',
+    'cncTraining.durationLabel': 'Duration',
+    'cncTraining.durationValue': '7 days',
+    'cncTraining.feeLabel': 'Fee',
+    'cncTraining.curriculumEyebrow': 'Curriculum',
+    'cncTraining.whatYouGetEyebrow': 'What you get',
+    'cncTraining.completePackage': 'Complete Package',
+    'cncTraining.registrationEyebrow': 'Registration',
+    'cncTraining.fullCourse': 'full course',
+    'cncTraining.registerNow': 'Register Now',
+    // pdf-books page
+    'pdfBooks.heroEyebrow': '🔥 Each book just 170TK! Buy 1, Get 1 Free!',
+    'pdfBooks.browseBooks': 'Browse Books',
+    'pdfBooks.pages': 'pages',
+    'pdfBooks.order': 'Order',
+    'pdfBooks.buy1Get1Title': 'Buy 1, Get 1 Free',
+    'pdfBooks.orderAll': 'Order All',
+    'pdfBooks.orderFormEyebrow': 'Order Form',
+    'pdfBooks.orderAnyBook': 'Order Any Book',
+    'pdfBooks.selectBookLabel': 'Select Book *',
+    'pdfBooks.freeBookLabel': 'Your free book (if wanted)',
+    'pdfBooks.freeBookPlaceholder': 'Mention which free book you want...',
+    'pdfBooks.sendAnotherOrder': 'Send another order',
+    'pdfBooks.thanksOrderTitle': 'Thank you! Your order has been received.',
   },
   bn: {
     'nav.about': 'আমাদের সম্পর্কে', 'nav.services': 'সেবাসমূহ', 'nav.industries': 'শিল্পখাত',
     'nav.caseStudies': 'কেস স্টাডি', 'nav.pricing': 'প্রাইসিং', 'nav.whyUs': 'কেন আমরা',
     'nav.blog': 'ব্লগ', 'nav.contact': 'যোগাযোগ',
+    'nav.more': 'আরও',
+    'nav.more.3dPortrait': 'থ্রিডি পোর্ট্রেট',
+    'nav.more.cncDesign': 'সিএনসি ডিজাইন',
+    'nav.more.aiTraining': 'এআই ট্রেনিং',
+    'nav.more.cncTraining': 'সিএনসি ট্রেনিং',
+    'nav.more.pdfBooks': 'পিডিএফ বই',
+    'nav.more.founder': 'প্রতিষ্ঠাতা',
     'cta.bookCall': 'স্ট্র্যাটেজি কল বুক করুন', 'cta.bookFreeCall': 'ফ্রি স্ট্র্যাটেজি কল বুক করুন',
     'cta.exploreServices': 'সেবাসমূহ দেখুন', 'cta.startFreeAudit': 'ফ্রি অডিট শুরু করুন',
     'cta.getThisStack': 'এই স্ট্যাক নিন', 'cta.subscribe': 'সাবস্ক্রাইব', 'cta.sendMessage': 'বার্তা পাঠান',
@@ -599,6 +723,7 @@ const translations: Record<Lang, Record<string, string>> = {
     'caseStudies.relatedTitle': 'আরও কেস স্টাডি',
     'caseStudies.detailCtaTitle': 'একই ফলাফল চান?',
     'caseStudies.detailCtaDesc': 'আপনার ব্যবসার জন্য কাস্টম এআই অটোমেশন রোডম্যাপ পান — ফ্রি স্ট্র্যাটেজি কল বুক করুন।',
+    'caseStudies.detailCtaButton': 'স্ট্র্যাটেজি কল বুক করুন',
     'team.eyebrow': 'আমাদের গল্প', 'team.title1': 'বাংলাদেশের এআই ভবিষ্যৎ', 'team.title2': 'তৈরি করছে যে টিম',
     'team.subtitle': 'আমরা যশোরভিত্তিক এআই ইঞ্জিনিয়ার, গ্রোথ স্পেশালিস্ট ও অটোমেশন আর্কিটেক্টের একটি টিম — একটি জিনিস নিয়ে আগ্রহী: আপনার রাজস্ব।',
     'faq.eyebrow': 'প্রশ্নোত্তর', 'faq.title': 'সাধারণ জিজ্ঞাসা',
@@ -973,6 +1098,7 @@ const translations: Record<Lang, Record<string, string>> = {
     'footer.blog': 'ব্লগ',
     'footer.caseStudies': 'কেস স্টাডি',
     'footer.servicesTitle': 'সেবাসমূহ',
+    'footer.viewAllServices': 'সকল সেবা দেখুন',
     'footer.newsletterPlaceholder': 'ইমেইল লিখুন',
     'footer.newsletterBtn': 'সাবস্ক্রাইব',
     'footer.newsletterSuccess': 'সাবস্ক্রাইবড! ইনবক্স চেক করুন।',
@@ -1052,6 +1178,114 @@ const translations: Record<Lang, Record<string, string>> = {
     'socialProof.actionReviewed': '৫-স্টার রিভিউ দিয়েছেন',
     'socialProof.justNow': 'এইমাত্র',
     'socialProof.minutesAgo': 'মিনিট আগে',
+    // === STEP-8: Landing page shared + per-page bilingual strings ===
+    'landing.whatsappDefaultMsg': 'আসসালামু আলাইকুম, আমি NextGen Digital Studio-এর সেবা সম্পর্কে জানতে চাই।',
+    'landing.whatsappChat': 'হোয়াটসঅ্যাপে চ্যাট করুন',
+    'landing.toastSuccess': 'সফলভাবে জমা হয়েছে!',
+    'landing.toastErrorFill': 'অনুগ্রহ করে সব প্রয়োজনীয় ঘর পূরণ করুন',
+    'landing.toastErrorGeneric': 'কিছু ভুল হয়েছে, আবার চেষ্টা করুন',
+    'landing.thanksTitle': 'ধন্যবাদ! আপনার অনুরোধ গ্রহণ করা হয়েছে।',
+    'landing.thanksDesc': 'আমাদের টিম ২ ঘন্টার মধ্যে আপনার সাথে যোগাযোগ করবে।',
+    'landing.sendAnother': 'আরেকটি অনুরোধ পাঠান',
+    'landing.fullNameLabel': 'নাম *',
+    'landing.fullNamePlaceholder': 'আপনার নাম',
+    'landing.phoneLabel': 'ফোন / হোয়াটসঅ্যাপ *',
+    'landing.emailLabel': 'ইমেইল *',
+    'landing.companyLabel': 'কোম্পানি',
+    'landing.companyPlaceholder': 'কোম্পানির নাম',
+    'landing.messageLabel': 'বার্তা',
+    'landing.messagePlaceholder': 'আপনার প্রয়োজন সম্পর্কে লিখুন...',
+    'landing.submitting': 'পাঠানো হচ্ছে...',
+    'landing.placeOrder': 'অর্ডার করুন',
+    'landing.footerSocials': 'সোশ্যাল',
+    'landing.footerContact': 'যোগাযোগ',
+    'landing.footerHome': 'হোম',
+    'landing.footerPrivacy': 'প্রাইভেসি পলিসি',
+    'landing.footerTerms': 'টার্মস',
+    'landing.footerRights': 'সর্বস্বত্ব সংরক্ষিত।',
+    'landing.followUs': 'আমাদের অনুসরণ করুন',
+    'landing.stayConnected': 'সোশ্যাল মিডিয়ায় যুক্ত থাকুন',
+    'landing.howToOrder': 'অর্ডার প্রক্রিয়া',
+    'landing.just3Steps': 'মাত্র ৩ ধাপ',
+    // services/[slug] landing page
+    'serviceLanding.eyebrow': 'NextGen সেবা',
+    'serviceLanding.includesTitle': 'এই সেবায় যা পাবেন',
+    'serviceLanding.fastSetup': 'দ্রুত সেটআপ',
+    'serviceLanding.guarantee': '১০০% গ্যারান্টি',
+    'serviceLanding.support247': '২৪/৭ সাপোর্ট',
+    'serviceLanding.benefitsEyebrow': 'সুবিধা',
+    'serviceLanding.priority': 'প্রায়োরিটি',
+    'serviceLanding.readyTitle': 'প্রস্তুত শুরু করতে?',
+    'serviceLanding.chatNow': 'এখনই চ্যাট করুন',
+    'serviceLanding.requestCallEyebrow': 'অনুরোধ করুন',
+    'serviceLanding.sendRequest': 'অনুরোধ পাঠান',
+    // 3d-portrait page
+    'portrait.campaignEyebrow': '🔥 ক্যাম্পেইন অফার — সিঙ্গেল ফেস মাত্র ৳৫০০',
+    'portrait.subtitleBold': 'সিএনসি ৩ডি ফেস স্কাল্পটিং',
+    'portrait.noAdvanceShort': 'কোনো অগ্রিম টাকা পেমেন্ট করতে হবে না — শুধু ছবি ও তথ্য দিন',
+    'portrait.photosFadeEyebrow': 'ছবি ফিকে হয়ে যায়...',
+    'portrait.imagineEyebrow': 'কল্পনা করুন',
+    'portrait.choosePriceEyebrow': 'দাম নির্বাচন করুন',
+    'portrait.priceCalcTitle': 'লাইভ মূল্য ক্যালকুলেটর',
+    'portrait.howManyFaces': 'কতজনের ফেস?',
+    'portrait.yourSelectedPrice': 'আপনার নির্বাচিত দাম',
+    'portrait.campaignOfferBadge': '🔥 ক্যাম্পেইন অফার (নির্ধারিত ৳৩২০০)',
+    'portrait.proofEyebrow': 'কাজের প্রমাণ',
+    'portrait.workSamplesEyebrow': 'আমাদের কাজের নমুনা',
+    'portrait.boardSizesEyebrow': 'বোর্ড ও কাঠের সাইজ',
+    'portrait.limitedOffer': 'সীমিত সময়ের অফার',
+    'portrait.watchOnFacebook': 'ফেসবুকে ভিডিও দেখুন',
+    'portrait.selectedLabel': 'নির্বাচিত:',
+    'portrait.confirmOrder': 'অর্ডার কনফার্ম করুন',
+    'portrait.sendPhotoWhatsapp': 'ছবি পাঠান (WhatsApp)',
+    'portrait.noAdvanceLong': 'কোনো অগ্রিম টাকা পেমেন্ট করতে হবে না — কাজ শেষে দেখিয়ে পেমেন্ট নেওয়া হবে',
+    // cnc-design page
+    'cncDesign.specialOfferEyebrow': 'স্পেশাল অফার · ৯০% ছাড়',
+    'cncDesign.yourProblemEyebrow': 'আপনার সমস্যা',
+    'cncDesign.solutionEyebrow': 'সমাধান',
+    'cncDesign.whatsIncludedEyebrow': 'প্যাকেজে যা যা আছে',
+    'cncDesign.completePackage': 'সম্পূর্ণ প্যাকেজ',
+    'cncDesign.priceEyebrow': 'মূল্য',
+    'cncDesign.bundle': 'বান্ডল',
+    'cncDesign.fullBundle': 'সম্পূর্ণ বান্ডল',
+    // ai-training page
+    'aiTraining.heroEyebrow': '১ সপ্তাহ · রাত ৯টা · হাতে কলমে',
+    'aiTraining.timeLabel': 'সময়',
+    'aiTraining.timeValue': 'রাত ৯টা',
+    'aiTraining.durationLabel': 'সময়কাল',
+    'aiTraining.durationValue': '১ সপ্তাহ',
+    'aiTraining.feeLabel': 'ফি',
+    'aiTraining.priceEyebrow': 'মূল্য',
+    'aiTraining.registerNow': 'রেজিস্টার করুন',
+    'aiTraining.registrationEyebrow': 'রেজিস্ট্রেশন',
+    'aiTraining.fullCourse': 'সম্পূর্ণ কোর্স',
+    // cnc-training page
+    'cncTraining.freeBonusEyebrow': '+ ফ্রি chair leg design',
+    'cncTraining.timeLabel': 'সময়',
+    'cncTraining.timeValue': 'রাত ৯টা',
+    'cncTraining.durationLabel': 'সময়কাল',
+    'cncTraining.durationValue': '৭ দিন',
+    'cncTraining.feeLabel': 'ফি',
+    'cncTraining.curriculumEyebrow': 'কারিকুলাম',
+    'cncTraining.whatYouGetEyebrow': 'আপনি যা পাবেন',
+    'cncTraining.completePackage': 'সম্পূর্ণ প্যাকেজ',
+    'cncTraining.registrationEyebrow': 'রেজিস্ট্রেশন',
+    'cncTraining.fullCourse': 'সম্পূর্ণ কোর্স',
+    'cncTraining.registerNow': 'রেজিস্টার করুন',
+    // pdf-books page
+    'pdfBooks.heroEyebrow': '🔥 প্রতিটি বই মাত্র ১৭০ টাকা! ১টি কিনুন, ১টি ফ্রি পান!',
+    'pdfBooks.browseBooks': 'বই দেখুন',
+    'pdfBooks.pages': 'পৃষ্ঠা',
+    'pdfBooks.order': 'অর্ডার',
+    'pdfBooks.buy1Get1Title': 'কিনুন ১, পান ১ ফ্রি',
+    'pdfBooks.orderAll': 'সব অর্ডার করুন',
+    'pdfBooks.orderFormEyebrow': 'অর্ডার ফর্ম',
+    'pdfBooks.orderAnyBook': 'যেকোনো বই অর্ডার করুন',
+    'pdfBooks.selectBookLabel': 'বই নির্বাচন করুন *',
+    'pdfBooks.freeBookLabel': 'আপনার ফ্রি বই (যদি চান)',
+    'pdfBooks.freeBookPlaceholder': 'কোন ফ্রি বই চান লিখুন...',
+    'pdfBooks.sendAnotherOrder': 'আরেকটি অর্ডার',
+    'pdfBooks.thanksOrderTitle': 'ধন্যবাদ! আপনার অর্ডার গ্রহণ করা হয়েছে।',
   },
 }
 
@@ -1464,9 +1698,52 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   // Keep <html lang> attribute in sync whenever lang changes (toggle / setLang calls).
+  // Also update document.title + meta description so search engines + browser
+  // tabs reflect the active language (server-rendered metadata is static).
   React.useEffect(() => {
-    if (typeof document !== 'undefined') {
-      document.documentElement.lang = lang
+    if (typeof document === 'undefined') return
+    document.documentElement.lang = lang
+
+    // Update <title> — only on the homepage (where the default title applies).
+    // On other pages, the page-specific title is preserved (it's already
+    // translated via the page's metadata export).
+    const isHome = window.location.pathname === '/'
+    if (isHome) {
+      document.title =
+        lang === 'bn'
+          ? 'নেক্সটজেন ডিজিটাল স্টুডিও — বাংলাদেশের এআই সেলস অটোমেশন'
+          : 'NextGen Digital Studio — AI Sales Automation Bangladesh'
+
+      // Update meta description
+      const descMeta = document.querySelector('meta[name="description"]')
+      if (descMeta) {
+        descMeta.setAttribute(
+          'content',
+          lang === 'bn'
+            ? 'বাংলাদেশের এআই সেলস অটোমেশন এজেন্সি। এআই চ্যাটবট, হোয়াটসঅ্যাপ অটোমেশন, CRM, লিড জেনারেশন। ফ্রি স্ট্র্যাটেজি সেশন। ৬০ দিনের ROI গ্যারান্টি।'
+            : 'AI Sales Automation Agency in Bangladesh. AI chatbots, WhatsApp automation, CRM, lead generation. Free strategy session. 60-day ROI guarantee. Jessore.',
+        )
+      }
+
+      // Update OpenGraph title + description
+      const ogTitle = document.querySelector('meta[property="og:title"]')
+      if (ogTitle) {
+        ogTitle.setAttribute(
+          'content',
+          lang === 'bn'
+            ? 'নেক্সটজেন ডিজিটাল স্টুডিও — বাংলাদেশের এআই সেলস অটোমেশন'
+            : 'NextGen Digital Studio — AI Sales Automation Bangladesh',
+        )
+      }
+      const ogDesc = document.querySelector('meta[property="og:description"]')
+      if (ogDesc) {
+        ogDesc.setAttribute(
+          'content',
+          lang === 'bn'
+            ? 'বাংলাদেশের এআই সেলস অটোমেশন এজেন্সি। এআই চ্যাটবট, হোয়াটসঅ্যাপ অটোমেশন, CRM, লিড জেনারেশন।'
+            : 'AI Sales Automation Agency in Bangladesh. AI chatbots, WhatsApp automation, CRM, lead generation.',
+        )
+      }
     }
   }, [lang])
 

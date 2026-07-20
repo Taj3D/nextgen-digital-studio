@@ -229,7 +229,7 @@ export function SocialProof() {
       <AnimatePresence>
         {current && (
           <motion.div
-            key={`${current.name}-${current.action}-${current.count ?? Date.now()}`}
+            key={`${current.name}-${current.action}-${stateRef.current.count}`}
             initial={{ opacity: 0, x: -40, y: 10 }}
             animate={{ opacity: 1, x: 0, y: 0 }}
             exit={{ opacity: 0, x: -40, y: 10 }}

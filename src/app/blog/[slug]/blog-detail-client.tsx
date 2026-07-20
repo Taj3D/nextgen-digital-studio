@@ -2,13 +2,77 @@
 
 import Link from "next/link"
 import { ArrowLeft, Clock, Calendar, ArrowRight, Sparkles } from "lucide-react"
-import { blogPosts, siteConfig } from "@/lib/site-data"
+import { blogPosts, siteConfig, type BlogPost } from "@/lib/site-data"
 import { useLang } from "@/components/site/language-provider"
 
-// Blog detail pages are dynamic (content not in data model yet)
-type BlogPost = (typeof blogPosts)[number] & {
-  author?: string
-  content?: { heading: string; body: string }[]
+/**
+ * Parses inline `**bold**` markers in a string into React nodes.
+ * Splits the text on the `**...**` pattern, wrapping matched segments in <strong>.
+ */
+function renderInlineMarkdown(text: string, keyPrefix: string) {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g)
+  return parts.map((part, i) => {
+    if (part.startsWith('**') && part.endsWith('**') && part.length > 4) {
+      return (
+        <strong key={`${keyPrefix}-b-${i}`} className="font-semibold text-foreground">
+          {part.slice(2, -2)}
+        </strong>
+      )
+    }
+    return <span key={`${keyPrefix}-t-${i}`}>{part}</span>
+  })
+}
+
+/**
+ * Renders a long-form article body stored as markdown-like plain text.
+ *
+ * Format conventions (see BlogPost.content in site-data.ts):
+ *   - Paragraphs are separated by "\n\n"
+ *   - A paragraph starting with "## " becomes an <h3> section heading
+ *   - A paragraph starting with "### " becomes an <h4> sub-heading
+ *   - Any other paragraph is rendered as a <p>; internal single "\n" are
+ *     preserved via whitespace-pre-line so list-style "- item" blocks read naturally.
+ *   - Inline "**text**" is rendered as bold.
+ */
+function renderArticleContent(content: string) {
+  const blocks = content.split('\n\n')
+  return blocks.map((block, i) => {
+    const trimmed = block.trim()
+    if (!trimmed) return null
+
+    const key = `blk-${i}`
+
+    if (trimmed.startsWith('### ')) {
+      return (
+        <h4
+          key={key}
+          className="mt-8 mb-2 font-heading text-lg font-bold tracking-tight text-foreground"
+        >
+          {renderInlineMarkdown(trimmed.slice(4), key)}
+        </h4>
+      )
+    }
+
+    if (trimmed.startsWith('## ')) {
+      return (
+        <h3
+          key={key}
+          className="mt-10 mb-3 font-heading text-xl font-extrabold tracking-tight text-foreground sm:text-2xl"
+        >
+          {renderInlineMarkdown(trimmed.slice(3), key)}
+        </h3>
+      )
+    }
+
+    return (
+      <p
+        key={key}
+        className="mb-4 whitespace-pre-line text-[15px] leading-7 text-foreground/90 sm:text-base sm:leading-8"
+      >
+        {renderInlineMarkdown(trimmed, key)}
+      </p>
+    )
+  })
 }
 
 export function BlogDetailClient({ slug }: { slug: string }) {
@@ -31,8 +95,7 @@ export function BlogDetailClient({ slug }: { slug: string }) {
 
   const isBn = lang === 'bn'
   const relatedPosts = blogPosts.filter((p) => p.slug !== slug).slice(0, 2)
-  const author = post.author ?? (isBn ? 'তাজ ভাই' : 'Taj Bhai')
-  const sections = post.content ?? [{ heading: post.title, body: post.excerpt }]
+  const author = isBn ? 'তাজ ভাই' : 'Taj Bhai'
   const year = new Date().getFullYear()
 
   return (
@@ -90,19 +153,17 @@ export function BlogDetailClient({ slug }: { slug: string }) {
           </span>
         </div>
 
-        {/* Article content */}
-        <div className="space-y-8">
-          {sections.map((section, i) => (
-            <section key={i}>
-              <h2 className="font-heading text-xl font-bold tracking-tight sm:text-2xl">
-                {tr(section.heading)}
-              </h2>
-              <div className="mt-3 whitespace-pre-line text-[15px] leading-relaxed text-foreground/90 sm:text-base">
-                {tr(section.body)}
-              </div>
-            </section>
-          ))}
+        {/* Article content — long-form body rendered with prose typography */}
+        <div className="prose prose-lg max-w-none mt-2">
+          {renderArticleContent(post.content)}
         </div>
+
+        {/* Bengali-mode note: full article body is in English for now */}
+        {isBn && (
+          <p className="mt-6 rounded-xl border border-blue-600/20 bg-blue-600/[0.04] px-4 py-3 text-xs text-muted-foreground">
+            📖 সম্পূর্ণ আর্টিকেলটি ইংরেজিতে প্রকাশিত। উপরের সারাংশটি বাংলায় দেখুন।
+          </p>
+        )}
 
         {/* CTA */}
         <div className="mt-12 overflow-hidden rounded-3xl border border-blue-600/30 bg-gradient-to-br from-blue-600/[0.06] to-cyan-500/[0.06] p-6 text-center sm:p-8">
@@ -114,7 +175,7 @@ export function BlogDetailClient({ slug }: { slug: string }) {
             {t('blog.detailCtaDesc')}
           </p>
           <Link
-            href="/#contact"
+            href="/#lead-form"
             className="mt-5 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-blue-600/25 transition-transform hover:scale-[1.02]"
           >
             {t('blog.detailCtaButton')}

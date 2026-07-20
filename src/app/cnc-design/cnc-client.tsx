@@ -35,7 +35,7 @@ const INCLUDED = [
 ]
 
 export function CncClient() {
-  const { lang } = useLang()
+  const { lang, t } = useLang()
   const isBn = lang === 'bn'
   usePageViewTracking('cnc_design_page')
 
@@ -59,7 +59,7 @@ export function CncClient() {
           <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 sm:px-6 sm:py-16 md:grid-cols-2 md:py-20">
             <div>
               <LandingEyebrow>
-                <Tag className="h-3 w-3" /> {isBn ? 'স্পেশাল অফার · ৯০% ছাড়' : 'Special Offer · 90% OFF'}
+                <Tag className="h-3 w-3" /> {t('cncDesign.specialOfferEyebrow')}
               </LandingEyebrow>
               <h1 className="mt-4 font-heading text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
                 {isBn ? (
@@ -97,7 +97,7 @@ export function CncClient() {
               </div>
               <div className="mt-6 flex flex-wrap items-center gap-3">
                 <a href="#order" className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-amber-600 to-orange-500 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-amber-600/25 transition-transform hover:scale-[1.02]">
-                  {isBn ? 'অর্ডার করুন' : 'Order Now'}
+                  {t('cta.orderNow')}
                 </a>
                 <WhatsAppCTA isBn={isBn} />
               </div>
@@ -118,7 +118,7 @@ export function CncClient() {
                 <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-white">
                   <div>
                     <p className="text-xs font-medium uppercase tracking-wider opacity-80">
-                      {isBn ? 'বান্ডল' : 'Bundle'}
+                      {t('cncDesign.bundle')}
                     </p>
                     <p className="font-heading text-xl font-bold">150GB · 2500+ files</p>
                   </div>
@@ -133,7 +133,7 @@ export function CncClient() {
         <section className="bg-muted/30 py-12 sm:py-16">
           <div className="mx-auto max-w-4xl px-4 sm:px-6">
             <div className="text-center">
-              <LandingEyebrow>{isBn ? 'আপনার সমস্যা' : 'Your problem'}</LandingEyebrow>
+              <LandingEyebrow>{t('cncDesign.yourProblemEyebrow')}</LandingEyebrow>
               <h2 className="mt-4 font-heading text-3xl font-bold sm:text-4xl">
                 {isBn ? 'প্রতিটি অর্ডারে নতুন করে ডিজাইন করছেন?' : 'Designing from scratch on every order?'}
               </h2>
@@ -156,7 +156,7 @@ export function CncClient() {
         {/* 3. Desire + Categories */}
         <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
           <div className="text-center">
-            <LandingEyebrow>{isBn ? 'সমাধান' : 'The solution'}</LandingEyebrow>
+            <LandingEyebrow>{t('cncDesign.solutionEyebrow')}</LandingEyebrow>
             <h2 className="mt-4 font-heading text-3xl font-bold sm:text-4xl">
               {isBn ? 'কল্পনা করুন ২৫০০+ ডিজাইন আপনার হাতে' : 'Imagine 2500+ designs at your fingertips'}
             </h2>
@@ -181,9 +181,9 @@ export function CncClient() {
         <section className="bg-muted/30 py-12 sm:py-16">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
             <div className="text-center">
-              <LandingEyebrow>{isBn ? 'প্যাকেজে যা যা আছে' : "What's included"}</LandingEyebrow>
+              <LandingEyebrow>{t('cncDesign.whatsIncludedEyebrow')}</LandingEyebrow>
               <h2 className="mt-4 font-heading text-3xl font-bold sm:text-4xl">
-                {isBn ? 'সম্পূর্ণ প্যাকেজ' : 'Complete Package'}
+                {t('cncDesign.completePackage')}
               </h2>
             </div>
             <div className="mt-8 grid gap-4 sm:grid-cols-2 md:grid-cols-4">
@@ -202,7 +202,7 @@ export function CncClient() {
         {/* 5. Price */}
         <section className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
           <div className="rounded-3xl border-2 border-amber-500/40 bg-gradient-to-br from-amber-50 to-orange-50 p-8 text-center shadow-xl dark:from-amber-950/30 dark:to-orange-950/20">
-            <LandingEyebrow>{isBn ? 'মূল্য' : 'Price'}</LandingEyebrow>
+            <LandingEyebrow>{t('cncDesign.priceEyebrow')}</LandingEyebrow>
             <div className="mt-4 flex items-baseline justify-center gap-3">
               <span className="text-6xl font-extrabold text-amber-600 dark:text-amber-400">৳{bn('150')}</span>
               <span className="text-lg text-muted-foreground line-through">৳{bn('1,500')}</span>
@@ -220,9 +220,9 @@ export function CncClient() {
         <section className="bg-muted/30 py-12 sm:py-16">
           <div className="mx-auto max-w-4xl px-4 sm:px-6">
             <div className="text-center">
-              <LandingEyebrow>{isBn ? 'অর্ডার প্রক্রিয়া' : 'How to order'}</LandingEyebrow>
+              <LandingEyebrow>{t('landing.howToOrder')}</LandingEyebrow>
               <h2 className="mt-4 font-heading text-3xl font-bold sm:text-4xl">
-                {isBn ? 'মাত্র ৩ ধাপ' : 'Just 3 steps'}
+                {t('landing.just3Steps')}
               </h2>
             </div>
             <div className="mt-8 grid gap-6 sm:grid-cols-3">
@@ -247,7 +247,7 @@ export function CncClient() {
         <section id="order" className="mx-auto max-w-3xl scroll-mt-20 px-4 py-12 sm:px-6 sm:py-16">
           <div className="rounded-3xl border border-border/60 bg-card p-6 shadow-lg sm:p-8">
             <div className="text-center">
-              <LandingEyebrow>{isBn ? 'অর্ডার করুন' : 'Place Order'}</LandingEyebrow>
+              <LandingEyebrow>{t('landing.placeOrder')}</LandingEyebrow>
               <h2 className="mt-4 font-heading text-3xl font-bold">
                 {isBn ? '১৫০টাকায় অর্ডার করুন' : 'Order Now for 150TK'}
               </h2>
@@ -258,7 +258,7 @@ export function CncClient() {
               </p>
               <div className="mt-4 inline-flex items-baseline gap-1">
                 <span className="text-4xl font-extrabold">৳{bn('150')}</span>
-                <span className="text-sm text-muted-foreground">/{isBn ? 'সম্পূর্ণ বান্ডল' : 'full bundle'}</span>
+                <span className="text-sm text-muted-foreground">/{t('cncDesign.fullBundle')}</span>
               </div>
             </div>
             <div className="mt-8">
@@ -266,7 +266,7 @@ export function CncClient() {
                 isBn={isBn}
                 source="cnc_design_page"
                 serviceName={isBn ? 'CNC ডিজাইন বান্ডল (150TK / 150GB)' : 'CNC Design Bundle (150TK / 150GB)'}
-                submitLabel={isBn ? 'অর্ডার করুন' : 'Place Order'}
+                submitLabel={t('cta.orderNow')}
                 paymentAmount={150}
                 paymentNote={isBn ? 'পেমেন্টের পর Google Drive লিংক পাবেন' : 'Google Drive link sent after payment'}
               />
@@ -283,9 +283,9 @@ export function CncClient() {
         {/* 8. Social Links */}
         <section className="bg-muted/30 py-10">
           <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
-            <LandingEyebrow>{isBn ? 'আমাদের অনুসরণ করুন' : 'Follow us'}</LandingEyebrow>
+            <LandingEyebrow>{t('landing.followUs')}</LandingEyebrow>
             <h2 className="mt-3 font-heading text-xl font-bold">
-              {isBn ? 'সোশ্যাল মিডিয়ায় যুক্ত থাকুন' : 'Stay connected on social media'}
+              {t('landing.stayConnected')}
             </h2>
             <div className="mt-4 flex justify-center">
               <LandingSocials />
@@ -310,7 +310,7 @@ export function CncClient() {
               href="#order"
               className="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-7 py-3 text-sm font-bold text-amber-600 shadow-lg transition-transform hover:scale-105"
             >
-              {isBn ? 'এখনই অর্ডার করুন' : 'Order Now'}
+              {t('cta.orderNow')}
             </a>
           </div>
         </section>

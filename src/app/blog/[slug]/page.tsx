@@ -38,5 +38,42 @@ export default async function BlogPostPage({ params }: Params) {
   const post = blogPosts.find((p) => p.slug === slug)
   if (!post) notFound()
 
-  return <BlogDetailClient slug={slug} />
+  // JSON-LD structured data for SEO — helps Google understand this is an
+  // Article and enables rich results in search.
+  const articleLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: post.title,
+    description: post.excerpt,
+    datePublished: post.date,
+    dateModified: post.date,
+    author: {
+      '@type': 'Organization',
+      name: 'NextGen Digital Studio',
+      url: 'https://nextgendigitalstudio.com',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'NextGen Digital Studio',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://nextgendigitalstudio.com/logo.jpg',
+      },
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `https://nextgendigitalstudio.com/blog/${slug}`,
+    },
+    image: 'https://nextgendigitalstudio.com/og-image.jpg',
+  }
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }}
+      />
+      <BlogDetailClient slug={slug} />
+    </>
+  )
 }

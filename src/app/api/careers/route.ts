@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { sendToGoogleSheets } from "@/lib/google-sheets";
+import { sendCustomerConfirmationEmail, sendOwnerNotificationEmail } from "@/lib/email-lead";
 import { trackEvent } from "@/lib/tracking";
 import { normalizeSource } from "@/lib/lead-sources";
 import { normalizePhone } from "@/lib/phone";
@@ -78,7 +79,7 @@ export async function POST(req: Request) {
     }
 
     // Google Sheets sync (saves to Sheet + sends email to candidate + owner via Apps Script)
-    sendToGoogleSheets({
+    const sheetsResult = await sendToGoogleSheets({
       name,
       email,
       phone: phone || "",
@@ -87,7 +88,23 @@ export async function POST(req: Request) {
       source,
       leadId,
       submittedAt: new Date().toISOString(),
-    }).catch((err) => console.error("[careers] google sheets error", err));
+    }).catch((err) => {
+      console.error("[careers] google sheets error", err);
+      return { ok: false, error: err instanceof Error ? err.message : String(err) };
+    });
+
+    // Send customer confirmation + owner notification emails (logged + persisted).
+    Promise.all([
+      sendCustomerConfirmationEmail({ name, email, phone: phone || "N/A", service, source }),
+      sendOwnerNotificationEmail({
+        name,
+        email,
+        phone: phone || "N/A",
+        service,
+        message: fullMessage,
+        source,
+      }),
+    ]).catch((err) => console.error("[careers] email-lead error", err));
 
     // Fire-and-forget: server-side tracking (GA4, Meta, TikTok, Snapchat Conversions API)
     trackEvent({
@@ -97,10 +114,20 @@ export async function POST(req: Request) {
       phone: phone || undefined,
       name,
       page: "/api/careers",
-      meta: { leadId, role: position || role, portfolio: portfolio || null },
+      meta: {
+        leadId,
+        role: position || role,
+        portfolio: portfolio || null,
+        sheetsOk: sheetsResult.ok,
+        ...(sheetsResult.error ? { sheetsError: sheetsResult.error } : {}),
+      },
     }).catch((err) => console.error("[careers] tracking error", err));
 
-    return NextResponse.json({ ok: true, id: leadId });
+    return NextResponse.json({
+      ok: true,
+      id: leadId,
+      ...(sheetsResult.ok ? {} : { warning: "Application saved locally but Google Sheets sync failed." }),
+    });
   } catch (err) {
     console.error("[careers] error", err);
     return NextResponse.json(

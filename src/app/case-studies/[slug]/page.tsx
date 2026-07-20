@@ -37,5 +37,39 @@ export default async function CaseStudyPage({ params }: Params) {
   const cs = caseStudies.find((c) => c.slug === slug)
   if (!cs) notFound()
 
-  return <CaseStudyDetailClient slug={slug} />
+  // JSON-LD structured data — CaseStudy schema helps Google show rich results.
+  const csLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CaseStudy',
+    headline: cs.title,
+    description: cs.summary,
+    author: {
+      '@type': 'Organization',
+      name: 'NextGen Digital Studio',
+      url: 'https://nextgendigitalstudio.com',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'NextGen Digital Studio',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://nextgendigitalstudio.com/logo.jpg',
+      },
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `https://nextgendigitalstudio.com/case-studies/${slug}`,
+    },
+    about: cs.services?.join(', '),
+  }
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(csLd) }}
+      />
+      <CaseStudyDetailClient slug={slug} />
+    </>
+  )
 }

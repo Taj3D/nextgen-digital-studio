@@ -105,7 +105,7 @@ export function BookingModal({
   prefillService,
   source = 'booking_modal',
 }: BookingModalProps) {
-  const { t } = useLang()
+  const { t, lang } = useLang()
   const [state, setState] = React.useState<FormState>('idle')
 
   // Zod schema (rebuilt when lang changes so validation messages localize)
@@ -135,6 +135,16 @@ export function BookingModal({
       message: '',
     },
   })
+
+  // When the language changes while the modal is open + has errors, clear
+  // the stale errors so they don't show in the old language. The next
+  // validation pass (on submit or field blur) will use the new schema.
+  React.useEffect(() => {
+    if (open && Object.keys(form.formState.errors).length > 0) {
+      form.clearErrors()
+    }
+     
+  }, [lang])
 
   // Sync prefillService when the modal opens with a new prefill (e.g. user
   // clicks "Book WhatsApp Automation call" on a service landing page).

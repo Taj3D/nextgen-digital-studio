@@ -68,7 +68,7 @@ const GALLERY = [
 ]
 
 export function PortraitClient() {
-  const { lang } = useLang()
+  const { lang, t } = useLang()
   const isBn = lang === 'bn'
   usePageViewTracking('3d_portrait_page')
 
@@ -105,7 +105,7 @@ export function PortraitClient() {
           <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 sm:px-6 sm:py-16 md:grid-cols-2 md:py-20">
             <div>
               <LandingEyebrow>
-                <Flame className="h-3 w-3 text-rose-500" /> {isBn ? '🔥 ক্যাম্পেইন অফার — সিঙ্গেল ফেস মাত্র ৳৫০০' : '🔥 Campaign — Single face just ৳500'}
+                <Flame className="h-3 w-3 text-rose-500" /> {t('portrait.campaignEyebrow')}
               </LandingEyebrow>
               <h1 className="mt-4 font-heading text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
                 {isBn ? (
@@ -119,7 +119,7 @@ export function PortraitClient() {
                 )}
               </h1>
               <p className="mt-2 text-lg font-bold text-violet-600 dark:text-violet-400">
-                {isBn ? 'সিএনসি ৩ডি ফেস স্কাল্পটিং' : 'CNC 3D Face Sculpting'}
+                {t('portrait.subtitleBold')}
               </p>
               <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-muted-foreground">
                 {isBn
@@ -128,14 +128,14 @@ export function PortraitClient() {
               </p>
               <div className="mt-6 flex flex-wrap items-center gap-3">
                 <a href="#order" className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-500 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-violet-600/25 transition-transform hover:scale-[1.02]">
-                  {isBn ? 'অর্ডার করুন' : 'Order Now'}
+                  {t('cta.orderNow')}
                 </a>
                 <WhatsAppCTA isBn={isBn} />
               </div>
               <div className="mt-5 flex items-center gap-2 rounded-xl border border-emerald-300/50 bg-emerald-50 px-4 py-3 dark:bg-emerald-950/30">
                 <ShieldCheck className="h-5 w-5 shrink-0 text-emerald-600" />
                 <p className="text-sm font-medium text-emerald-700 dark:text-emerald-300">
-                  {isBn ? 'কোনো অগ্রিম টাকা পেমেন্ট করতে হবে না — শুধু ছবি ও তথ্য দিন' : 'No advance payment — just send photo & details'}
+                  {t('portrait.noAdvanceShort')}
                 </p>
               </div>
             </div>
@@ -167,7 +167,7 @@ export function PortraitClient() {
           <div className="mx-auto max-w-4xl px-4 sm:px-6">
             <div className="text-center">
               <LandingEyebrow>
-                <Heart className="h-3 w-3 text-rose-500" /> {isBn ? 'ছবি ফিকে হয়ে যায়...' : 'Photos fade away...'}
+                <Heart className="h-3 w-3 text-rose-500" /> {t('portrait.photosFadeEyebrow')}
               </LandingEyebrow>
               <h2 className="mt-4 font-heading text-3xl font-bold sm:text-4xl">
                 {isBn ? 'অ্যালবামের পুরোনো ছবিগুলো ক্রমশ ফিকে হয়ে যাচ্ছে...' : 'Old album photos are slowly fading...'}
@@ -195,7 +195,7 @@ export function PortraitClient() {
         <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
           <div className="text-center">
             <LandingEyebrow>
-              <Sparkles className="h-3 w-3 text-violet-500" /> {isBn ? 'কল্পনা করুন' : 'Imagine'}
+              <Sparkles className="h-3 w-3 text-violet-500" /> {t('portrait.imagineEyebrow')}
             </LandingEyebrow>
             <h2 className="mt-4 font-heading text-3xl font-bold sm:text-4xl">
               {isBn ? 'কল্পনা করুন — আপনার মায়ের মুখখানি কাঠে খোদাই' : 'Imagine — your mother\'s face carved in wood'}
@@ -224,9 +224,9 @@ export function PortraitClient() {
         <section className="bg-muted/30 py-12 sm:py-16">
           <div className="mx-auto max-w-4xl px-4 sm:px-6">
             <div className="text-center">
-              <LandingEyebrow>{isBn ? 'দাম নির্বাচন করুন' : 'Choose Your Price'}</LandingEyebrow>
+              <LandingEyebrow>{t('portrait.choosePriceEyebrow')}</LandingEyebrow>
               <h2 className="mt-4 font-heading text-3xl font-bold sm:text-4xl">
-                {isBn ? 'লাইভ মূল্য ক্যালকুলেটর' : 'Live Price Calculator'}
+                {t('portrait.priceCalcTitle')}
               </h2>
               <p className="mt-2 text-sm text-muted-foreground">
                 {isBn ? 'material ও face count নির্বাচন করুন — দাম তাৎক্ষণিক আপডেট হবে' : 'Select material & face count — price updates instantly'}
@@ -260,7 +260,7 @@ export function PortraitClient() {
             {/* Face count selector */}
             <div className="mt-6">
               <p className="text-sm font-semibold text-muted-foreground" id="face-count-label">
-                {isBn ? 'কতজনের ফেস?' : 'How many faces?'}
+                {t('portrait.howManyFaces')}
               </p>
               <div
                 className="mt-3 flex flex-wrap gap-2"
@@ -289,7 +289,7 @@ export function PortraitClient() {
             {/* Price display */}
             <div className="mt-6 rounded-2xl border-2 border-violet-500/40 bg-gradient-to-br from-violet-50 to-fuchsia-50 p-6 text-center dark:from-violet-950/30 dark:to-fuchsia-950/20">
               <div className="text-xs font-medium text-muted-foreground">
-                {isBn ? 'আপনার নির্বাচিত দাম' : 'Your selected price'}
+                {t('portrait.yourSelectedPrice')}
               </div>
               <div className="mt-1 text-5xl font-extrabold text-violet-600 dark:text-violet-400">
                 ৳{bn(price.toLocaleString('en-US'))}
@@ -304,7 +304,7 @@ export function PortraitClient() {
               </div>
               {material === 'stl' && faces === 1 && (
                 <div className="mt-3 inline-block rounded-full bg-rose-500/15 px-3 py-1 text-xs font-bold text-rose-600">
-                  {isBn ? '🔥 ক্যাম্পেইন অফার (নির্ধারিত ৳৩২০০)' : '🔥 Campaign offer (was ৳3,200)'}
+                  {t('portrait.campaignOfferBadge')}
                 </div>
               )}
             </div>
@@ -314,7 +314,7 @@ export function PortraitClient() {
         {/* 5. Video */}
         <section className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16">
           <div className="text-center">
-            <LandingEyebrow>{isBn ? 'কাজের প্রমাণ' : 'Proof of work'}</LandingEyebrow>
+            <LandingEyebrow>{t('portrait.proofEyebrow')}</LandingEyebrow>
             <h2 className="mt-4 font-heading text-3xl font-bold sm:text-4xl">
               {isBn ? 'আমাদের ৩D পোর্ট্রেট তৈরির ভিডিও' : 'Our 3D Portrait Making Video'}
             </h2>
@@ -345,7 +345,7 @@ export function PortraitClient() {
               <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
               </svg>
-              {isBn ? 'ফেসবুকে ভিডিও দেখুন' : 'Watch on Facebook'}
+              {t('portrait.watchOnFacebook')}
             </a>
           </div>
         </section>
@@ -354,7 +354,7 @@ export function PortraitClient() {
         <section className="bg-muted/30 py-12 sm:py-16">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
             <div className="text-center">
-              <LandingEyebrow>{isBn ? 'আমাদের কাজের নমুনা' : 'Our Work Samples'}</LandingEyebrow>
+              <LandingEyebrow>{t('portrait.workSamplesEyebrow')}</LandingEyebrow>
               <h2 className="mt-4 font-heading text-3xl font-bold sm:text-4xl">
                 {isBn ? '৮+ স্যাম্পল ৩D পোর্ট্রেট' : '8+ Sample 3D Portraits'}
               </h2>
@@ -383,7 +383,7 @@ export function PortraitClient() {
         <section className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16">
           <div className="text-center">
             <LandingEyebrow>
-              <Ruler className="h-3 w-3" /> {isBn ? 'বোর্ড ও কাঠের সাইজ' : 'Board & Wood Sizes'}
+              <Ruler className="h-3 w-3" /> {t('portrait.boardSizesEyebrow')}
             </LandingEyebrow>
             <h2 className="mt-4 font-heading text-3xl font-bold sm:text-4xl">
               {isBn ? '৫টি সাইজ + পুরুত্ব' : '5 Sizes + Thickness'}
@@ -414,9 +414,9 @@ export function PortraitClient() {
         {/* 8. Social Links */}
         <section className="bg-muted/30 py-10">
           <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
-            <LandingEyebrow>{isBn ? 'আমাদের অনুসরণ করুন' : 'Follow us'}</LandingEyebrow>
+            <LandingEyebrow>{t('landing.followUs')}</LandingEyebrow>
             <h2 className="mt-3 font-heading text-xl font-bold">
-              {isBn ? 'সোশ্যাল মিডিয়ায় যুক্ত থাকুন' : 'Stay connected on social media'}
+              {t('landing.stayConnected')}
             </h2>
             <div className="mt-4 flex justify-center">
               <LandingSocials />
@@ -427,9 +427,9 @@ export function PortraitClient() {
         {/* 9. How to Order */}
         <section className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16">
           <div className="text-center">
-            <LandingEyebrow>{isBn ? 'অর্ডার প্রক্রিয়া' : 'How to order'}</LandingEyebrow>
+            <LandingEyebrow>{t('landing.howToOrder')}</LandingEyebrow>
             <h2 className="mt-4 font-heading text-3xl font-bold sm:text-4xl">
-              {isBn ? 'মাত্র ৩ ধাপ' : 'Just 3 steps'}
+              {t('landing.just3Steps')}
             </h2>
           </div>
           <div className="mt-8 grid gap-6 sm:grid-cols-3">
@@ -450,9 +450,7 @@ export function PortraitClient() {
           <div className="mt-6 rounded-xl border border-emerald-300/50 bg-emerald-50 p-4 text-center dark:bg-emerald-950/30">
             <ShieldCheck className="mx-auto h-6 w-6 text-emerald-600" />
             <p className="mt-2 text-sm font-semibold text-emerald-700 dark:text-emerald-300">
-              {isBn
-                ? 'কোনো অগ্রিম টাকা পেমেন্ট করতে হবে না — কাজ শেষে দেখিয়ে পেমেন্ট নেওয়া হবে'
-                : 'No advance payment — pay only after seeing the finished work'}
+              {t('portrait.noAdvanceLong')}
             </p>
           </div>
         </section>
@@ -461,7 +459,7 @@ export function PortraitClient() {
         <section id="order" className="mx-auto max-w-3xl scroll-mt-20 px-4 py-12 sm:px-6 sm:py-16">
           <div className="rounded-3xl border border-border/60 bg-card p-6 shadow-lg sm:p-8">
             <div className="text-center">
-              <LandingEyebrow>{isBn ? 'অর্ডার করুন' : 'Place Order'}</LandingEyebrow>
+              <LandingEyebrow>{t('landing.placeOrder')}</LandingEyebrow>
               <h2 className="mt-4 font-heading text-3xl font-bold">
                 {isBn ? 'আপনার ৩D পোর্ট্রেট অর্ডার করুন' : 'Order Your 3D Portrait'}
               </h2>
@@ -471,7 +469,7 @@ export function PortraitClient() {
                   : 'Fill the form to confirm order, then send photo on WhatsApp.'}
               </p>
               <div className="mt-4 flex items-center justify-center gap-2 text-sm">
-                <span className="font-semibold">{isBn ? 'নির্বাচিত:' : 'Selected:'}</span>
+                <span className="font-semibold">{t('portrait.selectedLabel')}</span>
                 <span className="rounded-full bg-violet-100 px-3 py-0.5 font-bold text-violet-700 dark:bg-violet-950/40 dark:text-violet-300">
                   {isBn ? MATERIALS.find((m) => m.key === material)!.t_bn : MATERIALS.find((m) => m.key === material)!.t_en}
                 </span>
@@ -486,7 +484,7 @@ export function PortraitClient() {
                 isBn={isBn}
                 source="3d_portrait_page"
                 serviceName={`3D Portrait — ${MATERIALS.find((m) => m.key === material)!.t_en} · ${faces} face(s) · ৳${price}`}
-                submitLabel={isBn ? 'অর্ডার কনফার্ম করুন' : 'Confirm Order'}
+                submitLabel={t('portrait.confirmOrder')}
                 successMessage={isBn
                   ? 'আপনার অর্ডার গ্রহণ করা হয়েছে! এখন ছবি WhatsApp-এ পাঠান। টিম কাজ শেষে দেখিয়ে পেমেন্ট নেবে।'
                   : 'Order received! Now send your photo on WhatsApp. Team will show finished work before payment.'}
@@ -502,7 +500,7 @@ export function PortraitClient() {
                 className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-green-600 to-emerald-500 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-green-600/25 transition-transform hover:scale-[1.01]"
               >
                 <Camera className="h-5 w-5" />
-                {isBn ? 'ছবি পাঠান (WhatsApp)' : 'Send Photo (WhatsApp)'}
+                {t('portrait.sendPhotoWhatsapp')}
               </a>
               <p className="mt-2 text-center text-xs text-muted-foreground">
                 {isBn
@@ -519,7 +517,7 @@ export function PortraitClient() {
           <div className="absolute inset-0 bg-grid opacity-20" />
           <div className="relative mx-auto max-w-3xl px-4 text-center sm:px-6">
             <div className="inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-1.5 text-sm font-bold text-white backdrop-blur">
-              <Flame className="h-4 w-4" /> {isBn ? 'সীমিত সময়ের অফার' : 'Limited time offer'}
+              <Flame className="h-4 w-4" /> {t('portrait.limitedOffer')}
             </div>
             <h2 className="mt-4 font-heading text-3xl font-extrabold text-white sm:text-4xl">
               {isBn ? 'ক্যাম্পেইন শেষ হওয়ার আগেই অর্ডার করুন!' : 'Order before the campaign ends!'}
@@ -533,7 +531,7 @@ export function PortraitClient() {
               href="#order"
               className="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-7 py-3 text-sm font-bold text-violet-600 shadow-lg transition-transform hover:scale-105"
             >
-              {isBn ? 'এখনই অর্ডার করুন' : 'Order Now'}
+              {t('cta.orderNow')}
               <ArrowRight className="h-4 w-4" />
             </a>
           </div>

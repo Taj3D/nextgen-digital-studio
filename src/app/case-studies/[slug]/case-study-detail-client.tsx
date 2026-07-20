@@ -2,22 +2,14 @@
 
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { ArrowLeft, TrendingUp, Check, ArrowRight, Quote } from "lucide-react"
+import { ArrowLeft, TrendingUp, ArrowRight, Quote, AlertCircle, Lightbulb } from "lucide-react"
 import { caseStudies, siteConfig } from "@/lib/site-data"
 import { useLang } from "@/components/site/language-provider"
-
-// Case study detail pages are dynamic (extended fields not in type yet)
-type CaseStudyFull = (typeof caseStudies)[number] & {
-  challenge?: string
-  solution?: { heading: string; body: string }[]
-  results?: string
-  testimonial?: { quote: string; name: string; role: string; company?: string }
-}
 
 export function CaseStudyDetailClient({ slug }: { slug: string }) {
   const { t, tr, lang } = useLang()
 
-  const cs = caseStudies.find((c) => c.slug === slug) as CaseStudyFull | undefined
+  const cs = caseStudies.find((c) => c.slug === slug)
   if (!cs) notFound()
 
   const isBn = lang === 'bn'
@@ -50,7 +42,7 @@ export function CaseStudyDetailClient({ slug }: { slug: string }) {
         </div>
 
         {/* Metrics */}
-        <div className="mb-8 grid grid-cols-3 gap-4">
+        <div className="mb-10 grid grid-cols-3 gap-4">
           {cs.metrics.map((m) => (
             <div key={m.label} className="rounded-2xl border border-border/60 bg-card p-5 text-center">
               <p className="font-heading text-3xl font-extrabold text-gradient sm:text-4xl">{tr(m.value)}</p>
@@ -60,65 +52,64 @@ export function CaseStudyDetailClient({ slug }: { slug: string }) {
         </div>
 
         {/* Challenge */}
-        {cs.challenge && (
-          <section className="mb-8">
+        <section className="mb-10">
+          <div className="flex items-center gap-2.5">
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400">
+              <AlertCircle className="h-5 w-5" />
+            </span>
             <h2 className="font-heading text-xl font-bold sm:text-2xl">{t('caseStudies.challenge')}</h2>
-            <p className="mt-3 text-[15px] leading-relaxed text-foreground/90 sm:text-base">{cs.challenge}</p>
-          </section>
-        )}
+          </div>
+          <div className="prose prose-slate mt-4 max-w-none dark:prose-invert prose-p:text-[15px] prose-p:leading-relaxed sm:prose-p:text-base prose-p:text-foreground/90">
+            <p>{cs.challenge}</p>
+          </div>
+        </section>
 
         {/* Solution */}
-        {cs.solution && (
-          <section className="mb-8">
+        <section className="mb-10">
+          <div className="flex items-center gap-2.5">
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600/10 text-blue-600 dark:text-blue-400">
+              <Lightbulb className="h-5 w-5" />
+            </span>
             <h2 className="font-heading text-xl font-bold sm:text-2xl">{t('caseStudies.solution')}</h2>
-            <div className="mt-4 space-y-5">
-              {cs.solution.map((s, i) => (
-                <div key={i} className="rounded-2xl border border-border/60 bg-card p-5 sm:p-6">
-                  <div className="flex items-start gap-3">
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-cyan-500 text-xs font-bold text-white">
-                      {i + 1}
-                    </span>
-                    <div>
-                      <h3 className="font-heading text-base font-bold sm:text-lg">{s.heading}</h3>
-                      <p className="mt-2 text-sm leading-relaxed text-muted-foreground sm:text-[15px]">{s.body}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
+          </div>
+          <div className="prose prose-slate mt-4 max-w-none dark:prose-invert prose-p:text-[15px] prose-p:leading-relaxed sm:prose-p:text-base prose-p:text-foreground/90">
+            <p>{cs.solution}</p>
+          </div>
+        </section>
 
         {/* Results */}
-        {cs.results && (
-          <section className="mb-8">
-            <div className="rounded-3xl border border-emerald-500/30 bg-emerald-500/[0.05] p-6 sm:p-8">
+        <section className="mb-10">
+          <div className="overflow-hidden rounded-3xl border border-emerald-500/30 bg-emerald-500/[0.05] p-6 sm:p-8">
+            <div className="flex items-center gap-2.5">
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-600/15 text-emerald-700 dark:text-emerald-400">
+                <TrendingUp className="h-5 w-5" />
+              </span>
               <h2 className="font-heading text-xl font-bold sm:text-2xl text-emerald-700 dark:text-emerald-400">{t('caseStudies.results')}</h2>
-              <p className="mt-3 text-[15px] leading-relaxed text-foreground/90 sm:text-base">{cs.results}</p>
             </div>
-          </section>
-        )}
+            <div className="prose prose-emerald mt-4 max-w-none dark:prose-invert prose-p:text-[15px] prose-p:leading-relaxed sm:prose-p:text-base prose-p:text-foreground/90 prose-p:font-medium prose-strong:text-emerald-700 dark:prose-strong:text-emerald-400">
+              <p>{cs.results}</p>
+            </div>
+          </div>
+        </section>
 
         {/* Testimonial */}
-        {cs.testimonial && (
-          <section className="mb-8">
-            <div className="rounded-3xl border border-border/60 bg-card p-6 sm:p-8">
-              <Quote className="h-8 w-8 text-blue-600/20" />
-              <p className="mt-2 text-lg font-medium leading-relaxed text-foreground">
-                &ldquo;{cs.testimonial.quote}&rdquo;
-              </p>
-              <div className="mt-4 flex items-center gap-3 border-t border-border/60 pt-4">
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-cyan-500 text-xs font-bold text-white">
-                  {cs.testimonial.name.charAt(0)}
-                </span>
-                <div>
-                  <p className="text-sm font-bold">{cs.testimonial.name}</p>
-                  <p className="text-xs text-muted-foreground">{cs.testimonial.role}</p>
-                </div>
+        <section className="mb-10">
+          <div className="overflow-hidden rounded-3xl border border-border/60 bg-card p-6 sm:p-8">
+            <Quote className="h-8 w-8 text-blue-600/20" />
+            <div className="prose prose-slate mt-2 max-w-none dark:prose-invert prose-p:text-lg prose-p:font-medium prose-p:leading-relaxed prose-p:text-foreground">
+              <p>&ldquo;{cs.testimonial.quote}&rdquo;</p>
+            </div>
+            <div className="mt-4 flex items-center gap-3 border-t border-border/60 pt-4">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-cyan-500 text-xs font-bold text-white">
+                {cs.testimonial.author.charAt(0)}
+              </span>
+              <div>
+                <p className="text-sm font-bold">{cs.testimonial.author}</p>
+                <p className="text-xs text-muted-foreground">{cs.testimonial.title}</p>
               </div>
             </div>
-          </section>
-        )}
+          </div>
+        </section>
 
         {/* Services used */}
         <section className="mb-8">
@@ -139,10 +130,10 @@ export function CaseStudyDetailClient({ slug }: { slug: string }) {
             {t('caseStudies.detailCtaDesc')}
           </p>
           <Link
-            href="/#contact"
+            href="/#lead-form"
             className="mt-5 inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 text-sm font-bold text-blue-700 shadow-lg transition-transform hover:scale-[1.02]"
           >
-            {t('blog.detailCtaButton')}
+            {t('caseStudies.detailCtaButton')}
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>

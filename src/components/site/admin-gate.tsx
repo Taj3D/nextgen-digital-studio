@@ -104,15 +104,26 @@ export function AdminGate({ children }: { children: React.ReactNode }) {
           </div>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
+              <label htmlFor="admin-password" className="mb-1.5 block text-xs font-medium text-blue-100/80">
+                পাসওয়ার্ড / Password
+              </label>
               <input
+                id="admin-password"
                 type="password"
                 value={password}
                 onChange={(e) => { setPassword(e.target.value); setError('') }}
                 placeholder="পাসওয়ার্ড লিখুন"
+                autoComplete="current-password"
                 autoFocus
+                aria-describedby={error ? 'admin-error' : undefined}
+                aria-invalid={error ? 'true' : 'false'}
                 className="h-12 w-full rounded-xl border border-white/10 bg-white/10 px-4 text-sm text-white outline-none transition-colors placeholder:text-blue-100/40 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20"
               />
-              {error && <p className="mt-2 text-xs font-medium text-rose-400">{error}</p>}
+              {error && (
+                <p id="admin-error" role="alert" className="mt-2 text-xs font-medium text-rose-400">
+                  {error}
+                </p>
+              )}
             </div>
             <button
               type="submit"

@@ -2,7 +2,8 @@
 
 import * as React from 'react'
 import Image from 'next/image'
-import { Menu, Globe } from 'lucide-react'
+import Link from 'next/link'
+import { Menu, Globe, ChevronDown } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -13,6 +14,12 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { useLang, type Lang } from '@/components/site/language-provider'
 import { ThemeToggle } from '@/components/site/theme-toggle'
 
@@ -29,6 +36,17 @@ const NAV_ITEMS: NavItem[] = [
   { key: 'nav.howItWorks', href: '/#how' },
   { key: 'nav.pricing', href: '/#pricing' },
   { key: 'nav.testimonials', href: '/#testimonials' },
+]
+
+// Full-route pages accessible from the "More" dropdown — these are the
+// orphan pages that were previously only reachable via direct URL.
+const MORE_ITEMS: NavItem[] = [
+  { key: 'nav.more.founder', href: '/founder' },
+  { key: 'nav.more.3dPortrait', href: '/3d-portrait' },
+  { key: 'nav.more.cncDesign', href: '/cnc-design' },
+  { key: 'nav.more.aiTraining', href: '/ai-training' },
+  { key: 'nav.more.cncTraining', href: '/cnc-training' },
+  { key: 'nav.more.pdfBooks', href: '/pdf-books' },
 ]
 
 function handleAnchorClick(href: string) {
@@ -117,6 +135,30 @@ function DesktopNav() {
           {t(item.key)}
         </button>
       ))}
+      {/* More dropdown — links to orphan pages (founder, 3d-portrait, etc.) */}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <button
+            type="button"
+            className="inline-flex items-center gap-1 rounded-full px-3.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+          >
+            {t('nav.more')}
+            <ChevronDown className="h-3.5 w-3.5" aria-hidden />
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-48">
+          {MORE_ITEMS.map((item) => (
+            <DropdownMenuItem key={item.key} asChild>
+              <Link
+                href={item.href}
+                className="cursor-pointer text-sm text-foreground/90"
+              >
+                {t(item.key)}
+              </Link>
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
     </nav>
   )
 }
@@ -213,6 +255,22 @@ export function Navbar() {
                     {t(item.key)}
                   </button>
                 ))}
+                {/* More section — orphan pages */}
+                <div className="mt-2 border-t border-border/50 pt-2">
+                  <p className="px-3 pb-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    {t('nav.more')}
+                  </p>
+                  {MORE_ITEMS.map((item) => (
+                    <Link
+                      key={item.key}
+                      href={item.href}
+                      onClick={() => setOpen(false)}
+                      className="flex min-h-[48px] items-center rounded-lg px-3 text-left text-base font-medium text-foreground/90 transition-colors hover:bg-accent/60 hover:text-foreground"
+                    >
+                      {t(item.key)}
+                    </Link>
+                  ))}
+                </div>
               </div>
 
               <div className="mt-auto border-t border-border/50 p-4">

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { sendToGoogleSheets } from "@/lib/google-sheets";
+import { sendCustomerConfirmationEmail, sendOwnerNotificationEmail } from "@/lib/email-lead";
 import { trackEvent } from "@/lib/tracking";
 import { normalizeSource } from "@/lib/lead-sources";
 import { normalizePhone } from "@/lib/phone";
@@ -97,7 +98,9 @@ export async function POST(req: Request) {
 
     // Google Sheets sync (saves to Sheet + sends email to customer + owner via Apps Script)
     // This is the primary lead capture — works even without DB.
-    sendToGoogleSheets({
+    // We AWAIT the webhook so we can surface failures to the admin dashboard,
+    // but we still return success to the user (lead is already saved to DB).
+    const sheetsResult = await sendToGoogleSheets({
       name,
       email,
       phone,
@@ -112,7 +115,26 @@ export async function POST(req: Request) {
         ...(utmMedium ? { utmMedium } : {}),
         ...(utmCampaign ? { utmCampaign } : {}),
       },
-    }).catch((err) => console.error("[contact] google sheets error", err));
+    }).catch((err) => {
+      console.error("[contact] google sheets error", err);
+      return { ok: false, error: err instanceof Error ? err.message : String(err) };
+    });
+
+    // Send customer confirmation + owner notification emails (logged + persisted
+    // as TrackingEvent rows for audit). Fire-and-forget — never blocks the response.
+    // The actual delivery is handled by the Google Apps Script webhook.
+    Promise.all([
+      sendCustomerConfirmationEmail({ name, email, phone, service: service ?? undefined, source }),
+      sendOwnerNotificationEmail({
+        name,
+        email,
+        phone,
+        company: company ?? undefined,
+        service: service ?? undefined,
+        message: message ?? undefined,
+        source,
+      }),
+    ]).catch((err) => console.error("[contact] email-lead error", err));
 
     // Fire-and-forget: server-side tracking (GA4, Meta, TikTok, Snapchat Conversions API)
     trackEvent({
@@ -125,13 +147,21 @@ export async function POST(req: Request) {
       meta: {
         service: service ?? null,
         leadId,
+        sheetsOk: sheetsResult.ok,
+        ...(sheetsResult.error ? { sheetsError: sheetsResult.error } : {}),
         ...(utmSource ? { utmSource } : {}),
         ...(utmMedium ? { utmMedium } : {}),
         ...(utmCampaign ? { utmCampaign } : {}),
       },
     }).catch((err) => console.error("[contact] tracking error", err));
 
-    return NextResponse.json({ ok: true, id: leadId });
+    // Return success to user (lead is saved to DB). Include a `warning` field
+    // if the Google Sheets webhook failed — the admin dashboard can show this.
+    return NextResponse.json({
+      ok: true,
+      id: leadId,
+      ...(sheetsResult.ok ? {} : { warning: "Lead saved locally but Google Sheets sync failed." }),
+    });
   } catch (err) {
     console.error("[contact] error", err);
     return NextResponse.json(

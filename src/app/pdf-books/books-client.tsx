@@ -97,7 +97,7 @@ const bn = (s: string | number, isBn: boolean) =>
     : String(s)
 
 export function BooksClient() {
-  const { lang } = useLang()
+  const { lang, t } = useLang()
   const isBn = lang === 'bn'
   const [selectedBook, setSelectedBook] = React.useState<string>('all')
   usePageViewTracking('pdf_books_page')
@@ -106,7 +106,7 @@ export function BooksClient() {
     if (selectedBook === 'all') return isBn ? 'সব ৫টি বই (৮৫০টাকা)' : 'All 5 Books (850TK)'
     const b = BOOKS.find((x) => x.id === Number(selectedBook))
     return b ? `${isBn ? b.titleBn : b.titleEn} (170TK)` : ''
-  }, [selectedBook, isBn])
+  }, [selectedBook, isBn, t])
 
   return (
     <div className="relative flex min-h-screen flex-col bg-background">
@@ -121,7 +121,7 @@ export function BooksClient() {
 
           <div className="relative mx-auto max-w-4xl px-4 py-12 text-center sm:px-6 sm:py-16 md:py-20">
             <LandingEyebrow>
-              <Gift className="h-3 w-3" /> {isBn ? '🔥 প্রতিটি বই মাত্র ১৭০ টাকা! ১টি কিনুন, ১টি ফ্রি পান!' : '🔥 Each book just 170TK! Buy 1, Get 1 Free!'}
+              <Gift className="h-3 w-3" /> {t('pdfBooks.heroEyebrow')}
             </LandingEyebrow>
             <h1 className="mt-4 font-heading text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
               {isBn ? (
@@ -153,7 +153,7 @@ export function BooksClient() {
                 }}
                 className="gradient-brand animate-pulse-glow inline-flex items-center gap-2 rounded-full px-7 py-3 text-sm font-bold text-white shadow-lg shadow-rose-600/25 transition-transform hover:scale-[1.02]"
               >
-                {isBn ? 'বই দেখুন' : 'Browse Books'}
+                {t('pdfBooks.browseBooks')}
                 <ArrowRight className="h-4 w-4" />
               </a>
               <WhatsAppCTA
@@ -179,7 +179,7 @@ export function BooksClient() {
                     {b.emoji}
                   </div>
                   <div className="absolute top-3 right-3 rounded-full bg-white/20 px-2 py-0.5 text-xs font-bold text-white backdrop-blur">
-                    {b.pages} {isBn ? 'পৃষ্ঠা' : 'pages'}
+                    {b.pages} {t('pdfBooks.pages')}
                   </div>
                 </div>
                 <div className="p-5">
@@ -199,7 +199,7 @@ export function BooksClient() {
                       className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-rose-600 to-pink-500 px-4 py-1.5 text-xs font-semibold text-white shadow-md transition-transform hover:scale-105"
                     >
                       <BookOpen className="h-3.5 w-3.5" />
-                      {isBn ? 'অর্ডার' : 'Order'}
+                      {t('pdfBooks.order')}
                     </a>
                   </div>
                 </div>
@@ -210,7 +210,7 @@ export function BooksClient() {
             <div className="flex flex-col items-center justify-center rounded-3xl border-2 border-dashed border-rose-300 bg-rose-50 p-6 text-center dark:border-rose-900 dark:bg-rose-950/30">
               <Gift className="h-12 w-12 text-rose-500" />
               <h3 className="mt-3 font-heading text-lg font-bold">
-                {isBn ? 'কিনুন ১, পান ১ ফ্রি' : 'Buy 1, Get 1 Free'}
+                {t('pdfBooks.buy1Get1Title')}
               </h3>
               <p className="mt-2 text-sm text-muted-foreground">
                 {isBn
@@ -241,7 +241,7 @@ export function BooksClient() {
                   onClick={() => setSelectedBook('all')}
                   className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-rose-600 to-pink-500 px-5 py-2.5 text-sm font-bold text-white shadow-lg transition-transform hover:scale-105"
                 >
-                  {isBn ? 'সব অর্ডার করুন' : 'Order All'}
+                  {t('pdfBooks.orderAll')}
                   <ArrowRight className="h-4 w-4" />
                 </a>
               </div>
@@ -275,9 +275,9 @@ export function BooksClient() {
         <section id="order-form" className="mx-auto max-w-3xl scroll-mt-20 px-4 py-12 sm:px-6 sm:py-16">
           <div className="rounded-3xl border border-border/60 bg-card p-6 shadow-lg sm:p-8">
             <div className="text-center">
-              <LandingEyebrow>{isBn ? 'অর্ডার ফর্ম' : 'Order Form'}</LandingEyebrow>
+              <LandingEyebrow>{t('pdfBooks.orderFormEyebrow')}</LandingEyebrow>
               <h2 className="mt-4 font-heading text-3xl font-bold">
-                {isBn ? 'যেকোনো বই অর্ডার করুন' : 'Order Any Book'}
+                {t('pdfBooks.orderAnyBook')}
               </h2>
               <p className="mt-2 text-sm text-muted-foreground">
                 {isBn
@@ -325,6 +325,7 @@ function BookOrderForm({
   setSelectedBook: (v: string) => void
   selectedLabel: string
 }) {
+  const { t } = useLang()
   const [submitting, setSubmitting] = React.useState(false)
   const [done, setDone] = React.useState(false)
 
@@ -337,7 +338,7 @@ function BookOrderForm({
     const website = String(fd.get('website') ?? '').trim()
     if (website) {
       setDone(true)
-      toast.success(isBn ? 'সফলভাবে জমা হয়েছে!' : 'Submission successful!')
+      toast.success(t('landing.toastSuccess'))
       form.reset()
       return
     }
@@ -353,7 +354,7 @@ function BookOrderForm({
       source: 'pdf_books_page',
     }
     if (!payload.name || !payload.email || !payload.phone) {
-      toast.error(isBn ? 'অনুগ্রহ করে সব প্রয়োজনীয় ঘর পূরণ করুন' : 'Please fill all required fields')
+      toast.error(t('landing.toastErrorFill'))
       setSubmitting(false)
       return
     }
@@ -377,10 +378,10 @@ function BookOrderForm({
         }),
       }).catch(() => {})
       setDone(true)
-      toast.success(isBn ? 'সফলভাবে জমা হয়েছে!' : 'Submission successful!')
+      toast.success(t('landing.toastSuccess'))
       form.reset()
     } catch {
-      toast.error(isBn ? 'কিছু ভুল হয়েছে, আবার চেষ্টা করুন' : 'Something went wrong, please try again')
+      toast.error(t('landing.toastErrorGeneric'))
     } finally {
       setSubmitting(false)
     }
@@ -391,7 +392,7 @@ function BookOrderForm({
       <div className="flex flex-col items-center justify-center rounded-2xl border border-emerald-500/30 bg-emerald-500/5 px-6 py-10 text-center">
         <CheckCircle2 className="mb-3 h-12 w-12 text-emerald-500" />
         <h3 className="font-heading text-xl font-bold">
-          {isBn ? 'ধন্যবাদ! আপনার অর্ডার গ্রহণ করা হয়েছে।' : 'Thank you! Your order has been received.'}
+          {t('pdfBooks.thanksOrderTitle')}
         </h3>
         <p className="mt-2 max-w-md text-sm text-muted-foreground">
           {isBn
@@ -406,7 +407,7 @@ function BookOrderForm({
           />
         </div>
         <Button variant="outline" className="mt-4" onClick={() => setDone(false)}>
-          {isBn ? 'আরেকটি অর্ডার' : 'Send another order'}
+          {t('pdfBooks.sendAnotherOrder')}
         </Button>
       </div>
     )
@@ -426,7 +427,7 @@ function BookOrderForm({
       {/* Book selection dropdown */}
       <div className="space-y-1.5">
         <Label htmlFor="book-select">
-          {isBn ? 'বই নির্বাচন করুন *' : 'Select Book *'}
+          {t('pdfBooks.selectBookLabel')}
         </Label>
         <select
           id="book-select"
@@ -449,29 +450,29 @@ function BookOrderForm({
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-1.5">
-          <Label htmlFor="pb-name">{isBn ? 'নাম *' : 'Full name *'}</Label>
-          <Input id="pb-name" name="name" required placeholder={isBn ? 'আপনার নাম' : 'Your name'} />
+          <Label htmlFor="pb-name">{t('landing.fullNameLabel')}</Label>
+          <Input id="pb-name" name="name" required placeholder={t('landing.fullNamePlaceholder')} />
         </div>
         <div className="space-y-1.5">
-          <Label htmlFor="pb-phone">{isBn ? 'ফোন / হোয়াটসঅ্যাপ *' : 'Phone / WhatsApp *'}</Label>
+          <Label htmlFor="pb-phone">{t('landing.phoneLabel')}</Label>
           <Input id="pb-phone" name="phone" required placeholder="+880 1XXX-XXXXXX" />
         </div>
         <div className="space-y-1.5">
-          <Label htmlFor="pb-email">{isBn ? 'ইমেইল *' : 'Email *'}</Label>
+          <Label htmlFor="pb-email">{t('landing.emailLabel')}</Label>
           <Input id="pb-email" name="email" type="email" required placeholder="you@company.com" />
         </div>
         <div className="space-y-1.5">
-          <Label htmlFor="pb-company">{isBn ? 'কোম্পানি' : 'Company'}</Label>
-          <Input id="pb-company" name="company" placeholder={isBn ? 'কোম্পানির নাম' : 'Company name'} />
+          <Label htmlFor="pb-company">{t('landing.companyLabel')}</Label>
+          <Input id="pb-company" name="company" placeholder={t('landing.companyPlaceholder')} />
         </div>
       </div>
       <div className="space-y-1.5">
-        <Label htmlFor="pb-message">{isBn ? 'আপনার ফ্রি বই (যদি চান)' : 'Your free book (if wanted)'}</Label>
+        <Label htmlFor="pb-message">{t('pdfBooks.freeBookLabel')}</Label>
         <Textarea
           id="pb-message"
           name="message"
           rows={2}
-          placeholder={isBn ? 'কোন ফ্রি বই চান লিখুন...' : 'Mention which free book you want...'}
+          placeholder={t('pdfBooks.freeBookPlaceholder')}
         />
       </div>
       <Button
@@ -482,11 +483,11 @@ function BookOrderForm({
         {submitting ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            {isBn ? 'পাঠানো হচ্ছে...' : 'Submitting...'}
+            {t('landing.submitting')}
           </>
         ) : (
           <>
-            {isBn ? 'অর্ডার করুন' : 'Place Order'}
+            {t('landing.placeOrder')}
             <ArrowRight className="ml-2 h-4 w-4" />
           </>
         )}

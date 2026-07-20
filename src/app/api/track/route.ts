@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server'
+import { NextResponse, type NextRequest } from 'next/server'
 import { trackEvent, getTrackingStats, type TrackingEventType } from '@/lib/tracking'
 import { rateLimit, getClientIP } from '@/lib/rate-limit'
 import { requireAuth } from '@/lib/auth'
@@ -72,7 +72,7 @@ export async function POST(req: Request) {
   }
 }
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   // Require auth — tracking stats are admin-only. Public duplicate was a
   // security gap (AUDIT-4-api [API-008]). Use /api/track/stats for the same data.
   const authError = requireAuth(req);

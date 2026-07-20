@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import {
   Facebook,
   Linkedin,
@@ -34,12 +35,29 @@ const COMPANY_LINKS = [
   { key: 'footer.caseStudies', href: '/case-studies' },
 ]
 
-const SERVICE_KEYS = [
-  'services.s1Title',
-  'services.s2Title',
-  'services.s3Title',
-  'services.s4Title',
+// First 6 services shown in footer (out of 12 — keeps footer compact).
+// Each links to its dedicated landing page (always works on any route).
+const SERVICE_LINKS = [
+  { key: 'services.s1Title', href: '/services/ai-sales-automation' },
+  { key: 'services.s2Title', href: '/services/ai-chat-agent' },
+  { key: 'services.s3Title', href: '/services/ai-voice-agent' },
+  { key: 'services.s4Title', href: '/services/crm-automation' },
+  { key: 'services.s5Title', href: '/services/whatsapp-automation' },
+  { key: 'services.s6Title', href: '/services/lead-generation' },
 ]
+
+/**
+ * Navigate to an anchor on the homepage. On the homepage we smooth-scroll;
+ * on other routes we navigate to the homepage, which scrolls automatically.
+ */
+function goToHomepageAnchor(anchor: string) {
+  const isHome = typeof window !== 'undefined' && window.location.pathname === '/'
+  if (isHome) {
+    document.getElementById(anchor)?.scrollIntoView({ behavior: 'smooth' })
+  } else {
+    window.location.href = `/#${anchor}`
+  }
+}
 
 function SocialButton({
   href,
@@ -251,20 +269,24 @@ export function SiteFooter() {
               {t('footer.servicesTitle')}
             </h3>
             <ul className="space-y-2">
-              {SERVICE_KEYS.map((key) => (
-                <li key={key}>
-                  <button
-                    onClick={() =>
-                      document
-                        .getElementById('services')
-                        ?.scrollIntoView({ behavior: 'smooth' })
-                    }
-                    className="text-left text-sm text-muted-foreground transition-colors hover:text-primary"
+              {SERVICE_LINKS.map((item) => (
+                <li key={item.key}>
+                  <Link
+                    href={item.href}
+                    className="text-sm text-muted-foreground transition-colors hover:text-primary"
                   >
-                    {t(key)}
-                  </button>
+                    {t(item.key)}
+                  </Link>
                 </li>
               ))}
+              <li>
+                <button
+                  onClick={() => goToHomepageAnchor('services')}
+                  className="text-left text-sm font-medium text-primary transition-colors hover:text-primary/80"
+                >
+                  {t('footer.viewAllServices')} →
+                </button>
+              </li>
             </ul>
           </div>
 

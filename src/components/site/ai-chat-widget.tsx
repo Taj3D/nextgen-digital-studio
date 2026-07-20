@@ -77,7 +77,7 @@ const QUICK_SUGGESTIONS = [
 ] as const
 
 export function AiChatWidget() {
-  const { t } = useLang()
+  const { t, lang } = useLang()
   const { openBookingModal } = useBookingModal()
 
   const [open, setOpen] = React.useState(false)
@@ -107,7 +107,22 @@ export function AiChatWidget() {
         content: t('chat.welcome'),
       },
     ])
+     
   }, [])
+
+  // When the language changes, update the welcome message IF it's still the
+  // only message (i.e. user hasn't started chatting yet). This keeps the
+  // welcome message in sync with the selected language without destroying
+  // an active conversation.
+  React.useEffect(() => {
+    setMessages((prev) => {
+      if (prev.length === 1 && prev[0]?.role === 'assistant' && prev[0]?.content) {
+        return [{ ...prev[0], content: t('chat.welcome') }]
+      }
+      return prev
+    })
+     
+  }, [lang])
 
   // Auto-scroll to bottom whenever messages change or typing starts
   React.useEffect(() => {

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { sendToGoogleSheets } from "@/lib/google-sheets";
+import { sendOwnerNotificationEmail } from "@/lib/email-lead";
 import { trackEvent } from "@/lib/tracking";
 import { normalizeSource } from "@/lib/lead-sources";
 import { normalizePhone } from "@/lib/phone";
@@ -182,7 +183,7 @@ export async function POST(req: Request) {
       }
 
       // Google Sheets sync (saves to Sheet + sends email to prospect + owner via Apps Script)
-      sendToGoogleSheets({
+      const sheetsResult = await sendToGoogleSheets({
         name: nameForLead,
         email: (hasRealEmail ? leadEmail : "") as string,
         phone: (hasRealPhone ? leadPhone : "") as string,
@@ -191,7 +192,22 @@ export async function POST(req: Request) {
         source: explicitSource,
         leadId: leadId ?? "sheets-only",
         submittedAt: new Date().toISOString(),
-      }).catch((err) => console.error("[chat-save] google sheets error", err));
+      }).catch((err) => {
+        console.error("[chat-save] google sheets error", err);
+        return { ok: false, error: err instanceof Error ? err.message : String(err) };
+      });
+
+      // Owner notification email (best-effort — never blocks).
+      if (hasRealEmail || hasRealPhone) {
+        sendOwnerNotificationEmail({
+          name: nameForLead,
+          email: (hasRealEmail ? leadEmail : "no-email") as string,
+          phone: (hasRealPhone ? leadPhone : "no-phone") as string,
+          service: "AI Chat enquiry",
+          message: `Captured from chat. Session: ${sessionId.substring(0, 8)}`,
+          source: explicitSource,
+        }).catch((err) => console.error("[chat-save] owner email error", err));
+      }
 
       // Fire-and-forget: server-side tracking
       trackEvent({
@@ -201,7 +217,12 @@ export async function POST(req: Request) {
         phone: hasRealPhone ? (leadPhone as string) : undefined,
         name: nameForLead,
         page: "/api/chat-save",
-        meta: { leadId, sessionId: sessionId.substring(0, 16) },
+        meta: {
+          leadId,
+          sessionId: sessionId.substring(0, 16),
+          sheetsOk: sheetsResult.ok,
+          ...(sheetsResult.error ? { sheetsError: sheetsResult.error } : {}),
+        },
       }).catch((err) => console.error("[chat-save] tracking error", err));
     } else {
       // No real contact info captured — still log the chat as an event for

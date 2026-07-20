@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { sendToGoogleSheets } from "@/lib/google-sheets";
+import { sendCustomerConfirmationEmail, sendOwnerNotificationEmail } from "@/lib/email-lead";
 import { trackEvent } from "@/lib/tracking";
 import { normalizeSource } from "@/lib/lead-sources";
 import { normalizePhone } from "@/lib/phone";
@@ -97,7 +98,7 @@ export async function POST(req: Request) {
 
     // Google Sheets sync (saves to Sheet + sends email to customer + owner via Apps Script)
     // Mirrors /api/contact so strategy-call leads reach the same pipeline.
-    sendToGoogleSheets({
+    const sheetsResult = await sendToGoogleSheets({
       name,
       email,
       phone,
@@ -107,7 +108,25 @@ export async function POST(req: Request) {
       source,
       leadId,
       submittedAt: new Date().toISOString(),
-    }).catch((err) => console.error("[book-call] google sheets error", err));
+      ...(preferredDate ? { meta: { preferredDate } } : {}),
+    }).catch((err) => {
+      console.error("[book-call] google sheets error", err);
+      return { ok: false, error: err instanceof Error ? err.message : String(err) };
+    });
+
+    // Send customer confirmation + owner notification emails (logged + persisted).
+    Promise.all([
+      sendCustomerConfirmationEmail({ name, email, phone, service: service ?? undefined, source }),
+      sendOwnerNotificationEmail({
+        name,
+        email,
+        phone,
+        company: company ?? undefined,
+        service: service ?? undefined,
+        message: message ?? undefined,
+        source,
+      }),
+    ]).catch((err) => console.error("[book-call] email-lead error", err));
 
     // Fire-and-forget: server-side tracking
     trackEvent({
@@ -117,12 +136,23 @@ export async function POST(req: Request) {
       phone,
       name,
       page: "/api/book-call",
-      meta: { service: service ?? null, leadId, preferredDate: preferredDate ?? null },
+      meta: {
+        service: service ?? null,
+        leadId,
+        preferredDate: preferredDate ?? null,
+        sheetsOk: sheetsResult.ok,
+        ...(sheetsResult.error ? { sheetsError: sheetsResult.error } : {}),
+      },
     }).catch((err) => console.error("[book-call] tracking error", err));
 
     // Return both bookingId (for the booking record) and leadId (for consistency
     // with /api/contact — admin CRM uses leadId to link activities).
-    return NextResponse.json({ ok: true, id: leadId, bookingId });
+    return NextResponse.json({
+      ok: true,
+      id: leadId,
+      bookingId,
+      ...(sheetsResult.ok ? {} : { warning: "Booking saved locally but Google Sheets sync failed." }),
+    });
   } catch (err) {
     console.error("[book-call] error", err);
     return NextResponse.json(

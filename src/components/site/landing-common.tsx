@@ -57,12 +57,8 @@ export function WhatsAppCTA({
   message?: string
   className?: string
 }) {
-  const text = encodeURIComponent(
-    message ??
-      (isBn
-        ? 'আসসালামু আলাইকুম, আমি NextGen Digital Studio-এর সেবা সম্পর্কে জানতে চাই।'
-        : "Hi NextGen Digital Studio, I'd like to know more about your services."),
-  )
+  const { t } = useLang()
+  const text = encodeURIComponent(message ?? t('landing.whatsappDefaultMsg'))
   return (
     <a
       href={`https://wa.me/${siteConfig.whatsapp}?text=${text}`}
@@ -71,7 +67,7 @@ export function WhatsAppCTA({
       className={`inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-green-600 to-emerald-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-green-600/25 transition-transform hover:scale-[1.02] ${className}`}
     >
       <MessageCircle className="h-4 w-4" />
-      {isBn ? 'হোয়াটসঅ্যাপে চ্যাট করুন' : 'Chat on WhatsApp'}
+      {t('landing.whatsappChat')}
     </a>
   )
 }
@@ -100,6 +96,7 @@ export function LandingLeadForm({
   paymentNote?: string
   className?: string
 }) {
+  const { t } = useLang()
   const [submitting, setSubmitting] = React.useState(false)
   const [done, setDone] = React.useState(false)
 
@@ -112,7 +109,7 @@ export function LandingLeadForm({
     const website = String(fd.get('website') ?? '').trim()
     if (website) {
       setDone(true)
-      toast.success(isBn ? 'সফলভাবে জমা হয়েছে!' : 'Submission successful!')
+      toast.success(t('landing.toastSuccess'))
       setSubmitting(false)
       form.reset()
       return
@@ -127,7 +124,7 @@ export function LandingLeadForm({
       source,
     }
     if (!payload.name || !payload.email || !payload.phone) {
-      toast.error(isBn ? 'অনুগ্রহ করে সব প্রয়োজনীয় ঘর পূরণ করুন' : 'Please fill all required fields')
+      toast.error(t('landing.toastErrorFill'))
       setSubmitting(false)
       return
     }
@@ -152,10 +149,10 @@ export function LandingLeadForm({
         }),
       }).catch(() => {})
       setDone(true)
-      toast.success(isBn ? 'সফলভাবে জমা হয়েছে!' : 'Submission successful!')
+      toast.success(t('landing.toastSuccess'))
       form.reset()
     } catch {
-      toast.error(isBn ? 'কিছু ভুল হয়েছে, আবার চেষ্টা করুন' : 'Something went wrong, please try again')
+      toast.error(t('landing.toastErrorGeneric'))
     } finally {
       setSubmitting(false)
     }
@@ -168,13 +165,10 @@ export function LandingLeadForm({
       >
         <CheckCircle2 className="mb-3 h-12 w-12 text-emerald-500" />
         <h3 className="font-heading text-xl font-bold">
-          {isBn ? 'ধন্যবাদ! আপনার অনুরোধ গ্রহণ করা হয়েছে।' : 'Thank you! We received your request.'}
+          {t('landing.thanksTitle')}
         </h3>
         <p className="mt-2 max-w-md text-sm text-muted-foreground">
-          {successMessage ??
-            (isBn
-              ? 'আমাদের টিম ২ ঘন্টার মধ্যে আপনার সাথে যোগাযোগ করবে।'
-              : 'Our team will contact you within 2 hours.')}
+          {successMessage ?? t('landing.thanksDesc')}
         </p>
         {paymentAmount !== undefined && (
           <div className="w-full max-w-md text-left">
@@ -186,7 +180,7 @@ export function LandingLeadForm({
           </div>
         )}
         <Button variant="outline" className="mt-4" onClick={() => setDone(false)}>
-          {isBn ? 'আরেকটি অনুরোধ পাঠান' : 'Send another request'}
+          {t('landing.sendAnother')}
         </Button>
       </div>
     )
@@ -205,29 +199,29 @@ export function LandingLeadForm({
       />
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-1.5">
-          <Label htmlFor="ld-name">{isBn ? 'নাম *' : 'Full name *'}</Label>
-          <Input id="ld-name" name="name" required placeholder={isBn ? 'আপনার নাম' : 'Your name'} />
+          <Label htmlFor="ld-name">{t('landing.fullNameLabel')}</Label>
+          <Input id="ld-name" name="name" required placeholder={t('landing.fullNamePlaceholder')} />
         </div>
         <div className="space-y-1.5">
-          <Label htmlFor="ld-phone">{isBn ? 'ফোন / হোয়াটসঅ্যাপ *' : 'Phone / WhatsApp *'}</Label>
+          <Label htmlFor="ld-phone">{t('landing.phoneLabel')}</Label>
           <Input id="ld-phone" name="phone" required placeholder="+880 1XXX-XXXXXX" />
         </div>
         <div className="space-y-1.5">
-          <Label htmlFor="ld-email">{isBn ? 'ইমেইল *' : 'Email *'}</Label>
+          <Label htmlFor="ld-email">{t('landing.emailLabel')}</Label>
           <Input id="ld-email" name="email" type="email" required placeholder="you@company.com" />
         </div>
         <div className="space-y-1.5">
-          <Label htmlFor="ld-company">{isBn ? 'কোম্পানি' : 'Company'}</Label>
-          <Input id="ld-company" name="company" placeholder={isBn ? 'কোম্পানির নাম' : 'Company name'} />
+          <Label htmlFor="ld-company">{t('landing.companyLabel')}</Label>
+          <Input id="ld-company" name="company" placeholder={t('landing.companyPlaceholder')} />
         </div>
       </div>
       <div className="space-y-1.5">
-        <Label htmlFor="ld-message">{isBn ? 'বার্তা' : 'Message'}</Label>
+        <Label htmlFor="ld-message">{t('landing.messageLabel')}</Label>
         <Textarea
           id="ld-message"
           name="message"
           rows={3}
-          placeholder={isBn ? 'আপনার প্রয়োজন সম্পর্কে লিখুন...' : 'Tell us what you need...'}
+          placeholder={t('landing.messagePlaceholder')}
         />
       </div>
       <Button
@@ -238,11 +232,11 @@ export function LandingLeadForm({
         {submitting ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            {isBn ? 'পাঠানো হচ্ছে...' : 'Submitting...'}
+            {t('landing.submitting')}
           </>
         ) : (
           <>
-            {submitLabel ?? (isBn ? 'অর্ডার করুন' : 'Place Order')}
+            {submitLabel ?? t('landing.placeOrder')}
             <ArrowRight className="ml-2 h-4 w-4" />
           </>
         )}
@@ -275,6 +269,7 @@ export function usePageViewTracking(source: string, meta?: Record<string, unknow
 /* -------------------------------------------------------------------------- */
 
 export function LandingFooter({ isBn }: { isBn: boolean }) {
+  const { t } = useLang()
   return (
     <footer className="mt-auto border-t border-border/60 bg-muted/30">
       <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
@@ -296,32 +291,32 @@ export function LandingFooter({ isBn }: { isBn: boolean }) {
             </p>
           </div>
           <div>
-            <p className="text-sm font-semibold">{isBn ? 'সোশ্যাল' : 'Socials'}</p>
+            <p className="text-sm font-semibold">{t('landing.footerSocials')}</p>
             <LandingSocials className="mt-3" />
           </div>
           <div>
-            <p className="text-sm font-semibold">{isBn ? 'যোগাযোগ' : 'Contact'}</p>
+            <p className="text-sm font-semibold">{t('landing.footerContact')}</p>
             <ul className="mt-3 space-y-1.5 text-xs text-muted-foreground">
               <li>
                 <Link href="/" className="hover:text-foreground">
-                  {isBn ? 'হোম' : 'Home'}
+                  {t('landing.footerHome')}
                 </Link>
               </li>
               <li>
                 <Link href="/privacy" className="hover:text-foreground">
-                  {isBn ? 'প্রাইভেসি পলিসি' : 'Privacy Policy'}
+                  {t('landing.footerPrivacy')}
                 </Link>
               </li>
               <li>
                 <Link href="/terms" className="hover:text-foreground">
-                  {isBn ? 'টার্মস' : 'Terms'}
+                  {t('landing.footerTerms')}
                 </Link>
               </li>
             </ul>
           </div>
         </div>
         <div className="mt-6 border-t border-border/60 pt-4 text-center text-xs text-muted-foreground">
-          © {new Date().getFullYear()} {siteConfig.name}. {isBn ? 'সর্বস্বত্ব সংরক্ষিত।' : 'All rights reserved.'}
+          © {new Date().getFullYear()} {siteConfig.name}. {t('landing.footerRights')}
         </div>
       </div>
     </footer>
