@@ -1,0 +1,116 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  // SQLite locally (db/custom.db) for fast preview panel development.
+  // On Vercel: create a Postgres store, then change provider to "postgresql"
+  // and set DATABASE_URL env var to the Postgres connection string.
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Lead {
+  id         String   @id @default(cuid())
+  name       String
+  email      String
+  phone      String
+  company    String?
+  service    String?
+  message    String?
+  notes      String?
+  assignedTo String?
+  source     String   @default("contact_form")
+  status     String   @default("new") // new | contacted | qualified | won | lost
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+model LeadActivity {
+  id        String   @id @default(cuid())
+  leadId    String
+  type      String   // status_change | note_added | assignment | created | contact_attempt
+  detail    String
+  oldValue  String?
+  newValue  String?
+  createdAt DateTime @default(now())
+
+  @@index([leadId])
+  @@index([createdAt])
+}
+
+model Booking {
+  id         String   @id @default(cuid())
+  name       String
+  email      String
+  phone      String
+  company    String?
+  service    String?
+  preferredDate String?
+  message    String?
+  status     String   @default("pending") // pending | confirmed | completed | cancelled
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+model NewsletterSubscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  active    Boolean  @default(true)
+  source    String   @default("footer")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ChatConversation {
+  id        String   @id @default(cuid())
+  sessionId String
+  messages  String   // JSON string of messages
+  leadEmail String?
+  leadPhone String?
+  leadName  String?
+  messageCount Int   @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([sessionId])
+  @@index([createdAt])
+}
+
+model TrackingEvent {
+  id        String   @id @default(cuid())
+  type      String   // page_view | lead | purchase | contact | booking | whatsapp_click | social_click
+  page      String   @default("")
+  source    String   @default("landing_page")
+  email     String?
+  phone     String?
+  name      String?
+  value     Float?
+  currency  String?  @default("BDT")
+  meta      String?  // JSON string
+  userAgent String?
+  ipAddress String?
+  createdAt DateTime @default(now())
+
+  @@index([type])
+  @@index([source])
+  @@index([createdAt])
+}
+
