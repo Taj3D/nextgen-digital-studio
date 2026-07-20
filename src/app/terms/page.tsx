@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Terms of Service — NextGen Digital Studio",
-    description: "The terms and conditions for using our services.",
+    description: "The terms and conditions for using NextGen Digital Studio AI automation services.",
   },
 }
 

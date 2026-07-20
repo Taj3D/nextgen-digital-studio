@@ -37,7 +37,7 @@ const productLd = {
 export const metadata: Metadata = {
   title: '3D Portrait & Face Sculpting Service',
   description:
-    'কাস্টম 3D ফেস স্কাল্পটিং, পোর্ট্রেট ও চরিত্র মডেলিং সেবা। আপনার ফটো থেকে রিয়ালিস্টিক 3D মডেল তৈরি করি প্রিন্ট, গেম, অ্যানিমেশন বা সোশ্যাল মিডিয়ার জন্য। Custom 3D face sculpting, portrait & character modelling service from photo for print, game, animation or social media.',
+    'Custom 3D face sculpting, portrait & character modelling from photo. For print, game, animation or social media. MDF from 7500 BDT.',
   keywords: [
     '3D portrait Bangladesh',
     '3D face sculpting',

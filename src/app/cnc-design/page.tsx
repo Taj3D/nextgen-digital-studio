@@ -28,7 +28,7 @@ const productLd = {
 export const metadata: Metadata = {
   title: 'CNC Design Bundle (150TK / 150GB)',
   description:
-    '১৫০টাকায় ১৫০ জিবি CNC ডিজাইন বান্ডল — রেডিমেড relief, 3D carving, ফার্নিচার, door panel, প্রতিমা ও আরও অনেক কিছু। Get 150GB of ready-to-cut CNC design files for just 150TK — relief, 3D carving, furniture, door panels, idols and more.',
+    'Get 150GB of ready-to-cut CNC design files for just 150TK — relief, 3D carving, furniture, door panels, idols and more. 2D + 3D files.',
   keywords: [
     'CNC design Bangladesh',
     'CNC relief file',

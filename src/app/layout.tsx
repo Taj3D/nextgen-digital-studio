@@ -3,9 +3,14 @@ import { Sora, Inter, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as SonnerToaster } from "@/components/ui/sonner";
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "@/components/site/theme-provider";
 import { LanguageProvider } from "@/components/site/language-provider";
 import { AnalyticsPixels } from "@/components/site/analytics-pixels";
+import { BookingModalProvider } from "@/components/site/booking-modal-context";
+import { ScrollProgress } from "@/components/site/scroll-progress";
+import { SocialProof } from "@/components/site/social-proof";
+import { StickyBookBar } from "@/components/site/sticky-book-bar";
+import { AiChatWidget } from "@/components/site/ai-chat-widget";
 import { siteConfig, faqs } from "@/lib/site-data";
 
 // Premium font stack:
@@ -318,12 +323,22 @@ export default function RootLayout({
         <AnalyticsPixels />
         <ThemeProvider
           attribute="class"
-          defaultTheme="light"
+          defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >
           <LanguageProvider>
-            {children}
+            <BookingModalProvider>
+              {children}
+              {/* Top reading-progress bar (z-[100], above navbar) */}
+              <ScrollProgress />
+              {/* Periodic social-proof toasts (bottom-left, sm+ only) */}
+              <SocialProof />
+              {/* Sticky bottom CTA bar (hidden near lead-form / when modal open) */}
+              <StickyBookBar />
+              {/* Floating AI chat widget (bottom-right, above WhatsApp button) */}
+              <AiChatWidget />
+            </BookingModalProvider>
             <Toaster />
             <SonnerToaster position="bottom-right" />
           </LanguageProvider>

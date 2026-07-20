@@ -24,7 +24,7 @@ const courseLd = {
 export const metadata: Metadata = {
   title: 'AI Training — 1 Week Course (1000TK) at 9 PM',
   description:
-    '১ সপ্তাহের ইনটেনসিভ AI ট্রেইনিং — মাত্র ১০০০ টাকা, প্রতিদিন রাত ৯টায়। AI এজেন্ট, চ্যাটবট, অটোমেশন, মার্কেটিং — সব হাতে-কলমে শিখুন। 1-week intensive AI training — just 1000TK, daily 9 PM. AI agents, chatbots, automation, marketing — all hands-on.',
+    '1-week intensive AI training — just 1000TK, daily 9 PM. AI agents, chatbots, automation, marketing — all hands-on. 4 live modules.',
   keywords: [
     'AI training Bangladesh',
     'AI ট্রেইনিং',

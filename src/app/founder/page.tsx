@@ -43,7 +43,7 @@ const personLd = {
 export const metadata: Metadata = {
   title: 'তাজ ভাই — Founder of NextGen Digital Studio | Md. Nazmul Islam Taj',
   description:
-    'পরিচয় করুন মোঃ নাজমুল ইসলাম তাজ (তাজ ভাই)-এর সাথে — যশোরের প্রথম ডিজিটাল ইঞ্জিনিয়ার, NextGen Digital Studio-এর প্রতিষ্ঠাতা, এবং AI Sales Automation বিশেষজ্ঞ। Meet Taj Bhai — Jessore first digital engineer, founder of NextGen Digital Studio.',
+    'Meet Taj Bhai — Jessore first digital engineer, founder of NextGen Digital Studio, and AI Sales Automation specialist.',
   keywords: [
     'Taj Bhai',
     'তাজ ভাই',

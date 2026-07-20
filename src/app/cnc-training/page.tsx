@@ -24,7 +24,7 @@ const courseLd = {
 export const metadata: Metadata = {
   title: 'CNC 3D Design Training — 1 Week (250TK) at 9 PM + Free Chair Leg Design',
   description:
-    '১ সপ্তাহের CNC 3D ডিজাইন ট্রেইনিং — মাত্র ২৫০ টাকা, প্রতিদিন রাত ৯টায়। relief, carving, ফার্নিচার ও door panel ডিজাইন শিখুন। অর্ডার করলেই একটি chair leg design সম্পূর্ণ ফ্রি! 1-week CNC 3D design training — just 250TK, daily 9 PM. Learn relief, carving, furniture & door panel design. Order now and get a free chair leg design!',
+    '1-week CNC 3D design training — just 250TK, daily 9 PM. Relief, carving, furniture & door panel design. Order now + free chair leg file!',
   keywords: [
     'CNC training Bangladesh',
     'CNC ট্রেইনিং',

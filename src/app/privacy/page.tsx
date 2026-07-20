@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Privacy Policy — NextGen Digital Studio",
-    description: "How we collect, use, and protect your data.",
+    description: "How NextGen Digital Studio collects, uses, and protects your personal data.",
   },
 }
 

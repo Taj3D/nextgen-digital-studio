@@ -30,12 +30,18 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# env files (NEVER commit secrets — contains webhook URL, admin password, API keys)
+.env
+.env.*
+!.env.example
+
+# database (SQLite local dev — contains PII, never commit)
+*.db
+*.db-journal
+/db/
 
 # vercel
 .vercel
-
 
 # typescript
 *.tsbuildinfo
@@ -50,5 +56,11 @@ test
 prompt
 
 server.log
-# Skills directory
+
+# Skills directory (internal tooling)
 /skills/
+
+# AI agent temp working files
+/tool-results/
+.dev-pid
+worklog.md

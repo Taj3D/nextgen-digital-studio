@@ -4,7 +4,7 @@ import { CaseStudiesIndexClient } from "./case-studies-index-client";
 export const metadata: Metadata = {
   title: "Case Studies — Real Results from NextGen Digital Studio Clients",
   description:
-    "See how Bangladeshi businesses in real estate, healthcare and e-commerce tripled leads, cut no-shows and recovered revenue with AI sales automation by NextGen Digital Studio.",
+    "See how Bangladeshi businesses tripled leads, cut no-shows and recovered revenue with AI sales automation by NextGen Digital Studio.",
   alternates: { canonical: "https://nextgendigitalstudio.com/case-studies" },
   openGraph: {
     title: "NextGen Digital Studio Case Studies",

@@ -39,6 +39,7 @@
   /* Premium font stack: MahfujLipi (Bangla) + Sora (English headings) + Inter (English body) */
   --font-sans: "NextGen Bangla", var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-heading: "NextGen Bangla", var(--font-sora), var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-bangla: "NextGen Bangla", var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-display: "NextGen Display", "NextGen Bangla", var(--font-sora), var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, monospace;
   --color-sidebar-ring: var(--sidebar-ring);
@@ -83,6 +84,7 @@
      These mirror @theme inline so var(--font-*) references resolve correctly. */
   --font-sans: "NextGen Bangla", var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-heading: "NextGen Bangla", var(--font-sora), var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-bangla: "NextGen Bangla", var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   /* Brand: primary #2563EB, secondary #0F172A, accent #06B6D4, bg white */
   --background: oklch(1 0 0);
   --foreground: oklch(0.21 0.034 264);
@@ -190,6 +192,8 @@
 /* ===== Brand utilities ===== */
 .font-heading { font-family: "NextGen Bangla", var(--font-sora), var(--font-jakarta), ui-sans-serif, system-ui, sans-serif; }
 .font-body { font-family: "NextGen Bangla", var(--font-inter), ui-sans-serif, system-ui, sans-serif; }
+/* Explicit Bengali-only class — forces MahfujLipi even on mixed text */
+.font-bangla { font-family: "NextGen Bangla", var(--font-inter), ui-sans-serif, system-ui, sans-serif; }
 /* Premium display accent (Forzon DEMO) — use ONLY on short, letter-only text
    like the logo wordmark. The font has 59 glyphs (A-Z a-z space comma period),
    so never apply it to text containing digits, hyphens, apostrophes, etc. */
