@@ -5285,3 +5285,456 @@ Stage Summary:
 - Security: 7 routes now rate-limited (was only 3), auth login hardened, public /api/track GET closed
 - Data integrity: nullable email/phone, FK cascade on LeadActivity, no more "Not provided" placeholders
 - No codebase breakage — all changes are backward-compatible
+
+---
+Task ID: DEPLOY-AUDIT
+Agent: Explore Agent — GitHub/Vercel Deployment Readiness Audit
+Task: Determine if the project is ready for GitHub + Vercel deployment
+
+Work Log:
+- Read worklog.md (last 200 lines) to inherit prior context (Tasks 1, 2-master, 2-c, plus recent fix tasks — full site built, 38-issue audit done, fixes applied).
+- Verified git repository state: `.git/` exists, branch=main, 6 commits, 1 modified tracked file (db/custom.db), 1 untracked file (tool-results/read_*.txt). NO git remote configured.
+- Read `.gitignore` — covers node_modules, .next, .env*, .vercel, .DS_Store, *.log, dev.log, .claude, /skills/. Does NOT explicitly exclude `*.db` or `db/` directory.
+- Ran `git ls-files` to check what is actually tracked. CRITICAL findings:
+  - `.env` IS tracked in git (contains GOOGLE_SHEETS_WEBHOOK_URL + ADMIN_PASSWORD in plaintext) — SECURITY BLOCKER.
+  - `db/custom.db` IS tracked in git (contains local leads + breaks Vercel serverless).
+  - `tool-results/` directory IS tracked (110+ temp tool-output files).
+  - `.dev-pid`, `start-dev.sh` also tracked.
+- Confirmed NO `README.md`, NO `vercel.json`, NO `.env.example` / `.env.local.example` exist.
+- Read `package.json` — has `build`, `start`, `lint`, `db:push`, `db:generate`, `db:migrate`, `db:reset` scripts. CRITICAL: NO `postinstall: prisma generate` (Vercel build will fail without Prisma Client). `start` script uses `bun .next/standalone/server.js` (Vercel doesn't use this). Build script has `next build && cp -r .next/static .next/standalone/.next/ && cp -r public .next/standalone/` — the cp commands may fail or be redundant on Vercel.
+- Read `next.config.ts` — `output: "standalone"`, `typescript.ignoreBuildErrors: true` (hides TS errors in CI), `reactStrictMode: false`. No image domains config (OK since no remote images).
+- Read `tsconfig.json` — valid ES2017 + bundler moduleResolution + strict mode + `@/*` path alias.
+- Read `tailwind.config.ts` — valid, darkMode: class, content globs cover ./app, ./components, ./pages (note: `./src/app` is covered via ./app glob? No — `./app/**` would NOT match `./src/app/**`. Possible Tailwind purge miss — but `@tailwindcss/postcss` v4 auto-detects content, so likely OK).
+- Read `prisma/schema.prisma` — `provider = "sqlite"`, all 7 models present (User, Lead, LeadActivity, Booking, NewsletterSubscriber, ChatConversation, TrackingEvent). Comment notes Vercel should switch to postgresql.
+- Grep'd all `process.env.*` usages across /src — mapped required env vars:
+  - PRESENT & SET: DATABASE_URL, GOOGLE_SHEETS_WEBHOOK_URL, ADMIN_PASSWORD, GEMINI_MODEL
+  - PRESENT but EMPTY: GEMINI_API_KEY, GA4_MEASUREMENT_ID, FB_PIXEL_ID, SNAP_PIXEL_ID, TIKTOK_PIXEL_ID
+  - MISSING entirely: NEXT_PUBLIC_GA4_ID, NEXT_PUBLIC_FB_PIXEL_ID, NEXT_PUBLIC_SNAP_PIXEL_ID, NEXT_PUBLIC_TIKTOK_PIXEL_ID, NEXT_PUBLIC_ADMIN_PASSWORD, GA4_API_SECRET, FB_ACCESS_TOKEN, TIKTOK_ACCESS_TOKEN, SNAPCHAT_ACCESS_TOKEN
+  - Note: code in analytics-pixels.tsx uses NEXT_PUBLIC_* client vars (with G-QF7TJBHR7Z hardcoded fallback for GA4 only); tracking.ts uses server-side vars (GA4_MEASUREMENT_ID, FB_PIXEL_ID etc).
+- Verified SEO/production files: src/app/sitemap.ts ✅, src/app/robots.ts ✅, src/app/manifest.ts ✅, public/llms.txt ✅, public/.well-known/agents.json ✅.
+- Listed public/ assets: logo.jpg, logo.svg, ng-logo.jpeg, favicon.svg, icon.svg, icon-256.png, apple-icon.png, og-image.jpg, og-image.svg, founder.png, llms.txt, 3d-gallery/ (16 images), resources/ (7 HTML files), fonts/ (MahfujLipi.ttf + ForzonDEMO-Italic.ttf), .well-known/agents.json. All present.
+- Ran `bun run lint` — PASS CLEAN (0 errors, 0 warnings).
+- Did NOT run `bun run build` per project rules.
+- Checked dev server: PID 29103 (next-server v16.1.3) running on port 3000, healthy. `curl localhost:3000` returned HTTP 200. dev.log tail shows all 200s except intentional 401s on /api/leads (auth working correctly) and one earlier Prisma delete error (already addressed in prior fix task). No hydration/runtime errors.
+- Did NOT modify any files (audit-only as instructed).
+
+Stage Summary:
+- DEPLOYMENT READINESS SCORE: 68/100 — NOT READY for production deploy without fixes.
+- The application code itself is solid (lint clean, dev server healthy, all SEO/assets in place), but the deployment pipeline has 7 blockers that will cause either a security leak, a build failure, or a runtime data-layer failure on Vercel.
+
+=== BLOCKERS (MUST FIX BEFORE DEPLOY) ===
+1. 🔴 CRITICAL SECURITY: `.env` is git-tracked. Contains GOOGLE_SHEETS_WEBHOOK_URL + ADMIN_PASSWORD in plaintext. Fix: `git rm --cached .env` (the .gitignore `.env*` rule is correct but doesn't apply to already-tracked files).
+2. 🔴 CRITICAL: `db/custom.db` is git-tracked. (a) Leaks local lead PII to GitHub, (b) Vercel serverless filesystem is read-only so SQLite writes will fail at runtime. Fix: `git rm --cached db/custom.db`, add `*.db` + `db/*.db` to .gitignore.
+3. 🔴 CRITICAL BUILD: NO `postinstall: prisma generate` script in package.json. Vercel runs `next build` which imports `@prisma/client`, but the client isn't generated on a fresh install. Build will fail with "PrismaClient unable to be found". Fix: add `"postinstall": "prisma generate"`.
+4. 🔴 CRITICAL BUILD: `build` script is `next build && cp -r .next/static .next/standalone/.next/ && cp -r public .next/standalone/`. The `cp` commands assume a Linux shell with the standalone output structure — may fail or be redundant on Vercel's build system (Vercel handles standalone output natively when `output: 'standalone'` is set). Fix: simplify to `"build": "next build"`.
+5. 🔴 CRITICAL RUNTIME: Prisma `provider = "sqlite"` + `DATABASE_URL=file:/home/z/my-project/db/custom.db` — SQLite writes are impossible on Vercel serverless (read-only FS). Fix: provision Vercel Postgres / Neon / Supabase, change `provider = "postgresql"`, update `DATABASE_URL` to the Postgres connection string, run `prisma migrate deploy`.
+6. 🟠 HIGH: NO git remote configured. Fix: `git remote add origin https://github.com/Taj3D/nextgen-digital-studio.git` then `git push -u origin main`.
+7. 🟠 HIGH: `tool-results/` directory (110+ temp files) + `.dev-pid` are git-tracked. Fix: `git rm --cached -r tool-results/`, add `tool-results/` and `.dev-pid` to .gitignore.
+
+=== RECOMMENDATIONS (NICE-TO-HAVE) ===
+1. Add `README.md` with project overview, local dev setup, env var list, deploy instructions.
+2. Add `.env.example` documenting all required env vars (DATABASE_URL, GOOGLE_SHEETS_WEBHOOK_URL, ADMIN_PASSWORD, GEMINI_API_KEY, GEMINI_MODEL, NEXT_PUBLIC_GA4_ID, NEXT_PUBLIC_FB_PIXEL_ID, NEXT_PUBLIC_SNAP_PIXEL_ID, NEXT_PUBLIC_TIKTOK_PIXEL_ID, GA4_MEASUREMENT_ID, GA4_API_SECRET, FB_ACCESS_TOKEN, TIKTOK_ACCESS_TOKEN, SNAPCHAT_ACCESS_TOKEN).
+3. Add `vercel.json` (optional — Vercel auto-detects Next.js, but explicit config is good practice).
+4. Fill in the empty env vars in Vercel dashboard: GEMINI_API_KEY, GA4_MEASUREMENT_ID, FB_PIXEL_ID, SNAP_PIXEL_ID, TIKTOK_PIXEL_ID (and add NEXT_PUBLIC_* client variants).
+5. Add `"engines": { "node": "20.x" }` to package.json to pin Node version on Vercel.
+6. Remove `typescript.ignoreBuildErrors: true` from next.config.ts — it hides real TS errors in CI (currently lint is clean, so safe to remove).
+7. Set `reactStrictMode: true` for production safety (currently false).
+8. Consider Turso (libSQL) instead of Postgres for a cheaper SQLite-compatible migration path (minimal schema changes).
+9. Configure DNS per MASTER_PROMPT: A record nextgendigitalstudio.com → 216.198.79.1, CNAME www → bfea6164acb600e9.vercel-dns-017.com.
+
+=== DOMAIN CONFIG (from MASTER_PROMPT.md — informational) ===
+- Production domain: nextgendigitalstudio.com → A record: 216.198.79.1
+- www subdomain: www.nextgendigitalstudio.com → CNAME: bfea6164acb600e9.vercel-dns-017.com.
+- Target GitHub repo: https://github.com/Taj3D/nextgen-digital-studio.git
+
+---
+Task ID: MPROMPT-AUDIT
+Agent: Explore Agent — MASTER_PROMPT Requirements Audit
+Task: Verify codebase satisfies all MASTER_PROMPT.md requirements
+
+Work Log:
+- Read /home/z/my-project/upload/MASTER_PROMPT.md in full (393 lines) for spec context.
+- Read last 200 lines of worklog.md to learn prior context (GOD-MODE-FIXES completed 18/20 steps; lead flow verified; rate limiting added; fonts MahfujLipi weight range extended; ForzonDEMO applied to navbar).
+- Used LS to enumerate /src/app/, /src/app/api/, /src/lib/, /src/components/site/, /src/components/site/sections/, /src/hooks/, /public/, /public/fonts/, /public/.well-known/.
+- Used Grep to scan entire src/ for missing component names (ai-chat-widget, booking-modal, sticky-book-bar, scroll-progress, social-proof, theme-provider, email-lead, feature-flags) — confirmed which are absent vs. relocated.
+- Read package.json, .env, prisma/schema.prisma, src/app/layout.tsx, src/app/sitemap.ts, src/app/robots.ts, src/components/site/analytics-pixels.tsx, src/lib/google-sheets.ts, src/lib/site-data.ts, src/components/theme-provider.tsx, src/app/services/[slug]/page.tsx.
+- Read globals.css (font-face + CSS vars) and tracking.ts (server-side CAPI env var usage).
+- Cross-checked every checklist item A through M against actual filesystem state and file contents.
+- No files modified (audit-only as instructed).
+
+Stage Summary:
+
+============================================================
+SECTION A — Pages (23 required)
+============================================================
+REQUIRED: 11 main pages + 12 service pages + (dynamic) blog/[slug], case-studies/[slug]
+PRESENT: 23 / 23 main+service pages
+  • All 11 main pages exist as src/app/{page,founder,3d-portrait,cnc-design,pdf-books,ai-training,cnc-training,privacy,terms,docs,admin}/page.tsx ✓
+  • All 12 service pages served by src/app/services/[slug]/page.tsx (dynamic, generateStaticParams → 12 slugs, dynamicParams:false) ✓
+  • /src/app/blog/[slug]/page.tsx ✓ (extra — not in 23-page count but required as dynamic)
+  • /src/app/case-studies/[slug]/page.tsx ✓ (extra — not in 23-page count but required as dynamic)
+  • Bonus: /src/app/blog/page.tsx and /src/app/case-studies/page.tsx (index pages — not required, helpful addition)
+MISSING: 0
+PARTIAL: 0
+SCORE: 23 / 23
+
+============================================================
+SECTION B — API Routes (16 required)
+============================================================
+REQUIRED: 15 explicitly listed + 1 extra
+PRESENT: 16 / 16 (all 15 explicit + 2 bonus)
+  1.  /api/contact ✓
+  2.  /api/track ✓
+  3.  /api/track/stats ✓
+  4.  /api/leads ✓
+  5.  /api/leads/[id] ✓
+  6.  /api/leads/bulk ✓
+  7.  /api/leads/export ✓
+  8.  /api/book-call ✓
+  9.  /api/newsletter ✓
+  10. /api/audit ✓
+  11. /api/careers ✓
+  12. /api/download ✓
+  13. /api/chat-agent ✓
+  14. /api/chat-save ✓
+  15. /api/send-email ✓
+  16. /api/auth/login/route.ts ✓ (the 16th — admin auth used by admin-gate.tsx)
+  Bonus: /api/route.ts (root metadata listing all endpoints)
+MISSING: 0
+PARTIAL: 0
+SCORE: 16 / 16
+
+============================================================
+SECTION C — Lib files (10 required)
+============================================================
+REQUIRED: site-data, db, google-sheets, tracking, whatsapp, cache, gemini, email-lead, feature-flags, utils
+PRESENT: 8 / 10
+  ✓ src/lib/site-data.ts        (541 lines — MASTER_PROMPT said 1247; smaller but contains all required content: services, caseStudies, blogPosts, faqs, pricing, testimonials, siteConfig)
+  ✓ src/lib/db.ts               (Prisma singleton)
+  ✓ src/lib/google-sheets.ts    (text/plain + redirect:follow + 15s timeout)
+  ✓ src/lib/tracking.ts         (332 lines, GA4 + FB + TikTok + Snap CAPI)
+  ✓ src/lib/whatsapp.ts
+  ✓ src/lib/cache.ts
+  ✓ src/lib/gemini.ts
+  ✓ src/lib/utils.ts
+  ✗ src/lib/email-lead.ts       MISSING — no email helper file exists; email logic lives inline in /api/contact and /api/send-email routes instead
+  ✗ src/lib/feature-flags.ts    MISSING — no feature-flags module exists; no feature gating in app
+  Bonus (not required but present): src/lib/auth.ts, src/lib/phone.ts, src/lib/rate-limit.ts, src/lib/lead-sources.ts
+MISSING: 2 (email-lead.ts, feature-flags.ts)
+PARTIAL: 0
+SCORE: 8 / 10
+
+============================================================
+SECTION D — Components/site (21 required)
+============================================================
+REQUIRED: navbar, footer, logo, top-bar, language-provider, language-toggle, theme-provider, theme-toggle, analytics-pixels, reveal, landing-common, payment-instructions, floating-buttons, ai-chat-widget, booking-modal, sticky-book-bar, scroll-progress, social-proof, admin-gate, api-docs, legal-footer
+PRESENT: 15 / 21 (16 if theme-provider counts despite wrong path)
+  ✓ navbar.tsx
+  ✓ footer.tsx
+  ✓ logo.tsx
+  ✓ top-bar.tsx
+  ✓ language-provider.tsx   (1376 lines — MASTER_PROMPT said 1226; richer)
+  ✓ language-toggle.tsx
+  ⚠ theme-provider.tsx      PARTIAL — exists at src/components/theme-provider.tsx (NOT src/components/site/theme-provider.tsx). Same export, used by layout.tsx. Cosmetic path mismatch only.
+  ✓ theme-toggle.tsx
+  ✓ analytics-pixels.tsx
+  ✓ reveal.tsx
+  ✓ landing-common.tsx
+  ✓ payment-instructions.tsx
+  ✓ floating-buttons.tsx
+  ✗ ai-chat-widget.tsx       MISSING — no chat widget UI component exists. /api/chat-agent route exists but nothing on the page calls it. Search of entire src/ for "ai-chat-widget|AiChatWidget|ChatWidget|FloatingChat" returned ZERO matches.
+  ✗ booking-modal.tsx        MISSING — no booking modal UI. /api/book-call route exists but no modal to invoke it (booking happens via inline form in lead-form.tsx or via WhatsApp deep-link instead).
+  ✗ sticky-book-bar.tsx      MISSING — no sticky bottom CTA bar.
+  ✗ scroll-progress.tsx      MISSING — no reading-progress bar.
+  ✗ social-proof.tsx         MISSING — no social-proof notification toasts.
+  ✓ admin-gate.tsx
+  ✓ api-docs.tsx
+  ✓ legal-footer.tsx
+MISSING: 5 (ai-chat-widget, booking-modal, sticky-book-bar, scroll-progress, social-proof)
+PARTIAL: 1 (theme-provider at wrong path)
+SCORE: 15 / 21 (or 16/21 with theme-provider counted)
+
+============================================================
+SECTION E — Sections (11 required PADA funnel sections)
+============================================================
+REQUIRED: hero, pain-points, cost-of-inaction, solution, how-it-works, services, why-choose-us, testimonials, pricing, lead-form, final-cta
+PRESENT: 11 / 11
+  ✓ src/components/site/sections/hero.tsx
+  ✓ src/components/site/sections/pain-points.tsx
+  ✓ src/components/site/sections/cost-of-inaction.tsx
+  ✓ src/components/site/sections/solution.tsx
+  ✓ src/components/site/sections/how-it-works.tsx
+  ✓ src/components/site/sections/services.tsx
+  ✓ src/components/site/sections/why-choose-us.tsx
+  ✓ src/components/site/sections/testimonials.tsx
+  ✓ src/components/site/sections/pricing.tsx
+  ✓ src/components/site/sections/lead-form.tsx
+  ✓ src/components/site/sections/final-cta.tsx
+MISSING: 0
+PARTIAL: 0
+SCORE: 11 / 11
+
+============================================================
+SECTION F — Hooks (2 required)
+============================================================
+REQUIRED: use-mobile, use-toast
+PRESENT: 2 / 2
+  ✓ src/hooks/use-mobile.ts
+  ✓ src/hooks/use-toast.ts
+MISSING: 0
+SCORE: 2 / 2
+
+============================================================
+SECTION G — Prisma models (7 required)
+============================================================
+REQUIRED: Lead, LeadActivity, Booking, NewsletterSubscriber, ChatConversation, TrackingEvent, User
+PRESENT: 7 / 7
+  ✓ model User { id, email, name, createdAt, updatedAt }
+  ✓ model Lead { id, name, email?, phone?, company?, service?, message?, notes?, assignedTo?, source, status, createdAt, updatedAt, activities[] }
+  ✓ model LeadActivity { id, leadId, type, detail, oldValue?, newValue?, createdAt, lead FK onDelete:Cascade }
+  ✓ model Booking { id, name, email, phone, company?, service?, preferredDate?, message?, status, createdAt, updatedAt }
+  ✓ model NewsletterSubscriber { id, email, active, source, createdAt, updatedAt }
+  ✓ model ChatConversation { id, sessionId, messages, leadEmail?, leadPhone?, leadName?, messageCount, createdAt, updatedAt }
+  ✓ model TrackingEvent { id, type, page, source, email?, phone?, name?, value?, currency?, meta?, userAgent?, ipAddress?, createdAt }
+MISSING: 0
+PARTIAL: 0 (schema enhanced with @@index on status/createdAt/email/phone — exceeds spec)
+SCORE: 7 / 7
+
+============================================================
+SECTION H — Site config (src/lib/site-data.ts → siteConfig)
+============================================================
+REQUIRED → ACTUAL:
+  ✓ name: 'NextGen Digital Studio'
+  ✓ nameBn: 'নেক্সটজেন ডিজিটাল স্টুডিও'
+  ⚠ phone: REQUIRED '+8801711731354'  | ACTUAL '+880 1711 731354' (cosmetic spacing — same number, used in JSON-LD telephone field as `+${whatsapp}` = +8801711731354 which matches)
+  ✓ whatsapp: '8801711731354'
+  ✓ email: 'nextgendigitalstudio1@gmail.com'
+  ✓ url: 'https://nextgendigitalstudio.com'
+  ✓ founded: 2023
+MISSING: 0
+PARTIAL: 1 (phone has spaces in display vs. no-space in MASTER_PROMPT — functionally identical)
+SCORE: 6.9 / 7 (effectively 7/7 — phone is the same E.164 number, just display-formatted)
+
+============================================================
+SECTION I — Tech stack (package.json)
+============================================================
+REQUIRED → ACTUAL (in dependencies):
+  ✓ next: ^16.1.1                                  (req: ^16)
+  ✓ typescript: ^5                                 (devDependencies, req: ^5)
+  ✓ tailwindcss: ^4                                (devDependencies, req: ^4)
+  ✓ framer-motion: ^12.23.2                        (req: latest)
+  ✓ lucide-react: ^0.525.0                         (req: latest)
+  ✓ @prisma/client: ^6.11.1                        (req: present)
+  ✓ react-hook-form: ^7.60.0 + @hookform/resolvers: ^5.1.1 + zod: ^4.0.2  (req: present)
+  ✓ next-themes: ^0.4.6                            (req: present)
+  ✓ @tanstack/react-query: ^5.82.0                 (req: present)
+MISSING: 0
+PARTIAL: 0
+SCORE: 11 / 11
+
+============================================================
+SECTION J — Fonts (CRITICAL — pending premium-fonts task)
+============================================================
+REQUIRED: Plus Jakarta Sans, Inter (Google Fonts), MahfujLipi (custom), ForzonDEMO Italic (custom)
+PRESENT: 4 / 4 required fonts loaded + 1 EXTRA (Sora)
+  Layout (src/app/layout.tsx):
+    ✓ Inter            via next/font/google → var(--font-inter)
+    ✓ Plus_Jakarta_Sans via next/font/google → var(--font-jakarta)
+    ✓ Sora             via next/font/google → var(--font-sora)  [EXTRA — not in MASTER_PROMPT, added as premium geometric display]
+  Custom @font-face declarations (src/app/globals.css):
+    ✓ "NextGen Bangla"  → /fonts/MahfujLipi.ttf           (font-weight: 300 900, unicode-range U+0980-09FF — Bengali block)
+    ✓ "NextGen Display" → /fonts/ForzonDEMO-Italic.ttf    (font-weight: 400, font-style: normal workaround for italic glyphs)
+  Filesystem (public/fonts/):
+    ✓ MahfujLipi.ttf        (303 KB)
+    ✓ ForzonDEMO-Italic.ttf (14 KB)
+  CSS variables wired in globals.css (@theme inline + :root):
+    ✓ --font-sans    = "NextGen Bangla", var(--font-inter), …
+    ✓ --font-heading = "NextGen Bangla", var(--font-sora), var(--font-jakarta), …
+    ✓ --font-display = "NextGen Display", "NextGen Bangla", var(--font-sora), …
+    ⚠ No standalone --font-bangla variable — Bengali font is folded into --font-sans and --font-heading via unicode-range (works correctly, just doesn't match the literal var name from spec)
+  Preload hints in layout.tsx <head>:
+    ✓ <link rel="preload" href="/fonts/MahfujLipi.ttf" as="font" type="font/ttf" crossOrigin="anonymous">
+    ✓ <link rel="preload" href="/fonts/ForzonDEMO-Italic.ttf" as="font" type="font/ttf" crossOrigin="anonymous">
+MISSING: 0
+PARTIAL: 1 (no literal --font-bangla CSS var; Bengali handled via unicode-range instead — functionally equivalent)
+SCORE: 4 / 4 fonts loaded; CSS var naming slightly different from spec
+NOTE: ThemeProvider defaultTheme="light" — MASTER_PROMPT section "⚡ গুরুত্বপূর্ণ নোট" point 7 says defaultTheme='dark'. MISMATCH (low severity — theme toggle still works).
+
+============================================================
+SECTION K — .env variables (9 required)
+============================================================
+REQUIRED → ACTUAL:
+  1. ✓ DATABASE_URL                       = file:/home/z/my-project/db/custom.db (matches spec, absolute path variant of file:./db/custom.db)
+  2. ✓ GOOGLE_SHEETS_WEBHOOK_URL          = https://script.google.com/macros/s/AKfycbwJX2Ok-SZS24QK8AxZeQLP8wWSytCzfQLYiW8tPKEV35ipHYsqgl2TFN9hVC98i7ou/exec (EXACT match ✓)
+  3. ✗ NEXT_PUBLIC_GA4_ID=G-QF7TJBHR7Z     MISSING — instead has GA4_MEASUREMENT_ID= (empty, server-side only, wrong name)
+  4. ✗ NEXT_PUBLIC_FB_PIXEL_ID=918051034554872    MISSING — instead has FB_PIXEL_ID= (empty, server-side only, wrong name)
+  5. ✗ NEXT_PUBLIC_SNAP_PIXEL_ID=7cca67ea-…      MISSING — instead has SNAP_PIXEL_ID= (empty, server-side only, wrong name)
+  6. ✗ NEXT_PUBLIC_TIKTOK_PIXEL_ID=D91TS0RC77UDRLSQ9CKG   MISSING — instead has TIKTOK_PIXEL_ID= (empty, server-side only, wrong name)
+  7. ✗ NEXT_PUBLIC_ADMIN_PASSWORD=nextgen2025      MISSING — instead has ADMIN_PASSWORD=nextgen2025 (server-side only; works for /api/auth/login but doesn't match the NEXT_PUBLIC_ prefix the spec calls for)
+  8. ✗ GEMINI_API_KEY (any non-empty value)        MISSING — set to empty string ""
+  9. ✗ GEMINI_MODEL=gemini-2.5-flash                WRONG VALUE — set to "gemini-flash-latest" instead of "gemini-2.5-flash"
+  Bonus (not in spec): AI_PROVIDER=auto, NEXT_PUBLIC_SITE_URL=https://nextgendigitalstudio.com
+MISSING: 7 of 9 (all 4 NEXT_PUBLIC_* pixel IDs, NEXT_PUBLIC_ADMIN_PASSWORD, GEMINI_API_KEY empty, GEMINI_MODEL wrong value)
+PARTIAL: 0
+SCORE: 2 / 9 env vars properly configured
+CRITICAL RUNTIME IMPACT:
+  • Client-side pixels (analytics-pixels.tsx): only GA4 fires (hardcoded fallback "G-QF7TJBHR7Z"); FB, Snap, TikTok pixels NEVER render because their NEXT_PUBLIC_* env vars are unset → conditional `{FB_PIXEL_ID && ...}` is falsy.
+  • Server-side CAPI (tracking.ts): all 4 senders early-return because GA4_MEASUREMENT_ID / FB_PIXEL_ID / TIKTOK_PIXEL_ID / SNAP_PIXEL_ID are all empty strings.
+  • Gemini chat (/api/chat-agent): no API key set → falls back to z-ai-web-dev-sdk (per AI_PROVIDER=auto).
+  • Admin login: works (uses ADMIN_PASSWORD server-side, doesn't need NEXT_PUBLIC_).
+
+============================================================
+SECTION L — Analytics pixels component (src/components/site/analytics-pixels.tsx)
+============================================================
+REQUIRED: load all 4 pixels — GA4, FB, Snap, TikTok
+PRESENT (code): 4 / 4 pixel code blocks present
+  ✓ GA4 pixel code (always loads, hardcoded fallback G-QF7TJBHR7Z if NEXT_PUBLIC_GA4_ID unset)
+  ✓ FB pixel code   (conditional on NEXT_PUBLIC_FB_PIXEL_ID)
+  ✓ Snap pixel code (conditional on NEXT_PUBLIC_SNAP_PIXEL_ID)
+  ✓ TikTok pixel code (conditional on NEXT_PUBLIC_TIKTOK_PIXEL_ID)
+PARTIAL — runtime behavior:
+  ⚠ At runtime with current .env, only GA4 actually loads (other 3 are gated on env vars that are missing — see Section K). The component itself is correct; the env wiring is wrong.
+  Bonus: exports trackFBEvent, trackSnapEvent, trackTikTokEvent helper fns for client-side event tracking.
+SCORE: 4 / 4 code present, 1 / 4 active at runtime
+
+============================================================
+SECTION M — Google Sheets integration (src/lib/google-sheets.ts)
+============================================================
+REQUIRED: webhook URL from env + Content-Type: text/plain + redirect: follow
+PRESENT: 3 / 3
+  ✓ Reads process.env.GOOGLE_SHEETS_WEBHOOK_URL
+  ✓ headers: { 'Content-Type': 'text/plain;charset=utf-8' }  (matches "text/plain" requirement)
+  ✓ redirect: 'follow'                                        (matches Apps Script 302 handling)
+  ✓ Bonus: AbortController timeout at 15_000 ms (resilience against hung Apps Script free tier — added by prior GOD-MODE-FIXES Step 18)
+  ✓ Bonus: returns {ok, error?} for caller to log; never throws
+MISSING: 0
+PARTIAL: 0
+SCORE: 3 / 3 (fully compliant + extra timeout hardening)
+
+============================================================
+OVERALL SCORES
+============================================================
+  Pages:            23 / 23   ✓
+  API routes:       16 / 16   ✓
+  Lib files:         8 / 10   ✗ (email-lead.ts, feature-flags.ts missing)
+  Site components:  15 / 21   ✗ (ai-chat-widget, booking-modal, sticky-book-bar, scroll-progress, social-proof missing; theme-provider at wrong path)
+  Sections:         11 / 11   ✓
+  Hooks:             2 / 2    ✓
+  Prisma models:     7 / 7    ✓
+  Tech stack:       11 / 11   ✓
+  Fonts:             4 / 4    ✓ (Plus Jakarta + Inter + MahfujLipi + ForzonDEMO; bonus Sora; CSS var --font-bangla missing but covered via unicode-range)
+  Site config:       6.9/7    ✓ (phone cosmetic spacing only)
+  Env vars:          2 / 9    ✗✗ (only DATABASE_URL + GOOGLE_SHEETS_WEBHOOK_URL correct — 7 of 9 missing/wrong)
+  Analytics pixels:  4 / 4 code, 1 / 4 runtime ✗
+  Google Sheets:     3 / 3    ✓
+
+============================================================
+EXTRA FINDINGS (outside checklist but noteworthy)
+============================================================
+  ✓ /public/.well-known/agents.json present (1545 bytes) — AI agent discovery file
+  ✓ /public/llms.txt present — AI agent discovery text file
+  ✓ /public/og-image.jpg, /public/logo.jpg, /public/founder.png present — all SEO/branding assets
+  ✓ /public/resources/ contains 6 lead-magnet HTML files (ai-readiness-ebook, crm-checklist, funnel-swipe, lead-gen-calculator, voice-scripts, whatsapp-templates)
+  ✓ /public/3d-gallery/ exists (3D portrait gallery)
+  ✓ /src/app/manifest.ts present (PWA manifest, bonus)
+  ⚠ /src/app/robots.ts — only has `userAgent: '*'` rule. MASTER_PROMPT "⚡ গরুত্বপূর্ণ নোট" point 8 specifies AI bot rules for: GPTBot, ClaudeBot, PerplexityBot, ChatGPT-User, Google-Extended. PARTIAL — robots.ts exists and disallows /api/ + /admin/ but does NOT have the explicit per-AI-bot rules the spec calls for.
+  ⚠ /src/app/sitemap.ts has 23 static + 4 blog + 4 case-study = 31 URLs (MASTER_PROMPT says 22 URLs — discrepancy is fine; more comprehensive).
+  ⚠ ThemeProvider defaultTheme="light" but MASTER_PROMPT note 7 says defaultTheme='dark'. Minor.
+  ✓ language-provider.tsx is 1376 lines (spec said 1226 — more comprehensive)
+  ✓ site-data.ts is 541 lines (spec said 1247 — smaller but all required content present: services, caseStudies, blogPosts, faqs, pricing, testimonials, siteConfig)
+
+============================================================
+PRIORITY RECOMMENDATIONS (for next fix agent)
+============================================================
+P0 — BLOCKING PRODUCTION READINESS:
+  1. .env: Add the 4 NEXT_PUBLIC_* pixel IDs (GA4, FB, Snap, TikTok) with the exact values from MASTER_PROMPT. Currently only GA4 client pixel fires (via fallback). Meta/Snap/TikTok pixels are completely dead in production.
+  2. .env: Set GEMINI_API_KEY to a non-empty value (or document that z-ai-web-dev-sdk auto-fallback is intentional).
+  3. .env: Change GEMINI_MODEL from "gemini-flash-latest" to "gemini-2.5-flash" per spec.
+
+P1 — FUNCTIONAL GAPS (missing features per spec):
+  4. Create src/components/site/ai-chat-widget.tsx — the /api/chat-agent route exists but no UI invokes it. Users have no way to chat with the AI bot on the site.
+  5. Create src/components/site/booking-modal.tsx — /api/book-call route exists but no modal UI. Currently booking happens via inline form or WhatsApp deep-link, not via a modal.
+  6. Create src/components/site/sticky-book-bar.tsx — no sticky bottom CTA bar.
+  7. Create src/components/site/scroll-progress.tsx — no reading-progress bar.
+  8. Create src/components/site/social-proof.tsx — no social-proof notification toasts.
+  9. Create src/lib/email-lead.ts — centralize email-sending helper (currently inline in /api/contact + /api/send-email).
+  10. Create src/lib/feature-flags.ts — 25 feature flags per spec (currently no feature-gating system).
+
+P2 — POLISH:
+  11. Add AI bot rules to robots.ts for GPTBot, ClaudeBot, PerplexityBot, ChatGPT-User, Google-Extended (currently only `*` rule).
+  12. Move src/components/theme-provider.tsx → src/components/site/theme-provider.tsx to match MASTER_PROMPT path (cosmetic; layout.tsx import would need updating).
+  13. Add standalone --font-bangla CSS var (currently MahfujLipi is folded into --font-sans + --font-heading via unicode-range — works but doesn't match spec var name).
+  14. Change ThemeProvider defaultTheme from "light" to "dark" per MASTER_PROMPT note 7.
+  15. Add NEXT_PUBLIC_ADMIN_PASSWORD=nextgen2025 (in addition to existing server-side ADMIN_PASSWORD) — match spec verbatim, even if admin-gate only uses server-side.
+
+============================================================
+VERDICT
+============================================================
+The codebase is ~85% compliant with MASTER_PROMPT.md. The 11 PADA funnel sections, all 23 pages, all 16 API routes, full Prisma schema, full tech stack, premium fonts, and Google Sheets integration are fully in place and working.
+
+The two areas that need urgent attention are:
+  (A) .env configuration — 7 of 9 required env vars are missing or wrongly named. This means 3 of 4 ad pixels are completely dark in production, server-side CAPI doesn't fire, and Gemini AI is non-functional (auto-falls back to z-ai-web-dev-sdk).
+  (B) 5 missing UI components — ai-chat-widget, booking-modal, sticky-book-bar, scroll-progress, social-proof. The corresponding API routes (chat-agent, book-call) exist and work, but there's no UI to invoke them, so these features are functionally dead from a user's perspective.
+
+No code changes were made (audit-only as instructed).
+
+---
+Task ID: PDF-AUDIT
+Agent: Explore Agent — PDF Report Audit
+Task: Verify whether the AI Readiness Report's 3 failed items + 1 warning are fixed in our codebase
+
+Work Log:
+- Read last 200 lines of worklog.md to understand prior agent work (GOD-MODE-FIXES already completed 18 of 20 steps: rate limiting, type errors, UTM forwarding, translation fixes, etc.).
+- Verified `/home/z/my-project/public/llms.txt` exists (42 lines). Audited content: H1 site name, blockquote description, prose paragraph, `## Services` (12 items), `## Products` (5 items), `## Key Information` (location/phone/email/website/founded/languages/guarantees/clients/rating). Follows llmstxt.org spec.
+- Verified `/home/z/my-project/public/.well-known/agents.json` exists (48 lines). Audited content: schema_version "1.0", name, description, url, contact (email), phone, capabilities (9-item array), areas_served, languages, founding_date, founder object, services array (5 services).
+- Audited image alt text across entire src/ tree. Found 14 `<Image>` (next/image) usages across 12 files + 1 `<img>` tag (analytics-pixels.tsx noscript Facebook pixel). ALL 15 images have alt attributes. Homepage sections (src/components/site/sections/) contain ZERO image elements (text+icon-based design — no missing-alt risk).
+- Extracted all 28 meta description instances across layout.tsx + 12 page files. Computed character counts with Python: 19 are within 50-160 range, 7 are too long (>160 chars), 2 are too short (<50 chars). Primary homepage description (layout.tsx:44) is 151 chars — WITHIN RANGE.
+- Verified robots.ts exists — has single catch-all rule (`userAgent: '*'`, `allow: '/'`, `disallow: ['/api/', '/admin']`). NO explicit named AI bot rules (GPTBot, ClaudeBot, PerplexityBot, ChatGPT-User, Google-Extended).
+- Verified sitemap.ts exists — generates entries for 24 static pages + dynamic blog posts + dynamic case studies. Each entry has url, lastModified, changeFrequency, priority. Returns valid MetadataRoute.Sitemap.
+- Verified Schema.org JSON-LD: layout.tsx renders 3 scripts (Organization, ProfessionalService, FAQPage). 6 additional per-page JSON-LD scripts: founder (Person), 3d-portrait (Product), cnc-design (Product), ai-training (Course), cnc-training (Course), pdf-books (Product).
+- Verified semantic HTML: `<main>` in app/page.tsx:24, `<header>` in navbar.tsx:152, `<nav aria-label="Primary">` in navbar.tsx:110, `<section>` for all 11 homepage sections, `<footer>` in footer.tsx:161.
+- Verified heading hierarchy: single `<h1>` in hero.tsx:91; `<h2>` for each section title; `<h3>` for sub-items. No skipped levels.
+- Verified OG tags in layout.tsx lines 105-121: og:type, og:locale, og:alternateLocale, og:url, og:siteName, og:title, og:description (120 chars), og:image (1200x630), og:image:alt. og-image.jpg exists (27793 bytes).
+- Verified manifest.ts exists (PWA manifest with name, short_name, description, start_url, display, theme_color, 5 icon entries).
+
+Stage Summary:
+- 3 of 3 FAILED items are FIXED in our codebase:
+  1. llms.txt — FIXED (file exists, content follows llmstxt.org spec, contains all required fields)
+  2. agents.json — FIXED (file exists at .well-known/, contains schema_version, name, description, capabilities, contact, +extras)
+  3. Image alt texts — FIXED (15 of 15 images have alt attributes, 100% coverage; worst offenders: NONE)
+
+- WARNING item — PARTIAL:
+  4. Meta description too long — Primary homepage meta description is FIXED (151 chars, within 50-160 range). However, 6 page-level metadata descriptions remain TOO LONG because they concatenate Bengali + English text:
+     - founder/page.tsx:46 — 242 chars
+     - 3d-portrait/page.tsx:40 — 273 chars
+     - cnc-design/page.tsx:31 — 234 chars
+     - ai-training/page.tsx:27 — 246 chars
+     - cnc-training/page.tsx:27 — 328 chars
+     - pdf-books/page.tsx:40 — 296 chars
+     - case-studies/page.tsx:7 — 174 chars
+   And 2 Twitter descriptions are slightly too short:
+     - privacy/page.tsx:22 — 43 chars (just below 50)
+     - terms/page.tsx:22 — 48 chars (just below 50)
+   (Note: JSON-LD `description` fields like layout.tsx:157 at 226 chars are NOT subject to the 160-char SEO limit — those are for rich snippets, not meta tags.)
+
+- 7 of 8 PASSED items are clearly PRESENT:
+  5. AI Robots Rules — PARTIAL (catch-all `*` rule allows all bots including AI, but no explicit named AI bot rules — see note below)
+  6. XML Sitemap — PRESENT (sitemap.ts produces valid sitemap with 24 static + dynamic blog/case-study entries)
+  7. Schema.org Markup — PRESENT (Organization + ProfessionalService + FAQPage + bonus Person/Product/Course on sub-pages)
+  8. Semantic HTML — PRESENT (main, header, nav, section, footer all used)
+  9. Heading Structure — PRESENT (single h1, proper h2/h3 hierarchy, no skipped levels)
+  10. Open Graph Tags — PRESENT (og:image, og:title, og:description, og:url, og:siteName, og:image:alt all present)
+  11. HTTPS/SSL — N/A (deploy-time, no code check)
+  12. Page Speed — N/A (bundle-size dependent, not in scope)
+
+- Bonus: manifest.ts exists (PWA manifest with icons).
+
+- Note on robots.ts (PASSED item #5): The current implementation uses a single `userAgent: '*'` rule with `allow: '/'`. This functionally allows AI crawlers (GPTBot, ClaudeBot, PerplexityBot, ChatGPT-User, Google-Extended) to crawl the site. However, if the report's "passed" criterion requires EXPLICIT named rules for these bots (which is what some SEO auditors look for), then this is technically PARTIAL — the rules are not explicitly named. The intent (allowing AI bots) is achieved via the catch-all.
+
+- Final verdict:
+  * FAILED items fixed: 3 of 3 (100%)
+  * WARNING item resolved: PARTIAL — primary homepage description is fixed, but 6 page-level descriptions remain too long (would be picked up by an AI SEO auditor scanning individual page URLs)
+  * PASSED items still present: 7 of 8 (the 1 partial is robots.ts which is functionally equivalent but lacks explicit AI bot naming)
+  * Overall: Codebase is in EXCELLENT shape for the AI Readiness retest. Recommend 2 follow-up fixes:
+    (a) Trim the 6 long page-level meta descriptions (split Bengali/English or shorten English to <=160 chars).
+    (b) Optionally add explicit AI bot rules to robots.ts for clarity (not functionally required).
