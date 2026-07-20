@@ -29,10 +29,10 @@ import { SITE_CONFIG } from '@/lib/site-data'
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 const COMPANY_LINKS = [
-  { key: 'footer.about', href: '#' },
-  { key: 'footer.careers', href: '#' },
-  { key: 'footer.blog', href: '#' },
-  { key: 'footer.caseStudies', href: '#' },
+  { key: 'footer.about', href: '/founder' },
+  { key: 'footer.careers', href: 'mailto:nextgendigitalstudio1@gmail.com?subject=Career%20Inquiry%20%E2%80%94%20NextGen%20Digital%20Studio' },
+  { key: 'footer.blog', href: '/blog' },
+  { key: 'footer.caseStudies', href: '/case-studies' },
 ]
 
 const SERVICE_KEYS = [
@@ -292,11 +292,11 @@ export function SiteFooter() {
               © {year} NextGen Digital Studio. {t('footer.rights')}
             </span>
             <span className="mx-1 hidden text-border md:inline">|</span>
-            <a href="#" className="transition-colors hover:text-primary">
+            <a href="/privacy" className="transition-colors hover:text-primary">
               {t('footer.privacy')}
             </a>
             <span className="mx-1 hidden text-border md:inline">|</span>
-            <a href="#" className="transition-colors hover:text-primary">
+            <a href="/terms" className="transition-colors hover:text-primary">
               {t('footer.terms')}
             </a>
           </div>

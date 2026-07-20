@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: "API Documentation",
   description: "NextGen Digital Studio API documentation — endpoints, methods, and examples for integrating with our AI automation platform.",
   robots: { index: true, follow: true },
+  alternates: { canonical: "https://nextgendigitalstudio.com/docs" },
 }
 
 export default function DocsPage() {

@@ -106,7 +106,7 @@ export function Solution() {
       <Reveal delay={0.2} className="mt-14 flex justify-center">
         <Button
           variant="outline"
-          onClick={() => scrollToId('how')}
+          onClick={() => scrollToId('services')}
           className="h-12 px-7 border-emerald-500/40 text-foreground hover:bg-emerald-500/10 hover:text-foreground"
           size="lg"
         >

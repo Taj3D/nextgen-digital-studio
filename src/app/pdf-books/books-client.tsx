@@ -11,12 +11,12 @@ import {
   usePageViewTracking,
 } from '@/components/site/landing-common'
 import { useLang } from '@/components/site/language-provider'
-import { siteConfig } from '@/lib/site-data'
+import { PaymentInstructions } from '@/components/site/payment-instructions'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
-import { BookOpen, Check, Gift, Download, Star, Loader2, CheckCircle2, ArrowRight, Heart, Brain, DollarSign, Building, User, TrendingUp } from 'lucide-react'
+import { BookOpen, Gift, Download, Star, Loader2, CheckCircle2, ArrowRight, Brain, DollarSign, Building, User, TrendingUp } from 'lucide-react'
 import { toast } from 'sonner'
 
 type Book = {
@@ -90,6 +90,12 @@ const BOOKS: Book[] = [
 ]
 
 const ALL_FIVE_PRICE = 850
+
+/** Convert ASCII digits to Bengali digits when lang === 'bn'. */
+const bn = (s: string | number, isBn: boolean) =>
+  isBn
+    ? String(s).replace(/[0-9]/g, (d) => '০১২৩৪৫৬৭৮৯'[Number(d)])
+    : String(s)
 
 export function BooksClient() {
   const { lang } = useLang()
@@ -174,8 +180,8 @@ export function BooksClient() {
                   <p className="mt-2 text-sm text-muted-foreground">{isBn ? b.descBn : b.descEn}</p>
                   <div className="mt-4 flex items-center justify-between">
                     <div className="flex items-baseline gap-2">
-                      <span className="text-2xl font-extrabold">৳170</span>
-                      <span className="text-xs text-muted-foreground line-through">৳350</span>
+                      <span className="text-2xl font-extrabold">৳{bn('170', isBn)}</span>
+                      <span className="text-xs text-muted-foreground line-through">৳{bn('350', isBn)}</span>
                     </div>
                     <a
                       href="#order-form"
@@ -217,8 +223,8 @@ export function BooksClient() {
               </div>
               <div className="flex items-center gap-4">
                 <div className="text-right">
-                  <div className="text-3xl font-extrabold text-rose-600 dark:text-rose-400">৳850</div>
-                  <div className="text-xs text-muted-foreground line-through">৳1,750</div>
+                  <div className="text-3xl font-extrabold text-rose-600 dark:text-rose-400">৳{bn('850', isBn)}</div>
+                  <div className="text-xs text-muted-foreground line-through">৳{bn('1,750', isBn)}</div>
                 </div>
                 <a
                   href="#order-form"
@@ -372,6 +378,13 @@ function BookOrderForm({
             ? `আপনার অর্ডার: ${selectedLabel}। আমাদের টিম ২ ঘন্টার মধ্যে যোগাযোগ করবে।`
             : `Your order: ${selectedLabel}. Our team will contact you within 2 hours.`}
         </p>
+        <div className="w-full max-w-md text-left">
+          <PaymentInstructions
+            isBn={isBn}
+            amount={selectedBook === 'all' ? 850 : 170}
+            note={isBn ? 'পেমেন্টের পর ডাউনলোড লিংক পাবেন' : 'Download link sent after payment'}
+          />
+        </div>
         <Button variant="outline" className="mt-4" onClick={() => setDone(false)}>
           {isBn ? 'আরেকটি অর্ডার' : 'Send another order'}
         </Button>

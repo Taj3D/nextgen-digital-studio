@@ -6,6 +6,7 @@ import Image from "next/image"
 import {
   ArrowLeft, Copy, Check, Terminal, Webhook, Database, Bot,
   Mail, Calendar, FileDown, Users, MessageSquare, ExternalLink,
+  TrendingUp,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -186,6 +187,78 @@ const endpoints: Endpoint[] = [
   },
   {
     method: "GET",
+    path: "/api/leads/[id]",
+    title: "Get Lead",
+    desc: "Fetch a single lead by ID, including status, notes, and assignment.",
+    icon: Database,
+    response: `{
+  "ok": true,
+  "lead": {
+    "id": "cmqy...",
+    "name": "Tanvir Ahmed",
+    "email": "tanvir@example.com",
+    "phone": "+8801712345678",
+    "status": "new",
+    "source": "contact_form",
+    "createdAt": "2025-01-15T08:30:00.000Z"
+  }
+}`,
+  },
+  {
+    method: "POST",
+    path: "/api/leads/bulk",
+    title: "Bulk Lead Action",
+    desc: "Apply an action (status change, assign, delete) to up to 500 leads at once.",
+    icon: Users,
+    body: `{
+  "ids": ["cmqy1...", "cmqy2..."],
+  "action": "status",
+  "value": "qualified"
+}`,
+    response: `{ "ok": true, "affected": 2 }`,
+  },
+  {
+    method: "POST",
+    path: "/api/track",
+    title: "Track Event",
+    desc: "Fire a tracking event (page_view, lead, purchase, whatsapp_click, etc.) for GA4 / Meta / TikTok / Snapchat Conversions API.",
+    icon: TrendingUp,
+    body: `{
+  "type": "lead",
+  "page": "/",
+  "source": "homepage_lead_form",
+  "email": "user@example.com",
+  "phone": "+8801712345678"
+}`,
+    response: `{ "ok": true, "id": "cmqy..." }`,
+  },
+  {
+    method: "GET",
+    path: "/api/track/stats",
+    title: "Tracking Stats",
+    desc: "Aggregated tracking event counts (cached 30s) plus per-platform Conversions API connection flags.",
+    icon: TrendingUp,
+    response: `{
+  "ok": true,
+  "stats": { "page_view": 1240, "lead": 38, "whatsapp_click": 92 },
+  "platforms": { "facebook": false, "tiktok": false, "snapchat": false, "google": false }
+}`,
+  },
+  {
+    method: "POST",
+    path: "/api/send-email",
+    title: "Send Email Notification",
+    desc: "Internal endpoint that logs a lead notification email (placeholder for SendGrid/Resend integration).",
+    icon: Mail,
+    body: `{
+  "to": "owner@example.com",
+  "subject": "New Lead: Tanvir Ahmed",
+  "body": "Lead details..."
+}`,
+    response: `{ "ok": true, "message": "Email notification logged" }`,
+  },
+  {
+    method: "GET",
     path: "/api/leads/export",
     title: "Export Leads (CSV)",
     desc: "Download all leads (filtered) as a CSV file. Supports source & status query params.",
@@ -250,7 +323,7 @@ export function ApiDocs() {
             All POST endpoints require a JSON body with <code className="rounded bg-muted px-1.5 py-0.5 text-xs">Content-Type: application/json</code>.
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
-            <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-600">12 Endpoints</span>
+            <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-600">17 Endpoints</span>
             <span className="rounded-full bg-blue-500/10 px-3 py-1 text-xs font-semibold text-blue-600">7 Lead Sources</span>
             <span className="rounded-full bg-violet-500/10 px-3 py-1 text-xs font-semibold text-violet-600">AI-Powered</span>
           </div>

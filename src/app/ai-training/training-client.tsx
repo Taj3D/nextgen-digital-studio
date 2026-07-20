@@ -68,6 +68,12 @@ export function TrainingClient() {
   const isBn = lang === 'bn'
   usePageViewTracking('ai_training_page')
 
+  /** Convert ASCII digits to Bengali digits when lang === 'bn'. */
+  const bn = (s: string | number) =>
+    isBn
+      ? String(s).replace(/[0-9]/g, (d) => '০১২৩৪৫৬৭৮৯'[Number(d)])
+      : String(s)
+
   return (
     <div className="relative flex min-h-screen flex-col bg-background">
       <TopBar />
@@ -121,7 +127,7 @@ export function TrainingClient() {
               <div className="flex items-center gap-2 rounded-2xl border-2 border-blue-500 bg-blue-50 px-4 py-3 dark:bg-blue-950/30">
                 <div className="text-left">
                   <div className="text-xs text-muted-foreground">{isBn ? 'ফি' : 'Fee'}</div>
-                  <div className="text-sm font-bold text-blue-700 dark:text-blue-300">৳1,000</div>
+                  <div className="text-sm font-bold text-blue-700 dark:text-blue-300">৳{bn('1,000')}</div>
                 </div>
               </div>
             </div>
@@ -223,8 +229,8 @@ export function TrainingClient() {
           <div className="rounded-3xl border-2 border-blue-500/40 bg-gradient-to-br from-blue-50 to-cyan-50 p-8 text-center shadow-xl dark:from-blue-950/30 dark:to-cyan-950/20">
             <LandingEyebrow>{isBn ? 'মূল্য' : 'Price'}</LandingEyebrow>
             <div className="mt-4 flex items-baseline justify-center gap-3">
-              <span className="text-6xl font-extrabold text-blue-600 dark:text-blue-400">৳1,000</span>
-              <span className="text-lg text-muted-foreground line-through">৳3,000</span>
+              <span className="text-6xl font-extrabold text-blue-600 dark:text-blue-400">৳{bn('1,000')}</span>
+              <span className="text-lg text-muted-foreground line-through">৳{bn('3,000')}</span>
               <span className="rounded-full bg-emerald-500/15 px-2 py-0.5 text-xs font-bold text-emerald-600">
                 {isBn ? '৬৭% ছাড়' : '67% OFF'}
               </span>
@@ -324,7 +330,7 @@ export function TrainingClient() {
                   : 'Fill the form below, then pay 1000TK. Zoom link sent on WhatsApp.'}
               </p>
               <div className="mt-4 inline-flex items-baseline gap-1">
-                <span className="text-4xl font-extrabold">৳1,000</span>
+                <span className="text-4xl font-extrabold">৳{bn('1,000')}</span>
                 <span className="text-sm text-muted-foreground">/{isBn ? 'সম্পূর্ণ কোর্স' : 'full course'}</span>
               </div>
             </div>
@@ -371,7 +377,7 @@ export function TrainingClient() {
                 : 'For just 1000TK, in 1 week, learn hands-on to build software with AI.'}
             </p>
             <a
-              href="#top"
+              href="#order"
               className="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-7 py-3 text-sm font-bold text-blue-600 shadow-lg transition-transform hover:scale-105"
             >
               {isBn ? 'এখনই রেজিস্টার করুন' : 'Register Now'}

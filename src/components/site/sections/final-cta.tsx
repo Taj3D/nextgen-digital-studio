@@ -171,8 +171,8 @@ export function FinalCta() {
               className="h-14 min-w-[16rem] px-8 text-base border-amber-400/40 text-foreground hover:bg-amber-400/10 hover:text-foreground w-full sm:w-auto"
               size="lg"
             >
-              <a href={waLink()} target="_blank" rel="noopener noreferrer">
-                <MessageCircle className="h-5 w-5 text-amber-400" />
+              <a href="#pricing" onClick={(e) => { e.preventDefault(); const el = document.getElementById('pricing'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}>
+                <ArrowRight className="h-5 w-5 text-amber-400" />
                 {t('final.ctaSecondary')}
               </a>
             </Button>

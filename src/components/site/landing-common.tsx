@@ -107,6 +107,15 @@ export function LandingLeadForm({
     setSubmitting(true)
     const form = e.currentTarget
     const fd = new FormData(form)
+    // Honeypot — bot bait: silently show success without hitting the API
+    const website = String(fd.get('website') ?? '').trim()
+    if (website) {
+      setDone(true)
+      toast.success(isBn ? 'সফলভাবে জমা হয়েছে!' : 'Submission successful!')
+      setSubmitting(false)
+      form.reset()
+      return
+    }
     const payload = {
       name: String(fd.get('name') ?? '').trim(),
       email: String(fd.get('email') ?? '').trim(),
@@ -184,6 +193,15 @@ export function LandingLeadForm({
 
   return (
     <form onSubmit={onSubmit} className={`grid gap-4 ${className}`}>
+      {/* Honeypot — visually hidden, never visible to humans */}
+      <input
+        type="text"
+        name="website"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden
+        className="absolute -left-[9999px] top-auto h-0 w-0 opacity-0"
+      />
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-1.5">
           <Label htmlFor="ld-name">{isBn ? 'নাম *' : 'Full name *'}</Label>

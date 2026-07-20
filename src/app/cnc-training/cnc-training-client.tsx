@@ -29,6 +29,12 @@ export function CncTrainingClient() {
   const isBn = lang === 'bn'
   usePageViewTracking('cnc_training_page')
 
+  /** Convert ASCII digits to Bengali digits when lang === 'bn'. */
+  const bn = (s: string | number) =>
+    isBn
+      ? String(s).replace(/[0-9]/g, (d) => '০১২৩৪৫৬৭৮৯'[Number(d)])
+      : String(s)
+
   return (
     <div className="relative flex min-h-screen flex-col bg-background">
       <TopBar />
@@ -79,7 +85,7 @@ export function CncTrainingClient() {
               <div className="flex items-center gap-2 rounded-2xl border-2 border-amber-500 bg-amber-50 px-4 py-3 dark:bg-amber-950/30">
                 <div className="text-left">
                   <div className="text-xs text-muted-foreground">{isBn ? 'ফি' : 'Fee'}</div>
-                  <div className="text-sm font-bold text-amber-700 dark:text-amber-300">৳250</div>
+                  <div className="text-sm font-bold text-amber-700 dark:text-amber-300">৳{bn('250')}</div>
                 </div>
               </div>
             </div>
@@ -96,7 +102,7 @@ export function CncTrainingClient() {
           <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-center gap-2 px-4 text-center text-sm font-semibold text-white">
             <Gift className="h-4 w-4" />
             {isBn
-              ? 'রেজিস্টার করলেই একটি সম্পূর্ণ chair leg design ফাইল ফ্রি পাবেন (মূল্য ৳৩০০)!'
+              ? `রেজিস্টার করলেই একটি সম্পূর্ণ chair leg design ফাইল ফ্রি পাবেন (মূল্য ৳${bn('300')})!`
               : 'Register now and get a complete chair leg design file for free (worth 300TK)!'}
           </div>
         </section>
@@ -179,7 +185,7 @@ export function CncTrainingClient() {
                   : 'Fill the form. We will reach out within 2 hours with payment + Zoom link + free chair leg file.'}
               </p>
               <div className="mt-4 inline-flex items-baseline gap-1">
-                <span className="text-4xl font-extrabold">৳250</span>
+                <span className="text-4xl font-extrabold">৳{bn('250')}</span>
                 <span className="text-sm text-muted-foreground">/{isBn ? 'সম্পূর্ণ কোর্স' : 'full course'}</span>
               </div>
             </div>

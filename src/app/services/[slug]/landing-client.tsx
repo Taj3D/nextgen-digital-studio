@@ -25,13 +25,19 @@ type LandingClientProps = {
 }
 
 export function LandingClient({ slug, title, short, description, features, gradient }: LandingClientProps) {
-  const { lang } = useLang()
+  const { lang, tr } = useLang()
   const isBn = lang === 'bn'
   // Look up the icon on the client (Lucide icons are functions and can't be
   // serialised across the Server→Client boundary).
   const service = services.find((s) => s.slug === slug)
   const Icon = service?.icon ?? Sparkles
   usePageViewTracking('service_detail_page', { slug })
+
+  // Pick BN copy from the contentBn dictionary when lang === 'bn'; falls back to EN.
+  const localisedTitle = tr(title)
+  const localisedShort = tr(short)
+  const localisedDescription = tr(description)
+  const localisedFeatures = features.map((f) => tr(f))
 
   return (
     <div className="relative flex min-h-screen flex-col bg-background">
@@ -50,14 +56,14 @@ export function LandingClient({ slug, title, short, description, features, gradi
                 <Sparkles className="h-3 w-3" /> {isBn ? 'NextGen সেবা' : 'NextGen Service'}
               </LandingEyebrow>
               <h1 className="mt-4 font-heading text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
-                {title}
+                {localisedTitle}
               </h1>
               <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-muted-foreground">
-                {description}
+                {localisedDescription}
               </p>
 
               <ul className="mt-6 grid gap-2 text-sm">
-                {features.map((f) => (
+                {localisedFeatures.map((f) => (
                   <li key={f} className="flex items-center gap-2">
                     <Check className="h-4 w-4 text-blue-600" /> {f}
                   </li>
@@ -81,7 +87,7 @@ export function LandingClient({ slug, title, short, description, features, gradi
                 <h2 className="mt-5 font-heading text-2xl font-bold">
                   {isBn ? 'এই সেবায় যা পাবেন' : 'What this service includes'}
                 </h2>
-                <p className="mt-2 text-sm text-muted-foreground">{short}</p>
+                <p className="mt-2 text-sm text-muted-foreground">{localisedShort}</p>
                 <div className="mt-5 grid grid-cols-3 gap-3 text-center">
                   <div className="rounded-xl bg-muted/60 p-3">
                     <Zap className="mx-auto h-5 w-5 text-blue-600" />
@@ -113,11 +119,11 @@ export function LandingClient({ slug, title, short, description, features, gradi
             <div className="text-center">
               <LandingEyebrow>{isBn ? 'সুবিধা' : 'Benefits'}</LandingEyebrow>
               <h2 className="mt-4 font-heading text-3xl font-bold sm:text-4xl">
-                {isBn ? `${title} কেন বেছে নেবেন` : `Why choose ${title}`}
+                {isBn ? `${localisedTitle} কেন বেছে নেবেন` : `Why choose ${localisedTitle}`}
               </h2>
             </div>
             <div className="mt-8 grid gap-6 sm:grid-cols-2 md:grid-cols-3">
-              {features.map((f, i) => (
+              {localisedFeatures.map((f, i) => (
                 <div key={f} className="rounded-2xl border border-border/60 bg-background p-6 shadow-sm">
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500 text-white">
                     <Check className="h-5 w-5" />
@@ -148,15 +154,15 @@ export function LandingClient({ slug, title, short, description, features, gradi
             </h2>
             <p className="mx-auto mt-3 max-w-xl text-sm text-blue-50">
               {isBn
-                ? `${title} সেবা নিয়ে আপনার ব্যবসার জন্য একটি কাস্টম AI রোডম্যাপ পান। ৩০ মিনিট ফ্রি কথা বলুন।`
-                : `Get a custom AI roadmap for your business with ${title}. 30-minute free call.`}
+                ? `${localisedTitle} সেবা নিয়ে আপনার ব্যবসার জন্য একটি কাস্টম AI রোডম্যাপ পান। ৩০ মিনিট ফ্রি কথা বলুন।`
+                : `Get a custom AI roadmap for your business with ${localisedTitle}. 30-minute free call.`}
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
               <a
                 href={`https://wa.me/8801711731354?text=${encodeURIComponent(
                   isBn
-                    ? `আসসালামু আলাইকুম, আমি ${title} সেবা সম্পর্কে জানতে চাই।`
-                    : `Hi, I'd like to know more about ${title}.`,
+                    ? `আসসালামু আলাইকুম, আমি ${localisedTitle} সেবা সম্পর্কে জানতে চাই।`
+                    : `Hi, I'd like to know more about ${localisedTitle}.`,
                 )}`}
                 target="_blank"
                 rel="noreferrer"
@@ -175,7 +181,7 @@ export function LandingClient({ slug, title, short, description, features, gradi
             <div className="text-center">
               <LandingEyebrow>{isBn ? 'অনুরোধ করুন' : 'Request a Call'}</LandingEyebrow>
               <h2 className="mt-4 font-heading text-3xl font-bold">
-                {isBn ? `${title} এর জন্য যোগাযোগ করুন` : `Get ${title}`}
+                {isBn ? `${localisedTitle} এর জন্য যোগাযোগ করুন` : `Get ${localisedTitle}`}
               </h2>
               <p className="mt-2 text-sm text-muted-foreground">
                 {isBn
@@ -187,7 +193,7 @@ export function LandingClient({ slug, title, short, description, features, gradi
               <LandingLeadForm
                 isBn={isBn}
                 source={`service_${slug}`}
-                serviceName={title}
+                serviceName={localisedTitle}
                 submitLabel={isBn ? 'অনুরোধ পাঠান' : 'Send Request'}
               />
             </div>

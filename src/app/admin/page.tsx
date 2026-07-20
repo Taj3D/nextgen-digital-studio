@@ -37,10 +37,18 @@ type Stats = {
 
 const sourceLabels: Record<string, { label: string; icon: typeof Mail; color: string }> = {
   contact_form: { label: 'Contact Form', icon: Mail, color: 'bg-blue-500' },
+  homepage_lead_form: { label: 'Homepage Lead Form', icon: Mail, color: 'bg-blue-600' },
   strategy_call: { label: 'Strategy Call', icon: Calendar, color: 'bg-violet-500' },
   ai_audit_tool: { label: 'AI Audit', icon: TrendingUp, color: 'bg-amber-500' },
   free_tools_download: { label: 'Free Tools', icon: Download, color: 'bg-emerald-500' },
   ai_chat_widget: { label: 'AI Chat', icon: Bot, color: 'bg-cyan-500' },
+  ai_training_page: { label: 'AI Training', icon: Users, color: 'bg-indigo-500' },
+  cnc_training_page: { label: 'CNC Training', icon: Users, color: 'bg-amber-600' },
+  cnc_design_page: { label: 'CNC Design Bundle', icon: Filter, color: 'bg-orange-500' },
+  '3d_portrait_page': { label: '3D Portrait', icon: Bot, color: 'bg-violet-600' },
+  pdf_books_page: { label: 'PDF Books', icon: Download, color: 'bg-rose-500' },
+  founder_page: { label: 'Founder Page', icon: Phone, color: 'bg-cyan-600' },
+  careers_application: { label: 'Careers', icon: Users, color: 'bg-teal-500' },
 }
 
 const statusColors: Record<string, string> = {

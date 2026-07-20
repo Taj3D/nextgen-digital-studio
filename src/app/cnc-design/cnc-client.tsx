@@ -13,7 +13,7 @@ import {
   usePageViewTracking,
 } from '@/components/site/landing-common'
 import { useLang } from '@/components/site/language-provider'
-import { Check, Clock, Tag, Download, HardDrive, Boxes, DoorOpen, Sofa, BedDouble, Archive, Armchair, Table2, LayoutGrid, ShieldCheck, Phone } from 'lucide-react'
+import { Check, Clock, Tag, Download, HardDrive, Boxes, DoorOpen, Sofa, BedDouble, Archive, Armchair, Table2, LayoutGrid } from 'lucide-react'
 
 /* 8 design categories with counts */
 const CATEGORIES = [
@@ -38,6 +38,12 @@ export function CncClient() {
   const { lang } = useLang()
   const isBn = lang === 'bn'
   usePageViewTracking('cnc_design_page')
+
+  /** Convert ASCII digits to Bengali digits when lang === 'bn'. */
+  const bn = (s: string | number) =>
+    isBn
+      ? String(s).replace(/[0-9]/g, (d) => '০১২৩৪৫৬৭৮৯'[Number(d)])
+      : String(s)
 
   return (
     <div className="relative flex min-h-screen flex-col bg-background">
@@ -72,8 +78,8 @@ export function CncClient() {
                   : '2500+ CNC designs, 150GB, 2D + 3D files — for just 150TK. Doors, sofa, bed, wardrobe and all categories. Order today!'}
               </p>
               <div className="mt-6 flex items-baseline gap-3">
-                <span className="text-5xl font-extrabold">৳150</span>
-                <span className="text-lg text-muted-foreground line-through">৳1,500</span>
+                <span className="text-5xl font-extrabold">৳{bn('150')}</span>
+                <span className="text-lg text-muted-foreground line-through">৳{bn('1,500')}</span>
                 <span className="rounded-full bg-emerald-500/15 px-2 py-0.5 text-xs font-bold text-emerald-600">
                   -90%
                 </span>
@@ -116,7 +122,7 @@ export function CncClient() {
                     </p>
                     <p className="font-heading text-xl font-bold">150GB · 2500+ files</p>
                   </div>
-                  <div className="rounded-full bg-amber-500 px-3 py-1 text-sm font-bold">৳150</div>
+                  <div className="rounded-full bg-amber-500 px-3 py-1 text-sm font-bold">৳{bn('150')}</div>
                 </div>
               </div>
             </div>
@@ -198,8 +204,8 @@ export function CncClient() {
           <div className="rounded-3xl border-2 border-amber-500/40 bg-gradient-to-br from-amber-50 to-orange-50 p-8 text-center shadow-xl dark:from-amber-950/30 dark:to-orange-950/20">
             <LandingEyebrow>{isBn ? 'মূল্য' : 'Price'}</LandingEyebrow>
             <div className="mt-4 flex items-baseline justify-center gap-3">
-              <span className="text-6xl font-extrabold text-amber-600 dark:text-amber-400">৳150</span>
-              <span className="text-lg text-muted-foreground line-through">৳1,500</span>
+              <span className="text-6xl font-extrabold text-amber-600 dark:text-amber-400">৳{bn('150')}</span>
+              <span className="text-lg text-muted-foreground line-through">৳{bn('1,500')}</span>
               <span className="rounded-full bg-emerald-500/15 px-2 py-0.5 text-xs font-bold text-emerald-600">
                 -90%
               </span>
@@ -251,7 +257,7 @@ export function CncClient() {
                   : 'Fill the form, then pay 150TK. Download link sent on WhatsApp.'}
               </p>
               <div className="mt-4 inline-flex items-baseline gap-1">
-                <span className="text-4xl font-extrabold">৳150</span>
+                <span className="text-4xl font-extrabold">৳{bn('150')}</span>
                 <span className="text-sm text-muted-foreground">/{isBn ? 'সম্পূর্ণ বান্ডল' : 'full bundle'}</span>
               </div>
             </div>

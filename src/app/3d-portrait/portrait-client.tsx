@@ -14,7 +14,7 @@ import {
 } from '@/components/site/landing-common'
 import { useLang } from '@/components/site/language-provider'
 import { siteConfig } from '@/lib/site-data'
-import { Check, Sparkles, Heart, Clock, ShieldCheck, Camera, MessageCircle, Flame, Ruler, Layers, ArrowRight } from 'lucide-react'
+import { Sparkles, Heart, Clock, ShieldCheck, Camera, Flame, Ruler, Layers, ArrowRight } from 'lucide-react'
 
 /* -------------------------------------------------------------------------- */
 /*  Pricing data — 3 materials × 5 face counts = 15 tiers                    */
@@ -72,6 +72,12 @@ export function PortraitClient() {
   const isBn = lang === 'bn'
   usePageViewTracking('3d_portrait_page')
 
+  /** Convert ASCII digits to Bengali digits when lang === 'bn'. */
+  const bn = (s: string | number) =>
+    isBn
+      ? String(s).replace(/[0-9]/g, (d) => '০১২৩৪৫৬৭৮৯'[Number(d)])
+      : String(s)
+
   // Live price calculator state
   const [material, setMaterial] = React.useState<MaterialKey>('stl')
   const [faces, setFaces] = React.useState(1)
@@ -113,7 +119,7 @@ export function PortraitClient() {
                 )}
               </h1>
               <p className="mt-2 text-lg font-bold text-violet-600 dark:text-violet-400">
-                {isBn ? 'CNC 3D Face Sculpting' : 'CNC 3D Face Sculpting'}
+                {isBn ? 'সিএনসি ৩ডি ফেস স্কাল্পটিং' : 'CNC 3D Face Sculpting'}
               </p>
               <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-muted-foreground">
                 {isBn
@@ -278,7 +284,7 @@ export function PortraitClient() {
                 {isBn ? 'আপনার নির্বাচিত দাম' : 'Your selected price'}
               </div>
               <div className="mt-1 text-5xl font-extrabold text-violet-600 dark:text-violet-400">
-                ৳{price.toLocaleString('en-US')}
+                ৳{bn(price.toLocaleString('en-US'))}
               </div>
               <div className="mt-2 flex items-center justify-center gap-3 text-sm">
                 <span className="flex items-center gap-1 text-muted-foreground">
@@ -312,10 +318,9 @@ export function PortraitClient() {
             <div className="aspect-video">
               <iframe
                 src="https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fweb.facebook.com%2Fshare%2Fr%2F18yKJ9scJr%2F&show_text=false&width=560&t=0"
-                className="h-full w-full"
+                className="h-full w-full border-0"
                 style={{ border: 'none' }}
                 scrolling="no"
-                frameBorder="0"
                 allowFullScreen
                 allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
                 title="3D Portrait Making Video"
@@ -465,7 +470,7 @@ export function PortraitClient() {
                 <span className="rounded-full bg-fuchsia-100 px-3 py-0.5 font-bold text-fuchsia-700 dark:bg-fuchsia-950/40 dark:text-fuchsia-300">
                   {faces} {isBn ? 'ফেস' : 'face'}{faces > 1 ? (isBn ? '' : 's') : ''}
                 </span>
-                <span className="font-bold text-violet-600 dark:text-violet-400">৳{price.toLocaleString('en-US')}</span>
+                <span className="font-bold text-violet-600 dark:text-violet-400">৳{bn(price.toLocaleString('en-US'))}</span>
               </div>
             </div>
             <div className="mt-8">

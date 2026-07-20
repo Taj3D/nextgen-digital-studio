@@ -23,14 +23,27 @@ const days: DayEntry[] = [
   { titleKey: 'how.day4Title', descKey: 'how.day4Desc' },
 ]
 
-/** Split a "Day N — Title" string into [dayLabel, titleText] using em-dash. */
+/** Split a "Day N: Title" string into [dayLabel, titleText] using colon.
+ *  Translation values use the form "Day 1: Discovery" / "দিন ১: ডিসকভারি"
+ *  (colon separator, not em-dash). Falls back to em-dash for safety. */
 function splitDay(full: string): { dayLabel: string; titleText: string } {
-  const idx = full.indexOf('—')
-  if (idx === -1) return { dayLabel: full, titleText: '' }
-  return {
-    dayLabel: full.slice(0, idx).trim(),
-    titleText: full.slice(idx + 1).trim(),
+  // Try colon-space first (matches actual translation values)
+  const colonIdx = full.indexOf(': ')
+  if (colonIdx !== -1) {
+    return {
+      dayLabel: full.slice(0, colonIdx).trim(),
+      titleText: full.slice(colonIdx + 2).trim(),
+    }
   }
+  // Fallback: em-dash (U+2014) or en-dash (U+2013)
+  const dashIdx = full.indexOf('—') !== -1 ? full.indexOf('—') : full.indexOf('–')
+  if (dashIdx !== -1) {
+    return {
+      dayLabel: full.slice(0, dashIdx).trim(),
+      titleText: full.slice(dashIdx + 1).trim(),
+    }
+  }
+  return { dayLabel: full, titleText: '' }
 }
 
 export function HowItWorks() {

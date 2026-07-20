@@ -8,6 +8,7 @@ import { LegalFooter } from "@/components/site/legal-footer"
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description: "Privacy Policy for NextGen Digital Studio — how we collect, use, and protect your data.",
+  alternates: { canonical: "https://nextgendigitalstudio.com/privacy" },
 }
 
 const sections = [

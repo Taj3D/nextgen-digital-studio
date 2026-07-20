@@ -8,6 +8,7 @@ import { LegalFooter } from "@/components/site/legal-footer"
 export const metadata: Metadata = {
   title: "Terms of Service",
   description: "Terms of Service for NextGen Digital Studio — the terms and conditions for using our services.",
+  alternates: { canonical: "https://nextgendigitalstudio.com/terms" },
 }
 
 const sections = [

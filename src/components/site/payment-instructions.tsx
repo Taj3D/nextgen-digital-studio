@@ -33,6 +33,10 @@ export function PaymentInstructions({
   const bkashNumber = siteConfig.phone.replace(/\s/g, '').replace('+', '')
   const nagadNumber = bkashNumber // same number for Nagad
 
+  // Convert ASCII digits to Bengali numerals (০-৯) for BN mode, keep lakh grouping.
+  const bn = (s: string | number) => String(s).replace(/[0-9]/g, (d) => '০১২৩৪৫৬৭৮৯'[+d])
+  const amountDisplay = isBn ? bn(amount.toLocaleString('en-US')) : amount.toLocaleString('en-US')
+
   return (
     <div className="mt-6 rounded-2xl border-2 border-amber-400/40 bg-gradient-to-br from-amber-50 to-orange-50 p-5 dark:from-amber-950/30 dark:to-orange-950/20">
       <div className="flex items-center gap-2 border-b border-amber-300/40 pb-3">
@@ -55,7 +59,7 @@ export function PaymentInstructions({
             {isBn ? 'পরিশোধযোগ্য মূল্য' : 'Amount to pay'}
           </div>
           <div className="text-4xl font-extrabold text-amber-600 dark:text-amber-400">
-            ৳{amount.toLocaleString('en-US')}
+            ৳{amountDisplay}
           </div>
         </div>
       </div>

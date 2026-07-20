@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { sendToGoogleSheets } from "@/lib/google-sheets";
+import { trackEvent } from "@/lib/tracking";
 
 export const runtime = "nodejs";
 
@@ -13,6 +15,7 @@ export async function POST(req: Request) {
     const service = body.service ? String(body.service).trim() : null;
     const preferredDate = body.date ? String(body.date).trim() : null;
     const message = body.message ? String(body.message).trim() : null;
+    const source = body.source ? String(body.source).trim() : "strategy_call";
 
     if (!name || !email || !phone) {
       return NextResponse.json(
@@ -27,23 +30,29 @@ export async function POST(req: Request) {
       );
     }
 
-    const booking = await db.booking.create({
-      data: {
-        name,
-        email,
-        phone,
-        company: company ?? undefined,
-        service: service ?? undefined,
-        preferredDate: preferredDate ?? undefined,
-        message: message ?? undefined,
-        status: "pending",
-      },
-    });
+    let bookingId = "sheets-only";
+    try {
+      const booking = await db.booking.create({
+        data: {
+          name,
+          email,
+          phone,
+          company: company ?? undefined,
+          service: service ?? undefined,
+          preferredDate: preferredDate ?? undefined,
+          message: message ?? undefined,
+          status: "pending",
+        },
+      });
+      bookingId = booking.id;
+    } catch (dbErr) {
+      console.error("[book-call] DB save failed (lead will still go to Google Sheets)", dbErr);
+    }
 
     // Also create a Lead record so it appears in the admin CRM dashboard.
-    // Log errors (don't swallow silently) so we can diagnose any failure.
+    let leadId = bookingId;
     try {
-      await db.lead.create({
+      const lead = await db.lead.create({
         data: {
           name,
           email,
@@ -51,15 +60,41 @@ export async function POST(req: Request) {
           company: company ?? undefined,
           service: service ?? undefined,
           message: message ?? undefined,
-          source: "strategy_call",
+          source,
           status: "new",
         },
       });
+      leadId = lead.id;
     } catch (leadErr) {
       console.error("[book-call] Lead create failed (booking still saved):", leadErr instanceof Error ? leadErr.message : leadErr);
     }
 
-    return NextResponse.json({ ok: true, id: booking.id });
+    // Google Sheets sync (saves to Sheet + sends email to customer + owner via Apps Script)
+    // Mirrors /api/contact so strategy-call leads reach the same pipeline.
+    sendToGoogleSheets({
+      name,
+      email,
+      phone,
+      company: company ?? "",
+      service: service ?? "",
+      message: message ?? "",
+      source,
+      leadId,
+      submittedAt: new Date().toISOString(),
+    }).catch((err) => console.error("[book-call] google sheets error", err));
+
+    // Fire-and-forget: server-side tracking
+    trackEvent({
+      type: "lead",
+      source,
+      email,
+      phone,
+      name,
+      page: "/api/book-call",
+      meta: { service: service ?? null, leadId, preferredDate: preferredDate ?? null },
+    }).catch((err) => console.error("[book-call] tracking error", err));
+
+    return NextResponse.json({ ok: true, id: bookingId });
   } catch (err) {
     console.error("[book-call] error", err);
     return NextResponse.json(
