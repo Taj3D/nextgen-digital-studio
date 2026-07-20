@@ -1,15 +1,30 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { sendToGoogleSheets } from "@/lib/google-sheets";
+import { trackEvent } from "@/lib/tracking";
+import { normalizeSource } from "@/lib/lead-sources";
+import { normalizePhone } from "@/lib/phone";
 
 export const runtime = "nodejs";
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    const name = String(body.name ?? "").trim();
-    const email = String(body.email ?? "").trim().toLowerCase();
-    const phone = body.phone ? String(body.phone).trim() : "";
-    const resource = String(body.resource ?? "").trim();
+    let body: unknown;
+    try {
+      body = await req.json();
+    } catch {
+      return NextResponse.json(
+        { ok: false, error: "Invalid JSON" },
+        { status: 400 },
+      );
+    }
+
+    const b = body as Record<string, unknown>;
+    const name = String(b.name ?? "").trim();
+    const email = String(b.email ?? "").trim().toLowerCase();
+    const phone = normalizePhone(b.phone ? String(b.phone).trim() : "");
+    const resource = String(b.resource ?? "").trim();
+    const source = normalizeSource(b.source, "free_tools_download");
 
     if (!name || !email || !resource) {
       return NextResponse.json(
@@ -24,17 +39,50 @@ export async function POST(req: Request) {
       );
     }
 
-    const lead = await db.lead.create({
-      data: {
-        name,
-        email,
-        phone: phone || "Not provided",
-        service: `Free Resource: ${resource}`,
-        message: `Downloaded: ${resource}`,
-        source: "free_tools_download",
-        status: "new",
-      },
-    });
+    const service = `Free Resource: ${resource}`;
+    const message = `Downloaded: ${resource}`;
+
+    // Try to save to database (may fail if DB not configured — Google Sheets is the source of truth)
+    let leadId = "sheets-only";
+    try {
+      const lead = await db.lead.create({
+        data: {
+          name,
+          email,
+          phone: phone || "Not provided",
+          service,
+          message,
+          source,
+          status: "new",
+        },
+      });
+      leadId = lead.id;
+    } catch (dbErr) {
+      console.error("[download] DB save failed (lead will still go to Google Sheets)", dbErr);
+    }
+
+    // Google Sheets sync (saves to Sheet + sends email to prospect + owner via Apps Script)
+    sendToGoogleSheets({
+      name,
+      email,
+      phone: phone || "",
+      service,
+      message,
+      source,
+      leadId,
+      submittedAt: new Date().toISOString(),
+    }).catch((err) => console.error("[download] google sheets error", err));
+
+    // Fire-and-forget: server-side tracking (GA4, Meta, TikTok, Snapchat Conversions API)
+    trackEvent({
+      type: "lead",
+      source,
+      email,
+      phone: phone || undefined,
+      name,
+      page: "/api/download",
+      meta: { leadId, resource },
+    }).catch((err) => console.error("[download] tracking error", err));
 
     // Map resource title to downloadable file. The free-tools section uses
     // resource.title as the "resource" field, so we match against known titles.
@@ -48,7 +96,7 @@ export async function POST(req: Request) {
     };
     const downloadUrl = resourceMap[resource] ?? null;
 
-    return NextResponse.json({ ok: true, id: lead.id, downloadUrl });
+    return NextResponse.json({ ok: true, id: leadId, downloadUrl });
   } catch (err) {
     console.error("[download] error", err);
     return NextResponse.json(

@@ -4,8 +4,8 @@ import * as React from "react"
 import Image from "next/image"
 import { motion } from "framer-motion"
 import {
-  Users, Mail, Phone, MessageSquare, Calendar, Download, Bot,
-  TrendingUp, Clock, Filter, RefreshCw, ArrowLeft, ExternalLink,
+  Users, Mail, Phone, Calendar, Download, Bot,
+  TrendingUp, Filter, RefreshCw, ArrowLeft,
   CheckCircle2, AlertCircle,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"

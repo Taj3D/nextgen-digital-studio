@@ -71,7 +71,7 @@ export function TopBar({ className }: { className?: string }) {
             <span className="hidden xs:inline sm:inline">
               {t('cta.bookCall')}
             </span>
-            <span className="xs:hidden sm:hidden sr-only">Book</span>
+            <span className="xs:hidden sm:hidden sr-only">{t('cta.bookCall')}</span>
           </Button>
         </div>
       </div>

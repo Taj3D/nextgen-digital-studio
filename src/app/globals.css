@@ -177,6 +177,16 @@
   }
 }
 
+/* ===== Brand color tokens (gold accent for premium highlights) ===== */
+:root {
+  --gold: oklch(0.78 0.16 75);
+  --gold-soft: oklch(0.78 0.16 75 / 0.12);
+}
+.dark {
+  --gold: oklch(0.83 0.15 75);
+  --gold-soft: oklch(0.83 0.15 75 / 0.18);
+}
+
 /* ===== Brand utilities ===== */
 .font-heading { font-family: "NextGen Bangla", var(--font-sora), var(--font-jakarta), ui-sans-serif, system-ui, sans-serif; }
 .font-body { font-family: "NextGen Bangla", var(--font-inter), ui-sans-serif, system-ui, sans-serif; }
@@ -185,17 +195,74 @@
    so never apply it to text containing digits, hyphens, apostrophes, etc. */
 .font-display { font-family: "NextGen Display", "NextGen Bangla", var(--font-sora), var(--font-jakarta), ui-sans-serif, system-ui, sans-serif; }
 
-.text-gradient {
+/* Gradient text — brand primary → accent. Both .text-gradient (legacy) and
+   .gradient-text (used by hero/pricing/final-cta) resolve to the same look. */
+.text-gradient,
+.gradient-text {
   background: linear-gradient(110deg, oklch(0.546 0.215 262.88) 0%, oklch(0.715 0.143 194) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  color: transparent;
 }
-.dark .text-gradient {
+.dark .text-gradient,
+.dark .gradient-text {
   background: linear-gradient(110deg, oklch(0.7 0.17 259) 0%, oklch(0.78 0.13 194) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Solid brand gradient background (buttons, badges, dividers) */
+.gradient-brand {
+  background: linear-gradient(110deg, oklch(0.546 0.215 262.88) 0%, oklch(0.715 0.143 194) 100%);
+}
+.dark .gradient-brand {
+  background: linear-gradient(110deg, oklch(0.62 0.193 259) 0%, oklch(0.78 0.13 194) 100%);
+}
+
+/* Soft brand gradient (icon tiles, subtle backgrounds) */
+.gradient-brand-soft {
+  background: linear-gradient(135deg, oklch(0.546 0.215 262.88 / 0.12) 0%, oklch(0.715 0.143 194 / 0.16) 100%);
+}
+.dark .gradient-brand-soft {
+  background: linear-gradient(135deg, oklch(0.62 0.193 259 / 0.2) 0%, oklch(0.78 0.13 194 / 0.22) 100%);
+}
+
+/* Glow shadow (logo, premium cards, CTA buttons) */
+.shadow-glow {
+  box-shadow: 0 0 0 1px oklch(0.546 0.215 262.88 / 0.18), 0 18px 50px -12px oklch(0.546 0.215 262.88 / 0.45), 0 6px 18px -6px oklch(0.715 0.143 194 / 0.3);
+}
+.dark .shadow-glow {
+  box-shadow: 0 0 0 1px oklch(0.62 0.193 259 / 0.3), 0 18px 50px -12px oklch(0.62 0.193 259 / 0.55), 0 6px 18px -6px oklch(0.78 0.13 194 / 0.35);
+}
+
+/* Pulsing glow animation (premium CTA buttons) */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 oklch(0.546 0.215 262.88 / 0.55), 0 12px 30px -8px oklch(0.546 0.215 262.88 / 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 10px oklch(0.546 0.215 262.88 / 0), 0 16px 40px -8px oklch(0.546 0.215 262.88 / 0.65);
+  }
+}
+.animate-pulse-glow { animation: pulse-glow 2.4s ease-in-out infinite; }
+.dark .animate-pulse-glow {
+  animation: pulse-glow 2.4s ease-in-out infinite;
+}
+
+/* Gold text accent (premium highlights) */
+.text-gold { color: var(--gold); }
+.border-gold { border-color: var(--gold); }
+.bg-gold { background-color: var(--gold); }
+.bg-gold\/5 { background-color: var(--gold-soft); }
+.border-gold\/30 { border-color: oklch(0.78 0.16 75 / 0.3); }
+
+/* Safe-bottom spacing for fixed elements (mobile safe area) */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  margin-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 .bg-grid {
@@ -291,4 +358,19 @@
 .mask-fade-x {
   -webkit-mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
   mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+}
+
+/* Reduced motion — respect user preferences */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .animate-pulse-glow,
+  .animate-blob,
+  .animate-marquee,
+  .animate-float,
+  .animate-pulse-ring { animation: none !important; }
 }

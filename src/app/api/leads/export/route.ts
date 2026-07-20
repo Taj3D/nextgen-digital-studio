@@ -1,5 +1,7 @@
+import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { requireAuth } from "@/lib/auth";
 
 export const runtime = "nodejs";
 
@@ -13,7 +15,10 @@ function escapeCsv(value: unknown): string {
   return str;
 }
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
+  const authError = requireAuth(req);
+  if (authError) return authError;
+
   try {
     const { searchParams } = new URL(req.url);
     const source = searchParams.get("source");

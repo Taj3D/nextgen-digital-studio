@@ -2,20 +2,32 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { sendToGoogleSheets } from "@/lib/google-sheets";
 import { trackEvent } from "@/lib/tracking";
+import { normalizeSource } from "@/lib/lead-sources";
+import { normalizePhone } from "@/lib/phone";
 
 export const runtime = "nodejs";
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    const name = String(body.name ?? "").trim();
-    const email = String(body.email ?? "").trim().toLowerCase();
-    const phone = String(body.phone ?? "").trim();
-    const company = body.company ? String(body.company).trim() : null;
-    const service = body.service ? String(body.service).trim() : null;
-    const preferredDate = body.date ? String(body.date).trim() : null;
-    const message = body.message ? String(body.message).trim() : null;
-    const source = body.source ? String(body.source).trim() : "strategy_call";
+    let body: unknown;
+    try {
+      body = await req.json();
+    } catch {
+      return NextResponse.json(
+        { ok: false, error: "Invalid JSON" },
+        { status: 400 },
+      );
+    }
+
+    const b = body as Record<string, unknown>;
+    const name = String(b.name ?? "").trim();
+    const email = String(b.email ?? "").trim().toLowerCase();
+    const phone = normalizePhone(String(b.phone ?? "").trim());
+    const company = b.company ? String(b.company).trim() : null;
+    const service = b.service ? String(b.service).trim() : null;
+    const preferredDate = b.date ? String(b.date).trim() : null;
+    const message = b.message ? String(b.message).trim() : null;
+    const source = normalizeSource(b.source, "strategy_call");
 
     if (!name || !email || !phone) {
       return NextResponse.json(

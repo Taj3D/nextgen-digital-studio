@@ -12,7 +12,7 @@ import {
   usePageViewTracking,
 } from '@/components/site/landing-common'
 import { useLang } from '@/components/site/language-provider'
-import { Check, Clock, Calendar, Gift, Layers, PenTool, Boxes, Wrench, Cpu, Award } from 'lucide-react'
+import { Check, Clock, Calendar, Gift, Layers, PenTool, Boxes, Wrench, Cpu, Award, ArrowRight } from 'lucide-react'
 
 const CURRICULUM = [
   { day: 1, t_en: 'CNC Basics & Software', t_bn: 'CNC বেসিক ও সফটওয়্যার', d_en: 'Aspire, Vectric, ArtCAM intro.', d_bn: 'Aspire, Vectric, ArtCAM পরিচিতি।', Icon: Cpu },
@@ -91,6 +91,17 @@ export function CncTrainingClient() {
             </div>
 
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+              <a
+                href="#order"
+                onClick={(e) => {
+                  e.preventDefault()
+                  document.getElementById('order')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                }}
+                className="gradient-brand animate-pulse-glow inline-flex items-center gap-2 rounded-full px-7 py-3 text-sm font-bold text-white shadow-lg shadow-amber-600/25 transition-transform hover:scale-[1.02]"
+              >
+                {isBn ? 'রেজিস্টার করুন' : 'Register Now'}
+                <ArrowRight className="h-4 w-4" />
+              </a>
               <WhatsAppCTA isBn={isBn} />
               <LandingSocials />
             </div>

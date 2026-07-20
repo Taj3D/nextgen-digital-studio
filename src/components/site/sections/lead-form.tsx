@@ -42,6 +42,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { waLink } from '@/lib/whatsapp'
+import { normalizePhone } from '@/lib/phone'
 
 type FormState = 'idle' | 'submitting' | 'success' | 'error'
 
@@ -56,7 +57,12 @@ type LeadValues = {
 }
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-const PHONE_RE = /^(\+?880|0)?1[3-9]\d{8}$/
+// Permissive phone regex — accepts ASCII digits, Bengali digits (০-৯), and
+// the usual punctuation (`+`, `-`, spaces, parens). Bengali digits are
+// normalised to ASCII via `normalizePhone()` before submit so the DB and
+// downstream consumers (Sheets, ad-platform Conversions APIs, dedup queries)
+// always see ASCII. See src/lib/phone.ts and AUDIT-5-i18n I18N-022.
+const PHONE_RE = /^[0-9০-৯+\-\s()]+$/
 
 const SERVICE_OPTIONS = [
   { value: 'lead-capture', key: 'form.serviceLeadCapture' },
@@ -133,7 +139,7 @@ export function LeadForm() {
         body: JSON.stringify({
           name: values.name,
           email: values.email,
-          phone: values.phone,
+          phone: normalizePhone(values.phone),
           company: values.company,
           service: values.service,
           message: values.message,
@@ -168,7 +174,7 @@ export function LeadForm() {
   )
 
   return (
-    <SectionShell id="lead-form" className="relative">
+    <SectionShell id="lead-form" className="relative" aria-label="Lead Form">
       {/* Soft brand glow backdrop */}
       <div
         className="pointer-events-none absolute inset-0 gradient-brand-soft opacity-20"

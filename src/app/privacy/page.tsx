@@ -9,6 +9,18 @@ export const metadata: Metadata = {
   title: "Privacy Policy",
   description: "Privacy Policy for NextGen Digital Studio — how we collect, use, and protect your data.",
   alternates: { canonical: "https://nextgendigitalstudio.com/privacy" },
+  openGraph: {
+    title: "Privacy Policy — NextGen Digital Studio",
+    description: "Privacy Policy for NextGen Digital Studio — how we collect, use, and protect your data.",
+    url: "https://nextgendigitalstudio.com/privacy",
+    siteName: "NextGen Digital Studio",
+    type: "article",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Privacy Policy — NextGen Digital Studio",
+    description: "How we collect, use, and protect your data.",
+  },
 }
 
 const sections = [
@@ -18,7 +30,7 @@ const sections = [
   { title: "৪. তথ্য শেয়ারিং", body: "আমরা আপনার ব্যক্তিগত তথ্য তৃতীয় পক্ষের কাছে বিক্রি করি না। সেবা প্রদানকারী (Google Analytics, হোস্টিং প্রোভাইডার) এবং আইনি প্রয়োজনে তথ্য শেয়ার করতে পারি।" },
   { title: "৫. তথ্য সুরক্ষা", body: "SSL/TLS এনক্রিপশন, ডেটাবেস অ্যাক্সেস সীমিত, নিয়মিত নিরাপত্তা আপডেট, অফিসিয়াল API ব্যবহার, এবং কর্মীদের গোপনীয়তা চুক্তি।" },
   { title: "৬. কুকিজ", body: "প্রয়োজনীয় কুকিজ (ওয়েবসাইট ফাংশনালিটি), অ্যানালিটিক্স কুকিজ (Google Analytics)। আপনি ব্রাউজার সেটিংস থেকে কুকিজ নিয়ন্ত্রণ করতে পারেন।" },
-  { title: "৭. আপনার অধিকার", body: "অ্যাক্সেস, সংশোধন, মুছে ফেলা, অপ্ট-আউট, এবং ডেটা পোর্টেবিলিটি। এই অধিকার ব্যবহার করতে nextgendigitalstudio1@gmail.com এ যোগাযোগ করুন।" },
+  { title: "৭. আপনার অধিকার", body: `অ্যাক্সেস, সংশোধন, মুছে ফেলা, অপ্ট-আউট, এবং ডেটা পোর্টেবিলিটি। এই অধিকার ব্যবহার করতে ${siteConfig.email} এ যোগাযোগ করুন।` },
   { title: "৮. যোগাযোগ", body: `NextGen Digital Studio, ${siteConfig.address}, ইমেইল: ${siteConfig.email}, ফোন: ${siteConfig.phone}` },
 ]
 

@@ -46,38 +46,30 @@ export const staggerItem: Variants = {
   },
 }
 
-/** SectionShell — consistent section padding + optional id for scroll targeting */
+/** SectionShell — consistent section padding + optional id for scroll targeting.
+ *  Accepts an `aria-label` so screen readers can identify the section's purpose
+ *  (landmark role is implicit on <section> when aria-label is provided). */
 export function SectionShell({
   id,
   children,
   className = '',
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledby,
 }: {
   id?: string
   children: React.ReactNode
   className?: string
+  'aria-label'?: string
+  'aria-labelledby'?: string
 }) {
   return (
-    <section id={id} className={`relative py-20 sm:py-24 lg:py-28 ${className}`}>
+    <section
+      id={id}
+      className={`relative py-20 sm:py-24 lg:py-28 ${className}`}
+      aria-label={ariaLabel}
+      aria-labelledby={ariaLabelledby}
+    >
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">{children}</div>
     </section>
-  )
-}
-
-/** Eyebrow — small uppercase badge label above section titles.
- *  Re-exported here so legacy section components that import { Eyebrow } from
- *  "../reveal" resolve correctly. */
-export function Eyebrow({
-  children,
-  className = '',
-}: {
-  children: React.ReactNode
-  className?: string
-}) {
-  return (
-    <div
-      className={`inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/5 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 ${className}`}
-    >
-      {children}
-    </div>
   )
 }

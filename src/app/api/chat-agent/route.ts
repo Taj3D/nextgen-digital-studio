@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import ZAI from "z-ai-web-dev-sdk";
 import { geminiChat, isGeminiConfigured, type ChatMessage } from "@/lib/gemini";
+import { siteConfig } from "@/lib/site-data";
+import { rateLimit, getClientIP } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -12,8 +14,8 @@ About NextGen Digital Studio:
 - Our services: AI Sales Automation, AI Chat Agent, AI Voice Agent, CRM Automation, WhatsApp Automation, Lead Generation, Performance Marketing, Sales Funnel Development, Business Automation, Website Development, Landing Page Design, and AI Consultation.
 - We serve: Small & Medium Businesses, Corporate Companies, Real Estate, Hospitals, Schools, E-commerce, Agencies.
 - Pricing starts at ৳25,000/month (Starter), ৳60,000/month (Growth), and custom Enterprise plans.
-- Contact: nextgendigitalstudio1@gmail.com, +880 1711 731354, Jessore Bangladesh.
-- WhatsApp: https://wa.me/8801711731354
+- Contact: ${siteConfig.email}, ${siteConfig.phone}, Jessore Bangladesh.
+- WhatsApp: https://wa.me/${siteConfig.whatsapp}
 
 Your role:
 - Greet visitors warmly. You can speak in both English and Bangla (Banglish is fine). Match the visitor's language.
@@ -31,10 +33,39 @@ Always end with a soft, helpful next step when relevant.`;
 const AI_PROVIDER = (process.env.AI_PROVIDER || "auto") as "gemini" | "zai" | "auto";
 
 export async function POST(req: Request) {
+  // Rate limit: 20 messages / min / IP. Chat is bursty (a user may send 5-10
+  // messages in quick succession) so this is intentionally generous — but it
+  // caps the worst-case AI budget burn from a single client. See
+  // src/lib/rate-limit.ts and AUDIT-4-api [API-019].
+  const ip = getClientIP(req);
+  const rl = rateLimit(`chat-agent:${ip}`, 20, 60_000);
+  if (!rl.ok) {
+    return NextResponse.json(
+      {
+        ok: false,
+        error: "Too many requests. Please slow down and try again shortly.",
+      },
+      {
+        status: 429,
+        headers: { "Retry-After": String(Math.ceil(rl.resetIn / 1000)) },
+      },
+    );
+  }
+
   try {
-    const body = await req.json();
-    const messages = Array.isArray(body.messages) ? body.messages : [];
-    const userMessage = String(body.message ?? "").trim();
+    let body: unknown;
+    try {
+      body = await req.json();
+    } catch {
+      return NextResponse.json(
+        { ok: false, error: "Invalid JSON" },
+        { status: 400 },
+      );
+    }
+
+    const b = body as Record<string, unknown>;
+    const messages = Array.isArray(b.messages) ? b.messages : [];
+    const userMessage = String(b.message ?? "").trim();
 
     if (!userMessage) {
       return NextResponse.json(

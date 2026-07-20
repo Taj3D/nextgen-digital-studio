@@ -1,5 +1,7 @@
+import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { requireAuth } from "@/lib/auth";
 
 export const runtime = "nodejs";
 
@@ -22,9 +24,12 @@ async function logActivity(
 }
 
 export async function PATCH(
-  req: Request,
+  req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
+  const authError = requireAuth(req);
+  if (authError) return authError;
+
   try {
     const { id } = await params;
     const body = await req.json();
@@ -108,9 +113,12 @@ export async function PATCH(
 }
 
 export async function GET(
-  req: Request,
+  req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
+  const authError = requireAuth(req);
+  if (authError) return authError;
+
   try {
     const { id } = await params;
     let activities: Array<{
@@ -141,9 +149,12 @@ export async function GET(
 }
 
 export async function DELETE(
-  _req: Request,
+  req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
+  const authError = requireAuth(req);
+  if (authError) return authError;
+
   try {
     const { id } = await params;
     // Log deletion before deleting (best-effort)

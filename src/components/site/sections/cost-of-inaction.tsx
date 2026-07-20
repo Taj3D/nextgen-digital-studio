@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { motion } from 'framer-motion'
-import { TrendingDown, ArrowRight } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import {
   Reveal,
   staggerContainer,
@@ -42,7 +42,7 @@ export function CostOfInactionSection() {
     <section
       id="cost"
       className="relative overflow-hidden bg-card py-20 sm:py-24 lg:py-28"
-      aria-label="Cost of inaction"
+      aria-label="Cost of Inaction"
     >
       {/* Dotted overlay for urgent tone */}
       <div className="pointer-events-none absolute inset-0 bg-dots opacity-50" aria-hidden />

@@ -1,0 +1,534 @@
+   185→
+   186→  function toggleSelect(id: string) {
+   187→    setSelectedIds((prev) => {
+   188→      const next = new Set(prev)
+   189→      if (next.has(id)) next.delete(id)
+   190→      else next.add(id)
+   191→      return next
+   192→    })
+   193→  }
+   194→
+   195→  function toggleSelectAll() {
+   196→    if (selectedIds.size === leads.length) {
+   197→      setSelectedIds(new Set())
+   198→    } else {
+   199→      setSelectedIds(new Set(leads.map((l) => l.id)))
+   200→    }
+   201→  }
+   202→
+   203→  const teamMembers = ['Unassigned', 'Founder', 'AI Engineer', 'Growth Specialist', 'Automation Architect', 'Sales Executive']
+   204→
+   205→  async function assignLead(id: string, assignee: string) {
+   206→    const value = assignee === 'Unassigned' ? '' : assignee
+   207→    setLeads((prev) => prev.map((l) => (l.id === id ? { ...l, assignedTo: value } : l)))
+   208→    try {
+   209→      await fetch(`/api/leads/${id}`, {
+   210→        method: "PATCH",
+   211→        headers: { "Content-Type": "application/json" },
+   212→        body: JSON.stringify({ assignedTo: value }),
+   213→      })
+   214→    } catch {
+   215→      fetchLeads()
+   216→    }
+   217→  }
+   218→
+   219→  function exportCsv() {
+   220→    const params = new URLSearchParams()
+   221→    if (sourceFilter !== 'all') params.set('source', sourceFilter)
+   222→    if (statusFilter !== 'all') params.set('status', statusFilter)
+   223→    window.open(`/api/leads/export?${params}`, '_blank')
+   224→  }
+   225→
+   226→  return (
+   227→    <AdminGate>
+   228→    <div className="min-h-screen bg-muted/20">
+   229→      {/* Top bar */}
+   230→      <header className="sticky top-0 z-40 border-b border-border/60 bg-background/90 backdrop-blur-xl">
+   231→        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8">
+   232→          <div className="flex items-center gap-3">
+   233→            <a href="/" className="flex items-center gap-2">
+   234→              <Image src="/logo.jpg" alt="NextGen Digital Studio" width={32} height={32} className="h-8 w-8 rounded-lg object-cover" />
+   235→            </a>
+   236→            <span className="h-4 w-px bg-border" />
+   237→            <a href="/" className="flex items-center gap-2 text-sm font-semibold text-muted-foreground hover:text-foreground">
+   238→              <ArrowLeft className="h-4 w-4" /> Back to site
+   239→            </a>
+   240→            <span className="h-4 w-px bg-border" />
+   241→            <h1 className="font-heading text-base font-bold">Lead Dashboard</h1>
+   242→            <span className="rounded-full bg-blue-600/10 px-2.5 py-0.5 text-[10px] font-bold uppercase text-blue-600">
+   243→              Admin
+   244→            </span>
+   245→          </div>
+   246→          <div className="flex items-center gap-2">
+   247→            <button
+   248→              onClick={exportCsv}
+   249→              className="flex items-center gap-1.5 rounded-lg border border-border/60 px-3 py-1.5 text-xs font-semibold hover:bg-muted"
+   250→            >
+   251→              <Download className="h-3.5 w-3.5" />
+   252→              Export CSV
+   253→            </button>
+   254→            <button
+   255→              onClick={fetchLeads}
+   256→              disabled={loading}
+   257→              className="flex items-center gap-1.5 rounded-lg border border-border/60 px-3 py-1.5 text-xs font-semibold hover:bg-muted"
+   258→            >
+   259→              <RefreshCw className={cn("h-3.5 w-3.5", loading && "animate-spin")} />
+   260→              Refresh
+   261→            </button>
+   262→          </div>
+   263→        </div>
+   264→      </header>
+   265→
+   266→      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+   267→        {/* Stats cards */}
+   268→        {stats && (
+   269→          <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+   270→            <StatCard icon={Users} label="Total Leads" value={stats.total} color="from-blue-600 to-cyan-500" />
+   271→            <StatCard icon={Bot} label="AI Chats" value={stats.conversations} color="from-violet-500 to-purple-500" />
+   272→            <StatCard icon={Mail} label="Newsletter Subs" value={stats.subscribers} color="from-emerald-500 to-teal-500" />
+   273→            <StatCard icon={TrendingUp} label="Conversion Rate" value={`${stats.total > 0 ? Math.round((stats.byStatus.find(s => s.status === 'won')?.count ?? 0) / stats.total * 100) : 0}%`} color="from-amber-500 to-orange-500" />
+   274→          </div>
+   275→        )}
+   276→
+   277→        {/* Source breakdown */}
+   278→        {stats && (
+   279→          <div className="mt-6 grid gap-4 lg:grid-cols-2">
+   280→            <div className="rounded-2xl border border-border/60 bg-card p-5">
+   281→              <h3 className="mb-3 font-heading text-sm font-bold">Leads by Source</h3>
+   282→              <div className="space-y-2">
+   283→                {stats.bySource.map((s) => {
+   284→                  const meta = sourceLabels[s.source] ?? { label: s.source, icon: AlertCircle, color: 'bg-gray-500' }
+   285→                  const pct = stats.total > 0 ? (s.count / stats.total) * 100 : 0
+   286→                  return (
+   287→                    <div key={s.source} className="flex items-center gap-3">
+   288→                      <span className={cn("flex h-7 w-7 items-center justify-center rounded-lg text-white", meta.color)}>
+   289→                        <meta.icon className="h-3.5 w-3.5" />
+   290→                      </span>
+   291→                      <span className="w-24 text-xs font-medium">{meta.label}</span>
+   292→                      <div className="h-2 flex-1 overflow-hidden rounded-full bg-muted">
+   293→                        <motion.div
+   294→                          initial={{ width: 0 }}
+   295→                          animate={{ width: `${pct}%` }}
+   296→                          transition={{ duration: 0.5 }}
+   297→                          className={cn("h-full rounded-full", meta.color)}
+   298→                        />
+   299→                      </div>
+   300→                      <span className="w-8 text-right text-xs font-bold">{s.count}</span>
+   301→                    </div>
+   302→                  )
+   303→                })}
+   304→              </div>
+   305→            </div>
+   306→            <div className="rounded-2xl border border-border/60 bg-card p-5">
+   307→              <h3 className="mb-3 font-heading text-sm font-bold">Leads by Status</h3>
+   308→              <div className="grid grid-cols-2 gap-2">
+   309→                {stats.byStatus.map((s) => (
+   310→                  <div key={s.status} className="rounded-xl border border-border/60 bg-background p-3">
+   311→                    <span className={cn("inline-block rounded-full px-2 py-0.5 text-[10px] font-bold capitalize", statusColors[s.status] ?? 'bg-muted text-muted-foreground')}>
+   312→                      {s.status}
+   313→                    </span>
+   314→                    <p className="mt-1.5 font-heading text-2xl font-extrabold">{s.count}</p>
+   315→                  </div>
+   316→                ))}
+   317→              </div>
+   318→            </div>
+   319→          </div>
+   320→        )}
+   321→
+   322→        {/* Filters */}
+   323→        <div className="mt-6 flex flex-wrap items-center gap-2">
+   324→          <Filter className="h-4 w-4 text-muted-foreground" />
+   325→          <select
+   326→            value={sourceFilter}
+   327→            onChange={(e) => setSourceFilter(e.target.value)}
+   328→            className="rounded-lg border border-border/60 bg-card px-3 py-1.5 text-xs font-medium outline-none focus:border-blue-600/50"
+   329→          >
+   330→            <option value="all">All sources</option>
+   331→            <option value="contact_form">Contact Form</option>
+   332→            <option value="strategy_call">Strategy Call</option>
+   333→            <option value="ai_audit_tool">AI Audit</option>
+   334→            <option value="free_tools_download">Free Tools</option>
+   335→            <option value="ai_chat_widget">AI Chat</option>
+   336→          </select>
+   337→          <select
+   338→            value={statusFilter}
+   339→            onChange={(e) => setStatusFilter(e.target.value)}
+   340→            className="rounded-lg border border-border/60 bg-card px-3 py-1.5 text-xs font-medium outline-none focus:border-blue-600/50"
+   341→          >
+   342→            <option value="all">All statuses</option>
+   343→            <option value="new">New</option>
+   344→            <option value="contacted">Contacted</option>
+   345→            <option value="qualified">Qualified</option>
+   346→            <option value="won">Won</option>
+   347→            <option value="lost">Lost</option>
+   348→          </select>
+   349→          <span className="ml-auto text-xs text-muted-foreground">
+   350→            {leads.length} lead{leads.length !== 1 ? 's' : ''}
+   351→          </span>
+   352→        </div>
+   353→
+   354→        {/* Bulk action toolbar */}
+   355→        {selectedIds.size > 0 && (
+   356→          <motion.div
+   357→            initial={{ opacity: 0, y: -8 }}
+   358→            animate={{ opacity: 1, y: 0 }}
+   359→            className="mt-3 flex flex-wrap items-center gap-2 rounded-xl border border-blue-600/30 bg-blue-600/[0.04] px-4 py-2.5"
+   360→          >
+   361→            <span className="text-xs font-bold text-blue-600">{selectedIds.size} selected</span>
+   362→            <span className="h-4 w-px bg-border" />
+   363→            <select
+   364→              value={bulkAction}
+   365→              onChange={(e) => setBulkAction(e.target.value)}
+   366→              className="rounded-lg border border-border/60 bg-card px-2.5 py-1 text-xs font-medium outline-none focus:border-blue-600/50"
+   367→            >
+   368→              <option value="">Choose action...</option>
+   369→              <optgroup label="Set status">
+   370→                <option value="status:new">→ New</option>
+   371→                <option value="status:contacted">→ Contacted</option>
+   372→                <option value="status:qualified">→ Qualified</option>
+   373→                <option value="status:won">→ Won</option>
+   374→                <option value="status:lost">→ Lost</option>
+   375→              </optgroup>
+   376→              <optgroup label="Assign to">
+   377→                {teamMembers.map((m) => (
+   378→                  <option key={m} value={`assign:${m}`}>→ {m}</option>
+   379→                ))}
+   380→              </optgroup>
+   381→              <option value="delete">🗑 Delete</option>
+   382→            </select>
+   383→            <button
+   384→              onClick={runBulkAction}
+   385→              disabled={!bulkAction}
+   386→              className="rounded-lg bg-gradient-to-r from-blue-600 to-cyan-500 px-3 py-1 text-xs font-semibold text-white shadow-md disabled:opacity-50"
+   387→            >
+   388→              Apply
+   389→            </button>
+   390→            <button
+   391→              onClick={() => { setSelectedIds(new Set()); setBulkAction('') }}
+   392→              className="rounded-lg border border-border/60 px-2.5 py-1 text-xs font-medium hover:bg-muted"
+   393→            >
+   394→              Clear
+   395→            </button>
+   396→          </motion.div>
+   397→        )}
+   398→
+   399→        {/* Leads table */}
+   400→        <div className="mt-4 overflow-hidden rounded-2xl border border-border/60 bg-card">
+   401→          {loading ? (
+   402→            <div className="flex items-center justify-center py-16">
+   403→              <RefreshCw className="h-6 w-6 animate-spin text-muted-foreground" />
+   404→            </div>
+   405→          ) : error ? (
+   406→            <div className="flex flex-col items-center justify-center py-16 text-center">
+   407→              <AlertCircle className="h-10 w-10 text-rose-500" />
+   408→              <p className="mt-3 text-sm text-muted-foreground">{error}</p>
+   409→              <Button onClick={fetchLeads} className="mt-4">Try again</Button>
+   410→            </div>
+   411→          ) : leads.length === 0 ? (
+   412→            <div className="flex flex-col items-center justify-center py-16 text-center">
+   413→              <CheckCircle2 className="h-10 w-10 text-muted-foreground/40" />
+   414→              <p className="mt-3 text-sm text-muted-foreground">No leads found for these filters.</p>
+   415→            </div>
+   416→          ) : (
+   417→            <div className="overflow-x-auto">
+   418→              <table className="w-full text-sm">
+   419→                <thead>
+   420→                  <tr className="border-b border-border/60 bg-muted/40 text-left">
+   421→                    <th className="px-3 py-3">
+   422→                      <input
+   423→                        type="checkbox"
+   424→                        checked={selectedIds.size === leads.length && leads.length > 0}
+   425→                        onChange={toggleSelectAll}
+   426→                        className="h-4 w-4 cursor-pointer rounded border-border accent-blue-600"
+   427→                        aria-label="Select all"
+   428→                      />
+   429→                    </th>
+   430→                    <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Name</th>
+   431→                    <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Contact</th>
+   432→                    <th className="hidden px-4 py-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground md:table-cell">Service</th>
+   433→                    <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Source</th>
+   434→                    <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Status</th>
+   435→                    <th className="hidden px-4 py-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground xl:table-cell">Assigned</th>
+   436→                    <th className="hidden px-4 py-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground lg:table-cell">Date</th>
+   437→                  </tr>
+   438→                </thead>
+   439→                <tbody className="divide-y divide-border/40">
+   440→                  {leads.map((lead) => {
+   441→                    const meta = sourceLabels[lead.source] ?? { label: lead.source, icon: AlertCircle, color: 'bg-gray-500' }
+   442→                    return (
+   443→                      <tr key={lead.id} className="cursor-pointer transition-colors hover:bg-muted/30" onClick={() => setSelectedLead(lead)}>
+   444→                        <td className="px-3 py-3" onClick={(e) => e.stopPropagation()}>
+   445→                          <input
+   446→                            type="checkbox"
+   447→                            checked={selectedIds.has(lead.id)}
+   448→                            onChange={() => toggleSelect(lead.id)}
+   449→                            className="h-4 w-4 cursor-pointer rounded border-border accent-blue-600"
+   450→                            aria-label={`Select ${lead.name}`}
+   451→                          />
+   452→                        </td>
+   453→                        <td className="px-4 py-3">
+   454→                          <div className="flex items-center gap-2">
+   455→                            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-cyan-500 text-[10px] font-bold text-white">
+   456→                              {lead.name.charAt(0).toUpperCase()}
+   457→                            </span>
+   458→                            <div>
+   459→                              <p className="font-semibold leading-tight">{lead.name}</p>
+   460→                              {lead.company && <p className="text-[11px] text-muted-foreground">{lead.company}</p>}
+   461→                            </div>
+   462→                          </div>
+   463→                        </td>
+   464→                        <td className="px-4 py-3">
+   465→                          <div className="space-y-0.5">
+   466→                            <a href={`mailto:${lead.email}`} onClick={(e) => e.stopPropagation()} className="flex items-center gap-1 text-xs text-blue-600 hover:underline">
+   467→                              <Mail className="h-3 w-3" /> <span className="max-w-[140px] truncate">{lead.email}</span>
+   468→                            </a>
+   469→                            <a href={`tel:${lead.phone}`} onClick={(e) => e.stopPropagation()} className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground">
+   470→                              <Phone className="h-3 w-3" /> {lead.phone}
+   471→                            </a>
+   472→                          </div>
+   473→                        </td>
+   474→                        <td className="hidden px-4 py-3 md:table-cell">
+   475→                          <span className="text-xs text-muted-foreground">{lead.service || '—'}</span>
+   476→                        </td>
+   477→                        <td className="px-4 py-3">
+   478→                          <span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-2.5 py-1 text-[10px] font-semibold">
+   479→                            <meta.icon className="h-3 w-3" /> {meta.label}
+   480→                          </span>
+   481→                        </td>
+   482→                        <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
+   483→                          <select
+   484→                            value={lead.status}
+   485→                            onChange={(e) => updateStatus(lead.id, e.target.value)}
+   486→                            className={cn("cursor-pointer rounded-full border-0 px-2.5 py-1 text-[10px] font-bold capitalize outline-none ring-1 ring-inset ring-transparent focus:ring-blue-600/40", statusColors[lead.status] ?? 'bg-muted text-muted-foreground')}
+   487→                          >
+   488→                            <option value="new">New</option>
+   489→                            <option value="contacted">Contacted</option>
+   490→                            <option value="qualified">Qualified</option>
+   491→                            <option value="won">Won</option>
+   492→                            <option value="lost">Lost</option>
+   493→                          </select>
+   494→                        </td>
+   495→                        <td className="hidden px-4 py-3 xl:table-cell" onClick={(e) => e.stopPropagation()}>
+   496→                          <select
+   497→                            value={lead.assignedTo || 'Unassigned'}
+   498→                            onChange={(e) => assignLead(lead.id, e.target.value)}
+   499→                            className={cn(
+   500→                              "cursor-pointer rounded-full border-0 px-2.5 py-1 text-[10px] font-semibold outline-none ring-1 ring-inset ring-transparent focus:ring-blue-600/40",
+   501→                              lead.assignedTo ? 'bg-violet-500/15 text-violet-600' : 'bg-muted text-muted-foreground'
+   502→                            )}
+   503→                          >
+   504→                            {teamMembers.map((m) => (
+   505→                              <option key={m} value={m}>{m}</option>
+   506→                            ))}
+   507→                          </select>
+   508→                        </td>
+   509→                        <td className="hidden px-4 py-3 text-xs text-muted-foreground lg:table-cell">
+   510→                          {new Date(lead.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+   511→                        </td>
+   512→                      </tr>
+   513→                    )
+   514→                  })}
+   515→                </tbody>
+   516→              </table>
+   517→            </div>
+   518→          )}
+   519→        </div>
+   520→
+   521→        <p className="mt-6 text-center text-xs text-muted-foreground">
+   522→          NextGen Digital Studio · Lead Dashboard · Data from SQLite database
+   523→        </p>
+   524→      </main>
+   525→
+   526→      {/* Lead detail drawer */}
+   527→      {selectedLead && (
+   528→        <div
+   529→          className="fixed inset-0 z-50 flex justify-end"
+   530→          onClick={() => setSelectedLead(null)}
+   531→        >
+   532→          <div className="absolute inset-0 bg-slate-950/50 backdrop-blur-sm" />
+   533→          <motion.div
+   534→            initial={{ x: 400 }}
+   535→            animate={{ x: 0 }}
+   536→            exit={{ x: 400 }}
+   537→            transition={{ type: "spring", damping: 30, stiffness: 300 }}
+   538→            onClick={(e) => e.stopPropagation()}
+   539→            className="relative h-full w-full max-w-md overflow-y-auto bg-card shadow-2xl"
+   540→          >
+   541→            <div className="sticky top-0 flex items-center justify-between border-b border-border/60 bg-card/95 px-5 py-4 backdrop-blur">
+   542→              <h3 className="font-heading text-base font-bold">Lead Details</h3>
+   543→              <button
+   544→                aria-label="Close"
+   545→                onClick={() => setSelectedLead(null)}
+   546→                className="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-muted"
+   547→              >
+   548→                ✕
+   549→              </button>
+   550→            </div>
+   551→            <div className="space-y-5 p-5">
+   552→              {/* Identity */}
+   553→              <div className="flex items-center gap-3">
+   554→                <span className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-cyan-500 text-lg font-bold text-white">
+   555→                  {selectedLead.name.charAt(0).toUpperCase()}
+   556→                </span>
+   557→                <div>
+   558→                  <p className="font-heading text-lg font-bold leading-tight">{selectedLead.name}</p>
+   559→                  {selectedLead.company && <p className="text-sm text-muted-foreground">{selectedLead.company}</p>}
+   560→                  <p className="text-[11px] text-muted-foreground">
+   561→                    {new Date(selectedLead.createdAt).toLocaleString('en-GB')}
+   562→                  </p>
+   563→                </div>
+   564→              </div>
+   565→
+   566→              {/* Contact */}
+   567→              <div className="grid gap-2">
+   568→                <a href={`mailto:${selectedLead.email}`} className="flex items-center gap-2 rounded-lg border border-border/60 bg-background px-3 py-2 text-sm hover:border-blue-600/40">
+   569→                  <Mail className="h-4 w-4 text-blue-600" /> {selectedLead.email}
+   570→                </a>
+   571→                <a href={`tel:${selectedLead.phone}`} className="flex items-center gap-2 rounded-lg border border-border/60 bg-background px-3 py-2 text-sm hover:border-blue-600/40">
+   572→                  <Phone className="h-4 w-4 text-blue-600" /> {selectedLead.phone}
+   573→                </a>
+   574→              </div>
+   575→
+   576→              {/* Status */}
+   577→              <div>
+   578→                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">Status</label>
+   579→                <select
+   580→                  value={selectedLead.status}
+   581→                  onChange={(e) => {
+   582→                    updateStatus(selectedLead.id, e.target.value)
+   583→                    setSelectedLead({ ...selectedLead, status: e.target.value })
+   584→                  }}
+   585→                  className={cn("w-full cursor-pointer rounded-lg border-0 px-3 py-2 text-sm font-bold capitalize outline-none ring-1 ring-inset ring-border focus:ring-blue-600/40", statusColors[selectedLead.status] ?? 'bg-muted')}
+   586→                >
+   587→                  <option value="new">New</option>
+   588→                  <option value="contacted">Contacted</option>
+   589→                  <option value="qualified">Qualified</option>
+   590→                  <option value="won">Won</option>
+   591→                  <option value="lost">Lost</option>
+   592→                </select>
+   593→              </div>
+   594→
+   595→              {/* Assignment */}
+   596→              <div>
+   597→                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">Assigned To</label>
+   598→                <select
+   599→                  value={selectedLead.assignedTo || 'Unassigned'}
+   600→                  onChange={(e) => {
+   601→                    assignLead(selectedLead.id, e.target.value)
+   602→                    setSelectedLead({ ...selectedLead, assignedTo: e.target.value === 'Unassigned' ? '' : e.target.value })
+   603→                  }}
+   604→                  className="w-full cursor-pointer rounded-lg border-0 bg-background px-3 py-2 text-sm font-medium outline-none ring-1 ring-inset ring-border focus:ring-blue-600/40"
+   605→                >
+   606→                  {teamMembers.map((m) => (
+   607→                    <option key={m} value={m}>{m}</option>
+   608→                  ))}
+   609→                </select>
+   610→              </div>
+   611→
+   612→              {/* Source & service */}
+   613→              <div className="grid grid-cols-2 gap-3">
+   614→                <div className="rounded-lg border border-border/60 bg-background px-3 py-2">
+   615→                  <p className="text-[10px] font-semibold uppercase text-muted-foreground">Source</p>
+   616→                  <p className="text-sm font-medium">{(sourceLabels[selectedLead.source] ?? { label: selectedLead.source }).label}</p>
+   617→                </div>
+   618→                <div className="rounded-lg border border-border/60 bg-background px-3 py-2">
+   619→                  <p className="text-[10px] font-semibold uppercase text-muted-foreground">Service</p>
+   620→                  <p className="text-sm font-medium">{selectedLead.service || '—'}</p>
+   621→                </div>
+   622→              </div>
+   623→
+   624→              {/* Message */}
+   625→              {selectedLead.message && (
+   626→                <div>
+   627→                  <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">Original Message</label>
+   628→                  <p className="rounded-lg border border-border/60 bg-muted/30 px-3 py-2 text-sm text-muted-foreground">
+   629→                    {selectedLead.message}
+   630→                  </p>
+   631→                </div>
+   632→              )}
+   633→
+   634→              {/* Notes */}
+   635→              <div>
+   636→                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">Internal Notes</label>
+   637→                <textarea
+   638→                  value={notesDraft}
+   639→                  onChange={(e) => setNotesDraft(e.target.value)}
+   640→                  rows={4}
+   641→                  placeholder="Add notes about this lead..."
+   642→                  className="w-full rounded-lg border border-border/60 bg-background px-3 py-2 text-sm outline-none focus:border-blue-600/50 focus:ring-2 focus:ring-blue-600/15"
+   643→                />
+   644→                <button
+   645→                  onClick={saveNotes}
+   646→                  disabled={savingNotes}
+   647→                  className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-500 px-4 py-2 text-sm font-semibold text-white shadow-md transition-transform hover:scale-[1.01] disabled:opacity-50"
+   648→                >
+   649→                  {savingNotes ? "Saving..." : "Save Notes"}
+   650→                </button>
+   651→              </div>
+   652→
+   653→              {/* Activity Timeline */}
+   654→              <div>
+   655→                <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">Activity Timeline</label>
+   656→                {activities.length === 0 ? (
+   657→                  <p className="rounded-lg border border-border/60 bg-muted/30 px-3 py-3 text-center text-xs text-muted-foreground">
+   658→                    No activity recorded yet.
+   659→                  </p>
+   660→                ) : (
+   661→                  <div className="space-y-2.5">
+   662→                    {activities.map((a) => (
+   663→                      <div key={a.id} className="flex gap-2.5">
+   664→                        <div className="flex flex-col items-center">
+   665→                          <span className={cn(
+   666→                            "mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[9px]",
+   667→                            a.type === 'status_change' ? 'bg-blue-500/15 text-blue-600' :
+   668→                            a.type === 'assignment' ? 'bg-violet-500/15 text-violet-600' :
+   669→                            a.type === 'note_added' ? 'bg-amber-500/15 text-amber-600' :
+   670→                            a.type === 'deleted' ? 'bg-rose-500/15 text-rose-500' :
+   671→                            'bg-emerald-500/15 text-emerald-600'
+   672→                          )}>
+   673→                            {a.type === 'status_change' ? '↻' : a.type === 'assignment' ? '👤' : a.type === 'note_added' ? '✎' : '•'}
+   674→                          </span>
+   675→                          {activities[activities.length - 1] !== a && <span className="w-px flex-1 bg-border" />}
+   676→                        </div>
+   677→                        <div className="flex-1 pb-1">
+   678→                          <p className="text-xs font-medium leading-tight">{a.detail}</p>
+   679→                          <p className="mt-0.5 text-[10px] text-muted-foreground">
+   680→                            {new Date(a.createdAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}
+   681→                          </p>
+   682→                        </div>
+   683→                      </div>
+   684→                    ))}
+   685→                  </div>
+   686→                )}
+   687→              </div>
+   688→
+   689→              {/* Delete */}
+   690→              <button
+   691→                onClick={() => deleteLead(selectedLead.id)}
+   692→                className="w-full rounded-lg border border-rose-500/30 bg-rose-500/5 px-4 py-2 text-sm font-semibold text-rose-600 transition-colors hover:bg-rose-500/10"
+   693→              >
+   694→                Delete lead
+   695→              </button>
+   696→            </div>
+   697→          </motion.div>
+   698→        </div>
+   699→      )}
+   700→    </div>
+   701→    </AdminGate>
+   702→  )
+   703→}
+   704→
+   705→function StatCard({ icon: Icon, label, value, color }: { icon: typeof Users; label: string; value: number | string; color: string }) {
+   706→  return (
+   707→    <div className="overflow-hidden rounded-2xl border border-border/60 bg-card p-5">
+   708→      <div className="flex items-center justify-between">
+   709→        <div className={cn("flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br text-white shadow-md", color)}>
+   710→          <Icon className="h-5 w-5" />
+   711→        </div>
+   712→      </div>
+   713→      <p className="mt-3 font-heading text-3xl font-extrabold">{value}</p>
+   714→      <p className="text-xs font-medium text-muted-foreground">{label}</p>
+   715→    </div>
+   716→  )
+   717→}
+   718→

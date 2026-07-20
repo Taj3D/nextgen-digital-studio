@@ -11,6 +11,7 @@
  *   TIKTOK_PIXEL_ID, TIKTOK_ACCESS_TOKEN — TikTok Events API
  *   SNAPCHAT_PIXEL_ID, SNAPCHAT_ACCESS_TOKEN — Snapchat Conversions API
  */
+import { createHash } from 'node:crypto'
 import { db } from '@/lib/db'
 import { cacheGet, cacheSet } from '@/lib/cache'
 
@@ -75,16 +76,25 @@ function nowMs() {
   return Date.now()
 }
 
-function hash(s: string | undefined | null): string | undefined {
-  if (!s) return undefined
-  // Lightweight FNV-1a hash (no crypto) — Conversions APIs in this deployment
-  // run best-effort; for full SHA-256 use node:crypto in production.
-  let h = 0x811c9dc5
-  for (let i = 0; i < s.length; i++) {
-    h ^= s.charCodeAt(i)
-    h = (h + ((h << 1) + (h << 4) + (h << 7) + (h << 8) + (h << 24))) >>> 0
-  }
-  return h.toString(16)
+/**
+ * SHA-256 hash of PII (email, phone, name) for ad-platform Conversions APIs.
+ *
+ * Meta, TikTok, and Snapchat REQUIRE user_data fields to be SHA-256 hashed
+ * (lowercased + trimmed before hashing). The previous FNV-1a 32-bit hash
+ * was rejected by every platform — events were silently dropped. See
+ * AUDIT-4-api [API-026].
+ *
+ * Returns `undefined` for empty input so the platform SDK treats the field
+ * as omitted (sending an empty string would be flagged as invalid user_data).
+ *
+ * Async to keep the call-site future-proof (crypto.subtle.digest, which is
+ * the browser-compatible variant, is genuinely async).
+ */
+async function hashPII(value: string | undefined | null): Promise<string | undefined> {
+  if (!value) return undefined
+  const normalised = value.trim().toLowerCase()
+  if (!normalised) return undefined
+  return createHash('sha256').update(normalised).digest('hex')
 }
 
 /**
@@ -122,17 +132,19 @@ export async function trackEvent(input: TrackingEventInput): Promise<{ id: strin
     console.error('[track] DB persist failed (best-effort, continuing)', err)
   }
 
-  // Fan out best-effort
-  const names = EVENT_NAME_MAP[input.type] ?? {}
+  // Fan out best-effort. PII is SHA-256 hashed (lowercased + trimmed) so the
+  // Conversions APIs can match events to known users — see hashPII() above.
   const user = {
-    email: hash(input.email?.toLowerCase()),
-    phone: hash(input.phone),
-    name: hash(input.name),
+    email: await hashPII(input.email),
+    phone: await hashPII(input.phone),
+    name: await hashPII(input.name),
     fbp: input.fbp,
     fbc: input.fbc,
     clientUserAgent: input.userAgent,
     clientIpAddress: input.ipAddress,
   }
+
+  const names = EVENT_NAME_MAP[input.type] ?? {}
 
   await Promise.allSettled([
     sendToGA4(input, names.ga4 ?? input.type),

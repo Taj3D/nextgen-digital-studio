@@ -12,7 +12,6 @@ import {
   MapPin,
   Phone,
   Mail,
-  Sparkles,
   Loader2,
   CheckCircle2,
   ArrowRight,
@@ -24,13 +23,13 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useLang } from '@/components/site/language-provider'
 import { waLink } from '@/lib/whatsapp'
-import { SITE_CONFIG } from '@/lib/site-data'
+import { siteConfig } from '@/lib/site-data'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 const COMPANY_LINKS = [
   { key: 'footer.about', href: '/founder' },
-  { key: 'footer.careers', href: 'mailto:nextgendigitalstudio1@gmail.com?subject=Career%20Inquiry%20%E2%80%94%20NextGen%20Digital%20Studio' },
+  { key: 'footer.careers', href: `mailto:${siteConfig.email}?subject=Career%20Inquiry%20%E2%80%94%20NextGen%20Digital%20Studio` },
   { key: 'footer.blog', href: '/blog' },
   { key: 'footer.caseStudies', href: '/case-studies' },
 ]
@@ -184,31 +183,31 @@ export function SiteFooter() {
             </p>
             <div className="flex items-center gap-2.5 pt-1">
               <SocialButton
-                href={SITE_CONFIG.facebook}
+                href={siteConfig.facebook}
                 label="Facebook"
               >
                 <Facebook className="h-5 w-5" />
               </SocialButton>
               <SocialButton
-                href={SITE_CONFIG.linkedin}
+                href={siteConfig.linkedin}
                 label="LinkedIn"
               >
                 <Linkedin className="h-5 w-5" />
               </SocialButton>
               <SocialButton
-                href={SITE_CONFIG.instagram}
+                href={siteConfig.instagram}
                 label="Instagram"
               >
                 <Instagram className="h-5 w-5" />
               </SocialButton>
               <SocialButton
-                href={SITE_CONFIG.youtube}
+                href={siteConfig.youtube}
                 label="YouTube"
               >
                 <Youtube className="h-5 w-5" />
               </SocialButton>
               <SocialButton
-                href={SITE_CONFIG.twitter}
+                href={siteConfig.twitter}
                 label="X"
               >
                 <Twitter className="h-5 w-5" />
@@ -218,11 +217,11 @@ export function SiteFooter() {
               </SocialButton>
             </div>
             <div className="space-y-1.5 pt-3 text-sm">
-              <a href={`tel:${SITE_CONFIG.phone}`} className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary">
-                <Phone className="h-4 w-4" /> {SITE_CONFIG.phoneDisplay}
+              <a href={`tel:${siteConfig.phone}`} className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary">
+                <Phone className="h-4 w-4" /> {siteConfig.phoneDisplay}
               </a>
-              <a href={`mailto:${SITE_CONFIG.email}`} className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary">
-                <Mail className="h-4 w-4" /> {SITE_CONFIG.email}
+              <a href={`mailto:${siteConfig.email}`} className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary">
+                <Mail className="h-4 w-4" /> {siteConfig.email}
               </a>
             </div>
           </div>
@@ -289,7 +288,7 @@ export function SiteFooter() {
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-60" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
               </span>
-              © {year} NextGen Digital Studio. {t('footer.rights')}
+              © {year} {t('brand.name')}. {t('footer.rights')}
             </span>
             <span className="mx-1 hidden text-border md:inline">|</span>
             <a href="/privacy" className="transition-colors hover:text-primary">

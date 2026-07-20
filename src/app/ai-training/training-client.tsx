@@ -13,7 +13,7 @@ import {
   usePageViewTracking,
 } from '@/components/site/landing-common'
 import { useLang } from '@/components/site/language-provider'
-import { Check, Clock, Calendar, Brain, MessageSquare, Code, Rocket, Star, Users, Heart, Sparkles, Target } from 'lucide-react'
+import { Check, Clock, Calendar, Brain, MessageSquare, Code, Rocket, Star, Users, Heart, Sparkles, Target, ArrowRight } from 'lucide-react'
 
 /* 4 course modules (per user spec) */
 const MODULES = [
@@ -133,6 +133,17 @@ export function TrainingClient() {
             </div>
 
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+              <a
+                href="#order"
+                onClick={(e) => {
+                  e.preventDefault()
+                  document.getElementById('order')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                }}
+                className="gradient-brand animate-pulse-glow inline-flex items-center gap-2 rounded-full px-7 py-3 text-sm font-bold text-white shadow-lg shadow-blue-600/25 transition-transform hover:scale-[1.02]"
+              >
+                {isBn ? 'রেজিস্টার করুন' : 'Register Now'}
+                <ArrowRight className="h-4 w-4" />
+              </a>
               <WhatsAppCTA isBn={isBn} />
               <LandingSocials />
             </div>

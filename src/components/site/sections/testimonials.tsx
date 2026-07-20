@@ -77,7 +77,7 @@ export function Testimonials() {
   const { t } = useLang()
 
   return (
-    <SectionShell id="testimonials" className="relative">
+    <SectionShell id="testimonials" className="relative" aria-label="Testimonials">
       {/* Header */}
       <Reveal className="mx-auto max-w-3xl text-center">
         <div className="inline-flex items-center gap-2 rounded-full border border-amber-400/30 bg-amber-400/5 px-4 py-2 text-amber-400 text-xs sm:text-sm font-semibold uppercase tracking-wider">

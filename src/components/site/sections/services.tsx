@@ -33,7 +33,7 @@ export function Services() {
   const { t, lang } = useLang()
 
   return (
-    <SectionShell id="services" className="relative">
+    <SectionShell id="services" className="relative" aria-label="Services">
       {/* Header */}
       <Reveal className="mx-auto max-w-3xl text-center">
         <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/5 px-4 py-2 text-emerald-500 text-xs sm:text-sm font-semibold uppercase tracking-wider">

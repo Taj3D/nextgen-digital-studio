@@ -2,19 +2,53 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { sendToGoogleSheets } from "@/lib/google-sheets";
 import { trackEvent } from "@/lib/tracking";
+import { normalizeSource } from "@/lib/lead-sources";
+import { normalizePhone } from "@/lib/phone";
+import { rateLimit, getClientIP } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 
 export async function POST(req: Request) {
+  // Rate limit: 10 submissions / min / IP. Generous enough for legitimate
+  // users (form retries, double-clicks) but blocks spam bots. See
+  // src/lib/rate-limit.ts and AUDIT-4-api [API-019].
+  const ip = getClientIP(req);
+  const rl = rateLimit(`contact:${ip}`, 10, 60_000);
+  if (!rl.ok) {
+    return NextResponse.json(
+      { ok: false, error: "Too many requests. Try again later." },
+      {
+        status: 429,
+        headers: { "Retry-After": String(Math.ceil(rl.resetIn / 1000)) },
+      },
+    );
+  }
+
   try {
-    const body = await req.json();
-    const name = String(body.name ?? "").trim();
-    const email = String(body.email ?? "").trim().toLowerCase();
-    const phone = String(body.phone ?? "").trim();
-    const company = body.company ? String(body.company).trim() : null;
-    const service = body.service ? String(body.service).trim() : null;
-    const message = body.message ? String(body.message).trim() : null;
-    const source = body.source ? String(body.source).trim() : "contact_form";
+    let body: unknown;
+    try {
+      body = await req.json();
+    } catch {
+      return NextResponse.json(
+        { ok: false, error: "Invalid JSON" },
+        { status: 400 },
+      );
+    }
+
+    const b = body as Record<string, unknown>;
+    const name = String(b.name ?? "").trim();
+    const email = String(b.email ?? "").trim().toLowerCase();
+    const phone = normalizePhone(String(b.phone ?? "").trim());
+    const company = b.company ? String(b.company).trim() : null;
+    const service = b.service ? String(b.service).trim() : null;
+    const message = b.message ? String(b.message).trim() : null;
+    const source = normalizeSource(b.source, "contact_form");
+
+    // Honeypot: if the hidden "website" field is filled, silently accept
+    // and discard (bots fill hidden fields; humans don't).
+    if (b.website && String(b.website).trim()) {
+      return NextResponse.json({ ok: true, id: "honeypot" });
+    }
 
     if (!name || !email || !phone) {
       return NextResponse.json(

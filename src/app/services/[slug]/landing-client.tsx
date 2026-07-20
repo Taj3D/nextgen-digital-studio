@@ -12,7 +12,7 @@ import {
   usePageViewTracking,
 } from '@/components/site/landing-common'
 import { useLang } from '@/components/site/language-provider'
-import { services } from '@/lib/site-data'
+import { services, siteConfig } from '@/lib/site-data'
 import { Check, ArrowRight, Sparkles, Zap, ShieldCheck, Clock } from 'lucide-react'
 
 type LandingClientProps = {
@@ -31,7 +31,11 @@ export function LandingClient({ slug, title, short, description, features, gradi
   // serialised across the Server→Client boundary).
   const service = services.find((s) => s.slug === slug)
   const Icon = service?.icon ?? Sparkles
-  usePageViewTracking('service_detail_page', { slug })
+  // Memoize the tracking meta so the hook's useEffect dep stays stable across
+  // re-renders. A fresh `{ slug }` literal here would re-fire page_view on every
+  // render (see AUDIT-2-landing LANDING-005).
+  const trackingMeta = React.useMemo(() => ({ slug }), [slug])
+  usePageViewTracking('service_detail_page', trackingMeta)
 
   // Pick BN copy from the contentBn dictionary when lang === 'bn'; falls back to EN.
   const localisedTitle = tr(title)
@@ -159,7 +163,7 @@ export function LandingClient({ slug, title, short, description, features, gradi
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
               <a
-                href={`https://wa.me/8801711731354?text=${encodeURIComponent(
+                href={`https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent(
                   isBn
                     ? `আসসালামু আলাইকুম, আমি ${localisedTitle} সেবা সম্পর্কে জানতে চাই।`
                     : `Hi, I'd like to know more about ${localisedTitle}.`,
@@ -176,7 +180,7 @@ export function LandingClient({ slug, title, short, description, features, gradi
         </section>
 
         {/* Lead form */}
-        <section className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
+        <section id="order" className="mx-auto max-w-3xl scroll-mt-20 px-4 py-12 sm:px-6 sm:py-16">
           <div className="rounded-3xl border border-border/60 bg-card p-6 shadow-lg sm:p-8">
             <div className="text-center">
               <LandingEyebrow>{isBn ? 'অনুরোধ করুন' : 'Request a Call'}</LandingEyebrow>

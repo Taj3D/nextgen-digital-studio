@@ -14,7 +14,7 @@ import {
 } from '@/components/site/landing-common'
 import { useLang } from '@/components/site/language-provider'
 import { siteConfig } from '@/lib/site-data'
-import { Award, Briefcase, GraduationCap, Lightbulb, MapPin, Phone, Mail, Star } from 'lucide-react'
+import { Award, Briefcase, GraduationCap, Lightbulb, MapPin, Phone, Mail, Star, ArrowRight } from 'lucide-react'
 
 export function FounderClient() {
   const { lang } = useLang()
@@ -57,6 +57,17 @@ export function FounderClient() {
                   : 'He is one of Bangladesh first digital engineers building business solutions with AI and automation. His mission — turn every Bangladeshi business into an AI-powered sales machine.'}
               </p>
               <div className="mt-6 flex flex-wrap items-center gap-3">
+                <a
+                  href="#order"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    document.getElementById('order')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                  }}
+                  className="gradient-brand animate-pulse-glow inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-bold text-white shadow-lg shadow-blue-600/25 transition-transform hover:scale-[1.02]"
+                >
+                  {isBn ? 'স্ট্র্যাটেজি কল বুক করুন' : 'Book Strategy Call'}
+                  <ArrowRight className="h-4 w-4" />
+                </a>
                 <WhatsAppCTA isBn={isBn} />
                 <LandingSocials />
               </div>
@@ -76,9 +87,13 @@ export function FounderClient() {
                   />
                 </div>
                 <div className="absolute -bottom-3 -right-3 rounded-2xl border border-border/60 bg-card px-4 py-2 shadow-lg">
-                  <div className="flex items-center gap-1">
+                  <div
+                    className="flex items-center gap-1"
+                    aria-label={isBn ? '৫ এর মধ্যে ৫ তারা' : '5 out of 5 stars'}
+                    role="img"
+                  >
                     {[0, 1, 2, 3, 4].map((i) => (
-                      <Star key={i} className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+                      <Star key={i} className="h-3.5 w-3.5 fill-amber-400 text-amber-400" aria-hidden />
                     ))}
                   </div>
                   <p className="mt-1 text-[10px] font-semibold text-muted-foreground">

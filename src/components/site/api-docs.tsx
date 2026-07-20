@@ -5,7 +5,7 @@ import Link from "next/link"
 import Image from "next/image"
 import {
   ArrowLeft, Copy, Check, Terminal, Webhook, Database, Bot,
-  Mail, Calendar, FileDown, Users, MessageSquare, ExternalLink,
+  Mail, Calendar, FileDown, Users, MessageSquare,
   TrendingUp,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -241,21 +241,21 @@ const endpoints: Endpoint[] = [
     response: `{
   "ok": true,
   "stats": { "page_view": 1240, "lead": 38, "whatsapp_click": 92 },
-  "platforms": { "facebook": false, "tiktok": false, "snapchat": false, "google": false }
+  "platforms": { "ga4": false, "meta": false, "snapchat": false, "tiktok": false }
 }`,
   },
   {
     method: "POST",
     path: "/api/send-email",
-    title: "Send Email Notification",
-    desc: "Internal endpoint that logs a lead notification email (placeholder for SendGrid/Resend integration).",
+    title: "Email Log Endpoint",
+    desc: "Internal logging endpoint. Real customer + owner email notifications are handled by the Google Apps Script webhook behind /api/contact. This route console.log's the payload for debugging.",
     icon: Mail,
     body: `{
   "to": "owner@example.com",
   "subject": "New Lead: Tanvir Ahmed",
   "body": "Lead details..."
 }`,
-    response: `{ "ok": true, "message": "Email notification logged" }`,
+    response: `{ "ok": true }`,
   },
   {
     method: "GET",
@@ -324,7 +324,7 @@ export function ApiDocs() {
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
             <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-600">17 Endpoints</span>
-            <span className="rounded-full bg-blue-500/10 px-3 py-1 text-xs font-semibold text-blue-600">7 Lead Sources</span>
+            <span className="rounded-full bg-blue-500/10 px-3 py-1 text-xs font-semibold text-blue-600">13 Lead Sources</span>
             <span className="rounded-full bg-violet-500/10 px-3 py-1 text-xs font-semibold text-violet-600">AI-Powered</span>
           </div>
         </div>

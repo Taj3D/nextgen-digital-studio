@@ -55,9 +55,24 @@ const translations: Record<Lang, Record<string, string>> = {
     'comparison.subtitle': 'Most agencies sell hours. We sell automated outcomes. Here\'s exactly how working with us compares to the alternatives.',
     'caseStudies.eyebrow': 'Case Studies', 'caseStudies.title1': 'Real businesses.', 'caseStudies.title2': 'Real results.',
     'caseStudies.subtitle': 'See how Bangladeshi companies are generating more leads, cutting costs and scaling with our AI + automation systems.',
+    'caseStudies.pageTitle': 'Real Results from Real Businesses',
+    'caseStudies.pageSubtitle': 'See how Bangladeshi businesses across real estate, healthcare and e-commerce are using AI sales automation to generate qualified leads, cut costs and grow revenue — 24/7.',
+    'caseStudies.readFull': 'Read full case study',
+    'caseStudies.ctaTitle': 'Want results like these?',
+    'caseStudies.ctaDesc': 'Book a free 30-minute strategy session. We\'ll audit your business and design a custom AI + automation roadmap with clear ROI projections — no obligation.',
+    'caseStudies.ctaButton': 'Get Your Free Strategy Session',
+    'caseStudies.backToCaseStudies': 'Back to Case Studies',
+    'caseStudies.challenge': 'Challenge',
+    'caseStudies.solution': 'Our Solution',
+    'caseStudies.results': 'Results',
+    'caseStudies.servicesUsed': 'SERVICES USED',
+    'caseStudies.relatedTitle': 'More Case Studies',
+    'caseStudies.detailCtaTitle': 'Want the same results?',
+    'caseStudies.detailCtaDesc': 'Get a custom AI automation roadmap for your business — book a free strategy call.',
     'team.eyebrow': 'Our Story', 'team.title1': 'The team building', 'team.title2': "Bangladesh's AI future",
     'team.subtitle': "We're a Jessore-based squad of AI engineers, growth specialists and automation architects obsessed with one thing: your revenue.",
-    'faq.eyebrow': 'FAQ', 'faq.title1': 'Questions?', 'faq.title2': "We've got answers.",
+    'faq.eyebrow': 'FAQ', 'faq.title': 'Frequently Asked Questions',
+    'faq.title1': 'Questions?', 'faq.title2': "We've got answers.",
     'faq.subtitle': 'Everything you need to know about working with NextGen Digital Studio.',
     'ctaBand.title': 'Ready to automate your growth?',
     'ctaBand.subtitle': 'Book a free 30-minute strategy call. We\'ll audit your business and design a custom AI + automation roadmap — no obligation.',
@@ -67,6 +82,19 @@ const translations: Record<Lang, Record<string, string>> = {
     'contact.subtitle': 'Send us a message or book a call. We typically reply within 2 hours during business hours.',
     'blog.eyebrow': 'Insights', 'blog.title1': 'From the', 'blog.title2': 'NextGen blog',
     'blog.subtitle': 'Practical guides on AI, automation and growth for Bangladeshi businesses.',
+    'blog.brandBadge': 'NextGen Digital Studio · Blog',
+    'blog.pageTitle': 'AI Sales Automation Insights',
+    'blog.pageSubtitle': 'Practical, no-fluff guides on how Bangladeshi businesses are using AI chatbots, WhatsApp automation, CRM and voice agents to close more deals — 24/7.',
+    'blog.ctaTitle': 'Ready to automate your growth?',
+    'blog.ctaDesc': 'Book a free 30-minute strategy session. We\'ll audit your business and design a custom AI + automation roadmap — no obligation.',
+    'blog.ctaButton': 'Get Your Free Strategy Session',
+    'blog.backToBlog': 'Back to Blog',
+    'blog.authorLabel': 'Founder · NextGen Digital Studio',
+    'blog.relatedTitle': 'More articles',
+    'blog.detailCtaTitle': 'Want AI automation for your business?',
+    'blog.detailCtaDesc': 'Book a free strategy call — we\'ll build a custom AI roadmap for your business.',
+    'blog.detailCtaButton': 'Book a strategy call',
+    'blog.notFound': 'Article Not Found',
     'footer.newsletterTitle': 'Get AI growth insights every week',
     'footer.newsletterDesc': 'Join 3,000+ Bangladeshi founders getting practical automation & AI tips. No spam, unsubscribe anytime.',
     'footer.emailPlaceholder': 'Enter your email', 'footer.subscribed': 'You\'re subscribed! Check your inbox to confirm.',
@@ -247,7 +275,10 @@ const translations: Record<Lang, Record<string, string>> = {
     'nav.cta': 'Get Started',
     'nav.howItWorks': 'How It Works',
     'nav.testimonials': 'Results',
+    'nav.openMenu': 'Open menu',
+    'nav.closeMenu': 'Close menu',
     'common.popular': 'Popular',
+    'common.scrollToTop': 'Scroll to top',
     'cta.orderNow': 'Order Now',
     'hero.eyebrow': 'AI Sales Automation Agency — Jessore, Bangladesh',
     'hero.title': 'Stop Losing Customers. Start Closing Deals 24/7.',
@@ -492,9 +523,24 @@ const translations: Record<Lang, Record<string, string>> = {
     'comparison.subtitle': 'বেশিরভাগ এজেন্সি ঘণ্টা বিক্রি করে। আমরা অটোমেটেড ফলাফল বিক্রি করি। আমাদের সাথে কাজ করা কিভাবে অন্যদের তুলনায় আলাদা, তা এখানে।',
     'caseStudies.eyebrow': 'কেস স্টাডি', 'caseStudies.title1': 'বাস্তব ব্যবসা।', 'caseStudies.title2': 'বাস্তব ফলাফল।',
     'caseStudies.subtitle': 'দেখুন বাংলাদেশের কোম্পানিগুলো কিভাবে আমাদের এআই + অটোমেশন সিস্টেম দিয়ে বেশি লিড তৈরি, খরচ কমায় এবং স্কেল করছে।',
+    'caseStudies.pageTitle': 'বাস্তব ব্যবসার বাস্তব ফলাফল',
+    'caseStudies.pageSubtitle': 'দেখুন কিভাবে বাংলাদেশের রিয়েল এস্টেট, হেলথকেয়ার ও ই-কমার্স ব্যবসাগুলো এআই সেলস অটোমেশন ব্যবহার করে যোগ্য লিড তৈরি, খরচ কমায় এবং রাজস্ব বাড়ায় — ২৪/৭।',
+    'caseStudies.readFull': 'সম্পূর্ণ কেস স্টাডি পড়ুন',
+    'caseStudies.ctaTitle': 'একই ফলাফল চান?',
+    'caseStudies.ctaDesc': 'ফ্রি ৩০-মিনিট স্ট্র্যাটেজি সেশন বুক করুন। আমরা আপনার ব্যবসা অডিট করে স্পষ্ট ROI প্রজেকশন সহ কাস্টম এআই + অটোমেশন রোডম্যাপ তৈরি করব — কোনো বাধ্যবাধকতা নেই।',
+    'caseStudies.ctaButton': 'ফ্রি স্ট্র্যাটেজি সেশন পান',
+    'caseStudies.backToCaseStudies': 'কেস স্টাডিতে ফিরুন',
+    'caseStudies.challenge': 'চ্যালেঞ্জ',
+    'caseStudies.solution': 'আমাদের সমাধান',
+    'caseStudies.results': 'ফলাফল',
+    'caseStudies.servicesUsed': 'ব্যবহৃত সেবা',
+    'caseStudies.relatedTitle': 'আরও কেস স্টাডি',
+    'caseStudies.detailCtaTitle': 'একই ফলাফল চান?',
+    'caseStudies.detailCtaDesc': 'আপনার ব্যবসার জন্য কাস্টম এআই অটোমেশন রোডম্যাপ পান — ফ্রি স্ট্র্যাটেজি কল বুক করুন।',
     'team.eyebrow': 'আমাদের গল্প', 'team.title1': 'বাংলাদেশের এআই ভবিষ্যৎ', 'team.title2': 'তৈরি করছে যে টিম',
     'team.subtitle': 'আমরা যশোরভিত্তিক এআই ইঞ্জিনিয়ার, গ্রোথ স্পেশালিস্ট ও অটোমেশন আর্কিটেক্টের একটি টিম — একটি জিনিস নিয়ে আগ্রহী: আপনার রাজস্ব।',
-    'faq.eyebrow': 'প্রশ্নোত্তর', 'faq.title1': 'প্রশ্ন আছে?', 'faq.title2': 'উত্তর আছে।',
+    'faq.eyebrow': 'প্রশ্নোত্তর', 'faq.title': 'সাধারণ জিজ্ঞাসা',
+    'faq.title1': 'প্রশ্ন আছে?', 'faq.title2': 'উত্তর আছে।',
     'faq.subtitle': 'NextGen Digital Studio এর সাথে কাজ করা সম্পর্কে যা যা জানতে হবে।',
     'ctaBand.title': 'আপনার গ্রোথ অটোমেট করতে প্রস্তুত?',
     'ctaBand.subtitle': 'ফ্রি ৩০-মিনিট স্ট্র্যাটেজি কল বুক করুন। আমরা আপনার ব্যবসা অডিট করে কাস্টম এআই + অটোমেশন রোডম্যাপ তৈরি করব — কোনো বাধ্যবাধকতা নেই।',
@@ -504,6 +550,19 @@ const translations: Record<Lang, Record<string, string>> = {
     'contact.subtitle': 'বার্তা পাঠান বা কল বুক করুন। কর্মঘণ্টায় আমরা সাধারণত ২ ঘন্টার মধ্যে উত্তর দেই।',
     'blog.eyebrow': 'ইনসাইটস', 'blog.title1': 'NextGen', 'blog.title2': 'ব্লগ থেকে',
     'blog.subtitle': 'বাংলাদেশের ব্যবসার জন্য এআই, অটোমেশন ও গ্রোথের উপর বাস্তবমুখী গাইড।',
+    'blog.brandBadge': 'NextGen Digital Studio · ব্লগ',
+    'blog.pageTitle': 'এআই সেলস অটোমেশন ইনসাইটস',
+    'blog.pageSubtitle': 'বাস্তবমুখী, ফালতু কথা ছাড়া গাইড — কীভাবে বাংলাদেশি ব্যবসাগুলো এআই চ্যাটবট, হোয়াটসঅ্যাপ অটোমেশন, CRM ও ভয়েস এজেন্ট দিয়ে বেশি ডিল ক্লোজ করছে — ২৪/৭।',
+    'blog.ctaTitle': 'আপনার গ্রোথ অটোমেট করতে প্রস্তুত?',
+    'blog.ctaDesc': 'ফ্রি ৩০-মিনিট স্ট্র্যাটেজি সেশন বুক করুন। আমরা আপনার ব্যবসা অডিট করে কাস্টম এআই + অটোমেশন রোডম্যাপ তৈরি করব — কোনো বাধ্যবাধকতা নেই।',
+    'blog.ctaButton': 'ফ্রি স্ট্র্যাটেজি সেশন পান',
+    'blog.backToBlog': 'ব্লগে ফিরুন',
+    'blog.authorLabel': 'প্রতিষ্ঠাতা · NextGen Digital Studio',
+    'blog.relatedTitle': 'আরও পড়ুন',
+    'blog.detailCtaTitle': 'আপনার ব্যবসায় AI অটোমেশন চান?',
+    'blog.detailCtaDesc': 'ফ্রি স্ট্র্যাটেজি কল বুক করুন — আমরা আপনার ব্যবসার জন্য কাস্টম AI রোডম্যাপ তৈরি করব।',
+    'blog.detailCtaButton': 'স্ট্র্যাটেজি কল বুক করুন',
+    'blog.notFound': 'আর্টিকেল পাওয়া যায়নি',
     'footer.newsletterTitle': 'প্রতি সপ্তাহে এআই গ্রোথ ইনসাইটস পান',
     'footer.newsletterDesc': '৩,০০০+ বাংলাদেশি প্রতিষ্ঠাতার সাথে যোগ দিন যারা বাস্তবমুখী অটোমেশন ও এআই টিপস পান। কোনো স্প্যাম নেই।',
     'footer.emailPlaceholder': 'ইমেইল লিখুন', 'footer.subscribed': 'সাবস্ক্রাইব হয়েছে! কনফার্মেশনের জন্য ইনবক্স চেক করুন।',
@@ -660,7 +719,10 @@ const translations: Record<Lang, Record<string, string>> = {
     'nav.cta': 'শুরু করুন',
     'nav.howItWorks': 'কিভাবে কাজ করে',
     'nav.testimonials': 'ফলাফল',
+    'nav.openMenu': 'মেনু খুলুন',
+    'nav.closeMenu': 'মেনু বন্ধ করুন',
     'common.popular': 'জনপ্রিয়',
+    'common.scrollToTop': 'উপরে যান',
     'cta.orderNow': 'অর্ডার করুন',
     'hero.eyebrow': 'এআই সেলস অটোমেশন এজেন্সি — যশোর, বাংলাদেশ',
     'hero.title': 'কাস্টমার হারানো বন্ধ করুন। ২৪/৭ সেলস ক্লোজ করুন।',
@@ -930,6 +992,66 @@ const contentBn: Record<string, string> = {
   'Full sales funnels that convert': 'কনভার্ট করা সম্পূর্ণ সেলস ফানেল',
   'Performance marketing with clear ROI': 'স্পষ্ট ROI সহ পারফরম্যান্স মার্কেটিং',
   'Business automation that saves 40+ hrs/week': 'বিজনেস অটোমেশন যা সপ্তাহে ৪০+ ঘণ্টা বাঁচায়',
+  // Service landing page features (47 unique feature strings from services[] array)
+  // AI Sales Automation
+  'AI lead scoring': 'এআই লিড স্কোরিং',
+  'Auto follow-up sequences': 'অটো ফলো-আপ সিকোয়েন্স',
+  'CRM pipeline sync': 'CRM পাইপলাইন সিঙ্ক',
+  'Meeting booking': 'মিটিং বুকিং',
+  // AI Chat Agent
+  'Trained on your data': 'আপনার ডেটার উপর ট্রেইনড',
+  'Multilingual': 'মাল্টি-ল্যাঙ্গুয়েজ',
+  'Lead capture & routing': 'লিড ক্যাপচার ও রাউটিং',
+  'Human handoff': 'হিউম্যান হ্যান্ডঅফ',
+  // AI Voice Agent
+  'Inbound & outbound': 'ইনবাউন্ড ও আউটবাউন্ড',
+  'Bangla + English': 'বাংলা + ইংরেজি',
+  'Appointment booking': 'অ্যাপয়েন্টমেন্ট বুকিং',
+  'CRM logging': 'CRM লগিং',
+  // CRM Automation
+  'Pipeline automation': 'পাইপলাইন অটোমেশন',
+  'Smart tagging': 'স্মার্ট ট্যাগিং',
+  'Task reminders': 'টাস্ক রিমাইন্ডার',
+  'Revenue reporting': 'রাজস্ব রিপোর্টিং',
+  // WhatsApp Automation
+  'Broadcast campaigns': 'ব্রডকাস্ট ক্যাম্পেইন',
+  'Chatbots & menus': 'চ্যাটবট ও মেনু',
+  'Template messages': 'টেমপ্লেট মেসেজ',
+  'Click-to-chat ads': 'ক্লিক-টু-চ্যাট বিজ্ঞাপন',
+  // Lead Generation
+  'B2B & B2C leads': 'B2B ও B2C লিড',
+  'Verified contact data': 'যাচাইকৃত কন্টাক্ট ডেটা',
+  'AI cold outreach': 'এআই কোল্ড আউটরিচ',
+  'Conversion tracking': 'কনভার্সন ট্র্যাকিং',
+  // Performance Marketing
+  'Meta & Google Ads': 'মেটা ও গুগল বিজ্ঞাপন',
+  'Creative production': 'ক্রিয়েটিভ প্রোডাকশন',
+  'ROAS reporting': 'ROAS রিপোর্টিং',
+  // Sales Funnel Development
+  'Funnel strategy': 'ফানেল স্ট্র্যাটেজি',
+  'Landing pages': 'ল্যান্ডিং পেজ',
+  'Email/SMS sequences': 'ইমেইল/SMS সিকোয়েন্স',
+  'A/B testing': 'A/B টেস্টিং',
+  // Business Automation
+  'n8n & Zapier': 'n8n ও Zapier',
+  'API integrations': 'API ইন্টিগ্রেশন',
+  'Document automation': 'ডকুমেন্ট অটোমেশন',
+  'Workflow audit': 'ওয়ার্কফ্লো অডিট',
+  // Website Development
+  'Next.js & React': 'Next.js ও React',
+  'SEO optimised': 'SEO অপ্টিমাইজড',
+  'CMS integration': 'CMS ইন্টিগ্রেশন',
+  'Core Web Vitals': 'কোর ওয়েব ভাইটালস',
+  // Landing Page Design
+  'Copywriting': 'কপিরাইটিং',
+  'Conversion design': 'কনভার্সন ডিজাইন',
+  'A/B variants': 'A/B ভ্যারিয়েন্ট',
+  'Analytics setup': 'অ্যানালিটিক্স সেটআপ',
+  // AI Consultation
+  'Business audit': 'বিজনেস অডিট',
+  'AI opportunity map': 'এআই সুযোগ ম্যাপ',
+  'ROI modelling': 'ROI মডেলিং',
+  'Implementation plan': 'ইমপ্লিমেন্টেশন প্ল্যান',
   // Why Choose Us
   "Bangladesh's most results-obsessed AI automation agency": 'বাংলাদেশের সবচেয়ে ফলাফল-আসক্ত এআই অটোমেশন এজেন্সি',
   "We're not just developers — we're growth partners. Every system we build is engineered around one goal: more qualified leads, more booked calls, more revenue.": 'আমরা শুধু ডেভেলপার নই — আমরা গ্রোথ পার্টনার। আমরা যে সিস্টেম তৈরি করি তার একটি লক্ষ্য: বেশি যোগ্য লিড, বেশি বুকড কল, বেশি রাজস্ব।',
@@ -977,7 +1099,7 @@ const contentBn: Record<string, string> = {
   'White-label options': 'হোয়াইট-লেবেল অপশন', '/month': '/মাস', '/mo': '/মাস', 'Custom': 'কাস্টম',
   'Most Popular': 'সবচেয়ে জনপ্রিয়', 'Need something custom?': 'কাস্টম কিছু দরকার?',
   // Guarantees
-  '30-Day ROI Promise': '৩০-দিনের ROI প্রতিশ্রুতি', 'No Long Lock-in': 'কোনো দীর্ঘ চুক্তি নেই',
+  '60-Day ROI Promise': '৬০-দিনের ROI প্রতিশ্রুতি', 'No Long Lock-in': 'কোনো দীর্ঘ চুক্তি নেই',
   'Bank-grade Security': 'ব্যাংক-গ্রেড নিরাপত্তা', 'Dhaka-based Support': 'ঢাকা-ভিত্তিক সাপোর্ট',
   'See qualified leads in the first month or we work free until you do.': 'প্রথম মাসে যোগ্য লিড দেখুন বা আমরা ফ্রিতে কাজ করব।',
   'Monthly plans. Cancel anytime — no multi-year contracts holding you hostage.': 'মাসিক প্ল্যান। যেকোনো সময় বাতিল করুন — কোনো বহু-বছরের চুক্তি নেই।',
@@ -1187,12 +1309,28 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = React.useState(false)
 
   React.useEffect(() => {
+    let initialLang: Lang = 'en'
     try {
       const saved = localStorage.getItem(STORAGE_KEY) as Lang | null
-      if (saved === 'en' || saved === 'bn') setLangState(saved)
+      if (saved === 'en' || saved === 'bn') {
+        setLangState(saved)
+        initialLang = saved
+      }
     } catch {}
+    // Keep the <html lang> attribute in sync with the active language on first mount
+    // (so SSR 'en' is corrected to 'bn' if the user previously toggled to Bengali).
+    if (typeof document !== 'undefined') {
+      document.documentElement.lang = initialLang
+    }
     setMounted(true)
   }, [])
+
+  // Keep <html lang> attribute in sync whenever lang changes (toggle / setLang calls).
+  React.useEffect(() => {
+    if (typeof document !== 'undefined') {
+      document.documentElement.lang = lang
+    }
+  }, [lang])
 
   const setLang = React.useCallback((l: Lang) => {
     setLangState(l)

@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import Image from 'next/image'
-import { Menu, Globe, Sparkles } from 'lucide-react'
+import { Menu, Globe } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -21,19 +21,29 @@ type NavItem = {
   href: string
 }
 
+// Anchor links point to homepage sections (`/#services`, `/#how`, etc.) so they
+// work from any route. On the homepage we smooth-scroll; on other routes we
+// navigate to the homepage, which then scrolls to the anchor automatically.
 const NAV_ITEMS: NavItem[] = [
-  { key: 'nav.services', href: '#services' },
-  { key: 'nav.howItWorks', href: '#how' },
-  { key: 'nav.pricing', href: '#pricing' },
-  { key: 'nav.testimonials', href: '#testimonials' },
+  { key: 'nav.services', href: '/#services' },
+  { key: 'nav.howItWorks', href: '/#how' },
+  { key: 'nav.pricing', href: '/#pricing' },
+  { key: 'nav.testimonials', href: '/#testimonials' },
 ]
 
-function smoothScrollTo(href: string) {
-  const id = href.replace('#', '')
-  const el = document.getElementById(id)
-  if (el) {
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+function handleAnchorClick(href: string) {
+  const isHome = window.location.pathname === '/'
+  if (isHome) {
+    const id = href.replace('/#', '')
+    const el = document.getElementById(id)
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      return
+    }
   }
+  // Not on homepage (or anchor not found) — navigate to homepage with anchor.
+  // Next.js will scroll to the section after the route change.
+  window.location.href = href
 }
 
 function Logo({ onClick }: { onClick?: () => void }) {
@@ -100,7 +110,7 @@ function DesktopNav() {
       {NAV_ITEMS.map((item) => (
         <button
           key={item.key}
-          onClick={() => smoothScrollTo(item.href)}
+          onClick={() => handleAnchorClick(item.href)}
           className="relative rounded-full px-3.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
         >
           {t(item.key)}
@@ -116,7 +126,7 @@ function CtaButton({ onClick }: { onClick?: () => void }) {
     <Button
       onClick={() => {
         onClick?.()
-        smoothScrollTo('#lead-form')
+        handleAnchorClick('/#lead-form')
       }}
       className="animate-pulse-glow h-10 rounded-full border-0 bg-gradient-to-r from-emerald-500 via-emerald-500 to-teal-500 px-5 text-sm font-semibold text-white shadow-md hover:from-emerald-400 hover:to-teal-400"
     >
@@ -163,7 +173,9 @@ export function Navbar() {
                 variant="ghost"
                 size="icon"
                 className="grid h-11 w-11 place-items-center rounded-lg border border-border/50 md:hidden"
-                aria-label="Open menu"
+                aria-label={open ? t('nav.closeMenu') : t('nav.openMenu')}
+                aria-expanded={open}
+                aria-controls="mobile-nav-sheet"
               >
                 <Menu className="h-5 w-5" />
               </Button>
@@ -171,6 +183,7 @@ export function Navbar() {
             <SheetContent
               side="right"
               className="w-[300px] max-w-[85vw] border-l border-border/60 bg-background p-0 sm:max-w-sm"
+              id="mobile-nav-sheet"
             >
               <SheetHeader className="border-b border-border/50 p-4">
                 <SheetTitle className="flex items-center gap-2">
@@ -191,8 +204,8 @@ export function Navbar() {
                     key={item.key}
                     onClick={() => {
                       setOpen(false)
-                      // wait for sheet close before smooth scroll
-                      setTimeout(() => smoothScrollTo(item.href), 80)
+                      // wait for sheet close before anchor navigation
+                      setTimeout(() => handleAnchorClick(item.href), 80)
                     }}
                     className="flex min-h-[48px] items-center rounded-lg px-3 text-left text-base font-medium text-foreground/90 transition-colors hover:bg-accent/60 hover:text-foreground"
                   >
@@ -205,7 +218,7 @@ export function Navbar() {
                 <CtaButton
                   onClick={() => {
                     setOpen(false)
-                    setTimeout(() => smoothScrollTo('#lead-form'), 80)
+                    setTimeout(() => handleAnchorClick('/#lead-form'), 80)
                   }}
                 />
               </div>

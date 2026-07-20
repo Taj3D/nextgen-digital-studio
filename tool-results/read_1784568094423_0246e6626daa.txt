@@ -1,0 +1,302 @@
+  1617→Task ID: AUDIT-2-landing
+  1618→Agent: God Mode Deep Audit (Landing Pages)
+  1619→Task: Exhaustive audit of the 6 product/landing pages + shared lead-form/payment components. Read every file in full. Find crashes, bugs, dummy features, i18n gaps, dead code, TS issues, A11y/SEO gaps, lead-flow issues, and fulfillment risks. Report 15+ issues with file/line/evidence/fix.
+  1620→
+  1621→Work Log:
+  1622→- Read prior worklog (Tasks 1, 2-a..2-d, 3-master-fixes, 4-verification, AUDIT-1) to understand all fixes already applied: ai-training "#top"→"#order" fix, bn() numeral helper added to all 5 pages, unused imports removed, honeypot added to LandingLeadForm, tr() applied on services/[slug], PaymentInstructions shown on books success state, PaymentInstructions amount uses bn(), frameBorder→border-0, admin sourceLabels expanded, etc.
+  1623→- Read every file in scope completely: ai-training/{page,training-client}.tsx, cnc-training/{page,cnc-training-client}.tsx, cnc-design/{page,cnc-client}.tsx, 3d-portrait/{page,portrait-client}.tsx, pdf-books/{page,books-client}.tsx, founder/{page,founder-client}.tsx, services/[slug]/{page,landing-client}.tsx, landing-common.tsx, payment-instructions.tsx. Also read top-bar.tsx, floating-buttons.tsx, booking-modal.tsx, language-provider.tsx (contentBn + tr()), site-data.ts (services + siteConfig), whatsapp.ts, api/download/route.ts.
+  1624→- Verified image assets: /public/3d-gallery/1-7.jpg + 8.png exist and are non-empty. /public/founder.png exists (1.7MB). 7 extra image-XXXXX.{jpg,png} files in /3d-gallery/ are orphaned (never referenced in code).
+  1625→- Verified NO PDF files exist anywhere in /public/ (no /public/books/, no /public/pdfs/, find returned 0 results). The /api/download endpoint maps to /resources/*.html (free tools), NOT to PDF books.
+  1626→- Ran `bunx tsc --noEmit` — 0 new TS errors in landing page files (only pre-existing lead-form.tsx zod resolver errors remain).
+  1627→- Ran ripgrep for TODO/FIXME/lorem/placeholder/coming-soon — only legitimate input placeholder attributes found.
+  1628→- Cross-checked #order / #order-form anchors vs form section IDs across all 6 pages.
+  1629→
+  1630→Stage Summary:
+  1631→
+  1632→### P1 — Conversion / Lead-Flow Bugs (7 issues)
+  1633→
+  1634→[LANDING-001] [SEVERITY: P1] [TYPE: LeadFlow/Bug]
+  1635→FILE: src/app/cnc-training/cnc-training-client.tsx
+  1636→LINE: 93-96 (hero), 174-203 (form), entire file
+  1637→ISSUE: NO scroll-to-form CTA anywhere on the page. Hero only has WhatsApp + Socials. No final CTA banner. The registration form (id="order") is unreachable except via TopBar's "Book Strategy Call" fallback or manual scroll.
+  1638→EVIDENCE: `rg -n 'href="#order' src/app/cnc-training/cnc-training-client.tsx` returns 0 matches. Hero (L93-96) only renders `<WhatsAppCTA>` + `<LandingSocials>`. No `<a href="#order">` anywhere.
+  1639→FIX: Add a hero CTA button `<a href="#order" className="...">Register Now</a>` next to WhatsAppCTA, and a final gradient CTA banner (like ai-training L367-386) before the footer.
+  1640→
+  1641→[LANDING-002] [SEVERITY: P1] [TYPE: LeadFlow/Bug]
+  1642→FILE: src/app/founder/founder-client.tsx
+  1643→LINE: 59-62 (hero), 166-199 (contact form)
+  1644→ISSUE: NO scroll-to-form CTA anywhere. Hero only has WhatsApp + Socials. The contact form (id="order") is unreachable except via TopBar fallback or manual scroll.
+  1645→EVIDENCE: `rg -n 'href="#order' src/app/founder/founder-client.tsx` returns 0 matches. Hero (L59-62) only renders `<WhatsAppCTA>` + `<LandingSocials>`.
+  1646→FIX: Add a hero CTA `<a href="#order" className="...">Send Request</a>` next to WhatsAppCTA. Optionally add a final CTA banner.
+  1647→
+  1648→[LANDING-003] [SEVERITY: P1] [TYPE: Bug/Gap]
+  1649→FILE: src/app/services/[slug]/landing-client.tsx
+  1650→LINE: 179 (form section)
+  1651→ISSUE: The lead-form `<section>` has NO id attribute. TopBar's `scrollToForm()` falls back to finding the last `<form>` element on the page (works but fragile). No `#order` anchor support for marketing links/ads.
+  1652→EVIDENCE: Line 179 `<section className="mx-auto max-w-3xl ...">` — no `id` prop. Compare to other pages: `<section id="order" className="...">`.
+  1653→FIX: Change L179 to `<section id="order" className="mx-auto max-w-3xl scroll-mt-20 px-4 py-12 sm:px-6 sm:py-16">`.
+  1654→
+  1655→[LANDING-004] [SEVERITY: P1] [TYPE: Gap/LeadFlow]
+  1656→FILE: src/app/pdf-books/books-client.tsx
+  1657→LINE: 396-466 (BookOrderForm)
+  1658→ISSUE: BookOrderForm has NO honeypot field — spam protection missing. The shared LandingLeadForm (landing-common.tsx L196-204) HAS a honeypot, but BookOrderForm is a separate form that bypasses this protection. Bots can submit spam leads via /pdf-books.
+  1659→EVIDENCE: L396 `<form onSubmit={onSubmit} className="grid gap-4">` — first child is the book-select div, no hidden honeypot input. Compare to LandingLeadForm L197-204 which has `<input type="text" name="website" tabIndex={-1} ... className="absolute -left-[9999px] ..." />`.
+  1660→FIX: Add the same honeypot input inside the `<form>`:
+  1661→```tsx
+  1662→<input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden className="absolute -left-[9999px] top-auto h-0 w-0 opacity-0" />
+  1663→```
+  1664→And in `onSubmit` (L321), add before payload construction:
+  1665→```tsx
+  1666→const website = String(fd.get('website') ?? '').trim()
+  1667→if (website) { setDone(true); toast.success(...); setSubmitting(false); form.reset(); return }
+  1668→```
+  1669→
+  1670→[LANDING-005] [SEVERITY: P1] [TYPE: Bug/Perf]
+  1671→FILE: src/app/services/[slug]/landing-client.tsx
+  1672→LINE: 34
+  1673→ISSUE: `usePageViewTracking('service_detail_page', { slug })` passes a NEW object literal `{ slug }` on every render. The hook's `useEffect` deps array is `[source, meta]` (landing-common.tsx L269) — since `meta` is a new object reference each render, the effect re-fires on EVERY parent re-render (e.g. on language toggle, on any state change). This spams /api/track with duplicate page_view events and corrupts analytics.
+  1674→EVIDENCE: L34 `usePageViewTracking('service_detail_page', { slug })`. Hook at L257-270: `React.useEffect(() => { fetch('/api/track', ...) }, [source, meta])`. Object literal `{ slug }` creates new ref every render.
+  1675→FIX: Either (a) pass slug as a string: `usePageViewTracking(\`service_detail_page_\${slug}\`)` and drop the meta param, or (b) memoize: `const meta = React.useMemo(() => ({ slug }), [slug])` then `usePageViewTracking('service_detail_page', meta)`.
+  1676→
+  1677→[LANDING-006] [SEVERITY: P1] [TYPE: Dummy/Fulfillment]
+  1678→FILE: src/app/pdf-books/books-client.tsx
+  1679→LINE: 34-90 (BOOKS array), 264-294 (order form)
+  1680→ISSUE: NO actual PDF files exist anywhere in /public/. The page sells "5 premium PDF books" with specific page counts (120, 140, 110, 95, 130 pages) and titles (Mind Training, Money Psychology, Business Branding, Personal Branding, Sales Psychology), but there are zero PDF files in the repository. Fulfillment relies entirely on the team manually sending a Google Drive link within 2 hours — if the books don't exist yet, paying customers will be defrauded.
+  1681→EVIDENCE: `find /home/z/my-project/public -name "*.pdf"` returns 0 results. `ls public/books/` → "No such file or directory". `ls public/pdfs/` → "No such file or directory". The /api/download endpoint maps to /resources/*.html (free tools), NOT to PDF books.
+  1682→FIX: Either (a) create the actual PDF files and store them in /public/books/ (or a private CDN), wire up an authenticated download endpoint, OR (b) add a clear "Pre-order" / "Coming soon" disclaimer if the books are not yet finalized, OR (c) verify with founder that books exist externally and document the manual fulfillment SOP.
+  1683→
+  1684→[LANDING-007] [SEVERITY: P1] [TYPE: Dummy/Fulfillment]
+  1685→FILE: src/app/cnc-design/cnc-client.tsx
+  1686→LINE: 19-28 (CATEGORIES), 75-78 (hero claim)
+  1687→ISSUE: NO actual CNC design files exist in /public/. The page sells "150GB of 2500+ ready-to-cut CNC designs" with per-category counts (500+ doors, 300+ sofa, 200+ beds, etc.) but there are zero design files in the repository. The 150GB / 2500+ figures are unverifiable marketing claims with no backing inventory. Same fulfillment risk as LANDING-006.
+  1688→EVIDENCE: `find /home/z/my-project/public -name "*.stl" -o -name "*.dxf"` returns 0 results. No /public/cnc-designs/ directory. The order flow (L246-281) just submits a lead and shows PaymentInstructions — no actual file delivery mechanism.
+  1689→FIX: Verify with founder that the 150GB bundle exists externally (Google Drive, etc.) and document the manual fulfillment SOP. If counts are estimates, soften language from "500+ doors" to "500+ door designs included". If counts are fabricated, remove them or replace with verifiable numbers.
+  1690→
+  1691→### P2 — i18n / A11y / SEO (17 issues)
+  1692→
+  1693→[LANDING-008] [SEVERITY: P2] [TYPE: i18n]
+  1694→FILE: src/app/ai-training/training-client.tsx
+  1695→LINE: 300, 305, 310
+  1696→ISSUE: Instructor stats (120+, 5.0, 7+) are hardcoded Western digits inside an isBn-aware block — they stay as "120+", "5.0", "7+" in BN mode instead of "১২০+", "৫.০", "৭+".
+  1697→EVIDENCE:
+  1698→```tsx
+  1699→// L298-313
+  1700→<div className="flex items-center gap-1.5">
+  1701→  <Users className="h-4 w-4 text-blue-600" />
+  1702→  <span className="font-semibold">120+</span>  {/* ← hardcoded Western */}
+  1703→  <span className="text-muted-foreground">{isBn ? 'ছাত্র' : 'students'}</span>
+  1704→</div>
+  1705→<div className="flex items-center gap-1.5">
+  1706→  <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+  1707→  <span className="font-semibold">5.0</span>  {/* ← hardcoded Western */}
+  1708→  <span className="text-muted-foreground">{isBn ? 'রেটিং' : 'rating'}</span>
+  1709→</div>
+  1710→<div className="flex items-center gap-1.5">
+  1711→  <Clock className="h-4 w-4 text-blue-600" />
+  1712→  <span className="font-semibold">7+</span>  {/* ← hardcoded Western */}
+  1713→  <span className="text-muted-foreground">{isBn ? 'বছর' : 'years'}</span>
+  1714→</div>
+  1715→```
+  1716→FIX: Wrap each in bn(): `<span className="font-semibold">{bn('120+')}</span>`, `{bn('5.0')}`, `{bn('7+')}`.
+  1717→
+  1718→[LANDING-009] [SEVERITY: P2] [TYPE: i18n]
+  1719→FILE: src/app/cnc-design/cnc-client.tsx
+  1720→LINE: 174
+  1721→ISSUE: CATEGORIES count (500+, 300+, 200+, etc.) rendered as `{count}` without bn() — stays Western in BN mode.
+  1722→EVIDENCE: L19-28 `count: '500+'` etc. L174 `<p className="text-lg font-extrabold ...">{count}</p>` — no bn() call.
+  1723→FIX: L174 → `<p ...>{bn(count)}</p>`.
+  1724→
+  1725→[LANDING-010] [SEVERITY: P2] [TYPE: i18n]
+  1726→FILE: src/app/cnc-design/cnc-client.tsx
+  1727→LINE: 89
+  1728→ISSUE: "150 GB" badge hardcoded Western digits — stays "150 GB" in BN mode instead of "১৫০ GB".
+  1729→EVIDENCE: L88-90 `<span className="rounded-full bg-amber-100 px-3 py-1 font-semibold text-amber-700 ...">150 GB</span>` — literal string.
+  1730→FIX: `<span ...>{bn('150')} GB</span>`.
+  1731→
+  1732→[LANDING-011] [SEVERITY: P2] [TYPE: i18n]
+  1733→FILE: src/app/cnc-design/cnc-client.tsx
+  1734→LINE: 84, 210
+  1735→ISSUE: "-90%" discount badge hardcoded Western — stays "-90%" in BN mode instead of "-৯০%".
+  1736→EVIDENCE: L83-85 `<span className="rounded-full bg-emerald-500/15 px-2 py-0.5 text-xs font-bold text-emerald-600">-90%</span>`. L209-211 same.
+  1737→FIX: `<span ...>{bn('-90%')}</span>` (or `{isBn ? '-৯০%' : '-90%'}`).
+  1738→
+  1739→[LANDING-012] [SEVERITY: P2] [TYPE: i18n]
+  1740→FILE: src/app/cnc-design/cnc-client.tsx
+  1741→LINE: 95
+  1742→ISSUE: "2D + 3D" badge hardcoded Western digits — stays "2D + 3D" in BN mode instead of "২D + ৩D".
+  1743→EVIDENCE: L94-96 `<span className="rounded-full bg-emerald-100 ...">2D + 3D</span>` — literal string.
+  1744→FIX: `<span ...>{isBn ? '২D + ৩D' : '2D + 3D'}</span>` (or use bn() helper: `{bn('2D + 3D')}`).
+  1745→
+  1746→[LANDING-013] [SEVERITY: P2] [TYPE: i18n]
+  1747→FILE: src/app/cnc-design/cnc-client.tsx
+  1748→LINE: 123
+  1749→ISSUE: Hero overlay "150GB · 2500+ files" hardcoded Western — stays Western in BN mode.
+  1750→EVIDENCE: L123 `<p className="font-heading text-xl font-bold">150GB · 2500+ files</p>` — literal string, not in isBn ternary.
+  1751→FIX: `<p ...>{isBn ? '১৫০GB · ২৫০০+ ফাইল' : '150GB · 2500+ files'}</p>`.
+  1752→
+  1753→[LANDING-014] [SEVERITY: P2] [TYPE: i18n]
+  1754→FILE: src/app/cnc-training/cnc-training-client.tsx
+  1755→LINE: 126
+  1756→ISSUE: Curriculum day labels "D{day}" (D1, D2, ... D7) hardcoded Western — stays "D1"..."D7" in BN mode instead of "D১"..."D৭".
+  1757→EVIDENCE: L125-127 `<div className="flex h-12 w-12 ... font-heading font-bold text-white shadow-md">D{day}</div>` — `D` prefix + raw number.
+  1758→FIX: `D{bn(day)}` (or `{isBn ? 'দিন ' + bn(day) : 'D' + day}`).
+  1759→
+  1760→[LANDING-015] [SEVERITY: P2] [TYPE: i18n/A11y]
+  1761→FILE: src/app/3d-portrait/portrait-client.tsx
+  1762→LINE: 153, 362
+  1763→ISSUE: Gallery image alt text "3D Portrait Sample ${i + 1}" hardcoded English — in BN mode, screen readers and image-fallback display show English instead of Bengali.
+  1764→EVIDENCE: L153 `alt={`3D Portrait Sample ${i + 1}`}`. L362 `alt={`3D Portrait Sample ${i + 1}`}`. Both use template literal with English text + Western digit.
+  1765→FIX: `alt={isBn ? \`৩D পোর্ট্রেট নমুনা ${bn(i + 1)}\` : \`3D Portrait Sample ${i + 1}\`}`.
+  1766→
+  1767→[LANDING-016] [SEVERITY: P2] [TYPE: A11y/i18n]
+  1768→FILE: src/app/3d-portrait/portrait-client.tsx
+  1769→LINE: 326
+  1770→ISSUE: Facebook video iframe `title="3D Portrait Making Video"` hardcoded English — WCAG requires iframe titles for screen readers; in BN mode it should be Bengali.
+  1771→EVIDENCE: L319-327 `<iframe ... title="3D Portrait Making Video" />` — literal English title.
+  1772→FIX: `title={isBn ? '৩D পোর্ট্রেট তৈরির ভিডিও' : '3D Portrait Making Video'}`.
+  1773→
+  1774→[LANDING-017] [SEVERITY: P2] [TYPE: i18n]
+  1775→FILE: src/app/3d-portrait/portrait-client.tsx
+  1776→LINE: 51-57 (BOARD_SIZES), 396-398 (table render)
+  1777→ISSUE: Board sizes (10" × 14", 12" × 16", etc.) and table row numbers ({i + 1}) hardcoded Western — stay Western in BN mode.
+  1778→EVIDENCE: L51-57 `BOARD_SIZES` array has `size: '10" × 14"'` etc. L396 `<td className="px-4 py-3 font-bold text-violet-600">{i + 1}</td>` — raw index.
+  1779→FIX: Either (a) wrap render in bn(): `<td ...>{bn(i + 1)}</td>` and `<td ...>{bn(b.size)}</td>` / `<td ...>{bn(b.thickness)}</td>`, or (b) add t_bn/bn variants to BOARD_SIZES entries.
+  1780→
+  1781→[LANDING-018] [SEVERITY: P2] [TYPE: i18n]
+  1782→FILE: src/app/3d-portrait/portrait-client.tsx
+  1783→LINE: 275 (face count selector), 471 (selected display)
+  1784→ISSUE: Face count button labels `{f}` (1-5) and "selected: X face(s)" display hardcoded Western — stay Western in BN mode.
+  1785→EVIDENCE: L264-277 `{[1,2,3,4,5].map((f) => (... <button>{f}</button> ...))}` — raw number. L470-472 `<span ...>{faces} {isBn ? 'ফেস' : 'face'}{faces > 1 ? (isBn ? '' : 's') : ''}</span>` — `{faces}` is raw number.
+  1786→FIX: L275 → `{bn(f)}`. L471 → `{bn(faces)} {isBn ? 'ফেস' : 'face'}...`.
+  1787→
+  1788→[LANDING-019] [SEVERITY: P2] [TYPE: Bug/Maintainability]
+  1789→FILE: src/app/services/[slug]/landing-client.tsx
+  1790→LINE: 162
+  1791→ISSUE: WhatsApp CTA link hardcodes the phone number `8801711731354` directly in the URL template, bypassing `siteConfig.whatsapp`. If the number ever changes in siteConfig, this CTA will be stale. Every other component uses `siteConfig.whatsapp` or `waLink()`.
+  1792→EVIDENCE: L162-166 `href={`https://wa.me/8801711731354?text=${encodeURIComponent(...)}`}` — magic number.
+  1793→FIX: `href={`https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent(...)}`}`. Add `import { siteConfig } from '@/lib/site-data'` (currently not imported in this file).
+  1794→
+  1795→[LANDING-020] [SEVERITY: P2] [TYPE: SEO]
+  1796→FILE: src/app/ai-training/page.tsx, src/app/cnc-training/page.tsx, src/app/cnc-design/page.tsx, src/app/3d-portrait/page.tsx, src/app/pdf-books/page.tsx, src/app/founder/page.tsx
+  1797→LINE: all (metadata exports)
+  1798→ISSUE: None of the 6 landing pages emit any structured data (JSON-LD). layout.tsx only emits Organization + Service + FAQ schema globally. Missing per-page schema:
+  1799→- /ai-training + /cnc-training → should emit Course schema (name, description, provider, offers[price=1000TK/250TK], hasCourseInstance[duration=1week/7days])
+  1800→- /cnc-design + /pdf-books → should emit Product schema (name, offers[price=150TK/170TK], aggregateRating if real)
+  1801→- /3d-portrait → should emit Service or Product schema (offers with price range 500-17500)
+  1802→- /founder → should emit Person schema (name, jobTitle, worksFor, image, sameAs[facebook/linkedin/etc.])
+  1803→EVIDENCE: `rg -n "application/ld+json" src/app/ai-training src/app/cnc-training src/app/cnc-design src/app/3d-portrait src/app/pdf-books src/app/founder` → 0 matches. Only layout.tsx L309-320 has JSON-LD.
+  1804→FIX: Add a `<script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(...)}} />` to each page.tsx (or a shared helper). Priorities: Course schema for the 2 training pages (eligible for Google rich results), Person schema for founder page.
+  1805→
+  1806→[LANDING-021] [SEVERITY: P2] [TYPE: A11y]
+  1807→FILE: src/app/3d-portrait/portrait-client.tsx
+  1808→LINE: 239-255 (material buttons), 264-277 (face count buttons)
+  1809→ISSUE: Calculator selector buttons use visual styling (border-color, bg-color) to indicate selection state, but have NO `aria-pressed` attribute. Screen reader users cannot tell which material/face-count is currently selected.
+  1810→EVIDENCE: L239-247 `<button type="button" onClick={() => setMaterial(m.key)} className={`... ${material === m.key ? 'border-violet-500 bg-violet-50 shadow-lg' : 'border-border/60 bg-card hover:border-violet-300'}`}>` — no aria-pressed. L265-273 same pattern for face count.
+  1811→FIX: Add `aria-pressed={material === m.key}` to material buttons (L239). Add `aria-pressed={faces === f}` to face count buttons (L265). Optionally add `aria-label={`Select ${m.t_en} material`}` / `aria-label={`Select ${f} faces`}`.
+  1812→
+  1813→[LANDING-022] [SEVERITY: P2] [TYPE: Gap/LeadFlow]
+  1814→FILE: src/app/ai-training/training-client.tsx, src/app/cnc-training/cnc-training-client.tsx, src/app/pdf-books/books-client.tsx, src/app/founder/founder-client.tsx
+  1815→LINE: hero sections (ai-training L135-138, cnc-training L93-96, pdf-books L148-154, founder L59-62)
+  1816→ISSUE: All 4 pages have NO hero "Order Now" / "Register Now" scroll-to-form CTA. Hero only renders WhatsApp + Socials. Users must scroll past the entire page (or use TopBar's "Book Strategy Call" fallback) to reach the form. /cnc-design and /3d-portrait DO have hero CTAs (L99, L130 respectively). This was flagged as P1 in audit 2-c (line 616 of worklog) but only /ai-training's final CTA was fixed — hero CTAs were never added.
+  1817→EVIDENCE: ai-training L135-138: `<WhatsAppCTA />` + `<LandingSocials />` only. cnc-training L93-96: same. pdf-books L148-154: same. founder L59-62: same. None have `<a href="#order">` in hero.
+  1818→FIX: Add a primary gradient CTA button `<a href="#order" className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r ...">Register Now / Order Now / Send Request</a>` to each hero, before or alongside `<WhatsAppCTA />`.
+  1819→
+  1820→[LANDING-023] [SEVERITY: P2] [TYPE: i18n]
+  1821→FILE: src/app/3d-portrait/portrait-client.tsx
+  1822→LINE: 213
+  1823→ISSUE: "1-5 faces" hardcoded Western digits inside BN string — mixes Bengali and Western numerals.
+  1824→EVIDENCE: L213 `{ t: isBn ? 'পরিবারের সবাই' : 'For the Whole Family', d: isBn ? '১-৫ জনের ফেস একসাথে খোদাই।' : '1-5 faces carved together.' }` — BN string "১-৫" already uses Bengali digits ✓ (this one is actually OK). However L213 EN `'1-5 faces carved together.'` — if the user switches to BN, the card title/desc both render BN version correctly. ✓ (FALSE POSITIVE — withdraw this issue; verified correct.)
+  1825→
+  1826→[LANDING-024] [SEVERITY: P2] [TYPE: i18n/A11y]
+  1827→FILE: src/app/founder/founder-client.tsx
+  1828→LINE: 78-87 (star rating badge)
+  1829→ISSUE: Star rating badge has 5 purely-decorative `<Star>` icons with no `aria-label` on the container. Screen readers announce "image" 5 times. The text "120+ client reviews" / "১২০+ ক্লায়েন্ট রেটিং" follows but the star cluster itself is unlabeled.
+  1830→EVIDENCE: L79-83 `<div className="flex items-center gap-1">{[0,1,2,3,4].map((i) => (<Star key={i} className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />))}</div>` — no role/aria-label.
+  1831→FIX: Wrap star cluster in `<div role="img" aria-label={isBn ? '৫.০ এর মধ্যে ৫ তারা' : '5 out of 5 stars'} className="flex items-center gap-1">...`.
+  1832→
+  1833→### P3 — Polish / Dead Code / Unverifiable Claims (6 issues)
+  1834→
+  1835→[LANDING-025] [SEVERITY: P3] [TYPE: TS]
+  1836→FILE: src/app/pdf-books/books-client.tsx
+  1837→LINE: 31
+  1838→ISSUE: BOOKS array `Icon` field typed as `typeof Brain` — non-standard pattern. The codebase already imports `LucideIcon` type in site-data.ts (L329) and uses it for Service/Industry types. `typeof Brain` works but is inconsistent and fragile (if Brain is ever removed from imports, the type breaks).
+  1839→EVIDENCE: L31 `Icon: typeof Brain` (inside `type Book = { ... Icon: typeof Brain }`).
+  1840→FIX: Change to `Icon: LucideIcon` and add `import type { LucideIcon } from 'lucide-react'` at top.
+  1841→
+  1842→[LANDING-026] [SEVERITY: P3] [TYPE: DeadCode]
+  1843→FILE: src/app/pdf-books/books-client.tsx
+  1844→LINE: 92
+  1845→ISSUE: `ALL_FIVE_PRICE = 850` constant defined but NEVER referenced anywhere in the file. The actual 850 price is hardcoded inline at L107, L226, L384, L409. Already noted in prior worklog (line 939) but never removed.
+  1846→EVIDENCE: `rg -n "ALL_FIVE_PRICE" src/` → only L92 (definition), 0 usages.
+  1847→FIX: Either (a) delete L92, or (b) replace all inline `850` literals with `{ALL_FIVE_PRICE}` and `{bn(String(ALL_FIVE_PRICE), isBn)}` for consistency.
+  1848→
+  1849→[LANDING-027] [SEVERITY: P3] [TYPE: Perf]
+  1850→FILE: src/app/3d-portrait/portrait-client.tsx
+  1851→LINE: 319-327
+  1852→ISSUE: Facebook video iframe loads eagerly (no `loading="lazy"`). The iframe is in section 5 (below the fold) — lazy loading would defer the network request until the user scrolls near it, improving initial page load.
+  1853→EVIDENCE: L319 `<iframe src="https://www.facebook.com/plugins/video.php?..." className="h-full w-full border-0" style={{ border: 'none' }} scrolling="no" allowFullScreen allow="..." title="..." />` — no `loading` attribute.
+  1854→FIX: Add `loading="lazy"` to the iframe.
+  1855→
+  1856→[LANDING-028] [SEVERITY: P3] [TYPE: Dummy/Unverifiable]
+  1857→FILE: src/app/founder/founder-client.tsx
+  1858→LINE: 52, 85, 97-100, 126
+  1859→ISSUE: Multiple unverifiable marketing stats presented as facts:
+  1860→- L52: "Jessore first digital engineer" (হশোরের প্রথম ডিজিটাল ইঞ্জিনিয়ার) — unverifiable superlative
+  1861→- L85: "120+ client reviews" badge on founder photo
+  1862→- L97: "120+ Clients" stat card
+  1863→- L99: "2.4M+ AI conversations" stat card
+  1864→- L100: "4.9/5 Avg rating" stat card
+  1865→- L126: "average ROI of 7.2x" claim in story
+  1866→None of these are backed by a case-studies page, a reviews page, or any public proof. The 4.9/5 rating is suspiciously high for 120+ clients (typically averages cluster around 4.5-4.8). The 7.2x ROI is precise but unverifiable. The "2.4M+ AI conversations" is plausible only if 120+ clients each had ~20,000 conversations — possible but unverified.
+  1867→EVIDENCE: L52 `{isBn ? 'তাজ ভাই · যশোরের প্রথম ডিজিটাল ইঞ্জিনিয়ার' : 'Taj Bhai · Jessore first digital engineer'}`. L97-100 stats array. L126 story paragraph.
+  1868→FIX: Verify each stat with founder. If verifiable, add a /case-studies or /reviews link nearby for proof. If unverifiable, soften language: "120+ clients served" → "Many happy clients", "4.9/5" → "Rated highly by clients", "7.2x ROI" → "Significant ROI improvements", "Jessore first digital engineer" → "A leading digital engineer in Jessore". The 2.4M+ conversations figure should link to a dashboard screenshot or case study.
+  1869→
+  1870→[LANDING-029] [SEVERITY: P3] [TYPE: Dummy/Unverifiable]
+  1871→FILE: src/app/cnc-design/cnc-client.tsx
+  1872→LINE: 19-28 (CATEGORIES counts), 78 (2500+ designs claim), 89 (150GB claim)
+  1873→ISSUE: Per-category design counts (500+ doors, 300+ sofa, 200+ beds, 400+ wardrobes, 150+ dressing tables, 250+ chairs, 180+ tables, 500+ others) sum to ~2480 — roughly matches the "2500+ designs" hero claim. But these are unverifiable dummy counts with no actual file inventory (see LANDING-007). The "150GB" total is also unverifiable.
+  1874→EVIDENCE: L19-28 CATEGORIES array. L78 hero `'2500+ CNC designs, 150GB'`. No file manifest, no S3/Drive inventory, no /public/cnc-designs/ directory.
+  1875→FIX: If counts are real (founder has the actual bundle), keep them but add a "Download file manifest" link or a sample-gallery section showing actual file names. If counts are estimates/aspirational, soften to "500+ door designs planned" or remove specific numbers.
+  1876→
+  1877→[LANDING-030] [SEVERITY: P3] [TYPE: Dummy/Unverifiable]
+  1878→FILE: src/app/3d-portrait/portrait-client.tsx
+  1879→LINE: 299, 521-522
+  1880→ISSUE: Campaign "was ৳3,200" original price is unverifiable — it doesn't match any price in the STL_PRICES array `[500, 4500, 6000, 7500, 9000]`. The campaign price is 500 (single face STL), but the next tier (2 faces) is 4500, not 3200. The "was ৳3,200" appears fabricated to inflate the perceived discount (84% off).
+  1881→EVIDENCE: L31-32 `// STL prices: 500 (campaign), 4500, 6000, 7500, 9000` and `const STL_PRICES = [500, 4500, 6000, 7500, 9000]`. L299 `{isBn ? '🔥 ক্যাম্পেইন অফার (নির্ধারিত ৳৩২০০)' : '🔥 Campaign offer (was ৳3,200)'}`. L521-522 same claim repeated.
+  1882→FIX: Either (a) replace 3200 with the actual previous price (if the campaign genuinely reduced from a real prior price), or (b) remove the "was ৳3,200" claim and just say "Campaign price ৳500 — limited time", or (c) verify with founder what the actual pre-campaign price was and use that.
+  1883→
+  1884→### POSITIVE FINDINGS (already fixed / working correctly)
+  1885→- LandingLeadForm (landing-common.tsx) HAS honeypot field ✓ (added in Task 3-landing-fixes)
+  1886→- LandingLeadForm shows PaymentInstructions when `paymentAmount` is passed ✓
+  1887→- BookOrderForm shows PaymentInstructions on success state ✓ (L381-387)
+  1888→- PaymentInstructions amount uses bn() for BN-mode display ✓ (L37-38)
+  1889→- All 5 landing pages have bn() helper defined ✓
+  1890→- Prices (৳1,000, ৳250, ৳150, ৳170, ৳850) properly localized via bn() ✓
+  1891→- 3D portrait iframe uses `border-0` class + `style={{border:'none'}}` (no deprecated frameBorder) ✓
+  1892→- services/[slug] uses tr() for BN title/short/description/features ✓
+  1893→- All 6 pages have `usePageViewTracking()` ✓ (except LANDING-005 bug in services/[slug])
+  1894→- All forms POST to /api/contact with correct `source` field ✓
+  1895→- All forms have loading state (Loader2 spinner) + success state (CheckCircle2) + error state (toast) ✓
+  1896→- Honeypot on LandingLeadForm silently shows success without hitting API ✓
+  1897→- All 6 page.tsx files have proper metadata (title, description, keywords, openGraph, alternates.canonical) ✓
+  1898→- All images (founder.png, 3d-gallery/1-8) exist and are non-empty ✓
+  1899→- All form sections have `scroll-mt-20` for sticky-header offset ✓
+  1900→- TopBar's `scrollToForm()` tries 6 different IDs + falls back to last `<form>` ✓
+  1901→- Lead form success state has "Send another request" reset button ✓
+  1902→- `siteConfig.phone` (real Taj number +880 1711 731354) used for bKash/Nagad — not placeholders ✓
+  1903→- FloatingButtons uses waLink() (real number) ✓
+  1904→- No `any` types in any landing page file ✓
+  1905→- No TODO/FIXME/lorem ipsum in any landing page file ✓
+  1906→- No crashes / runtime errors detected in code review ✓
+  1907→
+  1908→### PRIORITY QUEUE FOR NEXT FIX AGENT
+  1909→P0: None (no crashes).
+  1910→P1 (7): LANDING-005 (services/[slug] tracking re-fire), LANDING-001 + LANDING-002 (cnc-training + founder missing scroll-to-form CTAs), LANDING-003 (services/[slug] form id), LANDING-004 (books honeypot), LANDING-006 + LANDING-007 (PDF + CNC vaporware — verify with founder).
+  1911→P2 (16): LANDING-020 (structured data — highest SEO impact), LANDING-008-019 (i18n/A11y batch fixes — mechanical), LANDING-022 (hero CTAs on 4 pages), LANDING-021 (aria-pressed on calculator), LANDING-024 (star aria-label).
+  1912→P3 (6): LANDING-025 (LucideIcon type), LANDING-026 (dead ALL_FIVE_PRICE), LANDING-027 (iframe lazy), LANDING-028-030 (unverifiable stats — verify with founder).
+  1913→
+  1914→### OVERALL VERDICT
+  1915→6 landing pages are functionally clean for lead submission (form → /api/contact → Google Sheets works end-to-end, honeypot protects LandingLeadForm, PaymentInstructions shows on paid pages). The most significant NEW bugs found are: (1) services/[slug] usePageViewTracking re-fires on every render due to object-literal meta dep (LANDING-005 — analytics corruption), (2) /cnc-training and /founder have ZERO scroll-to-form CTAs (LANDING-001/002 — conversion loss), (3) BookOrderForm missing honeypot (LANDING-004 — spam risk), (4) PDF books + CNC design bundle have no actual product files (LANDING-006/007 — fulfillment risk, verify with founder). The i18n batch (LANDING-008-019) is mechanical — ~12 instances of hardcoded Western digits/English strings that should use bn() helper or isBn ternaries. SEO gap (LANDING-020) — no per-page Course/Product/Person structured data on any of the 6 pages.
+  1916→
+
+[showing lines 1617-1916 of 3943; use offset=1917 with limit to continue reading]

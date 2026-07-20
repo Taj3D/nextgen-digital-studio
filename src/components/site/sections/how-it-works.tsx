@@ -50,7 +50,7 @@ export function HowItWorks() {
   const { t } = useLang()
 
   return (
-    <SectionShell id="how" className="relative">
+    <SectionShell id="how" className="relative" aria-label="How It Works">
       {/* Header */}
       <Reveal className="mx-auto max-w-3xl text-center">
         <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/5 px-4 py-2 text-emerald-500 text-xs sm:text-sm font-semibold uppercase tracking-wider">

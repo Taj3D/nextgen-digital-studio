@@ -1,21 +1,36 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { sendToGoogleSheets } from "@/lib/google-sheets";
+import { trackEvent } from "@/lib/tracking";
+import { normalizeSource } from "@/lib/lead-sources";
+import { normalizePhone } from "@/lib/phone";
 
 export const runtime = "nodejs";
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    const name = String(body.name ?? "").trim();
-    const email = String(body.email ?? "").trim().toLowerCase();
-    const phone = body.phone ? String(body.phone).trim() : "";
-    const role = String(body.role ?? "").trim();
-    const portfolio = body.portfolio ? String(body.portfolio).trim() : "";
-    const message = body.message ? String(body.message).trim() : "";
-
-    if (!name || !email || !role) {
+    let body: unknown;
+    try {
+      body = await req.json();
+    } catch {
       return NextResponse.json(
-        { ok: false, error: "Name, email and role are required" },
+        { ok: false, error: "Invalid JSON" },
+        { status: 400 },
+      );
+    }
+
+    const name = String((body as Record<string, unknown>).name ?? "").trim();
+    const email = String((body as Record<string, unknown>).email ?? "").trim().toLowerCase();
+    const phone = normalizePhone((body as Record<string, unknown>).phone ? String((body as Record<string, unknown>).phone).trim() : "");
+    const role = String((body as Record<string, unknown>).role ?? "").trim();
+    const position = (body as Record<string, unknown>).position ? String((body as Record<string, unknown>).position).trim() : role;
+    const portfolio = (body as Record<string, unknown>).portfolio ? String((body as Record<string, unknown>).portfolio).trim() : "";
+    const message = (body as Record<string, unknown>).message ? String((body as Record<string, unknown>).message).trim() : "";
+    const source = normalizeSource((body as Record<string, unknown>).source, "careers_application");
+
+    if (!name || !email || (!role && !position)) {
+      return NextResponse.json(
+        { ok: false, error: "Name, email and role/position are required" },
         { status: 400 },
       );
     }
@@ -26,19 +41,52 @@ export async function POST(req: Request) {
       );
     }
 
-    const lead = await db.lead.create({
-      data: {
-        name,
-        email,
-        phone: phone || "Not provided",
-        service: `Job Application: ${role}`,
-        message: `${portfolio ? `Portfolio: ${portfolio} | ` : ""}${message}`.slice(0, 500),
-        source: "careers_application",
-        status: "new",
-      },
-    });
+    const service = `Job Application: ${position || role}`;
+    const fullMessage = `${portfolio ? `Portfolio: ${portfolio} | ` : ""}${message}`.slice(0, 500);
 
-    return NextResponse.json({ ok: true, id: lead.id });
+    // Try to save to database (may fail if DB not configured — Google Sheets is the source of truth)
+    let leadId = "sheets-only";
+    try {
+      const lead = await db.lead.create({
+        data: {
+          name,
+          email,
+          phone: phone || "Not provided",
+          service,
+          message: fullMessage,
+          source,
+          status: "new",
+        },
+      });
+      leadId = lead.id;
+    } catch (dbErr) {
+      console.error("[careers] DB save failed (lead will still go to Google Sheets)", dbErr);
+    }
+
+    // Google Sheets sync (saves to Sheet + sends email to candidate + owner via Apps Script)
+    sendToGoogleSheets({
+      name,
+      email,
+      phone: phone || "",
+      service,
+      message: fullMessage,
+      source,
+      leadId,
+      submittedAt: new Date().toISOString(),
+    }).catch((err) => console.error("[careers] google sheets error", err));
+
+    // Fire-and-forget: server-side tracking (GA4, Meta, TikTok, Snapchat Conversions API)
+    trackEvent({
+      type: "lead",
+      source,
+      email,
+      phone: phone || undefined,
+      name,
+      page: "/api/careers",
+      meta: { leadId, role: position || role, portfolio: portfolio || null },
+    }).catch((err) => console.error("[careers] tracking error", err));
+
+    return NextResponse.json({ ok: true, id: leadId });
   } catch (err) {
     console.error("[careers] error", err);
     return NextResponse.json(

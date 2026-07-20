@@ -150,7 +150,7 @@ export function PortraitClient() {
                   >
                     <Image
                       src={src}
-                      alt={`3D Portrait Sample ${i + 1}`}
+                      alt={isBn ? `৩D পোর্ট্রেট নমুনা ${bn(i + 1)}` : `3D Portrait Sample ${i + 1}`}
                       width={400}
                       height={400}
                       className="aspect-square w-full object-cover"
@@ -234,12 +234,14 @@ export function PortraitClient() {
             </div>
 
             {/* Material selector */}
-            <div className="mt-8 grid gap-3 sm:grid-cols-3">
+            <div className="mt-8 grid gap-3 sm:grid-cols-3" role="group" aria-label={isBn ? 'উপাদান নির্বাচন করুন' : 'Select material'}>
               {MATERIALS.map((m) => (
                 <button
                   key={m.key}
                   type="button"
                   onClick={() => setMaterial(m.key)}
+                  aria-pressed={material === m.key}
+                  aria-label={`${isBn ? m.t_bn : m.t_en} — ${isBn ? m.desc_bn : m.desc_en} — ${isBn ? m.days_bn : m.days_en}`}
                   className={`rounded-2xl border-2 p-4 text-left transition-all ${
                     material === m.key
                       ? 'border-violet-500 bg-violet-50 shadow-lg dark:bg-violet-950/30'
@@ -257,22 +259,28 @@ export function PortraitClient() {
 
             {/* Face count selector */}
             <div className="mt-6">
-              <p className="text-sm font-semibold text-muted-foreground">
+              <p className="text-sm font-semibold text-muted-foreground" id="face-count-label">
                 {isBn ? 'কতজনের ফেস?' : 'How many faces?'}
               </p>
-              <div className="mt-3 flex flex-wrap gap-2">
+              <div
+                className="mt-3 flex flex-wrap gap-2"
+                role="group"
+                aria-labelledby="face-count-label"
+              >
                 {[1, 2, 3, 4, 5].map((f) => (
                   <button
                     key={f}
                     type="button"
                     onClick={() => setFaces(f)}
+                    aria-pressed={faces === f}
+                    aria-label={`${bn(f)} ${isBn ? 'ফেস' : faces > 1 ? 'faces' : 'face'}`}
                     className={`flex h-12 w-12 items-center justify-center rounded-xl border-2 font-bold transition-all ${
                       faces === f
                         ? 'border-violet-500 bg-violet-500 text-white shadow-lg'
                         : 'border-border/60 bg-card hover:border-violet-300'
                     }`}
                   >
-                    {f}
+                    {bn(f)}
                   </button>
                 ))}
               </div>
@@ -291,7 +299,7 @@ export function PortraitClient() {
                   <Clock className="h-3.5 w-3.5" /> {days}
                 </span>
                 <span className="flex items-center gap-1 text-muted-foreground">
-                  <Layers className="h-3.5 w-3.5" /> {faces} {isBn ? 'ফেস' : 'face'}{faces > 1 ? (isBn ? '' : 's') : ''}
+                  <Layers className="h-3.5 w-3.5" /> {bn(faces)} {isBn ? 'ফেস' : 'face'}{faces > 1 ? (isBn ? '' : 's') : ''}
                 </span>
               </div>
               {material === 'stl' && faces === 1 && (
@@ -359,7 +367,7 @@ export function PortraitClient() {
                 >
                   <Image
                     src={src}
-                    alt={`3D Portrait Sample ${i + 1}`}
+                    alt={isBn ? `৩D পোর্ট্রেট নমুনা ${bn(i + 1)}` : `3D Portrait Sample ${i + 1}`}
                     width={400}
                     height={400}
                     className="aspect-square w-full object-cover transition-transform duration-500 group-hover:scale-110"
@@ -393,9 +401,9 @@ export function PortraitClient() {
               <tbody className="divide-y divide-border/60">
                 {BOARD_SIZES.map((b, i) => (
                   <tr key={i} className="hover:bg-muted/30">
-                    <td className="px-4 py-3 font-bold text-violet-600">{i + 1}</td>
-                    <td className="px-4 py-3 font-semibold">{b.size}</td>
-                    <td className="px-4 py-3">{b.thickness}</td>
+                    <td className="px-4 py-3 font-bold text-violet-600">{bn(i + 1)}</td>
+                    <td className="px-4 py-3 font-semibold">{bn(b.size)}</td>
+                    <td className="px-4 py-3">{bn(b.thickness)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -432,7 +440,7 @@ export function PortraitClient() {
             ].map((s) => (
               <div key={s.n} className="rounded-2xl border border-border/60 bg-card p-6 text-center shadow-sm">
                 <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-600 to-fuchsia-500 font-heading text-xl font-bold text-white shadow-md">
-                  {s.n}
+                  {bn(s.n)}
                 </div>
                 <h3 className="mt-3 font-heading font-bold">{s.t}</h3>
                 <p className="mt-1 text-xs text-muted-foreground">{s.d}</p>
@@ -468,7 +476,7 @@ export function PortraitClient() {
                   {isBn ? MATERIALS.find((m) => m.key === material)!.t_bn : MATERIALS.find((m) => m.key === material)!.t_en}
                 </span>
                 <span className="rounded-full bg-fuchsia-100 px-3 py-0.5 font-bold text-fuchsia-700 dark:bg-fuchsia-950/40 dark:text-fuchsia-300">
-                  {faces} {isBn ? 'ফেস' : 'face'}{faces > 1 ? (isBn ? '' : 's') : ''}
+                  {bn(faces)} {isBn ? 'ফেস' : 'face'}{faces > 1 ? (isBn ? '' : 's') : ''}
                 </span>
                 <span className="font-bold text-violet-600 dark:text-violet-400">৳{bn(price.toLocaleString('en-US'))}</span>
               </div>

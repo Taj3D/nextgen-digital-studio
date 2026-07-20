@@ -1,6 +1,8 @@
 // WhatsApp link helper for NextGen Digital Studio.
 
-export const WHATSAPP_NUMBER = '8801711731354'
+import { siteConfig } from '@/lib/site-data'
+
+export const WHATSAPP_NUMBER = siteConfig.whatsapp
 
 const DEFAULT_TEXT = 'Hi NextGen! I want to learn about your AI sales system.'
 

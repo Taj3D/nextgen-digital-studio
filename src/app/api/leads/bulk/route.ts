@@ -1,11 +1,16 @@
+import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { requireAuth } from "@/lib/auth";
 
 export const runtime = "nodejs";
 
 const VALID_STATUSES = ["new", "contacted", "qualified", "won", "lost"];
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
+  const authError = requireAuth(req);
+  if (authError) return authError;
+
   try {
     const body = await req.json();
     const { ids, action, value } = body as {

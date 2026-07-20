@@ -13,7 +13,7 @@ import {
   usePageViewTracking,
 } from '@/components/site/landing-common'
 import { useLang } from '@/components/site/language-provider'
-import { Check, Clock, Tag, Download, HardDrive, Boxes, DoorOpen, Sofa, BedDouble, Archive, Armchair, Table2, LayoutGrid } from 'lucide-react'
+import { Clock, Tag, Download, HardDrive, Boxes, DoorOpen, Sofa, BedDouble, Archive, Armchair, Table2, LayoutGrid } from 'lucide-react'
 
 /* 8 design categories with counts */
 const CATEGORIES = [
@@ -81,18 +81,18 @@ export function CncClient() {
                 <span className="text-5xl font-extrabold">৳{bn('150')}</span>
                 <span className="text-lg text-muted-foreground line-through">৳{bn('1,500')}</span>
                 <span className="rounded-full bg-emerald-500/15 px-2 py-0.5 text-xs font-bold text-emerald-600">
-                  -90%
+                  {isBn ? '-৯০%' : '-90%'}
                 </span>
               </div>
               <div className="mt-4 flex flex-wrap gap-3 text-sm">
                 <span className="rounded-full bg-amber-100 px-3 py-1 font-semibold text-amber-700 dark:bg-amber-950/40 dark:text-amber-300">
-                  150 GB
+                  {bn('150')} GB
                 </span>
                 <span className="rounded-full bg-orange-100 px-3 py-1 font-semibold text-orange-700 dark:bg-orange-950/40 dark:text-orange-300">
                   {isBn ? '২৫০০+ ডিজাইন' : '2500+ designs'}
                 </span>
                 <span className="rounded-full bg-emerald-100 px-3 py-1 font-semibold text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
-                  2D + 3D
+                  {isBn ? '২D + ৩D' : '2D + 3D'}
                 </span>
               </div>
               <div className="mt-6 flex flex-wrap items-center gap-3">
@@ -171,7 +171,7 @@ export function CncClient() {
                   <Icon className="h-6 w-6" />
                 </div>
                 <h3 className="mt-3 font-heading font-bold">{isBn ? t_bn : t_en}</h3>
-                <p className="text-lg font-extrabold text-amber-600 dark:text-amber-400">{count}</p>
+                <p className="text-lg font-extrabold text-amber-600 dark:text-amber-400">{bn(count)}</p>
               </div>
             ))}
           </div>

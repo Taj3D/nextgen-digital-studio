@@ -82,10 +82,6 @@ export const metadata: Metadata = {
   publisher: "NextGen Digital Studio",
   alternates: {
     canonical: "https://nextgendigitalstudio.com",
-    languages: {
-      'en': 'https://nextgendigitalstudio.com',
-      'bn': 'https://nextgendigitalstudio.com',
-    },
   },
   robots: {
     index: true,
@@ -116,7 +112,7 @@ export const metadata: Metadata = {
     description: "AI Sales Automation Agency in Bangladesh. AI chatbots, WhatsApp automation, CRM, lead generation. Free strategy session.",
     images: [
       {
-        url: "/logo.jpg",
+        url: "/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "NextGen Digital Studio — AI Sales Automation Agency in Bangladesh",
@@ -129,16 +125,13 @@ export const metadata: Metadata = {
     description: "AI chatbots, WhatsApp automation, CRM, lead generation. Generate qualified leads 24/7. Free strategy session. Jessore, Bangladesh.",
     images: [
       {
-        url: "/logo.jpg",
+        url: "/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "NextGen Digital Studio",
       },
     ],
     creator: "@nextgendigital",
-  },
-  verification: {
-    google: "google-site-verification=YOUR_GOOGLE_VERIFICATION_CODE",
   },
   category: "technology",
 };
@@ -162,8 +155,8 @@ const jsonLd = {
   logo: "https://nextgendigitalstudio.com/logo.jpg",
   image: "https://nextgendigitalstudio.com/logo.jpg",
   description: "AI Sales Automation Agency in Bangladesh. We help businesses automate marketing, sales, customer communication and operations with Artificial Intelligence. AI chatbots, WhatsApp automation, CRM, lead generation, sales funnels.",
-  email: "nextgendigitalstudio1@gmail.com",
-  telephone: "+8801711731354",
+  email: siteConfig.email,
+  telephone: `+${siteConfig.whatsapp}`,
   address: {
     "@type": "PostalAddress",
     addressLocality: "Jessore",
@@ -205,9 +198,9 @@ const jsonLd = {
   ],
   contactPoint: {
     "@type": "ContactPoint",
-    telephone: "+8801711731354",
+    telephone: `+${siteConfig.whatsapp}`,
     contactType: "customer service",
-    email: "nextgendigitalstudio1@gmail.com",
+    email: siteConfig.email,
     availableLanguage: ["English", "Bengali"],
   },
   priceRange: "৳৳",
@@ -221,8 +214,8 @@ const serviceLd = {
   name: "NextGen Digital Studio",
   image: "https://nextgendigitalstudio.com/logo.jpg",
   url: "https://nextgendigitalstudio.com",
-  telephone: "+8801711731354",
-  email: "nextgendigitalstudio1@gmail.com",
+  telephone: `+${siteConfig.whatsapp}`,
+  email: siteConfig.email,
   priceRange: "৳৳",
   address: {
     "@type": "PostalAddress",

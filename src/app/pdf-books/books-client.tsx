@@ -89,8 +89,6 @@ const BOOKS: Book[] = [
   },
 ]
 
-const ALL_FIVE_PRICE = 850
-
 /** Convert ASCII digits to Bengali digits when lang === 'bn'. */
 const bn = (s: string | number, isBn: boolean) =>
   isBn
@@ -146,6 +144,17 @@ export function BooksClient() {
             </p>
 
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+              <a
+                href="#books"
+                onClick={(e) => {
+                  e.preventDefault()
+                  document.getElementById('books')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                }}
+                className="gradient-brand animate-pulse-glow inline-flex items-center gap-2 rounded-full px-7 py-3 text-sm font-bold text-white shadow-lg shadow-rose-600/25 transition-transform hover:scale-[1.02]"
+              >
+                {isBn ? 'বই দেখুন' : 'Browse Books'}
+                <ArrowRight className="h-4 w-4" />
+              </a>
               <WhatsAppCTA
                 isBn={isBn}
                 message={isBn ? 'আসসালামু আলাইকুম, আমি PDF বই অর্ডার করতে চাই। প্রতিটি ১৭০ টাকা, ১টি কিনুন ১টি ফ্রি।' : 'Hi, I want to order PDF books. Each 170TK, buy 1 get 1 free.'}
@@ -156,7 +165,7 @@ export function BooksClient() {
         </section>
 
         {/* Books grid */}
-        <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
+        <section id="books" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-12 sm:px-6 sm:py-16">
           <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
             {BOOKS.map((b) => (
               <div
@@ -320,9 +329,19 @@ function BookOrderForm({
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    setSubmitting(true)
     const form = e.currentTarget
     const fd = new FormData(form)
+
+    // Honeypot — bot bait: silently show success without hitting the API
+    const website = String(fd.get('website') ?? '').trim()
+    if (website) {
+      setDone(true)
+      toast.success(isBn ? 'সফলভাবে জমা হয়েছে!' : 'Submission successful!')
+      form.reset()
+      return
+    }
+
+    setSubmitting(true)
     const payload = {
       name: String(fd.get('name') ?? '').trim(),
       email: String(fd.get('email') ?? '').trim(),
@@ -394,6 +413,15 @@ function BookOrderForm({
 
   return (
     <form onSubmit={onSubmit} className="grid gap-4">
+      {/* Honeypot — visually hidden, never visible to humans */}
+      <input
+        type="text"
+        name="website"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden
+        className="absolute -left-[9999px] top-auto h-0 w-0 opacity-0"
+      />
       {/* Book selection dropdown */}
       <div className="space-y-1.5">
         <Label htmlFor="book-select">

@@ -39,7 +39,7 @@ export function PainPointsSection() {
   const { t } = useLang()
 
   return (
-    <SectionShell id="pain" className="relative">
+    <SectionShell id="pain" className="relative" aria-label="Pain Points">
       {/* Section header */}
       <Reveal className="mx-auto max-w-3xl text-center">
         <h2 className="mt-5 text-3xl lg:text-4xl font-bold tracking-tight text-foreground">

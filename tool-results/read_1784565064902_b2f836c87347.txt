@@ -1,0 +1,559 @@
+     1→'use client'
+     2→
+     3→import * as React from 'react'
+     4→import Image from 'next/image'
+     5→import { TopBar } from '@/components/site/top-bar'
+     6→import { FloatingButtons } from '@/components/site/floating-buttons'
+     7→import {
+     8→  LandingEyebrow,
+     9→  LandingFooter,
+    10→  LandingLeadForm,
+    11→  LandingSocials,
+    12→  WhatsAppCTA,
+    13→  usePageViewTracking,
+    14→} from '@/components/site/landing-common'
+    15→import { useLang } from '@/components/site/language-provider'
+    16→import { siteConfig } from '@/lib/site-data'
+    17→import { Sparkles, Heart, Clock, ShieldCheck, Camera, Flame, Ruler, Layers, ArrowRight } from 'lucide-react'
+    18→
+    19→/* -------------------------------------------------------------------------- */
+    20→/*  Pricing data — 3 materials × 5 face counts = 15 tiers                    */
+    21→/* -------------------------------------------------------------------------- */
+    22→
+    23→type MaterialKey = 'stl' | 'mdf' | 'mahogany'
+    24→
+    25→const MATERIALS: { key: MaterialKey; t_en: string; t_bn: string; desc_en: string; desc_bn: string; days_en: string; days_bn: string }[] = [
+    26→  { key: 'stl', t_en: 'STL Design File', t_bn: 'STL ডিজাইন ফাইল', desc_en: 'Digital file only', desc_bn: 'শুধু ডিজিটাল ফাইল', days_en: '8 hours', days_bn: '৮ ঘণ্টা' },
+    27→  { key: 'mdf', t_en: 'MDF Board', t_bn: 'MDF বোর্ড', desc_en: 'Color + packaging + courier', desc_bn: 'কালার + প্যাকিং + কুরিয়ার', days_en: '7 days', days_bn: '৭ দিন' },
+    28→  { key: 'mahogany', t_en: 'Mahogany Wood', t_bn: 'মহোগনি কাঠ', desc_en: 'Premium wood (MDF + ৳1000-2500)', desc_bn: 'প্রিমিয়াম কাঠ (MDF + ৳১০০০-২৫০০)', days_en: '10 days', days_bn: '১০ দিন' },
+    29→]
+    30→
+    31→// STL prices: 500 (campaign), 4500, 6000, 7500, 9000
+    32→const STL_PRICES = [500, 4500, 6000, 7500, 9000]
+    33→// MDF prices: 7500, 9500, 11500, 14500, 17500
+    34→const MDF_PRICES = [7500, 9500, 11500, 14500, 17500]
+    35→// Mahogany: MDF + 1000, 1500, 2000, 2500, 2500
+    36→const MAHOGANY_ADD = [1000, 1500, 2000, 2500, 2500]
+    37→
+    38→function getPrice(material: MaterialKey, faces: number): number {
+    39→  const idx = faces - 1
+    40→  if (material === 'stl') return STL_PRICES[idx]
+    41→  if (material === 'mdf') return MDF_PRICES[idx]
+    42→  return MDF_PRICES[idx] + MAHOGANY_ADD[idx]
+    43→}
+    44→
+    45→function getDays(material: MaterialKey, isBn: boolean): string {
+    46→  const m = MATERIALS.find((x) => x.key === material)!
+    47→  return isBn ? m.days_bn : m.days_en
+    48→}
+    49→
+    50→// Board sizes
+    51→const BOARD_SIZES = [
+    52→  { size: '10" × 14"', thickness: '1.5"' },
+    53→  { size: '12" × 16"', thickness: '1.5"' },
+    54→  { size: '16" × 20"', thickness: '2"' },
+    55→  { size: '20" × 24"', thickness: '2.5"' },
+    56→  { size: '20" × 30"', thickness: '3"' },
+    57→]
+    58→
+    59→const GALLERY = [
+    60→  '/3d-gallery/1.jpg',
+    61→  '/3d-gallery/2.jpg',
+    62→  '/3d-gallery/3.jpg',
+    63→  '/3d-gallery/4.jpg',
+    64→  '/3d-gallery/5.jpg',
+    65→  '/3d-gallery/6.jpg',
+    66→  '/3d-gallery/7.jpg',
+    67→  '/3d-gallery/8.png',
+    68→]
+    69→
+    70→export function PortraitClient() {
+    71→  const { lang } = useLang()
+    72→  const isBn = lang === 'bn'
+    73→  usePageViewTracking('3d_portrait_page')
+    74→
+    75→  /** Convert ASCII digits to Bengali digits when lang === 'bn'. */
+    76→  const bn = (s: string | number) =>
+    77→    isBn
+    78→      ? String(s).replace(/[0-9]/g, (d) => '০১২৩৪৫৬৭৮৯'[Number(d)])
+    79→      : String(s)
+    80→
+    81→  // Live price calculator state
+    82→  const [material, setMaterial] = React.useState<MaterialKey>('stl')
+    83→  const [faces, setFaces] = React.useState(1)
+    84→  const price = getPrice(material, faces)
+    85→  const days = getDays(material, isBn)
+    86→
+    87→  // WhatsApp photo button message
+    88→  const waPhotoMessage = encodeURIComponent(
+    89→    isBn
+    90→      ? 'আসসালামু আলাইকুম, আমি ৩D পোর্ট্রেট অর্ডার করতে চাই। আমার ছবি পাঠাচ্ছি।'
+    91→      : 'Assalamu Alaikum, I want to order a 3D portrait. Sending my photo.',
+    92→  )
+    93→
+    94→  return (
+    95→    <div className="relative flex min-h-screen flex-col bg-background">
+    96→      <TopBar />
+    97→
+    98→      <main className="flex-1">
+    99→        {/* 1. Hero + Campaign */}
+   100→        <section className="relative overflow-hidden">
+   101→          <div className="absolute inset-0 bg-gradient-to-b from-violet-50 via-background to-background dark:from-violet-950/30" />
+   102→          <div className="absolute -top-32 -left-32 h-96 w-96 rounded-full bg-violet-500/10 blur-3xl" />
+   103→          <div className="absolute -bottom-32 -right-32 h-96 w-96 rounded-full bg-fuchsia-500/10 blur-3xl" />
+   104→
+   105→          <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 sm:px-6 sm:py-16 md:grid-cols-2 md:py-20">
+   106→            <div>
+   107→              <LandingEyebrow>
+   108→                <Flame className="h-3 w-3 text-rose-500" /> {isBn ? '🔥 ক্যাম্পেইন অফার — সিঙ্গেল ফেস মাত্র ৳৫০০' : '🔥 Campaign — Single face just ৳500'}
+   109→              </LandingEyebrow>
+   110→              <h1 className="mt-4 font-heading text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
+   111→                {isBn ? (
+   112→                  <>
+   113→                    আপনার স্মৃতিকে <span className="bg-gradient-to-r from-violet-600 to-fuchsia-500 bg-clip-text text-transparent">চিরস্মরণীয়</span> করে রাখুন
+   114→                  </>
+   115→                ) : (
+   116→                  <>
+   117→                    Make your memories <span className="bg-gradient-to-r from-violet-600 to-fuchsia-500 bg-clip-text text-transparent">eternal</span>
+   118→                  </>
+   119→                )}
+   120→              </h1>
+   121→              <p className="mt-2 text-lg font-bold text-violet-600 dark:text-violet-400">
+   122→                {isBn ? 'সিএনসি ৩ডি ফেস স্কাল্পটিং' : 'CNC 3D Face Sculpting'}
+   123→              </p>
+   124→              <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-muted-foreground">
+   125→                {isBn
+   126→                  ? 'আপনার প্রিয়জনের মুখ কাঠে খোদাই করে চিরকালের জন্য সংরক্ষণ করুন। ছবি ফিকে হয়ে যায়, কিন্তু ৩D পোর্ট্রেট প্রজন্মের পর প্রজন্ম থাকবে।'
+   127→                  : 'Preserve your loved ones forever in carved wood. Photos fade, but 3D portraits last for generations.'}
+   128→              </p>
+   129→              <div className="mt-6 flex flex-wrap items-center gap-3">
+   130→                <a href="#order" className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-500 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-violet-600/25 transition-transform hover:scale-[1.02]">
+   131→                  {isBn ? 'অর্ডার করুন' : 'Order Now'}
+   132→                </a>
+   133→                <WhatsAppCTA isBn={isBn} />
+   134→              </div>
+   135→              <div className="mt-5 flex items-center gap-2 rounded-xl border border-emerald-300/50 bg-emerald-50 px-4 py-3 dark:bg-emerald-950/30">
+   136→                <ShieldCheck className="h-5 w-5 shrink-0 text-emerald-600" />
+   137→                <p className="text-sm font-medium text-emerald-700 dark:text-emerald-300">
+   138→                  {isBn ? 'কোনো অগ্রিম টাকা পেমেন্ট করতে হবে না — শুধু ছবি ও তথ্য দিন' : 'No advance payment — just send photo & details'}
+   139→                </p>
+   140→              </div>
+   141→            </div>
+   142→
+   143→            <div className="relative">
+   144→              <div className="grid grid-cols-2 gap-3">
+   145→                {GALLERY.slice(0, 4).map((src, i) => (
+   146→                  <div
+   147→                    key={src}
+   148→                    className="overflow-hidden rounded-2xl border border-border/60 bg-card shadow-lg"
+   149→                    style={{ transform: i % 2 === 0 ? 'rotate(-1.5deg)' : 'rotate(1.5deg)' }}
+   150→                  >
+   151→                    <Image
+   152→                      src={src}
+   153→                      alt={`3D Portrait Sample ${i + 1}`}
+   154→                      width={400}
+   155→                      height={400}
+   156→                      className="aspect-square w-full object-cover"
+   157→                    />
+   158→                  </div>
+   159→                ))}
+   160→              </div>
+   161→            </div>
+   162→          </div>
+   163→        </section>
+   164→
+   165→        {/* 2. Emotional Pain */}
+   166→        <section className="bg-muted/30 py-12 sm:py-16">
+   167→          <div className="mx-auto max-w-4xl px-4 sm:px-6">
+   168→            <div className="text-center">
+   169→              <LandingEyebrow>
+   170→                <Heart className="h-3 w-3 text-rose-500" /> {isBn ? 'ছবি ফিকে হয়ে যায়...' : 'Photos fade away...'}
+   171→              </LandingEyebrow>
+   172→              <h2 className="mt-4 font-heading text-3xl font-bold sm:text-4xl">
+   173→                {isBn ? 'অ্যালবামের পুরোনো ছবিগুলো ক্রমশ ফিকে হয়ে যাচ্ছে...' : 'Old album photos are slowly fading...'}
+   174→              </h2>
+   175→            </div>
+   176→            <div className="mt-8 space-y-4">
+   177→              {[
+   178→                isBn
+   179→                  ? 'সময় প্রিয়জনকে দূরে নিয়ে যায়, কিন্তু তাদের হাসি আপনার দেওয়ালে থাকতে পারে — চিরকাল।'
+   180→                  : 'Time takes loved ones away, but their smile can stay on your wall — forever.',
+   181→                isBn
+   182→                  ? 'ফুল শুকিয়ে যায়, চকলেট শেষ হয়ে যায় — কিন্তু ৩D পোর্ট্রেট? এটি প্রজন্মের পর প্রজন্ম থাকবে।'
+   183→                  : 'Flowers dry, chocolates run out — but a 3D portrait? It stays for generations.',
+   184→              ].map((text, i) => (
+   185→                <div key={i} className="flex items-start gap-3 rounded-2xl border border-rose-200/60 bg-card p-5 shadow-sm dark:border-rose-900/40">
+   186→                  <Heart className="mt-0.5 h-5 w-5 shrink-0 fill-rose-500 text-rose-500" />
+   187→                  <p className="text-[15px] font-medium leading-relaxed">{text}</p>
+   188→                </div>
+   189→              ))}
+   190→            </div>
+   191→          </div>
+   192→        </section>
+   193→
+   194→        {/* 3. Emotional Desire */}
+   195→        <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
+   196→          <div className="text-center">
+   197→            <LandingEyebrow>
+   198→              <Sparkles className="h-3 w-3 text-violet-500" /> {isBn ? 'কল্পনা করুন' : 'Imagine'}
+   199→            </LandingEyebrow>
+   200→            <h2 className="mt-4 font-heading text-3xl font-bold sm:text-4xl">
+   201→              {isBn ? 'কল্পনা করুন — আপনার মায়ের মুখখানি কাঠে খোদাই' : 'Imagine — your mother\'s face carved in wood'}
+   202→            </h2>
+   203→            <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground">
+   204→              {isBn
+   205→                ? 'বাবার হাসি, স্বামী/স্ত্রীর মুখ, সন্তানের প্রথম হাসি — সব এখন চিরস্থায়ী হতে পারে।'
+   206→                : "Father's smile, spouse's face, child's first laugh — all can now be eternal."}
+   207→            </p>
+   208→          </div>
+   209→          <div className="mt-8 grid gap-6 sm:grid-cols-3">
+   210→            {[
+   211→              { t: isBn ? 'আবেগের উপহার' : 'Gift of Emotion', d: isBn ? 'প্রিয়জনকে সবচেয়ে বিশেষ উপহার।' : 'The most special gift for loved ones.' },
+   212→              { t: isBn ? 'নিখুঁত কারিগরি' : 'Perfect Craftsmanship', d: isBn ? 'হাতে তৈরি, প্রতিটি ডিটেইল নিখুঁত।' : 'Handcrafted, every detail perfect.' },
+   213→              { t: isBn ? 'পরিবারের সবাই' : 'For the Whole Family', d: isBn ? '১-৫ জনের ফেস একসাথে খোদাই।' : '1-5 faces carved together.' },
+   214→            ].map((c, i) => (
+   215→              <div key={i} className="rounded-2xl border border-violet-200/60 bg-gradient-to-br from-violet-50 to-fuchsia-50 p-6 text-center shadow-sm dark:border-violet-900/40 dark:from-violet-950/20 dark:to-fuchsia-950/10">
+   216→                <h3 className="font-heading text-lg font-bold text-violet-700 dark:text-violet-300">{c.t}</h3>
+   217→                <p className="mt-2 text-sm text-muted-foreground">{c.d}</p>
+   218→              </div>
+   219→            ))}
+   220→          </div>
+   221→        </section>
+   222→
+   223→        {/* 4. Pricing + Live Calculator */}
+   224→        <section className="bg-muted/30 py-12 sm:py-16">
+   225→          <div className="mx-auto max-w-4xl px-4 sm:px-6">
+   226→            <div className="text-center">
+   227→              <LandingEyebrow>{isBn ? 'দাম নির্বাচন করুন' : 'Choose Your Price'}</LandingEyebrow>
+   228→              <h2 className="mt-4 font-heading text-3xl font-bold sm:text-4xl">
+   229→                {isBn ? 'লাইভ মূল্য ক্যালকুলেটর' : 'Live Price Calculator'}
+   230→              </h2>
+   231→              <p className="mt-2 text-sm text-muted-foreground">
+   232→                {isBn ? 'material ও face count নির্বাচন করুন — দাম তাৎক্ষণিক আপডেট হবে' : 'Select material & face count — price updates instantly'}
+   233→              </p>
+   234→            </div>
+   235→
+   236→            {/* Material selector */}
+   237→            <div className="mt-8 grid gap-3 sm:grid-cols-3">
+   238→              {MATERIALS.map((m) => (
+   239→                <button
+   240→                  key={m.key}
+   241→                  type="button"
+   242→                  onClick={() => setMaterial(m.key)}
+   243→                  className={`rounded-2xl border-2 p-4 text-left transition-all ${
+   244→                    material === m.key
+   245→                      ? 'border-violet-500 bg-violet-50 shadow-lg dark:bg-violet-950/30'
+   246→                      : 'border-border/60 bg-card hover:border-violet-300'
+   247→                  }`}
+   248→                >
+   249→                  <div className="font-heading font-bold">{isBn ? m.t_bn : m.t_en}</div>
+   250→                  <div className="mt-1 text-xs text-muted-foreground">{isBn ? m.desc_bn : m.desc_en}</div>
+   251→                  <div className="mt-2 text-xs font-semibold text-violet-600 dark:text-violet-400">
+   252→                    {isBn ? m.days_bn : m.days_en}
+   253→                  </div>
+   254→                </button>
+   255→              ))}
+   256→            </div>
+   257→
+   258→            {/* Face count selector */}
+   259→            <div className="mt-6">
+   260→              <p className="text-sm font-semibold text-muted-foreground">
+   261→                {isBn ? 'কতজনের ফেস?' : 'How many faces?'}
+   262→              </p>
+   263→              <div className="mt-3 flex flex-wrap gap-2">
+   264→                {[1, 2, 3, 4, 5].map((f) => (
+   265→                  <button
+   266→                    key={f}
+   267→                    type="button"
+   268→                    onClick={() => setFaces(f)}
+   269→                    className={`flex h-12 w-12 items-center justify-center rounded-xl border-2 font-bold transition-all ${
+   270→                      faces === f
+   271→                        ? 'border-violet-500 bg-violet-500 text-white shadow-lg'
+   272→                        : 'border-border/60 bg-card hover:border-violet-300'
+   273→                    }`}
+   274→                  >
+   275→                    {f}
+   276→                  </button>
+   277→                ))}
+   278→              </div>
+   279→            </div>
+   280→
+   281→            {/* Price display */}
+   282→            <div className="mt-6 rounded-2xl border-2 border-violet-500/40 bg-gradient-to-br from-violet-50 to-fuchsia-50 p-6 text-center dark:from-violet-950/30 dark:to-fuchsia-950/20">
+   283→              <div className="text-xs font-medium text-muted-foreground">
+   284→                {isBn ? 'আপনার নির্বাচিত দাম' : 'Your selected price'}
+   285→              </div>
+   286→              <div className="mt-1 text-5xl font-extrabold text-violet-600 dark:text-violet-400">
+   287→                ৳{bn(price.toLocaleString('en-US'))}
+   288→              </div>
+   289→              <div className="mt-2 flex items-center justify-center gap-3 text-sm">
+   290→                <span className="flex items-center gap-1 text-muted-foreground">
+   291→                  <Clock className="h-3.5 w-3.5" /> {days}
+   292→                </span>
+   293→                <span className="flex items-center gap-1 text-muted-foreground">
+   294→                  <Layers className="h-3.5 w-3.5" /> {faces} {isBn ? 'ফেস' : 'face'}{faces > 1 ? (isBn ? '' : 's') : ''}
+   295→                </span>
+   296→              </div>
+   297→              {material === 'stl' && faces === 1 && (
+   298→                <div className="mt-3 inline-block rounded-full bg-rose-500/15 px-3 py-1 text-xs font-bold text-rose-600">
+   299→                  {isBn ? '🔥 ক্যাম্পেইন অফার (নির্ধারিত ৳৩২০০)' : '🔥 Campaign offer (was ৳3,200)'}
+   300→                </div>
+   301→              )}
+   302→            </div>
+   303→          </div>
+   304→        </section>
+   305→
+   306→        {/* 5. Video */}
+   307→        <section className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16">
+   308→          <div className="text-center">
+   309→            <LandingEyebrow>{isBn ? 'কাজের প্রমাণ' : 'Proof of work'}</LandingEyebrow>
+   310→            <h2 className="mt-4 font-heading text-3xl font-bold sm:text-4xl">
+   311→              {isBn ? 'আমাদের ৩D পোর্ট্রেট তৈরির ভিডিও' : 'Our 3D Portrait Making Video'}
+   312→            </h2>
+   313→            <p className="mt-2 text-sm text-muted-foreground">
+   314→              {isBn ? 'দেখুন কীভাবে আমরা ছবি থেকে ৩D পোর্ট্রেট তৈরি করি' : 'See how we turn a photo into a 3D portrait'}
+   315→            </p>
+   316→          </div>
+   317→          <div className="mt-8 overflow-hidden rounded-3xl border border-border/60 bg-card shadow-xl">
+   318→            <div className="aspect-video">
+   319→              <iframe
+   320→                src="https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fweb.facebook.com%2Fshare%2Fr%2F18yKJ9scJr%2F&show_text=false&width=560&t=0"
+   321→                className="h-full w-full border-0"
+   322→                style={{ border: 'none' }}
+   323→                scrolling="no"
+   324→                allowFullScreen
+   325→                allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+   326→                title="3D Portrait Making Video"
+   327→              />
+   328→            </div>
+   329→          </div>
+   330→          <div className="mt-4 text-center">
+   331→            <a
+   332→              href="https://web.facebook.com/share/r/18yKJ9scJr/"
+   333→              target="_blank"
+   334→              rel="noreferrer"
+   335→              className="inline-flex items-center gap-2 rounded-full border border-blue-600/40 bg-blue-50 px-5 py-2.5 text-sm font-semibold text-blue-700 transition-colors hover:bg-blue-100 dark:bg-blue-950/30 dark:text-blue-300"
+   336→            >
+   337→              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+   338→                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+   339→              </svg>
+   340→              {isBn ? 'ফেসবুকে ভিডিও দেখুন' : 'Watch on Facebook'}
+   341→            </a>
+   342→          </div>
+   343→        </section>
+   344→
+   345→        {/* 6. Gallery */}
+   346→        <section className="bg-muted/30 py-12 sm:py-16">
+   347→          <div className="mx-auto max-w-6xl px-4 sm:px-6">
+   348→            <div className="text-center">
+   349→              <LandingEyebrow>{isBn ? 'আমাদের কাজের নমুনা' : 'Our Work Samples'}</LandingEyebrow>
+   350→              <h2 className="mt-4 font-heading text-3xl font-bold sm:text-4xl">
+   351→                {isBn ? '৮+ স্যাম্পল ৩D পোর্ট্রেট' : '8+ Sample 3D Portraits'}
+   352→              </h2>
+   353→            </div>
+   354→            <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+   355→              {GALLERY.map((src, i) => (
+   356→                <div
+   357→                  key={src}
+   358→                  className="group relative overflow-hidden rounded-2xl border border-border/60 bg-card shadow-sm transition-transform hover:scale-[1.02]"
+   359→                >
+   360→                  <Image
+   361→                    src={src}
+   362→                    alt={`3D Portrait Sample ${i + 1}`}
+   363→                    width={400}
+   364→                    height={400}
+   365→                    className="aspect-square w-full object-cover transition-transform duration-500 group-hover:scale-110"
+   366→                  />
+   367→                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+   368→                </div>
+   369→              ))}
+   370→            </div>
+   371→          </div>
+   372→        </section>
+   373→
+   374→        {/* 7. Board Sizes */}
+   375→        <section className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16">
+   376→          <div className="text-center">
+   377→            <LandingEyebrow>
+   378→              <Ruler className="h-3 w-3" /> {isBn ? 'বোর্ড ও কাঠের সাইজ' : 'Board & Wood Sizes'}
+   379→            </LandingEyebrow>
+   380→            <h2 className="mt-4 font-heading text-3xl font-bold sm:text-4xl">
+   381→              {isBn ? '৫টি সাইজ + পুরুত্ব' : '5 Sizes + Thickness'}
+   382→            </h2>
+   383→          </div>
+   384→          <div className="mt-8 overflow-hidden rounded-2xl border border-border/60 bg-card shadow-sm">
+   385→            <table className="w-full text-sm">
+   386→              <thead className="bg-muted/50">
+   387→                <tr>
+   388→                  <th className="px-4 py-3 text-left font-heading font-bold">{isBn ? 'নং' : '#'}</th>
+   389→                  <th className="px-4 py-3 text-left font-heading font-bold">{isBn ? 'সাইজ' : 'Size'}</th>
+   390→                  <th className="px-4 py-3 text-left font-heading font-bold">{isBn ? 'পুরুত্ব' : 'Thickness'}</th>
+   391→                </tr>
+   392→              </thead>
+   393→              <tbody className="divide-y divide-border/60">
+   394→                {BOARD_SIZES.map((b, i) => (
+   395→                  <tr key={i} className="hover:bg-muted/30">
+   396→                    <td className="px-4 py-3 font-bold text-violet-600">{i + 1}</td>
+   397→                    <td className="px-4 py-3 font-semibold">{b.size}</td>
+   398→                    <td className="px-4 py-3">{b.thickness}</td>
+   399→                  </tr>
+   400→                ))}
+   401→              </tbody>
+   402→            </table>
+   403→          </div>
+   404→        </section>
+   405→
+   406→        {/* 8. Social Links */}
+   407→        <section className="bg-muted/30 py-10">
+   408→          <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
+   409→            <LandingEyebrow>{isBn ? 'আমাদের অনুসরণ করুন' : 'Follow us'}</LandingEyebrow>
+   410→            <h2 className="mt-3 font-heading text-xl font-bold">
+   411→              {isBn ? 'সোশ্যাল মিডিয়ায় যুক্ত থাকুন' : 'Stay connected on social media'}
+   412→            </h2>
+   413→            <div className="mt-4 flex justify-center">
+   414→              <LandingSocials />
+   415→            </div>
+   416→          </div>
+   417→        </section>
+   418→
+   419→        {/* 9. How to Order */}
+   420→        <section className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16">
+   421→          <div className="text-center">
+   422→            <LandingEyebrow>{isBn ? 'অর্ডার প্রক্রিয়া' : 'How to order'}</LandingEyebrow>
+   423→            <h2 className="mt-4 font-heading text-3xl font-bold sm:text-4xl">
+   424→              {isBn ? 'মাত্র ৩ ধাপ' : 'Just 3 steps'}
+   425→            </h2>
+   426→          </div>
+   427→          <div className="mt-8 grid gap-6 sm:grid-cols-3">
+   428→            {[
+   429→              { n: 1, t: isBn ? 'ছবি পাঠান' : 'Send photo', d: isBn ? 'WhatsApp-এ আপনার ছবি পাঠান।' : 'Send your photo on WhatsApp.' },
+   430→              { n: 2, t: isBn ? 'ফেস ও material নির্বাচন' : 'Choose face & material', d: isBn ? 'কতজন, কোন কাঠ বলুন।' : 'How many faces, which wood.' },
+   431→              { n: 3, t: isBn ? 'টিম কল করবে' : 'Team calls you', d: isBn ? 'কাজ শেষে দেখিয়ে পেমেন্ট নেব।' : 'After work done, then payment.' },
+   432→            ].map((s) => (
+   433→              <div key={s.n} className="rounded-2xl border border-border/60 bg-card p-6 text-center shadow-sm">
+   434→                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-600 to-fuchsia-500 font-heading text-xl font-bold text-white shadow-md">
+   435→                  {s.n}
+   436→                </div>
+   437→                <h3 className="mt-3 font-heading font-bold">{s.t}</h3>
+   438→                <p className="mt-1 text-xs text-muted-foreground">{s.d}</p>
+   439→              </div>
+   440→            ))}
+   441→          </div>
+   442→          <div className="mt-6 rounded-xl border border-emerald-300/50 bg-emerald-50 p-4 text-center dark:bg-emerald-950/30">
+   443→            <ShieldCheck className="mx-auto h-6 w-6 text-emerald-600" />
+   444→            <p className="mt-2 text-sm font-semibold text-emerald-700 dark:text-emerald-300">
+   445→              {isBn
+   446→                ? 'কোনো অগ্রিম টাকা পেমেন্ট করতে হবে না — কাজ শেষে দেখিয়ে পেমেন্ট নেওয়া হবে'
+   447→                : 'No advance payment — pay only after seeing the finished work'}
+   448→            </p>
+   449→          </div>
+   450→        </section>
+   451→
+   452→        {/* 10. Order Form + WhatsApp photo button */}
+   453→        <section id="order" className="mx-auto max-w-3xl scroll-mt-20 px-4 py-12 sm:px-6 sm:py-16">
+   454→          <div className="rounded-3xl border border-border/60 bg-card p-6 shadow-lg sm:p-8">
+   455→            <div className="text-center">
+   456→              <LandingEyebrow>{isBn ? 'অর্ডার করুন' : 'Place Order'}</LandingEyebrow>
+   457→              <h2 className="mt-4 font-heading text-3xl font-bold">
+   458→                {isBn ? 'আপনার ৩D পোর্ট্রেট অর্ডার করুন' : 'Order Your 3D Portrait'}
+   459→              </h2>
+   460→              <p className="mt-2 text-sm text-muted-foreground">
+   461→                {isBn
+   462→                  ? 'ফর্ম পূরণ করে অর্ডার কনফার্ম করুন, তারপর ছবি WhatsApp-এ পাঠান।'
+   463→                  : 'Fill the form to confirm order, then send photo on WhatsApp.'}
+   464→              </p>
+   465→              <div className="mt-4 flex items-center justify-center gap-2 text-sm">
+   466→                <span className="font-semibold">{isBn ? 'নির্বাচিত:' : 'Selected:'}</span>
+   467→                <span className="rounded-full bg-violet-100 px-3 py-0.5 font-bold text-violet-700 dark:bg-violet-950/40 dark:text-violet-300">
+   468→                  {isBn ? MATERIALS.find((m) => m.key === material)!.t_bn : MATERIALS.find((m) => m.key === material)!.t_en}
+   469→                </span>
+   470→                <span className="rounded-full bg-fuchsia-100 px-3 py-0.5 font-bold text-fuchsia-700 dark:bg-fuchsia-950/40 dark:text-fuchsia-300">
+   471→                  {faces} {isBn ? 'ফেস' : 'face'}{faces > 1 ? (isBn ? '' : 's') : ''}
+   472→                </span>
+   473→                <span className="font-bold text-violet-600 dark:text-violet-400">৳{bn(price.toLocaleString('en-US'))}</span>
+   474→              </div>
+   475→            </div>
+   476→            <div className="mt-8">
+   477→              <LandingLeadForm
+   478→                isBn={isBn}
+   479→                source="3d_portrait_page"
+   480→                serviceName={`3D Portrait — ${MATERIALS.find((m) => m.key === material)!.t_en} · ${faces} face(s) · ৳${price}`}
+   481→                submitLabel={isBn ? 'অর্ডার কনফার্ম করুন' : 'Confirm Order'}
+   482→                successMessage={isBn
+   483→                  ? 'আপনার অর্ডার গ্রহণ করা হয়েছে! এখন ছবি WhatsApp-এ পাঠান। টিম কাজ শেষে দেখিয়ে পেমেন্ট নেবে।'
+   484→                  : 'Order received! Now send your photo on WhatsApp. Team will show finished work before payment.'}
+   485→              />
+   486→            </div>
+   487→
+   488→            {/* WhatsApp photo button — below order confirm */}
+   489→            <div className="mt-6">
+   490→              <a
+   491→                href={`https://wa.me/${siteConfig.whatsapp}?text=${waPhotoMessage}`}
+   492→                target="_blank"
+   493→                rel="noreferrer"
+   494→                className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-green-600 to-emerald-500 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-green-600/25 transition-transform hover:scale-[1.01]"
+   495→              >
+   496→                <Camera className="h-5 w-5" />
+   497→                {isBn ? 'ছবি পাঠান (WhatsApp)' : 'Send Photo (WhatsApp)'}
+   498→              </a>
+   499→              <p className="mt-2 text-center text-xs text-muted-foreground">
+   500→                {isBn
+   501→                  ? 'আপনি দুটি উপায়ে অর্ডার করতে পারেন: ১. ফর্ম পূরণ করে → তারপর ছবি পাঠান, ২. শুধু ছবি পাঠান'
+   502→                  : 'You can order two ways: 1. Fill form → then send photo, 2. Just send photo directly'}
+   503→              </p>
+   504→            </div>
+   505→          </div>
+   506→        </section>
+   507→
+   508→        {/* 11. Campaign CTA */}
+   509→        <section className="relative overflow-hidden py-12 sm:py-16">
+   510→          <div className="absolute inset-0 bg-gradient-to-r from-violet-600 to-fuchsia-500" />
+   511→          <div className="absolute inset-0 bg-grid opacity-20" />
+   512→          <div className="relative mx-auto max-w-3xl px-4 text-center sm:px-6">
+   513→            <div className="inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-1.5 text-sm font-bold text-white backdrop-blur">
+   514→              <Flame className="h-4 w-4" /> {isBn ? 'সীমিত সময়ের অফার' : 'Limited time offer'}
+   515→            </div>
+   516→            <h2 className="mt-4 font-heading text-3xl font-extrabold text-white sm:text-4xl">
+   517→              {isBn ? 'ক্যাম্পেইন শেষ হওয়ার আগেই অর্ডার করুন!' : 'Order before the campaign ends!'}
+   518→            </h2>
+   519→            <p className="mx-auto mt-3 max-w-xl text-sm text-white/90">
+   520→              {isBn
+   521→                ? 'সিঙ্গেল ফেস STL মাত্র ৳৫০০ (নির্ধারিত ৳৩২০০)। অগ্রিম পেমেন্ট নেই।'
+   522→                : 'Single face STL just ৳500 (was ৳3,200). No advance payment.'}
+   523→            </p>
+   524→            <a
+   525→              href="#order"
+   526→              className="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-7 py-3 text-sm font-bold text-violet-600 shadow-lg transition-transform hover:scale-105"
+   527→            >
+   528→              {isBn ? 'এখনই অর্ডার করুন' : 'Order Now'}
+   529→              <ArrowRight className="h-4 w-4" />
+   530→            </a>
+   531→          </div>
+   532→        </section>
+   533→
+   534→        {/* 12. Success / Trust */}
+   535→        <section className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16">
+   536→          <div className="grid gap-4 sm:grid-cols-3">
+   537→            {[
+   538→              { Icon: ShieldCheck, t: isBn ? '১০০% নিরাপদ' : '100% Safe', d: isBn ? 'অগ্রিম পেমেন্ট নেই।' : 'No advance payment.' },
+   539→              { Icon: Clock, t: isBn ? 'দ্রুত ডেলিভারি' : 'Fast delivery', d: isBn ? '৮ ঘণ্টা থেকে ১০ দিন।' : '8 hours to 10 days.' },
+   540→              { Icon: Heart, t: isBn ? 'আবেগের সংরক্ষণ' : 'Emotional preservation', d: isBn ? 'প্রজন্মের পর প্রজন্ম।' : 'For generations.' },
+   541→            ].map(({ Icon, t, d }, i) => (
+   542→              <div key={i} className="rounded-2xl border border-border/60 bg-card p-5 text-center shadow-sm">
+   543→                <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-fuchsia-500 text-white">
+   544→                  <Icon className="h-5 w-5" />
+   545→                </div>
+   546→                <h3 className="mt-3 text-sm font-bold">{t}</h3>
+   547→                <p className="mt-1 text-xs text-muted-foreground">{d}</p>
+   548→              </div>
+   549→            ))}
+   550→          </div>
+   551→        </section>
+   552→      </main>
+   553→
+   554→      <LandingFooter isBn={isBn} />
+   555→      <FloatingButtons />
+   556→    </div>
+   557→  )
+   558→}
+   559→

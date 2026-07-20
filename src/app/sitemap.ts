@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next'
+import { blogPosts, caseStudies } from '@/lib/site-data'
 
 const BASE_URL = 'https://nextgendigitalstudio.com'
 
@@ -14,6 +15,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: '/pdf-books', priority: 0.9, changefreq: 'weekly' as const },
     { url: '/ai-training', priority: 0.9, changefreq: 'weekly' as const },
     { url: '/cnc-training', priority: 0.9, changefreq: 'weekly' as const },
+    { url: '/blog', priority: 0.7, changefreq: 'weekly' as const },
+    { url: '/case-studies', priority: 0.7, changefreq: 'weekly' as const },
     { url: '/services/ai-sales-automation', priority: 0.8, changefreq: 'monthly' as const },
     { url: '/services/ai-chat-agent', priority: 0.8, changefreq: 'monthly' as const },
     { url: '/services/ai-voice-agent', priority: 0.8, changefreq: 'monthly' as const },
@@ -31,10 +34,28 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: '/docs', priority: 0.3, changefreq: 'monthly' as const },
   ]
 
-  return staticPages.map((page) => ({
+  const staticEntries: MetadataRoute.Sitemap = staticPages.map((page) => ({
     url: `${BASE_URL}${page.url}`,
     lastModified: now,
     changeFrequency: page.changefreq,
     priority: page.priority,
   }))
+
+  // Dynamic blog post entries (priority 0.6, weekly)
+  const blogEntries: MetadataRoute.Sitemap = blogPosts.map((post) => ({
+    url: `${BASE_URL}/blog/${post.slug}`,
+    lastModified: new Date(post.date),
+    changeFrequency: 'monthly',
+    priority: 0.6,
+  }))
+
+  // Dynamic case study entries (priority 0.6, monthly)
+  const caseStudyEntries: MetadataRoute.Sitemap = caseStudies.map((cs) => ({
+    url: `${BASE_URL}/case-studies/${cs.slug}`,
+    lastModified: now,
+    changeFrequency: 'monthly',
+    priority: 0.6,
+  }))
+
+  return [...staticEntries, ...blogEntries, ...caseStudyEntries]
 }

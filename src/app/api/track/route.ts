@@ -24,25 +24,31 @@ function getClientIp(req: Request): string | undefined {
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json().catch(() => ({}))
-    const type = String(body.type ?? '') as TrackingEventType
+    let body: unknown
+    try {
+      body = await req.json()
+    } catch {
+      return NextResponse.json({ ok: false, error: 'Invalid JSON' }, { status: 400 })
+    }
+    const b = (body ?? {}) as Record<string, unknown>
+    const type = String(b.type ?? '') as TrackingEventType
     if (!ALLOWED_TYPES.includes(type)) {
       return NextResponse.json({ ok: false, error: 'Invalid event type' }, { status: 400 })
     }
     const { id } = await trackEvent({
       type,
-      page: body.page ? String(body.page) : undefined,
-      source: body.source ? String(body.source) : undefined,
-      email: body.email ? String(body.email) : undefined,
-      phone: body.phone ? String(body.phone) : undefined,
-      name: body.name ? String(body.name) : undefined,
-      value: typeof body.value === 'number' ? body.value : undefined,
-      currency: body.currency ? String(body.currency) : undefined,
-      meta: typeof body.meta === 'object' && body.meta ? body.meta : undefined,
+      page: b.page ? String(b.page) : undefined,
+      source: b.source ? String(b.source) : undefined,
+      email: b.email ? String(b.email) : undefined,
+      phone: b.phone ? String(b.phone) : undefined,
+      name: b.name ? String(b.name) : undefined,
+      value: typeof b.value === 'number' ? b.value : undefined,
+      currency: b.currency ? String(b.currency) : undefined,
+      meta: typeof b.meta === 'object' && b.meta ? (b.meta as Record<string, unknown>) : undefined,
       userAgent: req.headers.get('user-agent') ?? undefined,
       ipAddress: getClientIp(req),
-      fbp: body.fbp ? String(body.fbp) : undefined,
-      fbc: body.fbc ? String(body.fbc) : undefined,
+      fbp: b.fbp ? String(b.fbp) : undefined,
+      fbc: b.fbc ? String(b.fbc) : undefined,
     })
     return NextResponse.json({ ok: true, id })
   } catch (err) {

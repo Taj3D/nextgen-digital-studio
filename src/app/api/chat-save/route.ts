@@ -1,17 +1,48 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { sendToGoogleSheets } from "@/lib/google-sheets";
+import { trackEvent } from "@/lib/tracking";
+import { normalizeSource } from "@/lib/lead-sources";
+import { normalizePhone } from "@/lib/phone";
 
 export const runtime = "nodejs";
 
-// Regex to detect emails and phone numbers in chat messages
+// Regex to detect emails and phone numbers in chat messages.
+// Phone regex accepts ASCII digits and Bengali digits (০-৯) — Bengali users
+// often type phone numbers in Bengali digits inside the chat widget. The
+// matched phone is normalised to ASCII via `normalizePhone()` below before
+// being stored / sent to ad-platform Conversions APIs. See src/lib/phone.ts.
 const EMAIL_RE = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
-const PHONE_RE = /(\+?880|0)?1[3-9]\d{8}/g;
+const PHONE_RE = /(\+?880|0)?1[3-9][0-9০-৯]{8}/g;
+
+/**
+ * Heuristic check: returns true if the value looks like a real contact
+ * (not a placeholder like "Not provided" or empty junk).
+ */
+function isRealContact(value: string | null | undefined): boolean {
+  if (!value) return false
+  const v = value.trim().toLowerCase()
+  if (!v) return false
+  if (v === "not provided" || v === "n/a" || v === "unknown") return false
+  return true
+}
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    const sessionId = String(body.sessionId ?? "").trim();
-    const messages = Array.isArray(body.messages) ? body.messages : [];
+    let body: unknown;
+    try {
+      body = await req.json();
+    } catch {
+      return NextResponse.json(
+        { ok: false, error: "Invalid JSON" },
+        { status: 400 },
+      );
+    }
+
+    const b = body as Record<string, unknown>;
+    const sessionId = String(b.sessionId ?? "").trim();
+    const messages = Array.isArray(b.messages) ? b.messages : [];
+    const explicitSource = normalizeSource(b.source, "ai_chat_widget");
 
     if (!sessionId) {
       return NextResponse.json(
@@ -26,8 +57,10 @@ export async function POST(req: Request) {
     let leadName: string | null = null;
 
     for (const m of messages) {
-      if (m.role !== "user" || typeof m.content !== "string") continue;
-      const text = m.content;
+      if (typeof m !== "object" || m === null) continue;
+      const msg = m as { role?: unknown; content?: unknown };
+      if (msg.role !== "user" || typeof msg.content !== "string") continue;
+      const text = msg.content;
 
       if (!leadEmail) {
         const emailMatch = text.match(EMAIL_RE);
@@ -36,7 +69,7 @@ export async function POST(req: Request) {
       if (!leadPhone) {
         const phoneMatch = text.match(PHONE_RE);
         if (phoneMatch) {
-          let p = phoneMatch[0];
+          let p = normalizePhone(phoneMatch[0]);
           if (p.startsWith("880")) p = "+" + p;
           else if (p.startsWith("01")) p = "+880" + p.slice(1);
           leadPhone = p;
@@ -90,28 +123,86 @@ export async function POST(req: Request) {
       conversation = null;
     }
 
-    // If we detected contact info, create/update a lead
+    // Only create a Lead row in the DB if we have at least one REAL contact
+    // channel (email or phone) AND a name (or "Chat Lead" fallback when we
+    // have real contact info). This avoids polluting the CRM with junk rows
+    // that have email="Not provided" / phone="Not provided" placeholders.
+    const hasRealEmail = isRealContact(leadEmail);
+    const hasRealPhone = isRealContact(leadPhone);
     let leadId: string | null = null;
-    if (leadEmail || leadPhone) {
-      const existingLead = leadEmail
-        ? await db.lead.findFirst({ where: { email: leadEmail } })
-        : null;
+
+    if (hasRealEmail || hasRealPhone) {
+      const nameForLead = isRealContact(leadName) ? (leadName as string) : "Chat Lead";
+      // Dedup by email OR phone — Bangladeshi users often share phone only.
+      const dedupWhere: Record<string, unknown> = { OR: [] };
+      if (hasRealEmail) (dedupWhere.OR as Array<Record<string, unknown>>).push({ email: leadEmail });
+      if (hasRealPhone) (dedupWhere.OR as Array<Record<string, unknown>>).push({ phone: leadPhone });
+
+      let existingLead: { id: string } | null = null;
+      try {
+        existingLead = await db.lead.findFirst({ where: dedupWhere });
+      } catch {
+        existingLead = null;
+      }
+
       if (!existingLead) {
-        const lead = await db.lead.create({
-          data: {
-            name: leadName || "Chat Lead",
-            email: leadEmail || "Not provided",
-            phone: leadPhone || "Not provided",
-            service: "AI Chat enquiry",
-            message: `Captured from chat. Session: ${sessionId.substring(0, 8)}`,
-            source: "ai_chat_widget",
-            status: "new",
-          },
-        });
-        leadId = lead.id;
+        try {
+          const lead = await db.lead.create({
+            data: {
+              name: nameForLead,
+              email: (hasRealEmail ? leadEmail : "Not provided") as string,
+              phone: (hasRealPhone ? leadPhone : "Not provided") as string,
+              service: "AI Chat enquiry",
+              message: `Captured from chat. Session: ${sessionId.substring(0, 8)}`,
+              source: explicitSource,
+              status: "new",
+            },
+          });
+          leadId = lead.id;
+        } catch (dbErr) {
+          console.error("[chat-save] DB save failed (lead will still go to Google Sheets)", dbErr);
+          leadId = "sheets-only";
+        }
       } else {
         leadId = existingLead.id;
       }
+
+      // Google Sheets sync (saves to Sheet + sends email to prospect + owner via Apps Script)
+      sendToGoogleSheets({
+        name: nameForLead,
+        email: (hasRealEmail ? leadEmail : "") as string,
+        phone: (hasRealPhone ? leadPhone : "") as string,
+        service: "AI Chat enquiry",
+        message: `Captured from chat. Session: ${sessionId.substring(0, 8)}`,
+        source: explicitSource,
+        leadId: leadId ?? "sheets-only",
+        submittedAt: new Date().toISOString(),
+      }).catch((err) => console.error("[chat-save] google sheets error", err));
+
+      // Fire-and-forget: server-side tracking
+      trackEvent({
+        type: "lead",
+        source: explicitSource,
+        email: hasRealEmail ? (leadEmail as string) : undefined,
+        phone: hasRealPhone ? (leadPhone as string) : undefined,
+        name: nameForLead,
+        page: "/api/chat-save",
+        meta: { leadId, sessionId: sessionId.substring(0, 16) },
+      }).catch((err) => console.error("[chat-save] tracking error", err));
+    } else {
+      // No real contact info captured — still log the chat as an event for
+      // analytics (no DB Lead row, no Sheets sync — avoids polluting CRM).
+      trackEvent({
+        type: "lead",
+        source: explicitSource,
+        page: "/api/chat-save",
+        meta: {
+          chatLead: true,
+          sessionId: sessionId.substring(0, 16),
+          messageCount,
+          detectedName: leadName,
+        },
+      }).catch((err) => console.error("[chat-save] chat_lead tracking error", err));
     }
 
     return NextResponse.json({

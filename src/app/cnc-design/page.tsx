@@ -1,6 +1,30 @@
 import type { Metadata } from 'next'
 import { CncClient } from './cnc-client'
 
+const productLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: 'CNC Design Bundle — 150GB of 2500+ Ready-to-Cut Files',
+  description:
+    '150GB of ready-to-cut CNC design files for just 150TK — relief, 3D carving, furniture, door panels, idols and more. 2D + 3D files. Categories: doors, sofa, bed, wardrobe, dressing tables, chairs and more.',
+  brand: {
+    '@type': 'Brand',
+    name: 'NextGen Digital Studio',
+  },
+  image: 'https://nextgendigitalstudio.com/3d-gallery/2.jpg',
+  offers: {
+    '@type': 'Offer',
+    price: '150',
+    priceCurrency: 'BDT',
+    availability: 'https://schema.org/InStock',
+    url: 'https://nextgendigitalstudio.com/cnc-design',
+    seller: {
+      '@type': 'Organization',
+      name: 'NextGen Digital Studio',
+    },
+  },
+}
+
 export const metadata: Metadata = {
   title: 'CNC Design Bundle (150TK / 150GB) — NextGen Digital Studio',
   description:
@@ -22,5 +46,13 @@ export const metadata: Metadata = {
 }
 
 export default function CncDesignPage() {
-  return <CncClient />
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productLd) }}
+      />
+      <CncClient />
+    </>
+  )
 }

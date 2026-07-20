@@ -97,7 +97,7 @@ export function FinalCta() {
     <section
       id="final-cta"
       className="relative overflow-hidden bg-card py-24 sm:py-32 lg:py-40"
-      aria-label="Final call to action"
+      aria-label="Call to Action"
     >
       {/* Background grid */}
       <div className="pointer-events-none absolute inset-0 bg-grid opacity-50" aria-hidden />
