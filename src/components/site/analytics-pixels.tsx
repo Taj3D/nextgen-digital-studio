@@ -41,7 +41,7 @@ export function AnalyticsPixels() {
               width="1"
               style={{ display: 'none' }}
               src={`https://www.facebook.com/tr?id=${FB_PIXEL_ID}&ev=PageView&noscript=1`}
-              alt=""
+              alt="Facebook Pixel Tracking"
             />
           </noscript>
         </>
