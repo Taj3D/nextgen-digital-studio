@@ -41,8 +41,10 @@ export function TopBar({ className }: { className?: string }) {
       lastForm.scrollIntoView({ behavior: 'smooth', block: 'center' })
       return
     }
-    // Last resort: scroll to bottom
-    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
+    // No form on this page — navigate to homepage lead form so the user can
+    // actually book a strategy call (was previously scrolling to bottom, which
+    // showed no form — the user-reported "Book Strategy Call doesn't work" bug).
+    window.location.href = '/#lead-form'
   }
 
   return (

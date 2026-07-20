@@ -126,7 +126,7 @@ function NewsletterForm() {
           ) : state === 'success' ? (
             <>
               <CheckCircle2 className="h-4 w-4" />
-              <span className="hidden sm:inline">{t('footer.newsletterBtn')}</span>
+              <span className="hidden sm:inline">{t('footer.subscribed')}</span>
             </>
           ) : (
             <>

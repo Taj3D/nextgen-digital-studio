@@ -13,7 +13,7 @@
 @font-face {
   font-family: "NextGen Bangla";
   src: url("/fonts/MahfujLipi.ttf") format("truetype");
-  font-weight: 400 700;
+  font-weight: 300 900;
   font-style: normal;
   font-display: swap;
   /* Bengali block + Bengali currency/numerals + ZWNJ/ZWJ + danda */

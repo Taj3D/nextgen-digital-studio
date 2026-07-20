@@ -95,10 +95,10 @@ export function BlogDetailClient({ slug }: { slug: string }) {
           {sections.map((section, i) => (
             <section key={i}>
               <h2 className="font-heading text-xl font-bold tracking-tight sm:text-2xl">
-                {section.heading}
+                {tr(section.heading)}
               </h2>
               <div className="mt-3 whitespace-pre-line text-[15px] leading-relaxed text-foreground/90 sm:text-base">
-                {section.body}
+                {tr(section.body)}
               </div>
             </section>
           ))}

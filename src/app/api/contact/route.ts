@@ -43,6 +43,11 @@ export async function POST(req: Request) {
     const service = b.service ? String(b.service).trim() : null;
     const message = b.message ? String(b.message).trim() : null;
     const source = normalizeSource(b.source, "contact_form");
+    // UTM params — forwarded from the client for paid-ads attribution.
+    // The lead form captures these on mount and sends them in the payload.
+    const utmSource = b.utmSource ? String(b.utmSource).trim().slice(0, 100) : null;
+    const utmMedium = b.utmMedium ? String(b.utmMedium).trim().slice(0, 100) : null;
+    const utmCampaign = b.utmCampaign ? String(b.utmCampaign).trim().slice(0, 100) : null;
 
     // Honeypot: if the hidden "website" field is filled, silently accept
     // and discard (bots fill hidden fields; humans don't).
@@ -59,6 +64,13 @@ export async function POST(req: Request) {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return NextResponse.json(
         { ok: false, error: "Invalid email" },
+        { status: 400 },
+      );
+    }
+    // Phone format validation — accept +, digits, spaces, dashes, parens (6-20 chars)
+    if (phone && !/^\+?[0-9\s\-()]{6,20}$/.test(phone)) {
+      return NextResponse.json(
+        { ok: false, error: "Invalid phone format" },
         { status: 400 },
       );
     }
@@ -95,6 +107,11 @@ export async function POST(req: Request) {
       source,
       leadId,
       submittedAt: new Date().toISOString(),
+      meta: {
+        ...(utmSource ? { utmSource } : {}),
+        ...(utmMedium ? { utmMedium } : {}),
+        ...(utmCampaign ? { utmCampaign } : {}),
+      },
     }).catch((err) => console.error("[contact] google sheets error", err));
 
     // Fire-and-forget: server-side tracking (GA4, Meta, TikTok, Snapchat Conversions API)
@@ -105,7 +122,13 @@ export async function POST(req: Request) {
       phone,
       name,
       page: "/api/contact",
-      meta: { service: service ?? null, leadId },
+      meta: {
+        service: service ?? null,
+        leadId,
+        ...(utmSource ? { utmSource } : {}),
+        ...(utmMedium ? { utmMedium } : {}),
+        ...(utmCampaign ? { utmCampaign } : {}),
+      },
     }).catch((err) => console.error("[contact] tracking error", err));
 
     return NextResponse.json({ ok: true, id: leadId });

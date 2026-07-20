@@ -4,10 +4,24 @@ import { sendToGoogleSheets } from "@/lib/google-sheets";
 import { trackEvent } from "@/lib/tracking";
 import { normalizeSource } from "@/lib/lead-sources";
 import { normalizePhone } from "@/lib/phone";
+import { rateLimit, getClientIP } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 
 export async function POST(req: Request) {
+  // Rate limit: 5 audits / min / IP
+  const ip = getClientIP(req);
+  const rl = rateLimit(`audit:${ip}`, 5, 60_000);
+  if (!rl.ok) {
+    return NextResponse.json(
+      { ok: false, error: "Too many requests. Try again later." },
+      {
+        status: 429,
+        headers: { "Retry-After": String(Math.ceil(rl.resetIn / 1000)) },
+      },
+    );
+  }
+
   try {
     let body: unknown;
     try {

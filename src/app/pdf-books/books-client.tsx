@@ -18,6 +18,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { BookOpen, Gift, Download, Star, Loader2, CheckCircle2, ArrowRight, Brain, DollarSign, Building, User, TrendingUp } from 'lucide-react'
 import { toast } from 'sonner'
+import { normalizePhone } from '@/lib/phone'
 
 type Book = {
   id: number
@@ -345,7 +346,7 @@ function BookOrderForm({
     const payload = {
       name: String(fd.get('name') ?? '').trim(),
       email: String(fd.get('email') ?? '').trim(),
-      phone: String(fd.get('phone') ?? '').trim(),
+      phone: normalizePhone(String(fd.get('phone') ?? '').trim()),
       company: String(fd.get('company') ?? '').trim() || null,
       service: selectedLabel,
       message: String(fd.get('message') ?? '').trim() || null,

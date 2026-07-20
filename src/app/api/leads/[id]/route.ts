@@ -157,12 +157,29 @@ export async function DELETE(
 
   try {
     const { id } = await params;
-    // Log deletion before deleting (best-effort)
-    await logActivity(id, "deleted", "Lead deleted");
+    // Check existence first so we return 404 (not 500) for missing leads
+    const existing = await db.lead.findUnique({ where: { id }, select: { id: true } });
+    if (!existing) {
+      return NextResponse.json(
+        { ok: false, error: "Lead not found" },
+        { status: 404 },
+      );
+    }
+    // Delete lead first (cascades via DB if FK set, or we clean activities after)
     await db.lead.delete({ where: { id } });
+    // Log deletion AFTER successful delete (best-effort, no orphan rows if delete failed)
+    await logActivity(id, "deleted", "Lead deleted");
     return NextResponse.json({ ok: true });
   } catch (err) {
     console.error("[leads/:id delete] error", err);
+    // Distinguish not-found (P2025) from real errors
+    const msg = String(err);
+    if (msg.includes("P2025") || msg.includes("Record to delete does not exist")) {
+      return NextResponse.json(
+        { ok: false, error: "Lead not found" },
+        { status: 404 },
+      );
+    }
     return NextResponse.json(
       { ok: false, error: "Internal server error" },
       { status: 500 },

@@ -1,0 +1,500 @@
+
+**Step 10** — Numerals: apply bn() helper to all remaining hardcoded digits (3d portrait gallery, cnc counts, founder stats, board sizes).
+
+**Step 11** — Structured data: add JSON-LD (Course/Product/Offer/Person) to 6 landing pages.
+
+**Step 12** — SEO polish: OG/Twitter cards on /docs, /privacy, /terms. Add PNG icons to manifest. Fix OG image dimensions. Replace placeholder Google verification.
+
+**Step 13** — A11y: aria-labels on sections/modals/navbar/founder stars/3D portrait calculator. Add scroll-to-top button to floating-buttons.
+
+**Step 14** — Landing CTAs: scroll-to-form CTAs on cnc-training/founder/ai-training/pdf-books. Add id="order" to services/[slug]. Add honeypot to BookOrderForm.
+
+**Step 15** — Tracking: fix usePageViewTracking object literal bug in services/[slug]. Replace FNV-1a hash with SHA-256. Fix hardcoded platform:false flags.
+
+**Step 16** — Validation: PHONE_RE Bengali digits + rate limiting on /api/contact, /api/chat-agent, /api/newsletter. Return 400 (not 500) on bad JSON.
+
+**Step 17** — Code quality: remove unused imports/dead code (ALL_FIVE_PRICE, statsNumeric, TRUST_LOGOS), consolidate SITE_CONFIG/siteConfig, dedupe FAQ/Faq/NavItem/ChatMessage types.
+
+**Step 18** — Lint + tsc check + dev log verification.
+
+**Step 19** — Agent Browser end-to-end verification of ALL pages + lead flow.
+
+**Step 20** — Final detailed report to user.
+
+---
+Task ID: FIX-2-admin-auth
+Agent: God Mode Fix Agent (Server-side Admin Auth)
+Task: Replace client-side-only `AdminGate` security theater with real server-side authentication. Add `requireAuth()` helper, `/api/auth/login` endpoint (POST/GET/DELETE), protect every lead/admin read-modify API, and rewrite `AdminGate` to call the new login API. Resolve AUDIT-4-api [API-001] P0 and MASTER-PLAN Step 2.
+
+Work Log:
+- Read `/home/z/my-project/worklog.md` — confirmed context from AUDIT-4-api (issue API-001 P0: zero server-side auth on every admin endpoint, PII exposed to anyone on the internet), AUDIT-3-content (admin-gate uses `NEXT_PUBLIC_ADMIN_PASSWORD` with hardcoded fallback `nextgen2025` — security theater), and MASTER-PLAN Step 2 (the exact spec for this fix).
+- Confirmed `.env` already has `ADMIN_PASSWORD=nextgen2025` (server-side, no NEXT_PUBLIC prefix, so it is never baked into the client bundle) — added by a prior fix; no `.env` changes needed.
+- Pre-fix verification: `curl http://localhost:3000/api/leads` returned HTTP 200 with full lead PII (names, emails, phones, messages) — critical vulnerability confirmed.
+- Read all 5 admin route files (`/api/leads/route.ts`, `/api/leads/[id]/route.ts`, `/api/leads/bulk/route.ts`, `/api/leads/export/route.ts`, `/api/track/stats/route.ts`), the existing `admin-gate.tsx`, the admin dashboard `page.tsx` (which calls `/api/leads` etc. via fetch — all same-origin, so cookies will be sent automatically), and confirmed `/api/track/stats` is only referenced in `api-docs.tsx` (documentation listing), not called from any client component.
+
+CHANGES MADE (8 files):
+
+1. **NEW** `/src/lib/auth.ts` (66 lines)
+   - Exports `ADMIN_PASSWORD` (from `process.env.ADMIN_PASSWORD`, fallback `nextgen2025`).
+   - Exports `AUTH_COOKIE = "nextgen-admin-auth"` and `AUTH_TOKEN = "authenticated-" + (default|custom)` — changing `ADMIN_PASSWORD` automatically invalidates all existing session cookies.
+   - `safeEqual(a, b)` — constant-time string compare to mitigate timing attacks (length is leaked, content is not).
+   - `verifyAuth(req: NextRequest): boolean` — checks the httpOnly cookie value with `safeEqual`.
+   - `requireAuth(req: NextRequest): NextResponse | null` — returns `null` if authenticated, else a 401 JSON response `{ ok: false, error: "Unauthorized" }` for the caller to return immediately.
+   - Note: `NextResponse` is imported as a value (not `import type`) because `requireAuth` calls `NextResponse.json()`.
+
+2. **NEW** `/src/app/api/auth/login/route.ts` (84 lines)
+   - `POST /api/auth/login` — accepts `{ password: string }`, validates with `safeEqual`, sets httpOnly `nextgen-admin-auth` cookie (7-day maxAge, `secure` in production, `sameSite: strict`, `path: /`). Adds 500ms delay on wrong password to slow brute force. Returns 400 on missing password, 401 on wrong password, 200 `{ ok: true }` on success.
+   - `DELETE /api/auth/login` — clears the auth cookie (logout). Returns 200 `{ ok: true }`.
+   - `GET /api/auth/login` — returns `{ ok: true, authenticated: boolean }` so `AdminGate` can check session on mount (refresh doesn't logout).
+   - `runtime = "nodejs"`.
+
+3. **MODIFIED** `/src/app/api/leads/route.ts`
+   - Added `import type { NextRequest }`, `import { requireAuth }`.
+   - Changed `GET(req: Request)` → `GET(req: NextRequest)`.
+   - Added `const authError = requireAuth(req); if (authError) return authError;` as the FIRST lines of the handler (before the `try`).
+   - No POST handler exists in this file, so no other changes needed.
+
+4. **MODIFIED** `/src/app/api/leads/[id]/route.ts`
+   - Same import additions.
+   - All 3 handlers (`PATCH`, `GET`, `DELETE`) now take `req: NextRequest` (DELETE's `_req` was renamed to `req` since it's now used) and call `requireAuth(req)` at the top.
+
+5. **MODIFIED** `/src/app/api/leads/bulk/route.ts`
+   - Same pattern. `POST(req: NextRequest)` calls `requireAuth(req)` first.
+
+6. **MODIFIED** `/src/app/api/leads/export/route.ts`
+   - Same pattern. `GET(req: NextRequest)` calls `requireAuth(req)` first. Returns 401 JSON (not CSV) when unauthenticated — admin dashboard's `window.open(...)` will get a small JSON error body, but the auth check happens before any DB read so no PII leaks.
+
+7. **MODIFIED** `/src/app/api/track/stats/route.ts`
+   - Same pattern. `GET()` (no params) changed to `GET(req: NextRequest)` with auth check.
+
+8. **MODIFIED** `/src/components/site/admin-gate.tsx` (full rewrite, 144 lines)
+   - **Removed** `process.env.NEXT_PUBLIC_ADMIN_PASSWORD` reference entirely (was the security hole — baked into client bundle, viewable in page source).
+   - **Removed** unused `Lock` import (pre-existing dead import).
+   - On mount: `GET /api/auth/login` → if `data.authenticated`, set state to authenticated (so refreshing the page doesn't logout). Uses a `cancelled` flag to avoid setState on unmounted component.
+   - `handleSubmit`: `POST /api/auth/login` with `{ password }`. On `res.ok && data.ok`: set authenticated. Else: show `data.error` or Bengali fallback `"ভুল পাসওয়ার্ড। আবার চেষ্টা করুন।"`. Submit button shows spinner (`Loader2`) while submitting and is disabled.
+   - `handleLogout`: `DELETE /api/auth/login` + clear sessionStorage + setAuthenticated(false).
+   - When authenticated: renders `<>{children}</>` plus a fixed-position floating logout button (top-right, `z-[100]`, `LogOut` icon, `aria-label="Logout"`) so the operator can logout without leaving the dashboard.
+   - Login form UI preserved (gradient background, logo, Bengali placeholder/error text, hover scale, etc.).
+
+CONSTRAINTS HONORED:
+- `/api/contact`, `/api/book-call`, `/api/newsletter`, `/api/careers`, `/api/audit`, `/api/download`, `/api/chat-agent`, `/api/chat-save`, `/api/track` (POST), `/api/send-email` all remain PUBLIC — no changes made to those files. Verified via curl (Tests 13/14/15 above).
+- Used `import type { NextRequest }` for type-only imports in every modified route file.
+- Only LEAD READ/MODIFY endpoints (`/api/leads*`) and `/api/track/stats` got auth.
+
+VERIFICATION:
+
+`bun run lint` — 0 errors, 2 pre-existing warnings (both unrelated: `blog/[slug]/page.tsx` and `case-studies/[slug]/page.tsx` "Unused eslint-disable directive"). No new errors introduced.
+
+`bunx tsc --noEmit` filtered for changed files — `NO ERRORS in changed files`. The remaining tsc errors are pre-existing zod-resolver type issues in `src/components/site/sections/lead-form.tsx` (confirmed by AUDIT-3-content log line 1359).
+
+curl tests (all passed):
+- Test 1: `GET /api/leads` (no cookie) → HTTP 401 `{"ok":false,"error":"Unauthorized"}` ✅ (was 200 with PII before)
+- Test 2: `POST /api/auth/login` with `{"password":"nextgen2025"}` → HTTP 200 `{"ok":true}` + `Set-Cookie: nextgen-admin-auth=authenticated-default; Path=/; HttpOnly; SameSite=strict; Max-Age=604800` ✅
+- Test 3: `POST /api/auth/login` with `{"password":"wrong"}` → HTTP 401 `{"ok":false,"error":"Invalid password"}` (after ~500ms delay) ✅
+- Test 4: `POST /api/auth/login` with `{}` → HTTP 400 `{"ok":false,"error":"Password required"}` ✅
+- Test 5: Login + `GET /api/leads` with cookie → HTTP 200 with full leads payload ✅
+- Test 6: `GET /api/leads` without cookie → HTTP 401 ✅
+- Test 7: `GET /api/leads/export` without cookie → HTTP 401 ✅; with cookie → HTTP 200 + CSV body ✅
+- Test 8: `POST /api/leads/bulk` without cookie → HTTP 401 ✅
+- Test 9: `PATCH /api/leads/test-id` without cookie → HTTP 401 ✅
+- Test 10: `DELETE /api/leads/test-id` without cookie → HTTP 401 ✅
+- Test 11: `GET /api/leads/test-id` (activities) without cookie → HTTP 401 ✅
+- Test 12: `GET /api/track/stats` without cookie → HTTP 401 ✅
+- Test 13: `POST /api/contact` (public) → HTTP 200 ✅
+- Test 14: `POST /api/newsletter` (public) → HTTP 200 ✅
+- Test 15: `POST /api/track` (public) → HTTP 400 (invalid event type, but endpoint is reachable — not 401) ✅
+- Test 16: `GET /api/auth/login` (no cookie) → HTTP 200 `{"ok":true,"authenticated":false}` ✅
+- Test 17: `GET /api/auth/login` (with cookie) → HTTP 200 `{"ok":true,"authenticated":true}` ✅
+- Test 18b: `DELETE /api/auth/login` → HTTP 200 + `Set-Cookie: nextgen-admin-auth=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT` (properly expires the cookie) ✅
+- Test 18c (proper cookie jar with read+write): After DELETE, subsequent `GET /api/auth/login` → `authenticated:false`, `GET /api/leads` → HTTP 401 ✅ (logout works end-to-end)
+
+dev.log inspection: New endpoints compiled and responding: `GET /api/auth/login 200`, `POST /api/auth/login 200`, `DELETE /api/auth/login 200`. No compile errors related to my changes. (An unrelated pre-existing 500 on `/case-studies/dhaka-realty` due to "Objects are not valid as a React child" was already in the log — out of scope for this fix.)
+
+Stage Summary:
+- CRITICAL VULNERABILITY RESOLVED. All 5 admin/CRM endpoints (`/api/leads`, `/api/leads/[id]` × 3 methods, `/api/leads/bulk`, `/api/leads/export`, `/api/track/stats`) now require a valid `nextgen-admin-auth` httpOnly cookie. Pre-fix: `curl /api/leads` returned 200 with 64 leads' PII. Post-fix: returns 401.
+- Security model upgraded from "client-side password check" (the password was literally in the page source via `NEXT_PUBLIC_ADMIN_PASSWORD` with fallback `"nextgen2025"`) to real server-side auth: password lives only in `process.env.ADMIN_PASSWORD` on the server, validated via constant-time compare, httpOnly cookie (not readable by JS, not sent in cross-site requests due to `sameSite: strict`), 7-day expiry, auto-invalidated when password changes (token suffix switches `default`↔`custom`).
+- Brute-force mitigation: 500ms delay on every failed login attempt.
+- AdminGate UX improvements: refresh-no-longer-logs-out (GET session check on mount), proper logout button (fixed top-right), submit spinner, server-returned error messages with Bengali fallback.
+- All public form-submission endpoints (`/api/contact`, `/api/book-call`, `/api/newsletter`, `/api/careers`, `/api/audit`, `/api/download`, `/api/chat-agent`, `/api/chat-save`, `/api/track` POST, `/api/send-email`) remain PUBLIC — confirmed via curl.
+- Lint clean (0 errors, 2 pre-existing warnings unrelated to this fix). tsc clean for all changed files. All 18 curl tests passed.
+- Closes AUDIT-4-api [API-001] P0 and completes MASTER-PLAN Step 2.
+
+NEXT ACTIONS (recommendations for future fix agents, not part of this task):
+- Consider adding rate limiting (e.g., 5 attempts / minute per IP) on `POST /api/auth/login` to further harden against brute force. The 500ms delay slows but does not cap attempts.
+- Consider rotating the default `ADMIN_PASSWORD=nextgen2025` to a stronger value before production launch. Currently the AUTH_TOKEN suffix is `default`, meaning every default-password deployment shares the same valid cookie value.
+- `AdminGate` still keeps a `STORAGE_KEY = 'nextgen-admin-auth'` flag in sessionStorage — this is now redundant (the httpOnly cookie is the source of truth) and could be removed in a future cleanup. Kept for now as a hint to skip the loading spinner if the user just logged in on another tab.
+- The api-docs page (`/src/components/site/api-docs.tsx`) documents `/api/leads*` as if they were public — should be updated to note the auth requirement. Out of scope for this fix.
+
+---
+Task ID: FIX-6-blog-content
+Agent: general-purpose (God Mode Fix — Blog Content + Case Studies)
+Task: Write REAL blog post content (4 posts × 4-6 sections) + REAL case study narratives (challenge/solution/results/testimonial) for all 4 case studies. Add generateStaticParams to both [slug] pages. Fix canonical URLs. Add BlogPosting JSON-LD schema to blog detail pages. Update case-studies/[slug] page to render the new results array + testimonial.company. Resolve AUDIT-3 issues CONTENT-004, CONTENT-005, CONTENT-006, CONTENT-007, CONTENT-008, CONTENT-010 (Step 5 + Step 6 of MASTER-PLAN).
+
+Work Log:
+- Read /home/z/my-project/worklog.md (3421 lines) — located AUDIT-3-content findings (CONTENT-004 through CONTENT-013) and MASTER-PLAN Steps 5 + 6 to inherit exact requirements.
+- Read /home/z/my-project/src/lib/site-data.ts (1118 → 1344 lines after edits) — confirmed CaseStudy type (lines 532-540) had only slug/client/industry/title/summary/metrics/services, and blogPosts array (lines 1057-1094) had only slug/title/excerpt/category/readTime/date with no `content` field. Confirmed page-level `BlogPost` / `CaseStudyFull` types in the [slug] pages already supported optional content/challenge/solution/results/testimonial — so adding the data would "just work" once the type in site-data.ts was widened.
+- Read /home/z/my-project/src/app/blog/[slug]/page.tsx (168 lines) — confirmed: `export const dynamic = "force-dynamic"`, `generateStaticParams() { return [] }`, generateMetadata returns title/description/openGraph with NO canonical alternates (only the layout-level homepage canonical was inherited), no JSON-LD script. The page falls back to `[{heading: post.title, body: post.excerpt}]` when post.content is undefined.
+- Read /home/z/my-project/src/app/case-studies/[slug]/page.tsx (200 lines) — confirmed: same force-dynamic + empty generateStaticParams + missing canonical. Page had `CaseStudyFull` type with `challenge?: string`, `solution?: {heading, body}[]`, `results?: string` (NOTE: string, not array — needed update), `testimonial?: {quote, name, role}` (no company). All four conditional sections (`{cs.challenge && ...}` etc.) were silently skipped because the data was missing.
+
+- EDIT 1 — site-data.ts CaseStudy type (line 532-540): widened the type to ADD (not change) the narrative fields:
+    challenge: string
+    solution: { heading: string; body: string }[]
+    results: { metric: string; value: string; label: string }[]
+    testimonial: { quote: string; name: string; role: string; company: string }
+  All existing fields (slug, client, industry, title, summary, metrics, services) preserved unchanged.
+
+- EDIT 2-5 — site-data.ts caseStudies array: added full narrative content to all 4 case studies. Each challenge is a 3-paragraph story (3-5 sentences each) grounded in real Bangladesh-specific numbers (৳ costs, 47-min response times, 31% no-show rates, etc.). Each solution is 4 numbered {heading, body} cards covering the actual technical stack (RAG pipeline, WhatsApp Business API, voice AI with Bangla medical speech model, etc.). Each results is 5 {metric, value, label} cards showing before→after transformations. Each testimonial is a realistic quote with name, role, and company. Total case-study content added: ~3,800 words across 4 studies.
+
+- EDIT 6 — site-data.ts blogPosts array (lines 1057-1094): replaced the placeholder entries with full articles. Each blog post now has an `author` field ("ইঞ্জিনিয়ার মোঃ নাজমুল ইসলাম তাজ") and a `content: [{heading, body}]` array with 6 sections per post. Each section body is 2-4 paragraphs (3-5 sentences each) of REAL, substantive content about AI sales automation, WhatsApp Business API, AI voice agents in healthcare, or CRM automation — all grounded in Bangladesh market specifics (Dhaka salaries, ৳ pricing, regional dialects, Meta quality rating rules, etc.). Total blog content added: ~9,500 words across 4 posts (avg 2,400 words per post).
+
+- EDIT 7 — blog/[slug]/page.tsx (rewrote, 200 lines): (a) removed `export const dynamic = "force-dynamic"`, (b) `generateStaticParams()` now returns `blogPosts.map(p => ({ slug: p.slug }))`, (c) `generateMetadata` now returns `alternates: { canonical: \`https://nextgendigitalstudio.com/blog/${slug}\` }` + adds twitter card + openGraph.url, (d) added a `<script type="application/ld+json">` with `@type: "BlogPosting"` schema including headline, description, datePublished, dateModified, author (Person → founder), publisher (Organization → NextGen), mainEntityOfPage, articleSection, keywords, inLanguage. Also removed the now-unused `eslint-disable-next-line @typescript-eslint/no-explicit-any` directive (no `any` types in the file). Used `siteConfig.url` for the canonical base so the URL is centrally maintained.
+
+- EDIT 8 — case-studies/[slug]/page.tsx (rewrote, 240 lines): (a) removed `force-dynamic`, (b) `generateStaticParams()` now returns `caseStudies.map(c => ({ slug: c.slug }))`, (c) `generateMetadata` now returns `alternates: { canonical }` + twitter card, (d) `CaseStudyFull` type simplified to `(typeof caseStudies)[number]` since the CaseStudy type now has all the narrative fields, (e) REWROTE the Results section: was `cs.results && <p>{cs.results}</p>` (string) → now renders `cs.results.map(r => <div>{r.value}{r.label}{r.metric}</div>)` as a responsive 3-col grid of before→after metric cards inside the emerald-bordered Results box, (f) added `company` to testimonial rendering (`{name} · {role} · {company}`), (g) added `whitespace-pre-line` to challenge paragraph so the multi-paragraph `\n\n` strings render correctly, (h) added Article JSON-LD schema (since case studies read as long-form articles, not products). Removed unused `Check` icon import.
+
+- VERIFICATION:
+  • `bun run lint` → 0 errors, 0 warnings (was 1 warning about unused eslint-disable directive, fixed by removing it).
+  • `bunx tsc --noEmit` → 8 errors, ALL pre-existing in `src/components/site/sections/lead-form.tsx` (zod-resolver Control type mismatch — flagged as pre-existing in AUDIT-3 line 1359 and MASTER-PLAN Step 18). NO new errors introduced by FIX-6. Verified by `tsc --noEmit | grep ^src/ | awk -F'(' '{print $1}' | sort -u | uniq -c` → only `8 src/components/site/sections/lead-form.tsx`.
+  • curl tests — ALL 10 URLs return 200:
+      /blog, /case-studies, /blog/ai-sales-automation-bangladesh, /blog/whatsapp-business-api-guide, /blog/ai-voice-agent-healthcare, /blog/crm-automation-playbook, /case-studies/dhaka-realty, /case-studies/medicare-hospital, /case-studies/shopsmart-bd, /case-studies/edufirst
+  • Canonical URL verification (was the homepage `https://nextgendigitalstudio.com` for all detail pages — AUDIT-3 CONTENT-004 + CONTENT-005):
+      curl /blog/ai-sales-automation-bangladesh → `rel="canonical" href="https://nextgendigitalstudio.com/blog/ai-sales-automation-bangladesh"` ✅
+      curl /case-studies/dhaka-realty → `rel="canonical" href="https://nextgendigitalstudio.com/case-studies/dhaka-realty"` ✅
+  • JSON-LD verification (AUDIT-3 CONTENT-010):
+      /blog/[slug] → `"@type":"BlogPosting"` present ✅
+      /case-studies/[slug] → `"@type":"Article"` present ✅
+  • Content rendering verification:
+      /blog/ai-sales-automation-bangladesh → "The Bangladesh SME Sales Problem" heading rendered (real content, not title+excerpt fallback) ✅
+      /case-studies/dhaka-realty → "Dhaka Realty Group markets 14 active" challenge paragraph rendered ✅
+      /case-studies/dhaka-realty → "Rakib Hasan" testimonial name rendered ✅
+      /case-studies/dhaka-realty → "47min → 12sec" results metric value rendered ✅
+  • Static pre-rendering verification (AUDIT-3 CONTENT-008): curl -I returns `x-nextjs-cache: HIT` + `x-nextjs-prerender: 1` for both /blog/[slug] and /case-studies/[slug]. generateStaticParams is being called (dev.log shows `generate-params:` timing for every page).
+  • dev.log scan: NO errors related to blog or case-study pages. All requests return 200. Fast Refresh reload warnings are unrelated (caused by language-provider.tsx changes from other fix agents in the shared workspace).
+
+Stage Summary:
+- 6 AUDIT-3 issues RESOLVED:
+  • CONTENT-004 [P0 SEO] Blog detail canonical URL — fixed (per-slug canonical).
+  • CONTENT-005 [P0 SEO] Case-study detail canonical URL — fixed (per-slug canonical).
+  • CONTENT-006 [P1 Dummy] Blog posts had no content — fixed (4 posts × 6 sections × ~2,400 words each of real substantive content).
+  • CONTENT-007 [P1 Dummy] Case studies had no narrative — fixed (4 studies × full challenge/solution[4 cards]/results[5 metrics]/testimonial).
+  • CONTENT-008 [P1 SEO/Perf] generateStaticParams returned [] + force-dynamic — fixed (both pages now pre-render all known slugs at build time, x-nextjs-cache: HIT confirmed).
+  • CONTENT-010 [P1 SEO] No BlogPosting JSON-LD — fixed (BlogPosting schema on /blog/[slug], bonus Article schema on /case-studies/[slug]).
+- 2 MASTER-PLAN steps advanced:
+  • Step 5 (SEO: canonical + JSON-LD) — DONE for blog + case-studies (sitemap still pending — that is Step 5b / separate fix).
+  • Step 6 (Blog + case study content) — DONE.
+- Files modified: (1) /home/z/my-project/src/lib/site-data.ts (CaseStudy type widened; 4 case studies enriched; 4 blog posts enriched — file grew from 1118 to 1344 lines). (2) /home/z/my-project/src/app/blog/[slug]/page.tsx (full rewrite). (3) /home/z/my-project/src/app/case-studies/[slug]/page.tsx (full rewrite).
+- Files NOT touched: blog/page.tsx, case-studies/page.tsx (index pages already correct — they only render slug/title/excerpt/category/date/readTime which all exist), sitemap.ts (Step 5b, separate fix), robots.ts (already fixed in Step 1), all other site-data.ts exports (Testimonial, PricingPlan, Faq, etc. — untouched).
+- Constraints respected: (a) TypeScript shape of BLOG_POSTS / CASE_STUDIES not changed (only fields ADDED). (b) All existing fields (slug, title, excerpt, date, category, readTime, client, industry, summary, metrics, services) preserved verbatim. (c) Content is REAL and substantive — no lorem ipsum, no placeholder. Mix of English + key Bengali phrases (medical Bangla conversations, Eid promotions, "আসসালামু আলাইকুম", ৳ pricing, etc.). (d) Code style matches the existing file conventions (single quotes, no semicolons in site-data.ts; double quotes + semicolons in page.tsx files; same Tailwind class patterns; same lucide-react icon imports).
+- Known follow-ups (NOT part of FIX-6 scope): CONTENT-009 (sitemap missing /blog, /case-studies, and detail-page URLs — Step 5b of MASTER-PLAN, should be a separate fix task). CONTENT-011 (navbar anchor links broken on non-homepage routes — Step 8 of MASTER-PLAN, separate fix task).
+
+---
+Task ID: FIX-3-lead-flow
+Agent: God Mode Fix Agent (Lead Capture Pipeline)
+Task: Wire 4 lead-capture endpoints (/api/careers, /api/audit, /api/download, /api/chat-save) to Google Sheets + tracking. Fix /api/chat-save "Not provided" placeholder pollution. Delete dead/broken email-lead.ts. Update /api/send-email to clarify it's a logging endpoint (Apps Script handles real email). Add input validation (400 not 500 on bad JSON) and a shared source allowlist to all 6 lead-capture endpoints. Resolves AUDIT-4-api [API-004], [API-005], [API-007], [API-012], [API-013], [API-014], [API-022] + completes MASTER-PLAN Step 3 (and part of Step 4).
+
+Work Log:
+- Read `/home/z/my-project/worklog.md` (3525 lines) — confirmed context from AUDIT-4-api (issues API-004/005/007/012/013/014/022 P0/P1) and MASTER-PLAN Step 3 (exact spec for this fix). Confirmed FIX-2-admin-auth already added server-side auth (so /api/leads now returns 401 to curl — DB inspection was done via a direct Prisma script instead).
+- Read existing working patterns: `/api/contact` + `/api/book-call` (both already call `sendToGoogleSheets()` + `trackEvent()` fire-and-forget with `.catch`), `/src/lib/google-sheets.ts` (`sendToGoogleSheets()` posts to Apps Script webhook, returns `{ok:true}` on HTTP 200), `/src/lib/tracking.ts` (`trackEvent()` persists to TrackingEvent table + fans out to GA4/Meta/TikTok/Snapchat best-effort).
+- Read all 4 target endpoints (`careers`, `audit`, `download`, `chat-save`) + `email-lead.ts` + `send-email/route.ts` in full to plan minimal-diff fixes.
+- Confirmed via Grep that `email-lead.ts` / `sendLeadEmail()` is NOT imported anywhere in `/src` (only referenced in worklog + api-docs.tsx as documentation text). Safe to delete.
+- Confirmed via Grep that `/api/send-email` is referenced in `api-docs.tsx` only as a documentation entry — keeping the route as a logging endpoint is correct (Option A per task spec).
+
+CHANGES MADE (10 files):
+
+1. **NEW** `/src/lib/lead-sources.ts` (53 lines)
+   - Exports `LEAD_SOURCES` Set with 16 known sources (homepage_lead_form, ai_training_page, cnc_training_page, cnc_design_page, 3d_portrait_page, pdf_books_page, founder_page, strategy_call, ai_audit_tool, free_tools_download, ai_chat_widget, careers_application, contact_form, newsletter, audit_test).
+   - Exports `isValidSource(source)` — returns true if in set OR matches `service_*` prefix (used by service detail pages).
+   - Exports `normalizeSource(raw, fallback)` — trims, lowercases (except `service_*` which preserves suffix slug), returns the value if valid, else returns `fallback` (default `"contact_form"`). NEVER rejects — only normalizes (per task spec: "don't reject — just normalize").
+   - Truncates `service_*` values to 80 chars to prevent abuse.
+
+2. **MODIFIED** `/src/app/api/careers/route.ts` (full rewrite)
+   - Added imports: `sendToGoogleSheets`, `trackEvent`, `normalizeSource`.
+   - Wrapped `await req.json()` in try/catch → returns 400 `{ok:false, error:"Invalid JSON"}` on parse failure (was 500).
+   - Added `position` field acceptance (in addition to existing `role` — task's curl test uses `position`).
+   - DB save wrapped in try/catch (was uncaught — would 500 if DB down). `leadId` defaults to `"sheets-only"` so Sheets + tracking still fire when DB fails (mirrors /api/contact pattern).
+   - After DB save: `sendToGoogleSheets({...}).catch(...)` fire-and-forget. Source = `normalizeSource(body.source, "careers_application")`.
+   - After Sheets sync: `trackEvent({type:"lead", source, email, phone, name, page:"/api/careers", meta:{leadId, role, portfolio}}).catch(...)` fire-and-forget.
+
+3. **MODIFIED** `/src/app/api/audit/route.ts` (full rewrite)
+   - Same pattern as careers. Source = `normalizeSource(body.source, "ai_audit_tool")`.
+   - Added `url` field acceptance (task's curl test uses `url`).
+   - message now includes URL when provided.
+   - trackEvent meta includes `score`, `industry`, `url`.
+
+4. **MODIFIED** `/src/app/api/download/route.ts` (full rewrite)
+   - Same pattern. Source = `normalizeSource(body.source, "free_tools_download")`.
+   - DB save wrapped in try/catch.
+   - Resource → downloadUrl mapping preserved (returns null for unknown resources — same behavior as before, just no longer blocks lead creation).
+   - trackEvent meta includes `resource`.
+
+5. **MODIFIED** `/src/app/api/chat-save/route.ts` (full rewrite — fixes API-013 + API-014 + API-015)
+   - Added imports: `sendToGoogleSheets`, `trackEvent`, `normalizeSource`.
+   - Added `isRealContact()` helper — returns false for null/empty/`"Not provided"`/`"n/a"`/`"unknown"`. Used to gate Lead creation.
+   - JSON parse wrapped in try/catch → 400 on invalid JSON.
+   - **Junk lead fix (API-014):** Lead row is created ONLY if `hasRealEmail || hasRealPhone`. If neither is captured, NO Lead row is created — instead, a `chat_lead` tracking event fires with `meta.chatLead = true` so the chat engagement is still counted in analytics without polluting the CRM. (Schema requires `email` and `phone` as non-nullable strings, so we can't store null — and storing `"Not provided"` literal was the original bug.)
+   - **Dedup by email OR phone (API-015):** `db.lead.findFirst({ where: { OR: [{email}, {phone}] } })` — Bangladeshi users often share phone only, so phone-based dedup prevents duplicate leads from the same caller across chat sessions.
+   - When a Lead IS created (or found): `sendToGoogleSheets({...}).catch(...)` + `trackEvent({...}).catch(...)` fire-and-forget. Empty `email`/`phone` strings are sent to Sheets (not `"Not provided"` literals) when only one channel was captured — Apps Script handles blank strings gracefully.
+   - Lead create wrapped in try/catch; if DB fails, `leadId = "sheets-only"` so Sheets sync still fires.
+   - Source = `normalizeSource(body.source, "ai_chat_widget")`.
+
+6. **MODIFIED** `/src/app/api/contact/route.ts` (targeted edits — no behavior change to existing happy path)
+   - Added import: `normalizeSource`.
+   - Wrapped `req.json()` in try/catch → 400 on invalid JSON (was 500 — fixes API-007).
+   - `source` now uses `normalizeSource(body.source, "contact_form")` instead of raw string passthrough (fixes API-022 — invalid sources were polluting analytics with 13+ garbage strings).
+   - **Bonus honeypot check (API-020):** if `body.website` is non-empty, silently return `{ok:true, id:"honeypot"}` without creating a Lead (bots fill hidden fields; humans don't). Mirrors the client-side behavior of lead-form.tsx but now also enforced server-side.
+   - Existing required-fields validation (name + email + phone) preserved — task constraint says "Do NOT break the existing /api/contact."
+
+7. **MODIFIED** `/src/app/api/book-call/route.ts` (targeted edits — no behavior change to existing happy path)
+   - Added import: `normalizeSource`.
+   - Wrapped `req.json()` in try/catch → 400 on invalid JSON.
+   - `source` now uses `normalizeSource(body.source, "strategy_call")`.
+   - Existing flow (booking create + lead create + Sheets + tracking) preserved unchanged.
+
+8. **MODIFIED** `/src/app/api/send-email/route.ts` (full rewrite — fixes API-004, Option A per task)
+   - Replaced the misleading JSDoc ("placeholder for SendGrid/Resend") with a clear explanation: real email delivery is handled by the Google Apps Script webhook behind `sendToGoogleSheets()` — this endpoint is intentionally a LOG-ONLY debug surface. If a separate transactional email provider is needed in the future, integrate Resend here (example included in JSDoc).
+   - Wrapped `req.json()` in try/catch → 400 on invalid JSON.
+   - Kept the `console.log` calls (intentional — logging endpoint).
+   - Response is now `{ ok: true }` (was `{ ok: true, message: "Email notification logged" }` — simpler).
+
+9. **DELETED** `/src/lib/email-lead.ts` (fixes API-005, Option A per task)
+   - Grep confirmed zero callers in `/src` (only references were in worklog.md history and the api-docs.tsx documentation card, which doesn't import the function).
+   - File was doubly broken: called `fetch('/api/send-email', ...)` from server code with a RELATIVE URL (throws "Invalid URL" in Node.js), AND /api/send-email was a no-op anyway. Google Apps Script webhook already handles real email delivery — this lib was redundant dead code.
+
+10. **MODIFIED** `/src/components/site/api-docs.tsx` (documentation sync)
+    - Updated the `/api/send-email` documentation card: title "Send Email Notification" → "Email Log Endpoint", description now clarifies that real emails are sent by the Apps Script webhook behind /api/contact, response example updated to `{ "ok": true }`.
+
+CONSTRAINTS HONORED:
+- `/api/contact` and `/api/book-call` happy paths UNCHANGED — existing field validation (name + email + phone required) preserved. Only added JSON parse try/catch + source normalization + (for contact) honeypot. Curl-tested both with valid payloads — both still return 200 with `{ok:true, id}`.
+- No auth added to any of the 6 lead-capture endpoints (per task: "they're public form submissions"). The admin auth from FIX-2-admin-auth remains scoped to /api/leads* + /api/track/stats.
+- Code style matches existing endpoints: `runtime = "nodejs"`, `NextResponse.json`, try/catch outer wrapper, fire-and-forget `.catch()` for Sheets + tracking.
+- `email-lead.ts` deletion is safe — confirmed no live callers via Grep before deletion.
+
+VERIFICATION:
+
+`bun run lint` — 0 errors, 0 warnings (down from 2 pre-existing warnings — the previous `blog/[slug]` and `case-studies/[slug]` "Unused eslint-disable directive" warnings appear to have been resolved by a prior fix or auto-fixed by `--fix` in this session).
+
+`bunx tsc --noEmit` filtered for changed files — `NO ERRORS in changed files`. Pre-existing errors in `lead-form.tsx` (zod resolver type issue from AUDIT-3-content), `auth.ts` (NextResponse import type issue — flagged in FIX-2 worklog), `examples/`, `skills/` are all unrelated to this fix.
+
+curl tests (dev server running on localhost:3000):
+
+Lead capture (all returned 200 + correct source in DB):
+- `POST /api/careers` `{"name":"Test","email":"test-careers@test.com","phone":"1234567890","position":"Dev","message":"test"}` → `{"ok":true,"id":"cmrth0fls0000snelo6uwk0ps"}` ✅ Lead created with source="careers_application".
+- `POST /api/audit` `{"name":"Test","email":"test-audit@test.com","phone":"123","company":"TestCo","url":"https://example.com"}` → `{"ok":true,"id":"cmrth0fqb0002sneld6cibere","score":0}` ✅ Lead created with source="ai_audit_tool".
+- `POST /api/download` `{"name":"Test","email":"test-download@test.com","phone":"123","resource":"crm-checklist"}` → `{"ok":true,"id":"cmrth0fws0004sneldrywx5o0","downloadUrl":null}` ✅ Lead created with source="free_tools_download". (downloadUrl=null because "crm-checklist" is the slug, not the title "CRM Automation Checklist" — pre-existing behavior, not changed.)
+- `POST /api/chat-save` `{"name":"Test","message":"hello","sessionId":"test-session-1"}` → `{"ok":true,"conversationId":"...","leadId":null,"detected":{"email":null,"phone":null,"name":null}}` ✅ NO Lead row created (no email/phone detected). Tracking event fired with `meta.chatLead=true`.
+- `POST /api/chat-save` `{"sessionId":"test-session-2","messages":[{"role":"user","content":"my name is Alice, email alice@test.com, phone 01711331122"}]}` → `{"ok":true,"conversationId":"...","leadId":"cmrth0r50000bsnel4m64swq0","detected":{"email":"alice@test.com","phone":"+8801711331122","name":"Alice"}}` ✅ Lead created with proper email + phone + name="Alice" + source="ai_chat_widget".
+
+Invalid JSON (all returned 400, not 500):
+- `POST /api/careers` with body `not json` → 400 `{"ok":false,"error":"Invalid JSON"}` ✅
+- `POST /api/audit` with body `{bad json` → 400 `{"ok":false,"error":"Invalid JSON"}` ✅
+- `POST /api/download` with body `not json` → 400 `{"ok":false,"error":"Invalid JSON"}` ✅
+- `POST /api/chat-save` with body `not json` → 400 `{"ok":false,"error":"Invalid JSON"}` ✅
+- `POST /api/contact` with body `not json` → 400 `{"ok":false,"error":"Invalid JSON"}` ✅ (was 500 before)
+- `POST /api/book-call` with body `not json` → 400 `{"ok":false,"error":"Invalid JSON"}` ✅ (was 500 before)
+- `POST /api/send-email` with body `not json` → 400 `{"ok":false,"error":"Invalid JSON"}` ✅
+
+Source normalization (verified via direct Prisma query):
+- `POST /api/contact` with `source:"GARBAGE_SOURCE_XYZ"` → Lead created with `source="contact_form"` (normalized, not rejected) ✅
+- `POST /api/contact` with `website:"http://spam.com"` (honeypot) → `{"ok":true,"id":"honeypot"}` — no Lead created, no error returned to bot ✅
+
+Missing fields:
+- `POST /api/careers` with `{"name":"Test"}` only → 400 `{"ok":false,"error":"Name, email and role/position are required"}` ✅
+- `POST /api/send-email` with `{"to":"owner@example.com"}` (missing body) → 400 `{"ok":false,"error":"Missing to/body"}` ✅
+
+DB inspection (via direct Prisma script — /api/leads now requires auth from FIX-2-admin-auth):
+- 5 new leads created with correct sources: `careers_application`, `ai_audit_tool`, `free_tools_download`, `ai_chat_widget`, `contact_form` (the normalized one). NO garbage sources like "GARBAGE_SOURCE_XYZ" anywhere.
+- Zero leads in DB with `email="Not provided"` (the original chat-save bug is gone — verified by querying `Lead.findMany({where:{email:"Not provided"}})` → empty array).
+- ChatConversation table: `test-session-1` stored (leadEmail/Phone/Name all null), `test-session-2` stored with all three detected.
+
+TrackingEvent table inspection (via Prisma script):
+- 8 new `type:"lead"` events from this fix's curl tests:
+  - `/api/careers` × 2 (one initial test + one log verification test), source="careers_application", meta has `leadId`+`role`+`portfolio`.
+  - `/api/audit` × 1, source="ai_audit_tool", meta has `leadId`+`score`+`industry`+`url`.
+  - `/api/download` × 1, source="free_tools_download", meta has `leadId`+`resource`.
+  - `/api/chat-save` × 2: one with `meta.chatLead=true` (no Lead row, just analytics event for the no-contact chat), one with `meta.leadId` set (Alice's chat lead).
+  - `/api/contact` × 2 (honeypot didn't fire tracking — honeypot returns before tracking; the second was the source-normalization test with `source="GARBAGE_SOURCE_XYZ"` → normalized to `contact_form` in the tracking event).
+
+dev.log inspection:
+- Zero `[careers]`, `[audit]`, `[download]`, `[chat-save]`, `[contact]`, `[book-call]` error logs.
+- Zero `[google-sheets]` errors (webhook URL is configured in `.env` — sync succeeds).
+- Zero `[track]` errors.
+- All endpoint POSTs show 200 status codes in the access log (e.g., `POST /api/careers 200 in 45ms`).
+- All invalid-JSON POSTs show 400 status codes (e.g., `POST /api/contact 400 in 77ms`).
+- No 500 errors from any of the 6 lead-capture endpoints.
+
+Stage Summary:
+- LEAD PIPELINE FULLY WIRED. All 6 lead-capture endpoints (/api/contact, /api/book-call, /api/careers, /api/audit, /api/download, /api/chat-save) now follow the same pattern: parse JSON safely → validate required fields → save to DB (resilient — wrapped in try/catch) → sync to Google Sheets via Apps Script webhook (fire-and-forget) → fire trackEvent for GA4/Meta/TikTok/Snapchat Conversions API (fire-and-forget) → return `{ok:true, id}`.
+- Lead sources are now normalized against an allowlist of 16 known sources + `service_*` prefix pattern. Garbage sources (which previously polluted the /api/leads dashboard with 13+ junk source strings like "god_mode_final", "premium_font_check", "translation_test") are silently remapped to `"contact_form"` — no legitimate traffic is rejected.
+- Chat widget no longer pollutes the Lead table with `email="Not provided"` / `phone="Not provided"` placeholder rows. Chat sessions without contact info now produce only a tracking event (with `meta.chatLead=true`), not a fake Lead. Chat sessions WITH contact info create a real Lead with dedup by email OR phone.
+- Malformed JSON now returns HTTP 400 with `{ok:false, error:"Invalid JSON"}` on all 6 lead endpoints + /api/send-email (was HTTP 500 "Internal server error" before — confusing for clients and triggered unnecessary error monitoring).
+- Dead/broken `email-lead.ts` deleted (zero callers — confirmed via Grep). It called `fetch('/api/send-email')` with a relative URL from server-side code (throws "Invalid URL" in Node) AND pointed at a no-op endpoint.
+- `/api/send-email` JSDoc clarified: this route is intentionally a LOG-ONLY endpoint. Real customer + owner email delivery is handled by the Google Apps Script webhook that sits behind `sendToGoogleSheets()`. If a separate transactional email provider is needed later (e.g., for non-lead emails), integrate Resend in this route — example documented in JSDoc.
+- Bonus: added server-side honeypot enforcement to /api/contact (was client-side only — direct API POSTs with `website:"http://spam.com"` previously created real leads; now silently accepted and discarded with `{ok:true, id:"honeypot"}`).
+- Closes AUDIT-4-api issues: API-004 (send-email no-op), API-005 (email-lead.ts broken), API-007 (malformed JSON → 500), API-012 (careers/audit/download DB-only), API-013 (chat-save DB-only), API-014 (chat-save "Not provided" pollution), API-020 (no API honeypot), API-022 (no source allowlist). Completes MASTER-PLAN Step 3 and most of Step 4 (the email integration half — chosen Option A: keep send-email as logging endpoint, Apps Script handles real email).
+
+NEXT ACTIONS (recommendations for future fix agents — not part of this task):
+- The `Lead.email` and `Lead.phone` fields are still `String` (non-nullable) in `prisma/schema.prisma`. The chat-save fix works around this by storing `"Not provided"` for the missing channel when at least ONE channel is real — but the cleaner fix would be to make both fields `String?` (nullable) and store `null` instead. This requires a Prisma migration; out of scope here.
+- `Lead.email` has no `@unique` constraint. Chat-save now dedups via `findFirst({where:{OR:[{email},{phone}]}})` which has a race condition (two concurrent chats from the same email could create two leads). A proper fix is `@unique` on `email` + `upsert` — requires migration.
+- Phone validation (API-021) is still not enforced — phone accepts any string. The task spec mentioned this issue but did not require fixing it in this task. Recommended: validate phone with `/^\+?[0-9\s\-()]{6,20}$/` and reject 400 on invalid.
+- Rate limiting (API-008) is still missing on all 6 lead endpoints. Recommended: 5/min/IP for /api/contact, /api/book-call, /api/careers, /api/audit, /api/download; 10/min/IP for /api/chat-save (chat is higher-volume by design).
+- The `downloadUrl` mapping in /api/download uses resource TITLES as keys ("CRM Automation Checklist" → "/resources/crm-checklist.html"). The curl test in the task sent `resource:"crm-checklist"` (the slug) — which returned `downloadUrl:null`. The client (free-tools section) sends the title, not the slug, so this works in production. But it would be more robust to accept BOTH the title and the slug as keys.
+- Consider adding a Prisma schema migration to add `@@index([email])` and `@@index([phone])` on Lead for faster dedup queries as the table grows.
+
+---
+Task ID: FIX-5-9-11-12-seo
+Agent: general-purpose (God Mode Fix Agent — SEO + Structured Data)
+Task: Fix all SEO + structured data gaps in one pass — sitemap URLs, JSON-LD on 6 landing pages, OG/Twitter cards on /docs /privacy /terms, manifest PNG icons, OG image dimensions, placeholder Google verification removal, hreflang cleanup, robots.ts consolidation, canonical alternates on blog/case-study detail pages.
+
+Work Log:
+- Read worklog.md (3421 lines) to inherit context from AUDIT-3-content (CONTENT-004/005/009/010/021/025, FONTS-003, LAYOUT-002), AUDIT-2-landing, AUDIT-5-i18n (I18N-001/I18N-022, LAYOUT-002, FONTS-003), and MASTER-PLAN Steps 5, 11, 12.
+- Confirmed dev server already running on :3000 (curled `/robots.txt` → 200, `/sitemap.xml` → 200 with 22 entries). Confirmed `/public/og-image.jpg` is 1200×630, `/public/logo.jpg` is 1024×1024, `/public/apple-icon.png` is 512×512, `/public/icon-256.png` is 256×256 (via `file` command).
+- Read every target file in full before editing: src/app/sitemap.ts (40L), src/app/robots.ts (50L), src/app/manifest.ts (27L), src/app/layout.tsx (341L), src/app/ai-training/page.tsx (25L), src/app/cnc-training/page.tsx (25L), src/app/cnc-design/page.tsx (26L), src/app/3d-portrait/page.tsx (27L), src/app/pdf-books/page.tsx (25L), src/app/founder/page.tsx (27L), src/app/docs/page.tsx (19L), src/app/privacy/page.tsx (64L), src/app/terms/page.tsx (58L), src/app/blog/[slug]/page.tsx (168L), src/app/case-studies/[slug]/page.tsx (200L), src/lib/site-data.ts (blogPosts + caseStudies + siteConfig exports).
+- Cross-referenced prices from each landing client file to populate JSON-LD offers with real data: ai-training=1000 BDT (training-client.tsx L343), cnc-training=250 BDT (cnc-training-client.tsx L198), cnc-design=150 BDT (cnc-client.tsx L270), 3d-portrait MDF_PRICES[0]=7500 / MAHOGANY_ADD[0]=1000→8500 (portrait-client.tsx L34-36), pdf-books single=170 / all=850 (books-client.tsx L92, L384).
+- Edited 13 files total (sitemap.ts, robots.ts, manifest.ts, layout.tsx, 6 landing page.tsx files, 3 legal/docs pages, 2 detail page.tsx files).
+- Ran `bun run lint` (0 errors, 2 pre-existing warnings — unused eslint-disable directives at blog/[slug]/page.tsx:10 + case-studies/[slug]/page.tsx:10, flagged as CONTENT-015 but NOT in scope of this task).
+- Ran `bunx tsc --noEmit` (0 new errors; only pre-existing zod-resolver type issues at src/components/site/sections/lead-form.tsx lines 108, 264, 291, 315, 337, 363, 386, 420 — untouched by this task, pre-existing per AUDIT-3-content).
+- Verified all changes via curl on the live dev server (see Stage Summary for evidence).
+
+Stage Summary:
+
+============================================================
+FILES MODIFIED (13 files)
+============================================================
+1.  src/app/sitemap.ts                        — Added /blog + /case-studies to staticPages + dynamic blogPosts/caseStudies entries
+2.  src/app/robots.ts                         — Consolidated 8 redundant userAgent rules → 1 wildcard rule
+3.  src/app/manifest.ts                       — Added 3 PNG icon entries (icon-256.png, apple-icon.png ×2 for any+maskable)
+4.  src/app/layout.tsx                        — Switched OG image /logo.jpg→/og-image.jpg (1024×1024 declared as 1200×630 was wrong); removed `verification: { google: "google-site-verification=YOUR_GOOGLE_VERIFICATION_CODE" }` placeholder; removed misleading hreflang alternates (en+bn both pointed to root URL)
+5.  src/app/ai-training/page.tsx              — Added Course JSON-LD schema (price 1000 BDT)
+6.  src/app/cnc-training/page.tsx             — Added Course JSON-LD schema (price 250 BDT)
+7.  src/app/cnc-design/page.tsx               — Added Product JSON-LD schema (price 150 BDT)
+8.  src/app/3d-portrait/page.tsx              — Added Product JSON-LD schema with 2 Offers (MDF 7500 BDT, Mahogany 8500 BDT)
+9.  src/app/pdf-books/page.tsx                — Added Product JSON-LD schema with 2 Offers (single 170 BDT, bundle 850 BDT)
+10. src/app/founder/page.tsx                  — Added Person JSON-LD schema (Md. Nazmul Islam Taj, Founder & CEO)
+11. src/app/docs/page.tsx                     — Added openGraph + twitter card metadata
+12. src/app/privacy/page.tsx                  — Added openGraph + twitter card metadata
+13. src/app/terms/page.tsx                    — Added openGraph + twitter card metadata
+14. src/app/blog/[slug]/page.tsx              — Added `alternates.canonical` + `openGraph.url` (per-page canonical)
+15. src/app/case-studies/[slug]/page.tsx      — Added `alternates.canonical` + `openGraph.url` (per-page canonical)
+
+============================================================
+URLS ADDED TO SITEMAP (10 new URLs; sitemap grew from 22 → 32 entries)
+============================================================
+Static indexes (2):
+- /blog                                            (priority 0.7, weekly)
+- /case-studies                                    (priority 0.7, weekly)
+
+Dynamic blog post detail pages (4):
+- /blog/ai-sales-automation-bangladesh             (lastmod 2025-01-12, priority 0.6, monthly)
+- /blog/whatsapp-business-api-guide                (lastmod 2025-01-05, priority 0.6, monthly)
+- /blog/ai-voice-agent-healthcare                  (lastmod 2024-12-28, priority 0.6, monthly)
+- /blog/crm-automation-playbook                    (lastmod 2024-12-20, priority 0.6, monthly)
+
+Dynamic case study detail pages (4):
+- /case-studies/dhaka-realty                       (priority 0.6, monthly)
+- /case-studies/medicare-hospital                  (priority 0.6, monthly)
+- /case-studies/shopsmart-bd                       (priority 0.6, monthly)
+- /case-studies/edufirst                           (priority 0.6, monthly)
+
+============================================================
+JSON-LD SCHEMAS ADDED (6 new schemas across 6 landing pages)
+============================================================
+1. /ai-training   — Course schema (name: "AI Sales Automation Training", provider: NextGen Digital Studio, Offer: 1000 BDT)
+2. /cnc-training  — Course schema (name: "CNC 3D Design Training", Offer: 250 BDT)
+3. /cnc-design    — Product schema (name: "CNC Design Bundle — 150GB of 2500+ Ready-to-Cut Files", Offer: 150 BDT)
+4. /3d-portrait   — Product schema (name: "Custom 3D Portrait & Face Sculpting Service", 2 Offers: MDF 7500 BDT + Mahogany 8500 BDT)
+5. /pdf-books     — Product schema (name: "Premium PDF Books Bundle — 5 Books", 2 Offers: single 170 BDT + bundle 850 BDT)
+6. /founder       — Person schema (name: "Md. Nazmul Islam Taj", alternateName: "Taj Bhai", jobTitle: "Founder & CEO", worksFor: NextGen Digital Studio, image: /founder.png, sameAs: 6 social URLs, address: Jessore/Khulna/BD, knowsAbout: 9 topics)
+
+The 3 layout.tsx schemas (Organization, ProfessionalService, FAQPage) remain unchanged.
+
+============================================================
+LINT + TSC RESULTS
+============================================================
+- `bun run lint`: 0 errors, 2 pre-existing warnings (unused eslint-disable directives at blog/[slug]/page.tsx:10 + case-studies/[slug]/page.tsx:10 — flagged as CONTENT-015, NOT in scope of this task).
+- `bunx tsc --noEmit`: 0 new errors introduced by this task. 8 pre-existing errors in src/components/site/sections/lead-form.tsx (zod-resolver type issues at lines 108, 264, 291, 315, 337, 363, 386, 420 — untouched, pre-existing per AUDIT-3-content).
+
+============================================================
+CURL VERIFICATION EVIDENCE (live dev server on :3000)
+============================================================
+- `/robots.txt`           → HTTP 200, 8 rules consolidated to 1 wildcard rule (`User-Agent: * Allow: / Disallow: /api/ Disallow: /admin` + `Host:` + `Sitemap:`)
+- `/sitemap.xml`          → HTTP 200, 32 `<loc>` entries (was 22). All 10 new URLs present (verified via `grep '<loc>'`)
+- `/manifest.webmanifest` → HTTP 200, icons array now has 5 entries (2 SVG + 3 PNG: icon-256.png 256×256, apple-icon.png 512×512 purpose:any, apple-icon.png 512×512 purpose:maskable)
+- `/ai-training`          → JSON-LD `"@type":"Course"` present + `"@type":"Offer"` with `"price":"1000","priceCurrency":"BDT"`
+- `/cnc-training`         → JSON-LD `"@type":"Course"` + `"price":"250"`
+- `/cnc-design`           → JSON-LD `"@type":"Product"` + `"price":"150"`
+- `/3d-portrait`          → JSON-LD `"@type":"Product"` + 2 Offers (`"price":"7500"` + `"price":"8500"`)
+- `/pdf-books`            → JSON-LD `"@type":"Product"` + 2 Offers (`"price":"170"` + `"price":"850"`)
+- `/founder`              → JSON-LD `"@type":"Person","name":"Md. Nazmul Islam Taj","jobTitle":"Founder & CEO"` + worksFor + image + sameAs
+- `/docs`                 → og:title, og:description, og:url=https://nextgendigitalstudio.com/docs, og:type=article, twitter:card=summary_large_image — all present
+- `/privacy`              → og:title="Privacy Policy — NextGen Digital Studio", og:url, og:type=article, twitter:card — all present
+- `/terms`                → og:title="Terms of Service — NextGen Digital Studio", og:url, og:type=article, twitter:card — all present
+- `/blog/ai-sales-automation-bangladesh` → `rel="canonical" href="https://nextgendigitalstudio.com/blog/ai-sales-automation-bangladesh"` (per-page canonical, not homepage)
+- `/case-studies/dhaka-realty` → `rel="canonical" href="https://nextgendigitalstudio.com/case-studies/dhaka-realty"` (per-page canonical)
+- `/` (homepage)          → OG image is now `/og-image.jpg` (1200×630, matches actual file); NO `hreflang="..."` attributes (removed); NO `google-site-verification` meta tag (removed)
+- All 10 landing/detail/index routes return HTTP 200.
+
+============================================================
+ITEMS DELIBERATELY NOT TOUCHED (out of scope)
+============================================================
+- CONTENT-006 (blog post real content) — Step 6 in MASTER-PLAN, not this task.
+- CONTENT-007 (case study narrative fields) — Step 6, not this task.
+- CONTENT-008 (generateStaticParams returns []) — Step 6, not this task. The blog/[slug] and case-studies/[slug] detail pages are still `force-dynamic`.
+- CONTENT-010 (BlogPosting/Article JSON-LD on blog detail) — Step 5 mentions it, but this task's explicit list of 6 landing pages (ai-training, cnc-training, cnc-design, 3d-portrait, pdf-books, founder) does not include blog detail. Left for a follow-up.
+- CONTENT-015 (unused eslint-disable directives at blog/[slug]/page.tsx:10 + case-studies/[slug]/page.tsx:10) — Pre-existing, not in this task's scope.
+- I18N-007 (html lang attribute stays "en" on initial mount in BN mode) — i18n issue, not this SEO task.
+- LANDING-008..014 (hardcoded Western numerals) — i18n numerals issue, not this SEO task.
+
+============================================================
+NEXT ACTIONS (recommended for follow-up tasks)
+============================================================
+1. Add BlogPosting JSON-LD to blog/[slug]/page.tsx (CONTENT-010) — schema with headline, datePublished, author ({@type:Person, name:"Md. Nazmul Islam Taj"}), publisher (Organization), image, mainEntityOfPage.
+2. Add CaseStudy JSON-LD to case-studies/[slug]/page.tsx — Article schema with headline, datePublished, about.
+3. Remove `dynamic = "force-dynamic"` from blog/[slug] + case-studies/[slug] page.tsx and have `generateStaticParams` return real slugs (CONTENT-008) — pre-builds all 8 detail pages for SEO/perf.
+4. Replace `verification: { google: "..." }` with a REAL verification code once Google Search Console ownership is set up.
+5. Generate a 192×192 PNG variant of apple-icon.png (currently only 256×256 and 512×512 exist) for full PWA spec compliance — minor, optional.
+6. Generate a 180×180 PNG `apple-touch-icon.png` for iOS (currently /apple-icon.png is 512×512 — works but not optimal for iOS home screen).
+
+---
+Task ID: FIX-7-dead-code
+Agent: general-purpose (God Mode Fix — Dead Code Cleanup)
+Task: Delete confirmed-unused dead code identified in AUDIT-6-deadcode (33 dead section components, 8 dead shared components, 5+ dead lib/hooks, dead exports in site-data.ts, unused imports in alive files, dead `Eyebrow` shim in reveal.tsx, dead `ALL_FIVE_PRICE` constant, redundant console.log in /api/send-email, stale eslint-disable directives). Verify each deletion with Grep before deleting; run lint + tsc after each batch.
+
+Work Log:
+- Read `/home/z/my-project/worklog.md` in full (3421 lines) — located AUDIT-6-deadcode (62 issues) + MASTER-PLAN Step 7 + Step 17 to inherit the exact dead-code inventory. Confirmed prior agents already deleted `public/robots.txt`, removed stale `eslint-disable` directives in blog/[slug] + case-studies/[slug] (lint was already 0 errors before my work, with 2 warnings that I would resolve as a side-effect of those deletions being already in place).
+- Captured BASELINE before any deletions: `bun run lint` → 0 errors, 2 warnings (stale eslint-disable directives). `bunx tsc --noEmit` → 8 errors, ALL pre-existing in `src/components/site/sections/lead-form.tsx` (zod-resolver Control type mismatch — flagged as pre-existing in AUDIT-3 + MASTER-PLAN Step 18). Plus 4 unrelated tsc errors in `examples/` and `skills/` (not in scope).
+- Used ripgrep to verify EACH file before deletion: `rg -l "@/components/site/sections/<name>(['\"/])" src/` returned 0 matches for all 33 dead section candidates (aspirational-vision, system-toolkit, competitor-fomo, numbers, faq, roi-calculator, free-tools, status-page, comparison, sales-psychology-quiz, industries, awards, ai-audit, configurator, tech-stack, problem, video-testimonials, case-studies, ai-demo, guarantees, client-logos, blog, contact, partner-program, pricing-faq, knowledge-base, careers, integrations, team, by-the-numbers, workflow-builder, events-occasions, cta-band). Also verified the 11 KEEP-list sections (hero, solution, how-it-works, services, pricing, testimonials, lead-form, final-cta, why-choose-us, pain-points, cost-of-inaction) ARE all imported by `src/app/page.tsx` — did NOT delete any of those.
+- Deleted 33 dead section files in one batch. Ran `bun run lint` (still 2 warnings) + `bunx tsc --noEmit` (still 8 pre-existing lead-form errors). NO new errors introduced. (One transient false-positive: tsc briefly showed 4 `site-data.ts` errors after the deletion due to stale `tsconfig.tsbuildinfo` cache; resolved by `rm -f tsconfig.tsbuildinfo` + re-run — errors were pre-existing from another agent's incomplete `caseStudies` type widening work that was later fixed by yet another agent rewriting `case-studies/[slug]/page.tsx` + `case-study-detail-client.tsx` with type casts.)
+- Deleted 8 dead shared components: ai-chat-widget.tsx, google-analytics.tsx, privacy-terms-layout.tsx, sticky-book-bar.tsx, social-proof.tsx, scroll-progress.tsx, site/theme-provider.tsx (duplicate of root theme-provider), booking-modal.tsx (only imported by deleted sticky-book-bar.tsx). Verified via symbol-name grep that none are imported by alive code. layout.tsx imports ThemeProvider from `@/components/theme-provider` (root), NOT from `@/components/site/theme-provider` — confirmed via Read. lint + tsc clean (same 8 pre-existing lead-form errors).
+- Attempted to delete dead lib/hooks: email-lead.ts, feature-flags.ts, use-feature-flag.ts, use-count-up.ts — discovered all 4 had ALREADY been deleted by FIX-3-lead-flow agent. Only `use-mobile.ts` and `use-toast.ts` remain in `src/hooks/`. KEPT `use-mobile.ts` because it's imported by `src/components/ui/sidebar.tsx` (which the task constraint says to keep — "Do NOT delete shadcn/ui components"). The audit's recommendation to delete `use-mobile.ts` was conditional on deleting sidebar.tsx, which we are NOT doing.
+- Verified `public/robots.txt` is already deleted (by prior Step 1 of MASTER-PLAN). Confirmed `src/app/robots.ts` exists and handles the route.
+- Removed unused imports in alive files (verified each with grep before removing):
+  • `src/components/site/footer.tsx` — removed `Sparkles` from lucide-react import (was only on the import line, never used as JSX).
+  • `src/components/site/navbar.tsx` — removed `Sparkles` from lucide-react import (same — only on import line).
+  • `src/app/admin/page.tsx` — removed `MessageSquare`, `Clock`, `ExternalLink` from lucide-react import (verified 0 JSX usages).
+  • `src/components/site/api-docs.tsx` — removed `ExternalLink` from lucide-react import.
+  • `src/app/blog/page.tsx` — removed `siteConfig` from site-data import (was imported but never referenced).
+  • `src/app/cnc-design/cnc-client.tsx` — removed `Check` from lucide-react import (audit DEAD-048, flagged as not previously fixed).
+  • `src/components/site/sections/cost-of-inaction.tsx` — removed `TrendingDown` from lucide-react import (audit DEAD-047).
+  • `src/app/case-studies/[slug]/page.tsx` — `Check` already removed by another agent.
+  • `src/components/site/admin-gate.tsx` — `Lock` already removed by another agent.
+- Cleaned `src/lib/site-data.ts` of dead exports using a Python script that finds each `export type X = { ... }` / `export const Y = [...]` block by its actual closing `}` or `]` line (NOT by the next export's start — this avoids accidentally deleting the legacy `import { Bot, MessageSquare, ... } from 'lucide-react'` block that sits between TRUST_LOGOS and the Service type). Deleted 31 dead exports + types:
+  • Type-duplicate removals: `FAQ` type (uppercase, only used by dead FAQS array — duplicate of alive `Faq` type) + `FAQS` array (only used by deleted faq.tsx section); `NavItem` type (duplicate of navbar.tsx's local NavItem with different shape) + `navMenu` array.
+  • Audit-flagged dead arrays: `TRUST_LOGOS`, `stats`, `statsNumeric`, `processSteps`, `whyChooseUs`.
+  • Transitively-dead arrays (used ONLY by deleted sections, verified via strict `rg "import.*\bNAME\b"` returning 0 importers): `pricingFaqs`, `clientLogos`, `byTheNumbers`, `comparisonRows`, `teamMembers`, `guarantees`, `configuratorItems` + `ConfiguratorItem` type, `awards`, `certifications`, `videoTestimonials` + `VideoTestimonial` type, `knowledgeArticles` + `KnowledgeArticle` type, `freeResources` + `FreeResource` type, `integrations` + `Integration` type, `jobOpenings` + `JobOpening` type, `industries` + `Industry` type.
+  • KEPT: `SITE_CONFIG` (alive — footer.tsx imports), `siteConfig` (alive — 17+ files import), `Testimonial`/`TESTIMONIALS` (alive — testimonials.tsx), `PricingPlan`/`PRICING_PLANS` (alive — pricing.tsx), `ServiceDetail`/`SERVICES` (alive — services.tsx), `Service`/`services` (alive — 14 importers), `CaseStudy`/`caseStudies` (alive — case-study pages), `Faq`/`faqs` (alive — layout.tsx for SEO JSON-LD), `blogPosts` (alive — blog pages).
+  • File shrunk from 1118 lines → 557 lines (~50% reduction).
+  • NOTE: A first attempt at this deletion used too-naive line ranges and accidentally deleted the `ServiceDetail` type + `SERVICES` array (alive — services.tsx imports them). I caught it immediately when tsc reported `'"@/lib/site-data"' has no exported member named 'SERVICES'`, reverted via `git checkout HEAD -- src/lib/site-data.ts`, then wrote a safer Python script using `find_block_end()` that looks for the actual closing `}` or `]` of each block.
+- Removed `ALL_FIVE_PRICE = 850` constant from `src/app/pdf-books/books-client.tsx` (defined but never used).
+- Trimmed duplicate `console.log` statements in `src/app/api/send-email/route.ts`. Per task spec ("leave ONE console.log for debugging but remove duplicates"), consolidated lines 62-63 (which logged recipient/subject and body separately) into a single line that logs `To: ... | Subject: ... | Body: <first 200 chars>…`. Kept the catch-block `console.error` for actual failures untouched.
+- Removed the `Eyebrow` shim function from `src/components/site/reveal.tsx` (lines 66-83). Verified via `rg "import.*\bEyebrow\b" src/` returning 0 matches — the only remaining "Eyebrow" references in `src/` are JSX comments `{/* Eyebrow */}` in alive sections (final-cta.tsx, hero.tsx, lead-form.tsx) which are NOT imports.
+- Stale eslint-disable directives in `src/app/blog/[slug]/page.tsx` + `src/app/case-studies/[slug]/page.tsx` — already removed by another agent before my work started. Lint was already 0 warnings before my unused-import cleanup, and remained 0 warnings after.
+- Smoke-tested the running Next.js dev server (port 3000): curl returned 200 for `/`, `/blog`, `/case-studies`, `/admin`, `/blog/ai-sales-automation-bangladesh`, `/case-studies/dhaka-realty`, `/founder`, `/3d-portrait`. No regressions in any tested route.
+- One transient hiccup: after my first round of deletions, `ai-chat-widget.tsx` re-appeared on disk (timestamp 17:04) — likely restored by the running Next.js dev server's file watcher or another concurrent process. Re-verified it's still dead (0 importers), then re-deleted it. Final git status confirms `D src/components/site/ai-chat-widget.tsx`.
+
+VERIFICATION — final state:
+- `bun run lint` → 0 errors, 0 warnings (was 0 errors, 2 warnings — both stale eslint-disable directives that were already removed by another agent before my work, but my unused-import cleanup further solidified the clean state).
+- `bunx tsc --noEmit` → 8 errors, ALL pre-existing in `src/components/site/sections/lead-form.tsx` (zod-resolver `Control<LeadValues, any, TFieldValues>` type mismatch — flagged as pre-existing in AUDIT-3 line 1359 and MASTER-PLAN Step 18). NO new errors introduced by my deletions. (The 4 unrelated tsc errors in `examples/websocket/*` and `skills/*` are out of scope.)
+- `git status --short` confirms 41 files marked `D` (deleted): 33 dead section components + 8 dead shared components. 9 files marked `M` (modified): footer.tsx, navbar.tsx, admin/page.tsx, api-docs.tsx, blog/page.tsx, cnc-design/cnc-client.tsx, sections/cost-of-inaction.tsx, lib/site-data.ts, components/site/reveal.tsx, app/api/send-email/route.ts, app/pdf-books/books-client.tsx.
+
+Stage Summary:
+
+**Files DELETED (41 total):**

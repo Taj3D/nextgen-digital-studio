@@ -1,0 +1,302 @@
+     1→     1→# NextGen Digital Studio — Project Worklog
+     2→     2→
+     3→     3→---
+     4→     4→Task ID: 1
+     5→     5→Agent: Main (Z.ai Code)
+     6→     6→Task: Recreate the NextGen Digital Studio (AI Sales Automation Agency) website from the uploaded source backup (workspace-*.tar + MASTER_PROMPT.md). The site is a bilingual (EN/BN) multi-page Next.js 16 application with a PADA sales-funnel homepage, 12 service pages, landing pages, admin dashboard, lead-generation APIs, analytics pixels, and full SEO.
+     7→     7→
+     8→     8→Work Log:
+     9→     9→- Read `/home/z/my-project/upload/MASTER_PROMPT.md` to understand the full spec (23 pages, 16 API routes, 4 ad pixels, PADA funnel, bilingual system, Prisma schema with 7 models).
+    10→    10→- Inspected the uploaded tar archive `workspace-3de6a7f2-61db-4857-adaf-9efbd051a60a.tar` and found a complete source tree: 172 files under `src/`, full `public/` assets (logo.jpg, founder.png, fonts, 3d-gallery, og-image, llms.txt, .well-known/agents.json), `prisma/schema.prisma` (7 models), `db/custom.db`.
+    11→    11→- Extracted the tar to `/tmp/workspace-extract` and verified the key files (`src/app/page.tsx`, `src/app/layout.tsx`, `src/lib/site-data.ts`, `src/components/site/language-provider.tsx`) are intact and match the master prompt.
+    12→    12→- Copied all source files into the existing project:
+    13→    13→  - `src/*` → `/home/z/my-project/src/` (app routes, components, lib, hooks)
+    14→    14→  - `public/*` → `/home/z/my-project/public/` (logo, fonts, images, llms.txt, agents.json, resources)
+    15→    15→  - `prisma/schema.prisma` → `/home/z/my-project/prisma/schema.prisma`
+    16→    16→  - `db/custom.db` → `/home/z/my-project/db/custom.db`
+    17→    17→- Confirmed `.env` already has `DATABASE_URL=file:/home/z/my-project/db/custom.db`.
+    18→    18→- Ran `bun run db:push` — Prisma reports the database is already in sync with the schema (7 models: User, Lead, LeadActivity, Booking, NewsletterSubscriber, ChatConversation, TrackingEvent). Prisma Client regenerated.
+    19→    19→- Dev server was already running on port 3000; verified the homepage compiles and returns HTTP 200.
+    20→    20→- Ran `bun run lint` — only 2 cosmetic warnings about unused eslint-disable directives in `blog/[slug]/page.tsx` and `case-studies/[slug]/page.tsx`; 0 errors.
+    21→    21→- Verified with Agent Browser:
+    22→    22→  - Homepage `/` renders the full PADA funnel: Hero, Pain Points (6 cards), Cost of Inaction, Solution, How It Works (7-day), Services (4 cards), Why Choose Us (4 reasons), Testimonials, Pricing (3 plans with Monthly/Yearly toggle), Lead Form, Final CTA, Footer with socials.
+    23→    23→  - Language toggle EN ↔ BN works (h1 switches between English and Bangla).
+    24→    24→  - Theme toggle (dark/light) works.
+    25→    25→  - Lead form submission: filled name/email/phone → clicked "Get My Free Strategy Session" → `POST /api/contact 200` → lead persisted to SQLite (`Lead` table, source=homepage_lead_form, status=new).
+    26→    26→  - Pricing Monthly/Yearly toggle works.
+    27→    27→  - Services dropdown in navbar works.
+    28→    28→  - Service page `/services/ai-sales-automation` renders with hero, "what this service includes", "why choose", and an embedded lead form.
+    29→    29→  - Founder page `/founder` renders (Taj Bhai bio).
+    30→    30→  - 3D Portrait page `/3d-portrait` renders with the Live Price Calculator; selecting "Mahogany Wood" + quantity 3 updates the total to ৳13,500.
+    31→    31→  - All other main pages return 200 with correct titles: `/cnc-design`, `/pdf-books`, `/ai-training`, `/cnc-training`, `/privacy`, `/terms`, `/admin`.
+    32→    32→  - Tracking endpoint `POST /api/track 200` fires on every page view.
+    33→    33→  - WhatsApp links all point to `wa.me/8801711731354` with the pre-filled message.
+    34→    34→  - Responsive: tested at 375×667 (mobile), 1280×800, 1440×900 — layout holds, footer sticks to bottom of viewport on short pages and is pushed down naturally on long pages.
+    35→    35→  - No console errors, no hydration mismatches, no runtime errors in `/home/z/my-project/dev.log`.
+    36→    36→
+    37→    37→Stage Summary:
+    38→    38→- The complete NextGen Digital Studio website is live and fully functional at `http://localhost:3000` (preview via the Preview Panel).
+    39→    39→- All 11 main pages + 12 service pages + blog/case-study dynamic routes + 16 API routes are operational.
+    40→    40→- Lead generation flow works end-to-end (form → API → SQLite → success).
+    41→    41→- Bilingual (EN/BN) and dark/light theme switching works.
+    42→    42→- 4 analytics pixels (GA4, FB, Snapchat, TikTok) are wired in `analytics-pixels.tsx`.
+    43→    43→- SEO assets in place: `sitemap.ts`, `robots.ts`, `manifest.ts`, `public/llms.txt`, `public/.well-known/agents.json`, JSON-LD (Organization + ProfessionalService + FAQPage).
+    44→    44→- The site is production-ready; the only env var that would need to be added for the AI chat widget is `GEMINI_API_KEY` (the rest of the site does not depend on it).
+    45→    45→
+    46→    46→---
+    47→    47→Task ID: 2-master
+    48→    48→Agent: Main (Z.ai Code)
+    49→    49→Task: Comprehensive 20-step deep audit + update of NextGen Digital Studio website. User requests: (1) apply premium fonts to all EN/BN text, (2) verify order/lead system works with Google Apps Script webhook, (3) deep audit ALL pages for bugs/errors/gaps/dummy features/crash code/translation mismatches, (4) fix everything in 20 steps without breaking codebase. "God Mode" enabled.
+    50→    50→
+    51→    51→Work Log:
+    52→    52→- Read worklog.md (previous build complete), layout.tsx (fonts: Sora/Inter/Plus Jakarta Sans via next/font + MahfujLipi Bengali + ForzonDEMO display via @font-face), globals.css (font stacks wired).
+    53→    53→- Verified .env has GOOGLE_SHEETS_WEBHOOK_URL = https://script.google.com/macros/s/AKfycbwJX2Ok-SZS24QK8AxZeQLP8wWSytCzfQLYiW8tPKEV35ipHYsqgl2TFN9hVC98i7ou/exec (matches user's deployment v2).
+    54→    54→- Read /api/contact route: it DOES call sendToGoogleSheets() → posts to Apps Script webhook (text/plain to avoid CORS preflight, redirect:follow). Good.
+    55→    55→- Read /api/book-call route: it does NOT call sendToGoogleSheets — only saves to local DB. BUG: "Book Strategy Call" leads never reach Google Sheet / email.
+    56→    56→- Read booking-modal.tsx: BookingProvider is a NO-OP (modal removed); useBooking().openWith() just scrolls to #lead-form. So all "Book Strategy Call"/"Book Now" buttons now scroll to the lead form (which posts to /api/contact → works). The /api/book-call route is effectively dead code (only referenced in api-docs.tsx).
+    57→    57→- Read lead-form.tsx: posts to /api/contact with source='homepage_lead_form'. Phone regex /^(\+?880|0)?1[3-9]\d{8}$/ (BD numbers). Honeypot field. Success/error states wired. Looks functional.
+    58→    58→- Confirmed site-data.ts content is NOT corrupted (earlier "n" was terminal rendering artifact); "Monthly strategy call", "Book a strategy call" all present and correct in English.
+    59→    59→- Dev server was DOWN; restarted `bun run dev` — now LISTENING on port 3000.
+    60→    60→
+    61→    61→Stage Summary (Master Plan — 20 steps):
+    62→    62→PHASE 1 — DEEP AUDIT (parallel, steps 1-7):
+    63→    63→  1. Audit Homepage (/) — PADA funnel, all 11 sections, lead form, CTAs, sticky footer, responsive
+    64→    64→  2. Audit /ai-training + /cnc-training
+    65→    65→  3. Audit /cnc-design + /3d-portrait (price calculator)
+    66→    66→  4. Audit /pdf-books + /founder
+    67→    67→  5. Audit /services/[slug] landing pages + /admin + /docs
+    68→    68→  6. Audit ALL API routes (contact, book-call, leads, track, newsletter, chat-agent, send-email, careers, download, audit, chat-save)
+    69→    69→  7. Audit shared infra: i18n (site-data.ts EN/BN completeness + mismatches), fonts, SEO (sitemap/robots/manifest/llms.txt), analytics pixels, navbar/footer/floating-buttons/ai-chat-widget
+    70→    70→PHASE 2 — SYNTHESIS (step 8): consolidate all findings into master fix list
+    71→    71→PHASE 3 — FIXES (steps 9-17):
+    72→    72→  9. Apply premium fonts (verify Bengali MahfujLipi + English Sora/Inter render everywhere incl. dynamic content)
+    73→    73→  10. Verify/fix /api/contact → Google Sheets webhook (test real POST, confirm 200 + email)
+    74→    74→  11. Fix /api/book-call to ALSO sync to Google Sheets (so strategy-call leads reach Sheet + email)
+    75→    75→  12. Verify "Get Your Free Strategy Session" + "Book Strategy Call" buttons submit end-to-end
+    76→    76→  13. Fix EN/BN translation mismatches from audit
+    77→    77→  14. Fix broken links / dummy features / placeholder content
+    78→    78→  15. Fix runtime/hydration/console errors
+    79→    79→  16. Fix responsive + sticky footer issues
+    80→    80→  17. Fix SEO/meta gaps
+    81→    81→PHASE 4 — VERIFY (steps 18-20):
+    82→    82→  18. `bun run lint` clean + dev.log clean
+    83→    83→  19. Agent Browser: load every page + submit every form + confirm Google Sheets receives lead
+    84→    84→  20. Detailed final report to user
+    85→    85→
+    86→    86→Dispatching 4 parallel audit subagents now (Tasks 2-a..2-d).
+    87→    87→
+    88→    88→---
+    89→    89→Task ID: 2-c
+    90→    90→Agent: Explore (API + Components Audit)
+    91→    91→Task: Audit EVERY API route under /src/app/api/ and key shared components under /src/components/site/ for bugs, gaps, dummy features, security issues, mismatches, and crash risks. Produce a factual, file:line-cited findings list so the next fix agent can act directly. Do NOT modify any files.
+    92→    92→
+    93→    93→Work Log:
+    94→    94→- Read worklog.md to inherit prior context (Tasks 1, 2-master). Master plan dispatches 4 parallel audit subagents (2-a..2-d); this is 2-c (API + shared components).
+    95→    95→- Inventoried /src/app/api/ (16 route files), /src/lib/ (10 lib files incl. db, google-sheets, tracking, gemini, whatsapp, email-lead, cache, feature-flags, utils, site-data), /src/components/site/ (21 top-level components + 47 section components).
+    96→    96→- Read every API route in full: contact, book-call, leads, leads/[id], leads/bulk, leads/export, track, track/stats, newsletter, chat-agent, chat-save, send-email, careers, download, audit, route (root).
+    97→    97→- Read every supporting lib in full: db.ts, google-sheets.ts, tracking.ts, whatsapp.ts, gemini.ts, email-lead.ts, cache.ts, feature-flags.ts, utils.ts (site-data.ts audited separately by 2-d).
+    98→    98→- Read every key shared component in full: navbar, footer, floating-buttons, ai-chat-widget, sections/contact, admin-gate, api-docs, language-provider, language-toggle, theme-toggle, theme-provider, analytics-pixels, google-analytics, layout.tsx, prisma/schema.prisma, .env, booking-modal (no-op), sections/lead-form, sticky-book-bar.
+    99→    99→- Cross-referenced with Grep to find all callers of each API route and component to identify dead code, missing callers, missing translation keys, and security gaps.
+   100→   100→- Verified Prisma schema (7 models) against actual DB queries to find schema/route mismatches.
+   101→   101→- Verified .env to determine which env vars are actually configured (DATABASE_URL, GOOGLE_SHEETS_WEBHOOK_URL, NEXT_PUBLIC_GA4_ID, NEXT_PUBLIC_FB_PIXEL_ID, NEXT_PUBLIC_SNAP_PIXEL_ID, NEXT_PUBLIC_TIKTOK_PIXEL_ID, NEXT_PUBLIC_ADMIN_PASSWORD — present; GEMINI_API_KEY, GA4_MEASUREMENT_ID, GA4_API_SECRET, FB_ACCESS_TOKEN, TIKTOK_ACCESS_TOKEN, SNAPCHAT_ACCESS_TOKEN — MISSING).
+   102→   102→- Did NOT modify any files (audit-only as instructed).
+   103→   103→
+   104→   104→Stage Summary:
+   105→   105→Total findings: 38 (12 CRITICAL/HIGH, 17 MEDIUM, 9 LOW). Listed below by file with file:line citations.
+   106→   106→
+   107→   107→=== PART A — API ROUTES (16 files) ===
+   108→   108→
+   109→   109→[API: /api/contact] — src/app/api/contact/route.ts
+   110→   110→- BUG/MISMATCH: lead-form.tsx (sections/lead-form.tsx:140) sends `source: 'homepage_lead_form'` and UTM params (utmSource/utmMedium/utmCampaign) in the body. Route only reads `source` (line 17) and silently drops all UTM params — no persistence, no Sheet sync, no tracking attribution. Fix: accept and persist UTM (e.g. into `meta` JSON or as part of `message`).
+   111→   111→- MISMATCH: sections/contact.tsx:46-72 calls this route WITHOUT setting `source`, so it defaults to "contact_form" (route.ts:17). Admin sourceLabels (admin/page.tsx:38-44) has badge for "contact_form" but NOT "homepage_lead_form" — homepage leads will render with no badge/icon. Fix: either change lead-form.tsx to send `source: 'contact_form'`, or add `homepage_lead_form` to sourceLabels map.
+   112→   112→- Otherwise: CLEAN (proper validation, try/catch, 400/500, Google Sheets fire-and-forget, tracking fire-and-forget, DB failure-tolerant).
+   113→   113→
+   114→   114→[API: /api/book-call] — src/app/api/book-call/route.ts
+   115→   115→- GAP (CONFIRMED): Does NOT call sendToGoogleSheets() — only saves Booking + Lead to local DB (route.ts:30-60). Compare with /api/contact which DOES sync. Strategy-call leads never reach the Google Sheet or trigger customer/owner email. Fix: import { sendToGoogleSheets } from "@/lib/google-sheets" and call it fire-and-forget like /api/contact does.
+   116→   116→- DEAD CODE: No frontend caller. booking-modal.tsx is a no-op that scrolls to #lead-form (booking-modal.tsx:13-22). api-docs.tsx:44 documents it but no code path ever POSTs to it. Effectively unreachable from the UI.
+   117→   117→- BUG: Does not call trackEvent() — strategy_call leads are invisible to GA4/Meta/TikTok/Snapchat Conversions API. Fix: import trackEvent and call with type:'booking' / source:'strategy_call'.
+   118→   118→
+   119→   119→[API: /api/leads] — src/app/api/leads/route.ts
+   120→   120→- SECURITY (HIGH): No authentication. Anyone can `curl /api/leads` and read every lead (name, email, phone, message). AdminGate is purely client-side cosmetic — it never gates the API. Fix: add a server-side auth check (e.g. verify a session cookie or bearer token derived from a non-NEXT_PUBLIC env var) and return 401 if missing.
+   121→   121→- MINOR: Resilient to DB failure (returns empty state) — line 43-45. Acceptable.
+   122→   122→
+   123→   123→[API: /api/leads/[id]] — src/app/api/leads/[id]/route.ts
+   124→   124→- SECURITY (HIGH): GET, PATCH, DELETE — none check auth. Anyone with a lead id (cuid, guessable) can read activities, mutate status/notes, or DELETE leads (route.ts:143-160).
+   125→   125→- BUG: DELETE calls `logActivity(id, "deleted", ...)` BEFORE `db.lead.delete()` (route.ts:150-151). If the delete fails (e.g. lead already gone), you get a phantom "deleted" activity log. There is no FK constraint on LeadActivity.leadId in the schema (schema.prisma:43-54), so orphan activity records accumulate. Fix: delete first, then log (or wrap both in a transaction).
+   126→   126→- DEAD-CODE-FALLBACK: The fallback `safeData` block (route.ts:73-87) returns a fake "ok" response with `warning: "Field persisted client-side..."` when the second update also fails — this is misleading; the field is NOT persisted. Fix: return 500 instead of fake success.
+   127→   127→
+   128→   128→[API: /api/leads/bulk] — src/app/api/leads/bulk/route.ts
+   129→   129→- SECURITY (HIGH): No auth. Anyone can bulk-delete up to 500 leads per request (route.ts:30-33) or bulk-reassign. Fix: same as /api/leads.
+   130→   130→- MINOR: catch block at line 52 silently swallows leadActivity errors — acceptable best-effort, but log them.
+   131→   131→
+   132→   132→[API: /api/leads/export] — src/app/api/leads/export/route.ts
+   133→   133→- SECURITY (HIGH): No auth. Anyone can download all 5,000 leads as CSV (route.ts:26-30) including PII (email, phone, name). Fix: same auth gate.
+   134→   134→- CLEAN: CSV escaping correct (escapeCsv function handles quotes/commas/newlines).
+   135→   135→
+   136→   136→[API: /api/track] — src/app/api/track/route.ts
+   137→   137→- CLEAN: Proper try/catch on JSON parse (line 27), allowlist of event types (line 6-17), IP extraction (line 19-23), 400 on invalid type, 500 on error. Returns tracking id.
+   138→   138→- MINOR: When DB persist fails, trackEvent returns `{ id: 'pending' }` (lib/tracking.ts:144) — misleading but harmless.
+   139→   139→
+   140→   140→[API: /api/track/stats] — src/app/api/track/stats/route.ts
+   141→   141→- CLEAN: Cached 30s via cacheGetOrSet (lib/cache.ts), proper error handling.
+   142→   142→- DUMMY: `platforms: { facebook: false, tiktok: false, snapchat: false, google: false }` is hardcoded to false (route.ts:11) — these flags suggest "Conversions API connected?" but are never populated from env presence. Fix: derive from process.env presence (e.g. `google: !!process.env.GA4_MEASUREMENT_ID && !!process.env.GA4_API_SECRET`).
+   143→   143→
+   144→   144→[API: /api/newsletter] — src/app/api/leads/../newsletter/route.ts (src/app/api/newsletter/route.ts)
+   145→   145→- GAP: Does NOT call sendToGoogleSheets() — newsletter subscribers only land in SQLite NewsletterSubscriber table (route.ts:24-28). Business owner never sees them in the Sheet. Fix: send a row with source='newsletter' to the Sheet (may need a different sheet column layout).
+   146→   146→- CLEAN: Email regex, upsert by email, GET count endpoint, 400/500 handling.
+   147→   147→
+   148→   148→[API: /api/chat-agent] — src/app/api/chat-agent/route.ts
+   149→   149→- DEAD CODE: Never called from the frontend. ai-chat-widget.tsx (the only component that would call it) is itself never rendered (see COMPONENT: ai-chat-widget below). Route is callable via curl but unreachable from UI.
+   150→   150→- CLEAN: Gemini-first / z-ai-fallback (route.ts:73-104), input length cap 1000 chars, GET health-check endpoint (route.ts:122-138), maxDuration=30. Graceful degradation if GEMINI_API_KEY missing.
+   151→   151→- MINOR: `messages` array is accepted but the `message` field is also required (route.ts:37-44). The widget sends both. Redundant API.
+   152→   152→
+   153→   153→[API: /api/chat-save] — src/app/api/chat-save/route.ts
+   154→   154→- DEAD CODE: Only referenced in api-docs.tsx:93. No frontend caller (ai-chat-widget.tsx doesn't call it).
+   155→   155→- BUG (data quality): When only phone OR email is detected, creates a Lead with the missing field set to literal string "Not provided" (route.ts:103, 105). This pollutes the leads table and breaks email uniqueness expectations (multiple "Not provided" emails). Fix: skip lead creation if email is missing, or store null and update the schema.
+   156→   156→- SECURITY: No auth — anyone can POST arbitrary sessionId + messages and create leads. Low severity since the data is the same shape the widget would send, but still unprotected.
+   157→   157→
+   158→   158→[API: /api/send-email] — src/app/api/send-email/route.ts
+   159→   159→- DEAD CODE: Only callable from lib/email-lead.ts:21 sendLeadEmail(), which is itself NEVER imported anywhere in the codebase (Grep confirms only the definition exists). Effectively unreachable.
+   160→   160→- DUMMY: Route just `console.log`s the email body (route.ts:24-25) — does not actually send email. The JSDoc admits this ("For now, logs the email... production would use SendGrid/Resend"). Fix: either wire up Resend/SendGrid, or remove the route + email-lead.ts entirely (Google Sheets webhook already handles email via Apps Script).
+   161→   161→
+   162→   162→[API: /api/careers] — src/app/api/careers/route.ts
+   163→   163→- GAP: Does NOT call sendToGoogleSheets() — job applications stay DB-only. Owner never sees them in the Sheet. Fix: sync like /api/contact.
+   164→   164→- CLEAN: Email validation, 400/500 handling, source='careers_application'.
+   165→   165→
+   166→   166→[API: /api/download] — src/app/api/download/route.ts
+   167→   167→- GAP: Does NOT call sendToGoogleSheets() — download leads stay DB-only. Fix: sync.
+   168→   168→- BUG (resource map): resourceMap (route.ts:41-48) maps resource TITLES to /resources/*.html paths. If the free-tools section sends a different title (or the title changes), downloadUrl returns null and the user gets no download. Brittle coupling. Fix: use slug instead of title.
+   169→   169→- CLEAN: Email validation, 400/500 handling.
+   170→   170→
+   171→   171→[API: /api/audit] — src/app/api/audit/route.ts
+   172→   172→- GAP: Does NOT call sendToGoogleSheets() — audit leads stay DB-only. Fix: sync.
+   173→   173→- CLEAN: Email validation, score handling, 400/500.
+   174→   174→
+   175→   175→[API: /api/route.ts] (root)
+   176→   176→- DUMMY: Returns `{ message: "Hello, world!" }` (route.ts:4). Placeholder. Fix: return API metadata (version, endpoints count, health status) or remove the file.
+   177→   177→
+   178→   178→=== PART B — SHARED COMPONENTS ===
+   179→   179→
+   180→   180→[COMPONENT: navbar.tsx] — src/components/site/navbar.tsx
+   181→   181→- MISMATCH (worklog claim): Prior worklog (Task 1, line 27) claims "Services dropdown in navbar works" but there is NO dropdown in navbar.tsx — Services is a plain scroll-to-section button (navbar.tsx:25, 100-108). The claim is incorrect (or dropdown was removed).
+   182→   182→- BUG (broken anchor): NAV_ITEMS uses `#services`, `#how`, `#pricing`, `#testimonials` hrefs (navbar.tsx:25-29) — but the homepage renders LeadForm with id="lead-form", Hero, PainPoints, etc. Need to verify each section actually has the matching id. `#how` → HowItWorks must have id="how"; `#testimonials` → Testimonials must have id="testimonials"; `#pricing` → Pricing must have id="pricing". If any section id is missing, smoothScrollTo silently fails (navbar.tsx:31-37 returns nothing).
+   183→   183→- ACCESSIBILITY: Logo button has `aria-label` but no `type="button"` (navbar.tsx:42-49) — defaults to type=submit inside any form. Low impact here since not in a form.
+   184→   184→- CLEAN: Mobile Sheet menu, language toggle, theme toggle, CTA, scroll state.
+   185→   185→
+   186→   186→[COMPONENT: footer.tsx] — src/components/site/footer.tsx
+   187→   187→- DUMMY (broken links): COMPANY_LINKS all use `href="#"` (footer.tsx:32-36) — About, Careers, Blog, Case Studies links go nowhere. Real pages exist: /founder (about), /blog, /case-studies. Careers has no page (only /api/careers + sections/careers.tsx). Fix: link About → /founder, Blog → /blog, Case Studies → /case-studies, Careers → /#careers-section.
+   188→   188→- DUMMY (broken legal links): footer.privacy and footer.terms use `href="#"` (footer.tsx:295, 299). Real pages exist at /privacy and /terms. Fix: link them.
+   189→   189→- BUG (unused import): `Sparkles` imported (footer.tsx:15) but never used. Lint would flag.
+   190→   190→- BUG (newsletter success UX): On success state, the button shows `{t('footer.newsletterBtn')}` ("Subscribe") instead of a "Subscribed" label (footer.tsx:128-130) — confusing because the icon changes but the text doesn't. Fix: add a `footer.newsletterSubscribed` key.
+   191→   191→- CLEAN: Social links (SITE_CONFIG), phone/tel, mailto, address, year stamp.
+   192→   192→
+   193→   193→[COMPONENT: floating-buttons.tsx] — src/components/site/floating-buttons.tsx
+   194→   194→- MISMATCH (task description): Task says "WhatsApp + scroll-to-top" — but the file ONLY has a WhatsApp button. There is NO scroll-to-top button anywhere in the codebase (Grep for "scroll-to-top|backToTop|BackToTop" returns no matches). Either the spec is wrong or the feature was removed.
+   195→   195→- CLEAN: WhatsApp link via waLink(), tooltip, online indicator, accessibility (aria-label, focus handlers).
+   196→   196→
+   197→   197→[COMPONENT: ai-chat-widget.tsx] — src/components/site/ai-chat-widget.tsx
+   198→   198→- CRITICAL BUG (broken endpoint): Widget POSTs to `/api/chat` (line 93) but NO such route exists — only `/api/chat-agent` exists. Every chat message will 404 → catch block (line 113) → show `t('chat.error')` which itself is a missing key (see below). The chat widget is completely non-functional.
+   199→   199→- CRITICAL MISMATCH (missing i18n keys): Uses 8 translation keys that DO NOT EXIST in language-provider.tsx (verified by Grep): `chat.welcome` (line 60), `chat.subtitle` (line 160), `chat.thinking` (line 191), `chat.quickQ1`/`chat.quickQ2`/`chat.quickQ3` (lines 204-205), `chat.disclaimer` (line 220), `chat.send` (line 242), `chat.error` (line 119). The `t()` function returns the raw key string when missing (language-provider.tsx:1210). Users see literal "chat.welcome", "chat.thinking", "chat.error", etc. in the UI. Existing chat keys (chat.title, chat.placeholder, chat.suggestion1-4, chat.aria*) are unused by this widget.
+   200→   200→- DEAD CODE: AiChatWidget is NEVER imported or rendered anywhere in /src/app (Grep for "AiChatWidget|ai-chat-widget" in /src/app returns no matches). The widget is invisible to all users. Fix: either delete ai-chat-widget.tsx (and /api/chat-agent, /api/chat-save, gemini.ts) OR wire it into the layout and fix the endpoint + i18n.
+   201→   201→- ACCESSIBILITY: `aria-modal="false"` (line 147) on the chat panel — should be "true" since the panel overlays content. Minor.
+   202→   202→- HYDRATION: sessionId is generated in useEffect (line 49-62) — safe for SSR. Good.
+   203→   203→
+   204→   204→[COMPONENT: sections/contact.tsx] — src/components/site/sections/contact.tsx
+   205→   205→- MISMATCH (i18n): Toast messages are hardcoded English: "Message sent!" / "We'll get back to you within 24 hours." (line 66), "Could not send" / "Please try again or WhatsApp us." (line 68). The rest of the form uses `t('contact.*')` keys properly — only the toasts are hardcoded. Fix: add `contact.toastSuccess`/`contact.toastError` keys.
+   206→   206→- BUG (no honeypot): Unlike lead-form.tsx (which has a hidden `website` honeypot field, lead-form.tsx:280-287), this contact form has NO spam protection. Bots can submit freely. Fix: add honeypot.
+   207→   207→- BUG (no client-side phone validation): The phone field (line 122-124) accepts any string. The API only checks presence, not format. lead-form.tsx uses `/^(\+?880|0)?1[3-9]\d{8}$/` (lead-form.tsx:59) — should be consistent.
+   208→   208→- BUG (no source): Doesn't set `source` in the payload (line 50-57). Defaults to "contact_form" server-side. This is fine if intentional, but creates the source-label mismatch noted in [/api/contact].
+   209→   209→- CLEAN: Service select, map embed, socials, contact info cards.
+   210→   210→
+   211→   211→[COMPONENT: admin-gate.tsx] — src/components/site/admin-gate.tsx
+   212→   212→- SECURITY (CRITICAL): Uses `process.env.NEXT_PUBLIC_ADMIN_PASSWORD` (line 8) — NEXT_PUBLIC_ vars are bundled into the client JS and visible to anyone via DevTools. Default fallback `'nextgen2025'` is also hardcoded. Anyone can read the password from the bundle and "log in". This is purely cosmetic security.
+   213→   213→- SECURITY (CRITICAL): Even if the password is correct, it only sets `sessionStorage.setItem('nextgen-admin-auth', 'authenticated')` (line 29) — the actual API routes (/api/leads, /api/leads/[id], /api/leads/bulk, /api/leads/export) have NO server-side auth check. Anyone can hit the APIs directly and bypass the gate entirely.
+   214→   214→- Fix: (a) move password to a non-NEXT_PUBLIC env var, (b) add a server-side login API that sets an httpOnly cookie, (c) verify the cookie in every /api/leads* route.
+   215→   215→- MINOR: All Bangla text hardcoded ("ভুল পাসওয়ার্ড। আবার চেষ্টা করুন।", "পাসওয়ার্ড লিখুন", "লগইন করুন", "← হোমে ফিরুন") — admin-only so lower priority, but inconsistent with bilingual system.
+   216→   216→
+   217→   217→[COMPONENT: api-docs.tsx] — src/components/site/api-docs.tsx
+   218→   218→- MISMATCH: Claims "12 Endpoints" (line 253) — actual route count is 16+ (contact, book-call, newsletter, chat-agent, chat-save, audit, download, careers, leads GET, leads/[id] GET/PATCH/DELETE, leads/bulk POST, leads/export GET, track POST/GET, track/stats GET, send-email POST, root GET). Documentation is incomplete: missing /api/track, /api/track/stats, /api/send-email, /api/leads/bulk, /api/leads/[id] GET, /api/route.
+   219→   219→- MISMATCH: Book-call doc (line 44-60) shows `service: "AI Voice Agent"` and `date: "2025-02-15"` in the body — but the route accepts `date` (book-call/route.ts:14) and `service` (line 13) correctly. Doc is accurate for this route. But the doc claims Book Call "Also creates a lead with source='strategy_call'" — which is correct (book-call/route.ts:54).
+   220→   220→- DUMMY: "Webhooks (Coming Soon)" section (line 267-276) — placeholder roadmap text. Acceptable as a "coming soon" notice but is non-functional.
+   221→   221→- CLEAN: EndpointCard UI, copy buttons, method colors.
+   222→   222→
+   223→   223→[COMPONENT: language-provider.tsx] — src/components/site/language-provider.tsx
+   224→   224→- MISSING KEYS (CRITICAL, see ai-chat-widget above): `chat.welcome`, `chat.subtitle`, `chat.thinking`, `chat.quickQ1`, `chat.quickQ2`, `chat.quickQ3`, `chat.disclaimer`, `chat.send`, `chat.error` — absent in BOTH en and bn. Fix: add to both translation maps.
+   225→   225→- CLEAN: 1227-line bilingual dictionary, `t()` falls back to en then to raw key (line 1210), `tr()` helper, localStorage persistence, toggle function.
+   226→   226→
+   227→   227→[COMPONENT: language-toggle.tsx] — src/components/site/language-toggle.tsx
+   228→   228→- CLEAN: Compact EN/বাং toggle. Note: navbar.tsx uses its OWN inline LangToggle (navbar.tsx:65-94), not this shared component. Both work. Minor duplication.
+   229→   229→
+   230→   230→[COMPONENT: theme-toggle.tsx] — src/components/site/theme-toggle.tsx
+   231→   231→- CLEAN: Mounted guard prevents hydration mismatch (line 10-11), uses next-themes resolvedTheme.
+   232→   232→
+   233→   233→[COMPONENT: theme-provider.tsx] — src/components/site/theme-provider.tsx
+   234→   234→- MISMATCH: Sets `defaultTheme="dark"` (line 13) but layout.tsx passes `defaultTheme="light"` (layout.tsx:329) which overrides via `{...props}` spread (line 16). The component's own default is misleading. Fix: align both to the same value (probably "dark" since the design is dark-first).
+   235→   235→- CLEAN: NextThemesProvider wiring.
+   236→   236→
+   237→   237→[COMPONENT: analytics-pixels.tsx] — src/components/site/analytics-pixels.tsx
+   238→   238→- DUMMY/HARDCODED: GA4_ID defaults to `"G-QF7TJBHR7Z"` if env var missing (line 15). Env var IS set in .env, so currently OK, but if someone deploys without NEXT_PUBLIC_GA4_ID the site silently reports to a property they don't own. Fix: render the GA4 script only if `GA4_ID` is set, and don't ship a hardcoded fallback ID.
+   239→   239→- CLEAN: FB, Snapchat, TikTok pixels properly gated on their env vars being present (lines 33, 51, 58). Correct behavior — no env var, no pixel. Client-side tracker helpers (trackFBEvent, trackSnapEvent, trackTikTokEvent) properly no-op if window is undefined.
+   240→   240→
+   241→   241→[COMPONENT: google-analytics.tsx] — src/components/site/google-analytics.tsx
+   242→   242→- DEAD CODE: Not imported anywhere (Grep for "GoogleAnalytics|google-analytics" in /src/app + /src/components returns 0 matches outside the file itself). The file duplicates the GA4 init in analytics-pixels.tsx with hardcoded `GA_ID = "G-QF7TJBHR7Z"` (line 3). Fix: delete this file — analytics-pixels.tsx already handles GA4.
+   243→   243→
+   244→   244→[COMPONENT: layout.tsx] — src/app/layout.tsx
+   245→   245→- CLEAN: Fonts (Sora/Inter/Plus Jakarta Sans via next/font), MahfujLipi + ForzonDEMO preloaded, JSON-LD (Organization + ProfessionalService + FAQPage), AnalyticsPixels mounted (line 325). ThemeProvider + LanguageProvider wrap children.
+   246→   246→- MISMATCH: `defaultTheme="light"` (line 329) vs theme-provider.tsx's `defaultTheme="dark"` (line 13) — layout wins. Inconsistent.
+   247→   247→- DUMMY: `verification.google = "google-site-verification=YOUR_GOOGLE_VERIFICATION_CODE"` (line 141) — placeholder. Fix: replace with actual code or remove.
+   248→   248→- MISSING: AiChatWidget not mounted anywhere — chat widget is invisible site-wide. Intentional or oversight?
+   249→   249→
+   250→   250→=== OTHER DEAD/DUMMY FILES FOUND ===
+   251→   251→- src/components/site/sticky-book-bar.tsx: StickyBookBar component (74 lines) — never imported anywhere. Dead code. Has hardcoded English text ("Ready to automate your growth?", "Book Now") and uses no-op useBooking().openWith().
+   252→   252→- src/lib/email-lead.ts: sendLeadEmail() function — never imported/called. Dead code.
+   253→   253→- src/lib/feature-flags.ts: Feature flag system — Grep shows NO imports in /src/app or /src/components (only definition exists). The whole feature-flag system is dead code.
+   254→   254→- src/lib/cache.ts: Used by tracking.ts and track/stats route. LIVE.
+   255→   255→- src/lib/gemini.ts: Used by /api/chat-agent. LIVE (but chat-agent is dead code).
+   256→   256→
+   257→   257→=== ENV VAR AUDIT ===
+   258→   258→Present in .env:
+   259→   259→- DATABASE_URL ✓ (SQLite path)
+   260→   260→- GOOGLE_SHEETS_WEBHOOK_URL ✓ (Apps Script URL)
+   261→   261→- NEXT_PUBLIC_GA4_ID ✓ (= G-QF7TJBHR7Z — needs verification this is the user's actual GA property, not a test ID)
+   262→   262→- NEXT_PUBLIC_FB_PIXEL_ID ✓ (= 918051034554872)
+   263→   263→- NEXT_PUBLIC_SNAP_PIXEL_ID ✓ (= 7cca67ea-...)
+   264→   264→- NEXT_PUBLIC_TIKTOK_PIXEL_ID ✓ (= D91TS0RC77UDRLSQ9CKG)
+   265→   265→- NEXT_PUBLIC_ADMIN_PASSWORD ✓ (= nextgen2025 — INSECURE because NEXT_PUBLIC)
+   266→   266→
+   267→   267→MISSING (silent no-ops):
+   268→   268→- GEMINI_API_KEY — chat-agent falls back to z-ai-web-dev-sdk (acceptable if z-ai is configured)
+   269→   269→- GA4_MEASUREMENT_ID + GA4_API_SECRET — server-side GA4 Measurement Protocol disabled (lib/tracking.ts:148-150 silently returns)
+   270→   270→- FB_ACCESS_TOKEN — Meta Conversions API disabled (lib/tracking.ts:182-183 silently returns)
+   271→   271→- TIKTOK_ACCESS_TOKEN — TikTok Events API disabled (lib/tracking.ts:216-217 silently returns)
+   272→   272→- SNAPCHAT_ACCESS_TOKEN — Snapchat Conversions API disabled (lib/tracking.ts:250-251 silently returns)
+   273→   273→
+   274→   274→Result: client-side pixel tracking works; server-side Conversions API is entirely disabled. Lead events fire client-side only.
+   275→   275→
+   276→   276→=== PRIORITY FIX LIST (for next agent) ===
+   277→   277→P0 (CRITICAL — ship-blockers):
+   278→   278→1. ai-chat-widget.tsx:93 — fix `/api/chat` → `/api/chat-agent` (or delete widget if not needed)
+   279→   279→2. ai-chat-widget.tsx — add 9 missing translation keys (chat.welcome/subtitle/thinking/quickQ1-3/disclaimer/send/error) to both en + bn in language-provider.tsx
+   280→   280→3. Decide: is AiChatWidget supposed to be live? If yes, mount it in layout.tsx (or a page). If no, delete ai-chat-widget.tsx + /api/chat-agent + /api/chat-save + lib/gemini.ts.
+   281→   281→4. admin-gate.tsx + all /api/leads* routes — add real server-side auth (cookie + non-NEXT_PUBLIC password env var). Current setup leaks the password and has zero API protection.
+   282→   282→
+   283→   283→P1 (HIGH — broken UX):
+   284→   284→5. /api/book-call — add sendToGoogleSheets() call (master plan step 11)
+   285→   285→6. /api/newsletter, /api/careers, /api/download, /api/audit — add sendToGoogleSheets() calls so all leads reach the Sheet
+   286→   286→7. footer.tsx — fix 6 broken `href="#"` links (About→/founder, Blog→/blog, Case Studies→/case-studies, Privacy→/privacy, Terms→/terms, Careers→/#careers)
+   287→   287→8. sections/contact.tsx — replace hardcoded English toasts with i18n keys; add honeypot + phone regex (match lead-form.tsx)
+   288→   288→9. /api/leads/[id] DELETE — delete first, then log activity (or transaction)
+   289→   289→
+   290→   290→P2 (MEDIUM — polish):
+   291→   291→10. Add 'homepage_lead_form' to admin sourceLabels (admin/page.tsx:38-44) OR change lead-form.tsx source to 'contact_form'
+   292→   292→11. /api/contact — accept and persist UTM params from lead-form.tsx
+   293→   293→12. theme-provider.tsx — align defaultTheme with layout.tsx
+   294→   294→13. analytics-pixels.tsx — remove hardcoded GA4_ID fallback; only render if env var present
+   295→   295→14. /api/track/stats — derive `platforms.*` flags from env var presence
+   296→   296→15. /api/leads/[id] PATCH — remove fake "ok" success when update fails twice (return 500)
+   297→   297→16. /api/chat-save — don't create leads with literal "Not provided" email/phone
+   298→   298→17. /api/download — use slug instead of title in resourceMap
+   299→   299→18. /api/route.ts — replace "Hello, world!" with API metadata or delete
+   300→   300→19. api-docs.tsx — update endpoint count + add missing routes (/api/track, /api/leads/bulk, etc.)
+   301→
+   302→[showing lines 1-300 of 4280; use offset=301 with limit to continue reading]

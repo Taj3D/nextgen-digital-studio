@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server'
 import { trackEvent, getTrackingStats, type TrackingEventType } from '@/lib/tracking'
+import { rateLimit, getClientIP } from '@/lib/rate-limit'
+import { requireAuth } from '@/lib/auth'
 
 export const runtime = 'nodejs'
 
@@ -23,6 +25,19 @@ function getClientIp(req: Request): string | undefined {
 }
 
 export async function POST(req: Request) {
+  // Rate limit: 60 tracking events / min / IP (high volume — page views, clicks)
+  const ip = getClientIP(req);
+  const rl = rateLimit(`track:${ip}`, 60, 60_000);
+  if (!rl.ok) {
+    return NextResponse.json(
+      { ok: false, error: 'Too many requests. Try again later.' },
+      {
+        status: 429,
+        headers: { 'Retry-After': String(Math.ceil(rl.resetIn / 1000)) },
+      },
+    );
+  }
+
   try {
     let body: unknown
     try {
@@ -57,7 +72,12 @@ export async function POST(req: Request) {
   }
 }
 
-export async function GET() {
+export async function GET(req: Request) {
+  // Require auth — tracking stats are admin-only. Public duplicate was a
+  // security gap (AUDIT-4-api [API-008]). Use /api/track/stats for the same data.
+  const authError = requireAuth(req);
+  if (authError) return authError;
+
   try {
     const stats = await getTrackingStats()
     return NextResponse.json({ ok: true, ...stats })

@@ -50,6 +50,7 @@ function Logo({ onClick }: { onClick?: () => void }) {
   const { t } = useLang()
   return (
     <button
+      type="button"
       onClick={() => {
         onClick?.()
         window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -65,7 +66,7 @@ function Logo({ onClick }: { onClick?: () => void }) {
         className="h-10 w-10 rounded-xl object-cover shadow-glow transition-transform duration-300 group-hover:scale-105"
         priority
       />
-      <span className="hidden text-base font-bold tracking-tight text-foreground sm:block">
+      <span className="hidden font-display text-base font-bold tracking-tight text-foreground sm:block">
         {t('brand.name')}
       </span>
     </button>

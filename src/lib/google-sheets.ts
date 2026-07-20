@@ -39,10 +39,15 @@ export async function sendToGoogleSheets(row: LeadRow): Promise<{ ok: boolean; e
     // Apps Script Web Apps return 302 redirect on POST.
     // Use redirect: 'follow' to follow the redirect to the actual response.
     // Use text/plain content type to avoid CORS preflight (Apps Script doesn't handle OPTIONS).
+    // AbortController timeout: Apps Script free tier can hang up to 6 min; we cap at 15s
+    // so a stuck webhook doesn't block the lead flow (it's fire-and-forget anyway).
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15_000);
     const res = await fetch(webhook, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       redirect: 'follow',
+      signal: controller.signal,
       body: JSON.stringify({
         date: new Date().toISOString(),
         name: row.name,
@@ -57,7 +62,8 @@ export async function sendToGoogleSheets(row: LeadRow): Promise<{ ok: boolean; e
         submittedAt: row.submittedAt ?? '',
         ...(row.meta ?? {}),
       }),
-    })
+    });
+    clearTimeout(timeout);
     // Apps Script returns 200 after redirect follows
     if (res.ok) {
       return { ok: true }

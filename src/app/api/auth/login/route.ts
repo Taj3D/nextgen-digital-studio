@@ -7,6 +7,7 @@ import {
   safeEqual,
   verifyAuth,
 } from "@/lib/auth";
+import { rateLimit, getClientIP } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 
@@ -14,11 +15,33 @@ export const runtime = "nodejs";
  * POST /api/auth/login
  * Body: { "password": string }
  * Sets an httpOnly cookie `nextgen-admin-auth` valid for 7 days on success.
- * Adds a small delay on failed attempts to slow brute force.
+ * Rate-limited (5/min/IP) + exponential backoff on failure to slow brute force.
  */
 export async function POST(req: NextRequest) {
+  // Rate limit: 5 login attempts / min / IP (brute-force protection)
+  const ip = getClientIP(req);
+  const rl = rateLimit(`auth-login:${ip}`, 5, 60_000);
+  if (!rl.ok) {
+    return NextResponse.json(
+      { ok: false, error: "Too many login attempts. Try again later." },
+      {
+        status: 429,
+        headers: { "Retry-After": String(Math.ceil(rl.resetIn / 1000)) },
+      },
+    );
+  }
+
+  let body: unknown;
   try {
-    const body = await req.json();
+    body = await req.json();
+  } catch {
+    return NextResponse.json(
+      { ok: false, error: "Invalid JSON" },
+      { status: 400 },
+    );
+  }
+
+  try {
     const { password } = body as { password?: unknown };
 
     if (!password || typeof password !== "string") {
@@ -68,7 +91,9 @@ export async function DELETE() {
  * GET /api/auth/login
  * Returns whether the current session cookie is valid. Used by AdminGate on mount
  * so that refreshing the page does not log the user out.
+ * Returns ok:false (not ok:true) when unauthenticated for semantic correctness.
  */
 export async function GET(req: NextRequest) {
-  return NextResponse.json({ ok: true, authenticated: verifyAuth(req) });
+  const authenticated = verifyAuth(req);
+  return NextResponse.json({ ok: authenticated, authenticated });
 }

@@ -51,7 +51,7 @@ type LeadValues = {
   email: string
   phone: string
   company?: string
-  service: string
+  service?: string
   message?: string
   website?: string // honeypot
 }

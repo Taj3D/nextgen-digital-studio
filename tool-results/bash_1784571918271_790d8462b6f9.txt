@@ -1,0 +1,601 @@
+EVIDENCE: Verified via curl — `curl http://localhost:3000/case-studies/dhaka-realty | grep canonical` returns `rel="canonical" href="https://nextgendigitalstudio.com"` (homepage, not the case study URL).
+FIX: Add `alternates: { canonical: \`https://nextgendigitalstudio.com/case-studies/${slug}\` }` to the returned metadata object in generateMetadata (after line 30).
+
+[CONTENT-006] [SEVERITY: P1] [TYPE: Dummy]
+FILE: src/lib/site-data.ts (blogPosts array, lines 1057-1094) + src/app/blog/[slug]/page.tsx (lines 11, 42-45)
+ISSUE: Blog posts have NO content — only title/excerpt/category/readTime/date. The detail page falls back to `[{heading: post.title, body: post.excerpt}]` so visitors see title + excerpt as the only "section". Not real articles.
+EVIDENCE: site-data.ts:1057-1094 shows blogPosts entries with no `content` field. blog/[slug]/page.tsx:43-45: `const sections = post.content ?? [{ heading: post.title, body: post.excerpt }]`. Clicking into any blog post shows a hero + 1 short paragraph + CTA + related — no actual article body, no H2s, no real content.
+FIX: Either (a) add real `content: [{heading, body}]` arrays to each blog post in site-data.ts, or (b) convert to MDX file-based posts with real content, or (c) at minimum add 3-5 sections per post covering the topic substantively (currently 0 sections).
+
+[CONTENT-007] [SEVERITY: P1] [TYPE: Dummy]
+FILE: src/lib/site-data.ts (caseStudies array, lines 542-599) + src/app/case-studies/[slug]/page.tsx (lines 11-16, 83-141)
+ISSUE: Case studies have NO narrative content — no `challenge`, `solution`, `results`, `testimonial` fields. All four conditional sections in the detail page render as undefined and are skipped.
+EVIDENCE: site-data.ts:532-540 CaseStudy type has no challenge/solution/results/testimonial fields. case-studies/[slug]/page.tsx:11-16 defines a `CaseStudyFull` type with optional challenge/solution/results/testimonial — but the actual caseStudies data NEVER populates these. Result: the detail page only renders hero + metrics + services used + CTA + related. No challenge narrative, no solution walkthrough, no results story, no testimonial quote.
+FIX: Add real `challenge`, `solution` (array of {heading, body}), `results`, and `testimonial` ({quote, name, role}) fields to each case study in site-data.ts. Update the CaseStudy type to include them (no longer optional).
+
+[CONTENT-008] [SEVERITY: P1] [TYPE: SEO/Perf]
+FILE: src/app/blog/[slug]/page.tsx (lines 8, 15-17) + src/app/case-studies/[slug]/page.tsx (lines 8, 20-22)
+ISSUE: `generateStaticParams` returns `[]` for both — combined with `dynamic = "force-dynamic"`, every blog/case-study page is rendered on-demand per request, never pre-built
+EVIDENCE: blog/[slug]/page.tsx:8 `export const dynamic = "force-dynamic"`, line 15-17 `generateStaticParams() { return [] }`. Same in case-studies/[slug]/page.tsx:8, 20-22. HTTP response header confirms: `Cache-Control: no-store, must-revalidate` — every page request hits the server.
+FIX: Remove `dynamic = "force-dynamic"` and have `generateStaticParams` return `blogPosts.map(p => ({ slug: p.slug }))` (and `caseStudies.map(c => ({ slug: c.slug }))`). This pre-builds all pages at build time for SEO and performance.
+
+[CONTENT-009] [SEVERITY: P1] [TYPE: SEO]
+FILE: src/app/sitemap.ts
+LINE: 9-32
+ISSUE: Sitemap missing /blog, /case-studies, /blog/[slug] (4 posts), /case-studies/[slug] (4 studies) — 10 URLs missing
+EVIDENCE: sitemap.ts:9-32 staticPages array lists /founder, /3d-portrait, /cnc-design, /pdf-books, /ai-training, /cnc-training, /services/[12 slugs], /privacy, /terms, /docs. No /blog, no /case-studies, no detail pages. These pages exist and return 200 OK but are not discoverable via sitemap.
+FIX: Add entries for `/blog` (priority 0.7, weekly), `/case-studies` (priority 0.7, weekly), and dynamically generate entries for each blog post and case study slug from site-data.ts.
+
+[CONTENT-010] [SEVERITY: P1] [TYPE: SEO]
+FILE: src/app/blog/[slug]/page.tsx
+LINE: 19-34 (whole generateMetadata)
+ISSUE: No BlogPosting/Article JSON-LD structured data on blog detail pages
+EVIDENCE: curl http://localhost:3000/blog/ai-sales-automation-bangladesh shows only Organization, ProfessionalService, FAQPage JSON-LD (from layout.tsx). No BlogPosting or Article schema. Missing headline, datePublished, author, image, publisher — all standard for blog SEO.
+FIX: Add a `<script type="application/ld+json">` with `@type: "BlogPosting"` schema in the blog detail page. Include headline, datePublished (post.date), author ({@type:Person, name:"Md. Nazmul Islam Taj"}), publisher (Organization), image, mainEntityOfPage.
+
+[CONTENT-011] [SEVERITY: P1] [TYPE: Bug]
+FILE: src/components/site/navbar.tsx (lines 24-29, 31-37) + src/app/blog/page.tsx (line 26) + src/app/case-studies/page.tsx (line 26)
+ISSUE: Navbar links use `#services`, `#how`, `#pricing`, `#testimonials` anchors that don't exist on /blog or /case-studies pages. Clicking does nothing (smoothScrollTo silently fails when element not found).
+EVIDENCE: navbar.tsx:24-29 NAV_ITEMS use href="#services" etc. smoothScrollTo (line 31-37) does `document.getElementById(id)` and silently returns if null. Blog/case-studies index pages render `<Navbar />` but have no elements with ids `services`, `how`, `pricing`, `testimonials`. Logo button scrolls to top instead of navigating to homepage.
+FIX: Either (a) replace anchor links with `/` (homepage navigation) for non-homepage routes, or (b) use Next.js `usePathname` to switch between in-page anchor scrolling (on /) and route navigation (on other pages), or (c) make Logo use `<Link href="/">` instead of `window.scrollTo`.
+
+[CONTENT-012] [SEVERITY: P1] [TYPE: Auth]
+FILE: src/components/site/admin-gate.tsx
+LINE: 8
+ISSUE: Hardcoded fallback password "nextgen2025" committed in source — even if NEXT_PUBLIC_ADMIN_PASSWORD env var is set, the fallback is a known weak password
+EVIDENCE: `const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'nextgen2025'` — if env var is missing (e.g., on a fresh deploy), the password defaults to a publicly known value.
+FIX: Remove the fallback. Throw an error at build time if `process.env.ADMIN_PASSWORD` is not set. Use a non-NEXT_PUBLIC_ env var and verify server-side.
+
+[CONTENT-013] [SEVERITY: P2] [TYPE: DeadCode]
+FILE: src/lib/site-data.ts
+LINE: 725-730 (statsNumeric), 717-722 (stats), 297-306 (TRUST_LOGOS)
+ISSUE: Three exported constants are never imported or used anywhere in src/
+EVIDENCE: Grep for `statsNumeric` returns 0 imports (only the declaration at site-data.ts:725). Grep for `TRUST_LOGOS` returns 0 imports. Grep for `stats` returns hits but each is a local const inside hero.tsx, cost-of-inaction.tsx, status-page.tsx — none import the site-data `stats` export.
+FIX: Delete `statsNumeric` (725-730), `stats` (717-722), and `TRUST_LOGOS` (297-306) arrays from site-data.ts.
+
+[CONTENT-014] [SEVERITY: P2] [TYPE: DeadCode]
+FILE: src/components/site/privacy-terms-layout.tsx
+LINE: 1-87 (whole file)
+ISSUE: PrivacyTermsLayout component is exported but NEVER imported — both /privacy and /terms pages have their own inline layout instead
+EVIDENCE: Grep for `PrivacyTermsLayout` returns only the export declaration at line 10. No imports found. The /privacy and /terms pages each duplicate the layout code inline instead of using this shared component.
+FIX: Either (a) delete privacy-terms-layout.tsx (it's unused), or (b) refactor /privacy and /terms pages to use this shared layout component (DRY). Option (b) is better — the current duplication means any layout change must be applied in 3 places.
+
+[CONTENT-015] [SEVERITY: P2] [TYPE: DeadCode]
+FILE: src/app/blog/[slug]/page.tsx:10 + src/app/case-studies/[slug]/page.tsx:10
+LINE: 10
+ISSUE: Unused `// eslint-disable-next-line @typescript-eslint/no-explicit-any` directives — no `any` types follow them
+EVIDENCE: `bun run lint` reports 2 warnings: "Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-explicit-any')" at blog/[slug]/page.tsx:10 and case-studies/[slug]/page.tsx:10. The `BlogPost` type at line 11 uses `(typeof blogPosts)[number]` (no `any`), and `CaseStudyFull` at line 11 also has no `any`.
+FIX: Delete the `// eslint-disable-next-line @typescript-eslint/no-explicit-any` comment on line 10 of both files.
+
+[CONTENT-016] [SEVERITY: P2] [TYPE: DeadCode]
+FILE: src/app/admin/page.tsx
+LINE: 7-9 (imports)
+ISSUE: Three unused imports: `MessageSquare`, `Clock`, `ExternalLink`
+EVIDENCE: Grep for `\bMessageSquare\b` in admin/page.tsx returns only the import line 7. Grep for `\bClock\b` returns only import line 8. Grep for `\bExternalLink\b` returns only import line 8. None are referenced in JSX.
+FIX: Remove `MessageSquare`, `Clock`, `ExternalLink` from the lucide-react import statement.
+
+[CONTENT-017] [SEVERITY: P2] [TYPE: DeadCode]
+FILE: src/components/site/api-docs.tsx
+LINE: 8
+ISSUE: Unused import `ExternalLink`
+EVIDENCE: Grep for `ExternalLink` in api-docs.tsx returns only line 8 (the import). Not referenced in JSX.
+FIX: Remove `ExternalLink` from the lucide-react import statement.
+
+[CONTENT-018] [SEVERITY: P2] [TYPE: DeadCode]
+FILE: src/app/blog/page.tsx
+LINE: 7
+ISSUE: Unused import `siteConfig`
+EVIDENCE: Grep for `siteConfig` in blog/page.tsx returns only line 7 (the import). Not referenced anywhere in the file (the page uses hardcoded "NextGen Digital Studio" string at line 37, 56).
+FIX: Remove `siteConfig` from the import statement (keep `blogPosts`).
+
+[CONTENT-019] [SEVERITY: P2] [TYPE: DeadCode]
+FILE: src/app/case-studies/[slug]/page.tsx
+LINE: 4
+ISSUE: Unused import `Check`
+EVIDENCE: Grep for `\bCheck\b` in case-studies/[slug]/page.tsx returns only line 4 (the import). Not referenced in JSX. (The `CheckCircle2` icon used elsewhere is from admin/page.tsx, not this file.)
+FIX: Remove `Check` from the lucide-react import statement.
+
+[CONTENT-020] [SEVERITY: P2] [TYPE: Dummy]
+FILE: src/components/site/api-docs.tsx
+LINE: 327
+ISSUE: "7 Lead Sources" badge is wrong — actual count is 13+ (admin sourceLabels has 13 entries)
+EVIDENCE: api-docs.tsx:327 `<span className="...">7 Lead Sources</span>` — hardcoded to 7. But admin/page.tsx:38-52 sourceLabels has 13 entries (contact_form, homepage_lead_form, strategy_call, ai_audit_tool, free_tools_download, ai_chat_widget, ai_training_page, cnc_training_page, cnc_design_page, 3d_portrait_page, pdf_books_page, founder_page, careers_application). Verified via /api/leads response which showed even more sources (audit, demo_test, local_test, test, etc.).
+FIX: Change "7 Lead Sources" → "13+ Lead Sources" (or dynamically count from a shared source-labels module).
+
+[CONTENT-021] [SEVERITY: P2] [TYPE: SEO]
+FILE: src/app/docs/page.tsx, src/app/privacy/page.tsx, src/app/terms/page.tsx
+LINE: metadata exports
+ISSUE: Missing OpenGraph + Twitter card metadata on /docs, /privacy, /terms
+EVIDENCE: docs/page.tsx:5-10 metadata has title, description, robots, alternates.canonical — no openGraph, no twitter. privacy/page.tsx:8-12 same. terms/page.tsx:8-12 same. These pages won't render proper social share cards.
+FIX: Add `openGraph: { title, description, url, type: 'article' }` and `twitter: { card: 'summary', title, description }` to each page's metadata.
+
+[CONTENT-022] [SEVERITY: P2] [TYPE: i18n]
+FILE: src/app/blog/page.tsx, src/app/case-studies/page.tsx, src/app/blog/[slug]/page.tsx, src/app/case-studies/[slug]/page.tsx
+LINE: Multiple (hero text, CTAs, back links, section headings)
+ISSUE: All 4 pages have hardcoded English OR hardcoded Bengali strings with no language-toggle support
+EVIDENCE:
+- blog/page.tsx:39-46 "AI Sales Automation Insights", hero p, CTA "Get Your Free Strategy Session" — English only, no `useLang()` import.
+- case-studies/page.tsx:39-46 "Real Results from Real Businesses", hero p, CTA — English only.
+- blog/[slug]/page.tsx:53 "ব্লগে ফিরুন" (back link) — Bengali only; line 80 author "তাজ", line 84 "প্রতিষ্ঠাতা · NextGen Digital Studio", line 120 CTA "আপনার ব্যবসায় AI অটোমেশন চান?" — all Bengali only.
+- case-studies/[slug]/page.tsx:53 "কেস স্টাডিতে ফিরুন", line 85 "চ্যালেঞ্জ", line 93 "আমাদের সমাধান", line 116 "ফলাফল", line 145 "ব্যবহৃত সেবা", line 157 "একই ফলাফল চান?", line 173 "আরও কেস স্টাডি" — all Bengali only.
+FIX: Convert each page to a client component (or wrap content in a client child) using `useLang()` and `tr()` from language-provider. Add EN/BN translations to the contentBn dictionary. Pattern mirrors the landing pages that were already fixed in Task 3-landing-fixes.
+
+[CONTENT-023] [SEVERITY: P2] [TYPE: i18n]
+FILE: src/app/case-studies/[slug]/page.tsx
+LINE: 53, 85, 93, 116, 145, 157, 173
+ISSUE: Mixed-language content — hero label is English ("Case Studies" badge) but section headings are Bengali only ("চ্যালেঞ্জ", "আমাদের সমাধান", "ফলাফল", "ব্যবহৃত সেবা", "আরও কেস স্টাডি"). The cs.title/summary content is English. Back-link is Bengali only.
+EVIDENCE: Line 53 `<ArrowLeft /> কেস স্টাডিতে ফিরুন` — Bengali back-link even in EN mode. Line 85 `<h2>চ্যালেঞ্জ</h2>` — Bengali heading. But line 67 `<h1>{cs.title}</h1>` is English content. Jarring mix.
+FIX: Same as CONTENT-022 — use `useLang()` to switch all UI strings. When EN mode, back-link should be "Back to case studies", section headings should be "Challenge", "Our Solution", "Results", "Services Used", "Want the same results?", "More case studies".
+
+[CONTENT-024] [SEVERITY: P2] [TYPE: i18n]
+FILE: src/app/blog/[slug]/page.tsx
+LINE: 53, 80-84, 120-129, 137, 162-164
+ISSUE: Blog detail page is Bengali-only for UI strings even though post content is English — mixed language
+EVIDENCE: Line 53 back-link Bengali, line 80 avatar "তাজ", line 83 author "তাজ ভাই", line 84 role "প্রতিষ্ঠাতা · NextGen Digital Studio", line 120 CTA heading "আপনার ব্যবসায় AI অটোমেশন চান?", line 129 button "স্ট্র্যাটেজি কল বুক করুন", line 137 "আরও পড়ুন" — all Bengali only. But post.title (line 75) and post.excerpt (line 77) are English.
+FIX: Same as CONTENT-022 — add `useLang()` toggle. EN mode should show "Back to blog", author "Taj Bhai", role "Founder · NextGen Digital Studio", CTA "Want AI automation for your business?", button "Book strategy call", "Read more".
+
+[CONTENT-025] [SEVERITY: P2] [TYPE: DeadCode]
+FILE: src/app/robots.ts
+LINE: 5-46
+ISSUE: 8 redundant userAgent rules — all 8 entries have identical `allow: '/'` and `disallow: ['/api/', '/admin']`. Should be one wildcard rule.
+EVIDENCE: robots.ts lines 5-46: 8 separate objects (userAgent: '*', 'Googlebot', 'Bingbot', 'GPTBot', 'ClaudeBot', 'PerplexityBot', 'ChatGPT-User', 'Google-Extended') all with same allow/disallow. Redundant and harder to maintain.
+FIX: Replace with a single rule: `{ userAgent: '*', allow: '/', disallow: ['/api/', '/admin'] }`. If specific bot behaviour is needed later, add separate rules then.
+
+[CONTENT-026] [SEVERITY: P2] [TYPE: Bug/Maintainability]
+FILE: src/app/admin/page.tsx:203 + src/lib/site-data.ts:784
+LINE: admin/page.tsx:203
+ISSUE: `teamMembers` is defined locally in admin/page.tsx as a string[] of role labels, SHADOWING the exported `teamMembers` from site-data.ts (which has objects with name/role/bio). Confusing dual definition.
+EVIDENCE: site-data.ts:784 exports `teamMembers = [{name: 'ইঞ্জিনিয়ার মোঃ নাজমুল ইসলাম তাজ', role: 'প্রতিষ্ঠাতা...', bio: '...', initials: 'NG', image: '/founder.png'}, {name: 'AI Engineer', ...}, ...]`. admin/page.tsx:203 defines `const teamMembers = ['Unassigned', 'Founder', 'AI Engineer', 'Growth Specialist', 'Automation Architect', 'Sales Executive']` — different shape, different values, same name.
+FIX: Rename the admin local const to `assigneeRoles` or `teamAssignees` to avoid shadowing. Or extract to a shared module.
+
+[CONTENT-027] [SEVERITY: P2] [TYPE: UX]
+FILE: src/app/admin/page.tsx:219-224
+LINE: 219-224 (exportCsv)
+ISSUE: CSV export uses `window.open()` — bypasses fetch, no loading state, no error handling, opens new tab that may be blocked by popup blockers
+EVIDENCE: `function exportCsv() { ... window.open(`/api/leads/export?${params}`, '_blank') }` — no try/catch, no loading indicator, no feedback if export fails.
+FIX: Use `fetch()` with a loading state, then create a blob URL and trigger download via `<a download>` element. Show error toast if response is not 200.
+
+[CONTENT-028] [SEVERITY: P2] [TYPE: Bug/Maintainability]
+FILE: src/lib/site-data.ts:4-21 (SITE_CONFIG) + 1096-1118 (siteConfig)
+LINE: 4 vs 1096
+ISSUE: Two config objects with overlapping but slightly different data — `SITE_CONFIG` (phone: '+8801711731354', phoneDisplay: '+880 1711-731354') vs `siteConfig` (phone: '+880 1711 731354'). Confusing dual config.
+EVIDENCE: site-data.ts:4-21 SITE_CONFIG has phone: '+8801711731354', phoneDisplay: '+880 1711-731354'. site-data.ts:1096-1118 siteConfig has phone: '+880 1711 731354'. Both have email/url/address/etc. with same values. SITE_CONFIG is imported by footer.tsx only; siteConfig is imported by ~20 files.
+FIX: Delete SITE_CONFIG and update footer.tsx to use siteConfig (with `phoneDisplay` derived via `siteConfig.phone` formatting, or add `phoneDisplay` field to siteConfig).
+
+[CONTENT-029] [SEVERITY: P2] [TYPE: Dummy]
+FILE: src/components/site/api-docs.tsx
+LINE: 244 (track/stats response example)
+ISSUE: Example response reveals ALL Conversions API integrations are non-functional placeholders: `"platforms": { "facebook": false, "tiktok": false, "snapchat": false, "google": false }`
+EVIDENCE: api-docs.tsx:241-245 response example shows all 4 platform flags as `false`. This is documented in public-facing API docs — visitors can see that the ad platform integrations don't actually work.
+FIX: Either (a) remove the `platforms` field from the example response, or (b) actually implement at least one Conversions API integration (Meta CAPI is most common) and update the example to show `"facebook": true`.
+
+[CONTENT-030] [SEVERITY: P2] [TYPE: Dummy]
+FILE: src/components/site/api-docs.tsx
+LINE: 251 (send-email desc), 343 (Webhooks section)
+ISSUE: Public-facing API docs admit two features are placeholders — `send-email` is "placeholder for SendGrid/Resend integration" and Webhooks are "(Coming Soon)"
+EVIDENCE: api-docs.tsx:251 `desc: "Internal endpoint that logs a lead notification email (placeholder for SendGrid/Resend integration)."` — admits emails are not actually sent. Line 343 `<h3>Webhooks (Coming Soon)</h3>` with body "Webhook support for real-time lead notifications is on our roadmap." — admits webhooks don't exist.
+FIX: Either (a) implement SendGrid/Resend and remove the "placeholder" note, or (b) remove the /api/send-email endpoint card from public docs (it's an internal endpoint not meant for external use). For Webhooks, either remove the section or implement basic webhook support.
+
+[CONTENT-031] [SEVERITY: P2] [TYPE: Gap]
+FILE: src/app/admin/page.tsx
+LINE: 70-91 (fetchLeads), 440-514 (table render)
+ISSUE: Admin dashboard has no pagination, no search, no date filter — only fetches first 100 leads with no UI to load more
+EVIDENCE: admin/page.tsx:77 `const res = await fetch(`/api/leads?${params}`)` — no `limit` param sent. API defaults to `take: 100` (api/leads/route.ts:11). If database has >100 leads, only first 100 are shown. No "Load more" button, no pagination, no search-by-name/email field, no date range filter. Currently 61 leads in DB (verified via curl) — will hit limit soon.
+FIX: Add pagination controls (prev/next, page numbers), a search input (filter by name/email/phone client-side or server-side), and an optional date range filter. Pass `limit` and `offset` params to the API.
+
+============================================================
+SUMMARY
+============================================================
+P0 (3 critical — fix immediately):
+  1. CONTENT-001 + CONTENT-002 + CONTENT-012: Admin auth is fundamentally broken — client-side-only password check + zero server-side auth on all 4 admin API endpoints. Anyone can scrape all lead PII and delete leads at will. Verified via curl: 200 OK + 19KB of lead data returned without credentials.
+  2. CONTENT-003: /robots.txt returns HTTP 500 due to conflicting static + dynamic files. Search engines can't fetch crawl rules.
+  3. CONTENT-004 + CONTENT-005: Blog post and case study detail pages have homepage canonical — Google will index them as duplicates of homepage.
+
+P1 (9 high — fix before production):
+  4. CONTENT-006: Blog posts have no real content (only title + excerpt).
+  5. CONTENT-007: Case studies have no narrative content (challenge/solution/results/testimonial all undefined).
+  6. CONTENT-008: generateStaticParams returns [] — every detail page is dynamic, no pre-rendering.
+  7. CONTENT-009: Sitemap missing /blog, /case-studies, and all 8 detail pages.
+  8. CONTENT-010: No BlogPosting/Article JSON-LD schema.
+  9. CONTENT-011: Navbar anchor links broken on /blog and /case-studies (silently fail).
+  10. CONTENT-012: (counted with P0 above)
+
+P2 (19 medium — fix in polish pass):
+  11-29. Dead code (statsNumeric, TRUST_LOGOS, stats, PrivacyTermsLayout, unused eslint-disables, unused imports in admin/api-docs/blog/case-studies), wrong "7 Lead Sources" badge, missing OG metadata on /docs /privacy /terms, i18n gaps on all 4 blog/case-study pages, mixed-language UI, redundant robots.ts rules, duplicate teamMembers, weak CSV export UX, duplicate SITE_CONFIG/siteConfig, dummy Conversions API flags, dummy send-email "placeholder", dummy "Webhooks Coming Soon" section, no admin pagination/search.
+
+============================================================
+VERIFICATION
+============================================================
+- `bun run lint` → 0 errors, 2 warnings (both pre-existing in audited files: unused eslint-disable directives at blog/[slug]/page.tsx:10 and case-studies/[slug]/page.tsx:10 — flagged as CONTENT-015).
+- `bunx tsc --noEmit` → 0 new errors in audited files. Only pre-existing zod-resolver type issues in lead-form.tsx (untouched).
+- HTTP 200 confirmed via curl on all audited routes: /blog (200), /blog/ai-sales-automation-bangladesh (200), /case-studies (200), /case-studies/dhaka-realty (200), /admin (200), /docs (200), /privacy (200), /terms (200), /sitemap.xml (200), /manifest.webmanifest (200), /api/leads (200 — returns 19,915 bytes of lead PII without auth), /api/leads/export (200 — returns 7,916-byte CSV without auth).
+- HTTP 500 confirmed: /robots.txt (conflicting public file + page file error).
+- HTTP 404 confirmed: /blog/nonexistent-slug (404), /case-studies/nonexistent-slug (404).
+- Canonical verified broken on /blog/[slug] and /case-studies/[slug] (both inherit homepage canonical).
+- Canonical verified correct on /blog, /case-studies, /privacy, /terms, /docs (set explicitly in metadata).
+
+---
+Task ID: AUDIT-2-landing
+Agent: God Mode Deep Audit (Landing Pages)
+Task: Exhaustive audit of the 6 product/landing pages + shared lead-form/payment components. Read every file in full. Find crashes, bugs, dummy features, i18n gaps, dead code, TS issues, A11y/SEO gaps, lead-flow issues, and fulfillment risks. Report 15+ issues with file/line/evidence/fix.
+
+Work Log:
+- Read prior worklog (Tasks 1, 2-a..2-d, 3-master-fixes, 4-verification, AUDIT-1) to understand all fixes already applied: ai-training "#top"→"#order" fix, bn() numeral helper added to all 5 pages, unused imports removed, honeypot added to LandingLeadForm, tr() applied on services/[slug], PaymentInstructions shown on books success state, PaymentInstructions amount uses bn(), frameBorder→border-0, admin sourceLabels expanded, etc.
+- Read every file in scope completely: ai-training/{page,training-client}.tsx, cnc-training/{page,cnc-training-client}.tsx, cnc-design/{page,cnc-client}.tsx, 3d-portrait/{page,portrait-client}.tsx, pdf-books/{page,books-client}.tsx, founder/{page,founder-client}.tsx, services/[slug]/{page,landing-client}.tsx, landing-common.tsx, payment-instructions.tsx. Also read top-bar.tsx, floating-buttons.tsx, booking-modal.tsx, language-provider.tsx (contentBn + tr()), site-data.ts (services + siteConfig), whatsapp.ts, api/download/route.ts.
+- Verified image assets: /public/3d-gallery/1-7.jpg + 8.png exist and are non-empty. /public/founder.png exists (1.7MB). 7 extra image-XXXXX.{jpg,png} files in /3d-gallery/ are orphaned (never referenced in code).
+- Verified NO PDF files exist anywhere in /public/ (no /public/books/, no /public/pdfs/, find returned 0 results). The /api/download endpoint maps to /resources/*.html (free tools), NOT to PDF books.
+- Ran `bunx tsc --noEmit` — 0 new TS errors in landing page files (only pre-existing lead-form.tsx zod resolver errors remain).
+- Ran ripgrep for TODO/FIXME/lorem/placeholder/coming-soon — only legitimate input placeholder attributes found.
+- Cross-checked #order / #order-form anchors vs form section IDs across all 6 pages.
+
+Stage Summary:
+
+### P1 — Conversion / Lead-Flow Bugs (7 issues)
+
+[LANDING-001] [SEVERITY: P1] [TYPE: LeadFlow/Bug]
+FILE: src/app/cnc-training/cnc-training-client.tsx
+LINE: 93-96 (hero), 174-203 (form), entire file
+ISSUE: NO scroll-to-form CTA anywhere on the page. Hero only has WhatsApp + Socials. No final CTA banner. The registration form (id="order") is unreachable except via TopBar's "Book Strategy Call" fallback or manual scroll.
+EVIDENCE: `rg -n 'href="#order' src/app/cnc-training/cnc-training-client.tsx` returns 0 matches. Hero (L93-96) only renders `<WhatsAppCTA>` + `<LandingSocials>`. No `<a href="#order">` anywhere.
+FIX: Add a hero CTA button `<a href="#order" className="...">Register Now</a>` next to WhatsAppCTA, and a final gradient CTA banner (like ai-training L367-386) before the footer.
+
+[LANDING-002] [SEVERITY: P1] [TYPE: LeadFlow/Bug]
+FILE: src/app/founder/founder-client.tsx
+LINE: 59-62 (hero), 166-199 (contact form)
+ISSUE: NO scroll-to-form CTA anywhere. Hero only has WhatsApp + Socials. The contact form (id="order") is unreachable except via TopBar fallback or manual scroll.
+EVIDENCE: `rg -n 'href="#order' src/app/founder/founder-client.tsx` returns 0 matches. Hero (L59-62) only renders `<WhatsAppCTA>` + `<LandingSocials>`.
+FIX: Add a hero CTA `<a href="#order" className="...">Send Request</a>` next to WhatsAppCTA. Optionally add a final CTA banner.
+
+[LANDING-003] [SEVERITY: P1] [TYPE: Bug/Gap]
+FILE: src/app/services/[slug]/landing-client.tsx
+LINE: 179 (form section)
+ISSUE: The lead-form `<section>` has NO id attribute. TopBar's `scrollToForm()` falls back to finding the last `<form>` element on the page (works but fragile). No `#order` anchor support for marketing links/ads.
+EVIDENCE: Line 179 `<section className="mx-auto max-w-3xl ...">` — no `id` prop. Compare to other pages: `<section id="order" className="...">`.
+FIX: Change L179 to `<section id="order" className="mx-auto max-w-3xl scroll-mt-20 px-4 py-12 sm:px-6 sm:py-16">`.
+
+[LANDING-004] [SEVERITY: P1] [TYPE: Gap/LeadFlow]
+FILE: src/app/pdf-books/books-client.tsx
+LINE: 396-466 (BookOrderForm)
+ISSUE: BookOrderForm has NO honeypot field — spam protection missing. The shared LandingLeadForm (landing-common.tsx L196-204) HAS a honeypot, but BookOrderForm is a separate form that bypasses this protection. Bots can submit spam leads via /pdf-books.
+EVIDENCE: L396 `<form onSubmit={onSubmit} className="grid gap-4">` — first child is the book-select div, no hidden honeypot input. Compare to LandingLeadForm L197-204 which has `<input type="text" name="website" tabIndex={-1} ... className="absolute -left-[9999px] ..." />`.
+FIX: Add the same honeypot input inside the `<form>`:
+```tsx
+<input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden className="absolute -left-[9999px] top-auto h-0 w-0 opacity-0" />
+```
+And in `onSubmit` (L321), add before payload construction:
+```tsx
+const website = String(fd.get('website') ?? '').trim()
+if (website) { setDone(true); toast.success(...); setSubmitting(false); form.reset(); return }
+```
+
+[LANDING-005] [SEVERITY: P1] [TYPE: Bug/Perf]
+FILE: src/app/services/[slug]/landing-client.tsx
+LINE: 34
+ISSUE: `usePageViewTracking('service_detail_page', { slug })` passes a NEW object literal `{ slug }` on every render. The hook's `useEffect` deps array is `[source, meta]` (landing-common.tsx L269) — since `meta` is a new object reference each render, the effect re-fires on EVERY parent re-render (e.g. on language toggle, on any state change). This spams /api/track with duplicate page_view events and corrupts analytics.
+EVIDENCE: L34 `usePageViewTracking('service_detail_page', { slug })`. Hook at L257-270: `React.useEffect(() => { fetch('/api/track', ...) }, [source, meta])`. Object literal `{ slug }` creates new ref every render.
+FIX: Either (a) pass slug as a string: `usePageViewTracking(\`service_detail_page_\${slug}\`)` and drop the meta param, or (b) memoize: `const meta = React.useMemo(() => ({ slug }), [slug])` then `usePageViewTracking('service_detail_page', meta)`.
+
+[LANDING-006] [SEVERITY: P1] [TYPE: Dummy/Fulfillment]
+FILE: src/app/pdf-books/books-client.tsx
+LINE: 34-90 (BOOKS array), 264-294 (order form)
+ISSUE: NO actual PDF files exist anywhere in /public/. The page sells "5 premium PDF books" with specific page counts (120, 140, 110, 95, 130 pages) and titles (Mind Training, Money Psychology, Business Branding, Personal Branding, Sales Psychology), but there are zero PDF files in the repository. Fulfillment relies entirely on the team manually sending a Google Drive link within 2 hours — if the books don't exist yet, paying customers will be defrauded.
+EVIDENCE: `find /home/z/my-project/public -name "*.pdf"` returns 0 results. `ls public/books/` → "No such file or directory". `ls public/pdfs/` → "No such file or directory". The /api/download endpoint maps to /resources/*.html (free tools), NOT to PDF books.
+FIX: Either (a) create the actual PDF files and store them in /public/books/ (or a private CDN), wire up an authenticated download endpoint, OR (b) add a clear "Pre-order" / "Coming soon" disclaimer if the books are not yet finalized, OR (c) verify with founder that books exist externally and document the manual fulfillment SOP.
+
+[LANDING-007] [SEVERITY: P1] [TYPE: Dummy/Fulfillment]
+FILE: src/app/cnc-design/cnc-client.tsx
+LINE: 19-28 (CATEGORIES), 75-78 (hero claim)
+ISSUE: NO actual CNC design files exist in /public/. The page sells "150GB of 2500+ ready-to-cut CNC designs" with per-category counts (500+ doors, 300+ sofa, 200+ beds, etc.) but there are zero design files in the repository. The 150GB / 2500+ figures are unverifiable marketing claims with no backing inventory. Same fulfillment risk as LANDING-006.
+EVIDENCE: `find /home/z/my-project/public -name "*.stl" -o -name "*.dxf"` returns 0 results. No /public/cnc-designs/ directory. The order flow (L246-281) just submits a lead and shows PaymentInstructions — no actual file delivery mechanism.
+FIX: Verify with founder that the 150GB bundle exists externally (Google Drive, etc.) and document the manual fulfillment SOP. If counts are estimates, soften language from "500+ doors" to "500+ door designs included". If counts are fabricated, remove them or replace with verifiable numbers.
+
+### P2 — i18n / A11y / SEO (17 issues)
+
+[LANDING-008] [SEVERITY: P2] [TYPE: i18n]
+FILE: src/app/ai-training/training-client.tsx
+LINE: 300, 305, 310
+ISSUE: Instructor stats (120+, 5.0, 7+) are hardcoded Western digits inside an isBn-aware block — they stay as "120+", "5.0", "7+" in BN mode instead of "১২০+", "৫.০", "৭+".
+EVIDENCE:
+```tsx
+// L298-313
+<div className="flex items-center gap-1.5">
+  <Users className="h-4 w-4 text-blue-600" />
+  <span className="font-semibold">120+</span>  {/* ← hardcoded Western */}
+  <span className="text-muted-foreground">{isBn ? 'ছাত্র' : 'students'}</span>
+</div>
+<div className="flex items-center gap-1.5">
+  <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+  <span className="font-semibold">5.0</span>  {/* ← hardcoded Western */}
+  <span className="text-muted-foreground">{isBn ? 'রেটিং' : 'rating'}</span>
+</div>
+<div className="flex items-center gap-1.5">
+  <Clock className="h-4 w-4 text-blue-600" />
+  <span className="font-semibold">7+</span>  {/* ← hardcoded Western */}
+  <span className="text-muted-foreground">{isBn ? 'বছর' : 'years'}</span>
+</div>
+```
+FIX: Wrap each in bn(): `<span className="font-semibold">{bn('120+')}</span>`, `{bn('5.0')}`, `{bn('7+')}`.
+
+[LANDING-009] [SEVERITY: P2] [TYPE: i18n]
+FILE: src/app/cnc-design/cnc-client.tsx
+LINE: 174
+ISSUE: CATEGORIES count (500+, 300+, 200+, etc.) rendered as `{count}` without bn() — stays Western in BN mode.
+EVIDENCE: L19-28 `count: '500+'` etc. L174 `<p className="text-lg font-extrabold ...">{count}</p>` — no bn() call.
+FIX: L174 → `<p ...>{bn(count)}</p>`.
+
+[LANDING-010] [SEVERITY: P2] [TYPE: i18n]
+FILE: src/app/cnc-design/cnc-client.tsx
+LINE: 89
+ISSUE: "150 GB" badge hardcoded Western digits — stays "150 GB" in BN mode instead of "১৫০ GB".
+EVIDENCE: L88-90 `<span className="rounded-full bg-amber-100 px-3 py-1 font-semibold text-amber-700 ...">150 GB</span>` — literal string.
+FIX: `<span ...>{bn('150')} GB</span>`.
+
+[LANDING-011] [SEVERITY: P2] [TYPE: i18n]
+FILE: src/app/cnc-design/cnc-client.tsx
+LINE: 84, 210
+ISSUE: "-90%" discount badge hardcoded Western — stays "-90%" in BN mode instead of "-৯০%".
+EVIDENCE: L83-85 `<span className="rounded-full bg-emerald-500/15 px-2 py-0.5 text-xs font-bold text-emerald-600">-90%</span>`. L209-211 same.
+FIX: `<span ...>{bn('-90%')}</span>` (or `{isBn ? '-৯০%' : '-90%'}`).
+
+[LANDING-012] [SEVERITY: P2] [TYPE: i18n]
+FILE: src/app/cnc-design/cnc-client.tsx
+LINE: 95
+ISSUE: "2D + 3D" badge hardcoded Western digits — stays "2D + 3D" in BN mode instead of "২D + ৩D".
+EVIDENCE: L94-96 `<span className="rounded-full bg-emerald-100 ...">2D + 3D</span>` — literal string.
+FIX: `<span ...>{isBn ? '২D + ৩D' : '2D + 3D'}</span>` (or use bn() helper: `{bn('2D + 3D')}`).
+
+[LANDING-013] [SEVERITY: P2] [TYPE: i18n]
+FILE: src/app/cnc-design/cnc-client.tsx
+LINE: 123
+ISSUE: Hero overlay "150GB · 2500+ files" hardcoded Western — stays Western in BN mode.
+EVIDENCE: L123 `<p className="font-heading text-xl font-bold">150GB · 2500+ files</p>` — literal string, not in isBn ternary.
+FIX: `<p ...>{isBn ? '১৫০GB · ২৫০০+ ফাইল' : '150GB · 2500+ files'}</p>`.
+
+[LANDING-014] [SEVERITY: P2] [TYPE: i18n]
+FILE: src/app/cnc-training/cnc-training-client.tsx
+LINE: 126
+ISSUE: Curriculum day labels "D{day}" (D1, D2, ... D7) hardcoded Western — stays "D1"..."D7" in BN mode instead of "D১"..."D৭".
+EVIDENCE: L125-127 `<div className="flex h-12 w-12 ... font-heading font-bold text-white shadow-md">D{day}</div>` — `D` prefix + raw number.
+FIX: `D{bn(day)}` (or `{isBn ? 'দিন ' + bn(day) : 'D' + day}`).
+
+[LANDING-015] [SEVERITY: P2] [TYPE: i18n/A11y]
+FILE: src/app/3d-portrait/portrait-client.tsx
+LINE: 153, 362
+ISSUE: Gallery image alt text "3D Portrait Sample ${i + 1}" hardcoded English — in BN mode, screen readers and image-fallback display show English instead of Bengali.
+EVIDENCE: L153 `alt={`3D Portrait Sample ${i + 1}`}`. L362 `alt={`3D Portrait Sample ${i + 1}`}`. Both use template literal with English text + Western digit.
+FIX: `alt={isBn ? \`৩D পোর্ট্রেট নমুনা ${bn(i + 1)}\` : \`3D Portrait Sample ${i + 1}\`}`.
+
+[LANDING-016] [SEVERITY: P2] [TYPE: A11y/i18n]
+FILE: src/app/3d-portrait/portrait-client.tsx
+LINE: 326
+ISSUE: Facebook video iframe `title="3D Portrait Making Video"` hardcoded English — WCAG requires iframe titles for screen readers; in BN mode it should be Bengali.
+EVIDENCE: L319-327 `<iframe ... title="3D Portrait Making Video" />` — literal English title.
+FIX: `title={isBn ? '৩D পোর্ট্রেট তৈরির ভিডিও' : '3D Portrait Making Video'}`.
+
+[LANDING-017] [SEVERITY: P2] [TYPE: i18n]
+FILE: src/app/3d-portrait/portrait-client.tsx
+LINE: 51-57 (BOARD_SIZES), 396-398 (table render)
+ISSUE: Board sizes (10" × 14", 12" × 16", etc.) and table row numbers ({i + 1}) hardcoded Western — stay Western in BN mode.
+EVIDENCE: L51-57 `BOARD_SIZES` array has `size: '10" × 14"'` etc. L396 `<td className="px-4 py-3 font-bold text-violet-600">{i + 1}</td>` — raw index.
+FIX: Either (a) wrap render in bn(): `<td ...>{bn(i + 1)}</td>` and `<td ...>{bn(b.size)}</td>` / `<td ...>{bn(b.thickness)}</td>`, or (b) add t_bn/bn variants to BOARD_SIZES entries.
+
+[LANDING-018] [SEVERITY: P2] [TYPE: i18n]
+FILE: src/app/3d-portrait/portrait-client.tsx
+LINE: 275 (face count selector), 471 (selected display)
+ISSUE: Face count button labels `{f}` (1-5) and "selected: X face(s)" display hardcoded Western — stay Western in BN mode.
+EVIDENCE: L264-277 `{[1,2,3,4,5].map((f) => (... <button>{f}</button> ...))}` — raw number. L470-472 `<span ...>{faces} {isBn ? 'ফেস' : 'face'}{faces > 1 ? (isBn ? '' : 's') : ''}</span>` — `{faces}` is raw number.
+FIX: L275 → `{bn(f)}`. L471 → `{bn(faces)} {isBn ? 'ফেস' : 'face'}...`.
+
+[LANDING-019] [SEVERITY: P2] [TYPE: Bug/Maintainability]
+FILE: src/app/services/[slug]/landing-client.tsx
+LINE: 162
+ISSUE: WhatsApp CTA link hardcodes the phone number `8801711731354` directly in the URL template, bypassing `siteConfig.whatsapp`. If the number ever changes in siteConfig, this CTA will be stale. Every other component uses `siteConfig.whatsapp` or `waLink()`.
+EVIDENCE: L162-166 `href={`https://wa.me/8801711731354?text=${encodeURIComponent(...)}`}` — magic number.
+FIX: `href={`https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent(...)}`}`. Add `import { siteConfig } from '@/lib/site-data'` (currently not imported in this file).
+
+[LANDING-020] [SEVERITY: P2] [TYPE: SEO]
+FILE: src/app/ai-training/page.tsx, src/app/cnc-training/page.tsx, src/app/cnc-design/page.tsx, src/app/3d-portrait/page.tsx, src/app/pdf-books/page.tsx, src/app/founder/page.tsx
+LINE: all (metadata exports)
+ISSUE: None of the 6 landing pages emit any structured data (JSON-LD). layout.tsx only emits Organization + Service + FAQ schema globally. Missing per-page schema:
+- /ai-training + /cnc-training → should emit Course schema (name, description, provider, offers[price=1000TK/250TK], hasCourseInstance[duration=1week/7days])
+- /cnc-design + /pdf-books → should emit Product schema (name, offers[price=150TK/170TK], aggregateRating if real)
+- /3d-portrait → should emit Service or Product schema (offers with price range 500-17500)
+- /founder → should emit Person schema (name, jobTitle, worksFor, image, sameAs[facebook/linkedin/etc.])
+EVIDENCE: `rg -n "application/ld+json" src/app/ai-training src/app/cnc-training src/app/cnc-design src/app/3d-portrait src/app/pdf-books src/app/founder` → 0 matches. Only layout.tsx L309-320 has JSON-LD.
+FIX: Add a `<script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(...)}} />` to each page.tsx (or a shared helper). Priorities: Course schema for the 2 training pages (eligible for Google rich results), Person schema for founder page.
+
+[LANDING-021] [SEVERITY: P2] [TYPE: A11y]
+FILE: src/app/3d-portrait/portrait-client.tsx
+LINE: 239-255 (material buttons), 264-277 (face count buttons)
+ISSUE: Calculator selector buttons use visual styling (border-color, bg-color) to indicate selection state, but have NO `aria-pressed` attribute. Screen reader users cannot tell which material/face-count is currently selected.
+EVIDENCE: L239-247 `<button type="button" onClick={() => setMaterial(m.key)} className={`... ${material === m.key ? 'border-violet-500 bg-violet-50 shadow-lg' : 'border-border/60 bg-card hover:border-violet-300'}`}>` — no aria-pressed. L265-273 same pattern for face count.
+FIX: Add `aria-pressed={material === m.key}` to material buttons (L239). Add `aria-pressed={faces === f}` to face count buttons (L265). Optionally add `aria-label={`Select ${m.t_en} material`}` / `aria-label={`Select ${f} faces`}`.
+
+[LANDING-022] [SEVERITY: P2] [TYPE: Gap/LeadFlow]
+FILE: src/app/ai-training/training-client.tsx, src/app/cnc-training/cnc-training-client.tsx, src/app/pdf-books/books-client.tsx, src/app/founder/founder-client.tsx
+LINE: hero sections (ai-training L135-138, cnc-training L93-96, pdf-books L148-154, founder L59-62)
+ISSUE: All 4 pages have NO hero "Order Now" / "Register Now" scroll-to-form CTA. Hero only renders WhatsApp + Socials. Users must scroll past the entire page (or use TopBar's "Book Strategy Call" fallback) to reach the form. /cnc-design and /3d-portrait DO have hero CTAs (L99, L130 respectively). This was flagged as P1 in audit 2-c (line 616 of worklog) but only /ai-training's final CTA was fixed — hero CTAs were never added.
+EVIDENCE: ai-training L135-138: `<WhatsAppCTA />` + `<LandingSocials />` only. cnc-training L93-96: same. pdf-books L148-154: same. founder L59-62: same. None have `<a href="#order">` in hero.
+FIX: Add a primary gradient CTA button `<a href="#order" className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r ...">Register Now / Order Now / Send Request</a>` to each hero, before or alongside `<WhatsAppCTA />`.
+
+[LANDING-023] [SEVERITY: P2] [TYPE: i18n]
+FILE: src/app/3d-portrait/portrait-client.tsx
+LINE: 213
+ISSUE: "1-5 faces" hardcoded Western digits inside BN string — mixes Bengali and Western numerals.
+EVIDENCE: L213 `{ t: isBn ? 'পরিবারের সবাই' : 'For the Whole Family', d: isBn ? '১-৫ জনের ফেস একসাথে খোদাই।' : '1-5 faces carved together.' }` — BN string "১-৫" already uses Bengali digits ✓ (this one is actually OK). However L213 EN `'1-5 faces carved together.'` — if the user switches to BN, the card title/desc both render BN version correctly. ✓ (FALSE POSITIVE — withdraw this issue; verified correct.)
+
+[LANDING-024] [SEVERITY: P2] [TYPE: i18n/A11y]
+FILE: src/app/founder/founder-client.tsx
+LINE: 78-87 (star rating badge)
+ISSUE: Star rating badge has 5 purely-decorative `<Star>` icons with no `aria-label` on the container. Screen readers announce "image" 5 times. The text "120+ client reviews" / "১২০+ ক্লায়েন্ট রেটিং" follows but the star cluster itself is unlabeled.
+EVIDENCE: L79-83 `<div className="flex items-center gap-1">{[0,1,2,3,4].map((i) => (<Star key={i} className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />))}</div>` — no role/aria-label.
+FIX: Wrap star cluster in `<div role="img" aria-label={isBn ? '৫.০ এর মধ্যে ৫ তারা' : '5 out of 5 stars'} className="flex items-center gap-1">...`.
+
+### P3 — Polish / Dead Code / Unverifiable Claims (6 issues)
+
+[LANDING-025] [SEVERITY: P3] [TYPE: TS]
+FILE: src/app/pdf-books/books-client.tsx
+LINE: 31
+ISSUE: BOOKS array `Icon` field typed as `typeof Brain` — non-standard pattern. The codebase already imports `LucideIcon` type in site-data.ts (L329) and uses it for Service/Industry types. `typeof Brain` works but is inconsistent and fragile (if Brain is ever removed from imports, the type breaks).
+EVIDENCE: L31 `Icon: typeof Brain` (inside `type Book = { ... Icon: typeof Brain }`).
+FIX: Change to `Icon: LucideIcon` and add `import type { LucideIcon } from 'lucide-react'` at top.
+
+[LANDING-026] [SEVERITY: P3] [TYPE: DeadCode]
+FILE: src/app/pdf-books/books-client.tsx
+LINE: 92
+ISSUE: `ALL_FIVE_PRICE = 850` constant defined but NEVER referenced anywhere in the file. The actual 850 price is hardcoded inline at L107, L226, L384, L409. Already noted in prior worklog (line 939) but never removed.
+EVIDENCE: `rg -n "ALL_FIVE_PRICE" src/` → only L92 (definition), 0 usages.
+FIX: Either (a) delete L92, or (b) replace all inline `850` literals with `{ALL_FIVE_PRICE}` and `{bn(String(ALL_FIVE_PRICE), isBn)}` for consistency.
+
+[LANDING-027] [SEVERITY: P3] [TYPE: Perf]
+FILE: src/app/3d-portrait/portrait-client.tsx
+LINE: 319-327
+ISSUE: Facebook video iframe loads eagerly (no `loading="lazy"`). The iframe is in section 5 (below the fold) — lazy loading would defer the network request until the user scrolls near it, improving initial page load.
+EVIDENCE: L319 `<iframe src="https://www.facebook.com/plugins/video.php?..." className="h-full w-full border-0" style={{ border: 'none' }} scrolling="no" allowFullScreen allow="..." title="..." />` — no `loading` attribute.
+FIX: Add `loading="lazy"` to the iframe.
+
+[LANDING-028] [SEVERITY: P3] [TYPE: Dummy/Unverifiable]
+FILE: src/app/founder/founder-client.tsx
+LINE: 52, 85, 97-100, 126
+ISSUE: Multiple unverifiable marketing stats presented as facts:
+- L52: "Jessore first digital engineer" (হশোরের প্রথম ডিজিটাল ইঞ্জিনিয়ার) — unverifiable superlative
+- L85: "120+ client reviews" badge on founder photo
+- L97: "120+ Clients" stat card
+- L99: "2.4M+ AI conversations" stat card
+- L100: "4.9/5 Avg rating" stat card
+- L126: "average ROI of 7.2x" claim in story
+None of these are backed by a case-studies page, a reviews page, or any public proof. The 4.9/5 rating is suspiciously high for 120+ clients (typically averages cluster around 4.5-4.8). The 7.2x ROI is precise but unverifiable. The "2.4M+ AI conversations" is plausible only if 120+ clients each had ~20,000 conversations — possible but unverified.
+EVIDENCE: L52 `{isBn ? 'তাজ ভাই · যশোরের প্রথম ডিজিটাল ইঞ্জিনিয়ার' : 'Taj Bhai · Jessore first digital engineer'}`. L97-100 stats array. L126 story paragraph.
+FIX: Verify each stat with founder. If verifiable, add a /case-studies or /reviews link nearby for proof. If unverifiable, soften language: "120+ clients served" → "Many happy clients", "4.9/5" → "Rated highly by clients", "7.2x ROI" → "Significant ROI improvements", "Jessore first digital engineer" → "A leading digital engineer in Jessore". The 2.4M+ conversations figure should link to a dashboard screenshot or case study.
+
+[LANDING-029] [SEVERITY: P3] [TYPE: Dummy/Unverifiable]
+FILE: src/app/cnc-design/cnc-client.tsx
+LINE: 19-28 (CATEGORIES counts), 78 (2500+ designs claim), 89 (150GB claim)
+ISSUE: Per-category design counts (500+ doors, 300+ sofa, 200+ beds, 400+ wardrobes, 150+ dressing tables, 250+ chairs, 180+ tables, 500+ others) sum to ~2480 — roughly matches the "2500+ designs" hero claim. But these are unverifiable dummy counts with no actual file inventory (see LANDING-007). The "150GB" total is also unverifiable.
+EVIDENCE: L19-28 CATEGORIES array. L78 hero `'2500+ CNC designs, 150GB'`. No file manifest, no S3/Drive inventory, no /public/cnc-designs/ directory.
+FIX: If counts are real (founder has the actual bundle), keep them but add a "Download file manifest" link or a sample-gallery section showing actual file names. If counts are estimates/aspirational, soften to "500+ door designs planned" or remove specific numbers.
+
+[LANDING-030] [SEVERITY: P3] [TYPE: Dummy/Unverifiable]
+FILE: src/app/3d-portrait/portrait-client.tsx
+LINE: 299, 521-522
+ISSUE: Campaign "was ৳3,200" original price is unverifiable — it doesn't match any price in the STL_PRICES array `[500, 4500, 6000, 7500, 9000]`. The campaign price is 500 (single face STL), but the next tier (2 faces) is 4500, not 3200. The "was ৳3,200" appears fabricated to inflate the perceived discount (84% off).
+EVIDENCE: L31-32 `// STL prices: 500 (campaign), 4500, 6000, 7500, 9000` and `const STL_PRICES = [500, 4500, 6000, 7500, 9000]`. L299 `{isBn ? '🔥 ক্যাম্পেইন অফার (নির্ধারিত ৳৩২০০)' : '🔥 Campaign offer (was ৳3,200)'}`. L521-522 same claim repeated.
+FIX: Either (a) replace 3200 with the actual previous price (if the campaign genuinely reduced from a real prior price), or (b) remove the "was ৳3,200" claim and just say "Campaign price ৳500 — limited time", or (c) verify with founder what the actual pre-campaign price was and use that.
+
+### POSITIVE FINDINGS (already fixed / working correctly)
+- LandingLeadForm (landing-common.tsx) HAS honeypot field ✓ (added in Task 3-landing-fixes)
+- LandingLeadForm shows PaymentInstructions when `paymentAmount` is passed ✓
+- BookOrderForm shows PaymentInstructions on success state ✓ (L381-387)
+- PaymentInstructions amount uses bn() for BN-mode display ✓ (L37-38)
+- All 5 landing pages have bn() helper defined ✓
+- Prices (৳1,000, ৳250, ৳150, ৳170, ৳850) properly localized via bn() ✓
+- 3D portrait iframe uses `border-0` class + `style={{border:'none'}}` (no deprecated frameBorder) ✓
+- services/[slug] uses tr() for BN title/short/description/features ✓
+- All 6 pages have `usePageViewTracking()` ✓ (except LANDING-005 bug in services/[slug])
+- All forms POST to /api/contact with correct `source` field ✓
+- All forms have loading state (Loader2 spinner) + success state (CheckCircle2) + error state (toast) ✓
+- Honeypot on LandingLeadForm silently shows success without hitting API ✓
+- All 6 page.tsx files have proper metadata (title, description, keywords, openGraph, alternates.canonical) ✓
+- All images (founder.png, 3d-gallery/1-8) exist and are non-empty ✓
+- All form sections have `scroll-mt-20` for sticky-header offset ✓
+- TopBar's `scrollToForm()` tries 6 different IDs + falls back to last `<form>` ✓
+- Lead form success state has "Send another request" reset button ✓
+- `siteConfig.phone` (real Taj number +880 1711 731354) used for bKash/Nagad — not placeholders ✓
+- FloatingButtons uses waLink() (real number) ✓
+- No `any` types in any landing page file ✓
+- No TODO/FIXME/lorem ipsum in any landing page file ✓
+- No crashes / runtime errors detected in code review ✓
+
+### PRIORITY QUEUE FOR NEXT FIX AGENT
+P0: None (no crashes).
+P1 (7): LANDING-005 (services/[slug] tracking re-fire), LANDING-001 + LANDING-002 (cnc-training + founder missing scroll-to-form CTAs), LANDING-003 (services/[slug] form id), LANDING-004 (books honeypot), LANDING-006 + LANDING-007 (PDF + CNC vaporware — verify with founder).
+P2 (16): LANDING-020 (structured data — highest SEO impact), LANDING-008-019 (i18n/A11y batch fixes — mechanical), LANDING-022 (hero CTAs on 4 pages), LANDING-021 (aria-pressed on calculator), LANDING-024 (star aria-label).
+P3 (6): LANDING-025 (LucideIcon type), LANDING-026 (dead ALL_FIVE_PRICE), LANDING-027 (iframe lazy), LANDING-028-030 (unverifiable stats — verify with founder).
+
+### OVERALL VERDICT
+6 landing pages are functionally clean for lead submission (form → /api/contact → Google Sheets works end-to-end, honeypot protects LandingLeadForm, PaymentInstructions shows on paid pages). The most significant NEW bugs found are: (1) services/[slug] usePageViewTracking re-fires on every render due to object-literal meta dep (LANDING-005 — analytics corruption), (2) /cnc-training and /founder have ZERO scroll-to-form CTAs (LANDING-001/002 — conversion loss), (3) BookOrderForm missing honeypot (LANDING-004 — spam risk), (4) PDF books + CNC design bundle have no actual product files (LANDING-006/007 — fulfillment risk, verify with founder). The i18n batch (LANDING-008-019) is mechanical — ~12 instances of hardcoded Western digits/English strings that should use bn() helper or isBn ternaries. SEO gap (LANDING-020) — no per-page Course/Product/Person structured data on any of the 6 pages.
+
+---
+Task ID: AUDIT-5-i18n
+Agent: God Mode Audit Agent (i18n + fonts + layout)
+Task: Deep audit of i18n (translation keys, hardcoded EN/BN, numerals), premium fonts (loading, cascade, files, weights, display), and shared layout infrastructure (sticky footer, dark mode, analytics pixels, metadata, manifest, sitemap, robots).
+
+Work Log:
+- Read worklog.md (1007 lines) to understand all prior audit + fix history (Tasks 1, 2-a..2-d, 3-master-fixes, 3-landing-fixes, 4-verification). Previous work already removed 20 duplicate i18n keys (TS1117), added 9 missing chat.* keys, deleted 129 lines of dead duplicate types in site-data.ts. The codebase was reported clean (0 lint errors, 0 blocking TS errors).
+- Read in full: language-provider.tsx (1224 lines), site-data.ts (1118 lines), layout.tsx (341 lines), globals.css (294 lines), language-toggle.tsx, theme-toggle.tsx, theme-provider.tsx, navbar.tsx, footer.tsx, analytics-pixels.tsx, google-analytics.tsx, logo.tsx, top-bar.tsx, landing-common.tsx, ai-chat-widget.tsx, floating-buttons.tsx, hero.tsx, pain-points.tsx, cost-of-inaction.tsx, solution.tsx, how-it-works.tsx, services.tsx, why-choose-us.tsx, testimonials.tsx, pricing.tsx, lead-form.tsx, final-cta.tsx, faq.tsx, industries.tsx, page.tsx, sitemap.ts, robots.ts, manifest.ts, founder/page.tsx, founder/founder-client.tsx, services/[slug]/page.tsx, services/[slug]/landing-client.tsx, blog/page.tsx, case-studies/page.tsx.
+- Extracted all 358 unique `t('key')` calls across the codebase via ripgrep, filtered to 342 real dotted keys.
+- Programmatically verified EN and BN dictionaries each have 525 keys, 0 duplicates within each, 0 keys missing from the other dictionary. Both sides are symmetric (was already cleaned in Task 3).
+- Cross-referenced t() keys vs dictionary keys → 20 MISSING keys (mostly in orphan sections + faq.title).
+- Verified fonts via curl: MahfujLipi.ttf (303,168 bytes, 200 OK), ForzonDEMO-Italic.ttf (14,656 bytes, 200 OK). @font-face declarations present in compiled CSS at `/_next/static/chunks/[root-of-the-server]__f5d9dba9._.css`. unicode-range `U+0980-09FF, U+0964-0965, U+200C-200D, U+25CC` correctly covers Bengali block + numerals + danda + ZWNJ/ZWJ + dotted circle. font-display: swap on both faces.
+- Verified compiled CSS contains: `--font-sans: "NextGen Bangla", var(--font-inter), ...`, `--font-heading: "NextGen Bangla", var(--font-sora), var(--font-jakarta), ...`, `--font-display: "NextGen Display", "NextGen Bangla", var(--font-sora), ...`. Body class includes `font-body antialiased bg-background text-foreground` + Sora/Inter/Jakarta CSS variable classes. Cascade is CORRECT: Bengali font first via unicode-range, English fallback fonts after.
+- Ran `curl` against all critical assets and routes. ALL return 200 EXCEPT `/robots.txt` which returns HTTP 500 (CONFLICT between `public/robots.txt` static file and `src/app/robots.ts` route handler — Next.js refuses to serve either, breaking crawl rules for ALL search engines).
+- Verified sitemap.xml 200 (21 static routes), manifest.webmanifest 200 (icons SVG-only, no PNG), favicon.svg/icon.svg/apple-icon.png all 200.
+
+=== FINDINGS (32 issues, 4 P0/P1 critical, 28 P2) ===
+
+[I18N-001] [SEVERITY: P0] [TYPE: SEO/Layout]
+FILE: public/robots.txt + src/app/robots.ts
+LINE: public/robots.txt:1-15, src/app/robots.ts:3-50
+ISSUE: `/robots.txt` returns HTTP 500 — Next.js refuses to serve because a static public file AND a route handler both claim the path.
+EVIDENCE: `curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/robots.txt` → 500. Error body: `"A conflicting public file and page file was found for path /robots.txt https://nextjs.org/docs/messages/conflicting-public-file-page"`. Search engines (Googlebot, Bingbot, GPTBot, ClaudeBot) cannot read crawl rules → entire site's robots policy is broken.
+FIX: Delete `public/robots.txt` (the static file is also INCOMPLETE — only lists Googlebot/Bingbot/Twitterbot/facebookexternalhit/*, missing the GPTBot/ClaudeBot/PerplexityBot/ChatGPT-User/Google-Extended rules that `src/app/robots.ts` correctly defines). Keep only `src/app/robots.ts`.
+
+[I18N-002] [SEVERITY: P1] [TYPE: MissingKey]
+FILE: src/components/site/sections/faq.tsx:33 + src/components/site/language-provider.tsx (dictionaries)
+LINE: faq.tsx:33 `{t('faq.title')}`
+ISSUE: `t('faq.title')` is called but ONLY `faq.title1` and `faq.title2` exist in dictionaries — `faq.title` is MISSING. The `t()` fallback returns the literal string `"faq.title"`.
+EVIDENCE: `rg "'faq\.title" src/components/site/language-provider.tsx` → only `faq.title1` / `faq.title2` defined (EN line 60, BN line 497). No `faq.title`. Currently FAQ section is orphan (not imported on homepage), so users don't see the broken string yet — but the section exists and would render `"faq.title"` if anyone imports it.
+FIX: Add `'faq.title': 'Frequently Asked Questions'` to EN and `'faq.title': 'প্রায়শই জিজ্ঞাসিত প্রশ্ন'` to BN. OR change faq.tsx:33 to `t('faq.title1') + ' ' + t('faq.title2')`.
+
+[I18N-003..006] [SEVERITY: P2] [TYPE: MissingKey]
+FILE: src/components/site/sections/{aspirational-vision,competitor-fomo,system-toolkit,numbers}.tsx
+ISSUE: 19 missing keys across 4 orphan section files (aspire.eyebrow, aspire.title1, aspire.title2, aspire.subtitle, aspire.thisIsNot, aspire.makeItReal; competitor.eyebrow, competitor.title1, competitor.title2, competitor.subtitle, competitor.question, competitor.catchUp; toolkit.eyebrow, toolkit.title1, toolkit.title2, toolkit.subtitle; numbers.eyebrow, numbers.title, numbers.subtitle). All return literal key strings as fallback. Sections are NOT imported on the homepage (verified via `rg "from '@/components/site/sections/(aspirational-vision|competitor-fomo|system-toolkit|numbers)'" src` → 0 hits).
+EVIDENCE: 19 keys appear in `t('...')` calls but not in either dictionary (verified via Python cross-reference: `missing = real_used - dict_keys`).
+FIX: Either delete the 4 orphan section files (recommended — they're dead code), OR add the 19 keys to both EN and BN dictionaries.
+
+[I18N-007] [SEVERITY: P1] [TYPE: A11y/SEO]
+FILE: src/components/site/language-provider.tsx:1185-1205
+LINE: 1189-1195 (useEffect on mount), 1197-1201 (setLang)
+ISSUE: On initial client mount, the provider reads saved language from localStorage and calls `setLangState(saved)` — but does NOT call `setLang(saved)`. So `document.documentElement.lang` stays at the hardcoded `"en"` from layout.tsx:292 even when BN is the active language.
+EVIDENCE: layout.tsx renders `<html lang="en">`. provider's setLang updates `document.documentElement.lang` but is only called when user clicks the toggle, not on initial hydration. Result: screen readers pronounce Bengali content as English; search engines index the page as English-only.
+FIX: In the useEffect, call `setLang(saved)` (not just `setLangState(saved)`) so the html lang attribute updates on mount. OR add `document.documentElement.lang = saved` inside the useEffect.
+
+[I18N-008] [SEVERITY: P1] [TYPE: Mismatch]
+FILE: src/components/site/language-provider.tsx
+LINE: EN:258 `'hero.trust2': 'Trusted by 50+ BD businesses'` vs EN:30 `'hero.trustedBy': 'Trusted by 120+ leading businesses across Bangladesh'`
+ISSUE: Internal content inconsistency — two different "trusted by" counts in the EN dictionary itself (50+ vs 120+). The hero.trust2 badge is rendered in hero.tsx (homepage) while hero.trustedBy is used in client-logos.tsx (orphan section, currently unused).
+EVIDENCE: Same EN dictionary, two conflicting numbers for the same concept.
+FIX: Standardize on 120+ (matches TESTIMONIALS, byNumbers, founder page stats). Update `hero.trust2` to `'Trusted by 120+ BD businesses'`.
+
+[I18N-009] [SEVERITY: P2] [TYPE: HardcodedEN]
+FILE: src/components/site/footer.tsx:292
+LINE: `© {year} NextGen Digital Studio. {t('footer.rights')}`
+ISSUE: "NextGen Digital Studio" is hardcoded English in the copyright line. When lang=BN, the line reads "© 2026 NextGen Digital Studio. সর্বস্বত্ব সংরক্ষিত।" — mixed language. Should use `t('brand.name')` which returns 'নেক্সটজেন ডিজিটাল স্টুডিও' in BN.
+EVIDENCE: footer.tsx:292 `© {year} NextGen Digital Studio. {t('footer.rights')}`. The same file already uses `t('brand.name')` on line 179 (brand display) and 184 (sheet title) — so the key exists.
+FIX: Replace `NextGen Digital Studio` with `{t('brand.name')}` on line 292.
+
+[I18N-010] [SEVERITY: P2] [TYPE: HardcodedEN]
+FILE: src/components/site/ai-chat-widget.tsx:282
+LINE: `ME` (UserAvatar component)
+ISSUE: UserAvatar shows hardcoded English "ME" label even in BN mode.
+EVIDENCE: `<div className="...">ME</div>` — no t() call.
+FIX: Replace with `{lang === 'bn' ? 'আমি' : 'ME'}` (destructure `lang` from useLang). Or use `t('chat.userAvatar')` with a new key.
+
+[I18N-011] [SEVERITY: P2] [TYPE: HardcodedEN]
+FILE: src/components/site/top-bar.tsx:74
+LINE: `<span className="xs:hidden sm:hidden sr-only">Book</span>`
+ISSUE: Screen-reader-only text "Book" is hardcoded English. Screen readers will announce "Book" in English even on BN pages.
+EVIDENCE: Line 74 hardcoded. The visible label on line 72 correctly uses `t('cta.bookCall')`.
+FIX: Replace with `<span className="xs:hidden sm:hidden sr-only">{t('cta.bookCall')}</span>` (or just remove — the visible label already serves SR users).
+
+[I18N-012] [SEVERITY: P2] [TYPE: HardcodedEN]
+FILE: src/components/site/sections/industries.tsx:116
+LINE: `<p ...>Outcomes we deliver</p>`
+ISSUE: Section subheader in industry modal is hardcoded English.
+EVIDENCE: industries.tsx:116 raw string. Surrounding code (lines 112-113, 124) correctly uses `tr()`.
+FIX: Replace with `{lang === 'bn' ? 'যে ফলাফল আমরা দিই' : 'Outcomes we deliver'}` OR add a key.
+
+[I18N-013] [SEVERITY: P2] [TYPE: HardcodedEN]
+FILE: src/components/site/sections/industries.tsx:135
+LINE: `Get a custom plan for {tr(ind.name)}`
+ISSUE: "Get a custom plan for" prefix is hardcoded English. In BN mode, button reads "Get a custom plan for ছোট ও মাঝারি ব্যবসা" — mixed language.

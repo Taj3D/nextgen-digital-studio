@@ -4,6 +4,7 @@ import { sendToGoogleSheets } from "@/lib/google-sheets";
 import { trackEvent } from "@/lib/tracking";
 import { normalizeSource } from "@/lib/lead-sources";
 import { normalizePhone } from "@/lib/phone";
+import { rateLimit, getClientIP } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 
@@ -28,6 +29,19 @@ function isRealContact(value: string | null | undefined): boolean {
 }
 
 export async function POST(req: Request) {
+  // Rate limit: 10 chat saves / min / IP
+  const ip = getClientIP(req);
+  const rl = rateLimit(`chat-save:${ip}`, 10, 60_000);
+  if (!rl.ok) {
+    return NextResponse.json(
+      { ok: false, error: "Too many requests. Try again later." },
+      {
+        status: 429,
+        headers: { "Retry-After": String(Math.ceil(rl.resetIn / 1000)) },
+      },
+    );
+  }
+
   try {
     let body: unknown;
     try {
@@ -150,8 +164,8 @@ export async function POST(req: Request) {
           const lead = await db.lead.create({
             data: {
               name: nameForLead,
-              email: (hasRealEmail ? leadEmail : "Not provided") as string,
-              phone: (hasRealPhone ? leadPhone : "Not provided") as string,
+              email: (hasRealEmail ? leadEmail : null) as string | null,
+              phone: (hasRealPhone ? leadPhone : null) as string | null,
               service: "AI Chat enquiry",
               message: `Captured from chat. Session: ${sessionId.substring(0, 8)}`,
               source: explicitSource,
