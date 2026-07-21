@@ -126,9 +126,16 @@ export async function POST(req: Request) {
     // the admin dashboard show whether emails actually went out. Even if
     // both fail, the lead is already saved (DB + Sheets) so we still return
     // ok:true to the user.
-    let emailStatus: { customerOk: boolean; ownerOk: boolean; customerMsg?: string; ownerMsg?: string } = {
+    //
+    // Email status aggregation:
+    //   - If SMTP is configured and succeeded → use SMTP result.
+    //   - If SMTP is NOT configured (skipped) → fall back to Apps Script
+    //     webhook's per-recipient status (customerEmail.sent / ownerEmail.sent).
+    //   - If SMTP failed but Apps Script webhook reported success → use Apps Script status.
+    let emailStatus: { customerOk: boolean; ownerOk: boolean; customerMsg?: string; ownerMsg?: string; source: 'smtp' | 'apps_script' | 'none' } = {
       customerOk: false,
       ownerOk: false,
+      source: 'none',
     }
     try {
       const [customerRes, ownerRes] = await Promise.all([
@@ -148,9 +155,34 @@ export async function POST(req: Request) {
         ownerOk: ownerRes.success,
         customerMsg: customerRes.message,
         ownerMsg: ownerRes.message,
+        source: 'smtp',
       }
-      if (!customerRes.success || !ownerRes.success) {
+      // If SMTP was skipped (not configured), pull email status from the
+      // Apps Script webhook response — that's the path that actually
+      // delivered the emails in this case.
+      const smtpSkipped =
+        customerRes.message.includes('SMTP not configured') &&
+        ownerRes.message.includes('SMTP not configured')
+      if (smtpSkipped && sheetsResult.ok && sheetsResult.response) {
+        const r = sheetsResult.response
+        const appsCustomerOk = r.customerEmail?.sent === true
+        const appsOwnerOk = r.ownerEmail?.sent === true
+        emailStatus = {
+          customerOk: appsCustomerOk,
+          ownerOk: appsOwnerOk,
+          customerMsg: appsCustomerOk
+            ? `Apps Script delivered customer email (sheet row ${r.sheetRow ?? 'n/a'})`
+            : `Apps Script customer email failed: ${r.customerEmail?.error ?? 'unknown error'}`,
+          ownerMsg: appsOwnerOk
+            ? `Apps Script delivered owner email (sheet row ${r.sheetRow ?? 'n/a'})`
+            : `Apps Script owner email failed: ${r.ownerEmail?.error ?? 'unknown error'}`,
+          source: 'apps_script',
+        }
+      }
+      if (!emailStatus.customerOk || !emailStatus.ownerOk) {
         console.error('[contact] email delivery partial failure', emailStatus)
+      } else {
+        console.log('[contact] emails delivered via', emailStatus.source, emailStatus)
       }
     } catch (err) {
       console.error('[contact] email-lead error', err)

@@ -29,7 +29,29 @@ export type LeadRow = {
   submittedAt?: string
 }
 
-export async function sendToGoogleSheets(row: LeadRow): Promise<{ ok: boolean; error?: string }> {
+/**
+ * Result of a Google Sheets webhook call.
+ *
+ * The Apps Script webhook now returns a richer response that includes
+ * per-recipient email delivery status. We surface that so the API route
+ * can include it in the response — this lets the admin dashboard show
+ * whether emails actually went out from the Apps Script side (the SMTP
+ * side is tracked separately via email-lead.ts).
+ */
+export interface SheetsResult {
+  ok: boolean
+  error?: string
+  /** Parsed JSON response from Apps Script (when ok). */
+  response?: {
+    ok?: boolean
+    sheetRow?: number
+    customerEmail?: { sent?: boolean; error?: string | null }
+    ownerEmail?: { sent?: boolean; error?: string | null }
+    [k: string]: unknown
+  }
+}
+
+export async function sendToGoogleSheets(row: LeadRow): Promise<SheetsResult> {
   const webhook = process.env.GOOGLE_SHEETS_WEBHOOK_URL
   if (!webhook) {
     return { ok: false, error: 'GOOGLE_SHEETS_WEBHOOK_URL not configured' }
@@ -91,10 +113,20 @@ export async function sendToGoogleSheets(row: LeadRow): Promise<{ ok: boolean; e
 
     // Check 3: If JSON, verify it contains {ok: true} (Apps Script convention).
     // Some deployments return {status: 'success'} — accept both.
+    // We also surface the full parsed response so callers can read the
+    // per-recipient email status returned by the Apps Script webhook.
     try {
       const json = JSON.parse(text)
       if (json.ok === true || json.status === 'success' || json.result === 'success') {
-        return { ok: true }
+        // Log email delivery status from Apps Script for debugging.
+        if (json.customerEmail || json.ownerEmail) {
+          console.log(
+            `[google-sheets] Apps Script email status:`,
+            `customer=${JSON.stringify(json.customerEmail)}`,
+            `owner=${JSON.stringify(json.ownerEmail)}`,
+          )
+        }
+        return { ok: true, response: json }
       }
       console.error('[google-sheets] Unexpected JSON response:', text.slice(0, 200))
       return { ok: false, error: `Unexpected JSON response: ${text.slice(0, 200)}` }

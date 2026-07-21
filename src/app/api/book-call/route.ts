@@ -117,9 +117,12 @@ export async function POST(req: Request) {
     // Send customer confirmation + owner notification emails.
     // Delivery path: SMTP (primary) → Apps Script webhook (fallback).
     // We AWAIT so we can surface email status in the response.
-    let emailStatus: { customerOk: boolean; ownerOk: boolean; customerMsg?: string; ownerMsg?: string } = {
+    // If SMTP is not configured, we pull email status from the Apps Script
+    // webhook response (customerEmail.sent / ownerEmail.sent).
+    let emailStatus: { customerOk: boolean; ownerOk: boolean; customerMsg?: string; ownerMsg?: string; source: 'smtp' | 'apps_script' | 'none' } = {
       customerOk: false,
       ownerOk: false,
+      source: 'none',
     }
     try {
       const [customerRes, ownerRes] = await Promise.all([
@@ -139,9 +142,31 @@ export async function POST(req: Request) {
         ownerOk: ownerRes.success,
         customerMsg: customerRes.message,
         ownerMsg: ownerRes.message,
+        source: 'smtp',
       }
-      if (!customerRes.success || !ownerRes.success) {
+      const smtpSkipped =
+        customerRes.message.includes('SMTP not configured') &&
+        ownerRes.message.includes('SMTP not configured')
+      if (smtpSkipped && sheetsResult.ok && sheetsResult.response) {
+        const r = sheetsResult.response
+        const appsCustomerOk = r.customerEmail?.sent === true
+        const appsOwnerOk = r.ownerEmail?.sent === true
+        emailStatus = {
+          customerOk: appsCustomerOk,
+          ownerOk: appsOwnerOk,
+          customerMsg: appsCustomerOk
+            ? `Apps Script delivered customer email (sheet row ${r.sheetRow ?? 'n/a'})`
+            : `Apps Script customer email failed: ${r.customerEmail?.error ?? 'unknown error'}`,
+          ownerMsg: appsOwnerOk
+            ? `Apps Script delivered owner email (sheet row ${r.sheetRow ?? 'n/a'})`
+            : `Apps Script owner email failed: ${r.ownerEmail?.error ?? 'unknown error'}`,
+          source: 'apps_script',
+        }
+      }
+      if (!emailStatus.customerOk || !emailStatus.ownerOk) {
         console.error('[book-call] email delivery partial failure', emailStatus)
+      } else {
+        console.log('[book-call] emails delivered via', emailStatus.source, emailStatus)
       }
     } catch (err) {
       console.error('[book-call] email-lead error', err)
