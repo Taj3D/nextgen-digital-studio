@@ -1,7 +1,7 @@
 "use client";
 
 import Script from "next/script";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 
 /**
@@ -67,8 +67,12 @@ export function AnalyticsPixels() {
 
       {/* Route-change pageview tracking for all 4 pixels.
           Next.js App Router is an SPA — without this, only the initial
-          page load is tracked. Every navigation needs an explicit pageview. */}
-      <PageViewTracker />
+          page load is tracked. Every navigation needs an explicit pageview.
+          Wrapped in Suspense because useSearchParams() requires a Suspense
+          boundary during static generation (e.g. /_not-found). */}
+      <Suspense fallback={null}>
+        <PageViewTracker />
+      </Suspense>
     </>
   );
 }
