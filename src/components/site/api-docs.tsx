@@ -339,13 +339,32 @@ export function ApiDocs() {
         {/* Webhooks note */}
         <div className="mt-8 rounded-2xl border border-border/60 bg-card p-6">
           <div className="flex items-center gap-2">
-            <Webhook className="h-5 w-5 text-blue-600" />
-            <h3 className="font-heading text-base font-bold">Webhooks (Coming Soon)</h3>
+            <Webhook className="h-5 w-5 text-emerald-500" />
+            <h3 className="font-heading text-base font-bold">Google Apps Script Webhook</h3>
+            <span className="rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-emerald-600">
+              Live
+            </span>
           </div>
           <p className="mt-2 text-sm text-muted-foreground">
-            Webhook support for real-time lead notifications is on our roadmap.
-            Subscribe to new lead events and get instant POST callbacks to your URL.
+            Every lead submitted via <code className="rounded bg-muted px-1 py-0.5 text-xs">/api/contact</code>,
+            <code className="rounded bg-muted px-1 py-0.5 text-xs">/api/book-call</code>, and
+            <code className="rounded bg-muted px-1 py-0.5 text-xs">/api/chat-save</code> is forwarded to a
+            Google Apps Script webhook that appends the row to Google Sheets and sends bilingual
+            (Bengali + English) confirmation emails to the customer + owner via <code>MailApp.sendEmail()</code>.
           </p>
+          <div className="mt-3 rounded-lg bg-muted/50 p-3 font-mono text-[11px] text-muted-foreground">
+            <div className="text-foreground/70">POST payload shape:</div>
+            <pre className="mt-1 overflow-x-auto">{`{
+  "name": "string",
+  "email": "string",
+  "phone": "string",
+  "company": "string",
+  "service": "string",
+  "message": "string",
+  "source": "string",
+  "status": "new"
+}`}</pre>
+          </div>
         </div>
 
         <p className="mt-8 text-center text-xs text-muted-foreground">

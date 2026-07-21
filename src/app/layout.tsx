@@ -12,6 +12,7 @@ import { SocialProof } from "@/components/site/social-proof";
 import { StickyBookBar } from "@/components/site/sticky-book-bar";
 import { AiChatWidget } from "@/components/site/ai-chat-widget";
 import { CookieConsentBanner } from "@/components/site/cookie-consent-banner";
+import { GodMode } from "@/components/site/god-mode";
 import { siteConfig, faqs } from "@/lib/site-data";
 
 // Premium font stack:
@@ -341,6 +342,8 @@ export default function RootLayout({
               <AiChatWidget />
               {/* Cookie consent banner (bottom-left, shows on first visit) */}
               <CookieConsentBanner />
+              {/* God Mode diagnostic super-panel (Ctrl+Shift+G) */}
+              <GodMode />
             </BookingModalProvider>
             <Toaster />
             <SonnerToaster position="bottom-right" />

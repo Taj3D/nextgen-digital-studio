@@ -49,19 +49,28 @@ const MORE_ITEMS: NavItem[] = [
   { key: 'nav.more.pdfBooks', href: '/pdf-books' },
 ]
 
-function handleAnchorClick(href: string) {
-  const isHome = window.location.pathname === '/'
-  if (isHome) {
-    const id = href.replace('/#', '')
-    const el = document.getElementById(id)
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      return
+// Anchor links point to homepage sections (`/#services`, `/#how`, etc.) so they
+// work from any route. On the homepage we smooth-scroll; on other routes we
+// navigate to the homepage with a full page load via window.location.assign()
+// which reliably handles hash navigation across routes. Next.js router.push
+// with a hash from a different path was unreliable in App Router.
+function useAnchorNav() {
+  return React.useCallback((href: string) => {
+    const isHome = window.location.pathname === '/'
+    if (isHome) {
+      const id = href.replace('/#', '')
+      const el = document.getElementById(id)
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        return
+      }
     }
-  }
-  // Not on homepage (or anchor not found) — navigate to homepage with anchor.
-  // Next.js will scroll to the section after the route change.
-  window.location.href = href
+    // Not on homepage (or anchor not found) — full navigation to homepage + hash.
+    // window.location.assign is used instead of router.push because App Router's
+    // router.push does not reliably scroll to hash anchors when navigating
+    // between different routes.
+    window.location.assign(href)
+  }, [])
 }
 
 function Logo({ onClick }: { onClick?: () => void }) {
@@ -124,12 +133,13 @@ function LangToggle() {
 
 function DesktopNav() {
   const { t } = useLang()
+  const navTo = useAnchorNav()
   return (
     <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
       {NAV_ITEMS.map((item) => (
         <button
           key={item.key}
-          onClick={() => handleAnchorClick(item.href)}
+          onClick={() => navTo(item.href)}
           className="relative rounded-full px-3.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
         >
           {t(item.key)}
@@ -165,11 +175,12 @@ function DesktopNav() {
 
 function CtaButton({ onClick }: { onClick?: () => void }) {
   const { t } = useLang()
+  const navTo = useAnchorNav()
   return (
     <Button
       onClick={() => {
         onClick?.()
-        handleAnchorClick('/#lead-form')
+        navTo('/#lead-form')
       }}
       className="animate-pulse-glow h-10 rounded-full border-0 bg-gradient-to-r from-emerald-500 via-emerald-500 to-teal-500 px-5 text-sm font-semibold text-white shadow-md hover:from-emerald-400 hover:to-teal-400"
     >
@@ -180,6 +191,7 @@ function CtaButton({ onClick }: { onClick?: () => void }) {
 
 export function Navbar() {
   const { t } = useLang()
+  const navTo = useAnchorNav()
   const [open, setOpen] = React.useState(false)
   const [scrolled, setScrolled] = React.useState(false)
 
@@ -248,7 +260,7 @@ export function Navbar() {
                     onClick={() => {
                       setOpen(false)
                       // wait for sheet close before anchor navigation
-                      setTimeout(() => handleAnchorClick(item.href), 80)
+                      setTimeout(() => navTo(item.href), 80)
                     }}
                     className="flex min-h-[48px] items-center rounded-lg px-3 text-left text-base font-medium text-foreground/90 transition-colors hover:bg-accent/60 hover:text-foreground"
                   >
@@ -277,7 +289,7 @@ export function Navbar() {
                 <CtaButton
                   onClick={() => {
                     setOpen(false)
-                    setTimeout(() => handleAnchorClick('/#lead-form'), 80)
+                    setTimeout(() => navTo('/#lead-form'), 80)
                   }}
                 />
               </div>
