@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { sendToGoogleSheets } from "@/lib/google-sheets";
+import { sendToGoogleSheets, type SheetsResult } from "@/lib/google-sheets";
 import { sendCustomerConfirmationEmail, sendOwnerNotificationEmail } from "@/lib/email-lead";
 import { trackEvent } from "@/lib/tracking";
 import { normalizeSource } from "@/lib/lead-sources";
@@ -115,7 +115,7 @@ export async function POST(req: Request) {
         ...(utmMedium ? { utmMedium } : {}),
         ...(utmCampaign ? { utmCampaign } : {}),
       },
-    }).catch((err) => {
+    }).catch((err): SheetsResult => {
       console.error("[contact] google sheets error", err);
       return { ok: false, error: err instanceof Error ? err.message : String(err) };
     });

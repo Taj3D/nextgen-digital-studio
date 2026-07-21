@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { sendToGoogleSheets } from "@/lib/google-sheets";
+import { sendToGoogleSheets, type SheetsResult } from "@/lib/google-sheets";
 import { sendCustomerConfirmationEmail, sendOwnerNotificationEmail } from "@/lib/email-lead";
 import { trackEvent } from "@/lib/tracking";
 import { normalizeSource } from "@/lib/lead-sources";
@@ -109,7 +109,7 @@ export async function POST(req: Request) {
       leadId,
       submittedAt: new Date().toISOString(),
       ...(preferredDate ? { meta: { preferredDate } } : {}),
-    }).catch((err) => {
+    }).catch((err): SheetsResult => {
       console.error("[book-call] google sheets error", err);
       return { ok: false, error: err instanceof Error ? err.message : String(err) };
     });
