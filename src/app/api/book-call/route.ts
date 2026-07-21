@@ -198,6 +198,13 @@ export async function POST(req: Request) {
       id: leadId,
       bookingId,
       email: emailStatus,
+      sheets: {
+        ok: sheetsResult.ok,
+        ...(sheetsResult.error ? { error: sheetsResult.error } : {}),
+        ...(sheetsResult.response?.sheetRow ? { sheetRow: sheetsResult.response.sheetRow } : {}),
+        ...(sheetsResult.response?.customerEmail ? { customerEmail: sheetsResult.response.customerEmail } : {}),
+        ...(sheetsResult.response?.ownerEmail ? { ownerEmail: sheetsResult.response.ownerEmail } : {}),
+      },
       ...(sheetsResult.ok ? {} : { warning: "Booking saved locally but Google Sheets sync failed." }),
     });
   } catch (err) {

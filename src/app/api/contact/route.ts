@@ -211,10 +211,20 @@ export async function POST(req: Request) {
     // if the Google Sheets webhook failed — the admin dashboard can show this.
     // Also include `emailStatus` so the admin dashboard can surface email
     // delivery issues (SMTP down, wrong credentials, etc.).
+    // Include `sheets` status with the full Apps Script response so the admin
+    // dashboard can show the Sheet row number + any per-recipient email status
+    // returned by the Apps Script webhook.
     return NextResponse.json({
       ok: true,
       id: leadId,
       email: emailStatus,
+      sheets: {
+        ok: sheetsResult.ok,
+        ...(sheetsResult.error ? { error: sheetsResult.error } : {}),
+        ...(sheetsResult.response?.sheetRow ? { sheetRow: sheetsResult.response.sheetRow } : {}),
+        ...(sheetsResult.response?.customerEmail ? { customerEmail: sheetsResult.response.customerEmail } : {}),
+        ...(sheetsResult.response?.ownerEmail ? { ownerEmail: sheetsResult.response.ownerEmail } : {}),
+      },
       ...(sheetsResult.ok ? {} : { warning: "Lead saved locally but Google Sheets sync failed." }),
     });
   } catch (err) {
