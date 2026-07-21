@@ -45,6 +45,18 @@ export interface SheetsResult {
   response?: {
     ok?: boolean
     sheetRow?: number
+    /** Spreadsheet ID (between /d/ and /edit in the URL). */
+    spreadsheetId?: string
+    /** Human-readable spreadsheet name (e.g. "NextGen Lead"). */
+    spreadsheetName?: string
+    /** Top-level URL to open the spreadsheet. */
+    spreadsheetUrl?: string
+    /** Tab name where the row was appended (e.g. "Leads"). */
+    sheetName?: string
+    /** Tab GID — needed to deep-link to a specific tab. */
+    sheetGid?: number
+    /** Direct deep-link URL that opens the spreadsheet scrolled to the row. */
+    rowUrl?: string
     customerEmail?: { sent?: boolean; error?: string | null }
     ownerEmail?: { sent?: boolean; error?: string | null }
     [k: string]: unknown
@@ -124,6 +136,18 @@ export async function sendToGoogleSheets(row: LeadRow): Promise<SheetsResult> {
             `[google-sheets] Apps Script email status:`,
             `customer=${JSON.stringify(json.customerEmail)}`,
             `owner=${JSON.stringify(json.ownerEmail)}`,
+          )
+        }
+        // Log where the row was saved so the user can find it without
+        // having to hunt through tabs (common confusion: leads go to the
+        // "Leads" tab, not "Sheet1").
+        if (json.spreadsheetName || json.sheetName || json.sheetRow) {
+          console.log(
+            `[google-sheets] Row saved:`,
+            `spreadsheet="${json.spreadsheetName ?? '?'}"`,
+            `tab="${json.sheetName ?? '?'}"`,
+            `row=${json.sheetRow ?? '?'}`,
+            json.rowUrl ? `url=${json.rowUrl}` : '',
           )
         }
         return { ok: true, response: json }

@@ -202,6 +202,13 @@ export async function POST(req: Request) {
         ok: sheetsResult.ok,
         ...(sheetsResult.error ? { error: sheetsResult.error } : {}),
         ...(sheetsResult.response?.sheetRow ? { sheetRow: sheetsResult.response.sheetRow } : {}),
+        // Surface where the row was saved so the user (and the admin dashboard)
+        // can jump straight to it — common confusion: leads go to the "Leads"
+        // tab, not "Sheet1", so just returning sheetRow: 16 isn't enough.
+        ...(sheetsResult.response?.spreadsheetName ? { spreadsheetName: sheetsResult.response.spreadsheetName } : {}),
+        ...(sheetsResult.response?.sheetName ? { sheetName: sheetsResult.response.sheetName } : {}),
+        ...(sheetsResult.response?.spreadsheetUrl ? { spreadsheetUrl: sheetsResult.response.spreadsheetUrl } : {}),
+        ...(sheetsResult.response?.rowUrl ? { rowUrl: sheetsResult.response.rowUrl } : {}),
         ...(sheetsResult.response?.customerEmail ? { customerEmail: sheetsResult.response.customerEmail } : {}),
         ...(sheetsResult.response?.ownerEmail ? { ownerEmail: sheetsResult.response.ownerEmail } : {}),
       },

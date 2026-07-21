@@ -34,6 +34,10 @@
  *   - Gmail daily quota: 100/day on free accounts, 500/day on Workspace.
  *     If you hit the quota, set SMTP_PASS in the project's .env to send
  *     directly from Next.js instead (500/day Gmail, 2000/day Workspace).
+ *   - If you can't find leads in the sheet: the response now includes
+ *     spreadsheetName, sheetName, spreadsheetUrl, and rowUrl — use these
+ *     to jump straight to the saved row. Leads go to the tab named in
+ *     SHEET_TAB_NAME (default 'Leads'), NOT 'Sheet1'.
  *
  * LAST UPDATED: 2026-07-21
  */
@@ -109,6 +113,17 @@ function doPost(e) {
       data.utmMedium || '',
       data.utmCampaign || ''
     ]);
+
+    // ─── 2b. Build a deep-link URL to the saved row ──────────────────
+    // Format: https://docs.google.com/spreadsheets/d/{id}/edit#gid={gid}&range=A{row}
+    // This lets the API response tell the user EXACTLY where to find the row,
+    // so they don't have to hunt through tabs.
+    var spreadsheetId = ss.getId();
+    var spreadsheetName = ss.getName();
+    var sheetName = sheet.getName();
+    var sheetGid = sheet.getSheetId();
+    var spreadsheetUrl = 'https://docs.google.com/spreadsheets/d/' + spreadsheetId + '/edit';
+    var rowUrl = spreadsheetUrl + '#gid=' + sheetGid + '&range=A' + rowNumber + ':N' + rowNumber;
 
     // ─── 3. Send customer confirmation email ────────────────────────
     var customerEmailResult = { sent: false, error: null };
@@ -236,9 +251,17 @@ function doPost(e) {
     }
 
     // ─── 5. Return aggregated result ────────────────────────────────
+    // Include spreadsheet + sheet metadata so the caller (and the admin
+    // dashboard) can deep-link the user straight to the saved row.
     return json({
       ok: true,
       sheetRow: rowNumber,
+      spreadsheetId: spreadsheetId,
+      spreadsheetName: spreadsheetName,
+      spreadsheetUrl: spreadsheetUrl,
+      sheetName: sheetName,
+      sheetGid: sheetGid,
+      rowUrl: rowUrl,
       customerEmail: customerEmailResult,
       ownerEmail: ownerEmailResult
     });
