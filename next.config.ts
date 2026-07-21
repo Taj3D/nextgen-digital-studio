@@ -11,6 +11,18 @@ const nextConfig: NextConfig = {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [],
   },
+  // Allow the sandbox preview panel domain (and any *.space-z.ai subdomain)
+  // to load /_next/* dev chunks. Without this, Next.js 16 treats the preview
+  // origin as cross-origin and the browser throws ChunkLoadError +
+  // "Invalid or unexpected token" because the layout chunk is blocked.
+  allowedDevOrigins: [
+    "preview-chat-7ab5994f-c017-4acd-ab7d-335149ba15a4.space-z.ai",
+    "*.space-z.ai",
+    "space-z.ai",
+    "localhost:3000",
+    "127.0.0.1:3000",
+    "0.0.0.0:3000",
+  ],
   async headers() {
     return [
       {
