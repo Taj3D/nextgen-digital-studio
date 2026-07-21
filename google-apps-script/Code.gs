@@ -80,7 +80,7 @@ function doPost(e) {
     var sheet;
     try {
       var ss = SpreadsheetApp.getActiveSpreadsheet();
-      sheet = SHEET_TAB_NAME ? ss.getSheetByName(SHEET_TAB_NAME) : ssgetActiveSheet();
+      sheet = SHEET_TAB_NAME ? ss.getSheetByName(SHEET_TAB_NAME) : ss.getActiveSheet();
       if (!sheet) sheet = ss.insertSheet(SHEET_TAB_NAME || 'Leads');
     } catch (sheetErr) {
       return json({ ok: false, error: 'Sheet access failed: ' + sheetErr.message });
