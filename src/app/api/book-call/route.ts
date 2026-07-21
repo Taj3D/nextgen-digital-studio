@@ -114,19 +114,38 @@ export async function POST(req: Request) {
       return { ok: false, error: err instanceof Error ? err.message : String(err) };
     });
 
-    // Send customer confirmation + owner notification emails (logged + persisted).
-    Promise.all([
-      sendCustomerConfirmationEmail({ name, email, phone, service: service ?? undefined, source }),
-      sendOwnerNotificationEmail({
-        name,
-        email,
-        phone,
-        company: company ?? undefined,
-        service: service ?? undefined,
-        message: message ?? undefined,
-        source,
-      }),
-    ]).catch((err) => console.error("[book-call] email-lead error", err));
+    // Send customer confirmation + owner notification emails.
+    // Delivery path: SMTP (primary) → Apps Script webhook (fallback).
+    // We AWAIT so we can surface email status in the response.
+    let emailStatus: { customerOk: boolean; ownerOk: boolean; customerMsg?: string; ownerMsg?: string } = {
+      customerOk: false,
+      ownerOk: false,
+    }
+    try {
+      const [customerRes, ownerRes] = await Promise.all([
+        sendCustomerConfirmationEmail({ name, email, phone, service: service ?? undefined, source }),
+        sendOwnerNotificationEmail({
+          name,
+          email,
+          phone,
+          company: company ?? undefined,
+          service: service ?? undefined,
+          message: message ?? undefined,
+          source,
+        }),
+      ])
+      emailStatus = {
+        customerOk: customerRes.success,
+        ownerOk: ownerRes.success,
+        customerMsg: customerRes.message,
+        ownerMsg: ownerRes.message,
+      }
+      if (!customerRes.success || !ownerRes.success) {
+        console.error('[book-call] email delivery partial failure', emailStatus)
+      }
+    } catch (err) {
+      console.error('[book-call] email-lead error', err)
+    }
 
     // Fire-and-forget: server-side tracking
     trackEvent({
@@ -147,10 +166,13 @@ export async function POST(req: Request) {
 
     // Return both bookingId (for the booking record) and leadId (for consistency
     // with /api/contact — admin CRM uses leadId to link activities).
+    // Also include `email` status so the admin dashboard can surface email
+    // delivery issues (SMTP down, wrong credentials, etc.).
     return NextResponse.json({
       ok: true,
       id: leadId,
       bookingId,
+      email: emailStatus,
       ...(sheetsResult.ok ? {} : { warning: "Booking saved locally but Google Sheets sync failed." }),
     });
   } catch (err) {

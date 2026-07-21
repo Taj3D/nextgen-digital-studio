@@ -120,21 +120,41 @@ export async function POST(req: Request) {
       return { ok: false, error: err instanceof Error ? err.message : String(err) };
     });
 
-    // Send customer confirmation + owner notification emails (logged + persisted
-    // as TrackingEvent rows for audit). Fire-and-forget — never blocks the response.
-    // The actual delivery is handled by the Google Apps Script webhook.
-    Promise.all([
-      sendCustomerConfirmationEmail({ name, email, phone, service: service ?? undefined, source }),
-      sendOwnerNotificationEmail({
-        name,
-        email,
-        phone,
-        company: company ?? undefined,
-        service: service ?? undefined,
-        message: message ?? undefined,
-        source,
-      }),
-    ]).catch((err) => console.error("[contact] email-lead error", err));
+    // Send customer confirmation + owner notification emails.
+    // Delivery path: SMTP (primary) → Apps Script webhook (fallback).
+    // We AWAIT so we can surface email status in the response — this helps
+    // the admin dashboard show whether emails actually went out. Even if
+    // both fail, the lead is already saved (DB + Sheets) so we still return
+    // ok:true to the user.
+    let emailStatus: { customerOk: boolean; ownerOk: boolean; customerMsg?: string; ownerMsg?: string } = {
+      customerOk: false,
+      ownerOk: false,
+    }
+    try {
+      const [customerRes, ownerRes] = await Promise.all([
+        sendCustomerConfirmationEmail({ name, email, phone, service: service ?? undefined, source }),
+        sendOwnerNotificationEmail({
+          name,
+          email,
+          phone,
+          company: company ?? undefined,
+          service: service ?? undefined,
+          message: message ?? undefined,
+          source,
+        }),
+      ])
+      emailStatus = {
+        customerOk: customerRes.success,
+        ownerOk: ownerRes.success,
+        customerMsg: customerRes.message,
+        ownerMsg: ownerRes.message,
+      }
+      if (!customerRes.success || !ownerRes.success) {
+        console.error('[contact] email delivery partial failure', emailStatus)
+      }
+    } catch (err) {
+      console.error('[contact] email-lead error', err)
+    }
 
     // Fire-and-forget: server-side tracking (GA4, Meta, TikTok, Snapchat Conversions API)
     trackEvent({
@@ -157,9 +177,12 @@ export async function POST(req: Request) {
 
     // Return success to user (lead is saved to DB). Include a `warning` field
     // if the Google Sheets webhook failed — the admin dashboard can show this.
+    // Also include `emailStatus` so the admin dashboard can surface email
+    // delivery issues (SMTP down, wrong credentials, etc.).
     return NextResponse.json({
       ok: true,
       id: leadId,
+      email: emailStatus,
       ...(sheetsResult.ok ? {} : { warning: "Lead saved locally but Google Sheets sync failed." }),
     });
   } catch (err) {
