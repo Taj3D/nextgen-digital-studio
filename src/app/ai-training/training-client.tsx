@@ -216,11 +216,20 @@ const FAQS = [
 /* -------------------------------------------------------------------------- */
 
 function useCountdown(deadline: Date) {
-  const [now, setNow] = React.useState(() => Date.now())
+  // Avoid hydration mismatch: `Date.now()` differs between server render and
+  // client hydration, which causes the countdown text (hours:minutes:seconds)
+  // to mismatch and throw a React hydration error. We render stable zeros on
+  // the server and the first client render, then start the real ticking
+  // countdown inside `useEffect` (client-only, after hydration completes).
+  const [now, setNow] = React.useState<number | null>(null)
   React.useEffect(() => {
+    setNow(Date.now())
     const id = setInterval(() => setNow(Date.now()), 1000)
     return () => clearInterval(id)
   }, [])
+  if (now === null) {
+    return { days: 0, hours: 0, minutes: 0, seconds: 0 }
+  }
   const diff = Math.max(0, deadline.getTime() - now)
   const days = Math.floor(diff / (1000 * 60 * 60 * 24))
   const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
