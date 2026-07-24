@@ -30,6 +30,24 @@ export function Reveal({
   )
 }
 
+/** Eyebrow — small uppercase label/badge placed above a section heading.
+ *  Exported here so section components can `import { Reveal, Eyebrow } from "../reveal"`. */
+export function Eyebrow({
+  children,
+  className = '',
+}: {
+  children: React.ReactNode
+  className?: string
+}) {
+  return (
+    <span
+      className={`inline-flex items-center gap-2 rounded-full border border-border bg-muted px-3 py-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground ${className}`}
+    >
+      {children}
+    </span>
+  )
+}
+
 export const staggerContainer: Variants = {
   hidden: {},
   show: {

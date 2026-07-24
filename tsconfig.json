@@ -41,6 +41,8 @@
     "examples",
     "mini-services",
     "upload",
-    "skills"
+    "skills",
+    "src/components/site/sections/_archive",
+    "src/hooks/_archive"
   ]
 }
