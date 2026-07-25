@@ -97,7 +97,7 @@ function StickyCTA({ isBn }: { isBn: boolean }) {
             {isBn ? 'আপনার পরিবারের স্মৃতি সংরক্ষণ করুন' : 'Preserve your family memory'}
           </p>
           <p className="truncate text-xs text-muted-foreground">
-            {isBn ? 'অগ্রিম পেমেন্ট নেই · প্রিভিউ পাবেন' : 'No advance · Preview before production'}
+            {isBn ? 'STL-এ অগ্রিম নেই · ফাইল প্রিভিউ দেখে পেমেন্ট' : 'No advance on STL · Pay after file preview'}
           </p>
         </div>
         <div className="flex w-full items-center gap-2 sm:w-auto">
@@ -215,11 +215,11 @@ export function PortraitClient() {
               <div className="mt-6 flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
                 <span className="inline-flex items-center gap-1.5">
                   <ShieldCheck className="h-4 w-4 text-emerald-600" />
-                  {isBn ? 'অগ্রিম পেমেন্ট নেই' : 'No advance payment'}
+                  {isBn ? 'STL-এ অগ্রিম নেই' : 'No advance on STL'}
                 </span>
                 <span className="inline-flex items-center gap-1.5">
                   <Eye className="h-4 w-4 text-amber-600" />
-                  {isBn ? 'প্রিভিউ পাবেন' : 'Preview before production'}
+                  {isBn ? '৩D প্রিভিউ অন্তর্ভুক্ত' : '3D preview included'}
                 </span>
                 <span className="inline-flex items-center gap-1.5">
                   <Users className="h-4 w-4 text-rose-600" />
@@ -476,7 +476,7 @@ export function PortraitClient() {
               {[
                 { n: 1, Icon: Camera, t: isBn ? 'ছবি পাঠান' : 'Send Photo', d: isBn ? 'WhatsApp-এ পাঠান — যেকোনো পুরোনো ছবি চলবে।' : 'Send on WhatsApp — any old photo works.' },
                 { n: 2, Icon: Eye, t: isBn ? 'প্রিভিউ দেখুন' : 'See Preview', d: isBn ? 'CNC খোদাইয়ের আগে ৩D প্রিভিউ পাবেন।' : 'Get a 3D preview before CNC carving.' },
-                { n: 3, Icon: Gift, t: isBn ? 'পেমেন্ট ও ডেলিভারি' : 'Pay & Receive', d: isBn ? 'কাজ দেখে পেমেন্ট — ঘরে ডেলিভারি।' : 'Pay after seeing work — home delivery.' },
+                { n: 3, Icon: Gift, t: isBn ? 'পেমেন্ট ও ডেলিভারি' : 'Pay & Receive', d: isBn ? 'STL: ফাইল প্রিভিউ দেখে পেমেন্ট। MDF/মহোগনি: অগ্রিম পেমেন্ট। ঘরে ডেলিভারি।' : 'STL: pay after file preview. MDF/Mahogany: advance payment. Home delivery.' },
               ].map(({ n, Icon, t, d }) => (
                 <div key={n} className="relative rounded-2xl border border-amber-200/50 bg-background p-6 text-center shadow-sm">
                   <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-500 to-rose-500 text-white shadow-lg">
@@ -766,9 +766,9 @@ export function PortraitClient() {
           </div>
           <div className="mt-10 grid gap-5 sm:grid-cols-3">
             {[
-              { Icon: Layers, t: isBn ? 'STL ডিজিটাল ফাইল' : 'STL Digital File', p: isBn ? '৳৫০০ থেকে' : 'From ৳500', d: isBn ? 'ডিজিটাল ফাইল — ৮ ঘণ্টায় ডেলিভারি। অগ্রিম পেমেন্ট নেই — ফাইল পেয়ে তারপর পেমেন্ট।' : 'Digital file — 8 hours delivery. No advance payment — pay after receiving file.', feat: isBn ? ['৮ ঘণ্টায়', 'ডিজিটাল', 'অগ্রিম পেমেন্ট নেই'] : ['8 hours', 'Digital', 'No advance payment'] },
-              { Icon: TreePine, t: isBn ? 'MDF বোর্ড' : 'MDF Board', p: isBn ? '৳৭,৫০০ থেকে' : 'From ৳7,500', d: isBn ? 'কালার + প্যাকিং + কুরিয়ার। ৭ দিনে ঘরে পাবেন।' : 'Color + packaging + courier. Home delivery in 7 days.', feat: isBn ? ['৭ দিনে', 'হ্যান্ড কালার', 'সারা দেশে ডেলিভারি'] : ['7 days', 'Hand colored', 'Nationwide delivery'], popular: true },
-              { Icon: Crown, t: isBn ? 'মহোগনি কাঠ' : 'Mahogany Wood', p: isBn ? '৳৮,৫০০ থেকে' : 'From ৳8,500', d: isBn ? 'প্রিমিয়াম কাঠ — ৫০+ বছর স্থায়ী। ১০ দিনে ডেলিভারি।' : 'Premium wood — lasts 50+ years. 10 days delivery.', feat: isBn ? ['৫০+ বছর', 'প্রিমিয়াম', 'উত্তরাধিকার'] : ['50+ years', 'Premium', 'Heirloom'] },
+              { Icon: Layers, t: isBn ? 'STL ডিজিটাল ফাইল' : 'STL Digital File', p: isBn ? '৳৫০০ থেকে' : 'From ৳500', d: isBn ? 'ডিজিটাল ফাইল — ৮ ঘণ্টায় ডেলিভারি। অগ্রিম পেমেন্ট নেই — ফাইল প্রিভিউ দেখে পেমেন্ট।' : 'Digital file — 8 hours delivery. No advance payment — pay after file preview.', feat: isBn ? ['৮ ঘণ্টায়', 'ডিজিটাল', 'ফাইল প্রিভিউ দেখে পেমেন্ট'] : ['8 hours', 'Digital', 'Pay after file preview'] },
+              { Icon: TreePine, t: isBn ? 'MDF বোর্ড' : 'MDF Board', p: isBn ? '৳৭,৫০০ থেকে' : 'From ৳7,500', d: isBn ? 'কালার + প্যাকিং + কুরিয়ার। অগ্রিম পেমেন্ট — কাজ শুরুর আগে। ৭ দিনে ঘরে পাবেন।' : 'Color + packaging + courier. Advance payment before production. Home delivery in 7 days.', feat: isBn ? ['৭ দিনে', 'হ্যান্ড কালার', 'অগ্রিম পেমেন্ট'] : ['7 days', 'Hand colored', 'Advance payment'], popular: true },
+              { Icon: Crown, t: isBn ? 'মহোগনি কাঠ' : 'Mahogany Wood', p: isBn ? '৳৮,৫০০ থেকে' : 'From ৳8,500', d: isBn ? 'প্রিমিয়াম কাঠ — ৫০+ বছর স্থায়ী। অগ্রিম পেমেন্ট — কাজ শুরুর আগে। ১০ দিনে ডেলিভারি।' : 'Premium wood — lasts 50+ years. Advance payment before production. 10 days delivery.', feat: isBn ? ['৫০+ বছর', 'প্রিমিয়াম', 'অগ্রিম পেমেন্ট'] : ['50+ years', 'Premium', 'Advance payment'] },
             ].map((m, i) => (
               <div key={i} className={`relative rounded-2xl border-2 p-6 shadow-sm ${m.popular ? 'border-amber-500 bg-amber-50/50 dark:bg-amber-950/20' : 'border-border/60 bg-card'}`}>
                 {m.popular && (
@@ -1008,13 +1008,13 @@ export function PortraitClient() {
             </h2>
             <p className="mx-auto mt-3 max-w-2xl text-[15px] leading-relaxed text-muted-foreground">
               {isBn
-                ? 'আপনার ঝুঁকি শূন্য। আমাদের ঝুঁকি সব। STL ফাইলের ক্ষেত্রে একদমই অগ্রিম পেমেন্ট নেই। যদি কাজ পছন্দ না হয় — পেমেন্ট করবেন না।'
-                : 'Your risk is zero. Our risk is everything. For STL files, there is absolutely no advance payment. If you don\'t love it — you don\'t pay.'}
+                ? 'STL ফাইলের ক্ষেত্রে একদমই অগ্রিম পেমেন্ট নেই — ফাইল প্রিভিউ দেখে পেমেন্ট। MDF ও মহোগনির ক্ষেত্রে অগ্রিম পেমেন্ট, তবে ৩D প্রিভিউ কনফার্ম করেই কাজ শুরু — সম্পূর্ণ সন্তুষ্টি গ্যারান্টি।'
+                : 'For STL files, there is absolutely no advance payment — you pay after seeing the file preview. For MDF and Mahogany, advance payment is required, but work begins only after you confirm the 3D preview — full satisfaction guarantee.'}
             </p>
             <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {[
                 { Icon: Eye, t: isBn ? 'প্রিভিউ পাবেন' : 'Preview First', d: isBn ? 'প্রোডাকশনের আগে' : 'Before production' },
-                { Icon: Lock, t: isBn ? 'অগ্রিম পেমেন্ট নেই' : 'No Advance Payment', d: isBn ? 'কাজ দেখে পেমেন্ট' : 'Pay after seeing work' },
+                { Icon: Lock, t: isBn ? 'STL-এ অগ্রিম নেই' : 'No Advance on STL', d: isBn ? 'ফাইল প্রিভিউ দেখে পেমেন্ট' : 'Pay after file preview' },
                 { Icon: RefreshCw, t: isBn ? 'ফ্রি রিভিশন' : 'Free Revisions', d: isBn ? 'আনলিমিটেড চেঞ্জ' : 'Unlimited changes' },
                 { Icon: Package, t: isBn ? 'সেফ প্যাকেজিং' : 'Safe Packaging', d: isBn ? 'ব্রেকেজ-প্রুফ' : 'Breakage-proof' },
                 { Icon: ShieldCheck, t: isBn ? 'কোয়ালিটি চেক' : 'Quality Check', d: isBn ? 'প্রতিটি অংশে' : 'On every part' },
@@ -1231,8 +1231,8 @@ export function PortraitClient() {
             </h2>
             <p className="mx-auto mt-3 max-w-xl text-sm text-white/90">
               {isBn
-                ? 'অগ্রিম পেমেন্ট নেই। প্রিভিউ দেখে পেমেন্ট। সারা দেশে ডেলিভারি।'
-                : 'No advance payment. Preview before payment. Nationwide delivery.'}
+                ? 'STL-এ অগ্রিম পেমেন্ট নেই — ফাইল প্রিভিউ দেখে পেমেন্ট। MDF/মহোগনিতে অগ্রিম পেমেন্ট। সারা দেশে ডেলিভারি।'
+                : 'No advance on STL — pay after file preview. MDF/Mahogany require advance payment. Nationwide delivery.'}
             </p>
           </div>
 
@@ -1266,8 +1266,8 @@ export function PortraitClient() {
                   serviceName={`3D Portrait — ${MATERIALS.find((m) => m.key === material)!.t_en} · ${faces} face(s) · ৳${price}`}
                   submitLabel={isBn ? 'আমার পরিবারের স্মৃতি রক্ষা করুন' : 'Protect Our Family Legacy'}
                   successMessage={isBn
-                    ? 'আপনার অর্ডার গ্রহণ করা হয়েছে! এখন ছবি WhatsApp-এ পাঠান। টিম কাজ শেষে দেখিয়ে পেমেন্ট নেবে।'
-                    : 'Order received! Now send your photo on WhatsApp. Team will show finished work before payment.'}
+                    ? 'আপনার অর্ডার গ্রহণ করা হয়েছে! এখন ছবি WhatsApp-এ পাঠান। টিম পেমেন্ট প্রক্রিয়া নিয়ে আলোচনা করবে — STL: ফাইল প্রিভিউ দেখে পেমেন্ট, MDF/মহোগনি: অগ্রিম পেমেন্ট।'
+                    : 'Order received! Now send your photo on WhatsApp. Our team will discuss the payment process — STL: pay after file preview, MDF/Mahogany: advance payment.'}
                 />
               </div>
 
@@ -1332,8 +1332,8 @@ function FAQSection({
     {
       q: isBn ? 'অগ্রিম পেমেন্ট দিতে হবে কি? STL ফাইলের ক্ষেত্রে?' : 'Do I need to pay any advance payment? What about STL files?',
       a: isBn
-        ? 'STL ডিজিটাল ফাইলের ক্ষেত্রে একদমই অগ্রিম পেমেন্ট নেই — ফাইল পেয়ে তারপর পেমেন্ট। MDF ও মহোগনির ক্ষেত্রেও প্রোডাকশনের আগে ৩D প্রিভিউ পাঠানো হয়, প্রিভিউ দেখে তারপর পেমেন্ট — কাজ পছন্দ না হলে পেমেন্ট করতে হবে না।'
-        : 'For STL digital files, there is absolutely no advance payment — you pay only after receiving the file. For MDF and Mahogany, we send a 3D preview before production; you pay only after approving the preview. If you don\'t love the work, you don\'t pay.',
+        ? 'STL ডিজিটাল ফাইলের ক্ষেত্রে একদমই অগ্রিম পেমেন্ট নেই — ফাইল প্রিভিউ দেখে পেমেন্ট। তবে MDF ও মহোগনি কাঠের ক্ষেত্রে অগ্রিম পেমেন্ট দিতে হবে — প্রিভিউ দেখে পেমেন্টের অপশন নেই। তবে প্রোডাকশনের আগে ৩D প্রিভিউ পাঠানো হয় এবং আপনার কনফার্মেশনের পরেই কাজ শুরু হয়।'
+        : 'For STL digital files, there is absolutely no advance payment — you pay after seeing the file preview. However, for MDF and Mahogany wood, advance payment is required — there is no pay-after-preview option. But we send a 3D preview before production, and work begins only after your confirmation.',
     },
     {
       q: isBn ? 'একসাথে কতজনের ফেস খোদাই করা যায়?' : 'How many faces can be carved in one portrait?',
@@ -1374,8 +1374,8 @@ function FAQSection({
     {
       q: isBn ? 'কিভাবে অর্ডার করব?' : 'How do I order?',
       a: isBn
-        ? 'তিনটি সহজ ধাপ: ১) WhatsApp-এ ছবি পাঠান বা ফর্ম পূরণ করুন, ২) উপাদান ও ফেস সংখ্যা নির্বাচন করুন, ৩) আমাদের টিম কল করবে ও কাজ দেখাবে। পেমেন্ট শুধুমাত্র কাজ দেখার পর।'
-        : 'Three simple steps: 1) Send your photo on WhatsApp or fill the order form, 2) Choose material and number of faces, 3) Our team calls you and delivers the finished portrait. Payment happens only after you see the finished work.',
+        ? 'তিনটি সহজ ধাপ: ১) WhatsApp-এ ছবি পাঠান বা ফর্ম পূরণ করুন, ২) উপাদান ও ফেস সংখ্যা নির্বাচন করুন, ৩) আমাদের টিম কল করবে ও পেমেন্ট প্রক্রিয়া নিয়ে আলোচনা করবে। STL: ফাইল প্রিভিউ দেখে পেমেন্ট। MDF/মহোগনি: অগ্রিম পেমেন্ট।'
+        : 'Three simple steps: 1) Send your photo on WhatsApp or fill the order form, 2) Choose material and number of faces, 3) Our team calls you to discuss the payment process. STL: pay after file preview. MDF/Mahogany: advance payment.',
     },
   ]
 

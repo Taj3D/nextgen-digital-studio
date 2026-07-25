@@ -50,7 +50,7 @@ const productLd = {
   '@type': 'Product',
   name: 'CNC 3D Wooden Portrait — Memory Preservation',
   description:
-    'Turn your precious photos into premium CNC-carved wooden portraits that last generations. Available in STL digital, MDF board, and Mahogany wood. 1-5 faces. No advance payment. Preview before production.',
+    'Turn your precious photos into premium CNC-carved wooden portraits that last generations. Available in STL digital, MDF board, and Mahogany wood. 1-5 faces. No advance payment on STL — pay after file preview. MDF/Mahogany: advance payment. 3D preview before production.',
   brand: { '@type': 'Brand', name: 'NextGen Digital Studio' },
   category: 'Memory Preservation / Personalised Gift',
   image: [
@@ -107,7 +107,7 @@ const faqLd = {
       name: 'Do I need to pay any advance payment? What about STL files?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'For STL digital files, there is absolutely no advance payment — you pay only after receiving the file. For MDF and Mahogany, we send a 3D preview before production; you pay only after approving the preview. If you do not love the work, you do not pay.',
+        text: 'For STL digital files, there is absolutely no advance payment — you pay after seeing the file preview. However, for MDF and Mahogany wood, advance payment is required — there is no pay-after-preview option. But we send a 3D preview before production, and work begins only after your confirmation.',
       },
     },
     {
@@ -192,7 +192,7 @@ export const metadata: Metadata = {
   title:
     'CNC 3D Wooden Portrait Bangladesh | Preserve Family Memories Forever — NextGen Digital Studio',
   description:
-    'Turn precious photos into premium CNC-carved wooden portraits that last generations. No advance payment. Preview before production. 1000+ families trust NextGen Digital Studio, Jessore. STL ৳500, MDF from ৳7,500, Mahogany from ৳8,500.',
+    'Turn precious photos into premium CNC-carved wooden portraits that last generations. No advance payment on STL files — pay after file preview. MDF/Mahogany require advance payment. 3D preview before production. 1000+ families trust NextGen Digital Studio, Jessore. STL ৳500, MDF from ৳7,500, Mahogany from ৳8,500.',
   keywords: [
     '3D wooden portrait Bangladesh',
     'CNC face carving',
@@ -232,7 +232,7 @@ export const metadata: Metadata = {
     title:
       'CNC 3D Wooden Portrait Bangladesh | Preserve Family Memories Forever',
     description:
-      'Turn precious photos into premium CNC-carved wooden portraits. No advance payment. Preview before production. 1000+ families trust us.',
+      'Turn precious photos into premium CNC-carved wooden portraits. No advance on STL — pay after file preview. MDF/Mahogany: advance payment. 3D preview included. 1000+ families trust us.',
     type: 'website',
     url: 'https://nextgendigitalstudio.com/3d-portrait',
     siteName: 'NextGen Digital Studio',
@@ -250,7 +250,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'CNC 3D Wooden Portrait Bangladesh | Preserve Memories Forever',
     description:
-      'Premium wooden portraits carved from your photos. Lasts generations. No advance payment.',
+      'Premium wooden portraits carved from your photos. Lasts generations. No advance on STL — pay after file preview.',
     images: ['/3d-gallery/1.jpg'],
   },
   category: 'Personalised Gifts',
