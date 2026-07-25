@@ -766,7 +766,7 @@ export function PortraitClient() {
           </div>
           <div className="mt-10 grid gap-5 sm:grid-cols-3">
             {[
-              { Icon: Layers, t: isBn ? 'STL ডিজিটাল ফাইল' : 'STL Digital File', p: isBn ? '৳৫০০ থেকে' : 'From ৳500', d: isBn ? 'ডিজিটাল ফাইল — ৮ ঘণ্টায় ডেলিভারি। নিজের প্রিন্টারে প্রিন্ট করুন।' : 'Digital file — 8 hours delivery. Print on your own 3D printer.', feat: isBn ? ['৮ ঘণ্টায়', 'ডিজিটাল', 'সবচেয়ে সস্তা'] : ['8 hours', 'Digital', 'Cheapest'] },
+              { Icon: Layers, t: isBn ? 'STL ডিজিটাল ফাইল' : 'STL Digital File', p: isBn ? '৳৫০০ থেকে' : 'From ৳500', d: isBn ? 'ডিজিটাল ফাইল — ৮ ঘণ্টায় ডেলিভারি। অগ্রিম পেমেন্ট নেই — ফাইল পেয়ে তারপর পেমেন্ট।' : 'Digital file — 8 hours delivery. No advance payment — pay after receiving file.', feat: isBn ? ['৮ ঘণ্টায়', 'ডিজিটাল', 'অগ্রিম পেমেন্ট নেই'] : ['8 hours', 'Digital', 'No advance payment'] },
               { Icon: TreePine, t: isBn ? 'MDF বোর্ড' : 'MDF Board', p: isBn ? '৳৭,৫০০ থেকে' : 'From ৳7,500', d: isBn ? 'কালার + প্যাকিং + কুরিয়ার। ৭ দিনে ঘরে পাবেন।' : 'Color + packaging + courier. Home delivery in 7 days.', feat: isBn ? ['৭ দিনে', 'হ্যান্ড কালার', 'সারা দেশে ডেলিভারি'] : ['7 days', 'Hand colored', 'Nationwide delivery'], popular: true },
               { Icon: Crown, t: isBn ? 'মহোগনি কাঠ' : 'Mahogany Wood', p: isBn ? '৳৮,৫০০ থেকে' : 'From ৳8,500', d: isBn ? 'প্রিমিয়াম কাঠ — ৫০+ বছর স্থায়ী। ১০ দিনে ডেলিভারি।' : 'Premium wood — lasts 50+ years. 10 days delivery.', feat: isBn ? ['৫০+ বছর', 'প্রিমিয়াম', 'উত্তরাধিকার'] : ['50+ years', 'Premium', 'Heirloom'] },
             ].map((m, i) => (
@@ -1008,8 +1008,8 @@ export function PortraitClient() {
             </h2>
             <p className="mx-auto mt-3 max-w-2xl text-[15px] leading-relaxed text-muted-foreground">
               {isBn
-                ? 'আপনার ঝুঁকি শূন্য। আমাদের ঝুঁকি সব। যদি কাজ পছন্দ না হয় — পেমেন্ট করবেন না।'
-                : 'Your risk is zero. Our risk is everything. If you don\'t love it — you don\'t pay.'}
+                ? 'আপনার ঝুঁকি শূন্য। আমাদের ঝুঁকি সব। STL ফাইলের ক্ষেত্রে একদমই অগ্রিম পেমেন্ট নেই। যদি কাজ পছন্দ না হয় — পেমেন্ট করবেন না।'
+                : 'Your risk is zero. Our risk is everything. For STL files, there is absolutely no advance payment. If you don\'t love it — you don\'t pay.'}
             </p>
             <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {[
@@ -1083,8 +1083,14 @@ export function PortraitClient() {
             </div>
             <div className="mt-8 grid gap-6 md:grid-cols-[1fr_2fr]">
               <div className="rounded-2xl border border-amber-200/50 bg-gradient-to-br from-amber-50 to-rose-50 p-6 text-center dark:from-amber-950/20 dark:to-rose-950/10">
-                <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-amber-500 to-rose-500 font-heading text-3xl font-bold text-white">
-                  T
+                <div className="mx-auto h-28 w-28 overflow-hidden rounded-full border-4 border-amber-300 shadow-lg shadow-amber-500/20 dark:border-amber-700/50">
+                  <Image
+                    src="/founder.png"
+                    alt={isBn ? 'Taj Bhai — NextGen Digital Studio-এর প্রতিষ্ঠাতা' : 'Taj Bhai — Founder of NextGen Digital Studio'}
+                    width={112}
+                    height={112}
+                    className="h-full w-full object-cover"
+                  />
                 </div>
                 <h3 className="mt-3 font-heading text-lg font-bold">Taj Bhai</h3>
                 <p className="text-xs text-muted-foreground">{isBn ? 'প্রতিষ্ঠাতা, NextGen Digital Studio' : 'Founder, NextGen Digital Studio'}</p>
@@ -1095,10 +1101,11 @@ export function PortraitClient() {
                 </div>
               </div>
               <div className="rounded-2xl border border-border/60 bg-card p-6 shadow-sm">
-                <p className="text-[15px] leading-relaxed text-muted-foreground">
+                <Quote className="h-8 w-8 text-amber-300" aria-hidden="true" />
+                <p className="mt-2 text-[15px] leading-relaxed text-muted-foreground">
                   {isBn
-                    ? '"আমি নিজে মা-কে হারিয়েছি। ছবি ফিকে হয়ে গিয়েছিল। সেই কষ্ট থেকেই NextGen জন্ম নিয়েছে — যাতে আর কেউ স্মৃতি না হারায়। প্রতিটি পোর্ট্রেট আমি নিজে তত্ত্বাবধান করি। ১০০০+ পরিবারের বিশ্বাস — এটাই আমার পুরস্কার।"'
-                    : '"I lost my own mother. Her photo had faded. From that pain, NextGen was born — so no one loses their memories. I personally oversee every portrait. The trust of 1000+ families — that\'s my reward."'}
+                    ? '"আমি নিজে আপনজন হারিয়েছি। ছবি ফিকে হয়ে গিয়েছিল। সেই কষ্ট থেকেই NextGen জন্ম নিয়েছে — যাতে আর কেউ স্মৃতি না হারায়। প্রতিটি পোর্ট্রেট আমি নিজে তত্ত্বাবধান করি। ১০০০+ পরিবারের বিশ্বাস — এটাই আমার পুরস্কার।"'
+                    : '"I lost my own loved one. The photo had faded. From that pain, NextGen was born — so no one loses their memories. I personally oversee every portrait. The trust of 1000+ families — that\'s my reward."'}
                 </p>
                 <div className="mt-4 flex flex-wrap gap-4 text-xs">
                   <span className="inline-flex items-center gap-1 text-muted-foreground">
@@ -1323,10 +1330,10 @@ function FAQSection({
 
   const faqs = [
     {
-      q: isBn ? 'অগ্রিম পেমেন্ট দিতে হবে কি?' : 'Do I need to pay any advance payment?',
+      q: isBn ? 'অগ্রিম পেমেন্ট দিতে হবে কি? STL ফাইলের ক্ষেত্রে?' : 'Do I need to pay any advance payment? What about STL files?',
       a: isBn
-        ? 'না। কোনো অগ্রিম পেমেন্ট নেই। কাজ শেষে দেখিয়ে পেমেন্ট নেওয়া হয়। প্রোডাকশনের আগে আপনাকে ৩D প্রিভিউ পাঠানো হয়।'
-        : 'No. There is absolutely no advance payment. You pay only after seeing the finished work. We send a 3D preview before production begins.',
+        ? 'STL ডিজিটাল ফাইলের ক্ষেত্রে একদমই অগ্রিম পেমেন্ট নেই — ফাইল পেয়ে তারপর পেমেন্ট। MDF ও মহোগনির ক্ষেত্রেও প্রোডাকশনের আগে ৩D প্রিভিউ পাঠানো হয়, প্রিভিউ দেখে তারপর পেমেন্ট — কাজ পছন্দ না হলে পেমেন্ট করতে হবে না।'
+        : 'For STL digital files, there is absolutely no advance payment — you pay only after receiving the file. For MDF and Mahogany, we send a 3D preview before production; you pay only after approving the preview. If you don\'t love the work, you don\'t pay.',
     },
     {
       q: isBn ? 'একসাথে কতজনের ফেস খোদাই করা যায়?' : 'How many faces can be carved in one portrait?',

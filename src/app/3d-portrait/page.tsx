@@ -104,10 +104,10 @@ const faqLd = {
   mainEntity: [
     {
       '@type': 'Question',
-      name: 'Do I need to pay any advance payment?',
+      name: 'Do I need to pay any advance payment? What about STL files?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'No. There is absolutely no advance payment. You pay only after seeing the finished work and approving it. We send you a preview before production begins.',
+        text: 'For STL digital files, there is absolutely no advance payment — you pay only after receiving the file. For MDF and Mahogany, we send a 3D preview before production; you pay only after approving the preview. If you do not love the work, you do not pay.',
       },
     },
     {
