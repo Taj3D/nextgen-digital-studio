@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { FounderClient } from './founder-client'
-import { founderFaqs } from '@/lib/founder-data'
+import { founderFaqs, founderFaqCategories, founderThoughtLeadership, founderPublications } from '@/lib/founder-data'
 
 /* -------------------------------------------------------------------------- */
 /*  EEAT-optimized JSON-LD                                                    */
@@ -120,6 +120,45 @@ const breadcrumbLd = {
   ],
 }
 
+/* Article schema for Thought Leadership pieces */
+const articleLd = founderThoughtLeadership.map((t) => ({
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: t.title.en,
+  description: t.thesis.en,
+  articleSection: t.category.en,
+  author: {
+    '@type': 'Person',
+    name: 'Md. Najmul Islam Taj',
+    url: 'https://nextgendigitalstudio.com/founder',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'NextGen Digital Studio',
+    url: 'https://nextgendigitalstudio.com',
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': 'https://nextgendigitalstudio.com/founder',
+  },
+}))
+
+/* Publication / CreativeWork schema */
+const publicationLd = founderPublications.map((p) => ({
+  '@context': 'https://schema.org',
+  '@type': p.type.en === 'Whitepaper' ? 'Whitepaper' : p.type.en === 'Research' ? 'ScholarlyArticle' : 'Article',
+  headline: p.title.en,
+  datePublished: `${p.year}`,
+  author: {
+    '@type': 'Person',
+    name: 'Md. Najmul Islam Taj',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'NextGen Digital Studio',
+  },
+}))
+
 export const metadata: Metadata = {
   title:
     'Taj Bhai — AI Business Strategist Bangladesh | Md. Najmul Islam Taj (Founder & CEO, NextGen Digital Studio)',
@@ -188,6 +227,22 @@ export default function FounderPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
       />
+      {/* Thought leadership articles */}
+      {articleLd.map((a, i) => (
+        <script
+          key={`art-${i}`}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(a) }}
+        />
+      ))}
+      {/* Publications / whitepapers / research */}
+      {publicationLd.map((p, i) => (
+        <script
+          key={`pub-${i}`}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(p) }}
+        />
+      ))}
       <FounderClient />
     </>
   )

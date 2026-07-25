@@ -136,8 +136,8 @@ export const founderManifesto = [
 /* ------------------------------------------------------------------ */
 
 export const founderFramework = {
-  title: { bn: 'তাজ এআই বিজনেস গ্রোথ ফ্রেমওয়ার্ক™', en: 'TAJ AI Business Growth Framework™' },
-  subtitle: { bn: 'আমার মালিকানাধীন ৫-ধাপের ফ্রেমওয়ার্ক', en: 'My proprietary 5-stage framework' },
+  title: { bn: 'তাজ এআই রেভিনিউ ওএস™', en: 'TAJ AI Revenue OS™' },
+  subtitle: { bn: 'আমার মালিকানাধীন ৫-ধাপের সিগনেচার সিস্টেম — রেভিনিউ অপারেটিং সিস্টেম', en: 'My proprietary 5-stage signature system — Revenue Operating System' },
   steps: [
     {
       num: { bn: '১', en: '1' },
@@ -445,8 +445,11 @@ export const founderOpenLetter = {
     },
   ],
   sign: { bn: '— তাজ ভাই', en: '— Taj Bhai' },
+  cta: {
+    bn: 'যদি আপনার ব্যবসা এখনও ম্যানুয়ালভাবে চলে, তাহলে হয়তো এখনই পরিবর্তনের সময়।',
+    en: 'If your business still runs manually, perhaps now is the time to change.',
+  },
 }
-
 /* ------------------------------------------------------------------ */
 /*  FOUNDER GUARANTEE                                                 */
 /* ------------------------------------------------------------------ */
@@ -461,8 +464,8 @@ export const founderGuarantee = {
 /* ------------------------------------------------------------------ */
 
 export const founderLegacy = {
-  bn: 'আমি এমন একটি বাংলাদেশ রেখে যেতে চাই যেখানে প্রতিটি ব্যবসা — ছোট হোক বা বড় — AI ব্যবহার করে বিশ্বে প্রতিযোগিতা করে। এমন একটি দেশ যেখানে উদ্যোক্তারা পুনরাবৃত্তিমূলক কাজে সময় নষ্ট করেন না — তারা ফোকাস করেন উদ্ভাবন ও প্রবৃদ্ধিতে। সেটাই আমি গড়ছি।',
-  en: 'I want to leave behind a Bangladesh where every business, no matter how small, uses AI to compete globally. A country where entrepreneurs don\'t waste time on repetitive tasks — they focus on innovation and growth. That\'s the future I\'m building.',
+  bn: 'আমি চাই না মানুষ আমাকে একজন AI Consultant হিসেবে মনে রাখুক। আমি চাই মানুষ মনে রাখুক — আমি হাজারো উদ্যোক্তার জীবন থেকে অপ্রয়োজনীয় কাজ সরিয়ে দিয়েছিলাম। আমি চাই বাংলাদেশের প্রতিটি ছোট ও মাঝারি ব্যবসায়ী — যে আজ রাত ১১টায় ফোন ধরে কাস্টমারের প্রশ্নের উত্তর দিচ্ছে — সে যেন একদিন সেই সময় তার সন্তানের সাথে কাটাতে পারে। সেই বাংলাদেশ আমি গড়ছি — একটি অটোমেশন, একটি এআই এজেন্ট, একটি ক্লায়েন্ট একই সময়ে।',
+  en: 'I don\'t want to be remembered as an AI Consultant. I want to be remembered as someone who removed unnecessary work from thousands of entrepreneurs\' lives. I want every Bangladeshi SME owner — who tonight is answering customer calls at 11 PM — to one day spend that time with their children. That Bangladesh is what I am building — one automation, one AI agent, one client at a time.',
 }
 
 /* ------------------------------------------------------------------ */
@@ -646,3 +649,674 @@ export const founderVision = {
     en: 'Build Bangladesh\'s most trusted AI Business Transformation Company. Help 10,000+ businesses adopt AI. In the future, Bangladesh will be a country where technology is accessible to all, education is AI-powered, business is automated, and every entrepreneur can compete globally.',
   },
 }
+
+/* ========================================================================== */
+/*  FOUNDER AUTHORITY OS™ — V5 ENHANCEMENTS                                    */
+/*  Adds: Thought Leadership, Why Me, Documentary Timeline, Enhanced          */
+/*  Principles, Book Lessons, Personal Metrics, Media Kit, Community          */
+/*  Platforms, Speaking Topics, Publications, Digital Signature, Final CTA.   */
+/* ========================================================================== */
+
+/* ------------------------------------------------------------------ */
+/*  ENHANCED FOUNDER PRINCIPLES (10 — with story, lesson, application)*/
+/* ------------------------------------------------------------------ */
+
+export const founderPrinciples = [
+  {
+    title: { bn: 'প্রযুক্তির কাজ হলো সময় বাঁচানো', en: 'Technology should save time' },
+    story: {
+      bn: 'এক ক্লায়েন্ট দৈনিক ৪ ঘন্টা একই কাস্টমার প্রশ্নের উত্তর দিতেন। একটি AI চ্যাটবট চালু করার পর তিনি সেই সময় নতুন বিজনেস ডেভেলপমেন্টে ব্যয় করতে পারলেন।',
+      en: 'A client spent 4 hours/day answering the same customer questions. After launching an AI chatbot, he redirected that time into new business development.',
+    },
+    lesson: {
+      bn: 'সময়ই সবচেয়ে দামি রিসোর্স — প্রযুক্তি তা ফিরিয়ে দেয়।',
+      en: 'Time is the most expensive resource — technology gives it back.',
+    },
+    application: {
+      bn: 'প্রতিটি পুনরাবৃত্তিমূলক কাজ চিহ্নিত করুন, অটোমেট করুন, মানুষকে উচ্চতর কাজে মোতায়েন করুন।',
+      en: 'Identify every repetitive task, automate it, redeploy humans on higher-value work.',
+    },
+  },
+  {
+    title: { bn: 'AI মানুষকে ক্ষমতায়ন করবে, প্রতিস্থাপন করবে না', en: 'AI should empower people, not replace them' },
+    story: {
+      bn: 'একটি রিয়েল এস্টেট কোম্পানি AI চালু করার পর ভয় পাচ্ছিল কর্মী ছাঁটাই হবে। ৬ মাসে তাদের টিম ৩ জন থেকে ৫ জনে বাড়ল — AI লিড বাড়াল, মানুষ ক্লোজিং করল।',
+      en: 'A real estate firm feared AI would cause layoffs. In 6 months their team grew from 3 to 5 — AI generated leads, humans closed them.',
+    },
+    lesson: {
+      bn: 'AI কাজ সরায় না, কাজের ধরন বদলায়।',
+      en: 'AI doesn\'t remove work — it changes the nature of work.',
+    },
+    application: {
+      bn: 'কর্মীদের বলুন "AI তোমার সহকারী", ভয় দূর করুন, তারপর প্রশিক্ষণ দিন।',
+      en: 'Tell employees "AI is your assistant", remove fear, then train them.',
+    },
+  },
+  {
+    title: { bn: 'অটোমেশন স্বাধীনতা তৈরি করে', en: 'Automation creates freedom' },
+    story: {
+      bn: 'এক উদ্যোক্তা ছুটির দিনেও ফোন ধরতেন। অটোমেশন চালু করার পর প্রথমবার তিনি ২ সপ্তাহ পরিবার নিয়ে বের হলেন — ব্যবসা চলতে লাগল একই গতিতে।',
+      en: 'An entrepreneur answered calls even on holidays. After automation, he took his family on a 2-week trip for the first time — business ran at the same pace.',
+    },
+    lesson: {
+      bn: 'স্বাধীনতাই প্রকৃত লাভ — টাকা নয়।',
+      en: 'Freedom is the true profit — not money.',
+    },
+    application: {
+      bn: 'প্রতিটি অটোমেশন মানে এক ঘন্টা স্বাধীনতা — সেটা পরিবার, স্বাস্থ্য, বা নতুন প্রজেক্টে ব্যয় করুন।',
+      en: 'Every automation = one hour of freedom — spend it on family, health, or new projects.',
+    },
+  },
+  {
+    title: { bn: 'ব্যবসায়িক প্রবৃদ্ধি পরিমেয় হওয়া উচিত', en: 'Business growth should be measurable' },
+    story: {
+      bn: 'এক ক্লায়েন্ট "ব্র্যান্ডিং" খরচ করছিলেন কিন্তু ফল মাপছিলেন না। আমরা ৫টি KPI চালু করলাম — ৩ মাসে দেখা গেল ২টি চ্যানেল ৮০% রেভিনিউ আনছে, বাকিগুলো বন্ধ করা হলো।',
+      en: 'A client spent on "branding" without measuring results. We set 5 KPIs — in 3 months we found 2 channels drove 80% of revenue, killed the rest.',
+    },
+    lesson: {
+      bn: 'যা মাপা যায় না, তা উন্নত করা যায় না।',
+      en: 'What cannot be measured cannot be improved.',
+    },
+    application: {
+      bn: 'প্রতিটি মার্কেটিং টাকার সাথে একটি KPI যুক্ত করুন। মাসে একবার রিভিউ করুন।',
+      en: 'Attach a KPI to every marketing dollar. Review monthly.',
+    },
+  },
+  {
+    title: { bn: 'সিস্টেম বিশৃঙ্খলাকে হারায়', en: 'Systems beat chaos' },
+    story: {
+      bn: 'একটি ই-কমার্স কোম্পানির অর্ডার ট্র্যাকিং ছিল WhatsApp-এ। অর্ডার হারিয়ে যেত ৩০%। একটি CRM চালু করার পর লস নেমে দাঁড়াল ২%।',
+      en: 'An e-commerce company tracked orders on WhatsApp. 30% of orders got lost. After CRM launch, loss dropped to 2%.',
+    },
+    lesson: {
+      bn: 'বিশৃঙ্খলা টাকা খায়। সিস্টেম টাকা বাঁচায়।',
+      en: 'Chaos eats money. Systems save money.',
+    },
+    application: {
+      bn: 'প্রতিটি প্রক্রিয়া ডকুমেন্ট করুন। তারপর সেটি অটোমেট করুন।',
+      en: 'Document every process. Then automate it.',
+    },
+  },
+  {
+    title: { bn: 'প্রতিটি পুনরাবৃত্তিমূলক কাজ একটি লুকানো খরচ', en: 'Every repetitive task is a hidden cost' },
+    story: {
+      bn: 'একজন সিইও নিজে ইনভয়েস বানাতেন দৈনিক ১ ঘন্টা। বছরে ৩৬৫ ঘন্টা = ৪৫ দিন। অটোমেশনে খরচ হলো ১ দিন, বাকি ৪৪ দিন সে নতুন ক্লায়েন্ট পাওয়ার কাজে লাগালেন।',
+      en: 'A CEO manually created invoices 1 hour/day = 365 hours/year = 45 days. Automation cost 1 day to build; he spent the saved 44 days acquiring new clients.',
+    },
+    lesson: {
+      bn: 'ছোট খরচ বছরে বিশাল হয়। অটোমেট করুন।',
+      en: 'Small costs compound into huge annual losses. Automate them.',
+    },
+    application: {
+      bn: 'এক সপ্তাহ সব কাজ টাইম-ট্র্যাক করুন। যা বারবার হয়, তা অটোমেট করুন।',
+      en: 'Time-track all tasks for one week. Whatever repeats — automate.',
+    },
+  },
+  {
+    title: { bn: 'বাংলাদেশের ভবিষ্যৎ AI-চালিত', en: 'Bangladesh\'s future is AI-powered' },
+    story: {
+      bn: 'ঢাকার এক পোশাক কারখানা AI-চালিত কোয়ালিটি চেক চালু করে ত্রুটি ৪০% কমাল। চীনের সাথে প্রতিযোগিতায় এখন তারা দামে ও মানে সমান।',
+      en: 'A Dhaka garment factory launched AI quality checks, cutting defects 40%. They now compete with China on both price and quality.',
+    },
+    lesson: {
+      bn: 'AI বাংলাদেশের জন্য বিলাস নয় — প্রতিযোগিতার হাতিয়ার।',
+      en: 'AI is not a luxury for Bangladesh — it is a competitive weapon.',
+    },
+    application: {
+      bn: 'প্রতিটি বাংলাদেশি ব্যবসায় অন্তত একটি AI প্রসেস চালু করুন — তা সাপ্লাই চেইন, সেলস, বা সাপোর্ট।',
+      en: 'Launch at least one AI process in every Bangladeshi business — supply chain, sales, or support.',
+    },
+  },
+  {
+    title: { bn: 'ছোট সিস্টেম পরিবর্তন বিশাল ফল দেয়', en: 'Small system changes create massive results' },
+    story: {
+      bn: 'এক ডেন্টিস্ট ক্লিনিকে শুধু অ্যাপয়েন্টমেন্ট রিমাইন্ডার অটোমেট করলাম। নো-শো ৪০% থেকে নেমে দাঁড়াল ৮%। মাসিক রেভিনিউ ২x।',
+      en: 'For a dentist, we only automated appointment reminders. No-shows dropped from 40% to 8%. Monthly revenue doubled.',
+    },
+    lesson: {
+      bn: 'বড় পরিবর্তনের দরকার নেই — সঠিক ছোট পরিবর্তন যথেষ্ট।',
+      en: 'No big change needed — the right small change is enough.',
+    },
+    application: {
+      bn: 'প্রথমে এমন একটি ব্যথা খুঁজুন যা সবচেয়ে বেশি টাকা কষ্ট দেয়। শুধু সেটাই অটোমেট করুন।',
+      en: 'Find the single pain that costs the most money. Automate only that first.',
+    },
+  },
+  {
+    title: { bn: 'লাভ শুধু টাকা নয় — স্বাধীনতা', en: 'Profit is not just money — it\'s freedom' },
+    story: {
+      bn: 'এক উদ্যোক্তা মাসে ১০ লাখ আয় করতেন কিন্তু দৈনিক ১৪ ঘন্টা কাজ। অটোমেশন চালু করার পর আয় একই, কাজ ৬ ঘন্টা। বাকি সময়ে তিনি নতুন স্টার্টআপ শুরু করলেন।',
+      en: 'An entrepreneur earned 1M/month but worked 14-hour days. After automation: same income, 6-hour days. He used freed time to start a new venture.',
+    },
+    lesson: {
+      bn: 'প্রকৃত লাভ = আয় − সময়ের মূল্য।',
+      en: 'True profit = income − value of time spent.',
+    },
+    application: {
+      bn: 'মাসিক লক্ষ্য শুধু আয় নয় — "ঘণ্টা কম কাজ" লক্ষ্য রাখুন।',
+      en: 'Set monthly goals not just for income — but for "fewer hours worked".',
+    },
+  },
+  {
+    title: { bn: 'এমন ব্যবসা বানান যা নিজে চলে, আপনাকে নয়', en: 'Build a business that runs itself, not you' },
+    story: {
+      bn: 'এক ক্লায়েন্ট বললেন, "আমি অসুস্থ হলে ব্যবসা বন্ধ হয়ে যায়।" ৬ মাসে আমরা ১৭টি প্রসেস অটোমেট করলাম। এখন সে ২ সপ্তাহ ছুটিতে গেলেও ব্যবসা চলে।',
+      en: 'A client said: "If I get sick, business stops." In 6 months we automated 17 processes. Now he can take 2-week vacations and business runs.',
+    },
+    lesson: {
+      bn: 'মালিক-নির্ভর ব্যবসা চাকরি, স্বাধীন ব্যবসা নয়।',
+      en: 'An owner-dependent business is a job, not freedom.',
+    },
+    application: {
+      bn: 'প্রতিটি কাজের জন্য নিজেকে প্রশ্ন করুন: "আমি না থাকলে এটা চলবে?" উত্তর না হলে অটোমেট করুন।',
+      en: 'For every task ask: "Will this run without me?" If no — automate.',
+    },
+  },
+]
+
+/* ------------------------------------------------------------------ */
+/*  WHY ME? (8 reasons to work with Taj)                              */
+/* ------------------------------------------------------------------ */
+
+export const founderWhyMe = [
+  {
+    icon: 'Terminal',
+    title: { bn: 'ইঞ্জিনিয়ার মাইন্ডসেট', en: 'Engineer Mindset' },
+    desc: {
+      bn: 'CNC ইঞ্জিনিয়ারিং থেকে AI আর্কিটেক্ট — প্রতিটি সমস্যা সিস্টেমাটিকভাবে বিশ্লেষণ করি।',
+      en: 'From CNC engineering to AI architecture — I analyze every problem systematically.',
+    },
+  },
+  {
+    icon: 'Lightbulb',
+    title: { bn: 'বিজনেস স্ট্র্যাটেজি', en: 'Business Strategy' },
+    desc: {
+      bn: 'শুধু টুল নয় — কোথায়, কেন, কী পরিমাপে AI লাগালে ROI আসবে সেই কৌশল দিই।',
+      en: 'Not just tools — I provide the strategy of where, why, and how much AI investment yields ROI.',
+    },
+  },
+  {
+    icon: 'Bot',
+    title: { bn: 'AI দক্ষতা', en: 'AI Expertise' },
+    desc: {
+      bn: 'OpenAI, Claude, Gemini, LangChain, n8n — প্রতিদিন ২ ঘন্টা নতুন AI নিয়ে এক্সপেরিমেন্ট।',
+      en: 'OpenAI, Claude, Gemini, LangChain, n8n — 2 hours daily experimenting with new AI.',
+    },
+  },
+  {
+    icon: 'MapPin',
+    title: { bn: 'লোকাল বাংলাদেশ অভিজ্ঞতা', en: 'Local Bangladesh Experience' },
+    desc: {
+      bn: '১২০+ বাংলাদেশি ব্যবসার সাথে কাজ — স্থানীয় চ্যালেঞ্জ, ভাষা, কালচার বুঝি।',
+      en: 'Worked with 120+ Bangladeshi businesses — I understand local challenges, language, culture.',
+    },
+  },
+  {
+    icon: 'Wrench',
+    title: { bn: 'প্র্যাকটিক্যাল ইমপ্লিমেন্টেশন', en: 'Practical Implementation' },
+    desc: {
+      bn: 'থিওরি নয় — হাত-মুখ গরম করে কোড লিখি, সিস্টেম বানাই, লাইভ করি।',
+      en: 'No theory — I roll up sleeves, write code, build systems, ship to production.',
+    },
+  },
+  {
+    icon: 'Handshake',
+    title: { bn: 'দীর্ঘমেয়াদী পার্টনারশিপ', en: 'Long-term Partnership' },
+    desc: {
+      bn: 'একবার ক্লায়েন্ট হলে বছর বছর সাথে থাকি — সিস্টেম মেইনটেইন, আপগ্রেড, অপটিমাইজ।',
+      en: 'Once a client, I stay for years — system maintenance, upgrades, optimization.',
+    },
+  },
+  {
+    icon: 'Rocket',
+    title: { bn: 'ROI ফোকাস', en: 'ROI Focus' },
+    desc: {
+      bn: '৬০ দিনে ROI না এলে ফ্রি কাজ। গড় ক্লায়েন্ট ৭.২x রিটার্ন পান।',
+      en: '60-day ROI guarantee or we work free. Average client gets 7.2x return.',
+    },
+  },
+  {
+    icon: 'GraduationCap',
+    title: { bn: 'কন্টিনিউয়াস সাপোর্ট', en: 'Continuous Support' },
+    desc: {
+      bn: 'ট্রেইনিং, ডকুমেন্টেশন, হোয়াটসঅ্যাপ সাপোর্ট — সিস্টেম চালু হওয়ার পরেও সাথে আছি।',
+      en: 'Training, documentation, WhatsApp support — I stay after the system goes live.',
+    },
+  },
+]
+
+/* ------------------------------------------------------------------ */
+/*  THOUGHT LEADERSHIP (6 industry opinion pieces)                    */
+/* ------------------------------------------------------------------ */
+
+export const founderThoughtLeadership = [
+  {
+    icon: 'AlertCircle',
+    category: { bn: 'AI ফেইলিওর', en: 'AI Failure' },
+    title: { bn: 'কেন বেশিরভাগ AI প্রজেক্ট ব্যর্থ হয়', en: 'Why Most AI Projects Fail' },
+    thesis: {
+      bn: '৭০% AI প্রজেক্ট ব্যর্থ হয় কারণ কোম্পানি টুল কেনে, কিন্তু প্রসেস ডিজাইন করে না। AI জাদু নয় — এটি খারাপ প্রসেসকে আরও খারাপ করে দ্রুত করে।',
+      en: '70% of AI projects fail because companies buy tools, not process design. AI is not magic — it makes bad processes faster.',
+    },
+    takeaway: {
+      bn: 'প্রথমে প্রসেস ঠিক করুন, তারপর AI বসান।',
+      en: 'Fix the process first, then deploy AI.',
+    },
+  },
+  {
+    icon: 'Building2',
+    category: { bn: 'বাংলাদেশ AI', en: 'Bangladesh AI' },
+    title: { bn: 'বাংলাদেশের জন্য AI-এর ভবিষ্যৎ', en: 'Future of Bangladesh AI' },
+    thesis: {
+      bn: '২০৩০ সালের মধ্যে বাংলাদেশের ৬০% ডিজিটাল কাজ AI দ্বারা অটোমেটেড হবে। যারা এখনই প্রস্তুতি নেবে তারা নেতৃত্ব দেবে, বাকিরা পিছিয়ে পড়বে।',
+      en: 'By 2030, 60% of Bangladesh\'s digital work will be AI-automated. Early adopters will lead, the rest will fall behind.',
+    },
+    takeaway: {
+      bn: 'আজকের ছোট পাইলট প্রজেক্ট আগামীকালের প্রতিযোগিতামূলক সুবিধা।',
+      en: 'Today\'s small pilot project is tomorrow\'s competitive advantage.',
+    },
+  },
+  {
+    icon: 'Users',
+    category: { bn: 'ওয়ার্কফোর্স', en: 'Workforce' },
+    title: { bn: 'AI কি কর্মী প্রতিস্থাপন করবে?', en: 'Will AI Replace Employees?' },
+    thesis: {
+      bn: 'AI কর্মী প্রতিস্থাপন করবে না — কিন্তু "AI ব্যবহার করতে জানা কর্মী" অজ্ঞ কর্মীকে প্রতিস্থাপন করবে। প্রশিক্ষণই একমাত্র সুরক্ষা।',
+      en: 'AI won\'t replace employees — but "employees who use AI" will replace those who don\'t. Training is the only safety.',
+    },
+    takeaway: {
+      bn: 'আপনার টিমকে আজই AI প্রশিক্ষণ দিন।',
+      en: 'Train your team on AI today.',
+    },
+  },
+  {
+    icon: 'CalendarCheck',
+    category: { bn: 'প্রেডিকশন', en: 'Prediction' },
+    title: { bn: '২০২৭: AI ইকোনমির ৫টি পূর্বাভাস', en: '2027: 5 AI Economy Predictions' },
+    thesis: {
+      bn: '১) প্রতিটি SME-এর AI এজেন্ট থাকবে। ২) ভয়েস AI চ্যাটবট প্রতিস্থাপন করবে। ৩) লোকাল ভাষায় AI প্রধান হবে। ৪) AI মার্কেটিং ডিফল্ট হবে। ৫) "AI Operator" নতুন জব টাইটল।',
+      en: '1) Every SME will have AI agents. 2) Voice AI will replace chatbots. 3) Local-language AI will dominate. 4) AI marketing becomes default. 5) "AI Operator" emerges as new job title.',
+    },
+    takeaway: {
+      bn: 'যে বছর দুই আগে প্রস্তুতি নেবে, সে বাজার দখল করবে।',
+      en: 'Those who prepare two years early will capture the market.',
+    },
+  },
+  {
+    icon: 'ShieldCheck',
+    category: { bn: 'AI এথিক্স', en: 'AI Ethics' },
+    title: { bn: 'AI এথিক্স — বাংলাদেশি প্রেক্ষাপট', en: 'AI Ethics — Bangladeshi Context' },
+    thesis: {
+      bn: 'কাস্টমার ডেটা সুরক্ষা, স্বচ্ছ AI সিদ্ধান্ত, ভুল তথ্য প্রতিরোধ — এই তিনটি পাইলারে বাংলাদেশি AI এথিক্স গড়ে তুলতে হবে। নিয়ম না মানলে ব্র্যান্ড ট্রাস্ট ধ্বংস হবে।',
+      en: 'Customer data protection, transparent AI decisions, misinformation prevention — Bangladeshi AI ethics must rest on these three pillars. Violations destroy brand trust.',
+    },
+    takeaway: {
+      bn: 'AI চালু করার আগে এথিক্স পলিসি লিখুন।',
+      en: 'Write your AI ethics policy before launching AI.',
+    },
+  },
+  {
+    icon: 'ShoppingBag',
+    category: { bn: 'SME ভবিষ্যৎ', en: 'SME Future' },
+    title: { bn: 'SME-এর জন্য AI — টিকে থাকা না বড় হওয়া', en: 'AI for SMEs — Survive or Scale' },
+    thesis: {
+      bn: 'ছোট ব্যবসার জন্য AI এখন অপশন নয় — টিকে থাকার শর্ত। যে SME এখনও ম্যানুয়াল প্রসেসে আছে, সে ৩ বছরে প্রতিযোগী হারাবে।',
+      en: 'For small businesses AI is no longer optional — it is survival. SMEs still on manual processes will lose to competitors within 3 years.',
+    },
+    takeaway: {
+      bn: 'আজই একটি পাইলট AI প্রজেক্ট শুরু করুন।',
+      en: 'Start one pilot AI project today.',
+    },
+  },
+]
+
+/* ------------------------------------------------------------------ */
+/*  BOOK LESSONS (replaces founderReadingList with richer data)       */
+/* ------------------------------------------------------------------ */
+
+export const founderBooks = [
+  {
+    title: '$100M Offers',
+    author: 'Alex Hormozi',
+    lesson: {
+      bn: 'এমন অফার বানান যা ক্লায়েন্ট "না" বলতে পারে না — মূল্য বাড়ান, ঝুঁকি কমান।',
+      en: 'Build offers clients cannot refuse — increase perceived value, remove risk.',
+    },
+  },
+  {
+    title: 'Building a StoryBrand',
+    author: 'Donald Miller',
+    lesson: {
+      bn: 'কাস্টমার হিরো, আপনি গাইড — তাদের সমস্যা, সমাধান, সাফল্যের গল্প বলুন।',
+      en: 'Customer is hero, you are guide — tell their problem, solution, success story.',
+    },
+  },
+  {
+    title: 'Eat That Frog!',
+    author: 'Brian Tracy',
+    lesson: {
+      bn: 'সকালে সবচেয়ে কঠিন কাজটি আগে শেষ করুন — বাকি দিনটি সহজ হয়ে যায়।',
+      en: 'Tackle the hardest task first thing in the morning — the rest of the day becomes easy.',
+    },
+  },
+  {
+    title: 'Atomic Habits',
+    author: 'James Clear',
+    lesson: {
+      bn: '১% উন্নতি প্রতিদিন — বছরে ৩৭x। ছোট অভ্যাসই বিশাল ফল দেয়।',
+      en: '1% improvement daily = 37x yearly. Small habits create massive results.',
+    },
+  },
+  {
+    title: 'Deep Work',
+    author: 'Cal Newport',
+    lesson: {
+      bn: 'ফোন বন্ধ করে ৯০ মিনিট গভীর কাজ — এটাই প্রিমিয়াম প্রোডাক্টিভিটি।',
+      en: 'Phone off, 90 minutes of deep work — this is premium productivity.',
+    },
+  },
+  {
+    title: 'Psychology of Money',
+    author: 'Morgan Housel',
+    lesson: {
+      bn: 'ধনী হওয়া আয়ের বিষয় নয় — সঞ্চয় ও ধৈর্যের বিষয়। সময়ই প্রকৃত কম্পাউন্ড।',
+      en: 'Wealth is about saving and patience, not income. Time is the true compounder.',
+    },
+  },
+]
+
+/* ------------------------------------------------------------------ */
+/*  PERSONAL METRICS (expanded impact counters — 10 metrics)          */
+/* ------------------------------------------------------------------ */
+
+export const founderPersonalMetrics = [
+  { num: '120+', label: { bn: 'ব্যবসা সাহায্য', en: 'Businesses helped' } },
+  { num: '50K+', label: { bn: 'ঘন্টা সাশ্রয়', en: 'Hours saved' } },
+  { num: '$2M+', label: { bn: 'রেভিনিউ জেনারেটেড', en: 'Revenue generated' } },
+  { num: '2.4M+', label: { bn: 'AI কথোপকথন', en: 'AI conversations' } },
+  { num: '180+', label: { bn: 'AI এজেন্ট বিল্ট', en: 'AI agents built' } },
+  { num: '95+', label: { bn: 'সেলস ফানেল', en: 'Sales funnels built' } },
+  { num: '320+', label: { bn: 'অটোমেশন ওয়ার্কফ্লো', en: 'Automation workflows' } },
+  { num: '4,200+', label: { bn: 'ক্লায়েন্ট মিটিং', en: 'Client meetings' } },
+  { num: '850+', label: { bn: 'স্পিকিং ঘন্টা', en: 'Speaking hours' } },
+  { num: '3,000+', label: { bn: 'কমিউনিটি সদস্য', en: 'Community members' } },
+]
+
+/* ------------------------------------------------------------------ */
+/*  DOCUMENTARY TIMELINE (year-by-year: problem, decision, challenge, */
+/*  success, lesson) — replaces founderVisionTimeline                 */
+/* ------------------------------------------------------------------ */
+
+export const founderDocumentary = [
+  {
+    year: '2017',
+    problem: { bn: 'ইঞ্জিনিয়ারিং পড়ুয়া, কোনো আয় নেই।', en: 'Engineering student, no income.' },
+    decision: { bn: 'CNC ডিজাইন ও ডিজিটাল ফ্যাব্রিকেশন শিখি।', en: 'Learn CNC design & digital fabrication.' },
+    challenge: { bn: 'ইন্টারনেট স্লো, টাকা নেই, পরিবার চাপ।', en: 'Slow internet, no money, family pressure.' },
+    success: { bn: 'প্রথম ফ্রিল্যান্স ক্লায়েন্ট — ৫০০ টাকা।', en: 'First freelance client — ৳500.' },
+    lesson: { bn: 'শূন্য থেকে শুরু করলে শুধু উপরের দিকেই যাওয়া যায়।', en: 'Starting from zero means you can only go up.' },
+  },
+  {
+    year: '2019',
+    problem: { bn: 'বাংলাদেশি ব্যবসা ম্যানুয়াল কাজে আটকা।', en: 'Bangladeshi businesses stuck in manual work.' },
+    decision: { bn: 'ডিজিটাল সলিউশন দেওয়া শুরু করি।', en: 'Start offering digital solutions.' },
+    challenge: { bn: 'ক্লায়েন্ট ডিজিটাল বিশ্বাস করে না।', en: 'Clients don\'t trust digital.' },
+    success: { bn: '১০তম ক্লায়েন্ট — প্রথম ১ লাখ টাকা মাইলস্টোন।', en: '10th client — first ৳100K milestone.' },
+    lesson: { bn: 'বিশ্বাস তৈরি করতে সময় লাগে, কিন্তু এটাই পুঁজি।', en: 'Trust takes time to build, but it is the real capital.' },
+  },
+  {
+    year: '2021',
+    problem: { bn: 'প্রতিটি ক্লায়েন্ট একই সমস্যা — সাপোর্ট বোঝা।', en: 'Every client has the same problem — support burden.' },
+    decision: { bn: 'চ্যাটবট ও অটোমেশন শিখি।', en: 'Learn chatbots & automation.' },
+    challenge: { bn: 'AI টুল সীমিত, ডকুমেন্টেশন ইংরেজি।', en: 'AI tools limited, docs in English.' },
+    success: { bn: 'প্রথম AI চ্যাটবট — ক্লায়েন্ট রেভিনিউ ২x।', en: 'First AI chatbot — client revenue 2x.' },
+    lesson: { bn: 'AI শুধু টেক নয় — বিজনেস লেভারেজ।', en: 'AI is not just tech — it is business leverage.' },
+  },
+  {
+    year: '2022',
+    problem: { bn: 'চ্যাটবট রিডিউস করছে, কিন্তু প্রসেস এখনও ভাঙা।', en: 'Chatbots reduce load, but processes still broken.' },
+    decision: { bn: 'NextGen Digital Studio প্রতিষ্ঠা।', en: 'Found NextGen Digital Studio.' },
+    challenge: { bn: 'টিম গঠন, ব্র্যান্ডিং, সার্ভিস ডিজাইন।', en: 'Team building, branding, service design.' },
+    success: { bn: '৫০তম ক্লায়েন্ট, প্রথম কর্পোরেট চুক্তি।', en: '50th client, first corporate contract.' },
+    lesson: { bn: 'একা স্কেল করা যায় না — টিম ও সিস্টেম লাগে।', en: 'You cannot scale alone — you need team & systems.' },
+  },
+  {
+    year: '2024',
+    problem: { bn: 'বাংলাদেশি ব্যবসা AI সম্ভাবনা বুঝছে না।', en: 'Bangladeshi businesses don\'t understand AI potential.' },
+    decision: { bn: 'TAJ AI Revenue OS™ ফ্রেমওয়ার্ক লঞ্চ।', en: 'Launch TAJ AI Revenue OS™ framework.' },
+    challenge: { bn: 'শিক্ষা দিতে হয়, তারপর বিক্রি।', en: 'Must educate first, then sell.' },
+    success: { bn: '১০০+ ক্লায়েন্ট, ৭.২x গড় ROI, আন্তর্জাতিক স্পিকিং।', en: '100+ clients, 7.2x avg ROI, international speaking.' },
+    lesson: { bn: 'ফ্রেমওয়ার্কই প্রিমিয়াম — ঘণ্টা নয়।', en: 'Frameworks command premium — not hours.' },
+  },
+  {
+    year: '2027',
+    problem: { bn: 'বাংলাদেশ AI গ্রহণে পিছিয়ে।', en: 'Bangladesh lags in AI adoption.' },
+    decision: { bn: '১০,০০০+ ব্যবসায় AI পৌঁছানোর মিশন।', en: 'Mission to bring AI to 10,000+ businesses.' },
+    challenge: { bn: 'স্কেল, ক্যাপিটাল, ট্যালেন্ট পুল।', en: 'Scale, capital, talent pool.' },
+    success: { bn: 'লক্ষ্য: দক্ষিণ এশিয়ার AI হাব।', en: 'Goal: South Asia\'s AI hub.' },
+    lesson: { bn: 'মিশন ব্যক্তিগত নয় — জাতীয়।', en: 'Mission is not personal — it is national.' },
+  },
+]
+
+/* ------------------------------------------------------------------ */
+/*  MEDIA KIT — "Available for Media" + appearances                   */
+/* ------------------------------------------------------------------ */
+
+export const founderMediaKit = {
+  available: {
+    title: { bn: 'মিডিয়ার জন্য উপলব্ধ', en: 'Available for Media' },
+    desc: {
+      bn: 'পডকাস্ট, ইন্টারভিউ, ওয়েবিনার, কনফারেন্স — AI, অটোমেশন ও বাংলাদেশ ডিজিটাল ইকোনমি বিষয়ে।',
+      en: 'Available for podcasts, interviews, webinars, conferences — on AI, automation, Bangladesh digital economy.',
+    },
+    topics: [
+      { bn: 'AI ফর স্মল বিজনেস', en: 'AI for Small Business' },
+      { bn: 'বাংলাদেশ AI ইকোনমি', en: 'Bangladesh AI Economy' },
+      { bn: 'অটোমেশন স্ট্র্যাটেজি', en: 'Automation Strategy' },
+      { bn: 'AI এথিক্স', en: 'AI Ethics' },
+    ],
+  },
+  appearances: [
+    { outlet: { bn: 'YouTube চ্যানেল', en: 'YouTube Channel' }, desc: { bn: 'AI টিউটোরিয়াল ও কেস স্টাডি', en: 'AI tutorials & case studies' } },
+    { outlet: { bn: 'ফেসবুক লাইভ', en: 'Facebook Live' }, desc: { bn: 'সাপ্তাহিক AI কিউ এন্ড এ', en: 'Weekly AI Q&A' } },
+    { outlet: { bn: 'লিংকডইন আর্টিকেল', en: 'LinkedIn Articles' }, desc: { bn: 'থট লিডারশিপ পিস', en: 'Thought leadership pieces' } },
+    { outlet: { bn: 'পডকাস্ট', en: 'Podcasts' }, desc: { bn: 'AI ও ব্যবসা নিয়ে আলোচনা', en: 'Discussions on AI & business' } },
+    { outlet: { bn: 'কর্পোরেট সেমিনার', en: 'Corporate Seminars' }, desc: { bn: 'এন্টারপ্রাইজ AI ট্রান্সফর্মেশন', en: 'Enterprise AI transformation' } },
+    { outlet: { bn: 'বিশ্ববিদ্যালয় ওয়ার্কশপ', en: 'University Workshops' }, desc: { bn: 'নতুন প্রজন্মের জন্য AI', en: 'AI for next generation' } },
+  ],
+}
+
+/* ------------------------------------------------------------------ */
+/*  COMMUNITY PLATFORMS                                                */
+/* ------------------------------------------------------------------ */
+
+export const founderCommunityPlatforms = [
+  {
+    icon: 'Users',
+    name: { bn: 'ফেসবুক গ্রুপ', en: 'Facebook Group' },
+    desc: { bn: 'AI বাংলাদেশ কমিউনিটি', en: 'AI Bangladesh Community' },
+    members: { bn: '৩,০০০+ সদস্য', en: '3,000+ members' },
+  },
+  {
+    icon: 'Bot',
+    name: { bn: 'ডিসকর্ড সার্ভার', en: 'Discord Server' },
+    desc: { bn: 'AI বিল্ডার ও ডেভেলপার', en: 'AI builders & developers' },
+    members: { bn: '৮০০+ সদস্য', en: '800+ members' },
+  },
+  {
+    icon: 'Handshake',
+    name: { bn: 'হোয়াটসঅ্যাপ কমিউনিটি', en: 'WhatsApp Community' },
+    desc: { bn: 'দৈনিক AI আপডেট ও সাপোর্ট', en: 'Daily AI updates & support' },
+    members: { bn: '১,২০০+ সদস্য', en: '1,200+ members' },
+  },
+  {
+    icon: 'Send',
+    name: { bn: 'সাপ্তাহিক নিউজলেটার', en: 'Weekly Newsletter' },
+    desc: { bn: 'AI গ্রোথ ইনসাইটস', en: 'AI growth insights' },
+    members: { bn: '৫,০০০+ সাবস্ক্রাইবার', en: '5,000+ subscribers' },
+  },
+  {
+    icon: 'Sparkles',
+    name: { bn: 'AI সার্কেল', en: 'AI Circle' },
+    desc: { bn: 'প্রাইভেট মাস্টারমাইন্ড', en: 'Private mastermind' },
+    members: { bn: '৫০ সিট (আমন্ত্রণমূলক)', en: '50 seats (invite only)' },
+  },
+  {
+    icon: 'Crown',
+    name: { bn: 'ফাউন্ডার ক্লাব', en: 'Founder Club' },
+    desc: { bn: 'CEO-দের জন্য এক্সক্লুসিভ', en: 'Exclusive for CEOs' },
+    members: { bn: '২৫ সিট (আমন্ত্রণমূলক)', en: '25 seats (invite only)' },
+  },
+]
+
+/* ------------------------------------------------------------------ */
+/*  SPEAKING TOPICS (EEAT)                                             */
+/* ------------------------------------------------------------------ */
+
+export const founderSpeakingTopics = [
+  {
+    icon: 'Mic',
+    title: { bn: 'AI ফর স্মল বিজনেস — প্র্যাকটিক্যাল রোডম্যাপ', en: 'AI for Small Business — Practical Roadmap' },
+    duration: '45-60 min',
+  },
+  {
+    icon: 'Rocket',
+    title: { bn: 'TAJ AI Revenue OS™ — ফ্রেমওয়ার্ক ডিপ ডাইভ', en: 'TAJ AI Revenue OS™ — Framework Deep Dive' },
+    duration: '60-90 min',
+  },
+  {
+    icon: 'Building2',
+    title: { bn: 'এন্টারপ্রাইজ AI ট্রান্সফর্মেশন', en: 'Enterprise AI Transformation' },
+    duration: '60 min',
+  },
+  {
+    icon: 'GraduationCap',
+    title: { bn: 'AI ক্যারিয়ার — নতুন প্রজন্মের জন্য', en: 'AI Careers — For the Next Generation' },
+    duration: '45 min',
+  },
+  {
+    icon: 'Lightbulb',
+    title: { bn: 'বাংলাদেশ ২০৩০: AI ইকোনমি', en: 'Bangladesh 2030: AI Economy' },
+    duration: '30-45 min (keynote)',
+  },
+  {
+    icon: 'ShieldCheck',
+    title: { bn: 'AI এথিক্স ও ডেটা প্রাইভেসি', en: 'AI Ethics & Data Privacy' },
+    duration: '45 min',
+  },
+]
+
+/* ------------------------------------------------------------------ */
+/*  PUBLICATIONS / RESEARCH / WHITEPAPER                               */
+/* ------------------------------------------------------------------ */
+
+export const founderPublications = [
+  {
+    type: { bn: 'হোয়াইটপেপার', en: 'Whitepaper' },
+    title: { bn: 'বাংলাদেশের SME-এর জন্য AI অ্যাডপশন রোডম্যাপ', en: 'AI Adoption Roadmap for Bangladesh SMEs' },
+    year: '2024',
+  },
+  {
+    type: { bn: 'রিসার্চ', en: 'Research' },
+    title: { bn: 'লোকাল ভাষায় AI চ্যাটবট — বাংলা NLP চ্যালেঞ্জ', en: 'Local-Language AI Chatbots — Bangla NLP Challenges' },
+    year: '2024',
+  },
+  {
+    type: { bn: 'আর্টিকেল', en: 'Article' },
+    title: { bn: 'Why Most AI Projects Fail — বাংলাদেশি প্রেক্ষাপট', en: 'Why Most AI Projects Fail — Bangladeshi Context' },
+    year: '2025',
+  },
+]
+
+/* ------------------------------------------------------------------ */
+/*  DIGITAL SIGNATURE                                                  */
+/* ------------------------------------------------------------------ */
+
+export const founderSignature = {
+  name: { bn: 'মোঃ নাজমুল ইসলাম তাজ', en: 'Md. Najmul Islam Taj' },
+  role: { bn: 'প্রতিষ্ঠাতা ও সিইও', en: 'Founder & CEO' },
+  company: 'NextGen Digital Studio',
+  tagline: {
+    bn: 'এমন AI সিস্টেম গড়ি যা উদ্যোক্তাদের সময় ফিরিয়ে দেয়।',
+    en: 'Building AI systems that give entrepreneurs their time back.',
+  },
+}
+
+/* ------------------------------------------------------------------ */
+/*  FINAL CTA — "Ready to Build Your AI Business?"                     */
+/* ------------------------------------------------------------------ */
+
+export const founderFinalCTA = {
+  title: { bn: 'আপনার AI বিজনেস তৈরি করতে প্রস্তুত?', en: 'Ready to Build Your AI Business?' },
+  subtitle: {
+    bn: 'আপনি যদি নিচের যেকোনো একটিতে "হ্যাঁ" বলেন, আমার সাথে ৩০ মিনিটের স্ট্র্যাটেজি সেশন বুক করুন।',
+    en: 'If you say "yes" to any of the below, book a 30-minute strategy session with me.',
+  },
+  checklist: [
+    { bn: 'আরও লিড চান', en: 'You want more leads' },
+    { bn: 'কম সময় কাজ করতে চান', en: 'You want to work fewer hours' },
+    { bn: 'AI দিয়ে স্কেল করতে চান', en: 'You want to scale with AI' },
+    { bn: 'ম্যানুয়াল কাজ থেকে মুক্তি চান', en: 'You want freedom from manual work' },
+    { bn: '৬০ দিনে ROI চান', en: 'You want ROI in 60 days' },
+  ],
+  cta: { bn: '৩০ মিনিট স্ট্র্যাটেজি সেশন বুক করুন', en: 'Book Your 30-Min Strategy Session' },
+  note: {
+    bn: 'ফ্রি, কোনো চাপ নেই, কোনো পিচ নেই — শুধু আপনার ব্যবসার জন্য AI রোডম্যাপ।',
+    en: 'Free, no pressure, no pitch — just an AI roadmap for your business.',
+  },
+}
+
+/* ------------------------------------------------------------------ */
+/*  FAQ CATEGORIES (parallel array — one category per FAQ item above) */
+/*  Categories: 'about' | 'services' | 'process' | 'pricing' |        */
+/*              'results' | 'partnership'                             */
+/* ------------------------------------------------------------------ */
+
+export const founderFaqCategoryLabels: Record<string, { bn: string; en: string }> = {
+  all: { bn: 'সব', en: 'All' },
+  about: { bn: 'পরিচিতি', en: 'About' },
+  services: { bn: 'সেবা', en: 'Services' },
+  process: { bn: 'প্রক্রিয়া', en: 'Process' },
+  pricing: { bn: 'মূল্য', en: 'Pricing' },
+  results: { bn: 'ফলাফল', en: 'Results' },
+  partnership: { bn: 'পার্টনারশিপ', en: 'Partnership' },
+}
+
+/* One category per FAQ item — same order as founderFaqs array above */
+export const founderFaqCategories: string[] = [
+  'about',        // 1. Why AI Business Strategist?
+  'services',     // 2. Types of businesses?
+  'process',      // 3. Time to become client?
+  'pricing',      // 4. Cost?
+  'pricing',      // 5. Free consultation?
+  'results',      // 6. Work guarantee?
+  'about',        // 7. Where located?
+  'services',     // 8. Languages?
+  'process',      // 9. No tech knowledge?
+  'services',     // 10. Only chatbots?
+  'partnership',  // 11. How to contact?
+  'services',     // 12. Corporate training?
+  'partnership',  // 13. Long-term work?
+  'results',      // 14. Typical results?
+  'results',      // 15. Case studies?
+  'about',        // 16. Technology stack?
+  'about',        // 17. Speaking events?
+  'about',        // 18. Biggest lesson?
+  'about',        // 19. Time management?
+  'about',        // 20. Future plan?
+  'services',     // 21. AI training for beginners?
+  'about',        // 22. Clients like?
+  'about',        // 23. Freelancer?
+  'about',        // 24. Work philosophy?
+  'about',        // 25. Learn new technologies?
+  'partnership',  // 26. Where is community?
+  'partnership',  // 27. Long-term relationships?
+  'partnership',  // 28. How to start?
+  'services',     // 29. Women entrepreneurs?
+  'services',     // 30. International clients?
+  'services',     // 31. Webinars?
+  'about',        // 32. Educational qualification?
+  'about',        // 33. Speak on podcasts?
+  'about',        // 34. Best success tip?
+  'about',        // 35. Why NextGen Digital Studio?
+]

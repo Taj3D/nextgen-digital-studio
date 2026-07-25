@@ -27,6 +27,7 @@ import {
   founderHero,
   founderTrust,
   founderMediaMentions,
+  founderMediaKit,
   founderCertifications,
   founderAwards,
   founderStory,
@@ -36,15 +37,19 @@ import {
   founderTechStack,
   founderExpertise,
   founderIndustries,
-  founderVisionTimeline,
-  founderImpact,
+  founderDocumentary,
+  founderPersonalMetrics,
   founderRoutine,
-  founderReadingList,
+  founderBooks,
   founderCaseStudies,
   founderSpeaking,
+  founderSpeakingTopics,
   founderTraining,
   founderValues,
-  founderBeliefs,
+  founderPrinciples,
+  founderWhyMe,
+  founderThoughtLeadership,
+  founderPublications,
   founderQuotes,
   founderFutureProjects,
   founderOpenLetter,
@@ -52,12 +57,16 @@ import {
   founderLegacy,
   founderClosing,
   founderFaqs,
+  founderFaqCategories,
+  founderFaqCategoryLabels,
+  founderCommunityPlatforms,
+  founderSignature,
+  founderFinalCTA,
   founderMission,
   founderVision,
 } from '@/lib/founder-data'
 import {
   Award,
-  ArrowRight,
   MapPin,
   Users,
   Star,
@@ -94,6 +103,13 @@ import {
   Video,
   Send,
   Lock,
+  AlertCircle,
+  Search,
+  Download,
+  FileText,
+  PenTool,
+  Target,
+  TrendingUp,
 } from 'lucide-react'
 
 /* ------------------------------------------------------------------ */
@@ -104,7 +120,7 @@ const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   MapPin, Users, Star, Bot, ShieldCheck, Lightbulb, Handshake, GraduationCap,
   Eye, Award, Rocket, Building, Crown, Terminal, Wrench, Code, CalendarCheck,
   Mic, HeartPulse, ShoppingBag, ShoppingCart, Factory, Building2, Briefcase,
-  BookOpen,
+  BookOpen, AlertCircle, Send, Sparkles, Target, TrendingUp, FileText,
 }
 
 function Icon({ name, className }: { name: string; className?: string }) {
@@ -201,12 +217,12 @@ function Reveal({ children, className = '' }: { children: React.ReactNode; class
 function FaqItem({ q, a, isBn }: { q: Bn; a: Bn; isBn: boolean }) {
   const [open, setOpen] = React.useState(false)
   return (
-    <div className="overflow-hidden rounded-xl border border-[#E8DDD4] bg-white">
+    <div className="overflow-hidden rounded-xl border border-[var(--foundry-border)] bg-[var(--foundry-card)]">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        className="flex w-full items-center justify-between gap-3 px-4 py-3.5 text-left text-sm font-semibold text-[#1C1C1C] transition-colors hover:bg-[#FAF7F3] sm:px-5 sm:text-[15px]"
+        className="flex w-full items-center justify-between gap-3 px-4 py-3.5 text-left text-sm font-semibold text-[var(--foundry-text)] transition-colors hover:bg-[var(--foundry-tint)] sm:px-5 sm:text-[15px]"
       >
         <span>{T(q, isBn)}</span>
         <ChevronDown className={`h-4 w-4 shrink-0 text-[#B8923A] transition-transform ${open ? 'rotate-180' : ''}`} />
@@ -215,10 +231,96 @@ function FaqItem({ q, a, isBn }: { q: Bn; a: Bn; isBn: boolean }) {
         className={`grid transition-all duration-300 ${open ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}
       >
         <div className="overflow-hidden">
-          <p className="px-4 pb-4 text-sm leading-relaxed text-[#4A4A4A] sm:px-5">{T(a, isBn)}</p>
+          <p className="px-4 pb-4 text-sm leading-relaxed text-[var(--foundry-subtle)] sm:px-5">{T(a, isBn)}</p>
         </div>
       </div>
     </div>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/*  Searchable + category-based FAQ section                            */
+/* ------------------------------------------------------------------ */
+
+function FaqSection({ isBn }: { isBn: boolean }) {
+  const [query, setQuery] = React.useState('')
+  const [activeCat, setActiveCat] = React.useState<string>('all')
+
+  // Build list of FAQs with their categories (zip founderFaqs + founderFaqCategories)
+  const items = React.useMemo(
+    () => founderFaqs.map((f, i) => ({ ...f, category: founderFaqCategories[i] ?? 'about' })),
+    [],
+  )
+
+  const filtered = React.useMemo(() => {
+    const q = query.trim().toLowerCase()
+    return items.filter((f) => {
+      const matchesCat = activeCat === 'all' || f.category === activeCat
+      if (!matchesCat) return false
+      if (!q) return true
+      const text = (isBn ? f.q.bn + ' ' + f.a.bn : f.q.en + ' ' + f.a.en).toLowerCase()
+      return text.includes(q)
+    })
+  }, [items, query, activeCat, isBn])
+
+  const categories = ['all', 'about', 'services', 'process', 'pricing', 'results', 'partnership']
+
+  return (
+    <>
+      {/* Search */}
+      <div className="relative mb-3">
+        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#B8923A]" />
+        <input
+          type="search"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder={isBn ? 'প্রশ্ন খুঁজুন...' : 'Search questions...'}
+          aria-label={isBn ? 'প্রশ্ন খুঁজুন' : 'Search questions'}
+          className="h-11 w-full rounded-full border border-[var(--foundry-border)] bg-[var(--foundry-card)] pl-10 pr-4 text-sm text-[var(--foundry-text)] outline-none focus:border-[#1E3A5F]"
+        />
+      </div>
+
+      {/* Category filter pills */}
+      <div className="mb-3 flex flex-wrap gap-1.5">
+        {categories.map((c) => (
+          <button
+            key={c}
+            type="button"
+            onClick={() => setActiveCat(c)}
+            aria-pressed={activeCat === c}
+            className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-colors ${
+              activeCat === c
+                ? 'bg-gradient-to-r from-[#1E3A5F] to-[#2D5A8E] text-white'
+                : 'border border-[var(--foundry-border)] bg-[var(--foundry-card)] text-[var(--foundry-subtle)] hover:bg-[var(--foundry-tint)]'
+            }`}
+          >
+            {T(founderFaqCategoryLabels[c], isBn)}
+          </button>
+        ))}
+      </div>
+
+      {/* Result count */}
+      <p className="mb-2 text-xs text-[var(--foundry-muted)]">
+        {isBn
+          ? `${filtered.length}টি প্রশ্ন পাওয়া গেছে`
+          : `${filtered.length} question${filtered.length === 1 ? '' : 's'} found`}
+      </p>
+
+      {/* Filtered FAQ list */}
+      {filtered.length > 0 ? (
+        <div className="space-y-2.5">
+          {filtered.map((f, i) => (
+            <FaqItem key={i} q={f.q} a={f.a} isBn={isBn} />
+          ))}
+        </div>
+      ) : (
+        <div className="rounded-xl border border-[var(--foundry-border)] bg-[var(--foundry-card)] p-6 text-center">
+          <p className="text-sm text-[var(--foundry-muted)]">
+            {isBn ? 'কোনো প্রশ্ন পাওয়া যায়নি। অন্য কীওয়ার্ড চেষ্টা করুন।' : 'No questions found. Try a different keyword.'}
+          </p>
+        </div>
+      )}
+    </>
   )
 }
 
@@ -232,31 +334,66 @@ export function FounderClient() {
   usePageViewTracking('founder_page_v3')
 
   return (
-    <div
-      className="relative flex min-h-screen flex-col bg-[#FAF7F3] text-[#1C1C1C]"
-      /*
-        Force light-mode CSS variables for this page so shadcn form inputs
-        (LandingLeadForm) render with light backgrounds/text even though the
-        global ThemeProvider defaults to 'dark'. The founder page is an
-        explicit light (navy + gold on cream) design.
-      */
-      style={{
-        '--background': 'oklch(1 0 0)',
-        '--foreground': 'oklch(0.21 0.034 264)',
-        '--card': 'oklch(1 0 0)',
-        '--popover': 'oklch(1 0 0)',
-        '--input': 'oklch(0.922 0.008 264)',
-        '--border': 'oklch(0.922 0.008 264)',
-        '--ring': 'oklch(0.546 0.215 262.88)',
-        '--muted': 'oklch(0.97 0.006 264)',
-        '--muted-foreground': 'oklch(0.45 0.02 264)',
-        '--primary': 'oklch(0.3 0.08 255)',
-        '--primary-foreground': 'oklch(0.985 0 0)',
-        '--accent': 'oklch(0.96 0.02 95)',
-        '--accent-foreground': 'oklch(0.3 0.08 255)',
-        colorScheme: 'light',
-      } as React.CSSProperties}
-    >
+    <>
+      {/*
+        Founder page theme tokens — adapt to BOTH light and dark modes.
+        Light: cream + navy + gold premium executive palette.
+        Dark:  deep navy + warm gold + soft cream text.
+        Also re-declares shadcn/ui CSS variables so LandingLeadForm inputs
+        render with the correct theme (the global ThemeProvider defaults
+        to 'dark' but the founder page defines its own palette per mode).
+      */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        .founder-page {
+          --foundry-bg: #FAF7F3;
+          --foundry-text: #1C1C1C;
+          --foundry-card: #FFFFFF;
+          --foundry-tint: #F5F0EB;
+          --foundry-border: #E8DDD4;
+          --foundry-subtle: #4A4A4A;
+          --foundry-muted: #7A7A7A;
+          --foundry-shadow: rgba(30, 58, 95, 0.08);
+          --background: oklch(1 0 0);
+          --foreground: oklch(0.21 0.034 264);
+          --card: oklch(1 0 0);
+          --popover: oklch(1 0 0);
+          --input: oklch(0.922 0.008 264);
+          --border: oklch(0.922 0.008 264);
+          --ring: oklch(0.546 0.215 262.88);
+          --muted: oklch(0.97 0.006 264);
+          --muted-foreground: oklch(0.45 0.02 264);
+          --primary: oklch(0.3 0.08 255);
+          --primary-foreground: oklch(0.985 0 0);
+          --accent: oklch(0.96 0.02 95);
+          --accent-foreground: oklch(0.3 0.08 255);
+          color-scheme: light;
+        }
+        .dark .founder-page {
+          --foundry-bg: #0A1428;
+          --foundry-text: #F5F0EB;
+          --foundry-card: #15202B;
+          --foundry-tint: #0F1A2E;
+          --foundry-border: #243248;
+          --foundry-subtle: #B8C5D6;
+          --foundry-muted: #8B9DAF;
+          --foundry-shadow: rgba(0, 0, 0, 0.4);
+          --background: oklch(0.16 0.02 264);
+          --foreground: oklch(0.96 0.005 264);
+          --card: oklch(0.2 0.02 264);
+          --popover: oklch(0.2 0.02 264);
+          --input: oklch(0.26 0.02 264);
+          --border: oklch(0.3 0.02 264);
+          --ring: oklch(0.646 0.18 62);
+          --muted: oklch(0.22 0.02 264);
+          --muted-foreground: oklch(0.7 0.02 264);
+          --primary: oklch(0.7 0.15 62);
+          --primary-foreground: oklch(0.16 0.02 264);
+          --accent: oklch(0.3 0.08 62);
+          --accent-foreground: oklch(0.96 0.005 264);
+          color-scheme: dark;
+        }
+      `}} />
+      <div className="founder-page relative flex min-h-screen flex-col bg-[var(--foundry-bg)] text-[var(--foundry-text)]">
       {/* Skip-to-content link for screen readers & keyboard users */}
       <a
         href="#main-content"
@@ -284,16 +421,16 @@ export function FounderClient() {
               </span>
             </h1>
 
-            <p className="mx-auto mt-3 max-w-xl text-base font-semibold text-[#4A4A4A] sm:text-lg">
+            <p className="mx-auto mt-3 max-w-xl text-base font-semibold text-[var(--foundry-subtle)] sm:text-lg">
               {T(founderHero.positioning, isBn)}
             </p>
-            <p className="mx-auto mt-1 max-w-md text-sm text-[#7A7A7A]">
+            <p className="mx-auto mt-1 max-w-md text-sm text-[var(--foundry-muted)]">
               {T(founderHero.subPositioning, isBn)}
             </p>
 
             {/* Manifesto */}
-            <div className="mt-5 rounded-xl border border-[#E8DDD4] bg-[#F5F0EB] p-4 sm:p-5">
-              <p className="text-[15px] italic leading-relaxed text-[#1C1C1C] sm:text-base">
+            <div className="mt-5 rounded-xl border border-[var(--foundry-border)] bg-[var(--foundry-tint)] p-4 sm:p-5">
+              <p className="text-[15px] italic leading-relaxed text-[var(--foundry-text)] sm:text-base">
                 <Quote className="mr-1 inline h-4 w-4 shrink-0 text-[#D4A853]" />
                 {T(founderHero.manifesto, isBn)}
               </p>
@@ -316,19 +453,19 @@ export function FounderClient() {
             </div>
 
             {/* Stats */}
-            <div className="mt-6 grid grid-cols-2 gap-3 rounded-xl border border-[#E8DDD4] bg-white p-4 shadow-sm sm:grid-cols-4 sm:gap-4 sm:p-6">
+            <div className="mt-6 grid grid-cols-2 gap-3 rounded-xl border border-[var(--foundry-border)] bg-[var(--foundry-card)] p-4 shadow-sm sm:grid-cols-4 sm:gap-4 sm:p-6">
               {founderHero.stats.map((s, i) => (
                 <div key={i} className="text-center">
                   <div className="bg-gradient-to-br from-[#1E3A5F] to-[#2D5A8E] bg-clip-text text-2xl font-extrabold text-transparent sm:text-3xl">
                     {T(s.v, isBn)}
                   </div>
-                  <div className="mt-0.5 text-xs text-[#7A7A7A]">{T(s.l, isBn)}</div>
+                  <div className="mt-0.5 text-xs text-[var(--foundry-muted)]">{T(s.l, isBn)}</div>
                 </div>
               ))}
             </div>
 
             {/* Trust bar */}
-            <div className="mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 border-t border-[#E8DDD4] pt-4 text-xs text-[#4A4A4A] sm:text-sm">
+            <div className="mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 border-t border-[var(--foundry-border)] pt-4 text-xs text-[var(--foundry-subtle)] sm:text-sm">
               {founderHero.trustBar.map((t, i) => (
                 <span key={i} className="inline-flex items-center gap-1.5">
                   <Icon name={t.icon} className="h-3.5 w-3.5 text-[#D4A853]" />
@@ -344,9 +481,9 @@ export function FounderClient() {
           <Reveal>
             <SectionTitle emoji="🔒">{isBn ? 'কেন আমাকে বিশ্বাস করবেন?' : 'Why Trust Me?'}</SectionTitle>
             <SectionDivider />
-            <div className="grid gap-3 rounded-2xl border border-[#E8DDD4] bg-white p-4 sm:grid-cols-2 sm:p-5">
+            <div className="grid gap-3 rounded-2xl border border-[var(--foundry-border)] bg-[var(--foundry-card)] p-4 sm:grid-cols-2 sm:p-5">
               {founderTrust.map((t, i) => (
-                <div key={i} className="flex items-center gap-2 text-sm text-[#1C1C1C]">
+                <div key={i} className="flex items-center gap-2 text-sm text-[var(--foundry-text)]">
                   <CheckCircle2 className="h-4 w-4 shrink-0 text-[#D4A853]" />
                   {T(t, isBn)}
                 </div>
@@ -355,20 +492,58 @@ export function FounderClient() {
           </Reveal>
         </Section>
 
-        {/* ===== 3. MEDIA MENTIONS ===== */}
+        {/* ===== 3. MEDIA KIT (As Seen On + Available for Media) ===== */}
         <Section>
           <Reveal>
-            <SectionTitle emoji="📰">{isBn ? 'যেখানে দেখা গেছে' : 'As Seen On'}</SectionTitle>
+            <SectionTitle emoji="📰">{isBn ? 'মিডিয়া কিট' : 'Media Kit'}</SectionTitle>
             <SectionDivider />
+            {/* As seen on (existing mentions) */}
             <div className="flex flex-wrap gap-2">
               {founderMediaMentions.map((m, i) => (
                 <span
                   key={i}
-                  className="rounded-full border border-[#E8DDD4] bg-white px-3.5 py-1.5 text-xs font-semibold text-[#4A4A4A]"
+                  className="rounded-full border border-[var(--foundry-border)] bg-[var(--foundry-card)] px-3.5 py-1.5 text-xs font-semibold text-[var(--foundry-subtle)]"
                 >
                   {m}
                 </span>
               ))}
+            </div>
+
+            {/* Appearances */}
+            <div className="mt-4 grid gap-2 sm:grid-cols-2">
+              {founderMediaKit.appearances.map((a, i) => (
+                <div
+                  key={i}
+                  className="flex items-start gap-2 rounded-xl border border-[var(--foundry-border)] bg-[var(--foundry-card)] p-3"
+                >
+                  <Mic className="mt-0.5 h-4 w-4 shrink-0 text-[#D4A853]" />
+                  <div>
+                    <div className="text-sm font-bold text-[#1E3A5F]">{T(a.outlet, isBn)}</div>
+                    <div className="text-xs text-[var(--foundry-muted)]">{T(a.desc, isBn)}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Available for Media CTA */}
+            <div className="mt-4 rounded-2xl border-l-4 border-[#D4A853] bg-[var(--foundry-tint)] p-4 sm:p-5">
+              <div className="flex items-center gap-2 text-sm font-bold text-[#1E3A5F]">
+                <Sparkles className="h-4 w-4 text-[#D4A853]" />
+                {T(founderMediaKit.available.title, isBn)}
+              </div>
+              <p className="mt-1 text-sm text-[var(--foundry-subtle)]">
+                {T(founderMediaKit.available.desc, isBn)}
+              </p>
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {founderMediaKit.available.topics.map((t, i) => (
+                  <span
+                    key={i}
+                    className="rounded-full bg-[#1E3A5F] px-2.5 py-0.5 text-[11px] font-semibold text-white"
+                  >
+                    {T(t, isBn)}
+                  </span>
+                ))}
+              </div>
             </div>
           </Reveal>
         </Section>
@@ -414,12 +589,12 @@ export function FounderClient() {
           <Reveal>
             <SectionTitle emoji="📖">{T(founderStory.title, isBn)}</SectionTitle>
             <SectionDivider />
-            <div className="space-y-3 text-[15px] leading-relaxed text-[#4A4A4A]">
+            <div className="space-y-3 text-[15px] leading-relaxed text-[var(--foundry-subtle)]">
               {founderStory.paragraphs.map((p, i) => (
                 <p key={i}>{T(p, isBn)}</p>
               ))}
-              <div className="rounded-r-xl border-l-4 border-[#D4A853] bg-[#FAF7F3] px-5 py-4">
-                <p className="italic text-[#4A4A4A]">
+              <div className="rounded-r-xl border-l-4 border-[#D4A853] bg-[var(--foundry-bg)] px-5 py-4">
+                <p className="italic text-[var(--foundry-subtle)]">
                   <Quote className="mr-1 inline h-4 w-4 text-[#D4A853]" />
                   {T(founderStory.quote, isBn)}
                 </p>
@@ -444,6 +619,43 @@ export function FounderClient() {
           </Reveal>
         </Section>
 
+        {/* ===== 7.5. THOUGHT LEADERSHIP ===== */}
+        <Section>
+          <Reveal>
+            <SectionTitle emoji="💡">{isBn ? 'থট লিডারশিপ' : 'Thought Leadership'}</SectionTitle>
+            <SectionDivider />
+            <div className="grid gap-3 sm:grid-cols-2">
+              {founderThoughtLeadership.map((t, i) => (
+                <div
+                  key={i}
+                  className="flex flex-col rounded-2xl border border-[var(--foundry-border)] bg-[var(--foundry-card)] p-4 shadow-sm"
+                >
+                  <div className="mb-2 flex items-center gap-2">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--foundry-tint)]">
+                      <Icon name={t.icon} className="h-4 w-4 text-[#D4A853]" />
+                    </div>
+                    <span className="rounded-full bg-[#D4A853]/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#B8923A]">
+                      {T(t.category, isBn)}
+                    </span>
+                  </div>
+                  <h4 className="text-sm font-bold text-[#1E3A5F]">{T(t.title, isBn)}</h4>
+                  <p className="mt-1 flex-1 text-xs leading-relaxed text-[var(--foundry-subtle)]">
+                    {T(t.thesis, isBn)}
+                  </p>
+                  <div className="mt-2 border-t border-[var(--foundry-border)] pt-2">
+                    <span className="text-[11px] font-semibold text-[#D4A853]">
+                      ★ {isBn ? 'কী শিখবেন:' : 'Takeaway:'}
+                    </span>{' '}
+                    <span className="text-[11px] text-[var(--foundry-text)]">
+                      {T(t.takeaway, isBn)}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+        </Section>
+
         {/* ===== 8. AI MANIFESTO ===== */}
         <Section>
           <Reveal>
@@ -451,13 +663,31 @@ export function FounderClient() {
             <SectionDivider />
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {founderManifesto.map((m, i) => (
-                <div key={i} className="rounded-xl border border-[#E8DDD4] bg-white p-4 text-center">
+                <div key={i} className="rounded-xl border border-[var(--foundry-border)] bg-[var(--foundry-card)] p-4 text-center">
                   <span className="block text-2xl font-extrabold text-[#D4A853]">
                     {isBn ? ['০১', '০২', '০৩', '০৪', '০৫', '০৬'][i] : String(i + 1).padStart(2, '0')}
                   </span>
-                  <p className="mt-1 text-sm font-medium text-[#1C1C1C]">{T(m, isBn)}</p>
+                  <p className="mt-1 text-sm font-medium text-[var(--foundry-text)]">{T(m, isBn)}</p>
                 </div>
               ))}
+            </div>
+            {/* Download Manifesto PDF */}
+            <div className="mt-4 flex justify-center">
+              <a
+                href="#contact"
+                onClick={(e) => {
+                  e.preventDefault()
+                  // PDF download is conceptual — opens contact to request the manifesto PDF
+                  alert(isBn
+                    ? 'মেনিফেস্টো PDF পেতে নিচের ফর্ম পূরণ করুন — আমরা ইমেইলে পাঠাব।'
+                    : 'To get the Manifesto PDF, fill the form below — we will email it to you.')
+                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
+                }}
+                className="inline-flex items-center gap-2 rounded-full border-2 border-[#D4A853] bg-[var(--foundry-card)] px-5 py-2.5 text-sm font-bold text-[#1E3A5F] transition-transform hover:scale-105"
+              >
+                <Download className="h-4 w-4 text-[#D4A853]" />
+                {isBn ? 'মেনিফেস্টো PDF ডাউনলোড' : 'Download Manifesto PDF'}
+              </a>
             </div>
           </Reveal>
         </Section>
@@ -466,16 +696,16 @@ export function FounderClient() {
         <Section>
           <Reveal>
             <SectionTitle emoji="⚡">{T(founderFramework.title, isBn)}</SectionTitle>
-            <p className="mb-3 text-sm text-[#7A7A7A]">{T(founderFramework.subtitle, isBn)}</p>
+            <p className="mb-3 text-sm text-[var(--foundry-muted)]">{T(founderFramework.subtitle, isBn)}</p>
             <SectionDivider />
             <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-5">
               {founderFramework.steps.map((s, i) => (
-                <div key={i} className="rounded-xl border border-[#E8DDD4] bg-white p-3 text-center sm:p-4">
+                <div key={i} className="rounded-xl border border-[var(--foundry-border)] bg-[var(--foundry-card)] p-3 text-center sm:p-4">
                   <div className="mx-auto mb-2 flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-[#1E3A5F] to-[#2D5A8E] text-sm font-bold text-white">
                     {T(s.num, isBn)}
                   </div>
                   <h4 className="text-sm font-bold">{T(s.title, isBn)}</h4>
-                  <p className="mt-0.5 text-xs text-[#7A7A7A]">{T(s.desc, isBn)}</p>
+                  <p className="mt-0.5 text-xs text-[var(--foundry-muted)]">{T(s.desc, isBn)}</p>
                 </div>
               ))}
             </div>
@@ -491,7 +721,7 @@ export function FounderClient() {
               {founderExpertise.map((e, i) => (
                 <span
                   key={i}
-                  className="rounded-full border border-[#1E3A5F]/30 bg-white px-3.5 py-1.5 text-xs font-semibold text-[#1E3A5F] sm:text-sm"
+                  className="rounded-full border border-[#1E3A5F]/30 bg-[var(--foundry-card)] px-3.5 py-1.5 text-xs font-semibold text-[#1E3A5F] sm:text-sm"
                 >
                   {T(e, isBn)}
                 </span>
@@ -507,9 +737,9 @@ export function FounderClient() {
             <SectionDivider />
             <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
               {founderTechStack.map((t, i) => (
-                <div key={i} className="rounded-xl border border-[#E8DDD4] bg-white p-3 text-center">
+                <div key={i} className="rounded-xl border border-[var(--foundry-border)] bg-[var(--foundry-card)] p-3 text-center">
                   <div className="text-sm font-bold text-[#1E3A5F]">{t.name}</div>
-                  <div className="mt-0.5 text-xs text-[#7A7A7A]">{T(t.use, isBn)}</div>
+                  <div className="mt-0.5 text-xs text-[var(--foundry-muted)]">{T(t.use, isBn)}</div>
                 </div>
               ))}
             </div>
@@ -523,45 +753,87 @@ export function FounderClient() {
             <SectionDivider />
             <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
               {founderIndustries.map((ind, i) => (
-                <div key={i} className="flex flex-col items-center gap-1.5 rounded-xl border border-[#E8DDD4] bg-white p-3 text-center">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#FAF7F3]">
+                <div key={i} className="flex flex-col items-center gap-1.5 rounded-xl border border-[var(--foundry-border)] bg-[var(--foundry-card)] p-3 text-center">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--foundry-bg)]">
                     <Icon name={ind.icon} className="h-4 w-4 text-[#D4A853]" />
                   </div>
-                  <span className="text-xs font-semibold text-[#1C1C1C] sm:text-sm">{T(ind, isBn)}</span>
+                  <span className="text-xs font-semibold text-[var(--foundry-text)] sm:text-sm">{T(ind, isBn)}</span>
                 </div>
               ))}
             </div>
           </Reveal>
         </Section>
 
-        {/* ===== 13. VISION TIMELINE ===== */}
+        {/* ===== 13. DOCUMENTARY TIMELINE (year: problem, decision, challenge, success, lesson) ===== */}
         <Section>
           <Reveal>
-            <SectionTitle emoji="🔭">{isBn ? 'ভিশন টাইমলাইন' : 'Vision Timeline'}</SectionTitle>
+            <SectionTitle emoji="🎬">{isBn ? 'আমার যাত্রা — ডকুমেন্টারি টাইমলাইন' : 'My Journey — Documentary Timeline'}</SectionTitle>
             <SectionDivider />
-            <div className="flex flex-wrap items-center justify-center gap-2">
-              {founderVisionTimeline.map((v, i) => (
-                <React.Fragment key={i}>
-                  {i > 0 && <ArrowRight className="h-4 w-4 text-[#D4A853]" />}
-                  <span className="rounded-full border border-[#E8DDD4] bg-white px-4 py-2 text-xs font-bold text-[#1E3A5F] sm:text-sm">
-                    {T(v, isBn)}
-                  </span>
-                </React.Fragment>
+            <div className="space-y-3">
+              {founderDocumentary.map((d, i) => (
+                <div
+                  key={i}
+                  className="relative rounded-2xl border border-[var(--foundry-border)] bg-[var(--foundry-card)] p-4 shadow-sm sm:p-5"
+                >
+                  {/* Year badge */}
+                  <div className="mb-2 flex items-center gap-2">
+                    <span className="inline-flex h-9 w-14 items-center justify-center rounded-lg bg-gradient-to-br from-[#1E3A5F] to-[#2D5A8E] text-sm font-extrabold text-white">
+                      {d.year}
+                    </span>
+                    <span className="text-xs font-semibold uppercase tracking-wider text-[#D4A853]">
+                      {isBn ? `অধ্যায় ${['১','২','৩','৪','৫','৬'][i]}` : `Chapter ${i + 1}`}
+                    </span>
+                  </div>
+                  <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
+                    <div>
+                      <div className="text-[10px] font-bold uppercase tracking-wider text-[#B8923A]">
+                        {isBn ? 'সমস্যা' : 'Problem'}
+                      </div>
+                      <p className="text-xs text-[var(--foundry-subtle)]">{T(d.problem, isBn)}</p>
+                    </div>
+                    <div>
+                      <div className="text-[10px] font-bold uppercase tracking-wider text-[#B8923A]">
+                        {isBn ? 'সিদ্ধান্ত' : 'Decision'}
+                      </div>
+                      <p className="text-xs text-[var(--foundry-subtle)]">{T(d.decision, isBn)}</p>
+                    </div>
+                    <div>
+                      <div className="text-[10px] font-bold uppercase tracking-wider text-[#B8923A]">
+                        {isBn ? 'চ্যালেঞ্জ' : 'Challenge'}
+                      </div>
+                      <p className="text-xs text-[var(--foundry-subtle)]">{T(d.challenge, isBn)}</p>
+                    </div>
+                    <div>
+                      <div className="text-[10px] font-bold uppercase tracking-wider text-[#B8923A]">
+                        {isBn ? 'সাফল্য' : 'Success'}
+                      </div>
+                      <p className="text-xs text-[var(--foundry-subtle)]">{T(d.success, isBn)}</p>
+                    </div>
+                    <div>
+                      <div className="text-[10px] font-bold uppercase tracking-wider text-[#B8923A]">
+                        {isBn ? 'শিক্ষা' : 'Lesson'}
+                      </div>
+                      <p className="text-xs font-semibold italic text-[#1E3A5F]">{T(d.lesson, isBn)}</p>
+                    </div>
+                  </div>
+                </div>
               ))}
             </div>
           </Reveal>
         </Section>
 
-        {/* ===== 14. IMPACT COUNTERS ===== */}
+        {/* ===== 14. IMPACT COUNTERS (expanded personal metrics) ===== */}
         <Section>
           <Reveal>
             <SectionTitle emoji="📊">{isBn ? 'সংখ্যায় প্রভাব' : 'Impact in Numbers'}</SectionTitle>
             <SectionDivider />
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-              {founderImpact.map((c, i) => (
-                <div key={i} className="rounded-xl border border-[#E8DDD4] bg-white p-4 text-center shadow-sm">
-                  <div className="text-2xl font-extrabold text-[#1E3A5F]">{c.num}</div>
-                  <div className="mt-0.5 text-xs text-[#7A7A7A]">{T(c.label, isBn)}</div>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+              {founderPersonalMetrics.map((c, i) => (
+                <div key={i} className="rounded-xl border border-[var(--foundry-border)] bg-[var(--foundry-card)] p-3 text-center shadow-sm sm:p-4">
+                  <div className="bg-gradient-to-br from-[#1E3A5F] to-[#2D5A8E] bg-clip-text text-xl font-extrabold text-transparent sm:text-2xl">
+                    {c.num}
+                  </div>
+                  <div className="mt-0.5 text-[11px] text-[var(--foundry-muted)] sm:text-xs">{T(c.label, isBn)}</div>
                 </div>
               ))}
             </div>
@@ -572,34 +844,78 @@ export function FounderClient() {
         <Section>
           <Reveal>
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-2xl border-l-4 border-[#1E3A5F] bg-white p-5 shadow-sm">
+              <div className="rounded-2xl border-l-4 border-[#1E3A5F] bg-[var(--foundry-card)] p-5 shadow-sm">
                 <h3 className="flex items-center gap-2 text-lg font-bold text-[#1E3A5F]">
                   <Rocket className="h-5 w-5" /> {T(founderMission.title, isBn)}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-[#4A4A4A]">{T(founderMission.body, isBn)}</p>
+                <p className="mt-2 text-sm leading-relaxed text-[var(--foundry-subtle)]">{T(founderMission.body, isBn)}</p>
               </div>
-              <div className="rounded-2xl border-l-4 border-[#D4A853] bg-white p-5 shadow-sm">
+              <div className="rounded-2xl border-l-4 border-[#D4A853] bg-[var(--foundry-card)] p-5 shadow-sm">
                 <h3 className="flex items-center gap-2 text-lg font-bold text-[#1E3A5F]">
                   <Eye className="h-5 w-5" /> {T(founderVision.title, isBn)}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-[#4A4A4A]">{T(founderVision.body, isBn)}</p>
+                <p className="mt-2 text-sm leading-relaxed text-[var(--foundry-subtle)]">{T(founderVision.body, isBn)}</p>
               </div>
             </div>
           </Reveal>
         </Section>
 
-        {/* ===== 16. CORE BELIEFS (10 principles) ===== */}
+        {/* ===== 16. FOUNDER PRINCIPLES (10 — with story, lesson, business application) ===== */}
         <Section>
           <Reveal>
             <SectionTitle emoji="💎">{isBn ? '১০টি প্রতিষ্ঠাতা নীতি' : '10 Founder Principles'}</SectionTitle>
+            <p className="mb-3 text-sm text-[var(--foundry-muted)]">
+              {isBn
+                ? 'প্রতিটি নীতির পেছনে একটি বাস্তব গল্প, একটি শিক্ষা, এবং একটি ব্যবসায়িক প্রয়োগ।'
+                : 'Each principle has a real story, a lesson, and a business application.'}
+            </p>
             <SectionDivider />
-            <div className="grid gap-2.5 sm:grid-cols-2">
-              {founderBeliefs.map((b, i) => (
-                <div key={i} className="rounded-xl border border-[#E8DDD4] bg-white p-4">
-                  <span className="mb-1 inline-block rounded-full bg-gradient-to-r from-[#1E3A5F] to-[#2D5A8E] px-2.5 py-0.5 text-xs font-bold text-white">
-                    {isBn ? ['০১', '০২', '০৩', '০৪', '০৫', '০৬', '০৭', '০৮', '০৯', '১০'][i] : String(i + 1).padStart(2, '0')}
-                  </span>
-                  <p className="text-sm font-medium text-[#1C1C1C]">{T(b, isBn)}</p>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {founderPrinciples.map((p, i) => (
+                <div
+                  key={i}
+                  className="rounded-2xl border border-[var(--foundry-border)] bg-[var(--foundry-card)] p-4 shadow-sm"
+                >
+                  <div className="mb-2 flex items-center gap-2">
+                    <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-r from-[#1E3A5F] to-[#2D5A8E] text-xs font-bold text-white">
+                      {isBn ? ['০১','০২','০৩','০৪','০৫','০৬','০৭','০৮','০৯','১০'][i] : String(i + 1).padStart(2, '0')}
+                    </span>
+                    <h4 className="text-sm font-bold text-[#1E3A5F]">{T(p.title, isBn)}</h4>
+                  </div>
+                  <p className="text-xs leading-relaxed text-[var(--foundry-subtle)]">
+                    <span className="font-semibold text-[#B8923A]">{isBn ? 'গল্প:' : 'Story:'}</span>{' '}
+                    {T(p.story, isBn)}
+                  </p>
+                  <p className="mt-1.5 text-xs leading-relaxed italic text-[#1E3A5F]">
+                    <span className="not-italic font-semibold text-[#B8923A]">{isBn ? 'শিক্ষা:' : 'Lesson:'}</span>{' '}
+                    {T(p.lesson, isBn)}
+                  </p>
+                  <p className="mt-1.5 rounded-lg bg-[var(--foundry-tint)] px-2.5 py-1.5 text-xs leading-relaxed text-[var(--foundry-text)]">
+                    <span className="font-semibold text-[#B8923A]">{isBn ? 'প্রয়োগ:' : 'Apply:'}</span>{' '}
+                    {T(p.application, isBn)}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+        </Section>
+
+        {/* ===== 16.5. WHY ME? (8 reasons to work with Taj) ===== */}
+        <Section>
+          <Reveal>
+            <SectionTitle emoji="🎯">{isBn ? 'কেন আমার সাথে কাজ করবেন?' : 'Why Work With Taj?'}</SectionTitle>
+            <SectionDivider />
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {founderWhyMe.map((w, i) => (
+                <div
+                  key={i}
+                  className="rounded-2xl border border-[var(--foundry-border)] bg-[var(--foundry-card)] p-4 shadow-sm"
+                >
+                  <div className="mb-2 flex h-9 w-9 items-center justify-center rounded-full bg-[var(--foundry-tint)]">
+                    <Icon name={w.icon} className="h-4 w-4 text-[#D4A853]" />
+                  </div>
+                  <h4 className="text-sm font-bold text-[#1E3A5F]">{T(w.title, isBn)}</h4>
+                  <p className="mt-1 text-xs leading-relaxed text-[var(--foundry-subtle)]">{T(w.desc, isBn)}</p>
                 </div>
               ))}
             </div>
@@ -613,12 +929,12 @@ export function FounderClient() {
             <SectionDivider />
             <div className="grid gap-3 sm:grid-cols-2">
               {founderCaseStudies.map((c, i) => (
-                <div key={i} className="rounded-2xl border border-[#E8DDD4] bg-white p-5 shadow-sm">
+                <div key={i} className="rounded-2xl border border-[var(--foundry-border)] bg-[var(--foundry-card)] p-5 shadow-sm">
                   <h4 className="text-base font-bold text-[#1E3A5F]">{T(c.title, isBn)}</h4>
-                  <div className="mt-2 space-y-1.5 text-sm text-[#4A4A4A]">
-                    <p><span className="font-semibold text-[#1C1C1C]">{isBn ? 'সমস্যা:' : 'Problem:'}</span> {T(c.problem, isBn)}</p>
-                    <p><span className="font-semibold text-[#1C1C1C]">{isBn ? 'সমাধান:' : 'Solution:'}</span> {T(c.solution, isBn)}</p>
-                    <p><span className="font-semibold text-[#1C1C1C]">{isBn ? 'ফলাফল:' : 'Result:'}</span> {T(c.result, isBn)}</p>
+                  <div className="mt-2 space-y-1.5 text-sm text-[var(--foundry-subtle)]">
+                    <p><span className="font-semibold text-[var(--foundry-text)]">{isBn ? 'সমস্যা:' : 'Problem:'}</span> {T(c.problem, isBn)}</p>
+                    <p><span className="font-semibold text-[var(--foundry-text)]">{isBn ? 'সমাধান:' : 'Solution:'}</span> {T(c.solution, isBn)}</p>
+                    <p><span className="font-semibold text-[var(--foundry-text)]">{isBn ? 'ফলাফল:' : 'Result:'}</span> {T(c.result, isBn)}</p>
                   </div>
                   <div className="mt-3 flex items-center justify-between">
                     <span className="text-xs font-bold text-[#D4A853]">ROI: {c.roi}</span>
@@ -632,7 +948,7 @@ export function FounderClient() {
           </Reveal>
         </Section>
 
-        {/* ===== 18. SPEAKING ===== */}
+        {/* ===== 18. SPEAKING + SPEAKING TOPICS ===== */}
         <Section>
           <Reveal>
             <SectionTitle emoji="🎤">{isBn ? 'স্পিকিং' : 'Speaking'}</SectionTitle>
@@ -641,11 +957,34 @@ export function FounderClient() {
               {founderSpeaking.map((s, i) => (
                 <span
                   key={i}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-[#E8DDD4] bg-white px-3.5 py-1.5 text-xs font-semibold text-[#1E3A5F] sm:text-sm"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-[var(--foundry-border)] bg-[var(--foundry-card)] px-3.5 py-1.5 text-xs font-semibold text-[#1E3A5F] sm:text-sm"
                 >
                   <Icon name={s.icon} className="h-3.5 w-3.5 text-[#D4A853]" />
                   {T(s, isBn)}
                 </span>
+              ))}
+            </div>
+
+            {/* Speaking Topics (EEAT) */}
+            <h4 className="mt-5 mb-2 text-sm font-bold text-[#1E3A5F]">
+              {isBn ? 'স্পিকিং টপিকস:' : 'Speaking Topics:'}
+            </h4>
+            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+              {founderSpeakingTopics.map((t, i) => (
+                <div
+                  key={i}
+                  className="flex items-start gap-2 rounded-xl border border-[var(--foundry-border)] bg-[var(--foundry-card)] p-3"
+                >
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--foundry-tint)]">
+                    <Icon name={t.icon} className="h-4 w-4 text-[#D4A853]" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-[var(--foundry-text)]">{T(t.title, isBn)}</p>
+                    <p className="mt-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#D4A853]">
+                      ⏱ {t.duration}
+                    </p>
+                  </div>
+                </div>
               ))}
             </div>
           </Reveal>
@@ -658,12 +997,37 @@ export function FounderClient() {
             <SectionDivider />
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {founderTraining.map((t, i) => (
-                <div key={i} className="rounded-2xl border border-[#E8DDD4] bg-white p-4 text-center shadow-sm">
+                <div key={i} className="rounded-2xl border border-[var(--foundry-border)] bg-[var(--foundry-card)] p-4 text-center shadow-sm">
                   <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#1E3A5F] to-[#2D5A8E]">
                     <Icon name={t.icon} className="h-5 w-5 text-white" />
                   </div>
                   <h4 className="text-sm font-bold">{T(t.title, isBn)}</h4>
-                  <p className="mt-0.5 text-xs text-[#7A7A7A]">{T(t.desc, isBn)}</p>
+                  <p className="mt-0.5 text-xs text-[var(--foundry-muted)]">{T(t.desc, isBn)}</p>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+        </Section>
+
+        {/* ===== 19.5. PUBLICATIONS / RESEARCH / WHITEPAPER (EEAT) ===== */}
+        <Section>
+          <Reveal>
+            <SectionTitle emoji="📑">{isBn ? 'প্রকাশনা ও গবেষণা' : 'Publications & Research'}</SectionTitle>
+            <SectionDivider />
+            <div className="grid gap-3 sm:grid-cols-3">
+              {founderPublications.map((p, i) => (
+                <div
+                  key={i}
+                  className="flex flex-col rounded-2xl border border-[var(--foundry-border)] bg-[var(--foundry-card)] p-4 shadow-sm"
+                >
+                  <div className="mb-2 flex items-center gap-2">
+                    <FileText className="h-4 w-4 text-[#D4A853]" />
+                    <span className="rounded-full bg-[#D4A853]/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#B8923A]">
+                      {T(p.type, isBn)}
+                    </span>
+                  </div>
+                  <p className="flex-1 text-sm font-bold text-[#1E3A5F]">{T(p.title, isBn)}</p>
+                  <p className="mt-1 text-xs font-semibold text-[var(--foundry-muted)]">📅 {p.year}</p>
                 </div>
               ))}
             </div>
@@ -677,12 +1041,12 @@ export function FounderClient() {
             <SectionDivider />
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {founderValues.map((v, i) => (
-                <div key={i} className="rounded-2xl border border-[#E8DDD4] bg-white p-5 shadow-sm">
-                  <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-[#FAF7F3]">
+                <div key={i} className="rounded-2xl border border-[var(--foundry-border)] bg-[var(--foundry-card)] p-5 shadow-sm">
+                  <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-[var(--foundry-bg)]">
                     <Icon name={v.icon} className="h-5 w-5 text-[#D4A853]" />
                   </div>
                   <h4 className="text-base font-bold text-[#1E3A5F]">{T(v.title, isBn)}</h4>
-                  <p className="mt-1 text-sm leading-relaxed text-[#4A4A4A]">{T(v.story, isBn)}</p>
+                  <p className="mt-1 text-sm leading-relaxed text-[var(--foundry-subtle)]">{T(v.story, isBn)}</p>
                 </div>
               ))}
             </div>
@@ -696,30 +1060,42 @@ export function FounderClient() {
             <SectionDivider />
             <div className="grid gap-2 sm:grid-cols-2">
               {founderRoutine.map((r, i) => (
-                <div key={i} className="flex items-center gap-3 rounded-xl border border-[#E8DDD4] bg-white p-3">
+                <div key={i} className="flex items-center gap-3 rounded-xl border border-[var(--foundry-border)] bg-[var(--foundry-card)] p-3">
                   <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-[#1E3A5F] px-2.5 py-1 text-xs font-bold text-white">
                     <Clock className="h-3 w-3" /> {r.time}
                   </span>
-                  <span className="text-sm text-[#1C1C1C]">{T(r.desc, isBn)}</span>
+                  <span className="text-sm text-[var(--foundry-text)]">{T(r.desc, isBn)}</span>
                 </div>
               ))}
             </div>
           </Reveal>
         </Section>
 
-        {/* ===== 22. READING LIST ===== */}
+        {/* ===== 22. BOOKS I RECOMMEND (with lessons) ===== */}
         <Section>
           <Reveal>
-            <SectionTitle emoji="📚">{isBn ? 'আমার পড়ার তালিকা' : 'Books I Recommend'}</SectionTitle>
+            <SectionTitle emoji="📚">{isBn ? 'যেসব বই আমাকে গড়েছে' : 'Books That Shaped Me'}</SectionTitle>
             <SectionDivider />
-            <div className="flex flex-wrap gap-2">
-              {founderReadingList.map((b, i) => (
-                <span
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {founderBooks.map((b, i) => (
+                <div
                   key={i}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-[#E8DDD4] bg-white px-3.5 py-1.5 text-xs font-medium text-[#1C1C1C] sm:text-sm"
+                  className="flex flex-col rounded-2xl border-l-4 border-[#D4A853] bg-[var(--foundry-card)] p-4 shadow-sm"
                 >
-                  <BookOpen className="h-3.5 w-3.5 text-[#D4A853]" /> {b}
-                </span>
+                  <div className="flex items-center gap-2">
+                    <BookOpen className="h-4 w-4 shrink-0 text-[#D4A853]" />
+                    <div>
+                      <p className="text-sm font-bold text-[#1E3A5F]">{b.title}</p>
+                      <p className="text-[11px] font-semibold uppercase tracking-wider text-[#B8923A]">
+                        ✍ {b.author}
+                      </p>
+                    </div>
+                  </div>
+                  <p className="mt-2 text-xs italic leading-relaxed text-[var(--foundry-subtle)]">
+                    <span className="not-italic font-semibold text-[#B8923A]">{isBn ? 'শিক্ষা:' : 'Lesson:'}</span>{' '}
+                    {T(b.lesson, isBn)}
+                  </p>
+                </div>
               ))}
             </div>
           </Reveal>
@@ -732,8 +1108,8 @@ export function FounderClient() {
             <SectionDivider />
             <div className="grid gap-3 sm:grid-cols-2">
               {founderQuotes.map((q, i) => (
-                <div key={i} className="rounded-xl border-l-4 border-[#D4A853] bg-white p-4 shadow-sm">
-                  <p className="text-sm italic leading-relaxed text-[#1C1C1C]">
+                <div key={i} className="rounded-xl border-l-4 border-[#D4A853] bg-[var(--foundry-card)] p-4 shadow-sm">
+                  <p className="text-sm italic leading-relaxed text-[var(--foundry-text)]">
                     &ldquo;{T(q, isBn)}&rdquo;
                   </p>
                 </div>
@@ -756,9 +1132,9 @@ export function FounderClient() {
                 { icon: 'Building', label: isBn ? 'অফিস' : 'Office' },
                 { icon: 'GraduationCap', label: isBn ? 'ট্রেইনিং' : 'Training' },
               ].map((p, i) => (
-                <div key={i} className="flex h-28 flex-col items-center justify-center gap-1.5 rounded-xl border border-[#E8DDD4] bg-[#F5F0EB]">
+                <div key={i} className="flex h-28 flex-col items-center justify-center gap-1.5 rounded-xl border border-[var(--foundry-border)] bg-[var(--foundry-tint)]">
                   <Icon name={p.icon} className="h-6 w-6 text-[#D4A853]" />
-                  <span className="text-xs font-medium text-[#7A7A7A]">{p.label}</span>
+                  <span className="text-xs font-medium text-[var(--foundry-muted)]">{p.label}</span>
                 </div>
               ))}
             </div>
@@ -796,12 +1172,12 @@ export function FounderClient() {
             <SectionDivider />
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {founderFutureProjects.map((p, i) => (
-                <div key={i} className="rounded-2xl border border-[#E8DDD4] bg-white p-4 text-center shadow-sm">
-                  <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-[#FAF7F3]">
+                <div key={i} className="rounded-2xl border border-[var(--foundry-border)] bg-[var(--foundry-card)] p-4 text-center shadow-sm">
+                  <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-[var(--foundry-bg)]">
                     <Icon name={p.icon} className="h-5 w-5 text-[#D4A853]" />
                   </div>
                   <h4 className="text-sm font-bold">{T(p.title, isBn)}</h4>
-                  <p className="mt-0.5 text-xs text-[#7A7A7A]">{T(p.desc, isBn)}</p>
+                  <p className="mt-0.5 text-xs text-[var(--foundry-muted)]">{T(p.desc, isBn)}</p>
                 </div>
               ))}
             </div>
@@ -827,14 +1203,20 @@ export function FounderClient() {
           <Reveal>
             <SectionTitle emoji="✉️">{isBn ? 'খোলা চিঠি' : 'Open Letter'}</SectionTitle>
             <SectionDivider />
-            <div className="rounded-2xl border border-[#E8DDD4] bg-white p-6 shadow-sm sm:p-8">
+            <div className="rounded-2xl border border-[var(--foundry-border)] bg-[var(--foundry-card)] p-6 shadow-sm sm:p-8">
               <h3 className="text-lg font-bold text-[#1E3A5F]">{T(founderOpenLetter.greeting, isBn)}</h3>
-              <div className="mt-3 space-y-2 text-sm leading-relaxed text-[#4A4A4A]">
+              <div className="mt-3 space-y-2 text-sm leading-relaxed text-[var(--foundry-subtle)]">
                 {founderOpenLetter.paragraphs.map((p, i) => (
                   <p key={i}>{T(p, isBn)}</p>
                 ))}
               </div>
               <p className="mt-3 font-bold text-[#1E3A5F]">{T(founderOpenLetter.sign, isBn)}</p>
+              {/* CTA line */}
+              <div className="mt-3 rounded-xl bg-gradient-to-r from-[#1E3A5F] to-[#2D5A8E] px-4 py-3 text-center">
+                <p className="text-sm font-semibold text-white">
+                  &ldquo;{T(founderOpenLetter.cta, isBn)}&rdquo;
+                </p>
+              </div>
             </div>
           </Reveal>
         </Section>
@@ -844,8 +1226,8 @@ export function FounderClient() {
           <Reveal>
             <SectionTitle emoji="🏛️">{isBn ? 'আমার লিগেসি' : 'My Legacy'}</SectionTitle>
             <SectionDivider />
-            <div className="rounded-2xl border-l-[6px] border-[#D4A853] bg-[#F5F0EB] p-5 sm:p-6">
-              <p className="text-sm leading-relaxed text-[#1C1C1C] sm:text-[15px]">
+            <div className="rounded-2xl border-l-[6px] border-[#D4A853] bg-[var(--foundry-tint)] p-5 sm:p-6">
+              <p className="text-sm leading-relaxed text-[var(--foundry-text)] sm:text-[15px]">
                 {T(founderLegacy, isBn)}
               </p>
             </div>
@@ -873,33 +1255,101 @@ export function FounderClient() {
           </Reveal>
         </Section>
 
-        {/* ===== 32. FAQ (30+) ===== */}
+        {/* ===== 32. FAQ (30+ — searchable + category-based) ===== */}
         <Section>
           <Reveal>
             <SectionTitle emoji="❓">{isBn ? 'প্রায়শই জিজ্ঞাসিত প্রশ্ন' : 'Frequently Asked Questions'}</SectionTitle>
             <SectionDivider />
-            <div className="space-y-2.5">
-              {founderFaqs.map((f, i) => (
-                <FaqItem key={i} q={f.q} a={f.a} isBn={isBn} />
+            <FaqSection isBn={isBn} />
+          </Reveal>
+        </Section>
+
+        {/* ===== 33. COMMUNITY (multiple platforms) ===== */}
+        <Section>
+          <Reveal>
+            <SectionTitle emoji="🌐">{isBn ? 'কমিউনিটি — যোগ দিন' : 'Community — Join Us'}</SectionTitle>
+            <SectionDivider />
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {founderCommunityPlatforms.map((p, i) => (
+                <div
+                  key={i}
+                  className="flex flex-col items-start rounded-2xl border border-[var(--foundry-border)] bg-[var(--foundry-card)] p-4 shadow-sm"
+                >
+                  <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-[var(--foundry-tint)]">
+                    <Icon name={p.icon} className="h-5 w-5 text-[#D4A853]" />
+                  </div>
+                  <h4 className="text-sm font-bold text-[#1E3A5F]">{T(p.name, isBn)}</h4>
+                  <p className="mt-0.5 text-xs text-[var(--foundry-subtle)]">{T(p.desc, isBn)}</p>
+                  <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-[#D4A853]/10 px-2.5 py-0.5 text-[11px] font-bold text-[#B8923A]">
+                    <Users className="h-3 w-3" /> {T(p.members, isBn)}
+                  </span>
+                </div>
               ))}
+            </div>
+            {/* Direct socials */}
+            <div className="mt-4 flex justify-center">
+              <LandingSocials />
             </div>
           </Reveal>
         </Section>
 
-        {/* ===== 33. COMMUNITY ===== */}
+        {/* ===== 33.5. FINAL CTA — "Ready to Build Your AI Business?" ===== */}
         <Section>
           <Reveal>
-            <SectionTitle emoji="🌐">{isBn ? 'কমিউনিটি' : 'Community'}</SectionTitle>
-            <SectionDivider />
-            <div className="rounded-2xl border border-[#E8DDD4] bg-white p-5 text-center shadow-sm sm:p-6">
-              <p className="text-sm text-[#4A4A4A]">
-                {isBn
-                  ? '৩,০০০+ বাংলাদেশি প্রতিষ্ঠাতার সাথে যোগ দিন।'
-                  : 'Join 3,000+ Bangladeshi founders.'}
+            <div className="rounded-3xl bg-gradient-to-br from-[#1E3A5F] to-[#2D5A8E] p-6 text-center text-white shadow-xl sm:p-10">
+              <h2 className="text-2xl font-extrabold leading-tight sm:text-3xl">
+                {T(founderFinalCTA.title, isBn)}
+              </h2>
+              <p className="mx-auto mt-2 max-w-lg text-sm text-white/80 sm:text-base">
+                {T(founderFinalCTA.subtitle, isBn)}
               </p>
-              <div className="mt-4 flex justify-center">
-                <LandingSocials />
+              {/* Checklist */}
+              <div className="mx-auto mt-5 max-w-md space-y-2 text-left">
+                {founderFinalCTA.checklist.map((c, i) => (
+                  <div key={i} className="flex items-start gap-2.5 rounded-lg bg-white/10 px-3 py-2">
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#D4A853]" />
+                    <span className="text-sm font-medium text-white">{T(c, isBn)}</span>
+                  </div>
+                ))}
               </div>
+              {/* CTA button */}
+              <a
+                href="#contact"
+                onClick={(e) => {
+                  e.preventDefault()
+                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
+                }}
+                className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-[#D4A853] px-7 py-3.5 text-sm font-bold text-white shadow-lg shadow-[#D4A853]/30 transition-transform hover:scale-105 sm:text-base"
+              >
+                <Calendar className="h-4 w-4" />
+                {T(founderFinalCTA.cta, isBn)}
+              </a>
+              <p className="mt-3 text-xs text-white/70">{T(founderFinalCTA.note, isBn)}</p>
+            </div>
+          </Reveal>
+        </Section>
+
+        {/* ===== 33.6. DIGITAL SIGNATURE ===== */}
+        <Section>
+          <Reveal>
+            <div className="rounded-2xl border border-[var(--foundry-border)] bg-[var(--foundry-card)] p-6 text-center shadow-sm sm:p-8">
+              <PenTool className="mx-auto h-7 w-7 text-[#D4A853]" />
+              {/* Signature-style name */}
+              <p
+                className="mt-3 text-2xl italic text-[#1E3A5F] sm:text-3xl"
+                style={{ fontFamily: '"Brush Script MT", "Lucida Handwriting", cursive, serif' }}
+              >
+                {T(founderSignature.name, isBn)}
+              </p>
+              <p className="mt-1 text-sm font-bold uppercase tracking-wider text-[#B8923A]">
+                {T(founderSignature.role, isBn)}
+              </p>
+              <p className="text-xs font-semibold text-[var(--foundry-subtle)]">
+                {founderSignature.company}
+              </p>
+              <p className="mx-auto mt-3 max-w-md text-xs italic leading-relaxed text-[var(--foundry-muted)]">
+                &ldquo;{T(founderSignature.tagline, isBn)}&rdquo;
+              </p>
             </div>
           </Reveal>
         </Section>
@@ -909,7 +1359,7 @@ export function FounderClient() {
         <div id="lead-form" aria-hidden className="sr-only" />
         <Section id="contact" className="scroll-mt-20">
           <Reveal>
-            <div className="rounded-3xl border border-[#E8DDD4] bg-white p-6 shadow-lg sm:p-8">
+            <div className="rounded-3xl border border-[var(--foundry-border)] bg-[var(--foundry-card)] p-6 shadow-lg sm:p-8">
               <div className="text-center">
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-[#D4A853]/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-[#B8923A]">
                   <Phone className="h-3 w-3" /> {isBn ? 'সরাসরি কথা বলুন' : 'Talk directly'}
@@ -917,19 +1367,19 @@ export function FounderClient() {
                 <h2 className="mt-3 text-2xl font-bold text-[#1E3A5F] sm:text-3xl">
                   {isBn ? 'একসাথে আপনার ব্যবসার ভবিষ্যৎ গড়ি' : 'Let\'s build the future of your business together'}
                 </h2>
-                <p className="mt-2 text-sm text-[#7A7A7A]">
+                <p className="mt-2 text-sm text-[var(--foundry-muted)]">
                   {isBn ? 'আপনার ব্যবসার জন্য AI রোডম্যাপ পেতে ফর্ম পূরণ করুন।' : 'Fill the form to get an AI roadmap for your business.'}
                 </p>
               </div>
 
-              <div className="mt-4 flex flex-wrap justify-center gap-2 text-xs text-[#4A4A4A]">
-                <a href={`mailto:${siteConfig.email}`} className="inline-flex items-center gap-1.5 rounded-full bg-[#FAF7F3] px-3 py-1.5">
+              <div className="mt-4 flex flex-wrap justify-center gap-2 text-xs text-[var(--foundry-subtle)]">
+                <a href={`mailto:${siteConfig.email}`} className="inline-flex items-center gap-1.5 rounded-full bg-[var(--foundry-bg)] px-3 py-1.5">
                   <Mail className="h-3.5 w-3.5 text-[#D4A853]" /> {siteConfig.email}
                 </a>
-                <a href={`tel:${siteConfig.phone.replace(/\s+/g, '')}`} className="inline-flex items-center gap-1.5 rounded-full bg-[#FAF7F3] px-3 py-1.5">
+                <a href={`tel:${siteConfig.phone.replace(/\s+/g, '')}`} className="inline-flex items-center gap-1.5 rounded-full bg-[var(--foundry-bg)] px-3 py-1.5">
                   <Phone className="h-3.5 w-3.5 text-[#D4A853]" /> {siteConfig.phone}
                 </a>
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-[#FAF7F3] px-3 py-1.5">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--foundry-bg)] px-3 py-1.5">
                   <MapPin className="h-3.5 w-3.5 text-[#D4A853]" /> {isBn ? 'যশোর, বাংলাদেশ' : 'Jessore, Bangladesh'}
                 </span>
               </div>
@@ -943,14 +1393,14 @@ export function FounderClient() {
                 />
               </div>
 
-              <div className="mt-6 border-t border-[#E8DDD4] pt-4 text-center">
-                <p className="mb-2 text-sm font-semibold text-[#1C1C1C]">
+              <div className="mt-6 border-t border-[var(--foundry-border)] pt-4 text-center">
+                <p className="mb-2 text-sm font-semibold text-[var(--foundry-text)]">
                   {isBn ? 'অথবা সরাসরি হোয়াটসঅ্যাপ করুন' : 'Or WhatsApp directly'}
                 </p>
                 <div className="flex justify-center">
                   <WhatsAppCTA isBn={isBn} />
                 </div>
-                <p className="mt-3 flex items-center justify-center gap-1 text-xs text-[#7A7A7A]">
+                <p className="mt-3 flex items-center justify-center gap-1 text-xs text-[var(--foundry-muted)]">
                   <Lock className="h-3 w-3" /> {isBn ? 'আপনার ডেটা নিরাপদ। আমরা শেয়ার করি না।' : 'Your data is safe. We never share.'}
                 </p>
               </div>
@@ -961,12 +1411,12 @@ export function FounderClient() {
         {/* ===== 35. NEWSLETTER ===== */}
         <Section>
           <Reveal>
-            <div className="rounded-2xl border border-[#E8DDD4] bg-[#F5F0EB] p-5 text-center sm:p-6">
+            <div className="rounded-2xl border border-[var(--foundry-border)] bg-[var(--foundry-tint)] p-5 text-center sm:p-6">
               <h4 className="flex items-center justify-center gap-2 text-base font-bold text-[#1E3A5F]">
                 <Send className="h-4 w-4 text-[#D4A853]" />
                 {isBn ? 'প্রতি সপ্তাহে AI গ্রোথ ইনসাইটস পান' : 'Get weekly AI growth insights'}
               </h4>
-              <p className="mt-1 text-sm text-[#4A4A4A]">
+              <p className="mt-1 text-sm text-[var(--foundry-subtle)]">
                 {isBn ? '৩,০০০+ বাংলাদেশি প্রতিষ্ঠাতার সাথে যোগ দিন।' : 'Join 3,000+ Bangladeshi founders.'}
               </p>
               <form
@@ -980,7 +1430,7 @@ export function FounderClient() {
                   type="email"
                   required
                   placeholder={isBn ? 'আপনার ইমেইল' : 'Your email'}
-                  className="h-11 rounded-full border border-[#E8DDD4] bg-white px-4 text-sm outline-none focus:border-[#1E3A5F]"
+                  className="h-11 rounded-full border border-[var(--foundry-border)] bg-[var(--foundry-card)] px-4 text-sm outline-none focus:border-[#1E3A5F]"
                 />
                 <button
                   type="submit"
@@ -989,7 +1439,7 @@ export function FounderClient() {
                   {isBn ? 'সাবস্ক্রাইব' : 'Subscribe'}
                 </button>
               </form>
-              <p className="mt-2 text-xs text-[#7A7A7A]">
+              <p className="mt-2 text-xs text-[var(--foundry-muted)]">
                 {isBn ? 'কোনো স্প্যাম নেই, যেকোনো সময় আনসাবস্ক্রাইব করুন।' : 'No spam, unsubscribe anytime.'}
               </p>
             </div>
@@ -999,6 +1449,7 @@ export function FounderClient() {
 
       <LandingFooter isBn={isBn} />
       <FloatingButtons />
-    </div>
+      </div>
+    </>
   )
 }
