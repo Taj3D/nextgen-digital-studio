@@ -212,7 +212,7 @@ const FAQS = [
 ] as const
 
 /* -------------------------------------------------------------------------- */
-/*  Countdown timer hook (deadline = Aug 1, 2026 midnight Asia/Dhaka)         */
+/*  Countdown timer hook (deadline = Aug 11, 2026 midnight Asia/Dhaka)        */
 /* -------------------------------------------------------------------------- */
 
 function useCountdown(deadline: Date) {
@@ -451,8 +451,8 @@ export function TrainingClient() {
   const bn = (s: string | number) =>
     isBn ? String(s).replace(/[0-9]/g, (d) => '০১২৩৪৫৬৭৮৯'[+d]) : String(s)
 
-  // Deadline = Aug 1, 2026 midnight Asia/Dhaka (UTC+6)
-  const deadline = React.useMemo(() => new Date('2026-08-01T00:00:00+06:00'), [])
+  // Deadline = Aug 11, 2026 midnight Asia/Dhaka (UTC+6)
+  const deadline = React.useMemo(() => new Date('2026-08-11T00:00:00+06:00'), [])
   const { days, hours, minutes, seconds } = useCountdown(deadline)
 
   // Fast-action bonus deadline = today end of day (local)
@@ -474,9 +474,6 @@ export function TrainingClient() {
 
   // FAQ search state
   const [faqQuery, setFaqQuery] = React.useState('')
-
-  // Demo video play state
-  const [demoPlaying, setDemoPlaying] = React.useState(false)
 
   const scrollToEnroll = (e?: React.MouseEvent) => {
     e?.preventDefault()
@@ -605,30 +602,21 @@ export function TrainingClient() {
             </p>
           </div>
           <div className="relative mt-6 aspect-video overflow-hidden rounded-2xl border border-border/60 bg-slate-900 shadow-xl">
-            {demoPlaying ? (
-              <iframe
-                src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
-                title="AI Demo"
-                allow="autoplay; encrypted-media; picture-in-picture"
-                allowFullScreen
-                className="h-full w-full"
-              />
-            ) : (
-              <button
-                type="button"
-                onClick={() => setDemoPlaying(true)}
-                className="group absolute inset-0 flex items-center justify-center bg-gradient-to-br from-slate-900 to-slate-800"
-                aria-label={isBn ? 'ভিডিও চালান' : 'Play video'}
-              >
-                <div className="absolute inset-0 bg-grid opacity-10" />
-                <div className="relative grid h-20 w-20 place-items-center rounded-full bg-white/20 backdrop-blur transition-transform group-hover:scale-110">
-                  <PlayCircle className="h-10 w-10 text-white" />
-                </div>
-                <p className="absolute bottom-6 left-1/2 -translate-x-1/2 text-xs font-semibold text-white/80">
-                  {isBn ? 'ক্লিক করে চালান' : 'Click to play'}
-                </p>
-              </button>
-            )}
+            <a
+              href="https://web.facebook.com/share/v/1FsTdn4U3u/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group absolute inset-0 flex items-center justify-center bg-gradient-to-br from-slate-900 to-slate-800"
+              aria-label={isBn ? 'Facebook-এ ডেমো ভিডিও দেখুন' : 'Watch demo video on Facebook'}
+            >
+              <div className="absolute inset-0 bg-grid opacity-10" />
+              <div className="relative grid h-20 w-20 place-items-center rounded-full bg-white/20 backdrop-blur transition-transform group-hover:scale-110">
+                <PlayCircle className="h-10 w-10 text-white" />
+              </div>
+              <p className="absolute bottom-6 left-1/2 -translate-x-1/2 text-xs font-semibold text-white/80">
+                {isBn ? 'Facebook-এ দেখুন' : 'Watch on Facebook'}
+              </p>
+            </a>
           </div>
         </section>
 

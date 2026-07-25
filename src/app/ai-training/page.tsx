@@ -40,8 +40,8 @@ const courseLd = {
   hasCourseInstance: {
     '@type': 'CourseInstance',
     courseMode: 'online',
-    startDate: '2026-08-01',
-    endDate: '2026-08-07',
+    startDate: '2026-08-11',
+    endDate: '2026-08-17',
     duration: 'P7D',
     instructor: { '@type': 'Person', name: 'Taj Bhai' },
     location: {

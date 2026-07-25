@@ -637,7 +637,7 @@ const translations: Record<Lang, Record<string, string>> = {
     'aiTraining.registrationEyebrow': 'Registration',
     'aiTraining.fullCourse': 'full course',
     // ai-training v2.0 — conversion-optimized page (bilingual)
-    'aiTraining.v2.badge': '🔥 Live batch starts Aug 1, 2026',
+    'aiTraining.v2.badge': '🔥 Live batch starts Aug 11, 2026',
     'aiTraining.v2.heroTitle1': '🚀 Build your own software with AI —',
     'aiTraining.v2.heroTitleHighlight': 'no coding required',
     'aiTraining.v2.heroSub': 'Become an AI Architect in 1 week — first app on day 1',
@@ -1433,7 +1433,7 @@ const translations: Record<Lang, Record<string, string>> = {
     'aiTraining.registrationEyebrow': 'রেজিস্ট্রেশন',
     'aiTraining.fullCourse': 'সম্পূর্ণ কোর্স',
     // ai-training v2.0 — conversion-optimized page (bilingual)
-    'aiTraining.v2.badge': '🔥 লাইভ ব্যাচ শুরু হচ্ছে ১ আগস্ট, ২০২৬',
+    'aiTraining.v2.badge': '🔥 লাইভ ব্যাচ শুরু হচ্ছে ১১ আগস্ট, ২০২৬',
     'aiTraining.v2.heroTitle1': '🚀 AI দিয়ে আপনার নিজের সফটওয়্যার বানান —',
     'aiTraining.v2.heroTitleHighlight': 'কোনো কোডিং ছাড়াই',
     'aiTraining.v2.heroSub': '১ সপ্তাহে AI আর্কিটেক্ট হয়ে উঠুন — প্রথম দিনেই প্রথম অ্যাপ',
