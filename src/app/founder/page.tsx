@@ -1,27 +1,39 @@
 import type { Metadata } from 'next'
-import { FounderClient } from './founder-client'
 
 export const metadata: Metadata = {
-  title: 'তাজ ভাই — Founder of NextGen Digital Studio | Md. Nazmul Islam Taj',
-  description:
-    'পরিচয় করুন মোঃ নাজমুল ইসলাম তাজ (তাজ ভাই)-এর সাথে — যশোরের প্রথম ডিজিটাল ইঞ্জিনিয়ার, NextGen Digital Studio-এর প্রতিষ্ঠাতা, এবং AI Sales Automation বিশেষজ্ঞ। Meet Taj Bhai — Jessore first digital engineer, founder of NextGen Digital Studio.',
+  title: 'মোঃ নাজমুল ইসলাম তাজ (তাজ ভাই) — AI Business Strategist | NextGen Digital Studio',
+  description: 'মোঃ নাজমুল ইসলাম তাজ — বাংলাদেশের AI বিজনেস স্ট্র্যাটেজিস্ট। ১২০+ ক্লায়েন্ট, ২.৪M+ অটোমেটেড কথোপকথন। NextGen Digital Studio-এর প্রতিষ্ঠাতা।',
   keywords: [
+    'AI Expert Bangladesh',
+    'AI Consultant Bangladesh',
+    'Business Automation Consultant',
+    'AI Speaker Bangladesh',
+    'AI Trainer Bangladesh',
+    'AI Business Strategist',
     'Taj Bhai',
-    'তাজ ভাই',
     'Nazmul Islam Taj',
     'NextGen Digital Studio founder',
-    'Jessore digital engineer',
     'AI automation Bangladesh',
   ],
   openGraph: {
-    title: 'তাজ ভাই — Founder of NextGen Digital Studio',
-    description:
-      'Meet Md. Nazmul Islam Taj (Taj Bhai) — Jessore first digital engineer & founder of NextGen Digital Studio.',
-    images: [{ url: '/founder.png', width: 1024, height: 1024, alt: 'Taj Bhai' }],
+    title: 'মোঃ নাজমুল ইসলাম তাজ — AI Business Strategist | NextGen Digital Studio',
+    description: 'বাংলাদেশের AI বিজনেস ট্রান্সফরমেশন স্ট্র্যাটেজিস্ট। NextGen Digital Studio-এর প্রতিষ্ঠাতা।',
+    type: 'profile',
+    url: 'https://nextgendigitalstudio.com/founder',
+    images: [{ url: '/logo.jpg', width: 1200, height: 630, alt: 'Taj Bhai — AI Business Strategist' }],
   },
-  alternates: { canonical: '/founder' },
+  alternates: { canonical: 'https://nextgendigitalstudio.com/founder' },
 }
 
 export default function FounderPage() {
-  return <FounderClient />
+  return (
+    <div className="min-h-screen bg-background">
+      <iframe
+        src="/founder-enterprise.html"
+        className="w-full"
+        style={{ minHeight: '100vh', border: 'none' }}
+        title="Founder — Taj Bhai"
+      />
+    </div>
+  )
 }
