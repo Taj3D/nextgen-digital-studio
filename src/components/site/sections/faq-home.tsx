@@ -39,7 +39,7 @@ export function FaqSection() {
   }
 
   return (
-    <SectionShell id="faq" aria-label="Frequently asked questions">
+    <SectionShell id="faq" aria-label={t('aria.faq')}>
       <div className="flex flex-col items-center text-center gap-3 mb-10">
         <Reveal>
           <Eyebrow>{t('faqHome.eyebrow')}</Eyebrow>

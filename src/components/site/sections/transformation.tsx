@@ -28,7 +28,7 @@ export function TransformationSection() {
   const { t } = useLang()
 
   return (
-    <SectionShell id="transformation" aria-label="Business transformation">
+    <SectionShell id="transformation" aria-label={t('aria.transformation')}>
       {/* Header */}
       <Reveal className="mx-auto max-w-3xl text-center">
         <span className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/5 px-4 py-2 text-xs sm:text-sm font-semibold uppercase tracking-wider text-emerald-500">

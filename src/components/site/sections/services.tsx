@@ -43,7 +43,7 @@ export function Services() {
   const { t, lang } = useLang()
 
   return (
-    <SectionShell id="services" className="relative" aria-label="Services">
+    <SectionShell id="services" className="relative" aria-label={t('aria.services')}>
       {/* Header */}
       <Reveal className="mx-auto max-w-3xl text-center">
         <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/5 px-4 py-2 text-emerald-500 text-xs sm:text-sm font-semibold uppercase tracking-wider">
@@ -107,7 +107,7 @@ export function Services() {
 
                     {/* Learn more indicator */}
                     <div className="mt-auto pt-2 flex items-center gap-1 text-sm font-semibold text-emerald-500">
-                      <span>{lang === 'bn' ? 'বিস্তারিত জানুন' : 'Learn more'}</span>
+                      <span>{t('services.learnMore')}</span>
                       <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </div>
                   </CardContent>

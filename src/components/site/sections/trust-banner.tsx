@@ -25,7 +25,7 @@ export function TrustBanner() {
   return (
     <section
       id="trust-banner"
-      aria-label="Trust signals"
+      aria-label={t('aria.trustSignals')}
       className="relative border-y border-border bg-muted/40 py-6"
     >
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">

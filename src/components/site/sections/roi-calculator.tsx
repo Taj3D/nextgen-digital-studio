@@ -84,7 +84,7 @@ export function RoiCalculatorSection() {
   ]
 
   return (
-    <SectionShell id="roi-calculator" aria-label="ROI Calculator">
+    <SectionShell id="roi-calculator" aria-label={t('aria.roiCalculator')}>
       <div className="flex flex-col items-center text-center gap-3 mb-12">
         <Reveal>
           <Eyebrow>{t('calc.eyebrow')}</Eyebrow>

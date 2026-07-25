@@ -371,10 +371,14 @@ export const services: Service[] = [
 export type CaseStudy = {
   slug: string
   client: string
+  clientBn: string
   industry: string
+  industryBn: string
   title: string
+  titleBn: string
   summary: string
-  metrics: { label: string; value: string }[]
+  summaryBn: string
+  metrics: { label: string; value: string; labelBn: string; valueBn: string }[]
   services: string[]
   challenge: string
   solution: string
@@ -386,14 +390,19 @@ export const caseStudies: CaseStudy[] = [
   {
     slug: 'dhaka-realty',
     client: 'Dhaka Realty Group',
+    clientBn: 'ঢাকা রিয়েলটি গ্রুপ',
     industry: 'Real Estate',
+    industryBn: 'রিয়েল এস্টেট',
     title: 'Tripled qualified property leads with an AI sales agent',
+    titleBn: 'এআই সেলস এজেন্ট দিয়ে কোয়ালিফাইড প্রপার্টি লিড ৩গুণ বৃদ্ধি',
     summary:
       'We deployed an AI chat agent on their website and WhatsApp that instantly qualifies buyers, answers property questions and books site visits — 24/7.',
+    summaryBn:
+      'তাদের ওয়েবসাইট ও WhatsApp-এ এআই চ্যাট এজেন্ট ডিপ্লয় করা হয়েছে যা বায়ারদের তাৎক্ষণিকভাবে যোগ্যতা যাচাই করে, প্রপার্টি প্রশ্নের উত্তর দেয় এবং সাইট ভিজিট বুক করে — ২৪/৭।',
     metrics: [
-      { label: 'Qualified leads', value: '+212%' },
-      { label: 'Response time', value: '-94%' },
-      { label: 'Site visits booked', value: '+168%' },
+      { label: 'Qualified leads', value: '+212%', labelBn: 'যোগ্য লিড', valueBn: '+২১২%' },
+      { label: 'Response time', value: '-94%', labelBn: 'রেসপন্স টাইম', valueBn: '-৯৪%' },
+      { label: 'Site visits booked', value: '+168%', labelBn: 'সাইট ভিজিট বুকড', valueBn: '+১৬৮%' },
     ],
     services: ['AI Chat Agent', 'WhatsApp Automation', 'CRM Automation'],
     challenge:
@@ -412,14 +421,19 @@ export const caseStudies: CaseStudy[] = [
   {
     slug: 'medicare-hospital',
     client: 'Medicare Hospital',
+    clientBn: 'মেডিকেয়ার হাসপাতাল',
     industry: 'Healthcare',
+    industryBn: 'স্বাস্থ্যসেবা',
     title: 'AI voice agent cut appointment no-shows by 38%',
+    titleBn: 'এআই ভয়েস এজেন্ট অ্যাপয়েন্টমেন্ট no-show ৩৮% কমিয়েছে',
     summary:
       'A bilingual (Bangla/English) AI voice agent now handles every appointment call, sends reminders and reschedules automatically — easing pressure on front desk staff.',
+    summaryBn:
+      'একটি দ্বিভাষিক (বাংলা/ইংরেজি) এআই ভয়েস এজেন্ট এখন প্রতিটি অ্যাপয়েন্টমেন্ট কল সামলায়, রিমাইন্ডার পাঠায় এবং স্বয়ংক্রিয়ভাবে রিশিডিউল করে — ফ্রন্ট ডেস্ক স্টাফের চাপ কমায়।',
     metrics: [
-      { label: 'No-show rate', value: '-38%' },
-      { label: 'Calls automated', value: '4,200/mo' },
-      { label: 'Patient satisfaction', value: '+27%' },
+      { label: 'No-show rate', value: '-38%', labelBn: 'No-show হার', valueBn: '-৩৮%' },
+      { label: 'Calls automated', value: '4,200/mo', labelBn: 'কল অটোমেটেড', valueBn: '৪,২০০/মাস' },
+      { label: 'Patient satisfaction', value: '+27%', labelBn: 'রোগী সন্তুষ্টি', valueBn: '+২৭%' },
     ],
     services: ['AI Voice Agent', 'CRM Automation', 'Business Automation'],
     challenge:
@@ -438,14 +452,19 @@ export const caseStudies: CaseStudy[] = [
   {
     slug: 'shopsmart-bd',
     client: 'ShopSmart BD',
+    clientBn: 'শপস্মার্ট বিডি',
     industry: 'E-commerce',
+    industryBn: 'ই-কমার্স',
     title: 'Recovered 12,000+ abandoned carts in one quarter',
+    titleBn: 'এক কোয়ার্টারে ১২,০০০+ পরিত্যক্ত কার্ট রিকভার করা হয়েছে',
     summary:
       'A full WhatsApp automation flow re-engages every abandoned cart with personalised offers and order updates — recovering revenue that was previously lost.',
+    summaryBn:
+      'একটি সম্পূর্ণ WhatsApp অটোমেশন ফ্লো প্রতিটি পরিত্যক্ত কার্টে পার্সোনালাইজড অফার ও অর্ডার আপডেট পাঠিয়ে পুনরায় সম্পৃক্ত করে — আগে হারানো রাজস্ব রিকভার করে।',
     metrics: [
-      { label: 'Carts recovered', value: '12,400' },
-      { label: 'Revenue recovered', value: '৳48L' },
-      { label: 'ROI', value: '7.2x' },
+      { label: 'Carts recovered', value: '12,400', labelBn: 'কার্ট রিকভারড', valueBn: '১২,৪০০' },
+      { label: 'Revenue recovered', value: '৳48L', labelBn: 'রাজস্ব রিকভারড', valueBn: '৳৪৮লক্ষ' },
+      { label: 'ROI', value: '7.2x', labelBn: 'ROI', valueBn: '৭.২গুণ' },
     ],
     services: ['WhatsApp Automation', 'Sales Funnel', 'Performance Marketing'],
     challenge:
@@ -464,14 +483,19 @@ export const caseStudies: CaseStudy[] = [
   {
     slug: 'edufirst',
     client: 'EduFirst School Network',
+    clientBn: 'এডুফার্স্ট স্কুল নেটওয়ার্ক',
     industry: 'Education',
+    industryBn: 'শিক্ষা',
     title: 'Admissions grew 45% with instant AI enquiry handling',
+    titleBn: 'তাৎক্ষণিক এআই ইনকোয়ারি হ্যান্ডলিংয়ে ভর্তি ৪৫% বৃদ্ধি',
     summary:
       'An AI agent now answers every admissions enquiry in seconds across web and WhatsApp, nurturing parents from first question to enrolment.',
+    summaryBn:
+      'একটি এআই এজেন্ট এখন প্রতিটি ভর্তি ইনকোয়ারির উত্তর সেকেন্ডের মধ্যে দেয় ওয়েব ও WhatsApp-এ, প্রথম প্রশ্ন থেকে ভর্তি পর্যন্ত অভিভাবকদের নার্চার করে।',
     metrics: [
-      { label: 'Enrolment growth', value: '+45%' },
-      { label: 'Enquiry response', value: '<5s' },
-      { label: 'Parent NPS', value: '72' },
+      { label: 'Enrolment growth', value: '+45%', labelBn: 'ভর্তি বৃদ্ধি', valueBn: '+৪৫%' },
+      { label: 'Enquiry response', value: '<5s', labelBn: 'ইনকোয়ারি রেসপন্স', valueBn: '<৫সে' },
+      { label: 'Parent NPS', value: '72', labelBn: 'অভিভাবক NPS', valueBn: '৭২' },
     ],
     services: ['AI Chat Agent', 'Lead Generation', 'WhatsApp Automation'],
     challenge:

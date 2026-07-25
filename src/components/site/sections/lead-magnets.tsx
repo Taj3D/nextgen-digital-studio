@@ -16,7 +16,7 @@ export function LeadMagnetSection() {
   const { t } = useLang()
 
   return (
-    <SectionShell id="lead-magnets" aria-label="Free resources">
+    <SectionShell id="lead-magnets" aria-label={t('aria.leadMagnets')}>
       <div className="flex flex-col items-center text-center gap-3 mb-12">
         <Reveal>
           <Eyebrow>{t('leadMagnet.eyebrow')}</Eyebrow>

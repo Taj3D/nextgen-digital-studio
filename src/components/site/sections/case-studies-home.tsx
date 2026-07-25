@@ -8,13 +8,13 @@ import { useLang } from '@/components/site/language-provider'
 import { caseStudies } from '@/lib/site-data'
 
 export function CaseStudiesPreview() {
-  const { t } = useLang()
+  const { t, lang } = useLang()
+  const isBn = lang === 'bn'
 
-  // CaseStudy type has no titleBn/summaryBn — English fields used directly.
   const items = caseStudies.slice(0, 4)
 
   return (
-    <SectionShell id="case-studies" aria-label="Case studies preview">
+    <SectionShell id="case-studies" aria-label={t('aria.caseStudies')}>
       <div className="flex flex-col items-center text-center gap-3 mb-12">
         <Reveal>
           <Eyebrow>{t('caseStudiesHome.eyebrow')}</Eyebrow>
@@ -41,17 +41,17 @@ export function CaseStudiesPreview() {
               <div className="flex flex-col gap-4 h-full">
                 <div className="flex items-center justify-between">
                   <span className="bg-muted text-muted-foreground text-xs px-2 py-1 rounded-full">
-                    {cs.industry}
+                    {isBn ? cs.industryBn : cs.industry}
                   </span>
                 </div>
                 <div>
-                  <div className="text-lg font-bold text-foreground">{cs.client}</div>
+                  <div className="text-lg font-bold text-foreground">{isBn ? cs.clientBn : cs.client}</div>
                   <h3 className="mt-1 text-base font-semibold text-foreground/90 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
-                    {cs.title}
+                    {isBn ? cs.titleBn : cs.title}
                   </h3>
                 </div>
                 <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
-                  {cs.summary}
+                  {isBn ? cs.summaryBn : cs.summary}
                 </p>
                 <div className="grid grid-cols-3 gap-2 mt-auto">
                   {cs.metrics.slice(0, 3).map((m, j) => (
@@ -59,16 +59,16 @@ export function CaseStudiesPreview() {
                       key={j}
                       className="rounded-lg bg-muted/50 p-2 text-center"
                     >
-                      <div className="text-sm font-bold gradient-text">{m.value}</div>
+                      <div className="text-sm font-bold gradient-text">{isBn ? m.valueBn : m.value}</div>
                       <div className="text-[10px] text-muted-foreground leading-tight mt-0.5">
-                        {m.label}
+                        {isBn ? m.labelBn : m.label}
                       </div>
                     </div>
                   ))}
                 </div>
                 <div className="flex items-center gap-2 pt-1">
                   <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-                    {t('caseStudiesHome.resultBadge')}: {cs.metrics[0]?.value}
+                    {t('caseStudiesHome.resultBadge')}: {isBn ? cs.metrics[0]?.valueBn : cs.metrics[0]?.value}
                   </span>
                 </div>
               </div>

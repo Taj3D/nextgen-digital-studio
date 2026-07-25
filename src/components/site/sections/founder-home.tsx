@@ -24,7 +24,7 @@ export function FounderSection() {
   return (
     <SectionShell
       id="founder"
-      aria-label="Founder note"
+      aria-label={t('aria.founder')}
       className="bg-gradient-to-b from-amber-50/50 to-background dark:from-amber-950/10"
     >
       <div className="grid gap-10 lg:grid-cols-[1fr_1.5fr] lg:items-center">

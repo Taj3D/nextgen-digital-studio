@@ -12,9 +12,11 @@ import {
 import { useLang } from '@/components/site/language-provider'
 import { TESTIMONIALS, type Testimonial } from '@/lib/site-data'
 
-function Stars({ rating }: { rating: number }) {
+function Stars({ rating, isBn }: { rating: number; isBn: boolean }) {
+  const bn = (s: string | number) => String(s).replace(/[0-9]/g, (d) => '০১২৩৪৫৬৭৮৯'[+d])
+  const label = isBn ? `${bn(rating)}/৫` : `${rating}/5`
   return (
-    <div className="flex items-center gap-0.5" aria-label={`${rating}/5`}>
+    <div className="flex items-center gap-0.5" aria-label={label}>
       {Array.from({ length: 5 }).map((_, i) => (
         <Star
           key={i}
@@ -29,11 +31,12 @@ function Stars({ rating }: { rating: number }) {
 
 function TestimonialCard({ t }: { t: Testimonial }) {
   const { lang } = useLang()
-  const name = lang === 'bn' ? t.nameBn : t.name
-  const role = lang === 'bn' ? t.roleBn : t.role
-  const company = lang === 'bn' ? t.companyBn : t.company
-  const quote = lang === 'bn' ? t.quoteBn : t.quote
-  const metric = lang === 'bn' ? t.metricBn : t.metric
+  const isBn = lang === 'bn'
+  const name = isBn ? t.nameBn : t.name
+  const role = isBn ? t.roleBn : t.role
+  const company = isBn ? t.companyBn : t.company
+  const quote = isBn ? t.quoteBn : t.quote
+  const metric = isBn ? t.metricBn : t.metric
 
   return (
     <div className="flex h-full flex-col gap-4 rounded-2xl border border-border/60 bg-card/70 backdrop-blur-sm p-6 transition-all duration-300 hover:-translate-y-1 hover:border-emerald-500/40 hover:shadow-glow">
@@ -51,7 +54,7 @@ function TestimonialCard({ t }: { t: Testimonial }) {
       </div>
 
       {/* Stars */}
-      <Stars rating={t.rating} />
+      <Stars rating={t.rating} isBn={isBn} />
 
       {/* Quote */}
       <div className="relative flex-1">
@@ -77,7 +80,7 @@ export function Testimonials() {
   const { t } = useLang()
 
   return (
-    <SectionShell id="testimonials" className="relative" aria-label="Testimonials">
+    <SectionShell id="testimonials" className="relative" aria-label={t('aria.testimonials')}>
       {/* Header */}
       <Reveal className="mx-auto max-w-3xl text-center">
         <div className="inline-flex items-center gap-2 rounded-full border border-amber-400/30 bg-amber-400/5 px-4 py-2 text-amber-400 text-xs sm:text-sm font-semibold uppercase tracking-wider">

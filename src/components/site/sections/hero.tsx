@@ -55,7 +55,7 @@ export function HeroSection() {
     <section
       id="hero"
       className="relative overflow-hidden bg-background"
-      aria-label="Hero"
+      aria-label={t('aria.hero')}
     >
       {/* Background grid */}
       <div className="pointer-events-none absolute inset-0 bg-grid opacity-60" aria-hidden />

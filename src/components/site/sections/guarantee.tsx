@@ -16,7 +16,7 @@ export function GuaranteeSection() {
   ] as const
 
   return (
-    <SectionShell id="guarantee" aria-label="ROI guarantee">
+    <SectionShell id="guarantee" aria-label={t('aria.guarantee')}>
       <Reveal>
         <div className="rounded-3xl gradient-brand-soft border border-emerald-500/20 p-8 sm:p-12">
           <div className="flex flex-col items-center text-center gap-5">

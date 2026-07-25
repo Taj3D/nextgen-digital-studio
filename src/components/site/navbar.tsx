@@ -87,7 +87,7 @@ function Logo({ onClick }: { onClick?: () => void }) {
     >
       <Image
         src="/logo.jpg"
-        alt="NextGen Digital Studio"
+        alt={t('brand.name')}
         width={40}
         height={40}
         className="h-10 w-10 rounded-xl object-cover shadow-glow transition-transform duration-300 group-hover:scale-105"
@@ -135,7 +135,7 @@ function DesktopNav() {
   const { t } = useLang()
   const navTo = useAnchorNav()
   return (
-    <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
+    <nav className="hidden items-center gap-1 md:flex" aria-label={t('aria.primaryNav')}>
       {NAV_ITEMS.map((item) => (
         <button
           key={item.key}
@@ -244,7 +244,7 @@ export function Navbar() {
                 <SheetTitle className="flex items-center gap-2">
                   <Image
                     src="/logo.jpg"
-                    alt="NextGen Digital Studio"
+                    alt={t('brand.name')}
                     width={36}
                     height={36}
                     className="h-9 w-9 rounded-xl object-cover"

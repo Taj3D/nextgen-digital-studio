@@ -38,7 +38,7 @@ export function FrameworkSection() {
   return (
     <SectionShell
       id="framework"
-      aria-label="Proprietary growth framework"
+      aria-label={t('aria.framework')}
       className="relative overflow-hidden"
     >
       {/* Premium background glow */}

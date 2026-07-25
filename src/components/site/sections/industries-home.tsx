@@ -11,7 +11,7 @@ export function IndustriesSection() {
   const isBn = lang === 'bn'
 
   return (
-    <SectionShell id="industries" aria-label="Industries we serve">
+    <SectionShell id="industries" aria-label={t('aria.industries')}>
       {/* Header */}
       <Reveal className="mx-auto max-w-3xl text-center">
         <span className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/5 px-4 py-2 text-xs sm:text-sm font-semibold uppercase tracking-wider text-emerald-500">

@@ -174,7 +174,7 @@ export function LeadForm() {
   )
 
   return (
-    <SectionShell id="lead-form" className="relative" aria-label="Lead Form">
+    <SectionShell id="lead-form" className="relative" aria-label={t('aria.leadForm')}>
       {/* Soft brand glow backdrop */}
       <div
         className="pointer-events-none absolute inset-0 gradient-brand-soft opacity-20"

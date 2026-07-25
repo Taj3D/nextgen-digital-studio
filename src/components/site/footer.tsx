@@ -28,22 +28,18 @@ import { siteConfig } from '@/lib/site-data'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-const COMPANY_LINKS = [
-  { key: 'footer.about', href: '/founder' },
-  { key: 'footer.careers', href: `mailto:${siteConfig.email}?subject=Career%20Inquiry%20%E2%80%94%20NextGen%20Digital%20Studio` },
-  { key: 'footer.blog', href: '/blog' },
-  { key: 'footer.caseStudies', href: '/case-studies' },
-]
+// Company links — built dynamically in SiteFooter (careers mailto needs bilingual subject).
+type CompanyLink = { key: string; href: string }
 
-// First 6 services shown in footer (out of 12 — keeps footer compact).
-// Each links to its dedicated landing page (always works on any route).
+// First 6 services shown in footer — each links to its dedicated /services/* page.
+// Labels use footer.service1-6 keys (bilingual) matching actual page titles.
 const SERVICE_LINKS = [
-  { key: 'services.s1Title', href: '/services/ai-sales-automation' },
-  { key: 'services.s2Title', href: '/services/ai-chat-agent' },
-  { key: 'services.s3Title', href: '/services/ai-voice-agent' },
-  { key: 'services.s4Title', href: '/services/crm-automation' },
-  { key: 'services.s5Title', href: '/services/whatsapp-automation' },
-  { key: 'services.s6Title', href: '/services/lead-generation' },
+  { key: 'footer.service1', href: '/services/ai-sales-automation' },
+  { key: 'footer.service2', href: '/services/ai-chat-agent' },
+  { key: 'footer.service3', href: '/services/ai-voice-agent' },
+  { key: 'footer.service4', href: '/services/crm-automation' },
+  { key: 'footer.service5', href: '/services/whatsapp-automation' },
+  { key: 'footer.service6', href: '/services/lead-generation' },
 ]
 
 /**
@@ -172,8 +168,21 @@ function NewsletterForm() {
 }
 
 export function SiteFooter() {
-  const { t } = useLang()
+  const { t, lang } = useLang()
+  const bn = (s: string | number) => String(s).replace(/[0-9]/g, (d) => '০১২৩৪৫৬৭৮৯'[+d])
   const year = new Date().getFullYear()
+  const yearDisplay = lang === 'bn' ? bn(year) : String(year)
+
+  // Build company links with bilingual careers mailto subject
+  const companyLinks: CompanyLink[] = [
+    { key: 'footer.about', href: '/founder' },
+    {
+      key: 'footer.careers',
+      href: `mailto:${siteConfig.email}?subject=${encodeURIComponent(t('footer.careersSubject'))}`,
+    },
+    { key: 'footer.blog', href: '/blog' },
+    { key: 'footer.caseStudies', href: '/case-studies' },
+  ]
 
   return (
     <footer className="mt-auto w-full border-t border-border/50 bg-card/50 backdrop-blur-sm">
@@ -187,7 +196,7 @@ export function SiteFooter() {
             <div className="flex items-center gap-2.5">
               <Image
                 src="/logo.jpg"
-                alt="NextGen Digital Studio"
+                alt={t('brand.name')}
                 width={40}
                 height={40}
                 className="h-10 w-10 rounded-xl object-cover shadow-glow"
@@ -250,7 +259,7 @@ export function SiteFooter() {
               {t('footer.company')}
             </h3>
             <ul className="space-y-2">
-              {COMPANY_LINKS.map((item) => (
+              {companyLinks.map((item) => (
                 <li key={item.key}>
                   <a
                     href={item.href}
@@ -310,7 +319,7 @@ export function SiteFooter() {
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-60" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
               </span>
-              © {year} {t('brand.name')}. {t('footer.rights')}
+              © {yearDisplay} {t('brand.name')}. {t('footer.rights')}
             </span>
             <span className="mx-1 hidden text-border md:inline">|</span>
             <a href="/privacy" className="transition-colors hover:text-primary">
