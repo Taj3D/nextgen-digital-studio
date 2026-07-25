@@ -200,8 +200,8 @@ const FAQS = [
   {
     q_bn: 'এনরোলমেন্ট শেষ হওয়ার সময় কখন?',
     q_en: 'When does enrollment close?',
-    a_bn: '৩১ জুলাই, ২০২৬ রাত ১১:৫৯ পর্যন্ত — সিট সংখ্যা সীমিত।',
-    a_en: 'Until July 31, 2026 11:59 PM — limited seats.',
+    a_bn: '১০ আগস্ট, ২০২৬ রাত ১১:৫৯ পর্যন্ত — সিট সংখ্যা সীমিত।',
+    a_en: 'Until August 10, 2026 11:59 PM — limited seats.',
   },
   {
     q_bn: 'এই অফার কি আবার পাব?',
