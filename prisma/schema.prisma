@@ -6,10 +6,12 @@ generator client {
 }
 
 datasource db {
-  // SQLite locally (db/custom.db) for fast preview panel development.
-  // On Vercel: create a Postgres store, then change provider to "postgresql"
-  // and set DATABASE_URL env var to the Postgres connection string.
-  provider = "sqlite"
+  // PostgreSQL — required for Vercel serverless deployment (read-only FS).
+  // Vercel Postgres / Neon / Supabase all work. Set DATABASE_URL env var
+  // to the Postgres connection string in both local .env and Vercel.
+  // Local dev: run a Postgres instance (e.g. `docker run -e POSTGRES_PASSWORD=pg -p 5432 postgres`)
+  //   then set DATABASE_URL=postgresql://postgres:pg@localhost:5432/nextgen
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
