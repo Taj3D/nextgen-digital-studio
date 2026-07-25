@@ -42,6 +42,17 @@ const SERVICE_LINKS = [
   { key: 'footer.service6', href: '/services/lead-generation' },
 ]
 
+// Products & Training — standalone product/training pages (previously only
+// reachable via the navbar "More" dropdown, which is client-rendered and thus
+// invisible to crawlers. These static <Link> elements fix that SEO gap.)
+const PRODUCT_LINKS = [
+  { key: 'footer.aiTraining', href: '/ai-training' },
+  { key: 'footer.cncTraining', href: '/cnc-training' },
+  { key: 'footer.cncDesign', href: '/cnc-design' },
+  { key: 'footer.3dPortrait', href: '/3d-portrait' },
+  { key: 'footer.pdfBooks', href: '/pdf-books' },
+]
+
 /**
  * Navigate to an anchor on the homepage. On the homepage we smooth-scroll;
  * on other routes we navigate to the homepage, which scrolls automatically.
@@ -190,7 +201,7 @@ export function SiteFooter() {
       <div className="h-px w-full gradient-brand" />
 
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.3fr]">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1.3fr]">
           {/* Col 1 — Brand */}
           <div className="space-y-4">
             <div className="flex items-center gap-2.5">
@@ -299,7 +310,26 @@ export function SiteFooter() {
             </ul>
           </div>
 
-          {/* Col 4 — Newsletter */}
+          {/* Col 4 — Products & Training */}
+          <div className="space-y-3.5">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground">
+              {t('footer.productsTitle')}
+            </h3>
+            <ul className="space-y-2">
+              {PRODUCT_LINKS.map((item) => (
+                <li key={item.key}>
+                  <Link
+                    href={item.href}
+                    className="text-sm text-muted-foreground transition-colors hover:text-primary"
+                  >
+                    {t(item.key)}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Col 5 — Newsletter */}
           <div className="space-y-3.5">
             <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground">
               {t('footer.newsletterTitle')}

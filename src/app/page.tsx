@@ -29,6 +29,7 @@ import { GuaranteeSection } from "@/components/site/sections/guarantee";
 import { Testimonials } from "@/components/site/sections/testimonials";
 import { Community } from "@/components/site/sections/community";
 import { ResourcesHub } from "@/components/site/sections/resources-hub";
+import { ProductsTraining } from "@/components/site/sections/products-training";
 import { EmailFunnel } from "@/components/site/sections/email-funnel";
 import { FaqSection } from "@/components/site/sections/faq-home";
 import { LeadMagnetSection } from "@/components/site/sections/lead-magnets";
@@ -218,6 +219,7 @@ export default function Home() {
         <Testimonials />
         <Community />
         <ResourcesHub />
+        <ProductsTraining />
         <EmailFunnel />
 
         {/* === Objection Handling & Conversion === */}

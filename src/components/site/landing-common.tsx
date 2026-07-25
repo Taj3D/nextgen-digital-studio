@@ -270,10 +270,19 @@ export function usePageViewTracking(source: string, meta?: Record<string, unknow
 
 export function LandingFooter({ isBn }: { isBn: boolean }) {
   const { t } = useLang()
+  // Cross-links between standalone product/training pages — improves SEO
+  // internal linking and lets visitors jump between products from any footer.
+  const productLinks = [
+    { key: 'footer.aiTraining', href: '/ai-training' },
+    { key: 'footer.cncTraining', href: '/cnc-training' },
+    { key: 'footer.cncDesign', href: '/cnc-design' },
+    { key: 'footer.3dPortrait', href: '/3d-portrait' },
+    { key: 'footer.pdfBooks', href: '/pdf-books' },
+  ]
   return (
     <footer className="mt-auto border-t border-border/60 bg-muted/30">
       <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
-        <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-4">
+        <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-5">
           <div className="sm:col-span-2 md:col-span-2">
             <p className="font-heading text-lg font-bold">{siteConfig.name}</p>
             <p className="mt-2 max-w-sm text-sm text-muted-foreground">
@@ -289,6 +298,19 @@ export function LandingFooter({ isBn }: { isBn: boolean }) {
                 {siteConfig.phone}
               </a>
             </p>
+          </div>
+          {/* Products & Training — cross-links between product pages */}
+          <div>
+            <p className="text-sm font-semibold">{t('footer.productsTitle')}</p>
+            <ul className="mt-3 space-y-1.5 text-xs text-muted-foreground">
+              {productLinks.map((item) => (
+                <li key={item.key}>
+                  <Link href={item.href} className="hover:text-foreground">
+                    {t(item.key)}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
           <div>
             <p className="text-sm font-semibold">{t('landing.footerSocials')}</p>
