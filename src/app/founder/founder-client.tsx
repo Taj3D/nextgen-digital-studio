@@ -10,12 +10,10 @@
  */
 
 import * as React from 'react'
-import Image from 'next/image'
 import {
   TopBar,
 } from '@/components/site/top-bar'
 import { FloatingButtons } from '@/components/site/floating-buttons'
-import { ScrollProgress } from '@/components/site/scroll-progress'
 import {
   LandingFooter,
   LandingLeadForm,
@@ -60,7 +58,6 @@ import {
 import {
   Award,
   ArrowRight,
-  ArrowDown,
   MapPin,
   Users,
   Star,
@@ -198,50 +195,6 @@ function Reveal({ children, className = '' }: { children: React.ReactNode; class
 }
 
 /* ------------------------------------------------------------------ */
-/*  Sticky CTA bar (mobile + desktop)                                 */
-/* ------------------------------------------------------------------ */
-
-function StickyFounderBar({ isBn }: { isBn: boolean }) {
-  const [visible, setVisible] = React.useState(false)
-  React.useEffect(() => {
-    const onScroll = () => setVisible(window.scrollY > 500)
-    window.addEventListener('scroll', onScroll, { passive: true })
-    onScroll()
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-  return (
-    <div
-      className={`fixed inset-x-0 bottom-0 z-[60] transition-transform duration-500 ${
-        visible ? 'translate-y-0' : 'translate-y-full'
-      }`}
-      aria-hidden={!visible}
-    >
-      <div className="mx-auto flex max-w-4xl items-center justify-between gap-3 border-t border-[#E8DDD4] bg-white/95 px-4 py-3 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] backdrop-blur-md sm:px-6">
-        <div className="min-w-0">
-          <p className="truncate text-sm font-bold text-[#1E3A5F] sm:text-base">
-            {isBn ? 'ফ্রি স্ট্র্যাটেজি সেশন' : 'Free Strategy Session'}
-          </p>
-          <p className="hidden text-xs font-semibold text-[#B8923A] sm:block">
-            {isBn ? '🔥 আজই বুক করুন' : '🔥 Book today'}
-          </p>
-        </div>
-        <a
-          href="#contact"
-          onClick={(e) => {
-            e.preventDefault()
-            document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
-          }}
-          className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-gradient-to-r from-[#1E3A5F] to-[#2D5A8E] px-4 py-2.5 text-xs font-bold text-white shadow-lg transition-transform hover:scale-105 sm:px-6 sm:text-sm"
-        >
-          {isBn ? 'বুক করুন' : 'Book Now'}
-          <ArrowRight className="h-3.5 w-3.5" />
-        </a>
-      </div>
-    </div>
-  )
-}
-
-/* ------------------------------------------------------------------ */
 /*  FAQ Accordion item                                                */
 /* ------------------------------------------------------------------ */
 
@@ -279,10 +232,32 @@ export function FounderClient() {
   usePageViewTracking('founder_page_v3')
 
   return (
-    <div className="relative flex min-h-screen flex-col bg-[#FAF7F3] text-[#1C1C1C]">
-      <ScrollProgress />
+    <div
+      className="relative flex min-h-screen flex-col bg-[#FAF7F3] text-[#1C1C1C]"
+      /*
+        Force light-mode CSS variables for this page so shadcn form inputs
+        (LandingLeadForm) render with light backgrounds/text even though the
+        global ThemeProvider defaults to 'dark'. The founder page is an
+        explicit light (navy + gold on cream) design.
+      */
+      style={{
+        '--background': 'oklch(1 0 0)',
+        '--foreground': 'oklch(0.21 0.034 264)',
+        '--card': 'oklch(1 0 0)',
+        '--popover': 'oklch(1 0 0)',
+        '--input': 'oklch(0.922 0.008 264)',
+        '--border': 'oklch(0.922 0.008 264)',
+        '--ring': 'oklch(0.546 0.215 262.88)',
+        '--muted': 'oklch(0.97 0.006 264)',
+        '--muted-foreground': 'oklch(0.45 0.02 264)',
+        '--primary': 'oklch(0.3 0.08 255)',
+        '--primary-foreground': 'oklch(0.985 0 0)',
+        '--accent': 'oklch(0.96 0.02 95)',
+        '--accent-foreground': 'oklch(0.3 0.08 255)',
+        colorScheme: 'light',
+      } as React.CSSProperties}
+    >
       <TopBar />
-      <StickyFounderBar isBn={isBn} />
 
       <main id="main-content" className="flex-1 pb-20">
         {/* ===== 1. HERO ===== */}
@@ -875,6 +850,7 @@ export function FounderClient() {
           <Reveal>
             <div className="rounded-2xl bg-gradient-to-br from-[#1E3A5F] to-[#2D5A8E] p-8 text-center text-white sm:p-10">
               <p className="mx-auto max-w-xl text-lg font-bold leading-relaxed sm:text-xl">
+                <span aria-hidden>&ldquo;</span>
                 {founderClosing.lines.map((l, i) => (
                   <React.Fragment key={i}>
                     {T(l, isBn)}
@@ -883,7 +859,7 @@ export function FounderClient() {
                 ))}
                 <br />
                 <span className="text-[#E8C97A]">{T(founderClosing.highlight, isBn)}</span>
-                &rdquo;
+                <span aria-hidden>&rdquo;</span>
               </p>
               <p className="mt-4 text-base">— {T(founderClosing.sign, isBn)}</p>
             </div>
@@ -922,6 +898,8 @@ export function FounderClient() {
         </Section>
 
         {/* ===== 34. CONTACT / LEAD FORM ===== */}
+        {/* Sentinel: tells the global StickyBookBar to auto-hide near the form */}
+        <div id="lead-form" aria-hidden className="sr-only" />
         <Section id="contact" className="scroll-mt-20">
           <Reveal>
             <div className="rounded-3xl border border-[#E8DDD4] bg-white p-6 shadow-lg sm:p-8">

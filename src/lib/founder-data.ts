@@ -140,27 +140,27 @@ export const founderFramework = {
   subtitle: { bn: 'আমার মালিকানাধীন ৫-ধাপের ফ্রেমওয়ার্ক', en: 'My proprietary 5-stage framework' },
   steps: [
     {
-      num: '১',
+      num: { bn: '১', en: '1' },
       title: { bn: 'অ্যাসেস', en: 'Assess' },
       desc: { bn: 'প্রক্রিয়া, চ্যালেঞ্জ ও সুযোগ বিশ্লেষণ', en: 'Audit process, challenges & opportunities' },
     },
     {
-      num: '২',
+      num: { bn: '২', en: '2' },
       title: { bn: 'ডিজাইন', en: 'Design' },
       desc: { bn: 'কাস্টম AI সলিউশন আর্কিটেক্ট', en: 'Architect custom AI solution' },
     },
     {
-      num: '৩',
+      num: { bn: '৩', en: '3' },
       title: { bn: 'বিল্ড', en: 'Build' },
       desc: { bn: 'সিস্টেম তৈরি ও ট্রেইনিং', en: 'Build system & train models' },
     },
     {
-      num: '৪',
+      num: { bn: '৪', en: '4' },
       title: { bn: 'লঞ্চ', en: 'Launch' },
       desc: { bn: 'লাইভ, টেস্ট, অপটিমাইজ', en: 'Go live, test, optimize' },
     },
     {
-      num: '৫',
+      num: { bn: '৫', en: '5' },
       title: { bn: 'স্কেল', en: 'Scale' },
       desc: { bn: 'মনিটরিং ও স্কেলিং', en: 'Monitor & scale' },
     },
