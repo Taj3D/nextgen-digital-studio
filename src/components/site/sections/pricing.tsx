@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { motion } from 'framer-motion'
-import { Tag, Check, ShieldCheck } from 'lucide-react'
+import { Tag, Check, ShieldCheck, TrendingUp } from 'lucide-react'
 import {
   Reveal,
   SectionShell,
@@ -129,8 +129,14 @@ export function Pricing() {
                 {/* Plan name */}
                 <h3 className="text-xl font-bold text-foreground">{name}</h3>
 
+                {/* ROI projection badge */}
+                <div className="mt-2 inline-flex w-fit items-center gap-1 rounded-full bg-amber-500/10 px-3 py-1 text-xs font-semibold text-amber-600 dark:text-amber-400">
+                  <TrendingUp className="h-3 w-3" />
+                  <span>{t(`pricing.roi${plan.id.charAt(0).toUpperCase()}${plan.id.slice(1)}`)}</span>
+                </div>
+
                 {/* Price */}
-                <div className="mt-4 flex items-baseline gap-1">
+                <div className="mt-3 flex items-baseline gap-1">
                   <span className="gradient-text text-4xl lg:text-5xl font-bold">
                     {formatPrice(price)}
                   </span>

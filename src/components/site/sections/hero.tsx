@@ -82,7 +82,7 @@ export function HeroSection() {
           <Reveal>
             <div className="inline-flex items-center gap-2 rounded-full border border-gold/30 bg-gold/5 px-4 py-2 text-gold text-xs sm:text-sm font-semibold uppercase tracking-wider">
               <Sparkles className="h-4 w-4 shrink-0" />
-              <span>{t('hero.eyebrow')}</span>
+              <span>{t('home.heroBadge')}</span>
             </div>
           </Reveal>
 
@@ -108,6 +108,13 @@ export function HeroSection() {
             </p>
           </Reveal>
 
+          {/* Sub-subtitle (location) */}
+          <Reveal delay={0.25}>
+            <p className="text-sm font-semibold text-amber-600 dark:text-amber-400">
+              {t('home.heroSubSub')}
+            </p>
+          </Reveal>
+
           {/* CTAs */}
           <Reveal delay={0.3}>
             <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
@@ -121,25 +128,25 @@ export function HeroSection() {
               </Button>
               <Button
                 variant="outline"
-                onClick={() => scrollToId('how')}
+                onClick={() => scrollToId('lead-magnets')}
                 className="h-14 px-8 text-base w-full sm:w-auto border-emerald-500/40 text-foreground hover:bg-emerald-500/10 hover:text-foreground"
                 size="lg"
               >
                 <Play className="h-5 w-5" />
-                {t('hero.ctaSecondary')}
+                {t('home.heroCtaSecondary')}
               </Button>
             </div>
           </Reveal>
 
-          {/* Trust badges */}
+          {/* Trust badges — expanded to 6 chips */}
           <Reveal delay={0.4}>
-            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 mt-2">
-              {[t('hero.trust1'), t('hero.trust2'), t('hero.trust3')].map((badge, i) => (
+            <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-3 mt-2 max-w-3xl">
+              {[t('hero.trust1'), t('hero.trust2'), t('hero.trust3'), t('home.trust4'), t('home.trust5'), t('home.trust6')].map((badge, i) => (
                 <div
                   key={i}
-                  className="flex items-center gap-2 text-sm text-muted-foreground"
+                  className="flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground"
                 >
-                  <CheckCircle2 className="h-5 w-5 text-emerald-500 shrink-0" />
+                  <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
                   <span>{badge}</span>
                 </div>
               ))}

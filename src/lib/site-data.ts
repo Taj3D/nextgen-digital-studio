@@ -489,40 +489,178 @@ export const caseStudies: CaseStudy[] = [
   },
 ]
 
-export type Faq = { q: string; a: string }
+export type Faq = { q: string; a: string; category?: string; qBn?: string; aBn?: string }
+
+/** FAQ categories used by the homepage accordion (also drives FAQ JSON-LD). */
+export const FAQ_CATEGORIES = ['general', 'pricing', 'implementation', 'support'] as const
+export type FaqCategory = (typeof FAQ_CATEGORIES)[number]
 
 export const faqs: Faq[] = [
+  // --- General ---
   {
+    category: 'general',
     q: 'What exactly does NextGen Digital Studio do?',
     a: 'We help businesses in Bangladesh automate marketing, sales, customer communication and operations using AI and business automation. Think AI chat agents, voice agents, WhatsApp automation, CRM automation, lead generation and full sales funnels — all designed to generate qualified leads and book strategy calls.',
+    qBn: 'NextGen Digital Studio ঠিক কী করে?',
+    aBn: 'আমরা বাংলাদেশের ব্যবসাকে AI ও বিজনেস অটোমেশন দিয়ে মার্কেটিং, সেলস, কাস্টমার কমিউনিকেশন ও অপারেশনস অটোমেট করতে সাহায্য করি। AI চ্যাট এজেন্ট, ভয়েস এজেন্ট, WhatsApp অটোমেশন, CRM অটোমেশন, লিড জেনারেশন ও সম্পূর্ণ সেলস ফানেল — সবই যোগ্য লিড তৈরি ও স্ট্র্যাটেজি কল বুক করার জন্য ডিজাইন করা।',
   },
   {
+    category: 'general',
     q: 'Which industries do you work with?',
     a: 'We work with small & medium businesses, corporate companies, real estate, hospitals, schools, e-commerce stores and agencies. Our automations are custom-built around each industry’s workflow.',
+    qBn: 'আপনারা কোন কোন শিল্পখাতে কাজ করেন?',
+    aBn: 'আমরা ছোট-মাঝারি ব্যবসা, কর্পোরেট কোম্পানি, রিয়েল এস্টেট, হাসপাতাল, স্কুল, ই-কমার্স স্টোর ও এজেন্সির সাথে কাজ করি। আমাদের অটোমেশন প্রতিটি শিল্পের ওয়ার্কফ্লো অনুযায়ী কাস্টম-বিল্ট।',
   },
   {
+    category: 'general',
     q: 'Can your AI agents speak Bangla?',
     a: 'Yes. Our AI chat and voice agents are fully bilingual in Bangla and English, which is essential for the Bangladesh market. They can switch languages mid-conversation.',
+    qBn: 'আপনাদের AI এজেন্ট কি বাংলায় কথা বলতে পারে?',
+    aBn: 'হ্যাঁ। আমাদের AI চ্যাট ও ভয়েস এজেন্ট বাংলা ও ইংরেজিতে সম্পূর্ণ দ্বিভাষিক — বাংলাদেশ বাজারের জন্য এটি অপরিহার্য। মাঝে কথোপকথনে ভাষা পরিবর্তনও করতে পারে।',
   },
   {
+    category: 'general',
     q: 'How long does it take to launch?',
-    a: 'Most AI chat agents and WhatsApp automations go live within 2–3 weeks. Larger CRM and funnel builds typically take 4–6 weeks depending on scope.',
+    a: 'Most AI chat agents and WhatsApp automations go live within 7 days. Larger CRM and funnel builds typically take 2–4 weeks depending on scope.',
+    qBn: 'লঞ্চ হতে কত সময় লাগে?',
+    aBn: 'বেশিরভাগ AI চ্যাট এজেন্ট ও WhatsApp অটোমেশন ৭ দিনের মধ্যে লাইভ হয়। বড় CRM ও ফানেল বিল্ড সাধারণত স্কোপ অনুযায়ী ২–৪ সপ্তাহ সময় নেয়।',
+  },
+  // --- Pricing ---
+  {
+    category: 'pricing',
+    q: 'How much does it cost?',
+    a: 'Plans start at ৳15,000/month for the Starter package. Growth is ৳35,000/month and Dominant is ৳75,000/month. Every plan includes our 60-day ROI guarantee.',
+    qBn: 'খরচ কত?',
+    aBn: 'Starter প্যাকেজ ৳১৫,০০০/মাস থেকে শুরু। Growth ৳৩৫,০০০/মাস এবং Dominant ৳৭৫,০০০/মাস। প্রতিটি প্ল্যানে ৬০ দিনের ROI গ্যারান্টি অন্তর্ভুক্ত।',
   },
   {
+    category: 'pricing',
+    q: 'Are there any hidden fees?',
+    a: 'No hidden fees. The monthly price covers strategy, build, integration, training and ongoing optimisation. Third-party platform costs (e.g. WhatsApp Business API, ad spend) are billed at cost.',
+    qBn: 'কোনো হিডেন ফি আছে কি?',
+    aBn: 'কোনো হিডেন ফি নেই। মাসিক মূল্যে স্ট্র্যাটেজি, বিল্ড, ইন্টিগ্রেশন, ট্রেইনিং ও চলমান অপটিমাইজেশন অন্তর্ভুক্ত। থার্ড-পার্টি প্ল্যাটফর্ম খরচ (যেমন WhatsApp Business API, অ্যাড স্পেন্ড) মূল্যে বিল করা হয়।',
+  },
+  // --- Implementation ---
+  {
+    category: 'implementation',
     q: 'Do I need technical knowledge to use this?',
     a: 'Not at all. We handle everything end-to-end — strategy, build, integration, training and ongoing optimisation. You just receive qualified leads and booked calls.',
+    qBn: 'এটি ব্যবহারের জন্য কি টেকনিক্যাল জ্ঞান দরকার?',
+    aBn: 'একদমই না। আমরা সবকিছু end-to-end হ্যান্ডেল করি — স্ট্র্যাটেজি, বিল্ড, ইন্টিগ্রেশন, ট্রেইনিং ও চলমান অপটিমাইজেশন। আপনি শুধু যোগ্য লিড ও বুক করা কল পাবেন।',
   },
   {
+    category: 'implementation',
     q: 'What tools and platforms do you use?',
     a: 'We build on Next.js, GoHighLevel, HubSpot, the WhatsApp Business API, n8n, Zapier and modern LLMs (GPT-4 class models). We pick the right stack for your goals and budget.',
+    qBn: 'আপনারা কোন টুলস ও প্ল্যাটফর্ম ব্যবহার করেন?',
+    aBn: 'আমরা Next.js, GoHighLevel, HubSpot, WhatsApp Business API, n8n, Zapier এবং আধুনিক LLM (GPT-4 ক্লাস মডেল)-এ বিল্ড করি। আপনার লক্ষ্য ও বাজেট অনুযায়ী সঠিক স্ট্যাক বাছাই করি।',
   },
   {
-    q: 'How much does it cost?',
-    a: 'Plans start at ৳25,000/month for the Starter package. Growth is ৳60,000/month and Enterprise is custom-quoted. You can see full pricing in the pricing section above.',
+    category: 'implementation',
+    q: 'Is my data safe?',
+    a: 'Yes. All data is encrypted in transit and at rest. We follow GDPR-aligned practices, sign NDAs, and never share your data with third parties. You own your data at all times.',
+    qBn: 'আমার ডেটা কি নিরাপদ?',
+    aBn: 'হ্যাঁ। সব ডেটা transit ও at-rest এ এনক্রিপ্ট করা। আমরা GDPR-অনুযায়ী প্র্যাকটিস অনুসরণ করি, NDA সাইন করি, এবং আপনার ডেটা থার্ড-পার্টির সাথে শেয়ার করি না। ডেটার মালিকানা সব সময় আপনার।',
+  },
+  // --- Support ---
+  {
+    category: 'support',
+    q: 'What support do I get after launch?',
+    a: 'Every plan includes ongoing optimisation, weekly performance reports, and a dedicated account manager. Dominant plans add 24/7 phone support and monthly strategy calls.',
+    qBn: 'লঞ্চের পর কী সাপোর্ট পাব?',
+    aBn: 'প্রতিটি প্ল্যানে চলমান অপটিমাইজেশন, সাপ্তাহিক পারফরম্যান্স রিপোর্ট ও ডেডিকেটেড অ্যাকাউন্ট ম্যানেজার অন্তর্ভুক্ত। Dominant প্ল্যানে ২৪/৭ ফোন সাপোর্ট ও মাসিক স্ট্র্যাটেজি কল যোগ হয়।',
   },
   {
-    q: 'How do I get started?',
-    a: 'Book a free strategy call using the “Book Strategy Call” button. We’ll audit your business and design a custom AI + automation roadmap with clear ROI projections — no obligation.',
+    category: 'support',
+    q: 'What if I don’t see ROI in 60 days?',
+    a: 'Our 60-day ROI guarantee means if you don’t see measurable revenue improvement, we keep working for free until you do. No long-term contracts — you can cancel anytime.',
+    qBn: '৬০ দিনে ROI না হলে কী হবে?',
+    aBn: 'আমাদের ৬০ দিনের ROI গ্যারান্টি — যদি পরিমেয় রাজস্ব উন্নতি না দেখেন, আমরা ফল না হওয়া পর্যন্ত ফ্রি কাজ করি। কোনো দীর্ঘমেয়াদী চুক্তি নেই — যেকোনো সময় ক্যানসেল করতে পারেন।',
+  },
+]
+
+/** Industries served — shown on homepage as a 9-card grid. */
+export type Industry = {
+  slug: string
+  name: string
+  nameBn: string
+  icon: string // emoji used as a lightweight icon (no extra deps)
+  desc: string
+  descBn: string
+}
+
+export const INDUSTRIES: Industry[] = [
+  {
+    slug: 'education',
+    name: 'Education',
+    nameBn: 'শিক্ষা প্রতিষ্ঠান',
+    icon: '🎓',
+    desc: 'Turn student inquiries into enrollments automatically.',
+    descBn: 'শিক্ষার্থীর ইনকোয়ারি থেকে এনরোলমেন্ট — স্বয়ংক্রিয়ভাবে।',
+  },
+  {
+    slug: 'clinic-health',
+    name: 'Clinic & Health',
+    nameBn: 'ক্লিনিক ও স্বাস্থ্য',
+    icon: '🏥',
+    desc: 'AI appointment booking reduces no-shows by 40–55%.',
+    descBn: 'AI অ্যাপয়েন্টমেন্ট বুকিং — no-show কমায় ৪০–৫৫%।',
+  },
+  {
+    slug: 'retail',
+    name: 'Retail',
+    nameBn: 'রিটেইল',
+    icon: '🏬',
+    desc: '24/7 customer support across Facebook & WhatsApp.',
+    descBn: 'Facebook ও WhatsApp-এ ২৪/৭ কাস্টমার সাপোর্ট।',
+  },
+  {
+    slug: 'real-estate',
+    name: 'Real Estate',
+    nameBn: 'রিয়েল এস্টেট',
+    icon: '🏠',
+    desc: 'Qualify property buyers and book site visits on autopilot.',
+    descBn: 'প্রপার্টি বায়ার যোগ্যতা যাচাই ও সাইট ভিজিট বুকিং — অটোপাইলটে।',
+  },
+  {
+    slug: 'manufacturing',
+    name: 'Manufacturing',
+    nameBn: 'ম্যানুফ্যাকচারিং',
+    icon: '🏭',
+    desc: 'B2B lead capture and distributor inquiry automation.',
+    descBn: 'B2B লিড ক্যাপচার ও ডিস্ট্রিবিউটর ইনকোয়ারি অটোমেশন।',
+  },
+  {
+    slug: 'professional-services',
+    name: 'Professional Services',
+    nameBn: 'প্রফেশনাল সার্ভিস',
+    icon: '💼',
+    desc: 'Streamline client intake and consultation scheduling.',
+    descBn: 'ক্লায়েন্ট ইনটেক ও কনসালটেশন শিডিউলিং সহজ করুন।',
+  },
+  {
+    slug: 'ecommerce',
+    name: 'E-Commerce',
+    nameBn: 'ই-কমার্স',
+    icon: '🛍️',
+    desc: 'Order support, cart recovery and upsell automation.',
+    descBn: 'অর্ডার সাপোর্ট, কার্ট রিকভারি ও আপসেল অটোমেশন।',
+  },
+  {
+    slug: 'auto-parts',
+    name: 'Auto Parts',
+    nameBn: 'অটো পার্টস',
+    icon: '🚗',
+    desc: 'Automate quote requests and spare-part inquiries.',
+    descBn: 'কোট রিকোয়েস্ট ও স্পেয়ার-পার্ট ইনকোয়ারি অটোমেট করুন।',
+  },
+  {
+    slug: 'beauty-salon',
+    name: 'Beauty Salon',
+    nameBn: 'বিউটি স্যালন',
+    icon: '💄',
+    desc: 'Booking management and customer re-engagement.',
+    descBn: 'বুকিং ম্যানেজমেন্ট ও কাস্টমার রি-এনগেজমেন্ট।',
   },
 ]
 

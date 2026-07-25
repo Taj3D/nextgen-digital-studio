@@ -21,6 +21,7 @@ const days: DayEntry[] = [
   { titleKey: 'how.day2Title', descKey: 'how.day2Desc' },
   { titleKey: 'how.day3Title', descKey: 'how.day3Desc' },
   { titleKey: 'how.day4Title', descKey: 'how.day4Desc' },
+  { titleKey: 'how.day5Title', descKey: 'how.day5Desc' },
 ]
 
 /** Split a "Day N: Title" string into [dayLabel, titleText] using colon.
