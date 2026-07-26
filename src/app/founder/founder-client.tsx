@@ -178,7 +178,41 @@ function SectionDivider() {
 
 /* ------------------------------------------------------------------ */
 /*  Reveal-on-scroll wrapper                                          */
+/*  Uses a single SHARED IntersectionObserver for ALL Reveal instances */
+/*  on the page — far cheaper than ~30 individual observers.           */
 /* ------------------------------------------------------------------ */
+
+type RevealEntry = { el: HTMLElement; show: () => void }
+let __sharedObserver: IntersectionObserver | null = null
+const __revealQueue: Set<RevealEntry> = new Set()
+
+function getSharedObserver() {
+  if (typeof window === 'undefined') return null
+  if (__sharedObserver) return __sharedObserver
+  __sharedObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          const target = e.target as HTMLElement
+          __revealQueue.forEach((entry) => {
+            if (entry.el === target) {
+              entry.show()
+              __sharedObserver?.unobserve(target)
+              __revealQueue.delete(entry)
+            }
+          })
+        }
+      })
+      // Once everything has revealed, disconnect to free up memory.
+      if (__revealQueue.size === 0 && __sharedObserver) {
+        __sharedObserver.disconnect()
+        __sharedObserver = null
+      }
+    },
+    { threshold: 0.1, rootMargin: '0px 0px -40px 0px' },
+  )
+  return __sharedObserver
+}
 
 function Reveal({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   const ref = React.useRef<HTMLDivElement>(null)
@@ -186,19 +220,19 @@ function Reveal({ children, className = '' }: { children: React.ReactNode; class
   React.useEffect(() => {
     const el = ref.current
     if (!el) return
-    const ob = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            setShown(true)
-            ob.disconnect()
-          }
-        })
-      },
-      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' },
-    )
+    // Fallback for SSR / no-IO: show immediately.
+    const ob = getSharedObserver()
+    if (!ob) {
+      setShown(true)
+      return
+    }
+    const entry: RevealEntry = { el, show: () => setShown(true) }
+    __revealQueue.add(entry)
     ob.observe(el)
-    return () => ob.disconnect()
+    return () => {
+      __revealQueue.delete(entry)
+      ob.unobserve(el)
+    }
   }, [])
   return (
     <div
@@ -325,8 +359,146 @@ function FaqSection({ isBn }: { isBn: boolean }) {
 }
 
 /* ------------------------------------------------------------------ */
-/*  MAIN COMPONENT                                                    */
+/*  Manifesto PDF download                                            */
+/*  Generates a self-contained printable HTML document in a new tab.  */
+/*  The user can then Ctrl+P → “Save as PDF” or just read it.         */
 /* ------------------------------------------------------------------ */
+
+function downloadManifestoPdf(isBn: boolean) {
+  const title = isBn ? 'বাংলাদেশের জন্য AI — মেনিফেস্টো' : 'Why Bangladesh Needs AI — Manifesto'
+  const subtitle = isBn
+    ? 'মোঃ নাজমুল ইসলাম তাজ — প্রতিষ্ঠাতা ও সিইও, NextGen Digital Studio'
+    : 'Md. Najmul Islam Taj — Founder & CEO, NextGen Digital Studio'
+  const intro = isBn
+    ? 'এই মেনিফেস্টো বাংলাদেশের ব্যবসার জন্য AI গ্রহণের একটি রোডম্যাপ। ছয়টি স্তম্ভের উপর দাঁড়িয়ে আছে — যা প্রতিটি ছোট ও মাঝারি ব্যবসাকে প্রতিযোগিতামূলক করে তুলবে।'
+    : 'This manifesto is a roadmap for AI adoption in Bangladeshi business. It stands on six pillars — each one designed to make every SME competitive.'
+  const points = founderManifesto.map((m, i) => ({
+    num: isBn ? ['০১', '০২', '০৩', '০৪', '০৫', '০৬'][i] : String(i + 1).padStart(2, '0'),
+    text: T(m, isBn),
+  }))
+  const closing = isBn
+    ? 'আসুন একসাথে বাংলাদেশকে দক্ষিণ এশিয়ার AI হাবে পরিণত করি। যোগাযোগ: nextgendigitalstudio1@gmail.com · +8801711731354'
+    : 'Let us together make Bangladesh the AI hub of South Asia. Contact: nextgendigitalstudio1@gmail.com · +8801711731354'
+
+  const html = `<!DOCTYPE html><html lang="${isBn ? 'bn' : 'en'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${title}</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: 'Segoe UI', 'Noto Sans Bengali', system-ui, sans-serif; max-width: 800px; margin: 0 auto; padding: 48px 32px; color: #1C1C1C; background: #FAF7F3; line-height: 1.6; }
+    .brand { text-align: center; border-bottom: 3px solid #D4A853; padding-bottom: 16px; margin-bottom: 32px; }
+    .brand h1 { color: #1E3A5F; font-size: 28px; margin: 0 0 8px; }
+    .brand p { color: #B8923A; font-weight: 600; margin: 0; font-size: 14px; letter-spacing: 0.5px; }
+    .intro { font-size: 16px; color: #4A4A4A; margin-bottom: 32px; padding: 16px 20px; background: #F5F0EB; border-left: 4px solid #D4A853; border-radius: 8px; }
+    .point { display: flex; gap: 16px; padding: 20px 0; border-bottom: 1px solid #E8DDD4; }
+    .point:last-of-type { border-bottom: none; }
+    .point .num { flex-shrink: 0; width: 48px; height: 48px; background: linear-gradient(135deg, #1E3A5F, #2D5A8E); color: #fff; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; }
+    .point .text { font-size: 15px; color: #1C1C1C; padding-top: 12px; }
+    .closing { margin-top: 32px; padding: 20px; background: linear-gradient(135deg, #1E3A5F, #2D5A8E); color: #fff; border-radius: 12px; text-align: center; font-size: 14px; }
+    .sign { text-align: center; margin-top: 24px; font-style: italic; color: #1E3A5F; font-size: 18px; font-family: 'Brush Script MT', cursive; }
+    .meta { text-align: center; margin-top: 8px; color: #7A7A7A; font-size: 12px; }
+    @media print { body { background: #fff; padding: 24px; } .point { break-inside: avoid; } }
+  </style></head><body>
+    <div class="brand">
+      <h1>${title}</h1>
+      <p>${subtitle}</p>
+    </div>
+    <div class="intro">${intro}</div>
+    ${points.map((p) => `<div class="point"><div class="num">${p.num}</div><div class="text">${p.text}</div></div>`).join('')}
+    <div class="closing">${closing}</div>
+    <div class="sign">— ${isBn ? 'তাজ ভাই' : 'Taj Bhai'}</div>
+    <div class="meta">NextGen Digital Studio · nextgendigitalstudio.com/founder</div>
+  </body></html>`
+
+  // Open in new tab — user can read, print to PDF, or save as HTML.
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' })
+  const url = URL.createObjectURL(blob)
+  const win = window.open(url, '_blank')
+  // Fallback: if popup blocked, trigger a direct download.
+  if (!win) {
+    const a = document.createElement('a')
+    a.href = url
+    a.download = isBn ? 'ai-manifesto-bangladesh.html' : 'ai-manifesto-bangladesh.html'
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+  }
+  // Revoke after 60s (enough time for the tab to load).
+  setTimeout(() => URL.revokeObjectURL(url), 60_000)
+}
+
+/* ------------------------------------------------------------------ */
+/*  Newsletter form (real API integration)                            */
+/* ------------------------------------------------------------------ */
+
+function NewsletterForm({ isBn }: { isBn: boolean }) {
+  const [email, setEmail] = React.useState('')
+  const [status, setStatus] = React.useState<'idle' | 'loading' | 'done' | 'error'>('idle')
+  const [errorMsg, setErrorMsg] = React.useState('')
+
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    if (!email.trim()) return
+    setStatus('loading')
+    setErrorMsg('')
+    try {
+      const res = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim() }),
+      })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(data?.error || 'Request failed')
+      setStatus('done')
+      setEmail('')
+    } catch (err) {
+      setStatus('error')
+      setErrorMsg(err instanceof Error ? err.message : 'Something went wrong')
+    }
+  }
+
+  if (status === 'done') {
+    return (
+      <div className="mx-auto mt-3 flex max-w-sm items-center justify-center gap-2 rounded-full bg-emerald-500/15 px-4 py-3 text-sm font-semibold text-emerald-700 dark:text-emerald-400">
+        <CheckCircle2 className="h-4 w-4" />
+        {isBn ? 'ধন্যবাদ! সাবস্ক্রাইব সম্পন্ন।' : 'Thank you! Subscribed.'}
+      </div>
+    )
+  }
+
+  return (
+    <form onSubmit={onSubmit} className="mx-auto mt-3 flex max-w-sm flex-col gap-2">
+      <input
+        type="email"
+        required
+        value={email}
+        onChange={(e) => {
+          setEmail(e.target.value)
+          if (status === 'error') setStatus('idle')
+        }}
+        placeholder={isBn ? 'আপনার ইমেইল' : 'Your email'}
+        aria-label={isBn ? 'ইমেইল ঠিকানা' : 'Email address'}
+        className="h-11 rounded-full border border-[var(--foundry-border)] bg-[var(--foundry-card)] px-4 text-sm text-[var(--foundry-text)] outline-none focus:border-[#1E3A5F]"
+      />
+      {status === 'error' && (
+        <p className="text-xs text-red-600 dark:text-red-400">{errorMsg || (isBn ? 'সাবস্ক্রাইব ব্যর্থ হয়েছে।' : 'Subscription failed.')}</p>
+      )}
+      <button
+        type="submit"
+        disabled={status === 'loading'}
+        className="inline-flex h-11 items-center justify-center gap-1.5 rounded-full bg-[#D4A853] px-5 text-sm font-bold text-white transition-transform hover:scale-105 disabled:opacity-60 disabled:hover:scale-100"
+      >
+        {status === 'loading' ? (
+          <>
+            <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
+            {isBn ? 'পাঠানো হচ্ছে...' : 'Subscribing...'}
+          </>
+        ) : (
+          isBn ? 'সাবস্ক্রাইব' : 'Subscribe'
+        )}
+      </button>
+    </form>
+  )
+}
+
 
 export function FounderClient() {
   const { lang } = useLang()
@@ -337,13 +509,15 @@ export function FounderClient() {
     <>
       {/*
         Founder page theme tokens — adapt to BOTH light and dark modes.
+        Kept inline (rather than in globals.css) because Tailwind v4's
+        CSS engine strips plain custom-property rules from the compiled
+        output. Inline <style> guarantees the variables are present.
         Light: cream + navy + gold premium executive palette.
         Dark:  deep navy + warm gold + soft cream text.
         Also re-declares shadcn/ui CSS variables so LandingLeadForm inputs
-        render with the correct theme (the global ThemeProvider defaults
-        to 'dark' but the founder page defines its own palette per mode).
+        render with the correct theme.
       */}
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style>{`
         .founder-page {
           --foundry-bg: #FAF7F3;
           --foundry-text: #1C1C1C;
@@ -392,7 +566,7 @@ export function FounderClient() {
           --accent-foreground: oklch(0.96 0.005 264);
           color-scheme: dark;
         }
-      `}} />
+      `}</style>
       <div className="founder-page relative flex min-h-screen flex-col bg-[var(--foundry-bg)] text-[var(--foundry-text)]">
       {/* Skip-to-content link for screen readers & keyboard users */}
       <a
@@ -414,10 +588,12 @@ export function FounderClient() {
             </span>
 
             <h1 className="mt-4 text-3xl font-extrabold leading-[1.1] tracking-tight sm:text-5xl">
-              {T(founderHero.name, isBn)}
-              <br />
-              <span className="bg-gradient-to-r from-[#1E3A5F] to-[#2D5A8E] bg-clip-text text-transparent">
-                {T(founderHero.brand, isBn)}
+              <span aria-label={`${T(founderHero.name, isBn)} — ${T(founderHero.brand, isBn)}`}>
+                {T(founderHero.name, isBn)}
+                <br />
+                <span className="bg-gradient-to-r from-[#1E3A5F] to-[#2D5A8E] bg-clip-text text-transparent dark:from-[#7BA4D9] dark:to-[#A8C8E8]">
+                  {T(founderHero.brand, isBn)}
+                </span>
               </span>
             </h1>
 
@@ -671,23 +847,17 @@ export function FounderClient() {
                 </div>
               ))}
             </div>
-            {/* Download Manifesto PDF */}
+            {/* Download Manifesto PDF — generates a real printable HTML document
+                that the browser can save as PDF (or save as .html). No alert(). */}
             <div className="mt-4 flex justify-center">
-              <a
-                href="#contact"
-                onClick={(e) => {
-                  e.preventDefault()
-                  // PDF download is conceptual — opens contact to request the manifesto PDF
-                  alert(isBn
-                    ? 'মেনিফেস্টো PDF পেতে নিচের ফর্ম পূরণ করুন — আমরা ইমেইলে পাঠাব।'
-                    : 'To get the Manifesto PDF, fill the form below — we will email it to you.')
-                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
-                }}
+              <button
+                type="button"
+                onClick={() => downloadManifestoPdf(isBn)}
                 className="inline-flex items-center gap-2 rounded-full border-2 border-[#D4A853] bg-[var(--foundry-card)] px-5 py-2.5 text-sm font-bold text-[#1E3A5F] transition-transform hover:scale-105"
               >
                 <Download className="h-4 w-4 text-[#D4A853]" />
                 {isBn ? 'মেনিফেস্টো PDF ডাউনলোড' : 'Download Manifesto PDF'}
-              </a>
+              </button>
             </div>
           </Reveal>
         </Section>
@@ -1419,26 +1589,7 @@ export function FounderClient() {
               <p className="mt-1 text-sm text-[var(--foundry-subtle)]">
                 {isBn ? '৩,০০০+ বাংলাদেশি প্রতিষ্ঠাতার সাথে যোগ দিন।' : 'Join 3,000+ Bangladeshi founders.'}
               </p>
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault()
-                  alert(isBn ? 'ধন্যবাদ! সাবস্ক্রাইব সম্পন্ন।' : 'Thank you! Subscribed.')
-                }}
-                className="mx-auto mt-3 flex max-w-sm flex-col gap-2"
-              >
-                <input
-                  type="email"
-                  required
-                  placeholder={isBn ? 'আপনার ইমেইল' : 'Your email'}
-                  className="h-11 rounded-full border border-[var(--foundry-border)] bg-[var(--foundry-card)] px-4 text-sm outline-none focus:border-[#1E3A5F]"
-                />
-                <button
-                  type="submit"
-                  className="inline-flex h-11 items-center justify-center gap-1.5 rounded-full bg-[#D4A853] px-5 text-sm font-bold text-white transition-transform hover:scale-105"
-                >
-                  {isBn ? 'সাবস্ক্রাইব' : 'Subscribe'}
-                </button>
-              </form>
+              <NewsletterForm isBn={isBn} />
               <p className="mt-2 text-xs text-[var(--foundry-muted)]">
                 {isBn ? 'কোনো স্প্যাম নেই, যেকোনো সময় আনসাবস্ক্রাইব করুন।' : 'No spam, unsubscribe anytime.'}
               </p>
