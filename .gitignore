@@ -77,3 +77,4 @@ PLAN-*.md
 # Founder page verification screenshots (internal QA)
 founder-hero-*.png
 founder-gallery-*.png
+.env*

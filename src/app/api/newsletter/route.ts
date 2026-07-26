@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { db } from "@/lib/db";
+import { dbAvailable, getSafeDb } from "@/lib/db-safe";
 import { sendEmail } from "@/lib/email-lead";
 import { rateLimit, getClientIP } from "@/lib/rate-limit";
 
@@ -47,11 +47,25 @@ export async function POST(req: Request) {
       );
     }
 
-    const sub = await db.newsletterSubscriber.upsert({
-      where: { email },
-      update: { active: true },
-      create: { email, active: true, source: "footer" },
-    });
+    // Persist to DB if available; otherwise degrade gracefully (welcome email still sends).
+    let subId = "pending"
+    if (dbAvailable) {
+      try {
+        const db = getSafeDb()
+        if (db) {
+          const sub = await db.newsletterSubscriber.upsert({
+            where: { email },
+            update: { active: true },
+            create: { email, active: true, source: "footer" },
+          })
+          subId = sub.id
+        }
+      } catch (err) {
+        // DB error (e.g. table missing) — log but don't fail the request.
+        // The welcome email + Google Sheets can still capture the subscriber.
+        console.error("[newsletter] db error (degraded mode)", err)
+      }
+    }
 
     // Send a bilingual welcome email (logged + persisted as TrackingEvent).
     // Fire-and-forget — never blocks the response.
@@ -80,7 +94,7 @@ Thank you! 🚀
       source: "newsletter_welcome",
     }).catch((err) => console.error("[newsletter] welcome email error", err));
 
-    return NextResponse.json({ ok: true, id: sub.id });
+    return NextResponse.json({ ok: true, id: subId });
   } catch (err) {
     console.error("[newsletter] error", err);
     return NextResponse.json(
@@ -91,7 +105,12 @@ Thank you! 🚀
 }
 
 export async function GET() {
+  if (!dbAvailable) {
+    return NextResponse.json({ ok: true, count: 0 });
+  }
   try {
+    const db = getSafeDb()
+    if (!db) return NextResponse.json({ ok: true, count: 0 });
     const count = await db.newsletterSubscriber.count({
       where: { active: true },
     });
