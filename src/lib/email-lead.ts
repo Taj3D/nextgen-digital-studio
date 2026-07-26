@@ -31,7 +31,7 @@
  *     language toggle and the Apps Script's existing format.
  */
 
-import { db } from '@/lib/db'
+import { db, dbAvailable } from '@/lib/db-safe'
 import { siteConfig } from '@/lib/site-data'
 import { sendSmtpEmail, isSmtpConfigured } from '@/lib/email-smtp'
 
@@ -74,7 +74,7 @@ async function persistEmailEvent(payload: EmailPayload): Promise<string | undefi
   try {
     // Defensive: in dev, Turbopack may cache @prisma/client from before
     // TrackingEvent existed. Same pattern as src/lib/tracking.ts.
-    if (!db.trackingEvent) return undefined
+    if (!dbAvailable || !db?.trackingEvent) return undefined
     const record = await db.trackingEvent.create({
       data: {
         type: 'email',

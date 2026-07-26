@@ -1,6 +1,6 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { db } from "@/lib/db";
+import { db, dbAvailable } from "@/lib/db-safe";
 import { requireAuth } from "@/lib/auth";
 
 export const runtime = "nodejs";

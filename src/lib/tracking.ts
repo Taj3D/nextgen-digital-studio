@@ -12,7 +12,7 @@
  *   SNAPCHAT_PIXEL_ID, SNAPCHAT_ACCESS_TOKEN — Snapchat Conversions API
  */
 import { createHash } from 'node:crypto'
-import { db } from '@/lib/db'
+import { db, dbAvailable } from '@/lib/db-safe'
 import { cacheGet, cacheSet } from '@/lib/cache'
 
 export type TrackingEventType =
@@ -110,7 +110,7 @@ export async function trackEvent(input: TrackingEventInput): Promise<{ id: strin
   // Persist to DB (resilient — skip if client doesn't yet know about TrackingEvent)
   let recordId: string | undefined
   try {
-    if (db.trackingEvent) {
+    if (dbAvailable && db?.trackingEvent) {
       const record = await db.trackingEvent.create({
         data: {
           type: input.type,
@@ -301,7 +301,7 @@ export async function getTrackingStats(): Promise<{
   if (cached) return cached
 
   const empty = { total: 0, byType: {}, bySource: {}, last24h: 0 }
-  if (!db.trackingEvent) {
+  if (!dbAvailable || !db?.trackingEvent) {
     cacheSet(cacheKey, empty, 30)
     return empty
   }

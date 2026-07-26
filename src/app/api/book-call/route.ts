@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { db } from "@/lib/db";
+import { db, dbAvailable } from "@/lib/db-safe";
 import { sendToGoogleSheets, type SheetsResult } from "@/lib/google-sheets";
 import { sendCustomerConfirmationEmail, sendOwnerNotificationEmail } from "@/lib/email-lead";
 import { trackEvent } from "@/lib/tracking";
