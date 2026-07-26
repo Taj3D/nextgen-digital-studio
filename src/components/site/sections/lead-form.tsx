@@ -268,17 +268,6 @@ export function LeadForm() {
                     <Form {...form}>
                       <form
                         onSubmit={form.handleSubmit(onSubmit)}
-                        onInput={(e) => {
-                          // Sync native input values to react-hook-form on input
-                          const formEl = e.currentTarget
-                          const fd = new FormData(formEl)
-                          ;['name', 'email', 'phone', 'company', 'message'].forEach((key) => {
-                            const val = fd.get(key)
-                            if (val !== undefined && val !== null) {
-                              form.setValue(key as keyof LeadValues, String(val), { shouldValidate: false })
-                            }
-                          })
-                        }}
                         className="flex flex-col gap-5"
                         noValidate
                       >
@@ -402,7 +391,7 @@ export function LeadForm() {
                                 onValueChange={field.onChange}
                               >
                                 <FormControl>
-                                  <SelectTrigger className={`h-12 w-full ${inputCls}`}>
+                                  <SelectTrigger className={`w-full ${inputCls}`}>
                                     <SelectValue
                                       placeholder={t('form.servicePlaceholder')}
                                     />

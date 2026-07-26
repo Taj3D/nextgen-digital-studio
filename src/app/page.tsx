@@ -2,7 +2,6 @@ import { Navbar } from "@/components/site/navbar";
 import { SiteFooter } from "@/components/site/footer";
 import { FloatingButtons } from "@/components/site/floating-buttons";
 import { ExitIntentPopup } from "@/components/site/exit-intent-popup";
-import { StickyCtaBar } from "@/components/site/sticky-cta-bar";
 import { faqs, TESTIMONIALS } from "@/lib/site-data";
 import { HeroSection } from "@/components/site/sections/hero";
 import { TrustBanner } from "@/components/site/sections/trust-banner";
@@ -321,7 +320,6 @@ export default function Home() {
       </main>
       <SiteFooter />
       <FloatingButtons />
-      <StickyCtaBar />
       <ExitIntentPopup />
     </div>
   );

@@ -37,7 +37,8 @@ function splitDay(full: string): { dayLabel: string; titleText: string } {
     }
   }
   // Fallback: em-dash (U+2014) or en-dash (U+2013)
-  const dashIdx = full.indexOf('—') !== -1 ? full.indexOf('—') : full.indexOf('–')
+  const emIdx = full.indexOf('—')
+  const dashIdx = emIdx !== -1 ? emIdx : full.indexOf('–')
   if (dashIdx !== -1) {
     return {
       dayLabel: full.slice(0, dashIdx).trim(),

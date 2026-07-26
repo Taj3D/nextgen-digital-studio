@@ -59,7 +59,9 @@ const STACK_ITEMS: StackItem[] = [
   { Icon: CalendarCheck, nameEn: 'Weekly Performance Review', nameBn: 'সাপ্তাহিক পারফরম্যান্স রিভিউ', value: 25000 },
 ]
 
-const TOTAL_VALUE = 345000
+// Total value is derived from the stack items so it can never drift if items
+// are added/removed/edited.
+const TOTAL_VALUE = STACK_ITEMS.reduce((sum, item) => sum + item.value, 0)
 const TODAYS_PRICE = 35000
 
 export function OfferStack() {

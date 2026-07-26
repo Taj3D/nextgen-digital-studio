@@ -20,6 +20,12 @@ import {
 import { useLang } from '@/components/site/language-provider'
 import { Card, CardContent } from '@/components/ui/card'
 
+function scrollToId(id: string) {
+  if (typeof document === 'undefined') return
+  const el = document.getElementById(id)
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
+
 type VideoItem = {
   titleKey: string
   descKey: string
@@ -89,12 +95,19 @@ export function VideoLayer() {
                   <div className="absolute top-3 right-3 rounded-full bg-emerald-600/90 text-white px-2.5 py-1 text-xs font-semibold">
                     {comingSoon}
                   </div>
-                  {/* play button */}
-                  <div className="absolute inset-0 grid place-items-center">
+                  {/* play button — scrolls to lead form (videos are "coming soon",
+                      so clicking lets the user request early access instead of
+                      being a dead, non-interactive affordance) */}
+                  <button
+                    type="button"
+                    onClick={() => scrollToId('lead-form')}
+                    aria-label={isBn ? 'আগে থেকে অ্যাক্সেস চাই' : 'Request early access'}
+                    className="absolute inset-0 grid place-items-center"
+                  >
                     <div className="grid h-14 w-14 place-items-center rounded-full bg-white text-emerald-600 shadow-lg transition-transform duration-300 group-hover:scale-110">
                       <Play className="h-6 w-6 fill-current" />
                     </div>
-                  </div>
+                  </button>
                 </div>
 
                 {/* Title + description */}

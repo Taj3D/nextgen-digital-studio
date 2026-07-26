@@ -40,7 +40,7 @@ const CTAS: Cta[] = [
   { icon: Calculator, titleKey: 'ecta.roi', descKey: 'ecta.roiDesc', target: 'roi-calculator' },
   { icon: FileBarChart, titleKey: 'ecta.case', descKey: 'ecta.caseDesc', target: 'case-studies' },
   { icon: SearchCheck, titleKey: 'ecta.audit', descKey: 'ecta.auditDesc', target: 'lead-form' },
-  { icon: MessageSquare, titleKey: 'ecta.talk', descKey: 'ecta.talkDesc', target: 'ai-demo' },
+  { icon: MessageSquare, titleKey: 'ecta.talk', descKey: 'ecta.talkDesc', target: 'lead-form' },
   { icon: Download, titleKey: 'ecta.guide', descKey: 'ecta.guideDesc', target: 'resources-hub' },
 ]
 

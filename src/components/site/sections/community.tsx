@@ -11,6 +11,7 @@ import {
   staggerItem,
 } from '@/components/site/reveal'
 import { useLang } from '@/components/site/language-provider'
+import { waLink } from '@/lib/whatsapp'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 
@@ -42,7 +43,7 @@ const CHANNELS: Channel[] = [
     titleKey: 'comm.wa',
     descKey: 'comm.waDesc',
     members: '3,400+ members',
-    href: 'https://chat.whatsapp.com/nextgen-digital-studio',
+    href: waLink(),
   },
   {
     icon: Mail,

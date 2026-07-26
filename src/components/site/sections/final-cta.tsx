@@ -5,13 +5,11 @@ import { motion } from 'framer-motion'
 import {
   Sparkles,
   ArrowRight,
-  MessageCircle,
   ShieldCheck,
 } from 'lucide-react'
 import { Reveal } from '@/components/site/reveal'
 import { useLang } from '@/components/site/language-provider'
 import { Button } from '@/components/ui/button'
-import { waLink } from '@/lib/whatsapp'
 
 function scrollToId(id: string) {
   if (typeof document === 'undefined') return

@@ -23,14 +23,21 @@ import { useLang } from '@/components/site/language-provider'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 
+function scrollToId(id: string) {
+  if (typeof document === 'undefined') return
+  const el = document.getElementById(id)
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
+
 type Resource = {
   icon: LucideIcon
   titleKey: string
   descKey: string
   coverClass: string
   actionKey: 'res.open' | 'res.download'
-  href: string
+  href?: string
   external: boolean
+  scrollTo?: string
 }
 
 const RESOURCES: Resource[] = [
@@ -49,7 +56,7 @@ const RESOURCES: Resource[] = [
     descKey: 'res.guidesDesc',
     coverClass: 'bg-emerald-500/10',
     actionKey: 'res.open',
-    href: '/blog',
+    href: '/case-studies',
     external: false,
   },
   {
@@ -67,8 +74,8 @@ const RESOURCES: Resource[] = [
     descKey: 'res.playbookDesc',
     coverClass: 'bg-amber-500/10',
     actionKey: 'res.download',
-    href: '#',
-    external: false,
+    href: '/resources/funnel-swipe.html',
+    external: true,
   },
   {
     icon: LayoutTemplate,
@@ -76,8 +83,8 @@ const RESOURCES: Resource[] = [
     descKey: 'res.templatesDesc',
     coverClass: 'gradient-brand-soft',
     actionKey: 'res.download',
-    href: '#',
-    external: false,
+    href: '/resources/whatsapp-templates.html',
+    external: true,
   },
 ]
 
@@ -129,22 +136,34 @@ export function ResourcesHub() {
                   <p className="text-sm text-muted-foreground leading-relaxed flex-1">
                     {t(r.descKey)}
                   </p>
-                  <a
-                    href={r.href}
-                    {...(r.external
-                      ? { target: '_blank', rel: 'noopener noreferrer' }
-                      : {})}
-                    className="inline-block w-fit mt-1"
-                  >
+                  {r.href ? (
+                    <a
+                      href={r.href}
+                      {...(r.external
+                        ? { target: '_blank', rel: 'noopener noreferrer' }
+                        : {})}
+                      className="inline-block w-fit mt-1"
+                    >
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="border-emerald-500/30 text-foreground hover:bg-emerald-500/10 hover:text-foreground"
+                      >
+                        {t(r.actionKey)}
+                        <ActionIcon className="h-4 w-4" />
+                      </Button>
+                    </a>
+                  ) : (
                     <Button
+                      onClick={() => r.scrollTo && scrollToId(r.scrollTo)}
                       variant="outline"
                       size="sm"
-                      className="border-emerald-500/30 text-foreground hover:bg-emerald-500/10 hover:text-foreground"
+                      className="w-fit mt-1 border-emerald-500/30 text-foreground hover:bg-emerald-500/10 hover:text-foreground"
                     >
                       {t(r.actionKey)}
                       <ActionIcon className="h-4 w-4" />
                     </Button>
-                  </a>
+                  )}
                 </CardContent>
               </Card>
             </motion.div>

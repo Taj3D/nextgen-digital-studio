@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import {
   Quote,
@@ -91,7 +92,6 @@ export function FounderSection() {
                   width={360}
                   height={360}
                   className="object-cover"
-                  priority={false}
                 />
               </div>
               {/* Floating badge */}
@@ -191,14 +191,12 @@ export function FounderSection() {
                 <ArrowRight className="h-4 w-4" />
               </Button>
               <Button
-                onClick={() => {
-                  window.location.href = '/founder'
-                }}
+                asChild
                 variant="outline"
                 className="border-amber-500/40 text-foreground hover:bg-amber-500/10 hover:text-foreground h-12"
                 size="lg"
               >
-                {isBn ? 'সম্পূর্ণ গল্প পড়ুন' : 'Read Full Story'}
+                <Link href="/founder">{isBn ? 'সম্পূর্ণ গল্প পড়ুন' : 'Read Full Story'}</Link>
               </Button>
             </div>
           </div>
