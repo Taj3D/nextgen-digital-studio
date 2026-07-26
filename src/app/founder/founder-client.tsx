@@ -10,6 +10,7 @@
  */
 
 import * as React from 'react'
+import Image from 'next/image'
 import {
   TopBar,
 } from '@/components/site/top-bar'
@@ -587,6 +588,29 @@ export function FounderClient() {
               <Crown className="h-3 w-3" /> {T(founderHero.badge, isBn)}
             </span>
 
+            {/* Founder Portrait — focal point of the page */}
+            <div className="relative mx-auto mb-4 mt-5 h-32 w-32 sm:h-40 sm:w-40">
+              {/* Soft gold glow */}
+              <div className="absolute -inset-3 rounded-full bg-[#D4A853]/25 blur-2xl" aria-hidden />
+              {/* Gold gradient ring */}
+              <div className="absolute -inset-1.5 rounded-full bg-gradient-to-br from-[#D4A853] via-[#E8C97A] to-[#B8923A]" aria-hidden />
+              {/* Image */}
+              <div className="relative h-full w-full overflow-hidden rounded-full border-4 border-[var(--foundry-card)] shadow-xl">
+                <Image
+                  src="/founder.png"
+                  alt="Md. Najmul Islam Taj (Taj Bhai) — Founder & CEO, NextGen Digital Studio"
+                  fill
+                  sizes="(max-width: 640px) 128px, 160px"
+                  className="object-cover"
+                  priority
+                />
+              </div>
+              {/* Name badge */}
+              <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-[#1E3A5F] px-3 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#D4A853] shadow-md ring-2 ring-[var(--foundry-card)]">
+                Taj Bhai
+              </span>
+            </div>
+
             <h1 className="mt-4 text-3xl font-extrabold leading-[1.1] tracking-tight sm:text-5xl">
               <span aria-label={`${T(founderHero.name, isBn)} — ${T(founderHero.brand, isBn)}`}>
                 {T(founderHero.name, isBn)}
@@ -765,19 +789,40 @@ export function FounderClient() {
           <Reveal>
             <SectionTitle emoji="📖">{T(founderStory.title, isBn)}</SectionTitle>
             <SectionDivider />
-            <div className="space-y-3 text-[15px] leading-relaxed text-[var(--foundry-subtle)]">
-              {founderStory.paragraphs.map((p, i) => (
-                <p key={i}>{T(p, isBn)}</p>
-              ))}
-              <div className="rounded-r-xl border-l-4 border-[#D4A853] bg-[var(--foundry-bg)] px-5 py-4">
-                <p className="italic text-[var(--foundry-subtle)]">
-                  <Quote className="mr-1 inline h-4 w-4 text-[#D4A853]" />
-                  {T(founderStory.quote, isBn)}
+            <div className="grid gap-5 sm:grid-cols-[180px_1fr] sm:items-start">
+              {/* Founder portrait */}
+              <div className="mx-auto h-44 w-44 sm:mx-0 sm:h-auto sm:w-full">
+                <div className="relative">
+                  <div className="absolute -inset-1 rounded-2xl bg-gradient-to-br from-[#D4A853] to-[#B8923A]" aria-hidden />
+                  <div className="relative aspect-square overflow-hidden rounded-2xl border-2 border-[var(--foundry-card)] shadow-lg">
+                    <Image
+                      src="/founder.png"
+                      alt="Md. Najmul Islam Taj — building NextGen Digital Studio from Jessore"
+                      fill
+                      sizes="(max-width: 640px) 176px, 180px"
+                      className="object-cover"
+                    />
+                  </div>
+                </div>
+                <p className="mt-2 text-center text-xs font-semibold text-[var(--foundry-muted)]">
+                  {isBn ? 'নাজমুল ইসলাম তাজ' : 'Nazmul Islam Taj'}
                 </p>
               </div>
-              {founderStory.paragraphs2.map((p, i) => (
-                <p key={i}>{T(p, isBn)}</p>
-              ))}
+              {/* Story text */}
+              <div className="space-y-3 text-[15px] leading-relaxed text-[var(--foundry-subtle)]">
+                {founderStory.paragraphs.map((p, i) => (
+                  <p key={i}>{T(p, isBn)}</p>
+                ))}
+                <div className="rounded-r-xl border-l-4 border-[#D4A853] bg-[var(--foundry-bg)] px-5 py-4">
+                  <p className="italic text-[var(--foundry-subtle)]">
+                    <Quote className="mr-1 inline h-4 w-4 text-[#D4A853]" />
+                    {T(founderStory.quote, isBn)}
+                  </p>
+                </div>
+                {founderStory.paragraphs2.map((p, i) => (
+                  <p key={i}>{T(p, isBn)}</p>
+                ))}
+              </div>
             </div>
           </Reveal>
         </Section>
@@ -1294,8 +1339,20 @@ export function FounderClient() {
             <SectionTitle emoji="📸">{isBn ? 'আমার জগৎ' : 'My World'}</SectionTitle>
             <SectionDivider />
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {/* Real founder photo as featured first item */}
+              <div className="relative h-28 overflow-hidden rounded-xl border border-[var(--foundry-border)] shadow-sm">
+                <Image
+                  src="/founder.png"
+                  alt="Md. Najmul Islam Taj (Taj Bhai) — portrait"
+                  fill
+                  sizes="(max-width: 640px) 160px, 200px"
+                  className="object-cover"
+                />
+                <span className="absolute bottom-1.5 left-1.5 rounded bg-black/60 px-1.5 py-0.5 text-[10px] font-medium text-white">
+                  {isBn ? 'হিরো' : 'Hero'}
+                </span>
+              </div>
               {[
-                { icon: 'Crown', label: isBn ? 'হিরো' : 'Hero' },
                 { icon: 'Code', label: isBn ? 'কাজ' : 'Working' },
                 { icon: 'Mic', label: isBn ? 'স্পিকিং' : 'Speaking' },
                 { icon: 'Handshake', label: isBn ? 'মিটিং' : 'Meeting' },
@@ -1503,6 +1560,19 @@ export function FounderClient() {
         <Section>
           <Reveal>
             <div className="rounded-2xl border border-[var(--foundry-border)] bg-[var(--foundry-card)] p-6 text-center shadow-sm sm:p-8">
+              {/* Small founder portrait above signature */}
+              <div className="relative mx-auto mb-3 h-16 w-16">
+                <div className="absolute -inset-1 rounded-full bg-gradient-to-br from-[#D4A853] to-[#B8923A]" aria-hidden />
+                <div className="relative h-full w-full overflow-hidden rounded-full border-2 border-[var(--foundry-card)]">
+                  <Image
+                    src="/founder.png"
+                    alt="Md. Najmul Islam Taj — digital signature portrait"
+                    fill
+                    sizes="64px"
+                    className="object-cover"
+                  />
+                </div>
+              </div>
               <PenTool className="mx-auto h-7 w-7 text-[#D4A853]" />
               {/* Signature-style name */}
               <p
