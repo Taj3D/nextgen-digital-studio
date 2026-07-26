@@ -207,18 +207,23 @@ export function SocialProof() {
     scheduleNext()
   }
 
-  if (!current) return null
-
-  const cfg = actionConfig(current.action)
-  const Icon = cfg.icon
-  const name = lang === 'bn' ? current.nameBn : current.name
-  const city = lang === 'bn' ? current.cityBn : current.city
-  const timeStr =
-    current.minutesAgo === 0
+  // NOTE: We intentionally do NOT early-return `null` when `!current`.
+  // Returning null would unmount the entire wrapper (including the
+  // <AnimatePresence>), which breaks framer-motion's exit-animation lifecycle
+  // and triggers a `removeChild` NotFoundError when the next toast mounts.
+  // Instead, the wrapper div + AnimatePresence stay permanently mounted and
+  // only the inner motion.div conditionally renders — the correct pattern.
+  const cfg = current ? actionConfig(current.action) : null
+  const Icon = cfg?.icon ?? CheckCircle2
+  const name = current ? (lang === 'bn' ? current.nameBn : current.name) : ''
+  const city = current ? (lang === 'bn' ? current.cityBn : current.city) : ''
+  const timeStr = current
+    ? current.minutesAgo === 0
       ? t('socialProof.justNow')
       : lang === 'bn'
         ? `${toBnDigits(current.minutesAgo)} ${t('socialProof.minutesAgo')}`
         : `${current.minutesAgo} ${t('socialProof.minutesAgo')}`
+    : ''
 
   return (
     <div
@@ -227,7 +232,7 @@ export function SocialProof() {
       aria-label={t('socialProof.ariaLabel')}
     >
       <AnimatePresence>
-        {current && (
+        {current && cfg && (
           <motion.div
             key={`${current.name}-${current.action}-${stateRef.current.count}`}
             initial={{ opacity: 0, x: -40, y: 10 }}
