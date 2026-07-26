@@ -44,6 +44,7 @@ const MORE_ITEMS: NavItem[] = [
   { key: 'nav.more.founder', href: '/founder' },
   { key: 'nav.more.3dPortrait', href: '/3d-portrait' },
   { key: 'nav.more.cncDesign', href: '/cnc-design' },
+  { key: 'nav.more.cncBundle', href: '/cnc-bundle' },
   { key: 'nav.more.aiTraining', href: '/ai-training' },
   { key: 'nav.more.cncTraining', href: '/cnc-training' },
   { key: 'nav.more.pdfBooks', href: '/pdf-books' },
