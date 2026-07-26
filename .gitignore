@@ -73,3 +73,7 @@ verify-*.png
 
 # Plan/docs scratch files
 PLAN-*.md
+
+# Founder page verification screenshots (internal QA)
+founder-hero-*.png
+founder-gallery-*.png
