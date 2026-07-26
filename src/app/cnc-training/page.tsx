@@ -162,18 +162,19 @@ const instructorLd = {
   description: `${CNC_COURSE.experienceYears}+ years CNC design experience, ${CNC_COURSE.students}+ students trained, ${CNC_COURSE.factories}+ factory collaborations, ${CNC_COURSE.designFiles}+ design files created.`,
 }
 
-// 7. Video Schema — founder VSL placeholder
+// 7. Video Schema — founder VSL (YouTube)
+const FOUNDER_VIDEO_ID = 'o3S_SM6b2Tg'
 const videoLd = {
   '@context': 'https://schema.org',
   '@type': 'VideoObject',
   name: 'CNC 3D Designer হওয়ার সম্পূর্ণ রোডম্যাপ — Founder Video',
   description:
     '৩ মিনিটে জানুন কীভাবে ৭ দিনে প্রফেশনাল CNC ডিজাইনার হবেন — NextGen Digital Studio প্রতিষ্ঠাতা তাজ ভাইয়ের গাইড।',
-  thumbnailUrl: `${BASE_URL}/og-image.jpg`,
+  thumbnailUrl: `https://i.ytimg.com/vi/${FOUNDER_VIDEO_ID}/hqdefault.jpg`,
   uploadDate: '2026-07-20',
   duration: 'PT3M',
-  contentUrl: `${BASE_URL}/cnc-training`,
-  embedUrl: `${BASE_URL}/cnc-training`,
+  contentUrl: `https://www.youtube.com/watch?v=${FOUNDER_VIDEO_ID}`,
+  embedUrl: `https://www.youtube-nocookie.com/embed/${FOUNDER_VIDEO_ID}`,
 }
 
 export const metadata: Metadata = {

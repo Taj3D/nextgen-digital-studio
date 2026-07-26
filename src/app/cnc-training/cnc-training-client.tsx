@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import {
   TopBar,
 } from '@/components/site/top-bar'
@@ -601,29 +602,89 @@ function FreeBonusBanner() {
 }
 
 /* -------------------------------------------------------------------------- */
-/*  3. Video sales letter placeholder                                          */
+/*  3. Founder video sales letter (YouTube embed — facade + click-to-play)     */
 /* -------------------------------------------------------------------------- */
+const FOUNDER_VIDEO_ID = 'o3S_SM6b2Tg'
+const FOUNDER_VIDEO_THUMB = `https://i.ytimg.com/vi/${FOUNDER_VIDEO_ID}/hqdefault.jpg`
+
 function VideoLetter() {
   const { lang } = useLang()
   const isBn = lang === 'bn'
+  const [playing, setPlaying] = React.useState(false)
+
   return (
     <section className="relative z-10 px-4 py-12 sm:px-6">
       <div className="mx-auto max-w-3xl">
-        <button
-          className="group relative flex w-full flex-col items-center justify-center gap-2 overflow-hidden rounded-3xl border border-orange-500/30 bg-gradient-to-br from-card to-card/50 px-6 py-16 text-center transition-colors hover:border-orange-500/60"
-          aria-label={isBn ? 'Founder ভিডিও দেখুন' : 'Watch the Founder video'}
-        >
-          <div className="absolute inset-0 bg-orange-600/5 opacity-0 transition-opacity group-hover:opacity-100" />
-          <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-orange-500 to-amber-500 shadow-lg shadow-orange-600/40 transition-transform group-hover:scale-110">
-            <Video className="h-9 w-9 text-white" />
+        <div className="mb-4 text-center">
+          <div className="inline-flex items-center gap-2 rounded-full border border-orange-500/30 bg-orange-500/10 px-3 py-1 text-xs font-semibold text-orange-300">
+            <Video className="h-3.5 w-3.5" />
+            {isBn ? 'Founder Video' : 'Founder Video'}
           </div>
-          <div className="relative mt-2 text-lg font-bold text-foreground">
-            🎬 {isBn ? 'Founder Video — ৩ মিনিট' : 'Founder Video — 3 min'}
-          </div>
-          <div className="relative text-sm text-muted-foreground">
-            {isBn ? 'CNC ডিজাইনার হওয়ার সম্পূর্ণ রোডম্যাপ' : 'The complete roadmap to becoming a CNC designer'}
-          </div>
-        </button>
+          <h2 className="mt-3 font-heading text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
+            {isBn ? '🎬 ফাউন্ডারের ভিডিও দেখুন' : '🎬 Watch the Founder’s Video'}
+          </h2>
+          <p className="mt-2 text-sm text-muted-foreground sm:text-base">
+            {isBn
+              ? 'CNC ডিজাইনার হওয়ার সম্পূর্ণ রোডম্যাপ — সরাসরি তাজ ভাইয়ের কাছ থেকে'
+              : 'The complete roadmap to becoming a CNC designer — directly from Taj Bhai'}
+          </p>
+        </div>
+
+        <div className="relative aspect-video w-full overflow-hidden rounded-3xl border border-orange-500/30 bg-black shadow-2xl shadow-orange-900/30">
+          {playing ? (
+            <iframe
+              className="absolute inset-0 h-full w-full"
+              src={`https://www.youtube-nocookie.com/embed/${FOUNDER_VIDEO_ID}?autoplay=1&rel=0&modestbranding=1`}
+              title={isBn ? 'Founder Video — CNC ডিজাইনার রোডম্যাপ' : 'Founder Video — CNC Designer Roadmap'}
+              loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              referrerPolicy="strict-origin-when-cross-origin"
+            />
+          ) : (
+            <button
+              type="button"
+              onClick={() => setPlaying(true)}
+              className="group absolute inset-0 h-full w-full"
+              aria-label={isBn ? 'Founder ভিডিও চালু করুন' : 'Play the Founder video'}
+            >
+              {/* Thumbnail */}
+              <img
+                src={FOUNDER_VIDEO_THUMB}
+                alt={isBn ? 'Founder ভিডিও — তাজ ভাই' : 'Founder video — Taj Bhai'}
+                className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                loading="lazy"
+              />
+              {/* Dark overlay for contrast */}
+              <span className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/20" />
+
+              {/* Play button */}
+              <span className="absolute inset-0 flex flex-col items-center justify-center gap-3">
+                <span className="relative flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-orange-500 to-amber-500 shadow-2xl shadow-orange-600/50 transition-transform duration-300 group-hover:scale-110">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-orange-400/40" />
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="relative h-9 w-9 translate-x-0.5 text-white"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </span>
+                <span className="rounded-full bg-black/60 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm">
+                  ▶ {isBn ? 'চালু করুন' : 'Play now'}
+                </span>
+              </span>
+            </button>
+          )}
+        </div>
+
+        {/* Caption under the video */}
+        <p className="mt-3 text-center text-xs text-muted-foreground/80">
+          {isBn
+            ? 'তাজ ভাই — Founder, NextGen Digital Studio · ৭+ বছর CNC ডিজাইন অভিজ্ঞতা'
+            : 'Taj Bhai — Founder, NextGen Digital Studio · 7+ years of CNC design experience'}
+        </p>
       </div>
     </section>
   )
@@ -647,13 +708,29 @@ function InstructorSection() {
     >
       <div className="overflow-hidden rounded-3xl border border-border bg-card/60 p-6 sm:p-8 md:p-10">
         <div className="grid gap-8 md:grid-cols-[auto_1fr] md:items-center">
-          {/* Avatar */}
-          <div className="mx-auto flex h-40 w-40 items-center justify-center rounded-3xl bg-gradient-to-br from-orange-500/20 to-amber-500/10 ring-2 ring-orange-500/30">
+          {/* Founder photo */}
+          <div className="mx-auto flex flex-col items-center gap-3">
+            <div className="relative h-44 w-44 overflow-hidden rounded-3xl bg-gradient-to-br from-orange-500/20 to-amber-500/10 ring-2 ring-orange-500/40 shadow-xl shadow-orange-900/20 sm:h-48 sm:w-48">
+              <Image
+                src="/founder.png"
+                alt={isBn ? 'তাজ ভাই — Founder, NextGen Digital Studio' : 'Taj Bhai — Founder, NextGen Digital Studio'}
+                fill
+                sizes="(max-width: 640px) 11rem, 12rem"
+                className="object-cover"
+                priority
+              />
+              {/* Verified badge */}
+              <span className="absolute bottom-2 right-2 inline-flex items-center gap-1 rounded-full bg-emerald-500/90 px-2 py-0.5 text-[10px] font-bold text-white shadow-lg backdrop-blur-sm">
+                <CheckCircle2 className="h-3 w-3" /> {isBn ? 'যাচাইকৃত' : 'Verified'}
+              </span>
+            </div>
             <div className="text-center">
-              <div className="font-heading text-5xl font-extrabold text-orange-400">
-                {isBn ? 'তাজ' : 'Taj'}
+              <div className="font-heading text-base font-bold text-foreground">
+                {isBn ? 'তাজ ভাই' : 'Taj Bhai'}
               </div>
-              <div className="mt-1 text-xs text-muted-foreground/70">Founder</div>
+              <div className="mt-0.5 text-xs text-muted-foreground/70">
+                {isBn ? 'প্রতিষ্ঠাতা, NextGen Digital Studio' : 'Founder, NextGen Digital Studio'}
+              </div>
             </div>
           </div>
 
