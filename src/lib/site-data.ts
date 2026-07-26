@@ -516,7 +516,10 @@ export const caseStudies: CaseStudy[] = [
 export type Faq = { q: string; a: string; category?: string; qBn?: string; aBn?: string }
 
 /** FAQ categories used by the homepage accordion (also drives FAQ JSON-LD). */
-export const FAQ_CATEGORIES = ['general', 'pricing', 'implementation', 'support'] as const
+export const FAQ_CATEGORIES = [
+  'general', 'pricing', 'implementation', 'support',
+  'ai', 'security', 'integration', 'roi', 'timeline', 'ownership',
+] as const
 export type FaqCategory = (typeof FAQ_CATEGORIES)[number]
 
 export const faqs: Faq[] = [
@@ -600,6 +603,264 @@ export const faqs: Faq[] = [
     a: 'Our 60-day ROI guarantee means if you don’t see measurable revenue improvement, we keep working for free until you do. No long-term contracts — you can cancel anytime.',
     qBn: '৬০ দিনে ROI না হলে কী হবে?',
     aBn: 'আমাদের ৬০ দিনের ROI গ্যারান্টি — যদি পরিমেয় রাজস্ব উন্নতি না দেখেন, আমরা ফল না হওয়া পর্যন্ত ফ্রি কাজ করি। কোনো দীর্ঘমেয়াদী চুক্তি নেই — যেকোনো সময় ক্যানসেল করতে পারেন।',
+  },
+  {
+    category: 'support',
+    q: 'Can I talk to a human when I need to?',
+    a: 'Absolutely. Every client gets a dedicated account manager reachable via WhatsApp, phone, or email. Dominant plans include 24/7 phone support and a direct line to your account team.',
+    qBn: 'প্রয়োজনে কি মানুষের সাথে কথা বলতে পারব?',
+    aBn: 'অবশ্যই। প্রতিটি ক্লায়েন্ট ডেডিকেটেড অ্যাকাউন্ট ম্যানেজার পান — WhatsApp, ফোন বা ইমেইলে পৌঁছানো যায়। Dominant প্ল্যানে ২৪/৭ ফোন সাপোর্ট ও সরাসরি লাইন অন্তর্ভুক্ত।',
+  },
+  {
+    category: 'support',
+    q: 'How do I report a bug or issue?',
+    a: 'Message your account manager on WhatsApp or email. We acknowledge within 2 business hours and resolve critical issues within 24 hours. Every issue is tracked to resolution.',
+    qBn: 'বাগ বা সমস্যা কীভাবে রিপোর্ট করব?',
+    aBn: 'WhatsApp বা ইমেইলে আপনার অ্যাকাউন্ট ম্যানেজারকে মেসেজ করুন। আমরা ২ ব্যবসায়িক ঘণ্টায় স্বীকার করি এবং ক্রিটিক্যাল সমস্যা ২৪ ঘণ্টায় সমাধান করি। প্রতিটি সমস্যা সমাধান পর্যন্ত ট্র্যাক করা হয়।',
+  },
+  {
+    category: 'support',
+    q: 'Do you offer training for my team?',
+    a: 'Yes. Every plan includes onboarding training. Growth and Dominant plans add monthly training sessions and a video training library so your team becomes self-sufficient.',
+    qBn: 'আমার টিমের জন্য ট্রেইনিং দেন কি?',
+    aBn: 'হ্যাঁ। প্রতিটি প্ল্যানে অনবোর্ডিং ট্রেইনিং অন্তর্ভুক্ত। Growth ও Dominant প্ল্যানে মাসিক ট্রেইনিং সেশন ও ভিডিও ট্রেইনিং লাইব্রেরি যোগ হয় যাতে আপনার টিম স্বয়ংসম্পূর্ণ হয়।',
+  },
+  // --- AI & Technology ---
+  {
+    category: 'ai',
+    q: 'How does your AI understand my specific business?',
+    a: 'We train your AI agent on your products, services, pricing, FAQs, brand voice, and past customer conversations. It learns YOUR business before it ever talks to a customer — typically trained on 200+ data points specific to your company.',
+    qBn: 'আপনাদের AI কীভাবে আমার নির্দিষ্ট ব্যবসা বোঝে?',
+    aBn: 'আমরা আপনার AI এজেন্টকে আপনার প্রোডাক্ট, সার্ভিস, প্রাইসিং, FAQ, ব্র্যান্ড ভয়েস ও অতীত কাস্টমার কথোপকথনে ট্রেইন করি। কাস্টমারের সাথে কথা বলার আগেই সে আপনার ব্যবসা শেখে — সাধারণত ২০০+ ডেটা পয়েন্টে ট্রেইনড।',
+  },
+  {
+    category: 'ai',
+    q: 'Can the AI handle complex customer questions?',
+    a: 'Yes. Our AI agents handle FAQs, pricing, product comparisons, objections, and booking. For edge cases outside its training, it gracefully escalates to a human teammate so no lead is ever stuck.',
+    qBn: 'AI কি জটিল কাস্টমার প্রশ্ন সামলাতে পারে?',
+    aBn: 'হ্যাঁ। আমাদের AI এজেন্ট FAQ, প্রাইসিং, প্রোডাক্ট তুলনা, অবজেকশন ও বুকিং সামলায়। ট্রেইনিং-এর বাইরে কেসে সে মানব টিমমেটকে এসকেলেট করে যাতে কোনো লিড আটকে না থাকে।',
+  },
+  {
+    category: 'ai',
+    q: 'What happens if the AI gives a wrong answer?',
+    a: 'We monitor all conversations and review logs daily. Wrong answers are corrected immediately and added to the AI\'s training. Our 60-day ROI guarantee covers any revenue impact from AI errors.',
+    qBn: 'AI ভুল উত্তর দিলে কী হবে?',
+    aBn: 'আমরা সব কথোপকথন মনিটর করি ও ডেইলি লগ রিভিউ করি। ভুল উত্তর তাৎক্ষণিকভাবে সংশোধন করে AI-এর ট্রেইনিংয়ে যোগ করা হয়। আমাদের ৬০ দিনের ROI গ্যারান্টি AI ত্রুটির রাজস্ব প্রভাব কভার করে।',
+  },
+  {
+    category: 'ai',
+    q: 'Which AI models do you use?',
+    a: 'We use GPT-4 class models, Claude, and Gemini — picking the right model for each task. For Bangla conversations, we use models fine-tuned for South Asian languages to ensure natural, accurate responses.',
+    qBn: 'আপনারা কোন AI মডেল ব্যবহার করেন?',
+    aBn: 'আমরা GPT-4 ক্লাস মডেল, Claude ও Gemini ব্যবহার করি — প্রতিটি কাজের জন্য সঠিক মডেল বেছে নিই। বাংলা কথোপকথনের জন্য দক্ষিণ এশীয় ভাষায় ফাইন-টিউনড মডেল ব্যবহার করি স্বাভাবিক, নির্ভুল উত্তরের জন্য।',
+  },
+  {
+    category: 'ai',
+    q: 'Can the AI make phone calls?',
+    a: 'Yes. Our AI voice agents can make and receive phone calls in Bangla and English — qualifying leads, booking appointments, and answering FAQs. Voice agents sound natural and can handle full conversations.',
+    qBn: 'AI কি ফোন কল করতে পারে?',
+    aBn: 'হ্যাঁ। আমাদের AI ভয়েস এজেন্ট বাংলা ও ইংরেজিতে ফোন কল করতে ও গ্রহণ করতে পারে — লিড যাচাই, অ্যাপয়েন্টমেন্ট বুকিং ও FAQ উত্তর দিতে। ভয়েস এজেন্ট স্বাভাবিক শোনায় ও সম্পূর্ণ কথোপকথন সামলায়।',
+  },
+  {
+    category: 'ai',
+    q: 'How does the AI handle multiple languages?',
+    a: 'Our AI detects the customer\'s language automatically and responds in the same language. It can switch between Bangla and English mid-conversation if the customer switches. This is critical for the Bangladesh market.',
+    qBn: 'AI কীভাবে একাধিক ভাষা সামলায়?',
+    aBn: 'আমাদের AI কাস্টমারের ভাষা স্বয়ংক্রিয়ভাবে শনাক্ত করে এবং একই ভাষায় উত্তর দেয়। কাস্টমার মাঝে ভাষা পরিবর্তন করলে সেও পরিবর্তন করতে পারে। বাংলাদেশ বাজারের জন্য এটি অপরিহার্য।',
+  },
+  // --- Security & Privacy ---
+  {
+    category: 'security',
+    q: 'How do you protect my customer data?',
+    a: 'All data is encrypted in transit (TLS 1.3) and at rest (AES-256). We follow GDPR-aligned practices, sign NDAs, and never share your data with third parties. You own your data at all times.',
+    qBn: 'আমার কাস্টমার ডেটা কীভাবে সুরক্ষিত করেন?',
+    aBn: 'সব ডেটা transit-এ (TLS 1.3) ও at-rest-এ (AES-256) এনক্রিপ্টেড। আমরা GDPR-অনুযায়ী প্র্যাকটিস, NDA সাইন, এবং আপনার ডেটা থার্ড-পার্টির সাথে শেয়ার করি না। ডেটার মালিকানা সব সময় আপনার।',
+  },
+  {
+    category: 'security',
+    q: 'Where is my data stored?',
+    a: 'Your data is stored on secure cloud infrastructure (AWS / Google Cloud / Vercel) with regional data residency options. We can configure storage to comply with your industry\'s data sovereignty requirements.',
+    qBn: 'আমার ডেটা কোথায় সংরক্ষিত হয়?',
+    aBn: 'আপনার ডেটা নিরাপদ ক্লাউড ইনফ্রাস্ট্রাকচারে (AWS / Google Cloud / Vercel) সংরক্ষিত, রিজিওনাল ডেটা রেসিডেন্সি অপশনসহ। আপনার শিল্পের ডেটা সার্ভেইন্টি রিকোয়ারমেন্ট অনুযায়ী স্টোরেজ কনফিগার করতে পারি।',
+  },
+  {
+    category: 'security',
+    q: 'Do you comply with Bangladesh data protection laws?',
+    a: 'Yes. We follow the ICT Act 2006 and the upcoming Personal Data Protection Act guidelines. We can sign a Data Processing Agreement (DPA) and customize data handling to meet your compliance needs.',
+    qBn: 'বাংলাদেশের ডেটা সুরক্ষা আইন মানেন কি?',
+    aBn: 'হ্যাঁ। আমরা ICT Act 2006 ও আসন্ন Personal Data Protection Act গাইডলাইন অনুসরণ করি। Data Processing Agreement (DPA) সাইন করতে পারি এবং আপনার কমপ্লায়েন্স চাহিদায় ডেটা হ্যান্ডলিং কাস্টমাইজ করতে পারি।',
+  },
+  {
+    category: 'security',
+    q: 'Who has access to my data?',
+    a: 'Only your dedicated account manager and the engineers working on your project. All access is logged, role-based, and revoked when team members change. You get a full audit trail on request.',
+    qBn: 'আমার ডেটায় কার অ্যাক্সেস আছে?',
+    aBn: 'শুধুমাত্র আপনার ডেডিকেটেড অ্যাকাউন্ট ম্যানেজার ও আপনার প্রজেক্টে কাজ করা ইঞ্জিনিয়ারদের। সব অ্যাক্সেস লগড, রোল-ভিত্তিক, এবং টিম পরিবর্তনে প্রত্যাহার করা হয়। অনুরোধে সম্পূর্ণ অডিট ট্রেইল পান।',
+  },
+  {
+    category: 'security',
+    q: 'Can I export or delete my data anytime?',
+    a: 'Yes. You can export all your data at any time in CSV/JSON format. You can request permanent deletion — we comply within 30 days and provide a deletion certificate.',
+    qBn: 'আমার ডেটা যেকোনো সময় এক্সপোর্ট বা ডিলিট করতে পারি কি?',
+    aBn: 'হ্যাঁ। আপনি সব ডেটা যেকোনো সময় CSV/JSON ফরম্যাটে এক্সপোর্ট করতে পারেন। স্থায়ী ডিলিশন অনুরোধ করতে পারেন — আমরা ৩০ দিনের মধ্যে কমপ্লাই করি ও ডিলিশন সার্টিফিকেট দিই।',
+  },
+  // --- Integrations ---
+  {
+    category: 'integration',
+    q: 'Which CRM systems do you integrate with?',
+    a: 'We integrate with HubSpot, GoHighLevel, Salesforce, Zoho, Pipedrive, and custom CRMs via API. If your CRM has an API, we can connect to it.',
+    qBn: 'কোন CRM সিস্টেমের সাথে ইন্টিগ্রেট করেন?',
+    aBn: 'HubSpot, GoHighLevel, Salesforce, Zoho, Pipedrive ও API-সহ কাস্টম CRM-এ ইন্টিগ্রেট করি। আপনার CRM-এ API থাকলে আমরা কানেক্ট করতে পারি।',
+  },
+  {
+    category: 'integration',
+    q: 'Do you integrate with WhatsApp Business API?',
+    a: 'Yes. We are an official WhatsApp Business API partner. Your AI agent responds on WhatsApp automatically — qualifying leads, answering FAQs, and booking calls 24/7.',
+    qBn: 'WhatsApp Business API-এর সাথে ইন্টিগ্রেট করেন কি?',
+    aBn: 'হ্যাঁ। আমরা অফিসিয়াল WhatsApp Business API পার্টনার। আপনার AI এজেন্ট WhatsApp-এ স্বয়ংক্রিয়ভাবে উত্তর দেয় — লিড যাচাই, FAQ উত্তর ও কল বুকিং ২৪/৭।',
+  },
+  {
+    category: 'integration',
+    q: 'Can you connect to my existing website?',
+    a: 'Yes. We add a chat widget to any website (Next.js, WordPress, Shopify, custom HTML). No rebuild needed — just paste a snippet and your AI agent is live.',
+    qBn: 'আমার বিদ্যমান ওয়েবসাইটে কানেক্ট করতে পারেন?',
+    aBn: 'হ্যাঁ। যেকোনো ওয়েবসাইটে (Next.js, WordPress, Shopify, কাস্টম HTML) চ্যাট উইজেট যোগ করি। রিবিল্ড লাগে না — শুধু স্নিপেট পেস্ট করুন, AI এজেন্ট লাইভ।',
+  },
+  {
+    category: 'integration',
+    q: 'Do you work with Facebook Messenger and Instagram?',
+    a: 'Yes. We connect your AI agent to Facebook Messenger and Instagram DMs. Leads from social media get the same instant, qualified response as website visitors.',
+    qBn: 'Facebook Messenger ও Instagram-এ কাজ করেন কি?',
+    aBn: 'হ্যাঁ। আমরা আপনার AI এজেন্ট Facebook Messenger ও Instagram DM-এ কানেক্ট করি। সোশ্যাল মিডিয়ার লিড ওয়েবসাইট ভিজিটরের মতো একই তাৎক্ষণিক, যাচাই করা উত্তর পায়।',
+  },
+  {
+    category: 'integration',
+    q: 'Can you integrate with my calendar for booking?',
+    a: 'Yes. We integrate with Google Calendar, Calendly, Cal.com, and Microsoft Outlook. Your AI agent checks real-time availability and books meetings directly into your calendar.',
+    qBn: 'বুকিংয়ের জন্য আমার ক্যালেন্ডারে ইন্টিগ্রেট করতে পারেন?',
+    aBn: 'হ্যাঁ। Google Calendar, Calendly, Cal.com ও Microsoft Outlook-এ ইন্টিগ্রেট করি। আপনার AI এজেন্ট রিয়েল-টাইম অ্যাভেইলাবিলিটি চেক করে সরাসরি আপনার ক্যালেন্ডারে মিটিং বুক করে।',
+  },
+  {
+    category: 'integration',
+    q: 'Do you integrate with email marketing tools?',
+    a: 'Yes. We connect with Mailchimp, Resend, SendGrid, ConvertKit, and GoHighLevel email. Automated follow-up sequences trigger based on lead behavior — no manual work.',
+    qBn: 'ইমেইল মার্কেটিং টুলসে ইন্টিগ্রেট করেন কি?',
+    aBn: 'হ্যাঁ। Mailchimp, Resend, SendGrid, ConvertKit ও GoHighLevel ইমেইলে কানেক্ট করি। লিড আচরণের ভিত্তিতে অটোমেটেড ফলো-আপ সিকোয়েন্স ট্রিগার হয় — কোনো ম্যানুয়াল কাজ নেই।',
+  },
+  // --- ROI & Results ---
+  {
+    category: 'roi',
+    q: 'How soon will I see results?',
+    a: 'Your AI agent goes live in 7 days. First qualified leads typically arrive within 48 hours. Most clients see measurable revenue lift in 30-60 days, with full ROI proven by day 90.',
+    qBn: 'কত দ্রুত ফল দেখব?',
+    aBn: 'আপনার AI এজেন্ট ৭ দিনে লাইভ হয়। প্রথম যাচাই করা লিড সাধারণত ৪৮ ঘণ্টায় আসে। বেশিরভাগ ক্লায়েন্ট ৩০-৬০ দিনে পরিমেয় রাজস্ব উত্থান দেখেন, ৯০ দিনে সম্পূর্ণ ROI প্রমাণিত।',
+  },
+  {
+    category: 'roi',
+    q: 'What ROI can I expect?',
+    a: 'Most clients see a 3-5x increase in qualified leads and a 40-70% reduction in response time. Revenue impact varies by industry, but average clients add ৳1-5 lakh/month in new business within 90 days.',
+    qBn: 'কেমন ROI আশা করতে পারি?',
+    aBn: 'বেশিরভাগ ক্লায়েন্ট যাচাই করা লিডে ৩-৫x বৃদ্ধি ও রেসপন্স টাইমে ৪০-৭০% হ্রাস দেখেন। রাজস্ব প্রভাব শিল্পভেদে ভিন্ন, তবে গড় ক্লায়েন্ট ৯০ দিনে ৳১-৫ লাখ/মাস নতুন ব্যবসা যোগ করেন।',
+  },
+  {
+    category: 'roi',
+    q: 'How do you measure ROI?',
+    a: 'We track leads generated, qualified leads, calls booked, calls closed, and revenue attributed. You get a live dashboard with real-time numbers and a weekly performance report.',
+    qBn: 'ROI কীভাবে পরিমাপ করেন?',
+    aBn: 'আমরা তৈরি লিড, যাচাই করা লিড, বুকড কল, ক্লোজড কল ও অ্যাট্রিবিউটেড রাজস্ব ট্র্যাক করি। আপনি রিয়েল-টাইম নম্বরসহ লাইভ ড্যাশবোর্ড ও সাপ্তাহিক পারফরম্যান্স রিপোর্ট পান।',
+  },
+  {
+    category: 'roi',
+    q: 'What if ROI doesn\'t meet expectations?',
+    a: 'Our 60-day ROI guarantee: if you don\'t see measurable revenue improvement, we keep working for free until you do. We also conduct a full audit at day 60 to identify and fix any bottlenecks.',
+    qBn: 'ROI প্রত্যাশা পূরণ না করলে?',
+    aBn: 'আমাদের ৬০ দিনের ROI গ্যারান্টি: পরিমেয় রাজস্ব উন্নতি না দেখলে আমরা ফল না হওয়া পর্যন্ত ফ্রি কাজ করি। ৬০ তম দিনে সম্পূর্ণ অডিট করে বাধা চিহ্নিত ও সমাধান করি।',
+  },
+  {
+    category: 'roi',
+    q: 'Can you show me case studies from similar businesses?',
+    a: 'Yes. We have case studies across real estate, healthcare, e-commerce, education, and services. Visit our Case Studies page for detailed before/after metrics and client interviews.',
+    qBn: 'অনুরূপ ব্যবসার কেস স্টাডি দেখাতে পারবেন?',
+    aBn: 'হ্যাঁ। রিয়েল এস্টেট, হেলথকেয়ার, ই-কমার্স, এডুকেশন ও সার্ভিসেসে কেস স্টাডি আছে। বিস্তারিত before/after মেট্রিক্স ও ক্লায়েন্ট ইন্টারভিউয়ের জন্য Case Studies পেজ দেখুন।',
+  },
+  // --- Timeline ---
+  {
+    category: 'timeline',
+    q: 'What happens in the first week?',
+    a: 'Day 1: Kickoff & audit. Day 3: Strategy roadmap delivered. Day 7: Your AI sales agent goes live on WhatsApp + website, starts qualifying leads 24/7.',
+    qBn: 'প্রথম সপ্তাহয় কী হয়?',
+    aBn: 'দিন ১: কিকঅফ ও অডিট। দিন ৩: স্ট্র্যাটেজি রোডম্যাপ ডেলিভারি। দিন ৭: আপনার AI সেলস এজেন্ট WhatsApp + ওয়েবসাইটে লাইভ, ২৪/৭ লিড যাচাই শুরু।',
+  },
+  {
+    category: 'timeline',
+    q: 'How long is the full implementation?',
+    a: 'Starter (AI chat + WhatsApp): 7 days. Growth (CRM + automation): 2-3 weeks. Dominant (full funnel + voice): 3-4 weeks. We give you a precise timeline after the kickoff audit.',
+    qBn: 'সম্পূর্ণ ইমপ্লিমেন্টেশন কত দিন?',
+    aBn: 'Starter (AI চ্যাট + WhatsApp): ৭ দিন। Growth (CRM + অটোমেশন): ২-৩ সপ্তাহ। Dominant (সম্পূর্ণ ফানেল + ভয়েস): ৩-৪ সপ্তাহ। কিকঅফ অডিটের পর সুনির্দিষ্ট টাইমলাইন দিই।',
+  },
+  {
+    category: 'timeline',
+    q: 'Do I need to do anything during setup?',
+    a: 'Minimal. We need access to your website, WhatsApp Business account, and calendar. We also need 30 minutes for a kickoff call to understand your business. We handle everything else.',
+    qBn: 'সেটআপের সময় আমাকে কিছু করতে হবে?',
+    aBn: 'ন্যূনতম। আমাদের আপনার ওয়েবসাইট, WhatsApp Business অ্যাকাউন্ট ও ক্যালেন্ডারে অ্যাক্সেস দরকার। আপনার ব্যবসা বোঝার জন্য ৩০ মিনিট কিকঅফ কল দরকার। বাকিটা আমরা সামলাই।',
+  },
+  {
+    category: 'timeline',
+    q: 'What happens after launch?',
+    a: 'Day 30: Full CRM + automation live. Day 60: Optimization cycle + new channels. Day 90: ROI proven + next-quarter growth plan. We continue optimizing throughout your engagement.',
+    qBn: 'লঞ্চের পর কী হয়?',
+    aBn: 'দিন ৩০: সম্পূর্ণ CRM + অটোমেশন লাইভ। দিন ৬০: অপটিমাইজেশন সাইকেল + নতুন চ্যানেল। দিন ৯০: ROI প্রমাণিত + পরবর্তী কোয়ার্টার গ্রোথ প্ল্যান। আমরা পুরো এনগেজমেন্ট জুড়ে অপটিমাইজ করি।',
+  },
+  {
+    category: 'timeline',
+    q: 'Can you launch faster for an urgent project?',
+    a: 'Yes. Our Express Launch gets your AI agent live in 72 hours for an additional ৳10,000 rush fee. Ideal for product launches, campaigns, or events with tight deadlines.',
+    qBn: 'জরুরি প্রজেক্টে দ্রুত লঞ্চ করতে পারেন?',
+    aBn: 'হ্যাঁ। আমাদের Express Launch-এ আপনার AI এজেন্ট ৭২ ঘণ্টায় লাইভ হয়, অতিরিক্ত ৳১০,০০০ রাশ ফি-এ। প্রোডাক্ট লঞ্চ, ক্যাম্পেইন বা ইভেন্টের জন্য আদর্শ।',
+  },
+  // --- Ownership & Contracts ---
+  {
+    category: 'ownership',
+    q: 'Who owns the AI agent and automations you build?',
+    a: 'You do. All AI agents, automations, workflows, and data we build are yours. If you ever leave, we hand over everything — accounts, code, training data, and documentation.',
+    qBn: 'আপনারা যে AI এজেন্ট ও অটোমেশন বানান তার মালিক কে?',
+    aBn: 'আপনি। আমরা যে AI এজেন্ট, অটোমেশন, ওয়ার্কফ্লো ও ডেটা বানাই সব আপনার। আপনি কখনো চলে গেলে, আমরা সব হ্যান্ডওভার করি — অ্যাকাউন্ট, কোড, ট্রেইনিং ডেটা ও ডকুমেন্টেশন।',
+  },
+  {
+    category: 'ownership',
+    q: 'Is there a long-term contract?',
+    a: 'No. All plans are month-to-month. No lock-in, no cancellation fees. You can cancel anytime with 7 days notice. We earn your business every month through results.',
+    qBn: 'দীর্ঘমেয়াদী চুক্তি আছে কি?',
+    aBn: 'না। সব প্ল্যান মাসে-টু-মাস। কোনো লক-ইন নেই, ক্যানসেলেশন ফি নেই। ৭ দিন নোটিশে যেকোনো সময় ক্যানসেল করতে পারেন। আমরা প্রতি মাসে ফল দিয়ে আপনার ব্যবসা অর্জন করি।',
+  },
+  {
+    category: 'ownership',
+    q: 'What happens if I cancel?',
+    a: 'You keep everything. We export your data, transfer all accounts to your name, and provide documentation so your team can continue running the systems. We also offer a 30-day transition support at no cost.',
+    qBn: 'ক্যানসেল করলে কী হয়?',
+    aBn: 'সবকিছু আপনার কাছে থাকে। আমরা আপনার ডেটা এক্সপোর্ট করি, সব অ্যাকাউন্ট আপনার নামে ট্রান্সফার করি, ডকুমেন্টেশন দিই যাতে আপনার টিম সিস্টেম চালাতে পারে। ৩০ দিনের ট্রানজিশন সাপোর্ট ফ্রিতে দিই।',
+  },
+  {
+    category: 'ownership',
+    q: 'Can I switch plans later?',
+    a: 'Yes, anytime. Upgrade or downgrade with one click. Upgrades take effect immediately; downgrades take effect at the next billing cycle. No fees, no penalties.',
+    qBn: 'পরে প্ল্যান পরিবর্তন করতে পারি কি?',
+    aBn: 'হ্যাঁ, যেকোনো সময়। এক ক্লিকে আপগ্রেড বা ডাউনগ্রেড। আপগ্রেড তাৎক্ষণিক; ডাউনগ্রেড পরবর্তী বিলিং সাইকেলে। কোনো ফি নেই, পেনাল্টি নেই।',
+  },
+  {
+    category: 'ownership',
+    q: 'Do you work with my competitors?',
+    a: 'We operate with exclusivity per industry per city. If we work with a real estate agency in Dhaka, we won\'t work with another Dhaka real estate agency during your engagement. Your competitive advantage stays yours.',
+    qBn: 'আমার প্রতিযোগীদের সাথে কাজ করেন কি?',
+    aBn: 'আমরা প্রতি শিল্প প্রতি শহরে এক্সক্লুসিভিটি বজায় রাখি। ঢাকায় একটি রিয়েল এস্টেট এজেন্সির সাথে কাজ করলে, আপনার এনগেজমেন্টের সময় আরেকটি ঢাকা রিয়েল এস্টেট এজেন্সির সাথে কাজ করি না।',
+  },
+  {
+    category: 'ownership',
+    q: 'Can I get a custom enterprise plan?',
+    a: 'Yes. For businesses needing dedicated infrastructure, custom AI models, or SLA guarantees, we build bespoke enterprise plans. Book a strategy call to discuss your requirements.',
+    qBn: 'কাস্টম এন্টারপ্রাইজ প্ল্যান পাব কি?',
+    aBn: 'হ্যাঁ। ডেডিকেটেড ইনফ্রাস্ট্রাকচার, কাস্টম AI মডেল বা SLA গ্যারান্টি প্রয়োজন এমন ব্যবসার জন্য বেসপোক এন্টারপ্রাইজ প্ল্যান বানাই। আপনার রিকোয়ারমেন্ট আলোচনায় স্ট্র্যাটেজি কল বুক করুন।',
   },
 ]
 

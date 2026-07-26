@@ -23,10 +23,16 @@ export function FaqSection() {
   const [openIndex, setOpenIndex] = React.useState<number | null>(null)
 
   const catLabels: Record<FaqCategory, string> = {
-    general: t('faqHome.catGeneral'),
-    pricing: t('faqHome.catPricing'),
-    implementation: t('faqHome.catImplementation'),
-    support: t('faqHome.catSupport'),
+    general: isBn ? 'সাধারণ' : 'General',
+    pricing: isBn ? 'মূল্য' : 'Pricing',
+    implementation: isBn ? 'ইমপ্লিমেন্টেশন' : 'Implementation',
+    support: isBn ? 'সাপোর্ট' : 'Support',
+    ai: isBn ? 'AI ও টেকনোলজি' : 'AI & Tech',
+    security: isBn ? 'নিরাপত্তা' : 'Security',
+    integration: isBn ? 'ইন্টিগ্রেশন' : 'Integrations',
+    roi: isBn ? 'ROI ও ফলাফল' : 'ROI & Results',
+    timeline: isBn ? 'টাইমলাইন' : 'Timeline',
+    ownership: isBn ? 'মালিকানা' : 'Ownership',
   }
 
   const filtered = faqs.filter((f) => (f.category ?? 'general') === activeCat)
