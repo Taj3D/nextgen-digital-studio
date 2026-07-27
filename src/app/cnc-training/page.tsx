@@ -2,7 +2,8 @@ import type { Metadata } from 'next'
 import { CncTrainingClient } from './cnc-training-client'
 import { FAQS, TESTIMONIALS, CNC_COURSE, BONUSES, CURRICULUM } from './cnc-data'
 
-const BASE_URL = 'https://nextgendigital.studio'
+// IMPORTANT: must match site-config url in src/lib/site-data.ts and sitemap.ts
+const BASE_URL = 'https://nextgendigitalstudio.com'
 
 /* -------------------------------------------------------------------------- */
 /*  JSON-LD Structured Data — rich results in Google                          */
@@ -171,7 +172,7 @@ const videoLd = {
   description:
     '৩ মিনিটে জানুন কীভাবে ৭ দিনে প্রফেশনাল CNC ডিজাইনার হবেন — NextGen Digital Studio প্রতিষ্ঠাতা তাজ ভাইয়ের গাইড।',
   thumbnailUrl: `https://i.ytimg.com/vi/${FOUNDER_VIDEO_ID}/hqdefault.jpg`,
-  uploadDate: '2026-07-20',
+  uploadDate: '2025-01-15',
   duration: 'PT3M',
   contentUrl: `https://www.youtube.com/watch?v=${FOUNDER_VIDEO_ID}`,
   embedUrl: `https://www.youtube-nocookie.com/embed/${FOUNDER_VIDEO_ID}`,

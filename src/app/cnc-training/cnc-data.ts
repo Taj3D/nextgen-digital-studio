@@ -45,7 +45,7 @@ export const CNC_COURSE = {
   experienceYears: 7,
   bonusProjects: 8,
   mainProjects: 15,
-  url: 'https://nextgendigital.studio/cnc-training',
+  url: 'https://nextgendigitalstudio.com/cnc-training',
   instructorName: 'Mohammad Nazmul Islam Taj',
   instructorNameBn: 'মোঃ নাজমুল ইসলাম তাজ',
   instructorTitle: 'CNC Design Specialist & Founder, NextGen Digital Studio',

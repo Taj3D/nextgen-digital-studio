@@ -15,6 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: '/pdf-books', priority: 0.9, changefreq: 'weekly' as const },
     { url: '/ai-training', priority: 0.9, changefreq: 'weekly' as const },
     { url: '/cnc-training', priority: 0.9, changefreq: 'weekly' as const },
+    { url: '/cnc-bundle', priority: 0.9, changefreq: 'weekly' as const },
     { url: '/blog', priority: 0.7, changefreq: 'weekly' as const },
     { url: '/case-studies', priority: 0.7, changefreq: 'weekly' as const },
     { url: '/services/ai-sales-automation', priority: 0.8, changefreq: 'monthly' as const },

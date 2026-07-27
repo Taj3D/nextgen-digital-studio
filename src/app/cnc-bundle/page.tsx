@@ -2,7 +2,8 @@ import type { Metadata } from 'next'
 import { CncBundleClient } from './cnc-bundle-client'
 import { FAQS, TESTIMONIALS, BUNDLE, FOLDERS, BONUSES, VALUE_STACK } from './cnc-bundle-data'
 
-const BASE_URL = 'https://nextgendigital.studio'
+// IMPORTANT: must match site-config url in src/lib/site-data.ts and sitemap.ts
+const BASE_URL = 'https://nextgendigitalstudio.com'
 
 /* -------------------------------------------------------------------------- */
 /*  JSON-LD Structured Data — rich results in Google                          */
@@ -19,7 +20,7 @@ const productLd = {
   brand: { '@type': 'Brand', name: 'NextGen Digital Studio' },
   category: 'CNC Design Files',
   url: `${BASE_URL}/cnc-bundle`,
-  image: `${BASE_URL}/og-image.jpg`,
+  image: `${BASE_URL}/og-cnc-bundle.jpg`,
   sku: 'NG-CNC-BUNDLE-150',
   mpn: 'NG-CNC-BUNDLE-150',
   offers: {
@@ -145,7 +146,7 @@ const videoLd = {
   description:
     'Taj Bhai explains why the NextGen CNC Design Bundle was created, who it is for, and why now is the best time to get it.',
   thumbnailUrl: `https://i.ytimg.com/vi/${FOUNDER_VIDEO_ID}/hqdefault.jpg`,
-  uploadDate: '2026-07-26',
+  uploadDate: '2025-01-15',
   duration: 'PT3M',
   contentUrl: `https://www.youtube.com/watch?v=${FOUNDER_VIDEO_ID}`,
   embedUrl: `https://www.youtube-nocookie.com/embed/${FOUNDER_VIDEO_ID}`,
@@ -195,11 +196,20 @@ export const metadata: Metadata = {
     siteName: 'NextGen Digital Studio',
     type: 'website',
     locale: 'bn_BD',
+    images: [
+      {
+        url: '/og-cnc-bundle.jpg',
+        width: 1344,
+        height: 768,
+        alt: 'NextGen CNC Design Bundle — 2,500+ CNC files, 150 GB, 150 ৳',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'NextGen CNC Design Bundle — 150 ৳ | NextGen',
     description: '২,৫০০+ CNC ফাইল, ১৫০ GB, সব ফরম্যাট। মাত্র ১৫০ ৳ (মূল ১,৫০০ ৳)।',
+    images: ['/og-cnc-bundle.jpg'],
   },
   robots: { index: true, follow: true },
 }

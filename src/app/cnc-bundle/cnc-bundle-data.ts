@@ -63,7 +63,7 @@ export const BUNDLE = {
     'Window',
   ],
 
-  url: 'https://nextgendigital.studio/cnc-bundle',
+  url: 'https://nextgendigitalstudio.com/cnc-bundle',
   founderName: 'Mohammad Nazmul Islam Taj',
   founderNameBn: 'মোঃ নাজমুল ইসলাম তাজ',
   founderTitle: 'CNC Design Specialist & Founder, NextGen Digital Studio',
