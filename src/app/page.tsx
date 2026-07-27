@@ -57,11 +57,11 @@ const knowledgeGraphLd = {
   "@graph": [
     {
       "@type": "Organization",
-      "@id": "https://nextgendigital.studio/#organization",
+      "@id": "https://nextgendigitalstudio.com/#organization",
       name: "NextGen Digital Studio",
       alternateName: "NextGen AI Revenue OS",
-      url: "https://nextgendigital.studio/",
-      logo: "https://nextgendigital.studio/logo.jpg",
+      url: "https://nextgendigitalstudio.com/",
+      logo: "https://nextgendigitalstudio.com/logo.jpg",
       description:
         "Bangladesh's AI Sales Automation agency. We design, build and manage AI agents, automations and growth systems — turning businesses into AI-powered sales machines.",
       foundingDate: "2023",
@@ -69,7 +69,7 @@ const knowledgeGraphLd = {
         "@type": "Place",
         name: "Jessore, Khulna, Bangladesh",
       },
-      founder: { "@id": "https://nextgendigital.studio/#founder" },
+      founder: { "@id": "https://nextgendigitalstudio.com/#founder" },
       address: {
         "@type": "PostalAddress",
         addressLocality: "Jessore",
@@ -95,13 +95,13 @@ const knowledgeGraphLd = {
     },
     {
       "@type": "Person",
-      "@id": "https://nextgendigital.studio/#founder",
+      "@id": "https://nextgendigitalstudio.com/#founder",
       name: "Mohammad Nazmul Islam Taj",
       alternateName: "Taj Bhai",
       jobTitle: "Founder & AI Automation Architect",
-      worksFor: { "@id": "https://nextgendigital.studio/#organization" },
-      url: "https://nextgendigital.studio/founder",
-      image: "https://nextgendigital.studio/founder.png",
+      worksFor: { "@id": "https://nextgendigitalstudio.com/#organization" },
+      url: "https://nextgendigitalstudio.com/founder",
+      image: "https://nextgendigitalstudio.com/founder.png",
       knowsAbout: [
         "Artificial Intelligence",
         "Automation Architecture",
@@ -112,10 +112,10 @@ const knowledgeGraphLd = {
     },
     {
       "@type": "LocalBusiness",
-      "@id": "https://nextgendigital.studio/#localbusiness",
+      "@id": "https://nextgendigitalstudio.com/#localbusiness",
       name: "NextGen Digital Studio",
-      image: "https://nextgendigital.studio/og-image.jpg",
-      url: "https://nextgendigital.studio/",
+      image: "https://nextgendigitalstudio.com/og-image.jpg",
+      url: "https://nextgendigitalstudio.com/",
       telephone: "+8801XXXXXXXXX",
       priceRange: "৳৳",
       address: {
@@ -137,13 +137,13 @@ const knowledgeGraphLd = {
           closes: "21:00",
         },
       ],
-      parentOrganization: { "@id": "https://nextgendigital.studio/#organization" },
+      parentOrganization: { "@id": "https://nextgendigitalstudio.com/#organization" },
     },
     {
       "@type": "Service",
-      "@id": "https://nextgendigital.studio/#services",
+      "@id": "https://nextgendigitalstudio.com/#services",
       serviceType: "AI Sales Automation & Business Automation",
-      provider: { "@id": "https://nextgendigital.studio/#organization" },
+      provider: { "@id": "https://nextgendigitalstudio.com/#organization" },
       areaServed: { "@type": "Country", name: "Bangladesh" },
       hasOfferCatalog: {
         "@type": "OfferCatalog",
@@ -162,13 +162,13 @@ const knowledgeGraphLd = {
     },
     {
       "@type": "WebSite",
-      "@id": "https://nextgendigital.studio/#website",
-      url: "https://nextgendigital.studio/",
+      "@id": "https://nextgendigitalstudio.com/#website",
+      url: "https://nextgendigitalstudio.com/",
       name: "NextGen Digital Studio — AI Revenue OS",
-      publisher: { "@id": "https://nextgendigital.studio/#organization" },
+      publisher: { "@id": "https://nextgendigitalstudio.com/#organization" },
       potentialAction: {
         "@type": "SearchAction",
-        target: "https://nextgendigital.studio/blog?q={search_term_string}",
+        target: "https://nextgendigitalstudio.com/blog?q={search_term_string}",
         "query-input": "required name=search_term_string",
       },
     },
@@ -184,7 +184,7 @@ const breadcrumbLd = {
       "@type": "ListItem",
       position: 1,
       name: "Home",
-      item: "https://nextgendigital.studio/",
+      item: "https://nextgendigitalstudio.com/",
     },
   ],
 };

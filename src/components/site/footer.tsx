@@ -45,9 +45,11 @@ const SERVICE_LINKS = [
 // Products & Training — standalone product/training pages (previously only
 // reachable via the navbar "More" dropdown, which is client-rendered and thus
 // invisible to crawlers. These static <Link> elements fix that SEO gap.)
+// Order matches LandingFooter in landing-common.tsx for cross-page consistency.
 const PRODUCT_LINKS = [
   { key: 'footer.aiTraining', href: '/ai-training' },
   { key: 'footer.cncTraining', href: '/cnc-training' },
+  { key: 'footer.cncBundle', href: '/cnc-bundle' },
   { key: 'footer.cncDesign', href: '/cnc-design' },
   { key: 'footer.3dPortrait', href: '/3d-portrait' },
   { key: 'footer.pdfBooks', href: '/pdf-books' },

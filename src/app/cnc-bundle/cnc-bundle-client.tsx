@@ -457,8 +457,8 @@ function HeroSection() {
             <Users2 className="h-4 w-4 text-emerald-400" />
             {isBn ? (
               <>
-                <strong className="text-foreground">{BUNDLE.totalSeats - BUNDLE.seatsLeft}</strong> জন কিনেছেন
-                <span className="font-semibold text-emerald-400">🔥 {isBn ? toBn(BUNDLE.seatsLeft) : BUNDLE.seatsLeft} সিট বাকি</span>
+                <strong className="text-foreground">{toBn(BUNDLE.totalSeats - BUNDLE.seatsLeft)}</strong> জন কিনেছেন
+                <span className="font-semibold text-emerald-400">🔥 {toBn(BUNDLE.seatsLeft)} সিট বাকি</span>
               </>
             ) : (
               <>
@@ -523,7 +523,7 @@ function FounderVideoSection() {
         <div className="mb-4 text-center">
           <span className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-400">
             <Video className="h-3.5 w-3.5" />
-            {isBn ? 'Founder Video' : 'Founder Video'}
+            {isBn ? 'প্রতিষ্ঠাতার ভিডিও' : 'Founder Video'}
           </span>
           <h2 className="mt-3 font-heading text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
             {isBn ? '🎬 কেন এই বান্ডল? তাজ ভাইয়ের কাছ থেকে জানুন' : '🎬 Why this bundle? Hear from Taj Bhai'}
@@ -870,14 +870,14 @@ function BundleBreakdownSection() {
   const isBn = lang === 'bn'
   return (
     <Section
-      eyebrow={isBn ? 'Bundle Breakdown' : 'Bundle Breakdown'}
+      eyebrow={isBn ? 'বান্ডল ব্রেকডাউন' : 'Bundle Breakdown'}
       title={isBn ? 'কীভাবে সাজানো — ভেতরে ঢুকে দেখুন' : 'How it\'s organized — look inside'}
     >
       <div className="grid gap-6 md:grid-cols-3">
         {/* Size */}
         <div className="rounded-2xl border border-border bg-card/60 p-6 text-center">
           <HardDrive className="mx-auto h-8 w-8 text-emerald-400" />
-          <div className="mt-3 font-heading text-3xl font-extrabold text-foreground">150 GB</div>
+          <div className="mt-3 font-heading text-3xl font-extrabold text-foreground">{isBn ? '১৫০ GB' : '150 GB'}</div>
           <div className="mt-1 text-sm text-muted-foreground">{isBn ? 'মোট সাইজ' : 'Total size'}</div>
         </div>
         {/* Files */}
@@ -1163,7 +1163,7 @@ function TestimonialsSection() {
             </p>
             <div className="mt-4 flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500/15 text-sm font-bold text-emerald-400">
-                {(isBn ? t.authorEn : t.authorEn).charAt(0)}
+                {(isBn ? t.author : t.authorEn).charAt(0)}
               </div>
               <div>
                 <div className="text-sm font-bold text-foreground">{isBn ? t.author : t.authorEn}</div>
@@ -1438,14 +1438,14 @@ function OrderSection() {
             <LandingLeadForm
               isBn={isBn}
               source="cnc_bundle_order"
-              serviceName="NextGen CNC Design Bundle (150 ৳)"
+              serviceName={`NextGen CNC Design Bundle (${BUNDLE.price} ৳)`}
               submitLabel={isBn ? 'অর্ডার কনফার্ম করুন' : 'Confirm Order'}
               successMessage={
                 isBn
                   ? 'আপনার অর্ডার গ্রহণ করা হয়েছে! নিচের পেমেন্ট ইনস্ট্রাকশন অনুসরণ করুন। পেমেন্ট নিশ্চিত হলেই Google Drive লিংক পাবেন।'
                   : 'Your order has been received! Follow the payment instructions below. You will get the Google Drive link as soon as payment is confirmed.'
               }
-              paymentAmount={150}
+              paymentAmount={BUNDLE.price}
               paymentNote={isBn ? 'CNC Bundle — লঞ্চ অফার' : 'CNC Bundle — launch offer'}
             />
 

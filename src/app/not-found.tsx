@@ -105,6 +105,12 @@ export default function NotFound() {
                 CNC Design
               </Link>
               <Link
+                href="/cnc-bundle"
+                className="text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline"
+              >
+                CNC Bundle
+              </Link>
+              <Link
                 href="/ai-training"
                 className="text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline"
               >

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { CncBundleClient } from './cnc-bundle-client'
-import { FAQS, TESTIMONIALS, BUNDLE, FOLDERS, BONUSES, VALUE_STACK } from './cnc-bundle-data'
+import { FAQS, TESTIMONIALS, BUNDLE, FOLDERS } from './cnc-bundle-data'
 
 // IMPORTANT: must match site-config url in src/lib/site-data.ts and sitemap.ts
 const BASE_URL = 'https://nextgendigitalstudio.com'
