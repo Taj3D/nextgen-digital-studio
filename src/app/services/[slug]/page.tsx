@@ -5,7 +5,7 @@ import { LandingClient } from './landing-client'
 import { LeadGenerationClient } from './lead-generation-client'
 import { FAQS, PRICING } from './lead-generation-data'
 import { WhatsAppAutomationClient } from './whatsapp-automation-client'
-import { FAQS as WA_FAQS, PRICING as WA_PRICING } from './whatsapp-automation-data'
+import { FAQS as WA_FAQS, PRICING as WA_PRICING, TRUST as WA_TRUST } from './whatsapp-automation-data'
 
 export const dynamicParams = false
 
@@ -190,9 +190,37 @@ function buildLeadGenSchemas() {
   return [serviceSchema, breadcrumbSchema, faqSchema]
 }
 
-/** Build JSON-LD schemas for the whatsapp-automation page (Service, FAQ, Breadcrumb). */
+/** Build JSON-LD schemas for the whatsapp-automation page.
+ *  Includes: Organization, Service (with offers + aggregateRating), Product
+ *  reviews, BreadcrumbList, FAQPage, and HowTo (setup process). */
 function buildWhatsAppSchemas() {
   const url = `${siteConfig.url}/services/whatsapp-automation`
+
+  const organizationSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: siteConfig.name,
+    url: siteConfig.url,
+    logo: `${siteConfig.url}/logo.png`,
+    image: `${siteConfig.url}/og-image.jpg`,
+    telephone: `+${siteConfig.whatsapp}`,
+    email: siteConfig.email,
+    description:
+      'NextGen Digital Studio — AI-powered WhatsApp Business Automation, lead generation and CRM automation agency in Bangladesh.',
+    address: {
+      '@type': 'PostalAddress',
+      addressCountry: 'BD',
+      addressLocality: 'Jessore',
+      addressRegion: 'Khulna',
+    },
+    areaServed: ['Bangladesh', 'Dhaka', 'Chittagong', 'Khulna', 'Jessore'],
+    sameAs: [
+      'https://www.facebook.com/nextgendigitalstudio',
+      'https://www.linkedin.com/company/nextgendigitalstudio',
+      'https://www.youtube.com/@nextgendigitalstudio',
+      'https://wa.me/' + siteConfig.whatsapp,
+    ],
+  }
 
   const serviceSchema = {
     '@context': 'https://schema.org',
@@ -206,6 +234,11 @@ function buildWhatsAppSchemas() {
       telephone: `+${siteConfig.whatsapp}`,
       email: siteConfig.email,
     },
+    brand: { '@type': 'Brand', name: 'NextGen WhatsApp Automation' },
+    audience: {
+      '@type': 'BusinessAudience',
+      audienceType: 'Small and medium businesses in Bangladesh',
+    },
     areaServed: ['Bangladesh', 'Dhaka', 'Chittagong', 'Khulna', 'Jessore'],
     description:
       'Official WhatsApp Business API automation: AI chatbot, broadcast campaigns, cart recovery, order tracking, payment links, CRM integration. 98% open rate, 5-10x ROI, 60-day guarantee.',
@@ -215,6 +248,8 @@ function buildWhatsAppSchemas() {
       price: parseInt(tier.price.en.replace(/[^\d]/g, ''), 10) || 0,
       priceCurrency: 'BDT',
       description: tier.tagline.en,
+      availability: 'https://schema.org/InStock',
+      url,
     })),
     aggregateRating: {
       '@type': 'AggregateRating',
@@ -223,6 +258,33 @@ function buildWhatsAppSchemas() {
       bestRating: '5',
       worstRating: '1',
     },
+    // Helps AI assistants identify key content blocks
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', 'h2', '.speakable-summary'],
+    },
+  }
+
+  // Individual customer reviews (rich snippets)
+  const reviewSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: 'WhatsApp Automation Service',
+    description:
+      'AI-powered WhatsApp Business API automation with chatbot, broadcast, cart recovery, CRM integration.',
+    brand: { '@type': 'Brand', name: 'NextGen Digital Studio' },
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.9',
+      reviewCount: '120',
+      bestRating: '5',
+    },
+    review: WA_TRUST.testimonials.slice(0, 5).map((t) => ({
+      '@type': 'Review',
+      author: { '@type': 'Person', name: t.author.en },
+      reviewBody: t.quote.en,
+      reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
+    })),
   }
 
   const breadcrumbSchema = {
@@ -248,7 +310,24 @@ function buildWhatsAppSchemas() {
     mainEntity: faqQuestions,
   }
 
-  return [serviceSchema, breadcrumbSchema, faqSchema]
+  // HowTo schema for the setup process — improves AI search visibility
+  const howToSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: 'How to set up WhatsApp Business Automation',
+    description:
+      'A 5-step process to go from manual WhatsApp to a fully automated AI-powered system in 3–10 days.',
+    totalTime: 'P5D',
+    step: [
+      { '@type': 'HowToStep', position: 1, name: 'Strategy Call', text: 'Free 30-minute call to audit your setup and map use cases.' },
+      { '@type': 'HowToStep', position: 2, name: 'Verification', text: 'Meta Business Manager + WhatsApp Business API verification (1–3 days).' },
+      { '@type': 'HowToStep', position: 3, name: 'Build', text: 'Flows, templates, AI training, CRM integration (2–4 days).' },
+      { '@type': 'HowToStep', position: 4, name: 'Test', text: 'End-to-end testing, team training, go-live checklist (1 day).' },
+      { '@type': 'HowToStep', position: 5, name: 'Optimise', text: 'Weekly review, A/B tests, AI retraining, continuous improvement.' },
+    ],
+  }
+
+  return [organizationSchema, serviceSchema, reviewSchema, breadcrumbSchema, faqSchema, howToSchema]
 }
 
 export default async function ServiceLandingPage({ params }: Props) {

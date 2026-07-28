@@ -36,6 +36,7 @@ import {
   Plane, Banknote as BankIcon, HeartHandshake, Utensils, ShoppingCart as CartIcon,
   MousePointer, BadgeCheck as BadgeCheckIcon, Plug, BarChart as BarChartIcon,
   BookOpen as BookOpenIcon, Frown, TrendingDown, Star as StarIcon, Tag,
+  ShoppingBag, Trophy,
 } from 'lucide-react'
 import { siteConfig } from '@/lib/site-data'
 import { useLang } from '@/components/site/language-provider'
@@ -59,6 +60,7 @@ import {
   CASE_STUDIES, STATISTICS, DELIVERABLES, PRICING, ROI_CALCULATOR,
   TIMELINE, PROCESS, FAQS, OBJECTIONS, GUARANTEES, TRUST, SECURITY,
   FINAL_CTA, EXIT_POPUP, STICKY_CTA,
+  LEAD_QUAL_CALC, BROADCAST_ESTIMATOR, INTEGRATIONS, BEFORE_AFTER, URGENCY,
   type Bilingual,
 } from './whatsapp-automation-data'
 
@@ -112,6 +114,7 @@ const iconMap: Record<string, React.ElementType> = {
   'human-handoff': Hand, 'conversation-routing': Shuffle, 'sentiment': Smile,
   'api-webhooks': Code, 'official-api': BadgeCheck, 'green-tick': BadgeCheck,
   'messaging-limits': Gauge, 'quality-rating': Star, 'commerce-api': ShoppingCart,
+  'shopping-bag': ShoppingBag, 'sliders': Sliders, 'trophy': Trophy,
 }
 
 function getIcon(name?: string): React.ElementType {
@@ -126,6 +129,46 @@ function getIcon(name?: string): React.ElementType {
 function L(b: Bilingual | undefined, isBn: boolean): string {
   if (!b) return ''
   return isBn ? b.bn : b.en
+}
+
+/** Scroll-reveal wrapper: fades + slides children into view once.
+ *  SSR-safe — children always render; the hidden class only applies after
+ *  mount (prevents hydration mismatch). */
+function Reveal({ children, delay = 0, className = '' }: {
+  children: React.ReactNode; delay?: number; className?: string
+}) {
+  const ref = React.useRef<HTMLDivElement>(null)
+  const [visible, setVisible] = React.useState(false)
+  const [mounted, setMounted] = React.useState(false)
+
+  React.useEffect(() => {
+    setMounted(true)
+    const el = ref.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true)
+          obs.disconnect()
+        }
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' },
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+
+  return (
+    <div
+      ref={ref}
+      className={`transition-all duration-700 ease-out ${
+        mounted && !visible ? 'opacity-0 translate-y-6' : 'opacity-100 translate-y-0'
+      } ${className}`}
+      style={{ transitionDelay: `${delay}ms` }}
+    >
+      {children}
+    </div>
+  )
 }
 
 /** Section wrapper with WhatsApp-green accent option. */
@@ -804,39 +847,41 @@ function CaseStudiesSection({ isBn }: { isBn: boolean }) {
         />
         <div className="mx-auto mt-12 max-w-4xl space-y-3">
           {CASE_STUDIES.items.map((cs, i) => (
-            <details key={i} className="group rounded-xl border border-border/60 bg-card p-4 shadow-sm">
-              <summary className="flex cursor-pointer items-center justify-between gap-3 font-heading text-base font-bold marker:content-['']">
-                <span className="flex items-center gap-2">
-                  <span>{L(cs.industry, isBn)}</span>
-                  <span className="inline-flex items-center rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-bold text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400">
-                    ROI {cs.roi}
-                  </span>
-                </span>
-                <ChevronDown className="h-5 w-5 flex-shrink-0 text-muted-foreground transition-transform group-open:rotate-180" />
-              </summary>
-              <div className="mt-4 space-y-3 text-sm">
-                <div>
-                  <span className="font-semibold text-red-600">{isBn ? 'সমস্যা: ' : 'Problem: '}</span>
-                  <span className="text-muted-foreground">{L(cs.problem, isBn)}</span>
-                </div>
-                <div>
-                  <span className="font-semibold text-emerald-600">{isBn ? 'সমাধান: ' : 'Solution: '}</span>
-                  <span className="text-muted-foreground">{L(cs.solution, isBn)}</span>
-                </div>
-                <div>
-                  <span className="font-semibold">{isBn ? 'টাইমলাইন: ' : 'Timeline: '}</span>
-                  <span className="text-muted-foreground">{L(cs.timeline, isBn)}</span>
-                </div>
-                <div className="flex flex-wrap gap-2 pt-1">
-                  {cs.metrics.map((m, j) => (
-                    <span key={j} className="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/30 dark:text-emerald-400">
-                      <CheckCircle2 className="mr-1 h-3 w-3" />
-                      {L(m, isBn)}
+            <Reveal key={i} delay={i * 60}>
+              <details className="group rounded-xl border border-border/60 bg-card p-4 shadow-sm">
+                <summary className="flex cursor-pointer items-center justify-between gap-3 font-heading text-base font-bold marker:content-['']">
+                  <span className="flex items-center gap-2">
+                    <span>{L(cs.industry, isBn)}</span>
+                    <span className="inline-flex items-center rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-bold text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400">
+                      ROI {cs.roi}
                     </span>
-                  ))}
+                  </span>
+                  <ChevronDown className="h-5 w-5 flex-shrink-0 text-muted-foreground transition-transform group-open:rotate-180" />
+                </summary>
+                <div className="mt-4 space-y-3 text-sm">
+                  <div>
+                    <span className="font-semibold text-red-600">{isBn ? 'সমস্যা: ' : 'Problem: '}</span>
+                    <span className="text-muted-foreground">{L(cs.problem, isBn)}</span>
+                  </div>
+                  <div>
+                    <span className="font-semibold text-emerald-600">{isBn ? 'সমাধান: ' : 'Solution: '}</span>
+                    <span className="text-muted-foreground">{L(cs.solution, isBn)}</span>
+                  </div>
+                  <div>
+                    <span className="font-semibold">{isBn ? 'টাইমলাইন: ' : 'Timeline: '}</span>
+                    <span className="text-muted-foreground">{L(cs.timeline, isBn)}</span>
+                  </div>
+                  <div className="flex flex-wrap gap-2 pt-1">
+                    {cs.metrics.map((m, j) => (
+                      <span key={j} className="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/30 dark:text-emerald-400">
+                        <CheckCircle2 className="mr-1 h-3 w-3" />
+                        {L(m, isBn)}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </details>
+              </details>
+            </Reveal>
           ))}
         </div>
       </Container>
@@ -915,6 +960,19 @@ function DeliverablesSection({ isBn }: { isBn: boolean }) {
 /* ========================================================================== */
 
 function PricingSection({ isBn, onCta }: { isBn: boolean; onCta: () => void }) {
+  const [annual, setAnnual] = React.useState(false)
+
+  /** Parse the numeric portion of a price string (e.g. "৳25,000/mo" → 25000).
+   *  Returns 0 for "Custom" or unparseable strings. */
+  function parsePrice(s: string): number {
+    const m = s.replace(/[^\d]/g, '')
+    return m ? parseInt(m, 10) : 0
+  }
+
+  function formatBDT(n: number): string {
+    return `৳${n.toLocaleString('en-IN')}`
+  }
+
   return (
     <Section id="pricing" bg="muted">
       <Container>
@@ -925,46 +983,107 @@ function PricingSection({ isBn, onCta }: { isBn: boolean; onCta: () => void }) {
           isBn={isBn}
           accent="emerald"
         />
-        <div className="mt-12 grid gap-6 lg:grid-cols-3">
-          {PRICING.tiers.map((tier, i) => (
-            <div
-              key={i}
-              className={`relative flex flex-col rounded-2xl border p-6 shadow-sm ${
-                tier.popular
-                  ? 'border-emerald-500 bg-background ring-2 ring-emerald-500/30 lg:-mt-4 lg:mb-4'
-                  : 'border-border/60 bg-background'
+
+        {/* Monthly / Annual toggle */}
+        <div className="mt-8 flex items-center justify-center gap-3">
+          <span className={`text-sm font-medium ${!annual ? 'text-foreground' : 'text-muted-foreground'}`}>
+            {isBn ? 'মাসিক' : 'Monthly'}
+          </span>
+          <button
+            onClick={() => setAnnual(!annual)}
+            role="switch"
+            aria-checked={annual}
+            aria-label={isBn ? 'মাসিক বা বার্ষিক টগল' : 'Monthly or annual toggle'}
+            className={`relative h-7 w-14 rounded-full transition-colors ${
+              annual ? 'bg-emerald-600' : 'bg-muted-foreground/30'
+            }`}
+          >
+            <span
+              className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-transform ${
+                annual ? 'translate-x-8' : 'translate-x-1'
               }`}
-            >
-              {tier.popular && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-emerald-600 px-4 py-1 text-xs font-bold text-white">
-                  {isBn ? 'সর্বাধিক জনপ্রিয়' : 'Most Popular'}
-                </span>
-              )}
-              <h3 className="font-heading text-xl font-bold">{L(tier.name, isBn)}</h3>
-              <div className="mt-2 text-3xl font-extrabold text-emerald-600">
-                {L(tier.price, isBn)}
-              </div>
-              <p className="mt-1 text-sm text-muted-foreground">{L(tier.tagline, isBn)}</p>
-              <ul className="mt-5 flex-1 space-y-2.5">
-                {tier.features.map((f, j) => (
-                  <li key={j} className="flex items-start gap-2 text-sm">
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-emerald-500" />
-                    <span>{L(f, isBn)}</span>
-                  </li>
-                ))}
-              </ul>
-              <button
-                onClick={onCta}
-                className={`mt-6 w-full rounded-full py-3 text-sm font-bold transition-transform hover:scale-[1.02] ${
+            />
+          </button>
+          <span className={`text-sm font-medium ${annual ? 'text-foreground' : 'text-muted-foreground'}`}>
+            {isBn ? 'বার্ষিক' : 'Annual'}
+          </span>
+          {annual && (
+            <span className="rounded-full bg-emerald-100 px-3 py-0.5 text-xs font-bold text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400">
+              {isBn ? '১৫% ছাড় + সেটআপ ফ্রি' : 'Save 15% + Free setup'}
+            </span>
+          )}
+        </div>
+
+        <div className="mt-12 grid gap-6 lg:grid-cols-3">
+          {PRICING.tiers.map((tier, i) => {
+            const monthlyNum = parsePrice(L(tier.price, isBn))
+            const isCustom = monthlyNum === 0
+            const annualMonthly = isCustom ? 0 : Math.round(monthlyNum * 0.85)
+            const annualSavings = isCustom ? 0 : monthlyNum * 12 - annualMonthly * 12
+
+            return (
+              <div
+                key={i}
+                className={`relative flex flex-col rounded-2xl border p-6 shadow-sm ${
                   tier.popular
-                    ? 'bg-emerald-600 text-white hover:bg-emerald-700'
-                    : 'border border-border bg-background hover:bg-muted'
+                    ? 'border-emerald-500 bg-background ring-2 ring-emerald-500/30 lg:-mt-4 lg:mb-4'
+                    : 'border-border/60 bg-background'
                 }`}
               >
-                {isBn ? 'শুরু করুন' : 'Get Started'}
-              </button>
-            </div>
-          ))}
+                {tier.popular && (
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-emerald-600 px-4 py-1 text-xs font-bold text-white">
+                    {isBn ? 'সর্বাধিক জনপ্রিয়' : 'Most Popular'}
+                  </span>
+                )}
+                <h3 className="font-heading text-xl font-bold">{L(tier.name, isBn)}</h3>
+                <div className="mt-2">
+                  {isCustom ? (
+                    <div className="text-3xl font-extrabold text-emerald-600">
+                      {L(tier.price, isBn)}
+                    </div>
+                  ) : (
+                    <>
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-3xl font-extrabold text-emerald-600">
+                          {annual ? formatBDT(annualMonthly) : formatBDT(monthlyNum)}
+                        </span>
+                        <span className="text-sm text-muted-foreground">
+                          {isBn ? '/মাস' : '/mo'}
+                        </span>
+                      </div>
+                      {annual && (
+                        <div className="mt-1 text-xs text-muted-foreground">
+                          <span className="line-through">{formatBDT(monthlyNum)}</span>
+                          <span className="ml-1.5 font-semibold text-emerald-600">
+                            {isBn ? `বছরে ${formatBDT(annualSavings)} সাশ্রয়` : `Save ${formatBDT(annualSavings)}/yr`}
+                          </span>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+                <p className="mt-1 text-sm text-muted-foreground">{L(tier.tagline, isBn)}</p>
+                <ul className="mt-5 flex-1 space-y-2.5">
+                  {tier.features.map((f, j) => (
+                    <li key={j} className="flex items-start gap-2 text-sm">
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-emerald-500" />
+                      <span>{L(f, isBn)}</span>
+                    </li>
+                  ))}
+                </ul>
+                <button
+                  onClick={onCta}
+                  className={`mt-6 w-full rounded-full py-3 text-sm font-bold transition-transform hover:scale-[1.02] ${
+                    tier.popular
+                      ? 'bg-emerald-600 text-white hover:bg-emerald-700'
+                      : 'border border-border bg-background hover:bg-muted'
+                  }`}
+                >
+                  {isBn ? 'শুরু করুন' : 'Get Started'}
+                </button>
+              </div>
+            )
+          })}
         </div>
         <p className="mt-6 text-center text-xs text-muted-foreground">
           {L(PRICING.note, isBn)}
@@ -1453,6 +1572,417 @@ function LeadFormSection({ isBn }: { isBn: boolean }) {
 }
 
 /* ========================================================================== */
+/*  LEAD QUALIFICATION CALCULATOR                                              */
+/* ========================================================================== */
+
+function LeadQualCalculatorSection({ isBn, onCta }: { isBn: boolean; onCta: () => void }) {
+  const [answers, setAnswers] = React.useState<number[]>(Array(LEAD_QUAL_CALC.questions.length).fill(-1))
+  const [current, setCurrent] = React.useState(0)
+  const [showResult, setShowResult] = React.useState(false)
+
+  // Sum of selected option scores across all questions
+  const score = answers.reduce((sum, aIdx, qIdx) => {
+    if (aIdx < 0) return sum
+    return sum + LEAD_QUAL_CALC.questions[qIdx].options[aIdx].score
+  }, 0)
+  const maxScore = LEAD_QUAL_CALC.questions.length * 4
+
+  const result = LEAD_QUAL_CALC.results.find((r) => score >= r.min && score <= r.max) || LEAD_QUAL_CALC.results[LEAD_QUAL_CALC.results.length - 1]
+
+  function selectAnswer(qIdx: number, aIdx: number) {
+    const next = [...answers]
+    next[qIdx] = aIdx
+    setAnswers(next)
+    if (qIdx < LEAD_QUAL_CALC.questions.length - 1) {
+      setTimeout(() => setCurrent(qIdx + 1), 200)
+    } else {
+      setTimeout(() => setShowResult(true), 200)
+    }
+  }
+
+  function retake() {
+    setAnswers(Array(LEAD_QUAL_CALC.questions.length).fill(-1))
+    setCurrent(0)
+    setShowResult(false)
+  }
+
+  const pct = Math.round((score / maxScore) * 100)
+
+  return (
+    <Section id="lead-qual-calculator" bg="muted">
+      <Container>
+        <SectionHeader
+          eyebrow={L(LEAD_QUAL_CALC.eyebrow, isBn)}
+          title={L(LEAD_QUAL_CALC.title, isBn)}
+          subtitle={L(LEAD_QUAL_CALC.subtitle, isBn)}
+          accent="emerald"
+        />
+
+        {!showResult ? (
+          <div className="mx-auto mt-10 max-w-2xl">
+            {/* Progress */}
+            <div className="mb-6">
+              <div className="flex items-center justify-between text-sm text-muted-foreground">
+                <span>{isBn ? `প্রশ্ন ${current + 1} / ${LEAD_QUAL_CALC.questions.length}` : `Question ${current + 1} / ${LEAD_QUAL_CALC.questions.length}`}</span>
+                <span>{Math.round(((current) / LEAD_QUAL_CALC.questions.length) * 100)}%</span>
+              </div>
+              <div className="mt-2 h-2 overflow-hidden rounded-full bg-muted">
+                <div
+                  className="h-full rounded-full bg-emerald-500 transition-all duration-300"
+                  style={{ width: `${(current / LEAD_QUAL_CALC.questions.length) * 100}%` }}
+                />
+              </div>
+            </div>
+
+            {/* Question */}
+            <div className="rounded-2xl border border-border bg-background p-6 shadow-sm sm:p-8">
+              <h3 className="font-heading text-xl font-bold sm:text-2xl">
+                {L(LEAD_QUAL_CALC.questions[current].q, isBn)}
+              </h3>
+              <div className="mt-6 space-y-3">
+                {LEAD_QUAL_CALC.questions[current].options.map((opt, i) => (
+                  <button
+                    key={i}
+                    onClick={() => selectAnswer(current, i)}
+                    className={`flex w-full items-center justify-between rounded-xl border p-4 text-left text-sm font-medium transition-all hover:border-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/30 sm:text-base ${
+                      answers[current] === i ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/30' : 'border-border'
+                    }`}
+                  >
+                    <span>{L(opt.label, isBn)}</span>
+                    {answers[current] === i && <CheckCircle2 className="h-5 w-5 text-emerald-600" />}
+                  </button>
+                ))}
+              </div>
+              {current > 0 && (
+                <button
+                  onClick={() => setCurrent(current - 1)}
+                  className="mt-4 text-sm text-muted-foreground underline-offset-2 hover:underline"
+                >
+                  ← {isBn ? 'আগের প্রশ্ন' : 'Previous question'}
+                </button>
+              )}
+            </div>
+
+            {/* Quick nav dots */}
+            <div className="mt-4 flex justify-center gap-2">
+              {LEAD_QUAL_CALC.questions.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setCurrent(i)}
+                  aria-label={`Question ${i + 1}`}
+                  className={`h-2.5 rounded-full transition-all ${
+                    i === current ? 'w-8 bg-emerald-500' : answers[i] >= 0 ? 'w-2.5 bg-emerald-300' : 'w-2.5 bg-muted-foreground/30'
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className="mx-auto mt-10 max-w-2xl">
+            <div className="rounded-3xl border border-border bg-background p-8 text-center shadow-lg sm:p-12">
+              {/* Score ring */}
+              <div className="relative mx-auto mb-6 flex h-40 w-40 items-center justify-center">
+                <svg className="h-40 w-40 -rotate-90" viewBox="0 0 160 160">
+                  <circle cx="80" cy="80" r="70" fill="none" strokeWidth="12" className="stroke-muted" />
+                  <circle
+                    cx="80" cy="80" r="70" fill="none" strokeWidth="12"
+                    strokeLinecap="round"
+                    className={result.color === 'emerald' ? 'stroke-emerald-500' : 'stroke-amber-500'}
+                    strokeDasharray={`${(pct / 100) * 440} 440`}
+                  />
+                </svg>
+                <div className="absolute text-center">
+                  <div className="font-heading text-4xl font-bold">{pct}%</div>
+                  <div className="text-xs text-muted-foreground">{isBn ? 'ফিট স্কোর' : 'Fit Score'}</div>
+                </div>
+              </div>
+
+              <div className={`inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-bold ${
+                result.color === 'emerald'
+                  ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400'
+                  : 'bg-amber-100 text-amber-700 dark:bg-amber-950/50 dark:text-amber-400'
+              }`}>
+                {result.color === 'emerald' ? <CheckCircle2 className="h-4 w-4" /> : <Target className="h-4 w-4" />}
+                {L(result.label, isBn)}
+              </div>
+
+              <p className="mt-5 text-base text-muted-foreground sm:text-lg">
+                {L(result.verdict, isBn)}
+              </p>
+
+              <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+                <button
+                  onClick={onCta}
+                  className={`inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-sm font-bold text-white transition-all hover:opacity-90 ${
+                    result.color === 'emerald' ? 'bg-emerald-600' : 'bg-amber-600'
+                  }`}
+                >
+                  <MessageCircle className="h-4 w-4" />
+                  {L(result.cta, isBn)}
+                </button>
+                <button
+                  onClick={retake}
+                  className="inline-flex items-center gap-2 rounded-full border border-border px-5 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted"
+                >
+                  <RefreshCw className="h-4 w-4" />
+                  {L(LEAD_QUAL_CALC.retake, isBn)}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </Container>
+    </Section>
+  )
+}
+
+/* ========================================================================== */
+/*  BROADCAST REACH ESTIMATOR                                                  */
+/* ========================================================================== */
+
+/** Standalone slider for the Broadcast Estimator (extracted to satisfy
+ *  react-hooks/static-components lint rule). */
+function BroadcastSlider({ label, value, set, min, max, step, fmt }: {
+  label: string; value: number; set: (v: number) => void
+  min: number; max: number; step: number; fmt: (v: number) => string
+}) {
+  return (
+    <div>
+      <div className="flex items-center justify-between">
+        <Label className="text-sm font-medium">{label}</Label>
+        <span className="rounded-md bg-emerald-100 px-2.5 py-0.5 text-sm font-bold text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400">
+          {fmt(value)}
+        </span>
+      </div>
+      <input
+        type="range"
+        min={min}
+        max={max}
+        step={step}
+        value={value}
+        onChange={(e) => set(Number(e.target.value))}
+        className="mt-2 h-2 w-full cursor-pointer appearance-none rounded-full bg-muted accent-emerald-600"
+      />
+    </div>
+  )
+}
+
+function fmtNum(v: number) { return v.toLocaleString() }
+function fmtBDT(v: number) { return `৳${v.toLocaleString()}` }
+function fmtPct(v: number) { return `${v}%` }
+
+function BroadcastEstimatorSection({ isBn }: { isBn: boolean }) {
+  const s = BROADCAST_ESTIMATOR.sliders
+  const [audience, setAudience] = React.useState(s.audience.default)
+  const [openRate, setOpenRate] = React.useState(s.openRate.default)
+  const [ctr, setCtr] = React.useState(s.ctr.default)
+  const [conversion, setConversion] = React.useState(s.conversion.default)
+  const [aov, setAov] = React.useState(s.aov.default)
+
+  const opens = Math.round(audience * (openRate / 100))
+  const clicks = Math.round(opens * (ctr / 100))
+  const buyers = Math.round(clicks * (conversion / 100))
+  const revenue = buyers * aov
+  const emailRevenue = Math.round(audience * 0.2 * 0.06 * 0.03 * aov)
+  const uplift = revenue > 0 && emailRevenue > 0 ? Math.round((revenue / emailRevenue) * 10) / 10 : 0
+
+  return (
+    <Section id="broadcast-estimator">
+      <Container>
+        <SectionHeader
+          eyebrow={L(BROADCAST_ESTIMATOR.eyebrow, isBn)}
+          title={L(BROADCAST_ESTIMATOR.title, isBn)}
+          subtitle={L(BROADCAST_ESTIMATOR.subtitle, isBn)}
+          accent="emerald"
+        />
+        <div className="mt-10 grid gap-8 lg:grid-cols-2">
+          {/* Sliders */}
+          <div className="space-y-5 rounded-2xl border border-border bg-background p-6 sm:p-8">
+            <BroadcastSlider label={L(s.audience.label, isBn)} value={audience} set={setAudience} min={s.audience.min} max={s.audience.max} step={s.audience.step} fmt={fmtNum} />
+            <BroadcastSlider label={L(s.openRate.label, isBn)} value={openRate} set={setOpenRate} min={s.openRate.min} max={s.openRate.max} step={s.openRate.step} fmt={fmtPct} />
+            <BroadcastSlider label={L(s.ctr.label, isBn)} value={ctr} set={setCtr} min={s.ctr.min} max={s.ctr.max} step={s.ctr.step} fmt={fmtPct} />
+            <BroadcastSlider label={L(s.conversion.label, isBn)} value={conversion} set={setConversion} min={s.conversion.min} max={s.conversion.max} step={s.conversion.step} fmt={fmtPct} />
+            <BroadcastSlider label={L(s.aov.label, isBn)} value={aov} set={setAov} min={s.aov.min} max={s.aov.max} step={s.aov.step} fmt={fmtBDT} />
+          </div>
+
+          {/* Results */}
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="rounded-xl border border-border bg-muted/40 p-5">
+                <div className="text-2xl font-bold text-emerald-600 sm:text-3xl">{fmtNum(opens)}</div>
+                <div className="mt-1 text-xs text-muted-foreground sm:text-sm">{L(BROADCAST_ESTIMATOR.results.opens.label, isBn)}</div>
+              </div>
+              <div className="rounded-xl border border-border bg-muted/40 p-5">
+                <div className="text-2xl font-bold text-emerald-600 sm:text-3xl">{fmtNum(clicks)}</div>
+                <div className="mt-1 text-xs text-muted-foreground sm:text-sm">{L(BROADCAST_ESTIMATOR.results.clicks.label, isBn)}</div>
+              </div>
+              <div className="rounded-xl border border-border bg-muted/40 p-5">
+                <div className="text-2xl font-bold text-emerald-600 sm:text-3xl">{fmtNum(buyers)}</div>
+                <div className="mt-1 text-xs text-muted-foreground sm:text-sm">{L(BROADCAST_ESTIMATOR.results.buyers.label, isBn)}</div>
+              </div>
+              <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-5 dark:border-emerald-900 dark:bg-emerald-950/30">
+                <div className="text-2xl font-bold text-emerald-700 dark:text-emerald-400 sm:text-3xl">{fmtBDT(revenue)}</div>
+                <div className="mt-1 text-xs text-muted-foreground sm:text-sm">{L(BROADCAST_ESTIMATOR.results.revenue.label, isBn)}</div>
+              </div>
+            </div>
+
+            {uplift > 0 && (
+              <div className="flex items-center gap-3 rounded-xl border border-emerald-200 bg-emerald-50 p-4 dark:border-emerald-900 dark:bg-emerald-950/30">
+                <TrendingUp className="h-6 w-6 flex-shrink-0 text-emerald-600" />
+                <div className="text-sm">
+                  <span className="font-bold text-emerald-700 dark:text-emerald-400">{uplift}x</span>
+                  <span className="text-muted-foreground"> {L(BROADCAST_ESTIMATOR.results.emailComparison.label, isBn)}</span>
+                </div>
+              </div>
+            )}
+
+            <p className="text-xs text-muted-foreground">{L(BROADCAST_ESTIMATOR.note, isBn)}</p>
+          </div>
+        </div>
+      </Container>
+    </Section>
+  )
+}
+
+/* ========================================================================== */
+/*  INTEGRATIONS MARQUEE                                                       */
+/* ========================================================================== */
+
+function IntegrationsSection({ isBn }: { isBn: boolean }) {
+  const items = INTEGRATIONS.items
+  // Duplicate for seamless loop
+  const loop = [...items, ...items]
+  return (
+    <Section bg="muted">
+      <Container>
+        <SectionHeader
+          eyebrow={L(INTEGRATIONS.eyebrow, isBn)}
+          title={L(INTEGRATIONS.title, isBn)}
+          subtitle={L(INTEGRATIONS.subtitle, isBn)}
+          accent="emerald"
+        />
+      </Container>
+      <div className="relative mt-10 overflow-hidden">
+        {/* Fade edges */}
+        <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-16 bg-gradient-to-r from-muted to-transparent sm:w-32" />
+        <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-16 bg-gradient-to-l from-muted to-transparent sm:w-32" />
+        <div className="flex w-max animate-[scroll_40s_linear_infinite] gap-3">
+          {loop.map((name, i) => (
+            <div
+              key={i}
+              className="flex flex-shrink-0 items-center gap-2 rounded-xl border border-border bg-background px-5 py-3 text-sm font-semibold shadow-sm"
+            >
+              <div className="flex h-6 w-6 items-center justify-center rounded-md bg-emerald-100 dark:bg-emerald-950/50">
+                <Plug className="h-3.5 w-3.5 text-emerald-600" />
+              </div>
+              {name}
+            </div>
+          ))}
+        </div>
+      </div>
+      <style jsx>{`
+        @keyframes scroll {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
+      `}</style>
+    </Section>
+  )
+}
+
+/* ========================================================================== */
+/*  BEFORE / AFTER TRANSFORMATION                                              */
+/* ========================================================================== */
+
+function BeforeAfterSection({ isBn }: { isBn: boolean }) {
+  return (
+    <Section id="before-after" bg="muted">
+      <Container>
+        <SectionHeader
+          eyebrow={L(BEFORE_AFTER.eyebrow, isBn)}
+          title={L(BEFORE_AFTER.title, isBn)}
+          subtitle={L(BEFORE_AFTER.subtitle, isBn)}
+          accent="emerald"
+        />
+        <div className="mx-auto mt-10 max-w-4xl space-y-3">
+          {BEFORE_AFTER.pairs.map((pair, i) => (
+            <div
+              key={i}
+              className="grid grid-cols-[1fr_auto_1fr] items-stretch gap-2 sm:gap-4"
+            >
+              {/* Before */}
+              <div className="flex items-center gap-3 rounded-xl border border-red-200 bg-red-50 p-4 dark:border-red-900/50 dark:bg-red-950/20">
+                <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-red-100 dark:bg-red-950/50">
+                  <XCircle className="h-5 w-5 text-red-600" />
+                </div>
+                <span className="text-sm font-medium text-red-900 dark:text-red-300 sm:text-base">
+                  {L(pair.before, isBn)}
+                </span>
+              </div>
+              {/* Arrow */}
+              <div className="flex items-center justify-center">
+                <ArrowRight className="h-5 w-5 text-muted-foreground" />
+              </div>
+              {/* After */}
+              <div className="flex items-center gap-3 rounded-xl border border-emerald-200 bg-emerald-50 p-4 dark:border-emerald-900 dark:bg-emerald-950/30">
+                <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-950/50">
+                  <CheckCircle2 className="h-5 w-5 text-emerald-600" />
+                </div>
+                <span className="text-sm font-bold text-emerald-900 dark:text-emerald-300 sm:text-base">
+                  {L(pair.after, isBn)}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Container>
+    </Section>
+  )
+}
+
+/* ========================================================================== */
+/*  URGENCY BAND                                                               */
+/* ========================================================================== */
+
+function UrgencyBand({ isBn, onCta }: { isBn: boolean; onCta: () => void }) {
+  const slots = 3
+  return (
+    <div className="border-y border-emerald-200 bg-gradient-to-r from-emerald-600 to-teal-600 text-white dark:border-emerald-900">
+      <Container>
+        <div className="flex flex-col items-center justify-between gap-4 py-4 sm:flex-row">
+          <div className="flex items-center gap-3 text-center sm:text-left">
+            <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-white/20">
+              <Clock className="h-5 w-5" />
+            </div>
+            <div>
+              <div className="text-xs font-semibold uppercase tracking-wide text-emerald-100">
+                {L(URGENCY.badge, isBn)}
+              </div>
+              <div className="text-sm font-bold sm:text-base">
+                {L(URGENCY.text, isBn)}
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="text-center">
+              <div className="font-heading text-2xl font-bold">{slots}</div>
+              <div className="text-[10px] uppercase text-emerald-100">{L(URGENCY.slotsLabel, isBn)}</div>
+            </div>
+            <button
+              onClick={onCta}
+              className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-bold text-emerald-700 transition-transform hover:scale-105"
+            >
+              <Calendar className="h-4 w-4" />
+              {L(URGENCY.cta, isBn)}
+            </button>
+          </div>
+        </div>
+      </Container>
+    </div>
+  )
+}
+
+/* ========================================================================== */
 /*  STICKY MOBILE CTA                                                          */
 /* ========================================================================== */
 
@@ -1605,6 +2135,7 @@ export function WhatsAppAutomationClient() {
 
       <main className="flex-1">
         <HeroSection isBn={isBn} onCta={scrollToLeadForm} />
+        <UrgencyBand isBn={isBn} onCta={scrollToLeadForm} />
         <MetricsSection isBn={isBn} />
         <ProblemSection isBn={isBn} onCta={scrollToLeadForm} />
         <EmotionalCostSection isBn={isBn} />
@@ -1617,13 +2148,17 @@ export function WhatsAppAutomationClient() {
         <MarketingSection isBn={isBn} />
         <CrmSection isBn={isBn} />
         <TechStackSection isBn={isBn} />
+        <IntegrationsSection isBn={isBn} />
         <BenefitsSection isBn={isBn} />
         <ComparisonSection isBn={isBn} />
+        <BeforeAfterSection isBn={isBn} />
         <CaseStudiesSection isBn={isBn} />
         <StatisticsSection isBn={isBn} />
         <DeliverablesSection isBn={isBn} />
         <PricingSection isBn={isBn} onCta={scrollToLeadForm} />
         <RoiCalculatorSection isBn={isBn} />
+        <LeadQualCalculatorSection isBn={isBn} onCta={scrollToLeadForm} />
+        <BroadcastEstimatorSection isBn={isBn} />
         <TimelineSection isBn={isBn} />
         <ProcessSection isBn={isBn} />
         <FaqSection isBn={isBn} />

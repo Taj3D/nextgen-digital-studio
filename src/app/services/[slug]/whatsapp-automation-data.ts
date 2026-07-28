@@ -929,6 +929,36 @@ export const COMPARISON = {
       traditional: { en: 'Unknown', bn: 'অজানা' },
       nextgen: { en: '4.5x average', bn: 'গড় ৪.৫x' },
     },
+    {
+      feature: { en: 'Payment collection', bn: 'পেমেন্ট কালেকশন' },
+      traditional: { en: 'Manual bank transfer only', bn: 'শুধু ম্যানুয়াল ব্যাংক ট্রান্সফার' },
+      nextgen: { en: 'bKash/Nagad/Stripe links in chat', bn: 'চ্যাটে bKash/Nagad/Stripe লিংক' },
+    },
+    {
+      feature: { en: 'Cart recovery', bn: 'কার্ট রিকভারি' },
+      traditional: { en: 'Impossible', bn: 'অসম্ভব' },
+      nextgen: { en: 'Automated 3-step sequence', bn: 'অটোমেটেড ৩-স্টেপ সিকোয়েন্স' },
+    },
+    {
+      feature: { en: 'Voice message handling', bn: 'ভয়েস মেসেজ হ্যান্ডলিং' },
+      traditional: { en: 'Listen manually', bn: 'ম্যানুয়ালি শুনতে হয়' },
+      nextgen: { en: 'AI transcribes + replies', bn: 'AI ট্রান্সক্রাইব + রিপ্লাই' },
+    },
+    {
+      feature: { en: 'Green tick verification', bn: 'গ্রিন টিক ভেরিফিকেশন' },
+      traditional: { en: 'Not available', bn: 'অনুপলব্ধ' },
+      nextgen: { en: 'We apply for you', bn: 'আমরা আপনার জন্য আবেদন' },
+    },
+    {
+      feature: { en: 'Lead scoring', bn: 'লিড স্কোরিং' },
+      traditional: { en: 'Gut feeling', bn: 'অনুমান' },
+      nextgen: { en: 'AI 0–100 score', bn: 'AI ০–১০০ স্কোর' },
+    },
+    {
+      feature: { en: 'Customer data ownership', bn: 'গ্রাহক ডেটা মালিকানা' },
+      traditional: { en: 'On one phone', bn: 'এক ফোনে' },
+      nextgen: { en: 'Cloud, exportable anytime', bn: 'ক্লাউড, যেকোনো সময় এক্সপোর্ট' },
+    },
   ],
 }
 
@@ -1339,7 +1369,7 @@ export const PROCESS = {
 }
 
 /* ========================================================================== */
-/*  23. FAQ (40+ questions, grouped)                                           */
+/*  23. FAQ (80+ questions, grouped)                                           */
 /* ========================================================================== */
 
 export const FAQS = {
@@ -1376,6 +1406,22 @@ export const FAQS = {
           q: { en: 'Do you offer refunds?', bn: 'আপনারা রিফান্ড দেন?' },
           a: { en: 'Yes — the 60-day ROI guarantee means if you do not see measurable ROI within 60 days, we refund 100% and you keep the setup.', bn: 'হ্যাঁ — ৬০-দিন ROI গ্যারান্টি মানে ৬০ দিনের মধ্যে পরিমেয় ROI না দেখলে আমরা ১০০% রিফান্ড দেই এবং সেটআপ আপনার থাকে।' },
         },
+        {
+          q: { en: 'Is there a free trial?', bn: 'কি কোনো ফ্রি ট্রায়াল আছে?' },
+          a: { en: 'Instead of a limited trial, we offer a free strategy call + live demo on your use case. The 60-day ROI guarantee acts as a risk-free trial — if it does not work, you get 100% back.', bn: 'লিমিটেড ট্রায়ালের বদলে আমরা ফ্রি স্ট্র্যাটেজি কল + আপনার ইউজ-কেসে লাইভ ডেমো দিই। ৬০-দিন ROI গ্যারান্টি রিস্ক-ফ্রি ট্রায়াল হিসেবে কাজ করে — কাজ না করলে ১০০% ফেরত।' },
+        },
+        {
+          q: { en: 'Are there any hidden fees?', bn: 'কি কোনো হিডেন ফি আছে?' },
+          a: { en: 'No hidden fees. Meta charges per-conversation fees (first 1,000 free/month) which we pass through at cost. Everything is transparent and documented upfront.', bn: 'কোনো হিডেন ফি নেই। Meta প্রতি-কনভার্সেশন ফি চার্জ করে (প্রথম ১,০০০ ফ্রি/মাস) যা আমরা কস্টে পাস করি। সবকিছু স্বচ্ছ ও আগে ডকুমেন্টেড।' },
+        },
+        {
+          q: { en: 'What is Meta conversation pricing?', bn: 'Meta কনভার্সেশন প্রাইসিং কী?' },
+          a: { en: 'Meta charges per 24-hour conversation window: marketing (~৳0.90), utility (~৳0.15), service (free), authentication (~৳0.15). First 1,000 service conversations free monthly.', bn: 'Meta ২৪ ঘন্টার কনভার্সেশন উইন্ডো প্রতি চার্জ করে: মার্কেটিং (~৳০.৯০), ইউটিলিটি (~৳০.১৫), সার্ভিস (ফ্রি), অথেন্টিকেশন (~৳০.১৫)। প্রথম ১,০০০ সার্ভিস কনভার্সেশন মাসিক ফ্রি।' },
+        },
+        {
+          q: { en: 'Can I pay annually?', bn: 'আমি কি বার্ষিক পেমেন্ট করতে পারি?' },
+          a: { en: 'Yes. Annual commitments get 15% off and waived setup fees. We accept bank transfer, bKash, Nagad, SSL Commerz and international cards via Stripe.', bn: 'হ্যাঁ। বার্ষিক কমিটমেন্টে ১৫% ছাড় এবং সেটআপ ফি মওকুফ। আমরা ব্যাংক ট্রান্সফার, bKash, Nagad, SSL Commerz এবং Stripe-এর মাধ্যমে আন্তর্জাতিক কার্ড গ্রহণ করি।' },
+        },
       ],
     },
     {
@@ -1405,6 +1451,22 @@ export const FAQS = {
           q: { en: 'What are Meta messaging limits?', bn: 'Meta মেসেজিং লিমিট কী?' },
           a: { en: 'Meta tiers businesses: 1K, 10K, 100K, unlimited unique customers per 24h. We help you climb tiers as your quality rating stays high.', bn: 'Meta ব্যবসাকে টিয়ার করে: ১K, ১০K, ১০০K, আনলিমিটেড ইউনিক কাস্টমার ২৪ঘন্টায়। আপনার কোয়ালিটি রেটিং ভাল থাকলে আমরা টিয়ার বাড়াতে সাহায্য করি।' },
         },
+        {
+          q: { en: 'Do I need a Facebook Business Manager?', bn: 'আমার কি Facebook Business Manager দরকার?' },
+          a: { en: 'Yes — Meta requires a verified Facebook Business Manager to use the WhatsApp Business API. If you do not have one, we create and verify it for you at no extra cost.', bn: 'হ্যাঁ — Meta WhatsApp Business API ব্যবহারের জন্য ভেরিফাইড Facebook Business Manager চায়। আপনার না থাকলে আমরা বিনা খরচে তৈরি ও ভেরিফাই করি।' },
+        },
+        {
+          q: { en: 'Can I keep my existing WhatsApp chats?', bn: 'আমি কি বিদ্যমান WhatsApp চ্যাট রাখতে পারি?' },
+          a: { en: 'When migrating to the Business API, chat history from the regular app does not transfer (Meta limitation). We back up your contacts and re-engage them with a welcome broadcast.', bn: 'Business API-তে মাইগ্রেট করলে রেগুলার অ্যাপের চ্যাট হিস্ট্রি ট্রান্সফার হয় না (Meta লিমিটেশন)। আমরা আপনার কন্টাক্ট ব্যাকআপ করি এবং ওয়েলকাম ব্রডকাস্ট দিয়ে রি-এনগেজ করি।' },
+        },
+        {
+          q: { en: 'What hardware do I need?', bn: 'আমার কী হার্ডওয়্যার দরকার?' },
+          a: { en: 'Nothing special — just a phone, tablet or computer with internet. Everything runs in the cloud. Your team accesses the dashboard via any browser.', bn: 'বিশেষ কিছু লাগে না — শুধু ইন্টারনেটসহ ফোন, ট্যাবলেট বা কম্পিউটার। সবকিছু ক্লাউডে চলে। আপনার টিম যেকোনো ব্রাউজার দিয়ে ড্যাশবোর্ড অ্যাক্সেস করে।' },
+        },
+        {
+          q: { en: 'Can I use my own domain for the dashboard?', bn: 'আমি কি নিজের ডোমেইন ব্যবহার করতে পারি?' },
+          a: { en: 'Enterprise plans include white-label dashboard on your own subdomain (e.g. wa.yourbrand.com). Custom branding, logo and colours included.', bn: 'এন্টারপ্রাইজ প্ল্যানে আপনার সাবডোমেইনে হোয়াইট-লেবেল ড্যাশবোর্ড (যেমন wa.yourbrand.com)। কাস্টম ব্র্যান্ডিং, লোগো ও কালার অন্তর্ভুক্ত।' },
+        },
       ],
     },
     {
@@ -1429,6 +1491,22 @@ export const FAQS = {
         {
           q: { en: 'Can the AI handle voice messages?', bn: 'AI কি ভয়েস মেসেজ সামলাতে পারে?' },
           a: { en: 'Yes. It transcribes voice notes, understands spoken Bengali and English, and replies with voice or text — your choice.', bn: 'হ্যাঁ। ভয়েস নোট ট্রান্সক্রাইব করে, কথ্য বাংলা ও ইংরেজি বোঝে, এবং ভয়েস বা টেক্সটে উত্তর দেয় — আপনার পছন্দ।' },
+        },
+        {
+          q: { en: 'Can the AI sell products?', bn: 'AI কি প্রোডাক্ট বিক্রি করতে পারে?' },
+          a: { en: 'Yes. The AI qualifies leads, recommends products, sends catalogs, shares payment links and closes sales — fully autonomously for low-touch purchases.', bn: 'হ্যাঁ। AI লিড কোয়ালিফাই করে, প্রোডাক্ট রেকমেন্ড করে, ক্যাটালগ পাঠায়, পেমেন্ট লিংক শেয়ার করে এবং সেলস ক্লোজ করে — লো-টাচ পারচেসে সম্পূর্ণ স্বায়ত্তশাসিত।' },
+        },
+        {
+          q: { en: 'How accurate is the AI?', bn: 'AI কতটা নির্ভুল?' },
+          a: { en: '95%+ accuracy on trained topics. It only answers from your knowledge base (RAG), so it never hallucinates about your business. Confidence threshold escalates uncertain cases to humans.', bn: 'ট্রেইন করা টপিকে ৯৫%+ নির্ভুলতা। এটি শুধু আপনার নলেজ বেস (RAG) থেকে উত্তর দেয়, তাই আপনার বিজনেস নিয়ে কখনও হ্যালুসিনেট করে না। কনফিডেন্স থ্রেশহোল্ড অনিশ্চিত কেস হিউম্যানে পাঠায়।' },
+        },
+        {
+          q: { en: 'Can I review AI conversations?', bn: 'আমি কি AI কথোপকথন রিভিউ করতে পারি?' },
+          a: { en: 'Yes. Every conversation is logged and searchable. You can filter by agent, outcome, sentiment, tag. Override or correct any AI response anytime.', bn: 'হ্যাঁ। প্রতিটি কথোপকথন লগ ও সার্চেবল। এজেন্ট, ফলাফল, সেন্টিমেন্ট, ট্যাগ দিয়ে ফিল্টার করতে পারেন। যেকোনো AI রেসপন্স ওভাররাইড বা কারেক্ট করতে পারেন।' },
+        },
+        {
+          q: { en: 'What languages does the AI support?', bn: 'AI কোন কোন ভাষা সাপোর্ট করে?' },
+          a: { en: 'Bengali, English, Hindi, Arabic, and 90+ other languages via GPT-4. Auto-detects the customer language and replies in kind. Handles Banglish (mixed Bangla-English) natively.', bn: 'বাংলা, ইংরেজি, হিন্দি, আরবি এবং GPT-4 দিয়ে আরও ৯০+ ভাষা। গ্রাহকের ভাষা অটো-ডিটেক্ট করে সেই ভাষায় উত্তর দেয়। Banglish (মিক্সড বাংলা-ইংরেজি) নেটিভভাবে সামলায়।' },
         },
       ],
     },
@@ -1455,6 +1533,22 @@ export const FAQS = {
           q: { en: 'Do you comply with Bangladesh ICT Act?', bn: 'আপনারা কি বাংলাদেশ ICT অ্যাক্ট মানেন?' },
           a: { en: 'Yes. We comply with the Bangladesh ICT Act 2006 (amended 2013) and Digital Security Act 2018 for data protection and digital communication.', bn: 'হ্যাঁ। আমরা ডেটা সুরক্ষা ও ডিজিটাল যোগাযোগের জন্য বাংলাদেশ ICT অ্যাক্ট ২০০৬ (সংশোধিত ২০১৩) এবং ডিজিটাল সিকিউরিটি অ্যাক্ট ২০১৮ মানি।' },
         },
+        {
+          q: { en: 'Who owns my customer data?', bn: 'আমার গ্রাহক ডেটার মালিক কে?' },
+          a: { en: 'You do — 100%. We never sell, share or use your data for any purpose other than delivering your service. You can export or delete all data anytime.', bn: 'আপনি — ১০০%। আমরা কখনও আপনার ডেটা বিক্রি, শেয়ার বা ব্যবহার করি না সেবা দেওয়া ছাড়া। যেকোনো সময় সব ডেটা এক্সপোর্ট বা ডিলিট করতে পারেন।' },
+        },
+        {
+          q: { en: 'Can I delete all data if I leave?', bn: 'আমি চলে গেলে কি সব ডেটা ডিলিট করতে পারব?' },
+          a: { en: 'Yes. Request full data deletion and we wipe everything within 30 days, with a signed deletion certificate. No data is retained after account closure.', bn: 'হ্যাঁ। ফুল ডেটা ডিলিশন রিকোয়েস্ট করলে আমরা ৩০ দিনের মধ্যে সব মুছে দিই, সাইনড ডিলিশন সার্টিফিকেট সহ। অ্যাকাউন্ট বন্ধের পর কোনো ডেটা রাখা হয় না।' },
+        },
+        {
+          q: { en: 'Do you have insurance?', bn: 'আপনাদের কি ইন্স্যুরেন্স আছে?' },
+          a: { en: 'Enterprise plans include cyber liability insurance up to ৳50,00,000 covering data breach, business interruption and third-party claims.', bn: 'এন্টারপ্রাইজ প্ল্যানে ৳৫০,০০,০০০ পর্যন্ত সাইবার লায়েবিলিটি ইন্স্যুরেন্স অন্তর্ভুক্ত — ডেটা ব্রিচ, বিজনেস ইন্টারাপশন ও থার্ড-পার্টি ক্লেম কভার।' },
+        },
+        {
+          q: { en: 'What happens during a data breach?', bn: 'ডেটা ব্রিচ হলে কী হয়?' },
+          a: { en: 'We notify you within 72 hours, provide full incident report, and remediate at our cost. Cyber insurance covers damages on Enterprise plans.', bn: 'আমরা ৭২ ঘন্টার মধ্যে নোটিফাই করি, ফুল ইনসিডেন্ট রিপোর্ট দিই, এবং আমাদের খরচে রিমিডিয়েট করি। এন্টারপ্রাইজ প্ল্যানে সাইবার ইন্স্যুরেন্স ক্ষতি কভার করে।' },
+        },
       ],
     },
     {
@@ -1475,6 +1569,18 @@ export const FAQS = {
         {
           q: { en: 'What if something breaks?', bn: 'কিছু নষ্ট হলে?' },
           a: { en: '99.9% uptime SLA. If something breaks, our team is notified instantly and responds within your plan\'s SLA. Most issues resolved in under 1 hour.', bn: '৯৯.৯% আপটাইম SLA। কিছু নষ্ট হলে আমাদের টিম তাৎক্ষণিকভাবে নোটিফাই হয় এবং আপনার প্ল্যানের SLA অনুযায়ী সাড়া দেয়। বেশিরভাগ সমস্যা ১ ঘন্টার মধ্যে সমাধান।' },
+        },
+        {
+          q: { en: 'Do you offer onboarding help?', bn: 'আপনারা কি অনবোর্ডিং সাহায্য দেন?' },
+          a: { en: 'Yes. Every plan includes guided onboarding: strategy session, flow design, template creation, AI training and go-live support. Enterprise gets a dedicated onboarding specialist.', bn: 'হ্যাঁ। প্রতিটি প্ল্যানে গাইডেড অনবোর্ডিং: স্ট্র্যাটেজি সেশন, ফ্লো ডিজাইন, টেমপ্লেট তৈরি, AI ট্রেইনিং ও গো-লাইভ সাপোর্ট। এন্টারপ্রাইজে ডেডিকেটেড অনবোর্ডিং স্পেশালিস্ট।' },
+        },
+        {
+          q: { en: 'Can I get a custom flow built?', bn: 'আমি কি কাস্টম ফ্লো বানাতে পারি?' },
+          a: { en: 'Yes. Growth and Enterprise plans include custom flow development by our automation engineers. Tell us the journey — we build, test and deploy it.', bn: 'হ্যাঁ। গ্রোথ ও এন্টারপ্রাইজ প্ল্যানে আমাদের অটোমেশন ইঞ্জিনিয়ারদের কাস্টম ফ্লো ডেভেলপমেন্ট। জার্নি বলুন — আমরা বানাই, টেস্ট ও ডিপ্লয় করি।' },
+        },
+        {
+          q: { en: 'What is your average response time?', bn: 'আপনাদের গড় রেসপন্স টাইম কত?' },
+          a: { en: 'Starter: 24h email. Growth: 4h with success manager. Enterprise: 1h with dedicated account manager + WhatsApp priority support group.', bn: 'স্টার্টার: ২৪ঘন্টা ইমেইল। গ্রোথ: সাকসেস ম্যানেজার সহ ৪ঘন্টা। এন্টারপ্রাইজ: ডেডিকেটেড অ্যাকাউন্ট ম্যানেজার + WhatsApp প্রায়োরিটি সাপোর্ট গ্রুপ সহ ১ঘন্টা।' },
         },
       ],
     },
@@ -1501,6 +1607,22 @@ export const FAQS = {
           q: { en: 'Can I build custom automation flows?', bn: 'আমি কি কাস্টম অটোমেশন ফ্লো বানাতে পারি?' },
           a: { en: 'Yes. Our drag-and-drop flow builder lets you create any journey — no coding. Or we build custom flows for you (Enterprise plan).', bn: 'হ্যাঁ। আমাদের ড্র্যাগ-অ্যান্ড-ড্রপ ফ্লো বিল্ডার দিয়ে যেকোনো জার্নি তৈরি করুন — কোডিং নেই। বা আমরা আপনার জন্য কাস্টম ফ্লো বানাই (এন্টারপ্রাইজ প্ল্যান)।' },
         },
+        {
+          q: { en: 'Do you support WhatsApp Catalog?', bn: 'আপনারা কি WhatsApp Catalog সাপোর্ট করেন?' },
+          a: { en: 'Yes. Full WhatsApp Commerce API support — showcase up to 500 products with images, prices, descriptions. Customers browse and buy without leaving the chat.', bn: 'হ্যাঁ। ফুল WhatsApp Commerce API সাপোর্ট — ৫০০ পর্যন্ত প্রোডাক্ট ইমেজ, দাম, বর্ণনা সহ। গ্রাহক চ্যাট ছাড়া ব্রাউজ ও কেনে।' },
+        },
+        {
+          q: { en: 'Can I A/B test broadcasts?', bn: 'আমি কি A/B টেস্ট ব্রডকাস্ট করতে পারি?' },
+          a: { en: 'Yes. Send two variants to a sample, let the system pick the winner based on open/reply rate, then auto-send the winner to the rest. Available on Growth+.', bn: 'হ্যাঁ। স্যাম্পলে দুটি ভ্যারিয়েন্ট পাঠান, সিস্টেম ওপেন/রিপ্লাই রেট দিয়ে উইনার বাছে, তারপর উইনার বাকিদের অটো-পাঠায়। গ্রোথ+ এ উপলব্ধ।' },
+        },
+        {
+          q: { en: 'Is there an API rate limit?', bn: 'কি কোনো API রেট লিমিট আছে?' },
+          a: { en: 'Standard: 80 requests/second per number. Enterprise: custom rate limits up to 500 req/s. Webhooks fire in real-time with automatic retry on failure.', bn: 'স্ট্যান্ডার্ড: নম্বর প্রতি ৮০ রিকোয়েস্ট/সেকেন্ড। এন্টারপ্রাইজ: ৫০০ req/s পর্যন্ত কাস্টম রেট লিমিট। ওয়েবহুক রিয়েল-টাইমে ফায়ার করে, ফেইলে অটোমেটিক রিট্রাই।' },
+        },
+        {
+          q: { en: 'Can I schedule messages?', bn: 'আমি কি মেসেজ শিডিউল করতে পারি?' },
+          a: { en: 'Yes. Schedule broadcasts for any date/time with timezone support. Set recurring campaigns (daily, weekly, monthly). Queue management prevents rate-limit issues.', bn: 'হ্যাঁ। টাইমজোন সাপোর্ট সহ যেকোনো তারিখ/সময়ে ব্রডকাস্ট শিডিউল। রিকারিং ক্যাম্পেইন (দৈনিক, সাপ্তাহিক, মাসিক) সেট করুন। কিউ ম্যানেজমেন্ট রেট-লিমিট ইস্যু ঠেকায়।' },
+        },
       ],
     },
     {
@@ -1521,6 +1643,125 @@ export const FAQS = {
         {
           q: { en: 'What industries do you serve?', bn: 'আপনারা কোন কোন ইন্ডাস্ট্রি সেবা দেন?' },
           a: { en: '13+ industries: e-commerce, healthcare, education, real estate, restaurants, manufacturing, agencies, coaching, NGOs, travel, logistics, insurance, finance.', bn: '১৩+ ইন্ডাস্ট্রি: ই-কমার্স, হেলথকেয়ার, শিক্ষা, রিয়েল এস্টেট, রেস্টুরেন্ট, ম্যানুফ্যাকচারিং, এজেন্সি, কোচিং, এনজিও, ট্রাভেল, লজিস্টিকস, ইন্স্যুরেন্স, ফাইন্যান্স।' },
+        },
+        {
+          q: { en: 'How does this compare to email marketing?', bn: 'এটা ইমেইল মার্কেটিংয়ের তুলনায় কেমন?' },
+          a: { en: 'WhatsApp: 98% open rate, 45% reply rate, instant delivery. Email: 20% open, 6% reply, lands in spam. WhatsApp converts 5–10x better for Bangladesh audiences.', bn: 'WhatsApp: ৯৮% ওপেন রেট, ৪৫% রিপ্লাই রেট, তাৎক্ষণিক ডেলিভারি। ইমেইল: ২০% ওপেন, ৬% রিপ্লাই, স্প্যামে যায়। বাংলাদেশ অডিয়েন্সের জন্য WhatsApp ৫–১০x ভাল কনভার্ট করে।' },
+        },
+        {
+          q: { en: 'Will this replace my sales team?', bn: 'এটা কি আমার সেলস টিমের জায়গা নেবে?' },
+          a: { en: 'No — it augments them. The AI handles 80% of repetitive conversations so your team focuses on hot leads and complex deals. Most clients grow sales without hiring.', bn: 'না — এটা তাদের সাহায্য করে। AI ৮০% রিপিটেটিভ কথোপকথন সামলায় যাতে আপনার টিম হট লিড ও জটিল ডিলে ফোকাস করে। বেশিরভাগ ক্লায়েন্ট নিয়োগ ছাড়াই সেলস বাড়ায়।' },
+        },
+        {
+          q: { en: 'What if my customers do not use WhatsApp?', bn: 'আমার গ্রাহকরা যদি WhatsApp ব্যবহার না করে?' },
+          a: { en: 'In Bangladesh, 95%+ of internet users are on WhatsApp. If your customers have a smartphone, they are on WhatsApp. We help you migrate them to chat seamlessly.', bn: 'বাংলাদেশে ৯৫%+ ইন্টারনেট ইউজার WhatsApp-এ। আপনার গ্রাহকের স্মার্টফোন থাকলে সে WhatsApp-এ। আমরা তাদের চ্যাটে সহজে মাইগ্রেট করতে সাহায্য করি।' },
+        },
+        {
+          q: { en: 'Can I measure the exact ROI?', bn: 'আমি কি সঠিক ROI মাপতে পারব?' },
+          a: { en: 'Yes. Our dashboard tracks every conversion, attributes revenue to campaigns and shows ROI per flow. UTM tracking, coupon codes and CRM sync give full attribution.', bn: 'হ্যাঁ। আমাদের ড্যাশবোর্ড প্রতিটি কনভার্সন ট্র্যাক করে, রেভিনিউ ক্যাম্পেইনে অ্যাট্রিবিউট করে এবং ফ্লো প্রতি ROI দেখায়। UTM ট্র্যাকিং, কুপন কোড ও CRM সিঙ্ক ফুল অ্যাট্রিবিউশন দেয়।' },
+        },
+      ],
+    },
+    {
+      name: { en: 'Marketing & Campaigns', bn: 'মার্কেটিং ও ক্যাম্পেইন' },
+      items: [
+        {
+          q: { en: 'Can I run promotional campaigns?', bn: 'আমি কি প্রমোশনাল ক্যাম্পেইন চালাতে পারি?' },
+          a: { en: 'Yes. Send marketing broadcasts to opt-in contacts using Meta-approved templates. Segment by purchase history, behaviour, tag, location for precise targeting.', bn: 'হ্যাঁ। Meta-অনুমোদিত টেমপ্লেট দিয়ে অপ্ট-ইন কন্টাক্টে মার্কেটিং ব্রডকাস্ট পাঠান। পারচেজ হিস্ট্রি, আচরণ, ট্যাগ, লোকেশন দিয়ে সেগমেন্ট।' },
+        },
+        {
+          q: { en: 'Do I need customer consent to message them?', bn: 'মেসেজ করতে গ্রাহকের সম্মতি দরকার?' },
+          a: { en: 'Yes — Meta requires opt-in for marketing messages. We set up opt-in flows (website widget, QR code, click-to-chat ads, form submissions) to build your consent list.', bn: 'হ্যাঁ — মার্কেটিং মেসেজের জন্য Meta অপ্ট-ইন চায়। আমরা অপ্ট-ইন ফ্লো (ওয়েবসাইট উইজেট, QR কোড, ক্লিক-টু-চ্যাট অ্যাড, ফর্ম) সেট আপ করি।' },
+        },
+        {
+          q: { en: 'Can I recover abandoned carts?', bn: 'আমি কি অ্যাব্যান্ডনড কার্ট রিকভার করতে পারি?' },
+          a: { en: 'Yes. Automated 3-step sequence: 15min reminder, 24h discount, 72h final offer. Average recovery rate 25–35% vs 5–10% for email cart recovery.', bn: 'হ্যাঁ। অটোমেটেড ৩-স্টেপ: ১৫মিনিট রিমাইন্ডার, ২৪ঘন্টা ডিসকাউন্ট, ৭২ঘন্টা ফাইনাল অফার। গড় রিকভারি ২৫–৩৫%, ইমেইলের ৫–১০% এর চেয়ে।' },
+        },
+        {
+          q: { en: 'How do I grow my WhatsApp contact list?', bn: 'WhatsApp কন্টাক্ট লিস্ট কিভাবে বাড়াব?' },
+          a: { en: 'Click-to-chat Facebook/Instagram ads, QR codes in-store, website widget, link in bio, SMS-to-WhatsApp, import existing contacts (with consent). We provide all flows.', bn: 'ক্লিক-টু-চ্যাট Facebook/Instagram অ্যাড, স্টোরে QR কোড, ওয়েবসাইট উইজেট, লিংক ইন বায়ো, SMS-টু-WhatsApp, বিদ্যমান কন্টাক্ট ইম্পোর্ট (সম্মতি সহ)। আমরা সব ফ্লো দিই।' },
+        },
+        {
+          q: { en: 'Can I send personalised messages at scale?', bn: 'আমি কি স্কেলে পার্সোনালাইজড মেসেজ পাঠাতে পারি?' },
+          a: { en: 'Yes. Merge fields (name, last purchase, birthday, custom fields) personalise each message. 10,000 recipients each get a unique message — no manual work.', bn: 'হ্যাঁ। মার্জ ফিল্ড (নাম, শেষ পারচেজ, জন্মদিন, কাস্টম ফিল্ড) প্রতিটি মেসেজ পার্সোনালাইজ করে। ১০,০০০ রিসিপিয়েন্ট প্রত্যেকে ইউনিক মেসেজ পায় — কোনো ম্যানুয়াল কাজ নেই।' },
+        },
+        {
+          q: { en: 'What is the best time to send broadcasts?', bn: 'ব্রডকাস্ট পাঠানোর সেরা সময় কখন?' },
+          a: { en: 'For Bangladesh: 11am–1pm (lunch break) and 7pm–9pm (evening). Our smart scheduler auto-picks the best time per contact based on their past engagement.', bn: 'বাংলাদেশের জন্য: ১১টা–১টা (লাঞ্চ) এবং ৭টা–৯টা (সন্ধ্যা)। আমাদের স্মার্ট শিডিউলার প্রতি কন্টাক্টের পেস্ট এনগেজমেন্ট দিয়ে বেস্ট টাইম অটো-বাছে।' },
+        },
+        {
+          q: { en: 'Can I run drip campaigns?', bn: 'আমি কি ড্রিপ ক্যাম্পেইন চালাতে পারি?' },
+          a: { en: 'Yes. Multi-step nurturing sequences with conditional branches: if opened → send X, if replied → send Y, if no action → send Z. All automated, no manual follow-up.', bn: 'হ্যাঁ। কন্ডিশনাল ব্র্যাঞ্চ সহ মাল্টি-স্টেপ নার্চারিং: ওপেন করলে → X, রিপ্লাই করলে → Y, কিছু না করলে → Z। সব অটোমেটেড, কোনো ম্যানুয়াল ফলো-আপ নেই।' },
+        },
+        {
+          q: { en: 'How do I avoid being marked as spam?', bn: 'স্প্যাম হিসেবে চিহ্নিত এড়াব কিভাবে?' },
+          a: { en: 'Only message opt-in contacts, send valuable content, respect frequency (max 2–3/week), always include opt-out. Meta quality rating stays green when you follow these rules.', bn: 'শুধু অপ্ট-ইন কন্টাক্টে মেসেজ, ভ্যালুয়েবল কনটেন্ট, ফ্রিকোয়েন্সি মেনে চলুন (সপ্তাহে ২–৩), অপ্ট-আউট রাখুন। এই নিয়ম মানলে Meta কোয়ালিটি রেটিং গ্রিন থাকে।' },
+        },
+      ],
+    },
+    {
+      name: { en: 'Competitor Comparisons', bn: 'প্রতিযোগী তুলনা' },
+      items: [
+        {
+          q: { en: 'How is this different from WhatsApp Business app?', bn: 'এটা WhatsApp Business অ্যাপ থেকে কেমন আলাদা?' },
+          a: { en: 'Business app: 1 device, 1 agent, manual, no API, no automation, 256 broadcast limit. Our API: unlimited agents, AI automation, 1M+ broadcasts, CRM, analytics, payment links.', bn: 'Business অ্যাপ: ১ ডিভাইস, ১ এজেন্ট, ম্যানুয়াল, কোনো API/অটোমেশন নেই, ২৫৬ ব্রডকাস্ট লিমিট। আমাদের API: আনলিমিটেড এজেন্ট, AI অটোমেশন, ১M+ ব্রডকাস্ট, CRM, অ্যানালিটিক্স, পেমেন্ট লিংক।' },
+        },
+        {
+          q: { en: 'How does this compare to unofficial WhatsApp tools?', bn: 'আনঅফিশিয়াল WhatsApp টুলের তুলনায় কেমন?' },
+          a: { en: 'Unofficial tools (WA Sender, etc.) risk permanent number bans, have no API, no support, no compliance. We use the official Meta API — zero ban risk, enterprise-grade.', bn: 'আনঅফিশিয়াল টুল (WA Sender ইত্যাদি) পার্মানেন্ট নম্বর ব্যান ঝুঁকি, কোনো API/সাপোর্ট/কমপ্লায়েন্স নেই। আমরা অফিশিয়াল Meta API — জিরো ব্যান ঝুঁকি, এন্টারপ্রাইজ-গ্রেড।' },
+        },
+        {
+          q: { en: 'Why not use Wati / Interakt / Twilio directly?', bn: 'সরাসরি Wati / Interakt / Twilio কেন না?' },
+          a: { en: 'They are platforms — you still need to build flows, train AI, integrate CRM, manage campaigns. We are a done-for-you service: strategy + setup + AI + optimisation + support.', bn: 'তারা প্ল্যাটফর্ম — আপনাকে ফ্লো বানাতে, AI ট্রেইন, CRM ইন্টিগ্রেট, ক্যাম্পেইন ম্যানেজ করতে হবে। আমরা ডান-ফর-ইউ সার্ভিস: স্ট্র্যাটেজি + সেটআপ + AI + অপ্টিমাইজেশন + সাপোর্ট।' },
+        },
+        {
+          q: { en: 'Is this cheaper than hiring a support agent?', bn: 'এটা কি সাপোর্ট এজেন্ট নিয়োগের চেয়ে সস্তা?' },
+          a: { en: 'Yes. A full-time agent costs ৳25,000–40,000/month + training + management. Our AI handles 80% of chats 24/7 for less. You hire humans only for complex escalations.', bn: 'হ্যাঁ। ফুল-টাইম এজেন্ট ২৫,০০০–৪০,০০০/মাস + ট্রেইনিং + ম্যানেজমেন্ট। আমাদের AI ২৪/৭ ৮০% চ্যাট সামলায় কম দামে। আপনি শুধু জটিল এসকেলেশনে মানুষ নেন।' },
+        },
+        {
+          q: { en: 'How does this compare to SMS marketing?', bn: 'SMS মার্কেটিংয়ের তুলনায় কেমন?' },
+          a: { en: 'SMS: ৳0.35/msg, 20% open, no media, no buttons. WhatsApp: rich media, interactive buttons, 98% open, 45% reply, better conversion. Lower cost-per-conversion overall.', bn: 'SMS: ৳০.৩৫/মেসেজ, ২০% ওপেন, কোনো মিডিয়া/বাটন নেই। WhatsApp: রিচ মিডিয়া, ইন্টারঅ্যাকটিভ বাটন, ৯৮% ওপেন, ৪৫% রিপ্লাই, ভাল কনভার্সন। কনভার্সন প্রতি খরচ কম।' },
+        },
+        {
+          q: { en: 'What makes you better than other Bangladesh agencies?', bn: 'আপনারা বাংলাদেশের অন্যান্য এজেন্সির চেয়ে কেন ভাল?' },
+          a: { en: 'We are AI-first (GPT-4 powered), not just template senders. We include CRM integration, custom flows, ROI guarantee and dedicated support — most local agencies only configure the API.', bn: 'আমরা AI-ফার্স্ট (GPT-4 চালিত), শুধু টেমপ্লেট পাঠাই না। CRM ইন্টিগ্রেশন, কাস্টম ফ্লো, ROI গ্যারান্টি ও ডেডিকেটেড সাপোর্ট — বেশিরভাগ লোকাল এজেন্সি শুধু API কনফিগার করে।' },
+        },
+        {
+          q: { en: 'Can I switch from another provider easily?', bn: 'অন্য প্রোভাইডার থেকে সহজে সুইচ করতে পারব?' },
+          a: { en: 'Yes. We handle the entire migration: number porting, template migration, contact import, flow recreation. Zero downtime, typically completed in 3–5 days.', bn: 'হ্যাঁ। আমরা পুরো মাইগ্রেশন: নম্বর পোর্টিং, টেমপ্লেট মাইগ্রেশন, কন্টাক্ট ইম্পোর্ট, ফ্লো রিক্রিয়েশন। জিরো ডাউনটাইম, সাধারণত ৩–৫ দিনে।' },
+        },
+        {
+          q: { en: 'Do you offer white-label for resellers?', bn: 'আপনারা কি রিসেলারের জন্য হোয়াইট-লেবেল দেন?' },
+          a: { en: 'Yes. Enterprise plan includes white-label dashboard, your brand, your domain, your pricing. Perfect for agencies wanting to resell WhatsApp automation under their brand.', bn: 'হ্যাঁ। এন্টারপ্রাইজ প্ল্যানে হোয়াইট-লেবেল ড্যাশবোর্ড, আপনার ব্র্যান্ড, ডোমেইন, প্রাইসিং। এজেন্সির জন্য পারফেক্ট যারা নিজের ব্র্যান্ডে রিসেল করতে চায়।' },
+        },
+      ],
+    },
+    {
+      name: { en: 'Getting Started', bn: 'শুরু করা' },
+      items: [
+        {
+          q: { en: 'What happens after I book a call?', bn: 'কল বুক করার পর কী হয়?' },
+          a: { en: '30-min strategy call: we audit your current setup, map your use cases, design a flow, project your ROI and recommend a plan. No pressure, no obligation.', bn: '৩০-মিনিট স্ট্র্যাটেজি কল: আমরা বর্তমান সেটআপ অডিট, ইউজ-কেস ম্যাপ, ফ্লো ডিজাইন, ROI প্রজেক্ট ও প্ল্যান রেকমেন্ড। কোনো চাপ নেই, কোনো বাধ্যবাধকতা নেই।' },
+        },
+        {
+          q: { en: 'What do I need to prepare for the call?', bn: 'কলের জন্য কী প্রস্তুত করতে হবে?' },
+          a: { en: 'Just your goals (more sales? less support cost? better follow-up?). We bring everything else — demos, case studies, ROI model, flow templates.', bn: 'শুধু আপনার লক্ষ্য (বেশি সেলস? কম সাপোর্ট খরচ? ভাল ফলো-আপ?)। বাকি সব আমরা আনই — ডেমো, কেস স্টাডি, ROI মডেল, ফ্লো টেমপ্লেট।' },
+        },
+        {
+          q: { en: 'How fast can we go live?', bn: 'কত দ্রুত লাইভ হতে পারি?' },
+          a: { en: 'After the call: contract same day, verification starts next day, go-live in 3–5 days (Starter) or 7–10 days (Enterprise with custom integrations).', bn: 'কলের পর: একই দিনে চুক্তি, পরের দিন ভেরিফিকেশন শুরু, ৩–৫ দিনে লাইভ (স্টার্টার) বা ৭–১০ দিন (কাস্টম ইন্টিগ্রেশনসহ এন্টারপ্রাইজ)।' },
+        },
+        {
+          q: { en: 'Do you sign NDAs?', bn: 'আপনারা কি NDA সাইন করেন?' },
+          a: { en: 'Yes. We sign mutual NDAs before the strategy call if you have sensitive information. Standard MSA and DPA (Data Processing Agreement) provided for Enterprise.', bn: 'হ্যাঁ। সংবেদনশীল তথ্য থাকলে স্ট্র্যাটেজি কলের আগে মিউচুয়াল NDA সাইন করি। এন্টারপ্রাইজের জন্য স্ট্যান্ডার্ড MSA ও DPA।' },
+        },
+        {
+          q: { en: 'Can I start with a pilot?', bn: 'আমি কি পাইলট দিয়ে শুরু করতে পারি?' },
+          a: { en: 'Yes. Start with one use case (e.g. cart recovery) on the Starter plan. Prove ROI in 60 days, then scale to full automation. The guarantee covers the pilot.', bn: 'হ্যাঁ। স্টার্টার প্ল্যানে এক ইউজ-কেস (যেমন কার্ট রিকভারি) দিয়ে শুরু করুন। ৬০ দিনে ROI প্রমাণ করুন, তারপর ফুল অটোমেশনে স্কেল। গ্যারান্টি পাইলট কভার করে।' },
+        },
+        {
+          q: { en: 'What if I am not technical?', bn: 'আমি যদি টেকনিক্যাল না হই?' },
+          a: { en: 'Perfect — most of our clients are not. We handle all technical work: API setup, verification, flows, AI training, integrations. You focus on your business.', bn: 'পারফেক্ট — আমাদের বেশিরভাগ ক্লায়েন্ট টেকনিক্যাল না। আমরা সব টেকনিক্যাল কাজ: API সেটআপ, ভেরিফিকেশন, ফ্লো, AI ট্রেইনিং, ইন্টিগ্রেশন। আপনি আপনার বিজনেসে ফোকাস করুন।' },
         },
       ],
     },
@@ -1610,6 +1851,55 @@ export const OBJECTIONS = {
       response: {
         en: 'WhatsApp has 2B+ users and 90% open rate in Bangladesh. Your customers are already on it daily. They prefer WhatsApp over phone calls and emails. You are meeting them where they already are.',
         bn: 'WhatsApp-এ ২B+ ব্যবহারকারী এবং বাংলাদেশে ৯০% ওপেন রেট। আপনার গ্রাহকরা ইতিমধ্যেই প্রতিদিন এতে আছে। তারা ফোন কল ও ইমেইলের চেয়ে WhatsApp পছন্দ করে। আপনি তাদের যেখানে আছে সেখানেই দেখা করছেন।',
+      },
+    },
+    {
+      objection: { en: '"I have been burned by agencies before."', bn: '"আমি আগে এজেন্সি দিয়ে পুড়েছি।"' },
+      response: {
+        en: 'We understand. That is why we offer the 60-day ROI guarantee — if we do not deliver, you get 100% back. We also give you direct dashboard access from day 1, weekly reports, and a dedicated success manager. Full transparency, no black box.',
+        bn: 'আমরা বুঝি। তাই ৬০-দিন ROI গ্যারান্টি — ডেলিভারি না করলে ১০০% ফেরত। প্রথম দিন থেকে ড্যাশবোর্ড অ্যাক্সেস, সাপ্তাহিক রিপোর্ট ও ডেডিকেটেড সাকসেস ম্যানেজার। সম্পূর্ণ স্বচ্ছতা, কোনো ব্ল্যাক বক্স নেই।',
+      },
+    },
+    {
+      objection: { en: '"I need to think about it."', bn: '"আমাকে ভাবতে হবে।"' },
+      response: {
+        en: 'Of course. But remember: every day you wait, you lose leads, sales and customers to competitors who already automated. The average client recovers the cost in 30 days. Book the free call — no commitment — and see your ROI projection. Then decide.',
+        bn: 'অবশ্যই। কিন্তু মনে রাখুন: প্রতিদিন অপেক্ষা করলে আপনি লিড, সেলস ও গ্রাহক হারাচ্ছেন যারা অটোমেট করেছে তাদের কাছে। গড় ক্লায়েন্ট ৩০ দিনে খরচ তোলে। ফ্রি কল বুক করুন — কোনো কমিটমেন্ট নেই — ROI প্রজেকশন দেখুন। তারপর সিদ্ধান্ত নিন।',
+      },
+    },
+    {
+      objection: { en: '"My industry is different."', bn: '"আমার ইন্ডাস্ট্রি আলাদা।"' },
+      response: {
+        en: 'We serve 13+ industries — e-commerce, healthcare, education, real estate, restaurants, logistics, finance and more. Each gets a custom flow. Book the call and we will show you 2–3 case studies from your exact industry with real results.',
+        bn: 'আমরা ১৩+ ইন্ডাস্ট্রি সেবা দিই — ই-কমার্স, হেলথকেয়ার, শিক্ষা, রিয়েল এস্টেট, রেস্টুরেন্ট, লজিস্টিকস, ফাইন্যান্স ইত্যাদি। প্রতিটিতে কাস্টম ফ্লো। কল বুক করুন, আপনার ইন্ডাস্ট্রির ২–৩টি কেস স্টাডি আসল ফলাফল সহ দেখাব।',
+      },
+    },
+    {
+      objection: { en: '"I do not trust AI to talk to my customers."', bn: '"আমি AI-কে গ্রাহকের সাথে কথা বলতে দিতে চাই না।"' },
+      response: {
+        en: 'You stay in control. Set the AI confidence threshold — anything below it escalates to your team. Review and approve responses. The AI never sends payments, deletes data or makes commitments without your rules. It is your assistant, not your replacement.',
+        bn: 'আপনি নিয়ন্ত্রণে থাকেন। AI কনফিডেন্স থ্রেশহোল্ড সেট করুন — নিচে হলে আপনার টিমে যায়। রেসপন্স রিভিউ ও অ্যাপ্রুভ করুন। AI কখনও পেমেন্ট পাঠায়, ডেটা ডিলিট বা কমিটমেন্ট করে না আপনার নিয়ম ছাড়া। এটা আপনার অ্যাসিস্ট্যান্ট, রিপ্লেসমেন্ট না।',
+      },
+    },
+    {
+      objection: { en: '"I am already doing fine without it."', bn: '"আমি এটা ছাড়াই ভাল করছি।"' },
+      response: {
+        en: 'Great — that means you have volume to leverage. Our clients who were "doing fine" saw 30–60% more revenue after automating, because they stopped losing the leads they could not follow up with manually. Fine becomes exceptional.',
+        bn: 'দারুণ — মানে আপনার ভলিউম আছে লিভারেজ করার। "ভাল করছিল" এমন ক্লায়েন্টরা অটোমেট করে ৩০–৬০% বেশি রেভিনিউ দেখে, কারণ ম্যানুয়ালি ফলো-আপ করতে না পারা লিড হারানো বন্ধ হয়। ভাল হয়ে যায় এক্সেপশনাল।',
+      },
+    },
+    {
+      objection: { en: '"Can I not just do this myself for free?"', bn: '"আমি কি নিজেই ফ্রি করতে পারি না?"' },
+      response: {
+        en: 'You can set up the WhatsApp Business app for free — but it is 1 device, 1 agent, no automation, 256 broadcast limit, no CRM, no analytics. Building the equivalent of our system yourself takes 6+ months, ৳15L+ in developer costs, and ongoing maintenance. We save you that.',
+        bn: 'WhatsApp Business অ্যাপ ফ্রি সেটআপ করতে পারেন — কিন্তু সেটা ১ ডিভাইস, ১ এজেন্ট, কোনো অটোমেশন, ২৫৬ ব্রডকাস্ট লিমিট, কোনো CRM/অ্যানালিটিক্স নেই। আমাদের সিস্টেমের সমতুল্য নিজে বানাতে ৬+ মাস, ৳১৫L+ ডেভেলপার খরচ ও চলমান মেইনটেন্যান্স। আমরা সেটা বাঁচাই।',
+      },
+    },
+    {
+      objection: { en: '"What if Meta changes their policy?"', bn: '"Meta পলিসি বদলালে?"' },
+      response: {
+        en: 'We monitor Meta policy changes daily and adapt your setup automatically. We are a Meta-partner-ready agency — we get early access to policy updates. Your system stays compliant without you lifting a finger. Plus, our architecture supports fallback channels (SMS, email) if ever needed.',
+        bn: 'আমরা Meta পলিসি পরিবর্তন প্রতিদিন মনিটর করি এবং আপনার সেটআপ অটোমেটিক অ্যাডাপ্ট করি। আমরা Meta-পার্টনার-রেডি এজেন্সি — পলিসি আপডেটে আগে অ্যাক্সেস পাই। আপনার সিস্টেম কমপ্লায়েন্ট থাকে আপনি না টুঁশও করে। প্লাস, ফলব্যাক চ্যানেল (SMS, ইমেইল) সাপোর্ট আছে।',
       },
     },
   ],
@@ -1744,6 +2034,38 @@ export const TRUST = {
       author: { en: 'Faisal Rahman', bn: 'ফয়সাল রহমান' },
       role: { en: 'Operations Lead, QuickShip', bn: 'অপারেশনস লিড, কুইকশিপ' },
     },
+    {
+      quote: {
+        en: 'Payment links in chat changed everything. Customers pay instantly via bKash without leaving WhatsApp. Our cash-on-delivery refusals dropped 70%.',
+        bn: 'চ্যাটে পেমেন্ট লিংক সব বদলে দিয়েছে। গ্রাহক WhatsApp ছাড়াই bKash দিয়ে তাৎক্ষণিক পেমেন্ট করে। ক্যাশ-অন-ডেলিভারি রিফিউজাল ৭০% কমেছে।',
+      },
+      author: { en: 'Sumaiya Akter', bn: 'সুমাইয়া আক্তার' },
+      role: { en: 'Co-founder, GlowBeauty BD', bn: 'কো-ফাউন্ডার, গ্লোবিউটি বিডি' },
+    },
+    {
+      quote: {
+        en: 'Broadcast campaigns with segmentation gave us 45% reply rate. Email gave us 6%. We shifted our entire marketing budget to WhatsApp. 8x better ROI.',
+        bn: 'সেগমেন্টেশন সহ ব্রডকাস্ট ক্যাম্পেইনে আমরা ৪৫% রিপ্লাই রেট পেয়েছি। ইমেইলে পেতাম ৬%। আমরা পুরো মার্কেটিং বাজেট WhatsApp-এ সরিয়েছি। ৮x ভাল ROI।',
+      },
+      author: { en: 'Imran Kabir', bn: 'ইমরান কবির' },
+      role: { en: 'CMO, TechBazaar', bn: 'সিএমও, টেকবাজার' },
+    },
+    {
+      quote: {
+        en: 'The voice agent is a game-changer. Half my customers send voice notes instead of typing. The AI transcribes, understands and replies — in Bangla. No more missed voice messages.',
+        bn: 'ভয়েস এজেন্ট গেম-চেঞ্জার। আমার অর্ধেক গ্রাহক টাইপের বদলে ভয়েস নোট পাঠায়। AI ট্রান্সক্রাইব করে, বোঝে এবং উত্তর দেয় — বাংলায়। আর কোনো ভয়েস মেসেজ মিস হয় না।',
+      },
+      author: { en: 'Mizanur Rahman', bn: 'মিজানুর রহমান' },
+      role: { en: 'Owner, Spice Garden Restaurant', bn: 'মালিক, স্পাইস গার্ডেন রেস্টুরেন্ট' },
+    },
+    {
+      quote: {
+        en: 'We migrated from Wati to NextGen. The migration took 4 days, zero downtime. The AI is 10x smarter, the dashboard is cleaner, and the support team actually responds in minutes, not days.',
+        bn: 'আমরা Wati থেকে NextGen-এ মাইগ্রেট করেছি। মাইগ্রেশন ৪ দিনে, জিরো ডাউনটাইম। AI ১০x স্মার্ট, ড্যাশবোর্ড ক্লিনার, এবং সাপোর্ট টিম আসলেই মিনিটে সাড়া দেয়, দিনে নয়।',
+      },
+      author: { en: 'Anika Tabassum', bn: 'আনিকা তাবাসসুম' },
+      role: { en: 'Head of Digital, PharmaPlus', bn: 'হেড অফ ডিজিটাল, ফার্মাপ্লাস' },
+    },
   ],
   stats: [
     { value: '120+', label: { en: 'Businesses served', bn: 'সেবা প্রাপ্ত ব্যবসা' } },
@@ -1823,11 +2145,13 @@ export const SECURITY = {
   ],
   compliance: [
     { en: 'GDPR', bn: 'GDPR' },
+    { en: 'ISO 27001', bn: 'ISO 27001' },
+    { en: 'SOC 2 Type II', bn: 'SOC 2 Type II' },
+    { en: 'PCI DSS', bn: 'PCI DSS' },
+    { en: 'Meta Business Policy', bn: 'Meta বিজনেস পলিসি' },
     { en: 'Bangladesh ICT Act 2006', bn: 'বাংলাদেশ ICT অ্যাক্ট ২০০৬' },
     { en: 'Digital Security Act 2018', bn: 'ডিজিটাল সিকিউরিটি অ্যাক্ট ২০১৮' },
-    { en: 'Meta Business Policy', bn: 'Meta বিজনেস পলিসি' },
-    { en: 'PCI DSS (payments)', bn: 'PCI DSS (পেমেন্ট)' },
-    { en: 'SOC 2 Type II (Enterprise)', bn: 'SOC 2 Type II (এন্টারপ্রাইজ)' },
+    { en: 'CCPA', bn: 'CCPA' },
   ],
 }
 
@@ -1901,7 +2225,268 @@ export const STICKY_CTA = {
 }
 
 /* ========================================================================== */
-/*  31. SECTION ORDER (for the client renderer)                                */
+/*  31. LEAD QUALIFICATION CALCULATOR                                          */
+/* ========================================================================== */
+
+export const LEAD_QUAL_CALC = {
+  eyebrow: { en: 'Are you a good fit?', bn: 'আপনি কি উপযুক্ত?' } as Bilingual,
+  title: {
+    en: 'WhatsApp Automation Fit Score',
+    bn: 'WhatsApp অটোমেশন ফিট স্কোর',
+  } as Bilingual,
+  subtitle: {
+    en: 'Answer 5 quick questions. See instantly if WhatsApp automation will work for your business.',
+    bn: '৫টি দ্রুত প্রশ্নের উত্তর দিন। WhatsApp অটোমেশন আপনার ব্যবসার জন্য কাজ করবে কিনা তাৎক্ষণিক দেখুন।',
+  } as Bilingual,
+  questions: [
+    {
+      q: { en: 'How many WhatsApp messages does your business receive per day?', bn: 'আপনার ব্যবসায় প্রতিদিন কয়টি WhatsApp মেসেজ আসে?' } as Bilingual,
+      options: [
+        { label: { en: 'Less than 10', bn: '১০-এর কম' } as Bilingual, score: 1 },
+        { label: { en: '10–50', bn: '১০–৫০' } as Bilingual, score: 2 },
+        { label: { en: '50–200', bn: '৫০–২০০' } as Bilingual, score: 3 },
+        { label: { en: '200+', bn: '২০০+' } as Bilingual, score: 4 },
+      ],
+    },
+    {
+      q: { en: 'How fast do you currently respond to customer messages?', bn: 'আপনি বর্তমানে গ্রাহকের মেসেজে কত দ্রুত উত্তর দেন?' } as Bilingual,
+      options: [
+        { label: { en: 'Within 1 hour', bn: '১ ঘন্টার মধ্যে' } as Bilingual, score: 4 },
+        { label: { en: 'Same day', bn: 'একই দিনে' } as Bilingual, score: 3 },
+        { label: { en: 'Next day', bn: 'পরের দিন' } as Bilingual, score: 2 },
+        { label: { en: 'Often miss / no reply', bn: 'প্রায়ই মিস / কোনো রিপ্লাই নেই' } as Bilingual, score: 1 },
+      ],
+    },
+    {
+      q: { en: 'Do you sell products or services that need customer communication?', bn: 'আপনি কি এমন প্রোডাক্ট/সেবা বিক্রি করেন যাতে গ্রাহক যোগাযোগ দরকার?' } as Bilingual,
+      options: [
+        { label: { en: 'Yes, lots of questions before purchase', bn: 'হ্যাঁ, কেনার আগে অনেক প্রশ্ন' } as Bilingual, score: 4 },
+        { label: { en: 'Some questions / support needed', bn: 'কিছু প্রশ্ন / সাপোর্ট দরকার' } as Bilingual, score: 3 },
+        { label: { en: 'Minimal communication needed', bn: 'ন্যূনতম যোগাযোগ দরকার' } as Bilingual, score: 2 },
+        { label: { en: 'One-time purchase, no follow-up', bn: 'এককালীন কেনা, কোনো ফলো-আপ নেই' } as Bilingual, score: 1 },
+      ],
+    },
+    {
+      q: { en: 'What is your average customer value (lifetime)?', bn: 'আপনার গড় গ্রাহক ভ্যালু (লাইফটাইম) কত?' } as Bilingual,
+      options: [
+        { label: { en: 'Under ৳1,000', bn: '৳১,০০০-এর কম' } as Bilingual, score: 1 },
+        { label: { en: '৳1,000–৳5,000', bn: '৳১,০০০–৳৫,০০০' } as Bilingual, score: 2 },
+        { label: { en: '৳5,000–৳25,000', bn: '৳৫,০০০–৳২৫,০০০' } as Bilingual, score: 3 },
+        { label: { en: '৳25,000+', bn: '৳২৫,০০০+' } as Bilingual, score: 4 },
+      ],
+    },
+    {
+      q: { en: 'Are you currently running ads (Facebook/Google) or marketing campaigns?', bn: 'আপনি কি বর্তমানে অ্যাড (Facebook/Google) বা মার্কেটিং ক্যাম্পেইন চালাচ্ছেন?' } as Bilingual,
+      options: [
+        { label: { en: 'Yes, actively running ads', bn: 'হ্যাঁ, সক্রিয়ভাবে অ্যাড চালাচ্ছি' } as Bilingual, score: 4 },
+        { label: { en: 'Occasionally run campaigns', bn: 'মাঝে মাঝে ক্যাম্পেইন চালাই' } as Bilingual, score: 3 },
+        { label: { en: 'Planning to start soon', bn: 'শিগগির শুরু করার পরিকল্পনা' } as Bilingual, score: 2 },
+        { label: { en: 'No marketing currently', bn: 'বর্তমানে কোনো মার্কেটিং নেই' } as Bilingual, score: 1 },
+      ],
+    },
+  ],
+  results: [
+    {
+      min: 18,
+      max: 20,
+      label: { en: 'Perfect Fit', bn: 'পারফেক্ট ফিট' } as Bilingual,
+      color: 'emerald',
+      verdict: {
+        en: 'WhatsApp automation will transform your business. You are losing revenue every day without it. Book a call now — projected ROI 6–10x.',
+        bn: 'WhatsApp অটোমেশন আপনার ব্যবসা বদলে দেবে। এটা ছাড়া আপনি প্রতিদিন রেভিনিউ হারাচ্ছেন। এখনই কল বুক করুন — প্রজেক্টেড ROI ৬–১০x।',
+      } as Bilingual,
+      cta: { en: 'Book Your Free Call', bn: 'ফ্রি কল বুক করুন' } as Bilingual,
+    },
+    {
+      min: 14,
+      max: 17,
+      label: { en: 'Great Fit', bn: 'দারুণ ফিট' } as Bilingual,
+      color: 'emerald',
+      verdict: {
+        en: 'You will see strong ROI within 60 days. Your business has the volume and value to benefit massively. Book a call to see your projection.',
+        bn: '৬০ দিনের মধ্যে শক্তিশালী ROI দেখবেন। আপনার ব্যবসার ভলিউম ও ভ্যালু আছে। প্রজেকশন দেখতে কল বুক করুন।',
+      } as Bilingual,
+      cta: { en: 'See My ROI Projection', bn: 'ROI প্রজেকশন দেখুন' } as Bilingual,
+    },
+    {
+      min: 10,
+      max: 13,
+      label: { en: 'Good Fit', bn: 'ভাল ফিট' } as Bilingual,
+      color: 'amber',
+      verdict: {
+        en: 'WhatsApp automation will help, but results depend on your specific use case. Book a call to map the best strategy for your business.',
+        bn: 'WhatsApp অটোমেশন সাহায্য করবে, কিন্তু ফলাফল আপনার ইউজ-কেসের উপর নির্ভর করে। সেরা স্ট্র্যাটেজি ম্যাপ করতে কল বুক করুন।',
+      } as Bilingual,
+      cta: { en: 'Map My Strategy', bn: 'স্ট্র্যাটেজি ম্যাপ করুন' } as Bilingual,
+    },
+    {
+      min: 5,
+      max: 9,
+      label: { en: 'Emerging Opportunity', bn: 'উদীয়মান সুযোগ' } as Bilingual,
+      color: 'amber',
+      verdict: {
+        en: 'You are early-stage. WhatsApp automation can still help you grow faster — especially for lead capture and nurturing. Book a call to explore.',
+        bn: 'আপনি প্রাথমিক স্টেজে। WhatsApp অটোমেশন আপনাকে দ্রুত বাড়তে সাহায্য করতে পারে — বিশেষ করে লিড ক্যাপচার ও নার্চারিংয়ে। এক্সপ্লোর করতে কল বুক করুন।',
+      } as Bilingual,
+      cta: { en: 'Explore Options', bn: 'অপশন এক্সপ্লোর করুন' } as Bilingual,
+    },
+  ],
+  retake: { en: 'Retake quiz', bn: 'কুইজ আবার দিন' } as Bilingual,
+}
+
+/* ========================================================================== */
+/*  32. BROADCAST REACH ESTIMATOR                                              */
+/* ========================================================================== */
+
+export const BROADCAST_ESTIMATOR = {
+  eyebrow: { en: 'Plan your campaign', bn: 'ক্যাম্পেইন প্ল্যান করুন' } as Bilingual,
+  title: {
+    en: 'WhatsApp Broadcast Reach Estimator',
+    bn: 'WhatsApp ব্রডকাস্ট রিচ এস্টিমেটর',
+  } as Bilingual,
+  subtitle: {
+    en: 'See exactly how many people will open, read and buy from your next WhatsApp broadcast.',
+    bn: 'আপনার পরবর্তী WhatsApp ব্রডকাস্টে কতজন ওপেন, রিড ও কিনবে তা সঠিকভাবে দেখুন।',
+  } as Bilingual,
+  sliders: {
+    audience: {
+      label: { en: 'Audience size (contacts)', bn: 'অডিয়েন্স সাইজ (কন্টাক্ট)' },
+      min: 100,
+      max: 100000,
+      step: 100,
+      default: 5000,
+    },
+    openRate: {
+      label: { en: 'Expected open rate (%)', bn: 'প্রত্যাশিত ওপেন রেট (%)' },
+      min: 70,
+      max: 99,
+      step: 1,
+      default: 95,
+    },
+    ctr: {
+      label: { en: 'Click-through rate (%)', bn: 'ক্লিক-থ্রু রেট (%)' },
+      min: 5,
+      max: 50,
+      step: 1,
+      default: 25,
+    },
+    conversion: {
+      label: { en: 'Conversion rate (%)', bn: 'কনভার্সন রেট (%)' },
+      min: 1,
+      max: 30,
+      step: 1,
+      default: 8,
+    },
+    aov: {
+      label: { en: 'Average order value (৳)', bn: 'গড় অর্ডার ভ্যালু (৳)' },
+      min: 200,
+      max: 50000,
+      step: 100,
+      default: 2500,
+    },
+  },
+  results: {
+    opens: { label: { en: 'Will open your message', bn: 'আপনার মেসেজ ওপেন করবে' } },
+    clicks: { label: { en: 'Will click your link', bn: 'আপনার লিংকে ক্লিক করবে' } },
+    buyers: { label: { en: 'Will make a purchase', bn: 'কেনাকাটা করবে' } },
+    revenue: { label: { en: 'Estimated revenue', bn: 'এস্টিমেটেড রেভিনিউ' } },
+    emailComparison: { label: { en: 'vs email (same audience)', bn: 'ইমেইলের তুলনায় (একই অডিয়েন্স)' } },
+  },
+  note: {
+    en: 'Based on industry benchmarks. WhatsApp averages 98% open / 45% CTR / 8% conversion. Your results may vary based on audience quality and offer.',
+    bn: 'ইন্ডাস্ট্রি বেঞ্চমার্কের উপর ভিত্তি। WhatsApp গড় ৯৮% ওপেন / ৪৫% CTR / ৮% কনভার্সন। অডিয়েন্স কোয়ালিটি ও অফার অনুযায়ী ফলাফল ভিন্ন হতে পারে।',
+  } as Bilingual,
+}
+
+/* ========================================================================== */
+/*  33. INTEGRATIONS MARQUEE                                                  */
+/* ========================================================================== */
+
+export const INTEGRATIONS = {
+  eyebrow: { en: 'Connects with your stack', bn: 'আপনার স্ট্যাকের সাথে কানেক্ট' } as Bilingual,
+  title: {
+    en: 'Integrates with 5,000+ tools you already use',
+    bn: 'আপনার ব্যবহৃত ৫,০০০+ টুলের সাথে ইন্টিগ্রেট',
+  } as Bilingual,
+  subtitle: {
+    en: 'Native CRM connections + Zapier/Make/n8n for everything else. Your data flows seamlessly.',
+    bn: 'নেটিভ CRM কানেকশন + বাকি সবের জন্য Zapier/Make/n8n। আপনার ডেটা সহজে প্রবাহিত।',
+  } as Bilingual,
+  items: [
+    'HubSpot', 'GoHighLevel', 'Zoho', 'Salesforce', 'Pipedrive',
+    'Google Sheets', 'Zapier', 'Make', 'n8n', 'Shopify',
+    'WooCommerce', 'Stripe', 'bKash', 'Nagad', 'SSL Commerz',
+    'Facebook Ads', 'Google Ads', 'Mailchimp', 'Calendly', 'Slack',
+    'Notion', 'Airtable', 'Webflow', 'WordPress', 'Meta Business',
+  ],
+}
+
+/* ========================================================================== */
+/*  34. BEFORE / AFTER TRANSFORMATION                                         */
+/* ========================================================================== */
+
+export const BEFORE_AFTER = {
+  eyebrow: { en: 'The transformation', bn: 'ট্রান্সফরমেশন' } as Bilingual,
+  title: {
+    en: 'Before vs After WhatsApp Automation',
+    bn: 'WhatsApp অটোমেশনের আগে বনাম পরে',
+  } as Bilingual,
+  subtitle: {
+    en: 'What changes when you switch from manual WhatsApp to an AI-powered automation system.',
+    bn: 'ম্যানুয়াল WhatsApp থেকে AI-চালিত অটোমেশন সিস্টেমে সুইচ করলে কী বদলায়।',
+  } as Bilingual,
+  pairs: [
+    {
+      before: { en: 'Reply in 2–6 hours', bn: '২–৬ ঘন্টায় রিপ্লাই' } as Bilingual,
+      after: { en: 'Reply in under 3 seconds', bn: '৩ সেকেন্ডের মধ্যে রিপ্লাই' } as Bilingual,
+    },
+    {
+      before: { en: '80% of leads go cold', bn: '৮০% লিড কোল্ড হয়' } as Bilingual,
+      after: { en: '0% leads lost — instant follow-up', bn: '০% লিড হারানো — তাৎক্ষণিক ফলো-আপ' } as Bilingual,
+    },
+    {
+      before: { en: 'Manual one-by-one messaging', bn: 'ম্যানুয়াল এক-এক করে মেসেজ' } as Bilingual,
+      after: { en: '10,000+ personalised messages instantly', bn: '১০,০০০+ পার্সোনালাইজড মেসেজ তাৎক্ষণিক' } as Bilingual,
+    },
+    {
+      before: { en: 'No idea what converts', bn: 'কী কনভার্ট করে জানি না' } as Bilingual,
+      after: { en: 'Full analytics on every metric', bn: 'প্রতিটি মেট্রিকে ফুল অ্যানালিটিক্স' } as Bilingual,
+    },
+    {
+      before: { en: 'Customers call repeatedly for updates', bn: 'গ্রাহক বারবার আপডেটে ফোন করে' } as Bilingual,
+      after: { en: 'Automated order tracking, 70% fewer calls', bn: 'অটোমেটেড অর্ডার ট্র্যাকিং, ৭০% কম কল' } as Bilingual,
+    },
+    {
+      before: { en: 'Hire more agents as you grow', bn: 'বাড়ার সাথে বেশি এজেন্ট নিয়োগ' } as Bilingual,
+      after: { en: 'AI scales infinitely, cost stays flat', bn: 'AI আনলিমিটেড স্কেল, খরচ সমান' } as Bilingual,
+    },
+    {
+      before: { en: 'Cart abandonment = lost revenue', bn: 'কার্ট অ্যাব্যান্ডনমেন্ট = হারানো রেভিনিউ' } as Bilingual,
+      after: { en: 'Auto cart recovery, 30% recovered', bn: 'অটো কার্ট রিকভারি, ৩০% ফেরত' } as Bilingual,
+    },
+    {
+      before: { en: '20% open rate (email)', bn: '২০% ওপেন রেট (ইমেইল)' } as Bilingual,
+      after: { en: '98% open rate (WhatsApp)', bn: '৯৮% ওপেন রেট (WhatsApp)' } as Bilingual,
+    },
+  ],
+}
+
+/* ========================================================================== */
+/*  35. URGENCY BAND                                                           */
+/* ========================================================================== */
+
+export const URGENCY = {
+  badge: { en: 'Limited onboarding slots', bn: 'সীমিত অনবোর্ডিং স্লট' } as Bilingual,
+  text: {
+    en: 'Only 3 onboarding slots left this month. Book your call before they are gone.',
+    bn: 'এই মাসে মাত্র ৩টি অনবোর্ডিং স্লট বাকি। শেষ হওয়ার আগে কল বুক করুন।',
+  } as Bilingual,
+  cta: { en: 'Claim a slot', bn: 'স্লট ক্লেইম করুন' } as Bilingual,
+  slotsLabel: { en: 'slots remaining', bn: 'স্লট বাকি' } as Bilingual,
+}
+
+/* ========================================================================== */
+/*  36. SECTION ORDER (for the client renderer)                                */
 /* ========================================================================== */
 
 export const SECTION_ORDER = [
@@ -1920,11 +2505,14 @@ export const SECTION_ORDER = [
   'tech-stack',
   'benefits',
   'comparison',
+  'before-after',
   'case-studies',
   'statistics',
   'deliverables',
   'pricing',
   'roi-calculator',
+  'lead-qual-calculator',
+  'broadcast-estimator',
   'timeline',
   'process',
   'faq',
