@@ -6,6 +6,14 @@ import { LeadGenerationClient } from './lead-generation-client'
 import { FAQS, PRICING } from './lead-generation-data'
 import { WhatsAppAutomationClient } from './whatsapp-automation-client'
 import { FAQS as WA_FAQS, PRICING as WA_PRICING, TRUST as WA_TRUST } from './whatsapp-automation-data'
+import { CrmAutomationClient } from './crm-automation-client'
+import {
+  FAQS as CRM_FAQS,
+  PRICING as CRM_PRICING,
+  TESTIMONIALS as CRM_TESTIMONIALS,
+  HOW_IT_WORKS as CRM_HOW,
+  TIMELINE as CRM_TIMELINE,
+} from './crm-automation-data'
 
 export const dynamicParams = false
 
@@ -68,6 +76,53 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         description: 'Multi-channel AI lead engine. 60-day ROI guarantee. Book a free strategy call.',
       },
       alternates: { canonical: `${siteConfig.url}/services/lead-generation` },
+    }
+  }
+
+  // CRM Automation gets enhanced, keyword-rich SEO metadata.
+  if (slug === 'crm-automation') {
+    return {
+      title: {
+        absolute:
+          'CRM Automation Bangladesh — AI-Powered Revenue Operating System | NextGen Digital Studio',
+      },
+      description:
+        'AI-powered CRM automation: lead capture, scoring, assignment, follow-up, pipeline, AI chatbot, voice agent, dashboards. HubSpot, GoHighLevel, Salesforce. 3–10 day setup, 60-day ROI guarantee. Book a free strategy call.',
+      keywords: [
+        'CRM automation Bangladesh',
+        'CRM automation Dhaka',
+        'HubSpot setup Bangladesh',
+        'GoHighLevel Bangladesh',
+        'Salesforce setup Bangladesh',
+        'AI CRM automation',
+        'CRM automation agency Bangladesh',
+        'lead scoring Bangladesh',
+        'sales automation Bangladesh',
+        'pipeline automation Bangladesh',
+        'CRM integration Bangladesh',
+        'Zapier automation Bangladesh',
+        'Make automation Bangladesh',
+        'n8n automation Bangladesh',
+        'CRM automation Jessore',
+        'revenue operations Bangladesh',
+        'AI sales agent Bangladesh',
+        'CRM consultant Bangladesh',
+      ],
+      openGraph: {
+        title: 'CRM Automation — AI-Powered Revenue Operating System | NextGen Digital Studio',
+        description:
+          'AI-powered CRM automation: lead scoring, assignment, follow-up, pipeline, AI chatbot. HubSpot, GoHighLevel, Salesforce. 3–10 day setup. 60-day ROI guarantee. Bangladesh + worldwide.',
+        url: `${siteConfig.url}/services/crm-automation`,
+        siteName: siteConfig.name,
+        type: 'website',
+        images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'CRM Automation Service — NextGen Digital Studio' }],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: 'CRM Automation Bangladesh — AI-Powered Revenue Operating System',
+        description: 'AI-powered CRM automation. 60-day ROI guarantee. Book a free strategy call.',
+      },
+      alternates: { canonical: `${siteConfig.url}/services/crm-automation` },
     }
   }
 
@@ -330,10 +385,183 @@ function buildWhatsAppSchemas() {
   return [organizationSchema, serviceSchema, reviewSchema, breadcrumbSchema, faqSchema, howToSchema]
 }
 
+/** Build JSON-LD schemas for the crm-automation page.
+ *  Includes: Organization, Service (with offers + aggregateRating), Product
+ *  reviews, BreadcrumbList, FAQPage, and HowTo (implementation process). */
+function buildCrmSchemas() {
+  const url = `${siteConfig.url}/services/crm-automation`
+
+  const organizationSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: siteConfig.name,
+    url: siteConfig.url,
+    logo: `${siteConfig.url}/logo.png`,
+    image: `${siteConfig.url}/og-image.jpg`,
+    telephone: `+${siteConfig.whatsapp}`,
+    email: siteConfig.email,
+    description:
+      'NextGen Digital Studio — AI-powered CRM automation, lead generation and sales automation agency in Bangladesh.',
+    address: {
+      '@type': 'PostalAddress',
+      addressCountry: 'BD',
+      addressLocality: 'Jessore',
+      addressRegion: 'Khulna',
+    },
+    areaServed: ['Bangladesh', 'Dhaka', 'Chittagong', 'Khulna', 'Jessore'],
+    sameAs: [
+      'https://www.facebook.com/nextgendigitalstudio',
+      'https://www.linkedin.com/company/nextgendigitalstudio',
+      'https://www.youtube.com/@nextgendigitalstudio',
+      'https://wa.me/' + siteConfig.whatsapp,
+    ],
+  }
+
+  const serviceSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'CRM Automation Service',
+    serviceType: 'CRM Automation',
+    provider: {
+      '@type': 'Organization',
+      name: siteConfig.name,
+      url: siteConfig.url,
+      telephone: `+${siteConfig.whatsapp}`,
+      email: siteConfig.email,
+    },
+    brand: { '@type': 'Brand', name: 'NextGen AI CRM' },
+    audience: {
+      '@type': 'BusinessAudience',
+      audienceType: 'Small and medium businesses in Bangladesh',
+    },
+    areaServed: ['Bangladesh', 'Dhaka', 'Chittagong', 'Khulna', 'Jessore'],
+    description:
+      'AI-powered CRM automation: lead capture, scoring, assignment, follow-up, pipeline, AI chatbot, voice agent, dashboards. HubSpot, GoHighLevel, Salesforce, Zoho. 3–10 day setup, 60-day ROI guarantee.',
+    offers: CRM_PRICING.tiers.map((tier) => ({
+      '@type': 'Offer',
+      name: tier.name.en,
+      price: parseInt(tier.price.en.replace(/[^\d]/g, ''), 10) || 0,
+      priceCurrency: 'BDT',
+      description: tier.tagline.en,
+      availability: 'https://schema.org/InStock',
+      url,
+    })),
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.9',
+      reviewCount: '50',
+      bestRating: '5',
+      worstRating: '1',
+    },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', 'h2', '.speakable-summary'],
+    },
+  }
+
+  // Individual customer reviews (rich snippets)
+  const reviewSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: 'CRM Automation Service',
+    description:
+      'AI-powered CRM automation with lead scoring, follow-up sequences, pipeline management, AI chatbot, voice agent, and dashboards.',
+    brand: { '@type': 'Brand', name: 'NextGen Digital Studio' },
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.9',
+      reviewCount: '50',
+      bestRating: '5',
+    },
+    review: CRM_TESTIMONIALS.items.slice(0, 5).map((t) => ({
+      '@type': 'Review',
+      author: { '@type': 'Person', name: t.author.en },
+      reviewBody: t.quote.en,
+      reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
+    })),
+  }
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: siteConfig.url },
+      { '@type': 'ListItem', position: 2, name: 'Services', item: `${siteConfig.url}/services` },
+      { '@type': 'ListItem', position: 3, name: 'CRM Automation', item: url },
+    ],
+  }
+
+  const faqQuestions = CRM_FAQS.groups.flatMap((g) =>
+    g.items.map((item) => ({
+      '@type': 'Question',
+      name: item.q.en,
+      acceptedAnswer: { '@type': 'Answer', text: item.a.en },
+    })),
+  )
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqQuestions,
+  }
+
+  // HowTo schema for the implementation process — improves AI search visibility
+  const howToSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: 'How to implement AI-powered CRM automation',
+    description:
+      'A 4-step process to go from manual CRM to a fully automated AI-powered revenue engine in 3–10 days.',
+    totalTime: 'P5D',
+    step: [
+      { '@type': 'HowToStep', position: 1, name: CRM_HOW.steps[0].title.en, text: CRM_HOW.steps[0].desc.en },
+      { '@type': 'HowToStep', position: 2, name: CRM_HOW.steps[1].title.en, text: CRM_HOW.steps[1].desc.en },
+      { '@type': 'HowToStep', position: 3, name: CRM_HOW.steps[2].title.en, text: CRM_HOW.steps[2].desc.en },
+      { '@type': 'HowToStep', position: 4, name: CRM_HOW.steps[3].title.en, text: CRM_HOW.steps[3].desc.en },
+    ],
+  }
+
+  // HowTo schema for the implementation timeline (Day 1 → Month 2)
+  const timelineHowTo = {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: 'CRM automation implementation timeline',
+    description:
+      'A 60-day implementation roadmap from kickoff to optimisation, with milestones at Day 1, Day 3, Week 1, Week 2, Month 1 and Month 2.',
+    totalTime: 'P60D',
+    step: CRM_TIMELINE.phases.map((p, i) => ({
+      '@type': 'HowToStep',
+      position: i + 1,
+      name: `${p.phase.en} — ${p.title.en}`,
+      text: p.desc.en,
+    })),
+  }
+
+  return [organizationSchema, serviceSchema, reviewSchema, breadcrumbSchema, faqSchema, howToSchema, timelineHowTo]
+}
+
 export default async function ServiceLandingPage({ params }: Props) {
   const { slug } = await params
   const service = services.find((s) => s.slug === slug)
   if (!service) notFound()
+
+  // CRM Automation has a dedicated enterprise landing page (35 sections,
+  // interactive ROI calculator, CRM maturity assessment, bilingual EN/BN,
+  // exit popup, sticky CTA, urgency band).
+  if (slug === 'crm-automation') {
+    const schemas = buildCrmSchemas()
+    return (
+      <>
+        {schemas.map((schema, i) => (
+          <script
+            key={i}
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+          />
+        ))}
+        <CrmAutomationClient />
+      </>
+    )
+  }
 
   // Lead Generation has a dedicated enterprise landing page (21 sections,
   // interactive ROI calculator, bilingual EN/BN, exit popup, sticky CTA).
