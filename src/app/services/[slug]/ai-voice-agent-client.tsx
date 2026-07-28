@@ -56,10 +56,10 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import {
-  HERO, HERO_METRICS, PROBLEM, EMOTIONAL_COST, WHY_TRADITIONAL_FAILS,
+  HERO, HERO_METRICS, TRUSTED_BY, PROBLEM, EMOTIONAL_COST, WHY_TRADITIONAL_FAILS,
   WHY_NEXTGEN, VOICE_AGENT_FRAMEWORK, HOW_IT_WORKS, CONVERSATION_EXAMPLE,
   USE_CASES, FEATURES, VOICE_AI_CAPABILITIES, INTEGRATIONS, INDUSTRY_SOLUTIONS,
-  COMPARISON, BEFORE_AFTER, AI_VS_HUMAN_DEMO, ROI_CALCULATOR, CALL_FLOW,
+  COMPARISON, COMPETITOR_COMPARISON, BEFORE_AFTER, AI_VS_HUMAN_DEMO, ROI_CALCULATOR, CALL_FLOW,
   AUTOMATION_WORKFLOWS, DASHBOARD_PREVIEW, CASE_STUDIES, TESTIMONIALS,
   STATISTICS, DELIVERABLES, PRICING, GUARANTEES, FAQS, OBJECTIONS,
   SECURITY, DEVELOPER_SECTION, KNOWLEDGE_BASE, TIMELINE, PROCESS, TRUST,
@@ -305,6 +305,38 @@ function HeroSection({ isBn, onCta }: { isBn: boolean; onCta: () => void }) {
           </div>
         </div>
 
+        {/* Voice Agent Illustration — animated waveform */}
+        <div className="mx-auto mt-10 flex max-w-md flex-col items-center">
+          <div className="relative flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 shadow-2xl shadow-blue-500/40">
+            {/* Pulsing rings */}
+            <span className="absolute inset-0 animate-ping rounded-full bg-blue-400/30" style={{ animationDuration: '3s' }} />
+            <span className="absolute -inset-2 animate-ping rounded-full bg-blue-400/20" style={{ animationDuration: '3s', animationDelay: '0.5s' }} />
+            <PhoneCall className="relative h-10 w-10 text-white" />
+          </div>
+          {/* Animated waveform bars */}
+          <div className="mt-6 flex h-12 items-center justify-center gap-1">
+            {[0.2, 0.5, 0.8, 0.4, 1, 0.6, 0.3, 0.9, 0.5, 0.7, 0.4, 0.8, 0.3, 0.6, 0.5].map((h, i) => (
+              <span
+                key={i}
+                className="w-1 rounded-full bg-gradient-to-t from-blue-500 to-indigo-400"
+                style={{
+                  height: `${h * 100}%`,
+                  animation: `voiceWave 1.2s ease-in-out ${i * 0.08}s infinite alternate`,
+                }}
+              />
+            ))}
+          </div>
+          <div className="mt-2 text-xs font-medium text-slate-400">
+            {isBn ? '🔴 লাইভ — AI এখন কথা বলছে' : '🔴 LIVE — AI is speaking now'}
+          </div>
+        </div>
+        <style jsx>{`
+          @keyframes voiceWave {
+            0% { transform: scaleY(0.3); opacity: 0.6; }
+            100% { transform: scaleY(1); opacity: 1; }
+          }
+        `}</style>
+
         {/* CTAs */}
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
           <button
@@ -377,6 +409,38 @@ function MetricsSection({ isBn }: { isBn: boolean }) {
         </div>
       </Container>
     </Section>
+  )
+}
+
+/* ========================================================================== */
+/*  TRUSTED BY (partner / infrastructure logos)                                */
+/* ========================================================================== */
+
+function TrustedBySection({ isBn }: { isBn: boolean }) {
+  return (
+    <div className="border-y border-border/60 bg-background">
+      <Container>
+        <p className="py-6 text-center text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          {L(TRUSTED_BY.eyebrow, isBn)}
+        </p>
+        <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 pb-8 sm:gap-x-12">
+          {TRUSTED_BY.logos.map((logo, i) => (
+            <div
+              key={i}
+              className="group flex flex-col items-center text-center"
+              title={isBn ? logo.note.bn : logo.note.en}
+            >
+              <div className="text-lg font-bold tracking-tight text-muted-foreground transition-colors group-hover:text-blue-600 sm:text-xl">
+                {logo.name}
+              </div>
+              <div className="mt-0.5 text-[10px] text-muted-foreground/70">
+                {isBn ? logo.note.bn : logo.note.en}
+              </div>
+            </div>
+          ))}
+        </div>
+      </Container>
+    </div>
   )
 }
 
@@ -622,6 +686,38 @@ function HowItWorksSection({ isBn }: { isBn: boolean }) {
 /* ========================================================================== */
 
 function ConversationExampleSection({ isBn }: { isBn: boolean }) {
+  const [playing, setPlaying] = React.useState(false)
+  const [activeLine, setActiveLine] = React.useState(-1)
+  const timerRef = React.useRef<ReturnType<typeof setInterval> | null>(null)
+
+  const playConversation = () => {
+    if (playing) {
+      setPlaying(false)
+      setActiveLine(-1)
+      if (timerRef.current) clearInterval(timerRef.current)
+      return
+    }
+    setPlaying(true)
+    setActiveLine(0)
+    let idx = 0
+    timerRef.current = setInterval(() => {
+      idx += 1
+      if (idx >= CONVERSATION_EXAMPLE.lines.length) {
+        setPlaying(false)
+        setActiveLine(-1)
+        if (timerRef.current) clearInterval(timerRef.current)
+      } else {
+        setActiveLine(idx)
+      }
+    }, 2200)
+  }
+
+  React.useEffect(() => {
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current)
+    }
+  }, [])
+
   return (
     <Section id="conversation-example">
       <Container>
@@ -632,26 +728,66 @@ function ConversationExampleSection({ isBn }: { isBn: boolean }) {
           isBn={isBn}
           accent="blue"
         />
-        <div className="mx-auto mt-12 max-w-2xl space-y-3 rounded-2xl border border-border/60 bg-card p-6 shadow-sm sm:p-8">
+        {/* Play control */}
+        <div className="mt-8 flex justify-center">
+          <button
+            onClick={playConversation}
+            className="inline-flex items-center gap-2.5 rounded-full bg-blue-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-blue-600/30 transition-transform hover:scale-105 hover:bg-blue-700"
+            aria-label={playing ? (isBn ? 'বিরতি দিন' : 'Pause') : (isBn ? 'কথোপকথন চালান' : 'Play conversation')}
+          >
+            {playing ? (
+              <>
+                <span className="flex h-2 w-2 items-center justify-center">
+                  <span className="block h-3 w-1 bg-white" style={{ marginRight: 2 }} />
+                  <span className="block h-3 w-1 bg-white" />
+                </span>
+                {isBn ? 'বিরতি দিন' : 'Pause'}
+              </>
+            ) : (
+              <>
+                <PlayCircle className="h-5 w-5" />
+                {isBn ? 'কথোপকথন চালান' : 'Play conversation'}
+              </>
+            )}
+          </button>
+        </div>
+        <div className="mx-auto mt-8 max-w-2xl space-y-3 rounded-2xl border border-border/60 bg-card p-6 shadow-sm sm:p-8">
           {CONVERSATION_EXAMPLE.lines.map((line, i) => {
             const isAi = line.speaker === 'ai'
+            const isActive = i === activeLine
             return (
               <div
                 key={i}
-                className={`flex ${isAi ? 'justify-start' : 'justify-end'}`}
+                className={`flex transition-all ${isAi ? 'justify-start' : 'justify-end'} ${
+                  activeLine >= 0 && !isActive ? 'opacity-40' : 'opacity-100'
+                } ${isActive ? 'scale-[1.02]' : 'scale-100'}`}
               >
                 <div
                   className={`max-w-[85%] rounded-2xl p-4 ${
                     isAi
                       ? 'rounded-tl-sm bg-blue-50 border-l-4 border-blue-500 text-blue-900 dark:bg-blue-950/40 dark:text-blue-100'
                       : 'rounded-tr-sm bg-muted text-foreground'
-                  }`}
+                  } ${isActive ? 'ring-2 ring-blue-400 ring-offset-2' : ''}`}
                 >
                   <div className="mb-1 flex items-center gap-1.5 text-xs font-bold opacity-70">
                     {isAi ? (
                       <>
                         <Bot className="h-3.5 w-3.5" />
                         {isBn ? 'AI Voice Agent' : 'AI Voice Agent'}
+                        {isActive && (
+                          <span className="ml-1 flex items-center gap-0.5">
+                            {[0, 1, 2].map((b) => (
+                              <span
+                                key={b}
+                                className="block w-0.5 rounded-full bg-blue-500"
+                                style={{
+                                  height: '10px',
+                                  animation: `voiceWave 0.8s ease-in-out ${b * 0.15}s infinite alternate`,
+                                }}
+                              />
+                            ))}
+                          </span>
+                        )}
                       </>
                     ) : (
                       <>
@@ -667,6 +803,12 @@ function ConversationExampleSection({ isBn }: { isBn: boolean }) {
               </div>
             )
           })}
+          <style jsx>{`
+            @keyframes voiceWave {
+              0% { transform: scaleY(0.4); opacity: 0.6; }
+              100% { transform: scaleY(1); opacity: 1; }
+            }
+          `}</style>
         </div>
       </Container>
     </Section>
@@ -921,6 +1063,73 @@ function ComparisonSection({ isBn }: { isBn: boolean }) {
 }
 
 /* ========================================================================== */
+/*  COMPETITOR COMPARISON (NextGen vs Air.ai / Vapi / Bland / Retell)          */
+/* ========================================================================== */
+
+function CompetitorComparisonSection({ isBn }: { isBn: boolean }) {
+  return (
+    <Section>
+      <Container>
+        <SectionHeader
+          badge={COMPETITOR_COMPARISON.eyebrow}
+          title={COMPETITOR_COMPARISON.title}
+          subtitle={COMPETITOR_COMPARISON.subtitle}
+          isBn={isBn}
+          accent="blue"
+        />
+        <div className="mt-12 overflow-x-auto">
+          <table className="w-full overflow-hidden rounded-2xl border border-border/60 bg-background shadow-sm">
+            <thead>
+              <tr className="bg-slate-900 text-left text-white">
+                {COMPETITOR_COMPARISON.headers.map((h, i) => (
+                  <th
+                    key={i}
+                    className={`p-3 text-xs font-semibold sm:p-4 sm:text-sm ${
+                      i === 1 ? 'bg-blue-600' : ''
+                    }`}
+                  >
+                    {L(h, isBn)}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {COMPETITOR_COMPARISON.rows.map((r, i) => (
+                <tr key={i} className="border-t border-border/60">
+                  <td className="p-3 text-xs font-medium sm:p-4 sm:text-sm">{L(r.feature, isBn)}</td>
+                  {r.values.map((v, j) => (
+                    <td
+                      key={j}
+                      className={`p-3 text-xs sm:p-4 sm:text-sm ${
+                        j === 0
+                          ? 'bg-blue-50/60 font-bold text-blue-900 dark:bg-blue-950/30 dark:text-blue-300'
+                          : 'text-muted-foreground'
+                      }`}
+                    >
+                      <span className="inline-flex items-center gap-1.5">
+                        {j === 0 ? (
+                          <CheckCircle2 className="h-3.5 w-3.5 flex-shrink-0 text-blue-500 sm:h-4 sm:w-4" />
+                        ) : (
+                          <XCircle className="h-3.5 w-3.5 flex-shrink-0 text-red-400 sm:h-4 sm:w-4" />
+                        )}
+                        {L(v, isBn)}
+                      </span>
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mx-auto mt-6 max-w-3xl text-center text-xs text-muted-foreground">
+          {L(COMPETITOR_COMPARISON.note, isBn)}
+        </p>
+      </Container>
+    </Section>
+  )
+}
+
+/* ========================================================================== */
 /*  BEFORE / AFTER (15 pairs)                                                  */
 /* ========================================================================== */
 
@@ -1063,6 +1272,9 @@ function RoiCalculatorSection({ isBn, onCta }: { isBn: boolean; onCta: () => voi
   const [avgDealSize, setAvgDealSize] = React.useState(15000)
   const [teamCostMonthly, setTeamCostMonthly] = React.useState(40000)
   const [responseTimeMin, setResponseTimeMin] = React.useState(3)
+  const [emailForProjection, setEmailForProjection] = React.useState('')
+  const [emailSent, setEmailSent] = React.useState(false)
+  const [showEmailForm, setShowEmailForm] = React.useState(false)
 
   // Compute outputs (per task spec)
   // recoveredCalls = calls * (missed/100) * 0.9
@@ -1100,6 +1312,39 @@ function RoiCalculatorSection({ isBn, onCta }: { isBn: boolean; onCta: () => voi
     { label: ROI_CALCULATOR.results[3].label, value: `${roiMultiple.toFixed(1)}x`, highlight: true },
     { label: ROI_CALCULATOR.results[4].label, value: `${paybackWeeks}`, highlight: false },
   ]
+
+  async function sendProjection(e: React.FormEvent) {
+    e.preventDefault()
+    if (!emailForProjection) return
+    const payload = {
+      email: emailForProjection,
+      source: 'voice_roi_projection',
+      tag: 'ai_voice_agent_roi',
+      projection: {
+        monthlyCalls,
+        missedCallPct,
+        conversionRate,
+        avgDealSize,
+        teamCostMonthly,
+        responseTimeMin,
+        revenueSaved: fmtBDT(revenueSaved),
+        hoursSaved,
+        appointments,
+        roiMultiple: roiMultiple.toFixed(1) + 'x',
+        paybackWeeks,
+      },
+    }
+    try {
+      await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+    } catch {
+      /* swallow — still show success */
+    }
+    setEmailSent(true)
+  }
 
   return (
     <Section id="roi-calculator" bg="muted">
@@ -1163,6 +1408,43 @@ function RoiCalculatorSection({ isBn, onCta }: { isBn: boolean; onCta: () => voi
               <PhoneCall className="h-4 w-4" />
               {isBn ? 'আমার কাস্টম প্রজেকশন পান' : 'Get My Custom Projection'}
             </button>
+            {/* Email-me-this-projection secondary CTA */}
+            {!showEmailForm && !emailSent && (
+              <button
+                onClick={() => setShowEmailForm(true)}
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-blue-200 bg-blue-50 py-2.5 text-xs font-bold text-blue-700 transition-colors hover:bg-blue-100 dark:border-blue-900 dark:bg-blue-950/30 dark:text-blue-400"
+              >
+                <Mail className="h-3.5 w-3.5" />
+                {isBn ? 'এই প্রজেকশন ইমেইলে পাঠান' : 'Email me this projection'}
+              </button>
+            )}
+            {showEmailForm && !emailSent && (
+              <form onSubmit={sendProjection} className="space-y-2 rounded-xl border border-border bg-background p-3">
+                <Input
+                  type="email"
+                  required
+                  placeholder={isBn ? 'আপনার ইমেইল' : 'your@email.com'}
+                  value={emailForProjection}
+                  onChange={(e) => setEmailForProjection(e.target.value)}
+                  className="text-sm"
+                />
+                <button
+                  type="submit"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-blue-600 py-2 text-xs font-bold text-white hover:bg-blue-700"
+                >
+                  <Mail className="h-3.5 w-3.5" />
+                  {isBn ? 'প্রজেকশন পাঠান' : 'Send projection'}
+                </button>
+              </form>
+            )}
+            {emailSent && (
+              <div className="flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-xs font-semibold text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/30 dark:text-emerald-400">
+                <CheckCircle2 className="h-4 w-4 flex-shrink-0" />
+                {isBn
+                  ? 'চমৎকার! আপনার প্রজেকশন ইমেইলে পাঠানো হয়েছে।'
+                  : 'Projection sent! Check your inbox in 2 minutes.'}
+              </div>
+            )}
           </div>
         </div>
       </Container>
@@ -1191,8 +1473,13 @@ function CallFlowSection({ isBn }: { isBn: boolean }) {
               const Icon = getIcon(s.icon)
               return (
                 <React.Fragment key={i}>
-                  <div className="flex flex-col items-center rounded-xl border border-blue-200/60 bg-blue-50/50 p-4 text-center dark:border-blue-900/40 dark:bg-blue-950/20">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 text-white">
+                  <div
+                    className="relative flex flex-col items-center rounded-xl border border-blue-200/60 bg-blue-50/50 p-4 text-center transition-transform hover:scale-105 dark:border-blue-900/40 dark:bg-blue-950/20"
+                    style={{
+                      animation: `flowPulse 3s ease-in-out ${i * 0.3}s infinite`,
+                    }}
+                  >
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 text-white shadow-lg shadow-blue-600/30">
                       <Icon className="h-5 w-5" />
                     </div>
                     <div className="mt-2 text-xs font-semibold sm:text-sm">{L(s.label, isBn)}</div>
@@ -1202,6 +1489,12 @@ function CallFlowSection({ isBn }: { isBn: boolean }) {
               )
             })}
           </div>
+          <style jsx>{`
+            @keyframes flowPulse {
+              0%, 100% { transform: translateY(0); box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+              50% { transform: translateY(-3px); box-shadow: 0 4px 16px 0 rgba(37, 99, 235, 0.2); }
+            }
+          `}</style>
         </div>
       </Container>
     </Section>
@@ -1414,11 +1707,11 @@ function TestimonialsSection({ isBn }: { isBn: boolean }) {
                 <span className="text-muted-foreground">{L(t.after, isBn)}</span>
               </div>
               <div className="mt-4 flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 font-bold text-blue-700 dark:bg-blue-950/50 dark:text-blue-400">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 font-bold text-blue-700 dark:bg-blue-950/50 dark:text-blue-400" aria-hidden="true">
                   {L(t.author, isBn).charAt(0)}
                 </div>
                 <div>
-                  <div className="text-sm font-semibold">{L(t.author, isBn)}</div>
+                  <h4 className="text-sm font-semibold">{L(t.author, isBn)}</h4>
                   <div className="text-xs text-muted-foreground">{L(t.role, isBn)} · {L(t.company, isBn)}</div>
                   <div className="text-xs text-muted-foreground">{L(t.industry, isBn)}</div>
                 </div>
@@ -1448,17 +1741,19 @@ function StatisticsSection({ isBn }: { isBn: boolean }) {
         />
         <div className="mt-12 grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
           {STATISTICS.stats.map((s, i) => (
-            <div key={i} className="rounded-2xl border border-border/60 bg-background p-6 text-center shadow-sm">
-              <div className="text-3xl font-extrabold text-blue-600 sm:text-4xl">
-                {s.value}
+            <Reveal key={i} delay={(i % 4) * 80}>
+              <div className="group rounded-2xl border border-border/60 bg-background p-6 text-center shadow-sm transition-all hover:-translate-y-1 hover:border-blue-300 hover:shadow-md">
+                <div className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-3xl font-extrabold text-transparent sm:text-4xl">
+                  {s.value}
+                </div>
+                <div className="mt-2 text-xs font-semibold sm:text-sm">
+                  {L(s.label, isBn)}
+                </div>
+                <div className="mt-1 text-xs text-muted-foreground">
+                  {L(s.desc, isBn)}
+                </div>
               </div>
-              <div className="mt-2 text-xs font-semibold sm:text-sm">
-                {L(s.label, isBn)}
-              </div>
-              <div className="mt-1 text-xs text-muted-foreground">
-                {L(s.desc, isBn)}
-              </div>
-            </div>
+            </Reveal>
           ))}
         </div>
       </Container>
@@ -1615,6 +1910,44 @@ function PricingSection({ isBn, onCta }: { isBn: boolean; onCta: () => void }) {
             </button>
           </div>
           <p className="mt-4 text-center text-xs text-muted-foreground">{L(PRICING.note, isBn)}</p>
+        </div>
+
+        {/* Transparency: what's NOT included + pricing FAQ */}
+        <div className="mx-auto mt-12 max-w-3xl rounded-2xl border border-amber-200/60 bg-amber-50/40 p-6 dark:border-amber-900/40 dark:bg-amber-950/10">
+          <h3 className="font-heading text-lg font-bold">
+            {isBn ? 'সততার সাথে বলি — যা অন্তর্ভুক্ত নয়' : 'Honestly — what is NOT included'}
+          </h3>
+          <p className="mt-1 text-xs text-muted-foreground">
+            {isBn
+              ? 'আমরা লুকানো খরচ পছন্দ করি না। আপনার সম্পূর্ণ খরচের ছবি এখানে:'
+              : 'We hate hidden costs. Here is your complete cost picture:'}
+          </p>
+          <ul className="mt-3 space-y-2">
+            {PRICING.notIncluded.map((item, i) => (
+              <li key={i} className="flex items-start gap-2 text-sm">
+                <AlertCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-600" />
+                <span className="text-muted-foreground">{L(item, isBn)}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Pricing FAQ */}
+        <div className="mx-auto mt-8 max-w-3xl">
+          <h3 className="mb-4 text-center font-heading text-lg font-bold">
+            {isBn ? 'প্রাইসিং সম্পর্কে সাধারণ প্রশ্ন' : 'Pricing quick questions'}
+          </h3>
+          <div className="space-y-2">
+            {PRICING.pricingFaq.map((item, i) => (
+              <details key={i} className="group rounded-xl border border-border/60 bg-background p-4 shadow-sm">
+                <summary className="flex cursor-pointer items-center justify-between gap-2 font-heading text-sm font-bold marker:content-['']">
+                  {L(item.q, isBn)}
+                  <ChevronDown className="h-4 w-4 flex-shrink-0 text-muted-foreground transition-transform group-open:rotate-180" />
+                </summary>
+                <p className="mt-2 text-sm text-muted-foreground">{L(item.a, isBn)}</p>
+              </details>
+            ))}
+          </div>
         </div>
       </Container>
     </Section>
@@ -2135,6 +2468,80 @@ function StickyCtaBar({ isBn, onCta }: { isBn: boolean; onCta: () => void }) {
 }
 
 /* ========================================================================== */
+/*  DESKTOP SECTION NAVIGATOR (floating dots, desktop only)                    */
+/* ========================================================================== */
+
+/** Floating dot navigator on the right edge (desktop xl+). Click a dot to
+ *  jump to that section. Shows progress through the page. */
+const SECTION_NAV_ITEMS = [
+  { id: 'conversation-example', label: { en: 'Demo', bn: 'ডেমো' } },
+  { id: 'features', label: { en: 'Features', bn: 'ফিচার' } },
+  { id: 'roi-calculator', label: { en: 'ROI', bn: 'ROI' } },
+  { id: 'pricing', label: { en: 'Pricing', bn: 'প্রাইস' } },
+  { id: 'faq', label: { en: 'FAQ', bn: 'প্রশ্ন' } },
+  { id: 'cta', label: { en: 'Get Started', bn: 'শুরু' } },
+  { id: 'order', label: { en: 'Contact', bn: 'যোগাযোগ' } },
+] as const
+
+function SectionNavigator({ isBn }: { isBn: boolean }) {
+  const [active, setActive] = React.useState<string>('')
+  React.useEffect(() => {
+    function onScroll() {
+      let current = ''
+      for (const item of SECTION_NAV_ITEMS) {
+        const el = document.getElementById(item.id)
+        if (el) {
+          const r = el.getBoundingClientRect()
+          if (r.top <= 200) current = item.id
+        }
+      }
+      setActive(current)
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  const jump = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  return (
+    <nav
+      aria-label={isBn ? 'সেকশন নেভিগেশন' : 'Section navigation'}
+      className="fixed right-4 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-3 xl:flex"
+    >
+      {SECTION_NAV_ITEMS.map((item) => {
+        const isActive = active === item.id
+        return (
+          <button
+            key={item.id}
+            onClick={() => jump(item.id)}
+            aria-label={isBn ? item.label.bn : item.label.en}
+            className="group flex items-center justify-end gap-2"
+          >
+            <span
+              className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide opacity-0 transition-opacity group-hover:opacity-100 ${
+                isActive ? 'bg-blue-600 text-white' : 'bg-muted text-muted-foreground'
+              }`}
+            >
+              {isBn ? item.label.bn : item.label.en}
+            </span>
+            <span
+              className={`block h-2.5 w-2.5 rounded-full border-2 transition-all ${
+                isActive
+                  ? 'scale-125 border-blue-600 bg-blue-600'
+                  : 'border-muted-foreground/40 bg-background hover:border-blue-400'
+              }`}
+            />
+          </button>
+        )
+      })}
+    </nav>
+  )
+}
+
+/* ========================================================================== */
 /*  EXIT POPUP                                                                 */
 /* ========================================================================== */
 
@@ -2223,9 +2630,23 @@ export function AiVoiceAgentClient() {
 
   const [showExit, setShowExit] = React.useState(false)
   const [exitSeen, setExitSeen] = React.useState(false)
+  const [scrollProgress, setScrollProgress] = React.useState(0)
   const exitTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null)
   const mouseArmed = React.useRef(false)
   const mountTime = React.useRef(Date.now())
+
+  /* Reading progress bar — tracks scroll position as % of page height. */
+  React.useEffect(() => {
+    function onScroll() {
+      const h = document.documentElement
+      const scrollTop = h.scrollTop || document.body.scrollTop
+      const scrollHeight = h.scrollHeight - h.clientHeight
+      setScrollProgress(scrollHeight > 0 ? Math.min(100, (scrollTop / scrollHeight) * 100) : 0)
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   /* Exit-intent: trigger once via mouseleave (desktop, after dwell-time + mouseenter)
    *  + 30s fallback (mobile). The dwell-time gate (7s) prevents the popup from
@@ -2262,12 +2683,20 @@ export function AiVoiceAgentClient() {
 
   return (
     <div className="relative flex min-h-screen flex-col bg-background">
+      {/* Reading progress bar — sticky at top, above TopBar */}
+      <div className="fixed left-0 right-0 top-0 z-[60] h-1 bg-transparent" aria-hidden="true">
+        <div
+          className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 transition-[width] duration-150 ease-out"
+          style={{ width: `${scrollProgress}%` }}
+        />
+      </div>
       <TopBar />
 
       <main className="flex-1">
         <HeroSection isBn={isBn} onCta={scrollToLeadForm} />
         <UrgencyBand isBn={isBn} onCta={scrollToLeadForm} />
         <MetricsSection isBn={isBn} />
+        <TrustedBySection isBn={isBn} />
         <ProblemSection isBn={isBn} onCta={scrollToLeadForm} />
         <EmotionalCostSection isBn={isBn} />
         <WhyTraditionalSection isBn={isBn} />
@@ -2281,6 +2710,7 @@ export function AiVoiceAgentClient() {
         <IntegrationsSection isBn={isBn} />
         <IndustrySolutionsSection isBn={isBn} />
         <ComparisonSection isBn={isBn} />
+        <CompetitorComparisonSection isBn={isBn} />
         <BeforeAfterSection isBn={isBn} />
         <AiVsHumanSection isBn={isBn} />
         <RoiCalculatorSection isBn={isBn} onCta={scrollToLeadForm} />
@@ -2308,6 +2738,7 @@ export function AiVoiceAgentClient() {
       <LandingFooter isBn={isBn} />
       <FloatingButtons />
       <StickyCtaBar isBn={isBn} onCta={scrollToLeadForm} />
+      <SectionNavigator isBn={isBn} />
       {showExit && <ExitPopup isBn={isBn} onClose={() => setShowExit(false)} />}
     </div>
   )

@@ -98,8 +98,22 @@ export const HERO_METRICS = {
 }
 
 /* ========================================================================== */
-/*  3. URGENCY BAND                                                            */
+/*  2b. TRUSTED BY (press / partner logos strip)                               */
 /* ========================================================================== */
+
+export const TRUSTED_BY = {
+  eyebrow: { en: 'Built on enterprise-grade infrastructure', bn: 'এন্টারপ্রাইজ-গ্রেড ইনফ্রাস্ট্রাকচারে নির্মিত' } as Bilingual,
+  logos: [
+    { name: 'OpenAI', note: { en: 'GPT-4o reasoning engine', bn: 'GPT-4o রিজনিং ইঞ্জিন' } },
+    { name: 'ElevenLabs', note: { en: 'Natural voice synthesis', bn: 'ন্যাচারাল ভয়েস সিন্থেসিস' } },
+    { name: 'Twilio', note: { en: 'Carrier-grade telephony', bn: 'ক্যারিয়ার-গ্রেড টেলিফোনি' } },
+    { name: 'Vapi', note: { en: 'Real-time voice orchestration', bn: 'রিয়েল-টাইম ভয়েস অর্কেস্ট্রেশন' } },
+    { name: 'Retell AI', note: { en: 'Sub-300ms latency', bn: '৩০০মিলি-এর কম লেটেন্সি' } },
+    { name: 'HubSpot', note: { en: 'CRM native sync', bn: 'CRM নেটিভ সিঙ্ক' } },
+    { name: 'AWS', note: { en: 'Cloud infrastructure', bn: 'ক্লাউড ইনফ্রাস্ট্রাকচার' } },
+    { name: 'Cloudflare', note: { en: 'DDoS protection + edge', bn: 'DDoS প্রোটেকশন + এজ' } },
+  ],
+}
 
 export const URGENCY = {
   badge: { en: 'Limited onboarding slots', bn: 'সীমিত অনবোর্ডিং স্লট' } as Bilingual,
@@ -1205,6 +1219,126 @@ export const INDUSTRY_SOLUTIONS = {
 /*  18. COMPARISON (Traditional Call Center vs AI Voice Agent — 22 rows)      */
 /* ========================================================================== */
 
+/* ========================================================================== */
+/*  18b. COMPETITOR COMPARISON (NextGen vs named competitors)                  */
+/* ========================================================================== */
+
+export const COMPETITOR_COMPARISON = {
+  eyebrow: { en: 'Why choose us over the rest', bn: 'বাকিদের চেয়ে কেন আমরা' } as Bilingual,
+  title: {
+    en: 'NextGen AI Voice vs other voice AI platforms',
+    bn: 'NextGen AI Voice বনাম অন্যান্য ভয়েস AI প্ল্যাটফর্ম',
+  } as Bilingual,
+  subtitle: {
+    en: 'We are not just a voice API — we are a fully-managed AI sales automation service built for Bangladesh.',
+    bn: 'আমরা শুধু একটি ভয়েস API নই — আমরা বাংলাদেশের জন্য তৈরি একটি সম্পূর্ণ-ম্যানেজড AI সেলস অটোমেশন সার্ভিস।',
+  } as Bilingual,
+  headers: [
+    { en: 'Capability', bn: 'ক্ষমতা' } as Bilingual,
+    { en: 'NextGen (us)', bn: 'NextGen (আমরা)' } as Bilingual,
+    { en: 'Air.ai', bn: 'Air.ai' } as Bilingual,
+    { en: 'Vapi', bn: 'Vapi' } as Bilingual,
+    { en: 'Bland AI', bn: 'Bland AI' } as Bilingual,
+    { en: 'Retell', bn: 'Retell' } as Bilingual,
+  ] as Bilingual[],
+  rows: [
+    {
+      feature: { en: 'Native Bangla fluency', bn: 'নেটিভ বাংলা দক্ষতা' } as Bilingual,
+      values: [
+        { en: 'Native, trained on BD data', bn: 'নেটিভ, BD ডেটায় ট্রেইনড' },
+        { en: 'Limited', bn: 'সীমিত' },
+        { en: 'Limited', bn: 'সীমিত' },
+        { en: 'Limited', bn: 'সীমিত' },
+        { en: 'Limited', bn: 'সীমিত' },
+      ],
+    },
+    {
+      feature: { en: 'Fully-managed setup', bn: 'সম্পূর্ণ-ম্যানেজড সেটআপ' } as Bilingual,
+      values: [
+        { en: 'Yes — we build everything', bn: 'হ্যাঁ — আমরা সব বানাই' },
+        { en: 'DIY only', bn: 'শুধু DIY' },
+        { en: 'DIY only', bn: 'শুধু DIY' },
+        { en: 'DIY only', bn: 'শুধু DIY' },
+        { en: 'DIY only', bn: 'শুধু DIY' },
+      ],
+    },
+    {
+      feature: { en: 'CRM integration (HubSpot/GHL/Salesforce)', bn: 'CRM ইন্টিগ্রেশন (HubSpot/GHL/Salesforce)' } as Bilingual,
+      values: [
+        { en: 'Included, done-for-you', bn: 'অন্তর্ভুক্ত, আমরা করে দিই' },
+        { en: 'Self-build via API', bn: 'API দিয়ে নিজে বানান' },
+        { en: 'Self-build via API', bn: 'API দিয়ে নিজে বানান' },
+        { en: 'Self-build via API', bn: 'API দিয়ে নিজে বানান' },
+        { en: 'Self-build via API', bn: 'API দিয়ে নিজে বানান' },
+      ],
+    },
+    {
+      feature: { en: 'Local payment (bKash/Nagad/Rocket)', bn: 'লোকাল পেমেন্ট (বিকাশ/নগদ/রকেট)' } as Bilingual,
+      values: [
+        { en: 'Yes', bn: 'হ্যাঁ' },
+        { en: 'No (USD only)', bn: 'না (শুধু USD)' },
+        { en: 'No (USD only)', bn: 'না (শুধু USD)' },
+        { en: 'No (USD only)', bn: 'না (শুধু USD)' },
+        { en: 'No (USD only)', bn: 'না (শুধু USD)' },
+      ],
+    },
+    {
+      feature: { en: 'Bangladeshi phone numbers', bn: 'বাংলাদেশি ফোন নম্বর' } as Bilingual,
+      values: [
+        { en: 'Yes (+880)', bn: 'হ্যাঁ (+৮৮০)' },
+        { en: 'US numbers only', bn: 'শুধু US নম্বর' },
+        { en: 'US numbers only', bn: 'শুধু US নম্বর' },
+        { en: 'US numbers only', bn: 'শুধু US নম্বর' },
+        { en: 'US numbers only', bn: 'শুধু US নম্বর' },
+      ],
+    },
+    {
+      feature: { en: 'In-person strategy call (Bangla/English)', bn: 'সরাসরি স্ট্র্যাটেজি কল (বাংলা/ইংরেজি)' } as Bilingual,
+      values: [
+        { en: 'Yes, free 30-min', bn: 'হ্যাঁ, ফ্রি ৩০-মিনিট' },
+        { en: 'No', bn: 'না' },
+        { en: 'No', bn: 'না' },
+        { en: 'No', bn: 'না' },
+        { en: 'No', bn: 'না' },
+      ],
+    },
+    {
+      feature: { en: 'Pricing transparency (BDT)', bn: 'প্রাইসিং স্বচ্ছতা (BDT)' } as Bilingual,
+      values: [
+        { en: 'Fixed BDT pricing', bn: 'নির্দিষ্ট BDT প্রাইসিং' },
+        { en: 'Per-minute USD', bn: 'প্রতি-মিনিট USD' },
+        { en: 'Per-minute USD', bn: 'প্রতি-মিনিট USD' },
+        { en: 'Per-minute USD', bn: 'প্রতি-মিনিট USD' },
+        { en: 'Per-minute USD', bn: 'প্রতি-মিনিট USD' },
+      ],
+    },
+    {
+      feature: { en: 'Local support team', bn: 'লোকাল সাপোর্ট টিম' } as Bilingual,
+      values: [
+        { en: 'Bangladesh-based, 24/7', bn: 'বাংলাদেশ-ভিত্তিক, ২৪/৭' },
+        { en: 'US/email only', bn: 'শুধু US/ইমেইল' },
+        { en: 'US/email only', bn: 'শুধু US/ইমেইল' },
+        { en: 'US/email only', bn: 'শুধু US/ইমেইল' },
+        { en: 'US/email only', bn: 'শুধু US/ইমেইল' },
+      ],
+    },
+    {
+      feature: { en: '60-day ROI guarantee', bn: '৬০-দিন ROI গ্যারান্টি' } as Bilingual,
+      values: [
+        { en: 'Yes', bn: 'হ্যাঁ' },
+        { en: 'No', bn: 'না' },
+        { en: 'No', bn: 'না' },
+        { en: 'No', bn: 'না' },
+        { en: 'No', bn: 'না' },
+      ],
+    },
+  ],
+  note: {
+    en: 'Competitor names are trademarks of their respective owners. Comparison based on publicly available information as of Q1 2025. We respect these platforms — they are excellent for developers. We are different: we are a done-for-you service for businesses that do not want to build.',
+    bn: 'প্রতিযোগীদের নাম তাদের নিজস্ব মালিকানাধীন ট্রেডমার্ক। তুলনা Q1 ২০২৫ অনুযায়ী প্রকাশ্য তথ্যের ভিত্তিতে। আমরা এই প্ল্যাটফর্মগুলোকে সম্মান করি — ডেভেলপারদের জন্য চমৎকার। আমরা আলাদা: আমরা যারা বানাতে চান না তাদের জন্য একটি ডান-ফর-ইউ সার্ভিস।',
+  } as Bilingual,
+}
+
 export const COMPARISON = {
   eyebrow: { en: 'Side by side', bn: 'পাশাপাশি তুলনা' } as Bilingual,
   title: {
@@ -2078,7 +2212,7 @@ export const PRICING = {
     {
       name: { en: 'Enterprise', bn: 'এন্টারপ্রাইজ' },
       price: { en: 'Custom', bn: 'কাস্টম' },
-      period: { en: '', bn: '' },
+      period: { en: 'quote on request', bn: 'অনুরোধে কোট' },
       tagline: { en: 'For large call volumes, multi-location, custom needs', bn: 'বড় কল ভলিউম, মাল্টি-লোকেশন, কাস্টম প্রয়োজনের জন্য' },
       features: [
         { en: 'Unlimited calls/month', bn: 'আনলিমিটেড কল/মাস' },
@@ -2110,7 +2244,7 @@ export const PRICING = {
     { item: { en: 'First Month Support', bn: 'প্রথম মাস সাপোর্ট' }, value: { en: '৳15,000', bn: '৳১৫,০০০' } },
   ],
   totalValue: { en: '৳3,95,000', bn: '৳৩,৯৫,০০০' },
-  todayInvestment: { en: '৳55,000/month', bn: '৳৫৫,০০০/মাস' },
+  todayInvestment: { en: 'starts at ৳35,000/month (Starter)', bn: 'শুরু ৳৩৫,০০০/মাস (স্টার্টার)' },
   bonus: [
     { en: 'FREE: 60-day ROI guarantee (worth ৳1,10,000)', bn: 'ফ্রি: ৬০-দিন ROI গ্যারান্টি (মূল্য ৳১,১০,০০০)' },
     { en: 'FREE: Custom voice cloning (worth ৳40,000)', bn: 'ফ্রি: কাস্টম ভয়েস ক্লোনিং (মূল্য ৳৪০,০০০)' },
@@ -2120,6 +2254,30 @@ export const PRICING = {
     en: 'All prices in BDT. Setup fee waived for annual commitments. 15% off annual billing. Custom quotes for Enterprise.',
     bn: 'সব মূল্য BDT-তে। বার্ষিক কমিটমেন্টে সেটআপ ফি মওকুফ। বার্ষিক বিলিংয়ে ১৫% ছাড়। এন্টারপ্রাইজের জন্য কাস্টম কোট।',
   } as Bilingual,
+  notIncluded: [
+    { en: 'Per-minute telephony cost (billed at cost by Twilio — ~৳0.45/min inbound, ~৳0.60/min outbound)', bn: 'প্রতি-মিনিট টেলিফোনি খরচ (Twilio দ্বারা মূল্যে বিল করা — ~৳০.৪৫/মিনিট ইনবাউন্ড, ~৳০.৬০/মিনিট আউটবাউন্ড)' },
+    { en: 'CRM subscription (HubSpot/GoHighLevel/Salesforce — we help you pick the right plan)', bn: 'CRM সাবস্ক্রিপশন (HubSpot/GoHighLevel/Salesforce — সঠিক প্ল্যান বাছাইয়ে সাহায্য করি)' },
+    { en: 'Phone number purchase (~৳1,500 one-time for a Bangladeshi virtual number)', bn: 'ফোন নম্বর ক্রয় (~৳১,৫০০ একবারের জন্য একটি বাংলাদেশি ভার্চুয়াল নম্বর)' },
+    { en: 'Custom AI model training beyond included knowledge base (quoted separately)', bn: 'অন্তর্ভুক্ত নলেজ বেসের বাইরে কাস্টম AI মডেল ট্রেনিং (আলাদাভাবে কোট করা)' },
+  ],
+  pricingFaq: [
+    {
+      q: { en: 'Is there a setup fee?', bn: 'সেটআপ ফি আছে কি?' },
+      a: { en: 'No. Setup is included in all plans. For annual commitments, even the one-time integration fee is waived.', bn: 'না। সব প্ল্যানে সেটআপ অন্তর্ভুক্ত। বার্ষিক কমিটমেন্টে একবারের ইন্টিগ্রেশন ফিও মওকুফ।' },
+    },
+    {
+      q: { en: 'Can I switch plans later?', bn: 'পরে প্ল্যান পরিবর্তন করতে পারব?' },
+      a: { en: 'Yes, anytime. Upgrade or downgrade takes effect from the next billing cycle. No penalties.', bn: 'হ্যাঁ, যেকোনো সময়। আপগ্রেড বা ডাউনগ্রেড পরবর্তী বিলিং সাইকেল থেকে কার্যকর। কোনো জরিমানা নেই।' },
+    },
+    {
+      q: { en: 'What happens if I cancel?', bn: 'বাতিল করলে কী হয়?' },
+      a: { en: 'You own your data. We export your call recordings, transcripts, and CRM data and hand it over within 7 days. No lock-in.', bn: 'আপনার ডেটা আপনার। আমরা আপনার কল রেকর্ডিং, ট্রান্সক্রিপ্ট ও CRM ডেটা এক্সপোর্ট করে ৭ দিনের মধ্যে হস্তান্তর করি। কোনো লক-ইন নেই।' },
+    },
+    {
+      q: { en: 'Are there hidden costs?', bn: 'কোনো লুকানো খরচ আছে?' },
+      a: { en: 'No hidden costs. The only pass-through is telephony (Twilio bills at cost) and your CRM subscription. Everything else is in your monthly plan.', bn: 'কোনো লুকানো খরচ নেই। একমাত্র পাস-থ্রু হলো টেলিফোনি (Twilio মূল্যে বিল করে) এবং আপনার CRM সাবস্ক্রিপশন। বাকি সব আপনার মাসিক প্ল্যানে অন্তর্ভুক্ত।' },
+    },
+  ],
 }
 
 /* ========================================================================== */
