@@ -170,7 +170,7 @@ export function LeadGenerationClient() {
   const [exitSeen, setExitSeen] = React.useState(false)
   const exitTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  /* Exit-intent: trigger once via mouseleave (desktop) + 25s fallback (mobile). */
+  /* Exit-intent: trigger once via mouseleave (desktop) + 30s fallback (mobile). */
   React.useEffect(() => {
     function onLeave(e: MouseEvent) {
       if (e.clientY < 0 && !exitSeen) {

@@ -24,9 +24,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   // Lead Generation gets enhanced, keyword-rich SEO metadata.
+  // Use `absolute` to bypass the root layout's "%s | NextGen Digital Studio"
+  // template (the title already includes the brand suffix).
   if (slug === 'lead-generation') {
     return {
-      title: 'AI Lead Generation Service Bangladesh — 50-200 Qualified Leads/Month | NextGen Digital Studio',
+      title: {
+        absolute:
+          'AI Lead Generation Service Bangladesh — 50-200 Qualified Leads/Month | NextGen Digital Studio',
+      },
       description:
         'AI-powered multi-channel lead generation: Google Ads, Meta, LinkedIn, WhatsApp, SEO, cold outreach & AI automation. 50-200 qualified leads/month, 5-10x ROI, 60-day guarantee. Book a free strategy call.',
       keywords: [
