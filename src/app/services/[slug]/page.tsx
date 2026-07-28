@@ -536,7 +536,43 @@ function buildCrmSchemas() {
     })),
   }
 
-  return [organizationSchema, serviceSchema, reviewSchema, breadcrumbSchema, faqSchema, howToSchema, timelineHowTo]
+  // VideoObject schema for the demo video — improves video search visibility
+  const videoSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'VideoObject',
+    name: 'How CRM automation transforms your business in 3 minutes',
+    description:
+      'A quick walkthrough of a real CRM automation system — from lead capture to closed deal, fully automated. See the dashboard, workflows, AI chatbot, and revenue reports.',
+    thumbnailUrl: `${siteConfig.url}/og-image.jpg`,
+    uploadDate: '2025-01-15',
+    duration: 'PT3M24S',
+    contentUrl: `${siteConfig.url}/services/crm-automation#video-demo`,
+    embedUrl: `${siteConfig.url}/services/crm-automation#video-demo`,
+    publisher: {
+      '@type': 'Organization',
+      name: siteConfig.name,
+      logo: { '@type': 'ImageObject', url: `${siteConfig.url}/logo.png` },
+    },
+  }
+
+  // Course schema for the CRM maturity assessment (educational content)
+  const courseSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Course',
+    name: 'CRM Automation Maturity Assessment',
+    description:
+      'A 6-question self-assessment to evaluate your current CRM maturity across lead capture, scoring, follow-up, reporting, integrations, and AI. Get a personalized score and recommendation.',
+    provider: {
+      '@type': 'Organization',
+      name: siteConfig.name,
+      sameAs: siteConfig.url,
+    },
+    inLanguage: ['en', 'bn'],
+    educationalLevel: 'Beginner to Advanced',
+    isAccessibleForFree: true,
+  }
+
+  return [organizationSchema, serviceSchema, reviewSchema, breadcrumbSchema, faqSchema, howToSchema, timelineHowTo, videoSchema, courseSchema]
 }
 
 export default async function ServiceLandingPage({ params }: Props) {

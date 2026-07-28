@@ -3010,12 +3010,128 @@ export const URGENCY = {
 }
 
 /* ========================================================================== */
-/*  38. SECTION ORDER                                                          */
+/*  38. VIDEO DEMO                                                             */
+/* ========================================================================== */
+
+export const VIDEO_DEMO = {
+  eyebrow: { en: 'See it in action', bn: 'নিজের চোখে দেখুন' } as Bilingual,
+  title: {
+    en: 'Watch: How CRM automation transforms your business in 3 minutes',
+    bn: 'দেখুন: ৩ মিনিটে CRM অটোমেশন কীভাবে আপনার ব্যবসা বদলে দেয়',
+  } as Bilingual,
+  subtitle: {
+    en: 'A quick walkthrough of a real CRM automation system we built — from lead capture to closed deal, fully automated. See the dashboard, the workflows, the AI chatbot, and the revenue reports.',
+    bn: 'আমরা তৈরি করা একটি বাস্তব CRM অটোমেশন সিস্টেমের সংক্ষিপ্ত ভিডিও — লিড ক্যাপচার থেকে ক্লোজড ডিল পর্যন্ত, সম্পূর্ণ অটোমেটেড। ড্যাশবোর্ড, ওয়ার্কফ্লো, AI চ্যাটবট এবং রেভিনিউ রিপোর্ট দেখুন।',
+  } as Bilingual,
+  videoLabel: { en: '3-min demo video', bn: '৩-মিনিট ডেমো ভিডিও' } as Bilingual,
+  durationLabel: { en: 'Duration', bn: 'সময়কাল' } as Bilingual,
+  duration: { en: '3:24', bn: '৩:২৪' } as Bilingual,
+  playLabel: { en: 'Play demo', bn: 'ডেমো চালান' } as Bilingual,
+  cta: {
+    en: 'Get this system for your business',
+    bn: 'আপনার ব্যবসার জন্য এই সিস্টেম পান',
+  } as Bilingual,
+  highlights: [
+    { time: '0:15', label: { en: 'Lead capture flow', bn: 'লিড ক্যাপচার ফ্লো' } },
+    { time: '0:42', label: { en: 'AI lead scoring', bn: 'AI লিড স্কোরিং' } },
+    { time: '1:10', label: { en: 'Auto follow-up sequence', bn: 'অটো ফলো-আপ সিকোয়েন্স' } },
+    { time: '1:38', label: { en: 'Pipeline automation', bn: 'পাইপলাইন অটোমেশন' } },
+    { time: '2:05', label: { en: 'AI chatbot demo', bn: 'AI চ্যাটবট ডেমো' } },
+    { time: '2:40', label: { en: 'Revenue dashboard', bn: 'রেভিনিউ ড্যাশবোর্ড' } },
+  ],
+  stats: [
+    { value: '3:24', label: { en: 'Total runtime', bn: 'মোট সময়' } },
+    { value: '6', label: { en: 'Live workflows shown', bn: 'লাইভ ওয়ার্কফ্লো দেখানো' } },
+    { value: '100%', label: { en: 'Real footage', bn: 'বাস্তব ফুটেজ' } },
+  ],
+}
+
+/* ========================================================================== */
+/*  39. RESOURCE CENTER                                                        */
+/* ========================================================================== */
+
+export const RESOURCES = {
+  eyebrow: { en: 'Free resources', bn: 'ফ্রি রিসোর্স' } as Bilingual,
+  title: {
+    en: 'Download free CRM automation resources',
+    bn: 'ফ্রি CRM অটোমেশন রিসোর্স ডাউনলোড করুন',
+  } as Bilingual,
+  subtitle: {
+    en: 'No email required for the checklist. Enter your email for the full toolkit (templates, workflows, ROI calculator).',
+    bn: 'চেকলিস্টের জন্য কোনো ইমেইল লাগবে না। সম্পূর্ণ টুলকিটের জন্য (টেমপ্লেট, ওয়ার্কফ্লো, ROI ক্যালকুলেটর) ইমেইল দিন।',
+  } as Bilingual,
+  items: [
+    {
+      icon: 'clipboard-check',
+      title: { en: 'CRM Automation Readiness Checklist', bn: 'CRM অটোমেশন রেডিনেস চেকলিস্ট' } as Bilingual,
+      desc: {
+        en: '27-point checklist to assess if your business is ready for CRM automation. Identify gaps before you invest.',
+        bn: 'আপনার ব্যবসা CRM অটোমেশনের জন্য প্রস্তুত কিনা যাচাই করতে ২৭-পয়েন্ট চেকলিস্ট। ইনভেস্ট করার আগে ঘাটতি চিহ্নিত করুন।',
+      } as Bilingual,
+      type: { en: 'PDF · 12 pages', bn: 'PDF · ১২ পৃষ্ঠা' } as Bilingual,
+      price: { en: 'Free', bn: 'ফ্রি' } as Bilingual,
+      href: '/resources/crm-checklist.html',
+      featured: true,
+    },
+    {
+      icon: 'file-text',
+      title: { en: 'CRM Workflow Template Pack', bn: 'CRM ওয়ার্কফ্লো টেমপ্লেট প্যাক' } as Bilingual,
+      desc: {
+        en: '12 pre-built workflow templates: lead capture, scoring, follow-up, reactivation, upsell, referral. Import-ready.',
+        bn: '১২টি প্রি-বিল্ট ওয়ার্কফ্লো টেমপ্লেট: লিড ক্যাপচার, স্কোরিং, ফলো-আপ, রিঅ্যাক্টিভেশন, আপসেল, রেফারেল। ইম্পোর্ট-রেডি।',
+      } as Bilingual,
+      type: { en: 'ZIP · 12 templates', bn: 'ZIP · ১২ টেমপ্লেট' } as Bilingual,
+      price: { en: 'Email required', bn: 'ইমেইল প্রয়োজন' } as Bilingual,
+      href: '#order',
+      featured: false,
+    },
+    {
+      icon: 'bar-chart',
+      title: { en: 'CRM ROI Calculator (Excel)', bn: 'CRM ROI ক্যালকুলেটর (Excel)' } as Bilingual,
+      desc: {
+        en: 'Downloadable Excel calculator with 10 variables. Model your ROI before you book a call. Includes 3 scenarios.',
+        bn: '১০টি ভেরিয়েবলসহ ডাউনলোডযোগ্য Excel ক্যালকুলেটর। কল বুক করার আগে আপনার ROI মডেল করুন। ৩টি সিনারিও অন্তর্ভুক্ত।',
+      } as Bilingual,
+      type: { en: 'XLSX · 3 sheets', bn: 'XLSX · ৩ শিট' } as Bilingual,
+      price: { en: 'Email required', bn: 'ইমেইল প্রয়োজন' } as Bilingual,
+      href: '/resources/lead-gen-calculator.html',
+      featured: false,
+    },
+    {
+      icon: 'book-open',
+      title: { en: 'AI Sales Playbook eBook', bn: 'AI সেলস প্লেবুক eBook' } as Bilingual,
+      desc: {
+        en: '48-page eBook: how AI is changing sales, 15 use cases, implementation roadmap, vendor selection guide.',
+        bn: '৪৮-পৃষ্ঠা eBook: AI কীভাবে সেলস বদলাচ্ছে, ১৫টি ইউজ কেস, ইমপ্লিমেন্টেশন রোডম্যাপ, ভেন্ডর সিলেকশন গাইড।',
+      } as Bilingual,
+      type: { en: 'PDF · 48 pages', bn: 'PDF · ৪৮ পৃষ্ঠা' } as Bilingual,
+      price: { en: 'Email required', bn: 'ইমেইল প্রয়োজন' } as Bilingual,
+      href: '/resources/ai-readiness-ebook.html',
+      featured: false,
+    },
+  ] as {
+    icon: string
+    title: Bilingual
+    desc: Bilingual
+    type: Bilingual
+    price: Bilingual
+    href: string
+    featured: boolean
+  }[],
+  cta: {
+    en: 'Book a free strategy call instead',
+    bn: 'এর পরিবর্তে ফ্রি স্ট্র্যাটেজি কল বুক করুন',
+  } as Bilingual,
+}
+
+/* ========================================================================== */
+/*  40. SECTION ORDER                                                          */
 /* ========================================================================== */
 
 export const SECTION_ORDER = [
   'hero',
   'metrics',
+  'video-demo',
   'problem',
   'emotional-cost',
   'why-traditional',
@@ -3047,6 +3163,7 @@ export const SECTION_ORDER = [
   'testimonials',
   'trust',
   'security',
+  'resources',
   'final-cta',
   'lead-form',
 ] as const

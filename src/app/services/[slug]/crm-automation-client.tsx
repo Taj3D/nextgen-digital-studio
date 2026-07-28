@@ -38,7 +38,7 @@ import {
   BookOpen as BookOpenIcon, Frown, TrendingDown, Star as StarIcon, Tag,
   ShoppingBag, Trophy, Table2, Folder, Video, ClipboardCheck, Compass,
   UserX, EyeOff, ZapOff, Copy, CalendarX, FileX,
-  ClipboardList, ClipboardCheck as ClipboardCheckIcon, Music,
+  ClipboardList, ClipboardCheck as ClipboardCheckIcon, Music, Play,
 } from 'lucide-react'
 import { siteConfig } from '@/lib/site-data'
 import { useLang } from '@/components/site/language-provider'
@@ -63,6 +63,7 @@ import {
   STATISTICS, DELIVERABLES, PRICING, GUARANTEES, TIMELINE, PROCESS,
   TEAM, ROI_CALCULATOR, CRM_MATURITY, FAQS, OBJECTIONS, TESTIMONIALS,
   TRUST, SECURITY, FINAL_CTA, EXIT_POPUP, STICKY_CTA, URGENCY,
+  VIDEO_DEMO, RESOURCES,
   type Bilingual,
 } from './crm-automation-data'
 
@@ -302,6 +303,80 @@ function HeroSection({ isBn, onCta }: { isBn: boolean; onCta: () => void }) {
               {L(b, isBn)}
             </span>
           ))}
+        </div>
+
+        {/* Dashboard preview mockup — hidden on mobile (video demo section has its own) */}
+        <div className="mx-auto mt-14 hidden max-w-5xl sm:block">
+          <div className="relative rounded-2xl border border-white/10 bg-slate-900/80 p-3 shadow-2xl backdrop-blur-sm sm:p-4">
+            {/* Browser chrome */}
+            <div className="flex items-center justify-between border-b border-white/10 pb-2">
+              <div className="flex items-center gap-1.5">
+                <div className="h-2.5 w-2.5 rounded-full bg-red-400/80" />
+                <div className="h-2.5 w-2.5 rounded-full bg-amber-400/80" />
+                <div className="h-2.5 w-2.5 rounded-full bg-emerald-400/80" />
+              </div>
+              <div className="flex-1 mx-4 hidden sm:block">
+                <div className="mx-auto max-w-md rounded-md bg-white/5 px-3 py-1 text-center text-[10px] text-slate-400">
+                  crm.nextgendigital.studio/dashboard
+                </div>
+              </div>
+              <span className="text-[10px] text-slate-500">● Live</span>
+            </div>
+
+            {/* Dashboard body */}
+            <div className="grid gap-3 p-2 sm:grid-cols-4 sm:gap-4 sm:p-4">
+              {/* KPI cards */}
+              <div className="rounded-xl bg-white/5 p-3 sm:col-span-1">
+                <div className="flex items-center justify-between">
+                  <span className="text-[9px] font-semibold uppercase text-emerald-300 sm:text-[10px]">New Leads</span>
+                  <TrendingUp className="h-3 w-3 text-emerald-400" />
+                </div>
+                <div className="mt-1 text-xl font-extrabold text-white sm:text-2xl">247</div>
+                <div className="text-[9px] text-emerald-400">↑ 32% vs last mo</div>
+              </div>
+              <div className="rounded-xl bg-white/5 p-3 sm:col-span-1">
+                <div className="flex items-center justify-between">
+                  <span className="text-[9px] font-semibold uppercase text-emerald-300 sm:text-[10px]">Pipeline</span>
+                  <DollarSign className="h-3 w-3 text-emerald-400" />
+                </div>
+                <div className="mt-1 text-xl font-extrabold text-white sm:text-2xl">৳42L</div>
+                <div className="text-[9px] text-emerald-400">↑ ৳8L vs last mo</div>
+              </div>
+              {/* Chart */}
+              <div className="rounded-xl bg-white/5 p-3 sm:col-span-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-[9px] font-semibold uppercase text-emerald-300 sm:text-[10px]">Revenue Trend</span>
+                  <span className="text-[9px] text-slate-400">Last 12 months</span>
+                </div>
+                <div className="mt-2 flex h-16 items-end gap-1 sm:h-20 sm:gap-1.5">
+                  {[28, 35, 42, 38, 52, 48, 62, 58, 70, 65, 82, 95].map((h, i) => (
+                    <div
+                      key={i}
+                      className="flex-1 rounded-t bg-gradient-to-t from-emerald-500/60 to-teal-300"
+                      style={{ height: `${h}%` }}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Workflow strip */}
+            <div className="mt-2 flex flex-wrap items-center gap-1.5 rounded-lg bg-white/5 p-2 sm:gap-2 sm:p-3">
+              <span className="text-[9px] font-semibold text-slate-400 sm:text-[10px]">AUTO-FLOW:</span>
+              {['Lead', 'Score', 'Assign', 'Follow-up', 'Book', 'Close'].map((step, i) => (
+                <React.Fragment key={step}>
+                  <span className="rounded-md bg-emerald-500/20 px-2 py-0.5 text-[9px] font-bold text-emerald-300 sm:text-[10px]">
+                    {step}
+                  </span>
+                  {i < 5 && <ArrowRight className="h-2.5 w-2.5 text-slate-600" />}
+                </React.Fragment>
+              ))}
+              <span className="ml-auto inline-flex items-center gap-1 text-[9px] font-semibold text-emerald-400 sm:text-[10px]">
+                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
+                Running
+              </span>
+            </div>
+          </div>
         </div>
       </Container>
     </section>
@@ -2077,6 +2152,233 @@ function SecuritySection({ isBn }: { isBn: boolean }) {
 }
 
 /* ========================================================================== */
+/*  VIDEO DEMO                                                                 */
+/* ========================================================================== */
+
+function VideoDemoSection({ isBn, onCta }: { isBn: boolean; onCta: () => void }) {
+  const [playing, setPlaying] = React.useState(false)
+  return (
+    <Section id="video-demo" bgClass="bg-muted/30">
+      <Container>
+        <SectionHeader
+          eyebrow={L(VIDEO_DEMO.eyebrow, isBn)}
+          title={L(VIDEO_DEMO.title, isBn)}
+          subtitle={L(VIDEO_DEMO.subtitle, isBn)}
+          isBn={isBn}
+        />
+
+        <Reveal>
+          <div className="mx-auto mt-10 max-w-4xl">
+            {/* Video player frame */}
+            <div className="relative aspect-video overflow-hidden rounded-2xl border border-border/60 bg-slate-950 shadow-2xl">
+              {/* Dashboard mockup as poster */}
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(16,185,129,0.15),transparent_60%)]" />
+              <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(15,23,42,0.85),rgba(13,148,136,0.25))]" />
+
+              {/* Mock dashboard UI */}
+              <div className="absolute inset-0 flex flex-col p-6 text-left text-white sm:p-10">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="h-2.5 w-2.5 rounded-full bg-red-400" />
+                    <div className="h-2.5 w-2.5 rounded-full bg-amber-400" />
+                    <div className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
+                  </div>
+                  <span className="text-[10px] font-medium text-white/60 sm:text-xs">
+                    crm.nextgendigital.studio
+                  </span>
+                </div>
+
+                <div className="mt-6 grid flex-1 grid-cols-3 gap-3 sm:gap-4">
+                  <div className="col-span-1 space-y-2">
+                    <div className="rounded-lg bg-white/10 p-2.5 backdrop-blur-sm sm:p-3">
+                      <div className="text-[9px] font-semibold text-emerald-300 sm:text-[10px]">NEW LEADS</div>
+                      <div className="mt-1 text-base font-extrabold sm:text-2xl">247</div>
+                    </div>
+                    <div className="rounded-lg bg-white/10 p-2.5 backdrop-blur-sm sm:p-3">
+                      <div className="text-[9px] font-semibold text-emerald-300 sm:text-[10px]">PIPELINE</div>
+                      <div className="mt-1 text-base font-extrabold sm:text-2xl">৳42L</div>
+                    </div>
+                    <div className="rounded-lg bg-white/10 p-2.5 backdrop-blur-sm sm:p-3">
+                      <div className="text-[9px] font-semibold text-emerald-300 sm:text-[10px]">WIN RATE</div>
+                      <div className="mt-1 text-base font-extrabold sm:text-2xl">34%</div>
+                    </div>
+                  </div>
+                  <div className="col-span-2 rounded-lg bg-white/5 p-3 backdrop-blur-sm sm:p-4">
+                    <div className="text-[9px] font-semibold text-white/70 sm:text-[10px]">REVENUE TREND</div>
+                    <div className="mt-2 flex h-20 items-end gap-1 sm:h-28 sm:gap-1.5">
+                      {[35, 48, 42, 60, 55, 72, 68, 85, 78, 92, 88, 100].map((h, i) => (
+                        <div
+                          key={i}
+                          className="flex-1 rounded-t bg-gradient-to-t from-emerald-500 to-teal-300"
+                          style={{ height: `${h}%` }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Play button overlay */}
+              {!playing && (
+                <button
+                  onClick={() => setPlaying(true)}
+                  className="absolute inset-0 flex items-center justify-center bg-black/40 transition hover:bg-black/30"
+                  aria-label={L(VIDEO_DEMO.playLabel, isBn)}
+                >
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500 shadow-2xl transition hover:scale-110 sm:h-20 sm:w-20">
+                    <Play className="h-7 w-7 fill-white text-white sm:h-9 sm:w-9" />
+                  </div>
+                </button>
+              )}
+
+              {/* Duration badge */}
+              <div className="absolute bottom-3 right-3 rounded-md bg-black/70 px-2 py-1 text-[10px] font-semibold text-white sm:bottom-4 sm:right-4 sm:text-xs">
+                {L(VIDEO_DEMO.duration, isBn)}
+              </div>
+            </div>
+
+            {/* Stats row */}
+            <div className="mt-6 grid grid-cols-3 gap-3">
+              {VIDEO_DEMO.stats.map((s, i) => (
+                <div key={i} className="rounded-xl border border-border/60 bg-background p-4 text-center">
+                  <div className="bg-gradient-to-br from-emerald-600 to-teal-500 bg-clip-text text-xl font-extrabold text-transparent sm:text-2xl">
+                    {s.value}
+                  </div>
+                  <div className="mt-1 text-[10px] font-medium text-muted-foreground sm:text-xs">
+                    {L(s.label, isBn)}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Highlights timeline */}
+            <div className="mt-6 rounded-2xl border border-border/60 bg-background p-5 sm:p-6">
+              <h3 className="text-sm font-bold text-foreground sm:text-base">
+                {isBn ? 'ভিডিওতে যা দেখবেন' : 'What you will see in the video'}
+              </h3>
+              <div className="mt-4 grid gap-2 sm:grid-cols-2">
+                {VIDEO_DEMO.highlights.map((h, i) => (
+                  <div key={i} className="flex items-center gap-3 rounded-lg bg-muted/40 p-2.5">
+                    <span className="flex-shrink-0 rounded-md bg-emerald-500/15 px-2 py-1 text-[10px] font-bold text-emerald-700 dark:text-emerald-300 sm:text-xs">
+                      {h.time}
+                    </span>
+                    <span className="text-xs font-medium text-foreground sm:text-sm">
+                      {L(h.label, isBn)}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* CTA */}
+            <div className="mt-6 text-center">
+              <button
+                onClick={onCta}
+                className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-600 to-teal-500 px-7 py-3.5 text-sm font-bold text-white shadow-lg transition hover:scale-[1.02]"
+              >
+                <CalendarCheck className="h-4 w-4" />
+                {L(VIDEO_DEMO.cta, isBn)}
+              </button>
+            </div>
+          </div>
+        </Reveal>
+      </Container>
+    </Section>
+  )
+}
+
+/* ========================================================================== */
+/*  RESOURCE CENTER                                                            */
+/* ========================================================================== */
+
+function ResourcesSection({ isBn, onCta }: { isBn: boolean; onCta: () => void }) {
+  return (
+    <Section id="resources" bgClass="border-t border-border/60 bg-muted/30">
+      <Container>
+        <SectionHeader
+          eyebrow={L(RESOURCES.eyebrow, isBn)}
+          title={L(RESOURCES.title, isBn)}
+          subtitle={L(RESOURCES.subtitle, isBn)}
+          isBn={isBn}
+        />
+
+        <div className="mx-auto mt-10 grid max-w-5xl gap-5 sm:grid-cols-2">
+          {RESOURCES.items.map((item, i) => {
+            const Icon = iconMap[item.icon] || FileText
+            return (
+              <Reveal key={i} delay={i * 60}>
+                <a
+                  href={item.href}
+                  className={`group flex h-full flex-col rounded-2xl border bg-background p-6 shadow-sm transition hover:shadow-md ${
+                    item.featured
+                      ? 'border-emerald-500/50 ring-1 ring-emerald-500/20'
+                      : 'border-border/60 hover:border-emerald-500/40'
+                  }`}
+                >
+                  <div className="flex items-start gap-4">
+                    <div className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl ${
+                      item.featured
+                        ? 'bg-gradient-to-br from-emerald-600 to-teal-500 text-white'
+                        : 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300'
+                    }`}>
+                      <Icon className="h-6 w-6" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-heading text-base font-bold text-foreground sm:text-lg">
+                          {L(item.title, isBn)}
+                        </h3>
+                        {item.featured && (
+                          <span className="rounded-full bg-emerald-500/15 px-2 py-0.5 text-[9px] font-bold uppercase text-emerald-700 dark:text-emerald-300">
+                            {isBn ? 'জনপ্রিয়' : 'Popular'}
+                          </span>
+                        )}
+                      </div>
+                      <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
+                        {L(item.desc, isBn)}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 flex items-center justify-between border-t border-border/60 pt-3">
+                    <div className="flex items-center gap-3">
+                      <span className="text-[10px] font-medium text-muted-foreground sm:text-xs">
+                        {L(item.type, isBn)}
+                      </span>
+                      <span className={`text-[10px] font-bold sm:text-xs ${
+                        item.price.en === 'Free'
+                          ? 'text-emerald-600 dark:text-emerald-400'
+                          : 'text-amber-600 dark:text-amber-400'
+                      }`}>
+                        {L(item.price, isBn)}
+                      </span>
+                    </div>
+                    <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 transition group-hover:gap-2 dark:text-emerald-300">
+                      <Download className="h-3.5 w-3.5" />
+                      {isBn ? 'ডাউনলোড' : 'Download'}
+                    </span>
+                  </div>
+                </a>
+              </Reveal>
+            )
+          })}
+        </div>
+
+        <div className="mt-8 text-center">
+          <button
+            onClick={onCta}
+            className="inline-flex items-center gap-2 text-sm font-bold text-emerald-700 transition hover:gap-3 dark:text-emerald-300"
+          >
+            {L(RESOURCES.cta, isBn)}
+            <ArrowRight className="h-4 w-4" />
+          </button>
+        </div>
+      </Container>
+    </Section>
+  )
+}
+
+/* ========================================================================== */
 /*  FINAL CTA                                                                  */
 /* ========================================================================== */
 
@@ -2195,6 +2497,58 @@ function LeadFormSection({ isBn }: { isBn: boolean }) {
         </div>
       </Container>
     </Section>
+  )
+}
+
+/* ========================================================================== */
+/*  QUICK NAV — sticky pill bar for jumping to key sections                    */
+/* ========================================================================== */
+
+function QuickNav({ isBn }: { isBn: boolean }) {
+  const [visible, setVisible] = React.useState(false)
+  React.useEffect(() => {
+    const onScroll = () => setVisible(window.scrollY > 800)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  const links = [
+    { href: '#video-demo', label: isBn ? 'ডেমো' : 'Demo' },
+    { href: '#framework', label: isBn ? 'ফ্রেমওয়ার্ক' : 'Framework' },
+    { href: '#pricing', label: isBn ? 'প্রাইসিং' : 'Pricing' },
+    { href: '#roi-calculator', label: isBn ? 'ROI' : 'ROI' },
+    { href: '#maturity', label: isBn ? 'অ্যাসেসমেন্ট' : 'Assessment' },
+    { href: '#faq', label: isBn ? 'প্রশ্ন' : 'FAQ' },
+    { href: '#order', label: isBn ? 'বুক করুন' : 'Book' },
+  ]
+
+  if (!visible) return null
+
+  const scrollTo = (href: string) => (e: React.MouseEvent) => {
+    e.preventDefault()
+    const el = document.querySelector(href)
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  return (
+    <div className="fixed left-1/2 top-16 z-30 -translate-x-1/2 px-2 sm:top-20">
+      <nav
+        className="flex max-w-[95vw] items-center gap-1 overflow-x-auto rounded-full border border-border/60 bg-background/95 p-1.5 shadow-lg backdrop-blur-sm"
+        aria-label={isBn ? 'দ্রুত নেভিগেশন' : 'Quick navigation'}
+      >
+        {links.map((l) => (
+          <a
+            key={l.href}
+            href={l.href}
+            onClick={scrollTo(l.href)}
+            className="flex-shrink-0 rounded-full px-3 py-1.5 text-xs font-semibold text-muted-foreground transition hover:bg-emerald-500/10 hover:text-emerald-700 dark:hover:text-emerald-300"
+          >
+            {l.label}
+          </a>
+        ))}
+      </nav>
+    </div>
   )
 }
 
@@ -2322,6 +2676,20 @@ export function CrmAutomationClient() {
   const trackingMeta = React.useMemo(() => ({ slug: 'crm-automation' }), [])
   usePageViewTracking('service_detail_page', trackingMeta)
 
+  // Reading progress bar — fills as user scrolls through the page
+  const [progress, setProgress] = React.useState(0)
+  React.useEffect(() => {
+    const onScroll = () => {
+      const scrollTop = window.scrollY
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight
+      const pct = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0
+      setProgress(pct)
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
   // Lead form scroll target
   const scrollToLeadForm = React.useCallback(() => {
     if (typeof document !== 'undefined') {
@@ -2332,35 +2700,61 @@ export function CrmAutomationClient() {
     }
   }, [])
 
-  // Exit popup logic: trigger on mouseleave OR after EXIT_POPUP.delayMs (30s fallback)
+  // Exit popup logic: trigger on mouseleave (only after mouse has entered + 7s
+  // dwell) OR after EXIT_POPUP.delayMs (30s fallback). The dwell gate prevents
+  // the popup firing on page load when the mouse starts outside the viewport.
   const [showExit, setShowExit] = React.useState(false)
   React.useEffect(() => {
     if (!EXIT_POPUP.enabled) return
     let shown = false
+    let armed = false
+    let entered = false
     const trigger = () => {
-      if (!shown) {
+      if (!shown && armed) {
         shown = true
         setShowExit(true)
       }
     }
-    const onMouseLeave = (e: MouseEvent) => {
-      if (e.clientY < 0) trigger()
+    const onMouseEnter = () => {
+      entered = true
     }
+    const onMouseLeave = (e: MouseEvent) => {
+      // Only fire if the mouse has previously entered the viewport AND the
+      // arm timer has elapsed. This prevents immediate firing on load.
+      if (e.clientY < 0 && entered && armed) trigger()
+    }
+    document.addEventListener('mouseenter', onMouseEnter)
     document.addEventListener('mouseleave', onMouseLeave)
-    const timer = setTimeout(trigger, EXIT_POPUP.delayMs)
+    // Arm after 7s dwell so popup doesn't fire during initial scroll
+    const armTimer = setTimeout(() => { armed = true }, 7000)
+    // Fallback: show after 30s regardless
+    const fallbackTimer = setTimeout(trigger, EXIT_POPUP.delayMs)
     return () => {
+      document.removeEventListener('mouseenter', onMouseEnter)
       document.removeEventListener('mouseleave', onMouseLeave)
-      clearTimeout(timer)
+      clearTimeout(armTimer)
+      clearTimeout(fallbackTimer)
     }
   }, [])
 
   return (
     <div className="relative flex min-h-screen flex-col bg-background">
+      {/* Reading progress bar */}
+      <div className="pointer-events-none fixed inset-x-0 top-0 z-50 h-1 bg-transparent" aria-hidden="true">
+        <div
+          className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-[width] duration-150 ease-out"
+          style={{ width: `${progress}%` }}
+        />
+      </div>
       <TopBar />
+
+      {/* Quick navigation — appears after scrolling past hero */}
+      <QuickNav isBn={isBn} />
 
       <main className="flex-1">
         <HeroSection isBn={isBn} onCta={scrollToLeadForm} />
         <MetricsSection isBn={isBn} />
+        <VideoDemoSection isBn={isBn} onCta={scrollToLeadForm} />
         <ProblemSection isBn={isBn} onCta={scrollToLeadForm} />
         <EmotionalCostSection isBn={isBn} />
         <WhyTraditionalSection isBn={isBn} />
@@ -2392,6 +2786,7 @@ export function CrmAutomationClient() {
         <TestimonialsSection isBn={isBn} />
         <TrustSection isBn={isBn} />
         <SecuritySection isBn={isBn} />
+        <ResourcesSection isBn={isBn} onCta={scrollToLeadForm} />
         <FinalCtaSection isBn={isBn} onCta={scrollToLeadForm} />
         <LeadFormSection isBn={isBn} />
       </main>
