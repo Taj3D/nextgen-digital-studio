@@ -4,6 +4,8 @@ import { services, siteConfig } from '@/lib/site-data'
 import { LandingClient } from './landing-client'
 import { LeadGenerationClient } from './lead-generation-client'
 import { FAQS, PRICING } from './lead-generation-data'
+import { WhatsAppAutomationClient } from './whatsapp-automation-client'
+import { FAQS as WA_FAQS, PRICING as WA_PRICING } from './whatsapp-automation-data'
 
 export const dynamicParams = false
 
@@ -66,6 +68,50 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         description: 'Multi-channel AI lead engine. 60-day ROI guarantee. Book a free strategy call.',
       },
       alternates: { canonical: `${siteConfig.url}/services/lead-generation` },
+    }
+  }
+
+  // WhatsApp Automation gets enhanced, keyword-rich SEO metadata.
+  if (slug === 'whatsapp-automation') {
+    return {
+      title: {
+        absolute:
+          'WhatsApp Automation Bangladesh — Official Business API + AI Chatbot | NextGen Digital Studio',
+      },
+      description:
+        'Official WhatsApp Business API automation: AI chatbot, broadcast campaigns, cart recovery, order tracking, payment links, CRM integration. 98% open rate, 5–10x ROI, 60-day guarantee. Book a free strategy call.',
+      keywords: [
+        'WhatsApp automation Bangladesh',
+        'WhatsApp Business API Bangladesh',
+        'WhatsApp chatbot Bangladesh',
+        'AI WhatsApp automation',
+        'WhatsApp marketing Bangladesh',
+        'broadcast campaign Bangladesh',
+        'WhatsApp Business API Dhaka',
+        'WhatsApp chatbot Dhaka',
+        'WhatsApp CRM integration',
+        'WhatsApp automation agency Bangladesh',
+        'abandoned cart recovery Bangladesh',
+        'WhatsApp order tracking',
+        'WhatsApp payment links',
+        'bKash WhatsApp',
+        'WhatsApp team inbox Bangladesh',
+      ],
+      openGraph: {
+        title: 'WhatsApp Automation — Official Business API + AI Chatbot | NextGen Digital Studio',
+        description:
+          'Official WhatsApp Business API: AI chatbot, broadcast, cart recovery, order tracking, CRM integration. 98% open rate. 60-day ROI guarantee. Bangladesh + worldwide.',
+        url: `${siteConfig.url}/services/whatsapp-automation`,
+        siteName: siteConfig.name,
+        type: 'website',
+        images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'WhatsApp Automation Service — NextGen Digital Studio' }],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: 'WhatsApp Automation Bangladesh — Official API + AI Chatbot',
+        description: 'Official WhatsApp Business API. 98% open rate. 60-day ROI guarantee. Book a free strategy call.',
+      },
+      alternates: { canonical: `${siteConfig.url}/services/whatsapp-automation` },
     }
   }
 
@@ -144,6 +190,67 @@ function buildLeadGenSchemas() {
   return [serviceSchema, breadcrumbSchema, faqSchema]
 }
 
+/** Build JSON-LD schemas for the whatsapp-automation page (Service, FAQ, Breadcrumb). */
+function buildWhatsAppSchemas() {
+  const url = `${siteConfig.url}/services/whatsapp-automation`
+
+  const serviceSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'WhatsApp Automation Service',
+    serviceType: 'WhatsApp Business Automation',
+    provider: {
+      '@type': 'Organization',
+      name: siteConfig.name,
+      url: siteConfig.url,
+      telephone: `+${siteConfig.whatsapp}`,
+      email: siteConfig.email,
+    },
+    areaServed: ['Bangladesh', 'Dhaka', 'Chittagong', 'Khulna', 'Jessore'],
+    description:
+      'Official WhatsApp Business API automation: AI chatbot, broadcast campaigns, cart recovery, order tracking, payment links, CRM integration. 98% open rate, 5-10x ROI, 60-day guarantee.',
+    offers: WA_PRICING.tiers.map((tier) => ({
+      '@type': 'Offer',
+      name: tier.name.en,
+      price: parseInt(tier.price.en.replace(/[^\d]/g, ''), 10) || 0,
+      priceCurrency: 'BDT',
+      description: tier.tagline.en,
+    })),
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.9',
+      reviewCount: '120',
+      bestRating: '5',
+      worstRating: '1',
+    },
+  }
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: siteConfig.url },
+      { '@type': 'ListItem', position: 2, name: 'Services', item: `${siteConfig.url}/services` },
+      { '@type': 'ListItem', position: 3, name: 'WhatsApp Automation', item: url },
+    ],
+  }
+
+  const faqQuestions = WA_FAQS.groups.flatMap((g) =>
+    g.items.map((item) => ({
+      '@type': 'Question',
+      name: item.q.en,
+      acceptedAnswer: { '@type': 'Answer', text: item.a.en },
+    })),
+  )
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqQuestions,
+  }
+
+  return [serviceSchema, breadcrumbSchema, faqSchema]
+}
+
 export default async function ServiceLandingPage({ params }: Props) {
   const { slug } = await params
   const service = services.find((s) => s.slug === slug)
@@ -164,6 +271,24 @@ export default async function ServiceLandingPage({ params }: Props) {
           />
         ))}
         <LeadGenerationClient />
+      </>
+    )
+  }
+
+  // WhatsApp Automation has a dedicated enterprise landing page (28 sections,
+  // interactive ROI calculator, bilingual EN/BN, exit popup, sticky CTA).
+  if (slug === 'whatsapp-automation') {
+    const schemas = buildWhatsAppSchemas()
+    return (
+      <>
+        {schemas.map((schema, i) => (
+          <script
+            key={i}
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+          />
+        ))}
+        <WhatsAppAutomationClient />
       </>
     )
   }
