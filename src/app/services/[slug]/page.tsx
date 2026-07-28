@@ -14,6 +14,14 @@ import {
   HOW_IT_WORKS as CRM_HOW,
   TIMELINE as CRM_TIMELINE,
 } from './crm-automation-data'
+import { AiVoiceAgentClient } from './ai-voice-agent-client'
+import {
+  FAQS as VOICE_FAQS,
+  PRICING as VOICE_PRICING,
+  TESTIMONIALS as VOICE_TESTIMONIALS,
+  HOW_IT_WORKS as VOICE_HOW,
+  TIMELINE as VOICE_TIMELINE,
+} from './ai-voice-agent-data'
 
 export const dynamicParams = false
 
@@ -123,6 +131,55 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         description: 'AI-powered CRM automation. 60-day ROI guarantee. Book a free strategy call.',
       },
       alternates: { canonical: `${siteConfig.url}/services/crm-automation` },
+    }
+  }
+
+  // AI Voice Agent gets enhanced, keyword-rich SEO metadata.
+  if (slug === 'ai-voice-agent') {
+    return {
+      title: {
+        absolute:
+          'AI Voice Agent Bangladesh — Enterprise AI Phone Agent 24/7 Bangla & English | NextGen Digital Studio',
+      },
+      description:
+        'Enterprise AI Voice Agent that answers calls 24/7 in Bangla & English. Books appointments, qualifies leads, updates CRM automatically. 90% fewer missed calls, 3x more appointments. 3-5 day setup, 60-day ROI guarantee. Book a free strategy call.',
+      keywords: [
+        'AI Voice Agent Bangladesh',
+        'AI call automation',
+        'AI phone agent',
+        'AI receptionist',
+        'Bangla AI voice bot',
+        'Voice AI for business',
+        'AI call center',
+        'appointment booking AI',
+        'Voice AI CRM',
+        'Conversational AI',
+        'AI voice agent Dhaka',
+        'AI voice bot Bangladesh',
+        'Twilio voice AI',
+        'Vapi Bangladesh',
+        'ElevenLabs voice agent',
+        'AI telemarketing Bangladesh',
+        'voice agent Jessore',
+        'AI caller Bangladesh',
+        'AI receptionist Bangladesh',
+        'voice AI CRM integration',
+      ],
+      openGraph: {
+        title: 'AI Voice Agent — Enterprise AI Phone Agent 24/7 Bangla & English | NextGen Digital Studio',
+        description:
+          'Enterprise AI Voice Agent: answers, qualifies, books appointments, updates CRM. 90% fewer missed calls. 3-5 day setup. 60-day ROI guarantee. Bangladesh + worldwide.',
+        url: `${siteConfig.url}/services/ai-voice-agent`,
+        siteName: siteConfig.name,
+        type: 'website',
+        images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'AI Voice Agent Service — NextGen Digital Studio' }],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: 'AI Voice Agent Bangladesh — Enterprise AI Phone Agent 24/7',
+        description: 'Enterprise AI Voice Agent. 90% fewer missed calls. 60-day ROI guarantee. Book a free strategy call.',
+      },
+      alternates: { canonical: `${siteConfig.url}/services/ai-voice-agent` },
     }
   }
 
@@ -575,10 +632,203 @@ function buildCrmSchemas() {
   return [organizationSchema, serviceSchema, reviewSchema, breadcrumbSchema, faqSchema, howToSchema, timelineHowTo, videoSchema, courseSchema]
 }
 
+/** Build JSON-LD schemas for the ai-voice-agent page.
+ *  Includes: Organization, Service (with offers + aggregateRating), Product
+ *  reviews, BreadcrumbList, FAQPage, HowTo (call flow), HowTo (timeline),
+ *  and VideoObject. */
+function buildVoiceSchemas() {
+  const url = `${siteConfig.url}/services/ai-voice-agent`
+
+  const organizationSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: siteConfig.name,
+    url: siteConfig.url,
+    logo: `${siteConfig.url}/logo.png`,
+    image: `${siteConfig.url}/og-image.jpg`,
+    telephone: `+${siteConfig.whatsapp}`,
+    email: siteConfig.email,
+    description:
+      'NextGen Digital Studio — AI Voice Agent, AI-powered call automation, appointment booking, and CRM integration agency in Bangladesh.',
+    address: {
+      '@type': 'PostalAddress',
+      addressCountry: 'BD',
+      addressLocality: 'Jessore',
+      addressRegion: 'Khulna',
+    },
+    areaServed: ['Bangladesh', 'Dhaka', 'Chittagong', 'Khulna', 'Jessore'],
+    sameAs: [
+      'https://www.facebook.com/nextgendigitalstudio',
+      'https://www.linkedin.com/company/nextgendigitalstudio',
+      'https://www.youtube.com/@nextgendigitalstudio',
+      'https://wa.me/' + siteConfig.whatsapp,
+    ],
+  }
+
+  const serviceSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'AI Voice Agent Service',
+    serviceType: 'AI Voice Agent',
+    provider: {
+      '@type': 'Organization',
+      name: siteConfig.name,
+      url: siteConfig.url,
+      telephone: `+${siteConfig.whatsapp}`,
+      email: siteConfig.email,
+    },
+    brand: { '@type': 'Brand', name: 'NextGen AI Voice Agent' },
+    audience: {
+      '@type': 'BusinessAudience',
+      audienceType: 'Small and medium businesses in Bangladesh',
+    },
+    areaServed: ['Bangladesh', 'Dhaka', 'Chittagong', 'Khulna', 'Jessore'],
+    description:
+      'Enterprise AI Voice Agent that answers calls 24/7 in Bangla & English. Books appointments, qualifies leads, updates CRM automatically. 90% fewer missed calls, 3x more appointments, 3-5 day setup, 60-day ROI guarantee.',
+    offers: VOICE_PRICING.tiers.map((tier) => ({
+      '@type': 'Offer',
+      name: tier.name.en,
+      price: parseInt(tier.price.en.replace(/[^\d]/g, ''), 10) || 0,
+      priceCurrency: 'BDT',
+      description: tier.tagline.en,
+      availability: 'https://schema.org/InStock',
+      url,
+    })),
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.9',
+      reviewCount: '45',
+      bestRating: '5',
+      worstRating: '1',
+    },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', 'h2', '.speakable-summary'],
+    },
+  }
+
+  // Individual customer reviews (rich snippets)
+  const reviewSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: 'AI Voice Agent Service',
+    description:
+      'Enterprise AI Voice Agent that answers calls 24/7 in Bangla & English, books appointments, qualifies leads, updates CRM automatically.',
+    brand: { '@type': 'Brand', name: 'NextGen Digital Studio' },
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.9',
+      reviewCount: '45',
+      bestRating: '5',
+    },
+    review: VOICE_TESTIMONIALS.items.slice(0, 5).map((t) => ({
+      '@type': 'Review',
+      author: { '@type': 'Person', name: t.author.en },
+      reviewBody: t.quote.en,
+      reviewRating: { '@type': 'Rating', ratingValue: String(t.rating || 5), bestRating: '5' },
+    })),
+  }
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: siteConfig.url },
+      { '@type': 'ListItem', position: 2, name: 'Services', item: `${siteConfig.url}/services` },
+      { '@type': 'ListItem', position: 3, name: 'AI Voice Agent', item: url },
+    ],
+  }
+
+  const faqQuestions = VOICE_FAQS.groups.flatMap((g) =>
+    g.items.map((item) => ({
+      '@type': 'Question',
+      name: item.q.en,
+      acceptedAnswer: { '@type': 'Answer', text: item.a.en },
+    })),
+  )
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqQuestions,
+  }
+
+  // HowTo schema for the call flow (12-step pipeline) — improves AI search visibility
+  const howToSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: 'How AI Voice Agent handles a call end-to-end',
+    description:
+      'A 12-step automated pipeline from incoming call to CRM update, SMS/WhatsApp/email follow-up, sales notification, and analytics — all in under 60 seconds per call.',
+    totalTime: 'PT1M',
+    step: VOICE_HOW.steps.map((s, i) => ({
+      '@type': 'HowToStep',
+      position: i + 1,
+      name: s.title.en,
+      text: s.desc.en,
+    })),
+  }
+
+  // HowTo schema for the implementation timeline (Day 1 → Month 2)
+  const timelineHowTo = {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: 'AI Voice Agent implementation timeline',
+    description:
+      'A 3-5 day implementation roadmap from kickoff to optimisation, with milestones at Day 1 (Strategy), Day 2-3 (Voice + KB), Day 4-5 (CRM + Calendar), Day 6 (Testing), Week 2 (Go-Live), and Month 2 (Optimisation).',
+    totalTime: 'P5D',
+    step: VOICE_TIMELINE.phases.map((p, i) => ({
+      '@type': 'HowToStep',
+      position: i + 1,
+      name: `${p.phase.en} — ${p.title.en}`,
+      text: p.desc.en,
+    })),
+  }
+
+  // VideoObject schema for the demo conversation — improves video search visibility
+  const videoSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'VideoObject',
+    name: 'AI Voice Agent live call demo — Bangla + English',
+    description:
+      'A real booking conversation between an AI Voice Agent and a customer in mixed Bangla + English. Hear how natural the AI sounds, how it books appointments, and how it follows up.',
+    thumbnailUrl: `${siteConfig.url}/og-image.jpg`,
+    uploadDate: '2025-01-15',
+    duration: 'PT2M30S',
+    contentUrl: `${siteConfig.url}/services/ai-voice-agent#conversation-example`,
+    embedUrl: `${siteConfig.url}/services/ai-voice-agent#conversation-example`,
+    publisher: {
+      '@type': 'Organization',
+      name: siteConfig.name,
+      logo: { '@type': 'ImageObject', url: `${siteConfig.url}/logo.png` },
+    },
+  }
+
+  return [organizationSchema, serviceSchema, reviewSchema, breadcrumbSchema, faqSchema, howToSchema, timelineHowTo, videoSchema]
+}
+
 export default async function ServiceLandingPage({ params }: Props) {
   const { slug } = await params
   const service = services.find((s) => s.slug === slug)
   if (!service) notFound()
+
+  // AI Voice Agent has a dedicated enterprise landing page (38 sections,
+  // interactive ROI calculator with 6 sliders, bilingual EN/BN, exit popup
+  // with dwell-time gate, sticky mobile CTA, urgency band, 8 JSON-LD schemas).
+  if (slug === 'ai-voice-agent') {
+    const schemas = buildVoiceSchemas()
+    return (
+      <>
+        {schemas.map((schema, i) => (
+          <script
+            key={i}
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+          />
+        ))}
+        <AiVoiceAgentClient />
+      </>
+    )
+  }
 
   // CRM Automation has a dedicated enterprise landing page (35 sections,
   // interactive ROI calculator, CRM maturity assessment, bilingual EN/BN,
