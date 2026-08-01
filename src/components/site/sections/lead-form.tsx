@@ -43,6 +43,7 @@ import {
 } from '@/components/ui/select'
 import { waLink } from '@/lib/whatsapp'
 import { normalizePhone } from '@/lib/phone'
+import { markUserEngaged } from '@/lib/popup-state'
 
 type FormState = 'idle' | 'submitting' | 'success' | 'error'
 
@@ -150,6 +151,9 @@ export function LeadForm() {
       if (!res.ok) throw new Error('request failed')
       setState('success')
       toast.success(t('toast.successTitle'), { description: t('toast.successDesc') })
+      // Mark the user as engaged — stops SocialProof toasts + exit-intent
+      // popup site-wide. Cross-component signal via lib/popup-state.ts.
+      markUserEngaged()
     } catch (err) {
       setState('error')
       toast.error(t('toast.errorTitle'), { description: t('toast.errorDesc') })

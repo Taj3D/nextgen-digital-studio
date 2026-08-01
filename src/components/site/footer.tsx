@@ -26,6 +26,7 @@ import { useLang } from '@/components/site/language-provider'
 import { waLink } from '@/lib/whatsapp'
 import { siteConfig } from '@/lib/site-data'
 import { markUserEngaged } from '@/lib/popup-state'
+import { trackClick } from '@/lib/tracking-client'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -78,12 +79,23 @@ function SocialButton({
   label: string
   children: React.ReactNode
 }) {
+  // WhatsApp deep-links fire `whatsapp_click`; everything else (FB, LI, IG,
+  // YT, X) fires `social_click` — the two event types are tracked separately
+  // in /api/track so the dashboard can attribute ad-spend to each surface.
+  const isWhatsApp = href.includes('wa.me') || href.includes('api.whatsapp.com')
   return (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
       aria-label={label}
+      onClick={() =>
+        trackClick(
+          isWhatsApp ? 'whatsapp_click' : 'social_click',
+          `footer_${isWhatsApp ? 'whatsapp' : label.toLowerCase()}`,
+          { platform: isWhatsApp ? 'WhatsApp' : label },
+        )
+      }
       className="grid h-11 w-11 place-items-center rounded-full border border-border/60 bg-background/40 text-muted-foreground transition-all hover:border-primary/60 hover:bg-primary/15 hover:text-primary"
     >
       {children}

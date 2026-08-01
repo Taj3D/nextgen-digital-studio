@@ -4,6 +4,7 @@ import * as React from 'react'
 import Link from 'next/link'
 import { Cookie, X, Check } from 'lucide-react'
 import { useLang } from '@/components/site/language-provider'
+import { getConsent, setConsent } from '@/lib/consent'
 
 /**
  * CookieConsentBanner — lightweight, non-blocking cookie consent banner.
@@ -11,11 +12,11 @@ import { useLang } from '@/components/site/language-provider'
  * Features:
  * - Shows on first visit (after a 1.5s delay so it doesn't interrupt the
  *   initial page render).
- * - Persists consent to localStorage key 'ng-cookie-consent'.
+ * - Persists consent via the shared `lib/consent.ts` utility (single source
+ *   of truth — <AnalyticsPixels> reads the same state to gate pixel firing).
  * - Bilingual (EN + BN) via useLang().
- * - "Accept" button enables analytics pixels (they're already loaded —
- *   this is mostly for GDPR/Privacy Policy compliance visibility).
- * - "Decline" button hides the banner without enabling extra tracking.
+ * - "Accept" enables analytics pixels (real gating, not cosmetic).
+ * - "Decline" disables analytics pixels for the session + future visits.
  * - Auto-hides after 30 days (re-prompts if consent is older than 30 days).
  * - Dismissible via X button (same as Decline).
  * - Skipped on /admin routes (admin doesn't need consent prompt).
@@ -26,36 +27,7 @@ import { useLang } from '@/components/site/language-provider'
  * fulfills that promise.
  */
 
-const STORAGE_KEY = 'ng-cookie-consent'
-const CONSENT_TTL_MS = 30 * 24 * 60 * 60 * 1000 // 30 days
 const SHOW_DELAY_MS = 1500
-
-type ConsentState = 'accepted' | 'declined' | null
-
-function loadConsent(): { state: ConsentState; timestamp: number } | null {
-  if (typeof window === 'undefined') return null
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    if (!raw) return null
-    const parsed = JSON.parse(raw) as { state: ConsentState; timestamp: number }
-    if (!parsed.state || !parsed.timestamp) return null
-    // Expire after TTL
-    if (Date.now() - parsed.timestamp > CONSENT_TTL_MS) return null
-    return parsed
-  } catch {
-    return null
-  }
-}
-
-function saveConsent(state: 'accepted' | 'declined') {
-  if (typeof window === 'undefined') return
-  try {
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify({ state, timestamp: Date.now() }),
-    )
-  } catch {}
-}
 
 export function CookieConsentBanner() {
   const { t, lang } = useLang()
@@ -67,9 +39,8 @@ export function CookieConsentBanner() {
       return
     }
 
-    // Don't show if already consented
-    const existing = loadConsent()
-    if (existing?.state === 'accepted' || existing?.state === 'declined') {
+    // Don't show if already consented (accepted OR declined)
+    if (getConsent() !== null) {
       return
     }
 
@@ -79,12 +50,12 @@ export function CookieConsentBanner() {
   }, [])
 
   const handleAccept = React.useCallback(() => {
-    saveConsent('accepted')
+    setConsent('accepted')
     setVisible(false)
   }, [])
 
   const handleDecline = React.useCallback(() => {
-    saveConsent('declined')
+    setConsent('declined')
     setVisible(false)
   }, [])
 

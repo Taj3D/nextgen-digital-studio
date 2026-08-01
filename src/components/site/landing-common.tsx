@@ -13,6 +13,7 @@ import { toast } from 'sonner'
 import { PaymentInstructions } from './payment-instructions'
 import { normalizePhone } from '@/lib/phone'
 import { markUserEngaged } from '@/lib/popup-state'
+import { trackClick } from '@/lib/tracking-client'
 
 /* -------------------------------------------------------------------------- */
 /*  Social icons                                                              */
@@ -36,6 +37,7 @@ export function LandingSocials({ className = '' }: { className?: string }) {
           target="_blank"
           rel="noreferrer"
           aria-label={label}
+          onClick={() => trackClick('social_click', `landing_footer_${label.toLowerCase()}`, { platform: label })}
           className="flex h-9 w-9 items-center justify-center rounded-full border border-border/60 bg-background/60 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
         >
           <Icon className="h-4 w-4" />
@@ -65,6 +67,7 @@ export function WhatsAppCTA({
       href={`https://wa.me/${siteConfig.whatsapp}?text=${text}`}
       target="_blank"
       rel="noreferrer"
+      onClick={() => trackClick('whatsapp_click', 'landing_whatsapp_cta', { platform: 'WhatsApp' })}
       className={`inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-green-600 to-emerald-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-green-600/25 transition-transform hover:scale-[1.02] ${className}`}
     >
       <MessageCircle className="h-4 w-4" />
@@ -136,19 +139,10 @@ export function LandingLeadForm({
         body: JSON.stringify(payload),
       })
       if (!res.ok) throw new Error('Request failed')
-      // Fire-and-forget tracking
-      fetch('/api/track', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'lead',
-          page: typeof window !== 'undefined' ? window.location.pathname : '',
-          source,
-          email: payload.email,
-          phone: payload.phone,
-          name: payload.name,
-        }),
-      }).catch(() => {})
+      // NOTE: /api/contact already fires `trackEvent({type:'lead'})` server-side
+      // (saves to DB + fans out to GA4/Meta/TikTok/Snapchat Conversions APIs).
+      // We deliberately do NOT also fire /api/track 'lead' client-side here —
+      // doing so would double-count every lead in the CRM + ad platforms.
       setDone(true)
       toast.success(t('landing.toastSuccess'))
       form.reset()

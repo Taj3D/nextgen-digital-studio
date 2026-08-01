@@ -5,6 +5,7 @@ import { MessageCircle, ArrowUp } from 'lucide-react'
 
 import { useLang } from '@/components/site/language-provider'
 import { waLink } from '@/lib/whatsapp'
+import { trackClick } from '@/lib/tracking-client'
 
 export function FloatingButtons() {
   const { t } = useLang()
@@ -62,6 +63,7 @@ export function FloatingButtons() {
           target="_blank"
           rel="noopener noreferrer"
           aria-label={t('float.whatsapp')}
+          onClick={() => trackClick('whatsapp_click', 'floating_button', { platform: 'WhatsApp' })}
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
           onFocus={() => setHovered(true)}

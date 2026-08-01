@@ -2,6 +2,7 @@ import { Navbar } from "@/components/site/navbar";
 import { SiteFooter } from "@/components/site/footer";
 import { FloatingButtons } from "@/components/site/floating-buttons";
 import { ExitIntentPopup } from "@/components/site/exit-intent-popup";
+import { HomePageTracker } from "@/components/site/home-page-tracker";
 import { faqs, TESTIMONIALS } from "@/lib/site-data";
 import { HeroSection } from "@/components/site/sections/hero";
 import { TrustBanner } from "@/components/site/sections/trust-banner";
@@ -255,6 +256,9 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewLd) }}
       />
       <Navbar />
+      {/* Fires server-side page_view tracking for the homepage (closes the
+          gap with landing pages that use usePageViewTracking). */}
+      <HomePageTracker />
       <main className="flex-1">
         {/* === Authority & Attention === */}
         <HeroSection />

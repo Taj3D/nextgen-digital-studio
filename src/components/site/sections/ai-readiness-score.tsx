@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { RefreshCw, ArrowRight, Sparkles, CheckCircle2, AlertCircle, XCircle } from 'lucide-react'
+import { RefreshCw, ArrowRight, Sparkles } from 'lucide-react'
 import { Reveal, SectionShell, Eyebrow } from '@/components/site/reveal'
 import { useLang } from '@/components/site/language-provider'
 import { Button } from '@/components/ui/button'

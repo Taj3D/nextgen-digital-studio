@@ -14,7 +14,7 @@ import { useLang } from '@/components/site/language-provider'
 const CATEGORIES: { titleKey: string; dot: string; techs: string[] }[] = [
   {
     titleKey: 'stack.cat1',
-    dot: 'bg-violet-500',
+    dot: 'bg-teal-500',
     techs: ['OpenAI', 'Claude', 'Gemini', 'Meta Llama', 'Mistral', 'OpenRouter'],
   },
   {

@@ -39,6 +39,7 @@ import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { hasUserEngaged, markUserEngaged } from '@/lib/popup-state'
+import { toast } from 'sonner'
 
 const STORAGE_KEY = 'exitIntentShown'
 const MIN_DELAY_MS = 8000
@@ -60,6 +61,7 @@ export function ExitIntentPopup() {
   const [open, setOpen] = React.useState(false)
   const [email, setEmail] = React.useState('')
   const [touched, setTouched] = React.useState(false)
+  const [submitting, setSubmitting] = React.useState(false)
 
   const inputRef = React.useRef<HTMLInputElement>(null)
   const cardRef = React.useRef<HTMLDivElement>(null)
@@ -179,10 +181,51 @@ export function ExitIntentPopup() {
     }
   }, [open])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setTouched(true)
-    if (!email.trim()) return
+    const trimmed = email.trim()
+    if (!trimmed) return
+
+    setSubmitting(true)
+    // Persist the email so the user actually receives their free audit +
+    // newsletter. This was previously a silent no-op (email discarded) —
+    // users believed they had signed up but nothing happened. Now the email
+    // goes to /api/newsletter which saves to DB, fires CAPI tracking, and
+    // sends a bilingual welcome email.
+    try {
+      await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: trimmed, source: 'exit_intent_popup' }),
+      }).catch(() => {})
+      // Fire a 'lead' tracking event (audit request — distinct from the
+      // 'complete_registration' the newsletter endpoint fires server-side).
+      // Best-effort; never blocks the UX.
+      fetch('/api/track', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'lead',
+          page: typeof window !== 'undefined' ? window.location.pathname : '/',
+          source: 'exit_intent_popup',
+          email: trimmed,
+        }),
+      }).catch(() => {})
+
+      toast.success(
+        isBn ? '✅ ধন্যবাদ! আপনার ফ্রি অডিট প্রস্তুত হচ্ছে।' : '✅ Thanks! Your free audit is on the way.',
+      )
+    } catch {
+      // Network failure — still mark engaged + scroll so the UX is intact.
+      // The email is lost, but the user is not blocked from continuing.
+      toast.error(
+        isBn ? 'নেটওয়ার্ক সমস্যা — নিচের ফর্মে আবার চেষ্টা করুন।' : 'Network issue — please try the form below.',
+      )
+    } finally {
+      setSubmitting(false)
+    }
+
     // Mark the user as engaged — this stops SocialProof toasts AND prevents
     // the exit popup from re-appearing (cross-component signal).
     markUserEngaged()
@@ -321,10 +364,13 @@ export function ExitIntentPopup() {
                       </div>
                       <Button
                         type="submit"
+                        disabled={submitting}
                         className="gradient-brand animate-pulse-glow h-11 shrink-0 text-white hover:opacity-95"
                       >
-                        {isBn ? 'ফ্রি অডিট নিন' : 'Get My Free Audit'}
-                        <ArrowRight className="h-4 w-4" />
+                        {submitting
+                          ? (isBn ? 'পাঠানো হচ্ছে...' : 'Sending...')
+                          : (isBn ? 'ফ্রি অডিট নিন' : 'Get My Free Audit')}
+                        {!submitting && <ArrowRight className="h-4 w-4" />}
                       </Button>
                     </div>
 

@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { dbAvailable, getSafeDb } from "@/lib/db-safe";
 import { sendEmail } from "@/lib/email-lead";
+import { sendToGoogleSheets, type SheetsResult } from "@/lib/google-sheets";
+import { trackEvent } from "@/lib/tracking";
 import { rateLimit, getClientIP } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
@@ -32,7 +34,12 @@ export async function POST(req: Request) {
       );
     }
 
-    const email = String((body as Record<string, unknown>).email ?? "").trim().toLowerCase();
+    const b = body as Record<string, unknown>;
+    const email = String(b.email ?? "").trim().toLowerCase();
+    // Optional source tag — e.g. "footer", "exit_intent_popup". Lets the
+    // admin dashboard + ad platforms attribute the subscription to the
+    // correct surface. Defaults to "footer" for backward compat.
+    const source = String(b.source ?? "footer").trim().slice(0, 60) || "footer";
 
     if (!email) {
       return NextResponse.json(
@@ -56,7 +63,7 @@ export async function POST(req: Request) {
           const sub = await db.newsletterSubscriber.upsert({
             where: { email },
             update: { active: true },
-            create: { email, active: true, source: "footer" },
+            create: { email, active: true, source },
           })
           subId = sub.id
         }
@@ -66,6 +73,24 @@ export async function POST(req: Request) {
         console.error("[newsletter] db error (degraded mode)", err)
       }
     }
+
+    // Google Sheets sync — keeps the CRM sheet in lockstep with the DB so
+    // the marketing team never misses a subscriber even if the DB is down.
+    // Fire-and-forget; a Sheets failure must not block the response.
+    sendToGoogleSheets({
+      name: "",
+      email,
+      phone: "",
+      company: "",
+      service: "",
+      message: "Newsletter subscription",
+      source: `newsletter_${source}`,
+      leadId: subId,
+      submittedAt: new Date().toISOString(),
+      meta: { subscriberId: subId },
+    }).catch((err: unknown) => {
+      console.error("[newsletter] google sheets sync error", err)
+    })
 
     // Send a bilingual welcome email (logged + persisted as TrackingEvent).
     // Fire-and-forget — never blocks the response.
@@ -93,6 +118,18 @@ Thank you! 🚀
 📞 +880 1711-731354`,
       source: "newsletter_welcome",
     }).catch((err) => console.error("[newsletter] welcome email error", err));
+
+    // Server-side tracking — fires Conversions API events to GA4/Meta/TikTok/
+    // Snapchat so paid-ads attribution captures the subscription. Uses
+    // 'complete_registration' (newsletter signup = registration action).
+    // Best-effort; never blocks the response.
+    trackEvent({
+      type: "complete_registration",
+      source: `newsletter_${source}`,
+      email,
+      page: "/api/newsletter",
+      meta: { subscriberId: subId, newsletterSource: source },
+    }).catch((err) => console.error("[newsletter] tracking error", err));
 
     return NextResponse.json({ ok: true, id: subId });
   } catch (err) {

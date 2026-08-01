@@ -1,8 +1,14 @@
 "use client";
 
 import Script from "next/script";
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useSyncExternalStore } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
+import {
+  getConsent,
+  subscribeConsent,
+  consentSnapshot,
+  consentServerSnapshot,
+} from "@/lib/consent";
 
 /**
  * AnalyticsPixels — installs client-side tracking pixels on every page.
@@ -13,6 +19,16 @@ import { usePathname, useSearchParams } from "next/navigation";
  * 3. Snapchat Pixel                 — NEXT_PUBLIC_SNAP_PIXEL_ID
  * 4. TikTok Pixel                   — NEXT_PUBLIC_TIKTOK_PIXEL_ID
  *
+ * Consent gating (GDPR):
+ *   - If the user has explicitly DECLINED consent (via <CookieConsentBanner>),
+ *     NO pixel scripts are rendered and NO events fire. This is real
+ *     gating, not cosmetic.
+ *   - If consent is ACCEPTED or unknown (not yet decided), pixels load per
+ *     the legitimate-interest baseline. The banner appears after 1.5s to
+ *     collect an explicit choice.
+ *   - Listens for live consent changes via `onConsentChange` so a Decline
+ *     click instantly suppresses all future PageView events.
+ *
  * Server-side Conversions API (CAPI) tracking is in src/lib/tracking.ts.
  */
 
@@ -22,6 +38,20 @@ const SNAP_PIXEL_ID = process.env.NEXT_PUBLIC_SNAP_PIXEL_ID;
 const TIKTOK_PIXEL_ID = process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID;
 
 export function AnalyticsPixels() {
+  // Read consent via useSyncExternalStore — this is the React-idiomatic way
+  // to subscribe to an external store (localStorage + custom event). It
+  // re-renders automatically when consent changes, with no setState-in-effect
+  // anti-pattern. Server snapshot is always 'unknown' (pixels load during SSR
+  // + first paint, then the banner collects the user's choice 1.5s later).
+  const consent = useSyncExternalStore(
+    subscribeConsent,
+    consentSnapshot,
+    consentServerSnapshot,
+  );
+
+  // User has explicitly declined — render nothing. No pixels, no events.
+  if (consent === "declined") return null;
+
   return (
     <>
       {/* Google Analytics 4 */}
@@ -90,6 +120,11 @@ function PageViewTracker() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+    // Consent gate: if the user has declined since mount, do nothing.
+    // This check runs on every route change so a mid-session Decline is
+    // respected immediately.
+    if (getConsent() === "declined") return;
+
     // Build the full URL (pathname + search params) for accurate tracking.
     const search = searchParams?.toString();
     const url = pathname + (search ? `?${search}` : "");
