@@ -22,14 +22,14 @@ type StepType = {
 }
 
 const STEP_LIBRARY: StepType[] = [
-  { id: 'landing', name: 'Landing Page', desc: 'Visitor lands on your optimized page', icon: Globe, color: 'from-blue-600 to-cyan-500' },
-  { id: 'chat', name: 'AI Chat Agent', desc: 'AI engages & qualifies the lead', icon: MessageSquare, color: 'from-cyan-500 to-blue-500' },
+  { id: 'landing', name: 'Landing Page', desc: 'Visitor lands on your optimized page', icon: Globe, color: 'from-emerald-600 to-cyan-500' },
+  { id: 'chat', name: 'AI Chat Agent', desc: 'AI engages & qualifies the lead', icon: MessageSquare, color: 'from-cyan-500 to-emerald-500' },
   { id: 'whatsapp', name: 'WhatsApp Follow-up', desc: 'Instant WhatsApp message sent', icon: MessageSquare, color: 'from-green-500 to-emerald-500' },
   { id: 'crm', name: 'CRM Auto-Tag', desc: 'Lead tagged & added to pipeline', icon: Workflow, color: 'from-emerald-500 to-teal-500' },
   { id: 'email', name: 'Email Sequence', desc: '3-day nurture email flow', icon: Mail, color: 'from-violet-500 to-purple-500' },
   { id: 'call', name: 'AI Voice Call', desc: 'AI books a strategy call', icon: PhoneCall, color: 'from-amber-500 to-orange-500' },
   { id: 'meeting', name: 'Booked Meeting', desc: 'Calendar invite sent automatically', icon: CalendarCheck, color: 'from-rose-500 to-pink-500' },
-  { id: 'analytics', name: 'Revenue Tracking', desc: 'Conversion tracked in dashboard', icon: TrendingUp, color: 'from-blue-600 to-indigo-500' },
+  { id: 'analytics', name: 'Revenue Tracking', desc: 'Conversion tracked in dashboard', icon: TrendingUp, color: 'from-emerald-600 to-teal-500' },
 ]
 
 const DEFAULT_FLOW = ['landing', 'chat', 'whatsapp', 'crm', 'call', 'meeting']
@@ -74,7 +74,7 @@ export function WorkflowBuilder() {
   return (
     <section id="workflow-builder" className="relative scroll-mt-24 overflow-hidden py-20 sm:py-28">
       <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute left-0 top-1/4 h-72 w-72 rounded-full bg-blue-600/10 blur-[100px]" />
+        <div className="absolute left-0 top-1/4 h-72 w-72 rounded-full bg-emerald-600/10 blur-[100px]" />
         <div className="absolute right-0 bottom-1/4 h-72 w-72 rounded-full bg-cyan-500/10 blur-[100px]" />
       </div>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -114,7 +114,7 @@ export function WorkflowBuilder() {
                       "flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-all",
                       running
                         ? "bg-amber-500/15 text-amber-600"
-                        : "bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-md shadow-blue-600/25 hover:scale-105",
+                        : "bg-gradient-to-r from-emerald-600 to-cyan-500 text-white shadow-md shadow-emerald-600/25 hover:scale-105",
                     )}
                   >
                     {running ? (
@@ -139,7 +139,7 @@ export function WorkflowBuilder() {
                   </p>
                   <button
                     onClick={() => setShowLibrary(true)}
-                    className="mt-3 flex items-center gap-1 rounded-lg bg-blue-600/10 px-3 py-1.5 text-xs font-semibold text-blue-600 hover:bg-blue-600/15"
+                    className="mt-3 flex items-center gap-1 rounded-lg bg-emerald-600/10 px-3 py-1.5 text-xs font-semibold text-emerald-600 hover:bg-emerald-600/15"
                   >
                     <Plus className="h-3 w-3" /> {t('workflow.addSteps')}
                   </button>
@@ -157,8 +157,8 @@ export function WorkflowBuilder() {
                         className={cn(
                           "group relative flex items-center gap-3 rounded-xl border p-3 transition-all",
                           activeStep === index && running
-                            ? "border-blue-600/50 bg-blue-600/[0.06] shadow-lg shadow-blue-600/15"
-                            : "border-border/60 bg-background hover:border-blue-600/30",
+                            ? "border-emerald-600/50 bg-emerald-600/[0.06] shadow-lg shadow-emerald-600/15"
+                            : "border-border/60 bg-background hover:border-emerald-600/30",
                         )}
                       >
                         {/* Drag handle */}
@@ -179,7 +179,7 @@ export function WorkflowBuilder() {
                         )}>
                           <step.icon className="h-5 w-5" />
                           {activeStep === index && running && (
-                            <span className="absolute inset-0 animate-ping rounded-lg bg-blue-600/40" />
+                            <span className="absolute inset-0 animate-ping rounded-lg bg-emerald-600/40" />
                           )}
                         </div>
 
@@ -224,7 +224,7 @@ export function WorkflowBuilder() {
               {availableToAdd.length > 0 && (
                 <button
                   onClick={() => setShowLibrary((v) => !v)}
-                  className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl border-2 border-dashed border-border/60 py-2.5 text-xs font-semibold text-muted-foreground transition-colors hover:border-blue-600/40 hover:bg-blue-600/[0.03] hover:text-blue-600"
+                  className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl border-2 border-dashed border-border/60 py-2.5 text-xs font-semibold text-muted-foreground transition-colors hover:border-emerald-600/40 hover:bg-emerald-600/[0.03] hover:text-emerald-600"
                 >
                   <Plus className="h-3.5 w-3.5" /> {t('workflow.addStep')} ({availableToAdd.length} {t('workflow.available')})
                 </button>
@@ -244,7 +244,7 @@ export function WorkflowBuilder() {
                         <button
                           key={s.id}
                           onClick={() => addStep(s.id)}
-                          className="flex flex-col items-center gap-1.5 rounded-lg border border-border/60 bg-background p-2.5 text-center transition-all hover:border-blue-600/40 hover:shadow-md"
+                          className="flex flex-col items-center gap-1.5 rounded-lg border border-border/60 bg-background p-2.5 text-center transition-all hover:border-emerald-600/40 hover:shadow-md"
                         >
                           <div className={cn("flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br text-white", s.color)}>
                             <s.icon className="h-4 w-4" />
@@ -263,31 +263,31 @@ export function WorkflowBuilder() {
           <Reveal delay={0.1}>
             <div className="flex h-full flex-col gap-4">
               {/* Live stats */}
-              <div className="rounded-3xl border border-border/60 bg-gradient-to-br from-blue-600 to-cyan-500 p-6 text-white shadow-xl">
+              <div className="rounded-3xl border border-border/60 bg-gradient-to-br from-emerald-600 to-cyan-500 p-6 text-white shadow-xl">
                 <div className="absolute inset-0 bg-grid opacity-10" />
                 <div className="relative">
                   <div className="flex items-center gap-2">
                     <Sparkles className="h-4 w-4" />
-                    <span className="text-xs font-semibold uppercase tracking-wider text-blue-50/90">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-emerald-50/90">
                       {t('workflow.funnelProjection')}
                     </span>
                   </div>
                   <div className="mt-4 grid grid-cols-2 gap-3">
                     <div className="rounded-xl bg-white/12 px-3 py-3 backdrop-blur">
                       <p className="font-heading text-2xl font-extrabold">{flow.length}</p>
-                      <p className="text-[10px] text-blue-50/80">{t('workflow.automationSteps')}</p>
+                      <p className="text-[10px] text-emerald-50/80">{t('workflow.automationSteps')}</p>
                     </div>
                     <div className="rounded-xl bg-white/12 px-3 py-3 backdrop-blur">
                       <p className="font-heading text-2xl font-extrabold">24/7</p>
-                      <p className="text-[10px] text-blue-50/80">{t('workflow.alwaysRunning')}</p>
+                      <p className="text-[10px] text-emerald-50/80">{t('workflow.alwaysRunning')}</p>
                     </div>
                     <div className="rounded-xl bg-white/12 px-3 py-3 backdrop-blur">
                       <p className="font-heading text-2xl font-extrabold">&lt;5s</p>
-                      <p className="text-[10px] text-blue-50/80">{t('workflow.leadResponse')}</p>
+                      <p className="text-[10px] text-emerald-50/80">{t('workflow.leadResponse')}</p>
                     </div>
                     <div className="rounded-xl bg-white/12 px-3 py-3 backdrop-blur">
                       <p className="font-heading text-2xl font-extrabold">{flow.length > 4 ? '3x' : '2x'}</p>
-                      <p className="text-[10px] text-blue-50/80">{t('workflow.estConversion')}</p>
+                      <p className="text-[10px] text-emerald-50/80">{t('workflow.estConversion')}</p>
                     </div>
                   </div>
                 </div>
@@ -297,14 +297,14 @@ export function WorkflowBuilder() {
               <div className="flex-1 rounded-3xl border border-border/60 bg-card p-6">
                 <h3 className="font-heading text-sm font-bold">{t('workflow.howThisWorks')}</h3>
                 <div className="mt-3 space-y-2.5 text-xs text-muted-foreground">
-                  <p className="flex gap-2"><span className="font-bold text-blue-600">1.</span> {t('workflow.step1')}</p>
-                  <p className="flex gap-2"><span className="font-bold text-blue-600">2.</span> {t('workflow.step2')}</p>
-                  <p className="flex gap-2"><span className="font-bold text-blue-600">3.</span> {t('workflow.step3')}</p>
-                  <p className="flex gap-2"><span className="font-bold text-blue-600">4.</span> {t('workflow.step4')}</p>
+                  <p className="flex gap-2"><span className="font-bold text-emerald-600">1.</span> {t('workflow.step1')}</p>
+                  <p className="flex gap-2"><span className="font-bold text-emerald-600">2.</span> {t('workflow.step2')}</p>
+                  <p className="flex gap-2"><span className="font-bold text-emerald-600">3.</span> {t('workflow.step3')}</p>
+                  <p className="flex gap-2"><span className="font-bold text-emerald-600">4.</span> {t('workflow.step4')}</p>
                 </div>
                 <Button
                   onClick={() => openWith(`Custom Workflow: ${steps.map((s) => s.name).join(' → ')}`)}
-                  className="mt-4 w-full rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 font-semibold shadow-lg shadow-blue-600/25"
+                  className="mt-4 w-full rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-500 font-semibold shadow-lg shadow-emerald-600/25"
                 >
                   {t('workflow.buildForMe')}
                   <ArrowRight className="ml-2 h-4 w-4" />

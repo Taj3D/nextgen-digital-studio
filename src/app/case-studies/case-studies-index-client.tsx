@@ -44,7 +44,7 @@ export function CaseStudiesIndexClient() {
                 href={`/case-studies/${cs.slug}`}
                 className="group relative flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-card p-6 shadow-sm transition-all hover:border-emerald-500/40 hover:shadow-lg"
               >
-                <div className="inline-flex w-fit items-center gap-1.5 rounded-full bg-blue-600/10 px-3 py-1 text-xs font-semibold text-blue-600 dark:text-blue-400">
+                <div className="inline-flex w-fit items-center gap-1.5 rounded-full bg-emerald-600/10 px-3 py-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
                   <Building2 className="h-3.5 w-3.5" />
                   {tr(cs.industry)}
                 </div>
@@ -84,7 +84,7 @@ export function CaseStudiesIndexClient() {
             </p>
             <Link
               href="/#lead-form"
-              className="mt-5 inline-flex h-12 items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 px-6 text-sm font-bold text-white shadow-lg shadow-blue-600/25 transition-transform hover:scale-[1.03]"
+              className="mt-5 inline-flex h-12 items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-500 px-6 text-sm font-bold text-white shadow-lg shadow-emerald-600/25 transition-transform hover:scale-[1.03]"
             >
               {t('caseStudies.ctaButton')}
               <ArrowRight className="h-4 w-4" />

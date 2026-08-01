@@ -86,7 +86,7 @@ export function BlogIndexClient() {
             </p>
             <Link
               href="/#lead-form"
-              className="mt-5 inline-flex h-12 items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 px-6 text-sm font-bold text-white shadow-lg shadow-blue-600/25 transition-transform hover:scale-[1.03]"
+              className="mt-5 inline-flex h-12 items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-500 px-6 text-sm font-bold text-white shadow-lg shadow-emerald-600/25 transition-transform hover:scale-[1.03]"
             >
               {t('blog.ctaButton')}
               <ArrowRight className="h-4 w-4" />

@@ -25,7 +25,7 @@ export function Blog() {
           </div>
           <button
             onClick={() => openWith("Blog / newsletter")}
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:underline"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-emerald-600 hover:underline"
           >
             Subscribe to updates <ArrowRight className="h-4 w-4" />
           </button>
@@ -34,15 +34,15 @@ export function Blog() {
         <div className="mt-12 grid gap-6 lg:grid-cols-2">
           {/* Featured post */}
           <Reveal>
-            <article className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-border/60 bg-card card-hover hover:border-blue-600/40 hover:shadow-2xl hover:shadow-blue-600/5">
-              <div className="relative aspect-[16/9] overflow-hidden bg-gradient-to-br from-blue-600 to-cyan-500">
+            <article className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-border/60 bg-card card-hover hover:border-emerald-600/40 hover:shadow-2xl hover:shadow-emerald-600/5">
+              <div className="relative aspect-[16/9] overflow-hidden bg-gradient-to-br from-emerald-600 to-cyan-500">
                 <div className="absolute inset-0 bg-grid opacity-20" />
                 <div className="absolute inset-0 flex items-center justify-center p-8">
                   <p className="font-heading text-2xl font-extrabold leading-tight text-white sm:text-3xl">
                     {tr(featured.title)}
                   </p>
                 </div>
-                <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-blue-600">
+                <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-emerald-600">
                   {featured.category}
                 </span>
               </div>
@@ -56,7 +56,7 @@ export function Blog() {
                 <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">
                   {tr(featured.excerpt)}
                 </p>
-                <button className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600">
+                <button className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-emerald-600">
                   Read article <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </button>
               </div>
@@ -67,8 +67,8 @@ export function Blog() {
           <div className="grid gap-6">
             {rest.map((post, i) => (
               <Reveal key={post.slug} delay={i * 0.08}>
-                <article className="group flex h-full gap-4 rounded-2xl border border-border/60 bg-card p-4 card-hover hover:border-blue-600/40 sm:p-5">
-                  <div className="relative hidden aspect-square w-28 shrink-0 overflow-hidden rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500 sm:block">
+                <article className="group flex h-full gap-4 rounded-2xl border border-border/60 bg-card p-4 card-hover hover:border-emerald-600/40 sm:p-5">
+                  <div className="relative hidden aspect-square w-28 shrink-0 overflow-hidden rounded-xl bg-gradient-to-br from-emerald-600 to-cyan-500 sm:block">
                     <div className="absolute inset-0 bg-grid opacity-20" />
                     <span className="absolute inset-0 flex items-center justify-center p-2 text-center text-[11px] font-bold leading-tight text-white">
                       {post.category}
@@ -76,12 +76,12 @@ export function Blog() {
                   </div>
                   <div className="flex flex-1 flex-col">
                     <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                      <span className="rounded-full bg-blue-600/10 px-2 py-0.5 font-semibold text-blue-600">
+                      <span className="rounded-full bg-emerald-600/10 px-2 py-0.5 font-semibold text-emerald-600">
                         {post.category}
                       </span>
                       <span>{post.readTime}</span>
                     </div>
-                    <h3 className="mt-2 font-heading text-base font-bold leading-snug group-hover:text-blue-600">
+                    <h3 className="mt-2 font-heading text-base font-bold leading-snug group-hover:text-emerald-600">
                       {tr(post.title)}
                     </h3>
                     <p className="mt-1.5 line-clamp-2 text-xs text-muted-foreground">

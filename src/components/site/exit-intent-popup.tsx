@@ -38,6 +38,7 @@ import { useLang } from '@/components/site/language-provider'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { hasUserEngaged, markUserEngaged } from '@/lib/popup-state'
 
 const STORAGE_KEY = 'exitIntentShown'
 const MIN_DELAY_MS = 8000
@@ -76,10 +77,14 @@ export function ExitIntentPopup() {
   // Mark mounted (avoid any SSR/client mismatch on the AnimatePresence tree)
   React.useEffect(() => setMounted(true), [])
 
-  // Arm the trigger after the minimum browse delay, unless already shown this session.
+  // Arm the trigger after the minimum browse delay, unless already shown
+  // this session OR the user has already submitted an email anywhere on the
+  // site (engaged customers should never see the exit popup again).
   React.useEffect(() => {
     if (!mounted) return
     if (typeof window === 'undefined') return
+
+    if (hasUserEngaged()) return
 
     let alreadyShown = false
     try {
@@ -95,9 +100,11 @@ export function ExitIntentPopup() {
     return () => window.clearTimeout(armTimer)
   }, [mounted])
 
-  // Fire the popup (guarded so it can only fire once per session).
+  // Fire the popup (guarded so it can only fire once per session, and never
+  // if the user has already engaged by submitting an email anywhere).
   const trigger = React.useCallback(() => {
     if (openRef.current) return
+    if (hasUserEngaged()) return
     try {
       sessionStorage.setItem(STORAGE_KEY, '1')
     } catch {
@@ -176,6 +183,9 @@ export function ExitIntentPopup() {
     e.preventDefault()
     setTouched(true)
     if (!email.trim()) return
+    // Mark the user as engaged — this stops SocialProof toasts AND prevents
+    // the exit popup from re-appearing (cross-component signal).
+    markUserEngaged()
     setOpen(false)
     setEmail('')
     setTouched(false)

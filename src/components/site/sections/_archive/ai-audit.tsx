@@ -147,7 +147,7 @@ export function AiAudit() {
   return (
     <section id="ai-audit" className="relative scroll-mt-24 overflow-hidden py-20 sm:py-28">
       <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute left-1/4 top-0 h-72 w-72 rounded-full bg-blue-600/10 blur-[100px]" />
+        <div className="absolute left-1/4 top-0 h-72 w-72 rounded-full bg-emerald-600/10 blur-[100px]" />
         <div className="absolute right-1/4 bottom-0 h-72 w-72 rounded-full bg-cyan-500/10 blur-[100px]" />
       </div>
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
@@ -168,7 +168,7 @@ export function AiAudit() {
             {step > 0 && step <= totalSteps && (
               <div className="h-1.5 w-full bg-muted">
                 <motion.div
-                  className="h-full bg-gradient-to-r from-blue-600 to-cyan-500"
+                  className="h-full bg-gradient-to-r from-emerald-600 to-cyan-500"
                   initial={{ width: 0 }}
                   animate={{ width: `${(step / totalSteps) * 100}%` }}
                   transition={{ duration: 0.3 }}
@@ -181,7 +181,7 @@ export function AiAudit() {
                 {/* Intro */}
                 {step === 0 && (
                   <motion.div key="intro" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-center">
-                    <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 to-cyan-500 shadow-xl shadow-blue-600/25">
+                    <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-600 to-cyan-500 shadow-xl shadow-emerald-600/25">
                       <Gauge className="h-10 w-10 text-white" />
                     </div>
                     <h3 className="font-heading text-2xl font-bold sm:text-3xl">{t('audit.getScore')}</h3>
@@ -196,7 +196,7 @@ export function AiAudit() {
                     <Button
                       onClick={() => setStep(1)}
                       size="lg"
-                      className="mt-8 h-13 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 px-7 font-semibold shadow-lg shadow-blue-600/25"
+                      className="mt-8 h-13 rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-500 px-7 font-semibold shadow-lg shadow-emerald-600/25"
                     >
                       {t('audit.startFreeAudit')}
                       <ArrowRight className="ml-2 h-4 w-4" />
@@ -208,7 +208,7 @@ export function AiAudit() {
                 {step >= 1 && step <= totalSteps && (
                   <motion.div key={`q-${step}`} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
                     <div className="mb-2 flex items-center justify-between">
-                      <span className="text-xs font-semibold uppercase tracking-wider text-blue-600">
+                      <span className="text-xs font-semibold uppercase tracking-wider text-emerald-600">
                         Question {step} of {totalSteps}
                       </span>
                       {step > 1 && (
@@ -226,15 +226,15 @@ export function AiAudit() {
                         <button
                           key={opt.label}
                           onClick={() => answer(questions[step - 1].id, opt.score)}
-                          className="group flex items-center justify-between rounded-xl border border-border/60 bg-background px-5 py-4 text-left transition-all hover:border-blue-600/40 hover:bg-blue-600/[0.03] hover:shadow-md"
+                          className="group flex items-center justify-between rounded-xl border border-border/60 bg-background px-5 py-4 text-left transition-all hover:border-emerald-600/40 hover:bg-emerald-600/[0.03] hover:shadow-md"
                         >
                           <span className="flex items-center gap-3 text-sm font-medium text-foreground sm:text-base">
-                            <span className="flex h-7 w-7 items-center justify-center rounded-full border border-border/60 text-xs font-bold text-muted-foreground transition-colors group-hover:border-blue-600 group-hover:bg-blue-600 group-hover:text-white">
+                            <span className="flex h-7 w-7 items-center justify-center rounded-full border border-border/60 text-xs font-bold text-muted-foreground transition-colors group-hover:border-emerald-600 group-hover:bg-emerald-600 group-hover:text-white">
                               {String.fromCharCode(65 + i)}
                             </span>
                             {tr(opt.label)}
                           </span>
-                          <ArrowRight className="h-4 w-4 text-muted-foreground/30 transition-all group-hover:translate-x-0.5 group-hover:text-blue-600" />
+                          <ArrowRight className="h-4 w-4 text-muted-foreground/30 transition-all group-hover:translate-x-0.5 group-hover:text-emerald-600" />
                         </button>
                       ))}
                     </div>
@@ -258,7 +258,7 @@ export function AiAudit() {
                           />
                           <defs>
                             <linearGradient id="scoreGrad" x1="0" y1="0" x2="1" y2="1">
-                              <stop offset="0%" stopColor="#2563EB" />
+                              <stop offset="0%" stopColor="#0d9488" />
                               <stop offset="100%" stopColor="#06B6D4" />
                             </linearGradient>
                           </defs>
@@ -279,7 +279,7 @@ export function AiAudit() {
                         <div className="grid gap-2.5">
                           {opportunities.map((o, i) => (
                             <div key={i} className="flex items-start gap-2.5 text-sm">
-                              <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-blue-600/15 text-blue-600">
+                              <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-600/15 text-emerald-600">
                                 <o.icon className="h-3 w-3" />
                               </span>
                               <span className="text-foreground/90">{o.text}</span>
@@ -292,7 +292,7 @@ export function AiAudit() {
                     <div className="mt-7 flex flex-col gap-2 sm:flex-row sm:justify-center">
                       <Button
                         onClick={() => setStep(totalSteps + 2)}
-                        className="h-12 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 px-6 font-semibold shadow-lg shadow-blue-600/25"
+                        className="h-12 rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-500 px-6 font-semibold shadow-lg shadow-emerald-600/25"
                       >
                         {t('audit.getFullReport')} <ArrowRight className="ml-2 h-4 w-4" />
                       </Button>
@@ -342,8 +342,8 @@ export function AiAudit() {
                               className={cn(
                                 "rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
                                 industry === ind
-                                  ? "border-blue-600 bg-blue-600/10 text-blue-600"
-                                  : "border-border/60 text-muted-foreground hover:border-blue-600/40",
+                                  ? "border-emerald-600 bg-emerald-600/10 text-emerald-600"
+                                  : "border-border/60 text-muted-foreground hover:border-emerald-600/40",
                               )}
                             >
                               {tr(ind)}
@@ -355,7 +355,7 @@ export function AiAudit() {
                         <Button
                           type="submit"
                           disabled={submitting}
-                          className="h-12 w-full rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 font-semibold shadow-lg shadow-blue-600/25"
+                          className="h-12 w-full rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-500 font-semibold shadow-lg shadow-emerald-600/25"
                         >
                           {submitting ? (
                             <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Generating report...</>
@@ -380,7 +380,7 @@ export function AiAudit() {
                     </p>
                     <Button
                       onClick={() => openWith("Post-audit strategy call")}
-                      className="mt-5 h-12 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 px-6 font-semibold shadow-lg shadow-blue-600/25"
+                      className="mt-5 h-12 rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-500 px-6 font-semibold shadow-lg shadow-emerald-600/25"
                     >
                       {t('audit.bookStrategyCall')} <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>

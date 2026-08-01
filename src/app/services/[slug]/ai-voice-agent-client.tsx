@@ -209,8 +209,8 @@ function Section({
   const bgClass =
     bg === 'muted' ? 'bg-muted/30' :
     bg === 'dark' ? 'bg-slate-950 text-white' :
-    bg === 'voice' ? 'bg-gradient-to-br from-blue-600 to-indigo-600 text-white' :
-    bg === 'gradient' ? 'bg-gradient-to-br from-blue-600 to-cyan-500 text-white' :
+    bg === 'voice' ? 'bg-gradient-to-br from-emerald-600 to-teal-600 text-white' :
+    bg === 'gradient' ? 'bg-gradient-to-br from-emerald-600 to-cyan-500 text-white' :
     ''
   return (
     <section id={id} className={`relative scroll-mt-20 py-14 sm:py-20 ${bgClass} ${className}`}>
@@ -237,7 +237,7 @@ function SectionHeader({
     ? 'bg-white/15 text-white'
     : accent === 'emerald'
     ? 'border border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/50 dark:text-emerald-300'
-    : 'border border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-900 dark:bg-blue-950/50 dark:text-blue-300'
+    : 'border border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/50 dark:text-emerald-300'
   return (
     <div className="mx-auto max-w-3xl text-center">
       {badge && (
@@ -249,7 +249,7 @@ function SectionHeader({
         {L(title, isBn)}
       </h2>
       {subtitle && (
-        <p className={`mt-3 text-[15px] leading-relaxed ${light ? 'text-blue-50' : 'text-muted-foreground'}`}>
+        <p className={`mt-3 text-[15px] leading-relaxed ${light ? 'text-emerald-50' : 'text-muted-foreground'}`}>
           {L(subtitle, isBn)}
         </p>
       )}
@@ -265,12 +265,12 @@ function HeroSection({ isBn, onCta }: { isBn: boolean; onCta: () => void }) {
   return (
     <section className="relative overflow-hidden bg-slate-950 text-white">
       {/* Voice-blue radial glow */}
-      <div className="pointer-events-none absolute -right-32 -bottom-32 h-[500px] w-[500px] rounded-full bg-blue-500/10 blur-3xl" />
-      <div className="pointer-events-none absolute -left-32 -top-32 h-96 w-96 rounded-full bg-indigo-500/10 blur-3xl" />
+      <div className="pointer-events-none absolute -right-32 -bottom-32 h-[500px] w-[500px] rounded-full bg-emerald-500/10 blur-3xl" />
+      <div className="pointer-events-none absolute -left-32 -top-32 h-96 w-96 rounded-full bg-teal-500/10 blur-3xl" />
       <Container className="relative py-16 text-center sm:py-24">
         {/* Badges */}
         <div className="flex flex-wrap items-center justify-center gap-2">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-3 py-1 text-xs font-semibold text-white">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-3 py-1 text-xs font-semibold text-white">
             <PhoneCall className="h-3 w-3" /> {L(HERO.eyebrow, isBn)}
           </span>
           <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-900">
@@ -283,7 +283,7 @@ function HeroSection({ isBn, onCta }: { isBn: boolean; onCta: () => void }) {
 
         {/* Title */}
         <h1 className="mt-6 font-heading text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl md:text-6xl">
-          <span className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
             {L(HERO.titleA, isBn)}
           </span>
           <br />
@@ -297,7 +297,7 @@ function HeroSection({ isBn, onCta }: { isBn: boolean; onCta: () => void }) {
 
         {/* ROI Badge */}
         <div className="mt-6 inline-block rounded-2xl border border-white/10 bg-white/5 px-8 py-4 backdrop-blur-sm">
-          <div className="text-xl font-bold text-blue-400 sm:text-2xl">
+          <div className="text-xl font-bold text-emerald-400 sm:text-2xl">
             {L(HERO.roiBadge, isBn)}
           </div>
           <div className="mt-1 text-sm text-slate-400">
@@ -307,10 +307,10 @@ function HeroSection({ isBn, onCta }: { isBn: boolean; onCta: () => void }) {
 
         {/* Voice Agent Illustration — animated waveform */}
         <div className="mx-auto mt-10 flex max-w-md flex-col items-center">
-          <div className="relative flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 shadow-2xl shadow-blue-500/40">
+          <div className="relative flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 shadow-2xl shadow-emerald-500/40">
             {/* Pulsing rings */}
-            <span className="absolute inset-0 animate-ping rounded-full bg-blue-400/30" style={{ animationDuration: '3s' }} />
-            <span className="absolute -inset-2 animate-ping rounded-full bg-blue-400/20" style={{ animationDuration: '3s', animationDelay: '0.5s' }} />
+            <span className="absolute inset-0 animate-ping rounded-full bg-emerald-400/30" style={{ animationDuration: '3s' }} />
+            <span className="absolute -inset-2 animate-ping rounded-full bg-emerald-400/20" style={{ animationDuration: '3s', animationDelay: '0.5s' }} />
             <PhoneCall className="relative h-10 w-10 text-white" />
           </div>
           {/* Animated waveform bars */}
@@ -318,7 +318,7 @@ function HeroSection({ isBn, onCta }: { isBn: boolean; onCta: () => void }) {
             {[0.2, 0.5, 0.8, 0.4, 1, 0.6, 0.3, 0.9, 0.5, 0.7, 0.4, 0.8, 0.3, 0.6, 0.5].map((h, i) => (
               <span
                 key={i}
-                className="w-1 rounded-full bg-gradient-to-t from-blue-500 to-indigo-400"
+                className="w-1 rounded-full bg-gradient-to-t from-emerald-500 to-teal-400"
                 style={{
                   height: `${h * 100}%`,
                   animation: `voiceWave 1.2s ease-in-out ${i * 0.08}s infinite alternate`,
@@ -341,7 +341,7 @@ function HeroSection({ isBn, onCta }: { isBn: boolean; onCta: () => void }) {
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
           <button
             onClick={onCta}
-            className="inline-flex items-center gap-2 rounded-full bg-blue-600 px-8 py-4 text-base font-bold text-white shadow-lg shadow-blue-600/30 transition-transform hover:scale-[1.02] hover:bg-blue-700"
+            className="inline-flex items-center gap-2 rounded-full bg-emerald-600 px-8 py-4 text-base font-bold text-white shadow-lg shadow-emerald-600/30 transition-transform hover:scale-[1.02] hover:bg-emerald-700"
           >
             <PhoneCall className="h-5 w-5" />
             {L(HERO.primaryCta, isBn)}
@@ -359,7 +359,7 @@ function HeroSection({ isBn, onCta }: { isBn: boolean; onCta: () => void }) {
         <div className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-slate-400">
           {HERO.trustBadges.map((b, i) => (
             <span key={i} className="inline-flex items-center gap-1.5">
-              <CheckCircle2 className="h-4 w-4 text-blue-400" />
+              <CheckCircle2 className="h-4 w-4 text-emerald-400" />
               {L(b, isBn)}
             </span>
           ))}
@@ -369,7 +369,7 @@ function HeroSection({ isBn, onCta }: { isBn: boolean; onCta: () => void }) {
         <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 border-t border-white/10 pt-6 text-sm text-slate-400">
           {HERO.trustRow.map((t, i) => (
             <span key={i} className="inline-flex items-center gap-1.5">
-              <CheckCircle2 className="h-4 w-4 text-blue-400" />
+              <CheckCircle2 className="h-4 w-4 text-emerald-400" />
               {L(t, isBn)}
             </span>
           ))}
@@ -398,7 +398,7 @@ function MetricsSection({ isBn }: { isBn: boolean }) {
         <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
           {HERO_METRICS.stats.map((s, i) => (
             <div key={i} className="text-center">
-              <div className="text-3xl font-extrabold text-blue-600 sm:text-4xl">
+              <div className="text-3xl font-extrabold text-emerald-600 sm:text-4xl">
                 {s.value}
               </div>
               <div className="mt-1 text-sm text-muted-foreground">
@@ -430,7 +430,7 @@ function TrustedBySection({ isBn }: { isBn: boolean }) {
               className="group flex flex-col items-center text-center"
               title={isBn ? logo.note.bn : logo.note.en}
             >
-              <div className="text-lg font-bold tracking-tight text-muted-foreground transition-colors group-hover:text-blue-600 sm:text-xl">
+              <div className="text-lg font-bold tracking-tight text-muted-foreground transition-colors group-hover:text-emerald-600 sm:text-xl">
                 {logo.name}
               </div>
               <div className="mt-0.5 text-[10px] text-muted-foreground/70">
@@ -476,7 +476,7 @@ function ProblemSection({ isBn, onCta }: { isBn: boolean; onCta: () => void }) {
           <div className="flex flex-col justify-center gap-4 rounded-2xl border border-border/60 bg-card p-6 sm:p-8">
             {PROBLEM.costStats.map((s, i) => (
               <div key={i}>
-                <div className="text-3xl font-extrabold text-blue-600 sm:text-4xl">
+                <div className="text-3xl font-extrabold text-emerald-600 sm:text-4xl">
                   {s.value}
                 </div>
                 <p className="mt-1 text-sm text-muted-foreground">{L(s.desc, isBn)}</p>
@@ -490,7 +490,7 @@ function ProblemSection({ isBn, onCta }: { isBn: boolean; onCta: () => void }) {
         <div className="mt-10 text-center">
           <button
             onClick={onCta}
-            className="inline-flex items-center gap-2 rounded-full bg-blue-600 px-8 py-3.5 text-sm font-bold text-white shadow-lg transition-transform hover:scale-[1.02] hover:bg-blue-700"
+            className="inline-flex items-center gap-2 rounded-full bg-emerald-600 px-8 py-3.5 text-sm font-bold text-white shadow-lg transition-transform hover:scale-[1.02] hover:bg-emerald-700"
           >
             <PhoneCall className="h-4 w-4" />
             {L(PROBLEM.cta, isBn)}
@@ -521,7 +521,7 @@ function EmotionalCostSection({ isBn }: { isBn: boolean }) {
             const Icon = getIcon(c.icon)
             return (
               <div key={i} className="rounded-2xl border border-border/60 bg-background p-6 shadow-sm transition-transform hover:-translate-y-1">
-                <Icon className="mb-3 h-10 w-10 text-blue-600" />
+                <Icon className="mb-3 h-10 w-10 text-emerald-600" />
                 <h3 className="font-heading text-lg font-bold">{L(c.title, isBn)}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{L(c.desc, isBn)}</p>
               </div>
@@ -584,7 +584,7 @@ function WhyNextgenSection({ isBn }: { isBn: boolean }) {
             const Icon = getIcon(c.icon)
             return (
               <div key={i} className="rounded-2xl border border-border/60 bg-background p-6 shadow-sm transition-transform hover:-translate-y-1">
-                <div className="mb-3 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-400">
+                <div className="mb-3 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400">
                   <Icon className="h-6 w-6" />
                 </div>
                 <h3 className="font-heading text-base font-bold">{L(c.title, isBn)}</h3>
@@ -619,12 +619,12 @@ function FrameworkSection({ isBn }: { isBn: boolean }) {
             return (
               <Reveal key={i} delay={i * 30}>
                 <div className="flex items-start gap-4 rounded-xl border border-border/60 bg-card p-4 shadow-sm">
-                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-blue-600 text-white">
+                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-emerald-600 text-white">
                     <Icon className="h-5 w-5" />
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
-                      <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-blue-100 text-[10px] font-bold text-blue-700 dark:bg-blue-950/50 dark:text-blue-400">{i + 1}</span>
+                      <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-[10px] font-bold text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400">{i + 1}</span>
                       <h3 className="font-heading text-base font-bold">{L(s.label, isBn)}</h3>
                     </div>
                     <p className="mt-1 text-sm text-muted-foreground">{L(s.desc, isBn)}</p>
@@ -634,7 +634,7 @@ function FrameworkSection({ isBn }: { isBn: boolean }) {
             )
           })}
         </div>
-        <p className="mt-8 text-center text-sm font-semibold text-blue-600">
+        <p className="mt-8 text-center text-sm font-semibold text-emerald-600">
           {L(VOICE_AGENT_FRAMEWORK.note, isBn)}
         </p>
       </Container>
@@ -662,12 +662,12 @@ function HowItWorksSection({ isBn }: { isBn: boolean }) {
             {HOW_IT_WORKS.steps.map((s, i) => {
               const Icon = getIcon(s.icon)
               return (
-                <div key={i} className="flex flex-col items-center rounded-xl border border-blue-200/60 bg-blue-50/50 p-4 text-center dark:border-blue-900/40 dark:bg-blue-950/20">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 text-white">
+                <div key={i} className="flex flex-col items-center rounded-xl border border-emerald-200/60 bg-emerald-50/50 p-4 text-center dark:border-emerald-900/40 dark:bg-emerald-950/20">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-600 text-white">
                     <Icon className="h-5 w-5" />
                   </div>
                   <div className="mt-2 text-xs font-semibold sm:text-sm">{L(s.label, isBn)}</div>
-                  <div className="mt-1 text-[10px] font-bold text-blue-600">#{i + 1}</div>
+                  <div className="mt-1 text-[10px] font-bold text-emerald-600">#{i + 1}</div>
                 </div>
               )
             })}
@@ -732,7 +732,7 @@ function ConversationExampleSection({ isBn }: { isBn: boolean }) {
         <div className="mt-8 flex justify-center">
           <button
             onClick={playConversation}
-            className="inline-flex items-center gap-2.5 rounded-full bg-blue-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-blue-600/30 transition-transform hover:scale-105 hover:bg-blue-700"
+            className="inline-flex items-center gap-2.5 rounded-full bg-emerald-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-emerald-600/30 transition-transform hover:scale-105 hover:bg-emerald-700"
             aria-label={playing ? (isBn ? 'বিরতি দিন' : 'Pause') : (isBn ? 'কথোপকথন চালান' : 'Play conversation')}
           >
             {playing ? (
@@ -765,9 +765,9 @@ function ConversationExampleSection({ isBn }: { isBn: boolean }) {
                 <div
                   className={`max-w-[85%] rounded-2xl p-4 ${
                     isAi
-                      ? 'rounded-tl-sm bg-blue-50 border-l-4 border-blue-500 text-blue-900 dark:bg-blue-950/40 dark:text-blue-100'
+                      ? 'rounded-tl-sm bg-emerald-50 border-l-4 border-emerald-500 text-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-100'
                       : 'rounded-tr-sm bg-muted text-foreground'
-                  } ${isActive ? 'ring-2 ring-blue-400 ring-offset-2' : ''}`}
+                  } ${isActive ? 'ring-2 ring-emerald-400 ring-offset-2' : ''}`}
                 >
                   <div className="mb-1 flex items-center gap-1.5 text-xs font-bold opacity-70">
                     {isAi ? (
@@ -779,7 +779,7 @@ function ConversationExampleSection({ isBn }: { isBn: boolean }) {
                             {[0, 1, 2].map((b) => (
                               <span
                                 key={b}
-                                className="block w-0.5 rounded-full bg-blue-500"
+                                className="block w-0.5 rounded-full bg-emerald-500"
                                 style={{
                                   height: '10px',
                                   animation: `voiceWave 0.8s ease-in-out ${b * 0.15}s infinite alternate`,
@@ -835,7 +835,7 @@ function UseCasesSection({ isBn }: { isBn: boolean }) {
             const Icon = getIcon(u.icon)
             return (
               <div key={i} className="rounded-2xl border border-border/60 bg-background p-5 shadow-sm transition-transform hover:-translate-y-1">
-                <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-400">
+                <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400">
                   <Icon className="h-5 w-5" />
                 </div>
                 <h3 className="font-heading text-base font-bold">{L(u.title, isBn)}</h3>
@@ -869,7 +869,7 @@ function FeaturesSection({ isBn }: { isBn: boolean }) {
             const Icon = getIcon(f.icon)
             return (
               <div key={i} className="rounded-2xl border border-border/60 bg-card p-5 shadow-sm transition-transform hover:-translate-y-1">
-                <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-400">
+                <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400">
                   <Icon className="h-5 w-5" />
                 </div>
                 <h3 className="font-heading text-base font-bold">{L(f.title, isBn)}</h3>
@@ -903,7 +903,7 @@ function VoiceCapabilitiesSection({ isBn }: { isBn: boolean }) {
             const Icon = getIcon(c.icon)
             return (
               <div key={i} className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm">
-                <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/20 text-blue-400">
+                <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-400">
                   <Icon className="h-5 w-5" />
                 </div>
                 <h3 className="font-heading text-sm font-bold text-white">{L(c.title, isBn)}</h3>
@@ -945,8 +945,8 @@ function IntegrationsSection({ isBn }: { isBn: boolean }) {
               key={i}
               className="flex flex-shrink-0 items-center gap-2 rounded-xl border border-border bg-background px-5 py-3 text-sm font-semibold shadow-sm"
             >
-              <div className="flex h-6 w-6 items-center justify-center rounded-md bg-blue-100 dark:bg-blue-950/50">
-                <Plug className="h-3.5 w-3.5 text-blue-600" />
+              <div className="flex h-6 w-6 items-center justify-center rounded-md bg-emerald-100 dark:bg-emerald-950/50">
+                <Plug className="h-3.5 w-3.5 text-emerald-600" />
               </div>
               {name}
             </div>
@@ -984,7 +984,7 @@ function IndustrySolutionsSection({ isBn }: { isBn: boolean }) {
             return (
               <div key={i} className="rounded-2xl border border-border/60 bg-card p-5 shadow-sm">
                 <div className="mb-3 flex items-center gap-3">
-                  <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-400">
+                  <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400">
                     <Icon className="h-5 w-5" />
                   </div>
                   <h3 className="font-heading text-base font-bold">{L(s.industry, isBn)}</h3>
@@ -995,7 +995,7 @@ function IndustrySolutionsSection({ isBn }: { isBn: boolean }) {
                     <span className="text-muted-foreground">{L(s.pain, isBn)}</span>
                   </p>
                   <p>
-                    <span className="font-semibold text-blue-600">{isBn ? 'সমাধান: ' : 'Solution: '}</span>
+                    <span className="font-semibold text-emerald-600">{isBn ? 'সমাধান: ' : 'Solution: '}</span>
                     <span className="text-muted-foreground">{L(s.solution, isBn)}</span>
                   </p>
                   <p>
@@ -1033,7 +1033,7 @@ function ComparisonSection({ isBn }: { isBn: boolean }) {
               <tr className="bg-slate-900 text-left text-white">
                 <th className="p-4 text-sm font-semibold">{L(COMPARISON.headers[0], isBn)}</th>
                 <th className="p-4 text-sm font-semibold">{L(COMPARISON.headers[1], isBn)}</th>
-                <th className="bg-blue-600 p-4 text-sm font-semibold">{isBn ? 'AI Voice Agent' : 'AI Voice Agent'}</th>
+                <th className="bg-emerald-600 p-4 text-sm font-semibold">{isBn ? 'AI Voice Agent' : 'AI Voice Agent'}</th>
               </tr>
             </thead>
             <tbody>
@@ -1046,9 +1046,9 @@ function ComparisonSection({ isBn }: { isBn: boolean }) {
                       {L(r.traditional, isBn)}
                     </span>
                   </td>
-                  <td className="bg-blue-50/60 p-4 text-sm font-medium dark:bg-blue-950/20">
+                  <td className="bg-emerald-50/60 p-4 text-sm font-medium dark:bg-emerald-950/20">
                     <span className="inline-flex items-center gap-1.5">
-                      <CheckCircle2 className="h-4 w-4 flex-shrink-0 text-blue-500" />
+                      <CheckCircle2 className="h-4 w-4 flex-shrink-0 text-emerald-500" />
                       {L(r.ai, isBn)}
                     </span>
                   </td>
@@ -1085,7 +1085,7 @@ function CompetitorComparisonSection({ isBn }: { isBn: boolean }) {
                   <th
                     key={i}
                     className={`p-3 text-xs font-semibold sm:p-4 sm:text-sm ${
-                      i === 1 ? 'bg-blue-600' : ''
+                      i === 1 ? 'bg-emerald-600' : ''
                     }`}
                   >
                     {L(h, isBn)}
@@ -1102,13 +1102,13 @@ function CompetitorComparisonSection({ isBn }: { isBn: boolean }) {
                       key={j}
                       className={`p-3 text-xs sm:p-4 sm:text-sm ${
                         j === 0
-                          ? 'bg-blue-50/60 font-bold text-blue-900 dark:bg-blue-950/30 dark:text-blue-300'
+                          ? 'bg-emerald-50/60 font-bold text-emerald-900 dark:bg-emerald-950/30 dark:text-emerald-300'
                           : 'text-muted-foreground'
                       }`}
                     >
                       <span className="inline-flex items-center gap-1.5">
                         {j === 0 ? (
-                          <CheckCircle2 className="h-3.5 w-3.5 flex-shrink-0 text-blue-500 sm:h-4 sm:w-4" />
+                          <CheckCircle2 className="h-3.5 w-3.5 flex-shrink-0 text-emerald-500 sm:h-4 sm:w-4" />
                         ) : (
                           <XCircle className="h-3.5 w-3.5 flex-shrink-0 text-red-400 sm:h-4 sm:w-4" />
                         )}
@@ -1164,11 +1164,11 @@ function BeforeAfterSection({ isBn }: { isBn: boolean }) {
                 <ArrowRight className="h-5 w-5 text-muted-foreground" />
               </div>
               {/* After */}
-              <div className="flex items-center gap-3 rounded-xl border border-blue-200 bg-blue-50 p-4 dark:border-blue-900 dark:bg-blue-950/30">
-                <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-950/50">
-                  <CheckCircle2 className="h-5 w-5 text-blue-600" />
+              <div className="flex items-center gap-3 rounded-xl border border-emerald-200 bg-emerald-50 p-4 dark:border-emerald-900 dark:bg-emerald-950/30">
+                <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-950/50">
+                  <CheckCircle2 className="h-5 w-5 text-emerald-600" />
                 </div>
-                <span className="text-sm font-bold text-blue-900 dark:text-blue-300 sm:text-base">
+                <span className="text-sm font-bold text-emerald-900 dark:text-emerald-300 sm:text-base">
                   {L(pair.after, isBn)}
                 </span>
               </div>
@@ -1201,7 +1201,7 @@ function AiVsHumanSection({ isBn }: { isBn: boolean }) {
               <tr className="bg-slate-900 text-left text-white">
                 <th className="p-4 text-sm font-semibold">{isBn ? 'মেট্রিক' : 'Metric'}</th>
                 <th className="p-4 text-sm font-semibold text-red-300">{isBn ? 'হিউম্যান এজেন্ট' : 'Human Agent'}</th>
-                <th className="bg-blue-600 p-4 text-sm font-semibold">{isBn ? 'AI Voice Agent' : 'AI Voice Agent'}</th>
+                <th className="bg-emerald-600 p-4 text-sm font-semibold">{isBn ? 'AI Voice Agent' : 'AI Voice Agent'}</th>
               </tr>
             </thead>
             <tbody>
@@ -1214,9 +1214,9 @@ function AiVsHumanSection({ isBn }: { isBn: boolean }) {
                       {L(r.human, isBn)}
                     </span>
                   </td>
-                  <td className="bg-blue-50/60 p-4 text-sm font-bold text-blue-900 dark:bg-blue-950/20 dark:text-blue-300">
+                  <td className="bg-emerald-50/60 p-4 text-sm font-bold text-emerald-900 dark:bg-emerald-950/20 dark:text-emerald-300">
                     <span className="inline-flex items-center gap-1.5">
-                      <CheckCircle2 className="h-4 w-4 flex-shrink-0 text-blue-500" />
+                      <CheckCircle2 className="h-4 w-4 flex-shrink-0 text-emerald-500" />
                       {L(r.ai, isBn)}
                     </span>
                   </td>
@@ -1244,7 +1244,7 @@ function RoiSlider({ label, value, set, min, max, step, fmt }: {
     <div>
       <div className="flex items-center justify-between">
         <Label className="text-sm font-medium">{label}</Label>
-        <span className="rounded-md bg-blue-100 px-2.5 py-0.5 text-sm font-bold text-blue-700 dark:bg-blue-950/50 dark:text-blue-400">
+        <span className="rounded-md bg-emerald-100 px-2.5 py-0.5 text-sm font-bold text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400">
           {fmt(value)}
         </span>
       </div>
@@ -1255,7 +1255,7 @@ function RoiSlider({ label, value, set, min, max, step, fmt }: {
         step={step}
         value={value}
         onChange={(e) => set(Number(e.target.value))}
-        className="mt-2 h-2 w-full cursor-pointer appearance-none rounded-full bg-muted accent-blue-600"
+        className="mt-2 h-2 w-full cursor-pointer appearance-none rounded-full bg-muted accent-emerald-600"
       />
     </div>
   )
@@ -1388,11 +1388,11 @@ function RoiCalculatorSection({ isBn, onCta }: { isBn: boolean; onCta: () => voi
                   key={i}
                   className={`rounded-2xl border p-5 text-center shadow-sm ${
                     r.highlight
-                      ? 'border-blue-200 bg-blue-50 dark:border-blue-900 dark:bg-blue-950/30'
+                      ? 'border-emerald-200 bg-emerald-50 dark:border-emerald-900 dark:bg-emerald-950/30'
                       : 'border-border/60 bg-background'
                   }`}
                 >
-                  <div className={`text-2xl font-extrabold sm:text-3xl ${r.highlight ? 'text-blue-700 dark:text-blue-400' : 'text-blue-600'}`}>
+                  <div className={`text-2xl font-extrabold sm:text-3xl ${r.highlight ? 'text-emerald-700 dark:text-emerald-400' : 'text-emerald-600'}`}>
                     {r.value}
                   </div>
                   <div className="mt-1 text-xs text-muted-foreground sm:text-sm">
@@ -1403,7 +1403,7 @@ function RoiCalculatorSection({ isBn, onCta }: { isBn: boolean; onCta: () => voi
             </div>
             <button
               onClick={onCta}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-blue-600 py-3 text-sm font-bold text-white transition-transform hover:scale-[1.02] hover:bg-blue-700"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-emerald-600 py-3 text-sm font-bold text-white transition-transform hover:scale-[1.02] hover:bg-emerald-700"
             >
               <PhoneCall className="h-4 w-4" />
               {isBn ? 'আমার কাস্টম প্রজেকশন পান' : 'Get My Custom Projection'}
@@ -1412,7 +1412,7 @@ function RoiCalculatorSection({ isBn, onCta }: { isBn: boolean; onCta: () => voi
             {!showEmailForm && !emailSent && (
               <button
                 onClick={() => setShowEmailForm(true)}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-blue-200 bg-blue-50 py-2.5 text-xs font-bold text-blue-700 transition-colors hover:bg-blue-100 dark:border-blue-900 dark:bg-blue-950/30 dark:text-blue-400"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 py-2.5 text-xs font-bold text-emerald-700 transition-colors hover:bg-emerald-100 dark:border-emerald-900 dark:bg-emerald-950/30 dark:text-emerald-400"
               >
                 <Mail className="h-3.5 w-3.5" />
                 {isBn ? 'এই প্রজেকশন ইমেইলে পাঠান' : 'Email me this projection'}
@@ -1430,7 +1430,7 @@ function RoiCalculatorSection({ isBn, onCta }: { isBn: boolean; onCta: () => voi
                 />
                 <button
                   type="submit"
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-blue-600 py-2 text-xs font-bold text-white hover:bg-blue-700"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-emerald-600 py-2 text-xs font-bold text-white hover:bg-emerald-700"
                 >
                   <Mail className="h-3.5 w-3.5" />
                   {isBn ? 'প্রজেকশন পাঠান' : 'Send projection'}
@@ -1474,16 +1474,16 @@ function CallFlowSection({ isBn }: { isBn: boolean }) {
               return (
                 <React.Fragment key={i}>
                   <div
-                    className="relative flex flex-col items-center rounded-xl border border-blue-200/60 bg-blue-50/50 p-4 text-center transition-transform hover:scale-105 dark:border-blue-900/40 dark:bg-blue-950/20"
+                    className="relative flex flex-col items-center rounded-xl border border-emerald-200/60 bg-emerald-50/50 p-4 text-center transition-transform hover:scale-105 dark:border-emerald-900/40 dark:bg-emerald-950/20"
                     style={{
                       animation: `flowPulse 3s ease-in-out ${i * 0.3}s infinite`,
                     }}
                   >
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 text-white shadow-lg shadow-blue-600/30">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-600 text-white shadow-lg shadow-emerald-600/30">
                       <Icon className="h-5 w-5" />
                     </div>
                     <div className="mt-2 text-xs font-semibold sm:text-sm">{L(s.label, isBn)}</div>
-                    <div className="mt-1 text-[10px] font-bold text-blue-600">#{i + 1}</div>
+                    <div className="mt-1 text-[10px] font-bold text-emerald-600">#{i + 1}</div>
                   </div>
                 </React.Fragment>
               )
@@ -1521,7 +1521,7 @@ function WorkflowsSection({ isBn }: { isBn: boolean }) {
             const Icon = getIcon(w.icon)
             return (
               <div key={i} className="rounded-2xl border border-border/60 bg-background p-5 shadow-sm transition-transform hover:-translate-y-1">
-                <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-400">
+                <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400">
                   <Icon className="h-5 w-5" />
                 </div>
                 <h3 className="font-heading text-sm font-bold">{L(w.title, isBn)}</h3>
@@ -1569,18 +1569,18 @@ function DashboardSection({ isBn }: { isBn: boolean }) {
               {DASHBOARD_PREVIEW.metrics.map((m, i) => (
                 <div key={i} className="rounded-xl border border-border/60 bg-background p-4">
                   <div className="text-xs text-muted-foreground">{L(m.label, isBn)}</div>
-                  <div className="mt-1 text-2xl font-extrabold text-blue-600">{m.value}</div>
+                  <div className="mt-1 text-2xl font-extrabold text-emerald-600">{m.value}</div>
                   <div className="mt-1 text-xs font-semibold text-emerald-600">{m.trend}</div>
                 </div>
               ))}
             </div>
             {/* Mini chart placeholder */}
-            <div className="mt-6 rounded-xl border border-border/60 bg-gradient-to-br from-blue-50 to-indigo-50 p-6 dark:from-blue-950/30 dark:to-indigo-950/30">
+            <div className="mt-6 rounded-xl border border-border/60 bg-gradient-to-br from-emerald-50 to-teal-50 p-6 dark:from-emerald-950/30 dark:to-teal-950/30">
               <div className="flex items-end justify-between gap-2" style={{ height: 120 }}>
                 {[40, 55, 35, 70, 60, 85, 75, 95, 80, 100, 90, 110].map((h, i) => (
                   <div
                     key={i}
-                    className="flex-1 rounded-t bg-gradient-to-t from-blue-600 to-indigo-500"
+                    className="flex-1 rounded-t bg-gradient-to-t from-emerald-600 to-teal-500"
                     style={{ height: `${h}%` }}
                   />
                 ))}
@@ -1621,7 +1621,7 @@ function CaseStudiesSection({ isBn }: { isBn: boolean }) {
                 <summary className="flex cursor-pointer items-center justify-between gap-3 font-heading text-base font-bold marker:content-['']">
                   <span className="flex items-center gap-2">
                     <span>{L(cs.company, isBn)}</span>
-                    <span className="inline-flex items-center rounded-full bg-blue-100 px-2 py-0.5 text-xs font-bold text-blue-700 dark:bg-blue-950/50 dark:text-blue-400">
+                    <span className="inline-flex items-center rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-bold text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400">
                       {L(cs.industry, isBn)} · {L(cs.location, isBn)}
                     </span>
                     <span className="inline-flex items-center rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-bold text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400">
@@ -1636,7 +1636,7 @@ function CaseStudiesSection({ isBn }: { isBn: boolean }) {
                     <span className="text-muted-foreground">{L(cs.problem, isBn)}</span>
                   </div>
                   <div>
-                    <span className="font-semibold text-blue-600">{isBn ? 'সমাধান: ' : 'Solution: '}</span>
+                    <span className="font-semibold text-emerald-600">{isBn ? 'সমাধান: ' : 'Solution: '}</span>
                     <span className="text-muted-foreground">{L(cs.solution, isBn)}</span>
                   </div>
                   <div>
@@ -1656,7 +1656,7 @@ function CaseStudiesSection({ isBn }: { isBn: boolean }) {
                   </div>
                   <div className="flex flex-wrap gap-2 pt-1">
                     {cs.metrics.map((m, j) => (
-                      <span key={j} className="inline-flex items-center rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700 dark:border-blue-900 dark:bg-blue-950/30 dark:text-blue-400">
+                      <span key={j} className="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/30 dark:text-emerald-400">
                         <CheckCircle2 className="mr-1 h-3 w-3" />
                         {L(m.label, isBn)}: {m.value}
                       </span>
@@ -1698,7 +1698,7 @@ function TestimonialsSection({ isBn }: { isBn: boolean }) {
               <p className="flex-1 text-sm leading-relaxed text-muted-foreground">
                 &ldquo;{L(t.quote, isBn)}&rdquo;
               </p>
-              <div className="mt-3 rounded-lg bg-blue-50 p-2 text-xs dark:bg-blue-950/30">
+              <div className="mt-3 rounded-lg bg-emerald-50 p-2 text-xs dark:bg-emerald-950/30">
                 <span className="font-semibold text-red-600">{isBn ? 'আগে: ' : 'Before: '}</span>
                 <span className="text-muted-foreground">{L(t.before, isBn)}</span>
               </div>
@@ -1707,7 +1707,7 @@ function TestimonialsSection({ isBn }: { isBn: boolean }) {
                 <span className="text-muted-foreground">{L(t.after, isBn)}</span>
               </div>
               <div className="mt-4 flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 font-bold text-blue-700 dark:bg-blue-950/50 dark:text-blue-400" aria-hidden="true">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 font-bold text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400" aria-hidden="true">
                   {L(t.author, isBn).charAt(0)}
                 </div>
                 <div>
@@ -1742,8 +1742,8 @@ function StatisticsSection({ isBn }: { isBn: boolean }) {
         <div className="mt-12 grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
           {STATISTICS.stats.map((s, i) => (
             <Reveal key={i} delay={(i % 4) * 80}>
-              <div className="group rounded-2xl border border-border/60 bg-background p-6 text-center shadow-sm transition-all hover:-translate-y-1 hover:border-blue-300 hover:shadow-md">
-                <div className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-3xl font-extrabold text-transparent sm:text-4xl">
+              <div className="group rounded-2xl border border-border/60 bg-background p-6 text-center shadow-sm transition-all hover:-translate-y-1 hover:border-emerald-300 hover:shadow-md">
+                <div className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-3xl font-extrabold text-transparent sm:text-4xl">
                   {s.value}
                 </div>
                 <div className="mt-2 text-xs font-semibold sm:text-sm">
@@ -1781,7 +1781,7 @@ function DeliverablesSection({ isBn }: { isBn: boolean }) {
             const Icon = getIcon(d.icon)
             return (
               <div key={i} className="rounded-2xl border border-border/60 bg-card p-5 shadow-sm">
-                <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-400">
+                <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400">
                   <Icon className="h-5 w-5" />
                 </div>
                 <h3 className="font-heading text-sm font-bold">{L(d.title, isBn)}</h3>
@@ -1828,19 +1828,19 @@ function PricingSection({ isBn, onCta }: { isBn: boolean; onCta: () => void }) {
                 key={i}
                 className={`relative flex flex-col rounded-2xl border p-6 shadow-sm ${
                   tier.popular
-                    ? 'border-blue-500 bg-background ring-2 ring-blue-500/30 lg:-mt-4 lg:mb-4'
+                    ? 'border-emerald-500 bg-background ring-2 ring-emerald-500/30 lg:-mt-4 lg:mb-4'
                     : 'border-border/60 bg-background'
                 }`}
               >
                 {tier.popular && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-blue-600 px-4 py-1 text-xs font-bold text-white">
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-emerald-600 px-4 py-1 text-xs font-bold text-white">
                     {isBn ? 'সর্বাধিক জনপ্রিয়' : 'Most Popular'}
                   </span>
                 )}
                 <h3 className="font-heading text-xl font-bold">{L(tier.name, isBn)}</h3>
                 <div className="mt-2">
                   <div className="flex items-baseline gap-2">
-                    <span className="text-3xl font-extrabold text-blue-600">
+                    <span className="text-3xl font-extrabold text-emerald-600">
                       {isCustom ? L(tier.price, isBn) : formatBDT(monthlyNum)}
                     </span>
                     <span className="text-sm text-muted-foreground">{L(tier.period, isBn)}</span>
@@ -1850,7 +1850,7 @@ function PricingSection({ isBn, onCta }: { isBn: boolean; onCta: () => void }) {
                 <ul className="mt-5 max-h-72 flex-1 space-y-2 overflow-y-auto">
                   {tier.features.map((f, j) => (
                     <li key={j} className="flex items-start gap-2 text-sm">
-                      <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-blue-500" />
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-emerald-500" />
                       <span>{L(f, isBn)}</span>
                     </li>
                   ))}
@@ -1859,7 +1859,7 @@ function PricingSection({ isBn, onCta }: { isBn: boolean; onCta: () => void }) {
                   onClick={onCta}
                   className={`mt-6 w-full rounded-full py-3 text-sm font-bold transition-transform hover:scale-[1.02] ${
                     tier.popular
-                      ? 'bg-blue-600 text-white hover:bg-blue-700'
+                      ? 'bg-emerald-600 text-white hover:bg-emerald-700'
                       : 'border border-border bg-background hover:bg-muted'
                   }`}
                 >
@@ -1882,11 +1882,11 @@ function PricingSection({ isBn, onCta }: { isBn: boolean; onCta: () => void }) {
                 <span className="text-sm text-muted-foreground line-through">{L(item.value, isBn)}</span>
               </div>
             ))}
-            <div className="flex items-center justify-between bg-blue-50 px-5 py-4 dark:bg-blue-950/30">
+            <div className="flex items-center justify-between bg-emerald-50 px-5 py-4 dark:bg-emerald-950/30">
               <span className="font-bold">{isBn ? 'মোট ভ্যালু' : 'Total Value'}</span>
-              <span className="font-bold text-blue-700 dark:text-blue-400">{L(PRICING.totalValue, isBn)}</span>
+              <span className="font-bold text-emerald-700 dark:text-emerald-400">{L(PRICING.totalValue, isBn)}</span>
             </div>
-            <div className="flex items-center justify-between bg-blue-600 px-5 py-4 text-white">
+            <div className="flex items-center justify-between bg-emerald-600 px-5 py-4 text-white">
               <span className="font-bold">{isBn ? 'আজকের বিনিয়োগ' : 'Today\'s Investment'}</span>
               <span className="font-bold">{L(PRICING.todayInvestment, isBn)}</span>
             </div>
@@ -1903,7 +1903,7 @@ function PricingSection({ isBn, onCta }: { isBn: boolean; onCta: () => void }) {
           <div className="mt-6 text-center">
             <button
               onClick={onCta}
-              className="inline-flex items-center gap-2 rounded-full bg-blue-600 px-8 py-3.5 text-sm font-bold text-white shadow-lg transition-transform hover:scale-[1.02] hover:bg-blue-700"
+              className="inline-flex items-center gap-2 rounded-full bg-emerald-600 px-8 py-3.5 text-sm font-bold text-white shadow-lg transition-transform hover:scale-[1.02] hover:bg-emerald-700"
             >
               <PhoneCall className="h-4 w-4" />
               {isBn ? 'আজই শুরু করুন' : 'Start Today'}
@@ -1978,7 +1978,7 @@ function GuaranteesSection({ isBn }: { isBn: boolean }) {
                   <Icon className="h-6 w-6" />
                 </div>
                 <h3 className="font-heading text-base font-bold text-white">{L(g.title, isBn)}</h3>
-                <p className="mt-2 text-sm text-blue-50">{L(g.desc, isBn)}</p>
+                <p className="mt-2 text-sm text-emerald-50">{L(g.desc, isBn)}</p>
               </div>
             )
           })}
@@ -2006,7 +2006,7 @@ function FaqSection({ isBn }: { isBn: boolean }) {
         <div className="mx-auto mt-12 max-w-3xl space-y-8">
           {FAQS.groups.map((g, gi) => (
             <div key={gi}>
-              <h3 className="mb-3 font-heading text-lg font-bold text-blue-700 dark:text-blue-400">
+              <h3 className="mb-3 font-heading text-lg font-bold text-emerald-700 dark:text-emerald-400">
                 {L(g.title, isBn)}
               </h3>
               <div className="space-y-2">
@@ -2085,7 +2085,7 @@ function SecuritySection({ isBn }: { isBn: boolean }) {
             const Icon = getIcon(c.icon)
             return (
               <div key={i} className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm">
-                <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/20 text-blue-400">
+                <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-400">
                   <Icon className="h-5 w-5" />
                 </div>
                 <h3 className="font-heading text-sm font-bold text-white">{L(c.title, isBn)}</h3>
@@ -2098,7 +2098,7 @@ function SecuritySection({ isBn }: { isBn: boolean }) {
         <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
           {SECURITY.certifications.map((c, i) => (
             <span key={i} className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold text-white">
-              <ShieldCheck className="h-3.5 w-3.5 text-blue-400" />
+              <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" />
               {L(c, isBn)}
             </span>
           ))}
@@ -2128,7 +2128,7 @@ function DeveloperSection({ isBn }: { isBn: boolean }) {
             const Icon = getIcon(d.icon)
             return (
               <div key={i} className="rounded-2xl border border-border/60 bg-card p-5 shadow-sm">
-                <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-400">
+                <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400">
                   <Icon className="h-5 w-5" />
                 </div>
                 <h3 className="font-heading text-sm font-bold">{L(d.title, isBn)}</h3>
@@ -2148,7 +2148,7 @@ function DeveloperSection({ isBn }: { isBn: boolean }) {
               </div>
               <span className="ml-2 text-xs text-slate-400">trigger-call.js</span>
             </div>
-            <span className="text-xs font-semibold text-blue-400">{DEVELOPER_SECTION.codeSnippet.language}</span>
+            <span className="text-xs font-semibold text-emerald-400">{DEVELOPER_SECTION.codeSnippet.language}</span>
           </div>
           <pre className="overflow-x-auto p-5 text-xs leading-relaxed text-slate-200 sm:text-sm">
             <code>{DEVELOPER_SECTION.codeSnippet.code}</code>
@@ -2179,7 +2179,7 @@ function KnowledgeBaseSection({ isBn }: { isBn: boolean }) {
             const Icon = getIcon(k.icon)
             return (
               <div key={i} className="rounded-2xl border border-border/60 bg-background p-6 shadow-sm transition-transform hover:-translate-y-1">
-                <div className="mb-3 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-400">
+                <div className="mb-3 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400">
                   <Icon className="h-6 w-6" />
                 </div>
                 <h3 className="font-heading text-base font-bold">{L(k.title, isBn)}</h3>
@@ -2210,9 +2210,9 @@ function TimelineSection({ isBn }: { isBn: boolean }) {
         />
         <div className="mx-auto mt-12 max-w-3xl space-y-3">
           {TIMELINE.phases.map((p, i) => (
-            <div key={i} className="flex items-start gap-4 rounded-xl border-l-4 border-blue-500 bg-background p-4 shadow-sm">
+            <div key={i} className="flex items-start gap-4 rounded-xl border-l-4 border-emerald-500 bg-background p-4 shadow-sm">
               <div className="min-w-[80px]">
-                <div className="font-bold text-blue-600">{L(p.phase, isBn)}</div>
+                <div className="font-bold text-emerald-600">{L(p.phase, isBn)}</div>
                 <div className="text-xs text-muted-foreground">{L(p.duration, isBn)}</div>
               </div>
               <div>
@@ -2245,7 +2245,7 @@ function ProcessSection({ isBn }: { isBn: boolean }) {
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
           {PROCESS.steps.map((s, i) => (
             <div key={i} className="relative rounded-2xl border border-border/60 bg-background p-6 shadow-sm">
-              <div className="absolute -top-3 -right-3 flex h-9 w-9 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white">
+              <div className="absolute -top-3 -right-3 flex h-9 w-9 items-center justify-center rounded-full bg-emerald-600 text-sm font-bold text-white">
                 {s.num}
               </div>
               <h3 className="mt-3 font-heading text-base font-bold">{L(s.title, isBn)}</h3>
@@ -2279,7 +2279,7 @@ function TrustSection({ isBn }: { isBn: boolean }) {
             const Icon = getIcon(b.icon)
             return (
               <div key={i} className="flex flex-col items-center rounded-xl border border-border/60 bg-card p-4 text-center shadow-sm">
-                <Icon className="mb-2 h-7 w-7 text-blue-600" />
+                <Icon className="mb-2 h-7 w-7 text-emerald-600" />
                 <span className="text-xs font-semibold sm:text-sm">{L(b.label, isBn)}</span>
               </div>
             )
@@ -2320,7 +2320,7 @@ function FinalCtaSection({ isBn, onCta }: { isBn: boolean; onCta: () => void }) 
           <h2 className="mt-4 font-heading text-3xl font-bold tracking-tight text-white sm:text-4xl">
             {L(FINAL_CTA.title, isBn)}
           </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-base text-blue-50 sm:text-lg">
+          <p className="mx-auto mt-4 max-w-2xl text-base text-emerald-50 sm:text-lg">
             {L(FINAL_CTA.subtitle, isBn)}
           </p>
           <div className="mt-6 inline-block rounded-xl border border-white/20 bg-white/10 px-6 py-3 text-sm font-semibold text-white">
@@ -2329,7 +2329,7 @@ function FinalCtaSection({ isBn, onCta }: { isBn: boolean; onCta: () => void }) 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
             <button
               onClick={onCta}
-              className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 text-base font-bold text-blue-700 shadow-lg transition-transform hover:scale-[1.02]"
+              className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 text-base font-bold text-emerald-700 shadow-lg transition-transform hover:scale-[1.02]"
             >
               <CalendarClock className="h-5 w-5" />
               {L(FINAL_CTA.primaryCta, isBn)}
@@ -2344,7 +2344,7 @@ function FinalCtaSection({ isBn, onCta }: { isBn: boolean; onCta: () => void }) 
               {L(FINAL_CTA.secondaryCta, isBn)}
             </a>
           </div>
-          <ul className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-blue-50">
+          <ul className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-emerald-50">
             {FINAL_CTA.trustRow.map((r, i) => (
               <li key={i} className="inline-flex items-center gap-1.5">
                 <CheckCircle2 className="h-4 w-4" />
@@ -2401,7 +2401,7 @@ function LeadFormSection({ isBn }: { isBn: boolean }) {
 function UrgencyBand({ isBn, onCta }: { isBn: boolean; onCta: () => void }) {
   const slots = 3
   return (
-    <div className="border-y border-blue-200 bg-gradient-to-r from-blue-600 to-indigo-600 text-white dark:border-blue-900">
+    <div className="border-y border-emerald-200 bg-gradient-to-r from-emerald-600 to-teal-600 text-white dark:border-emerald-900">
       <Container>
         <div className="flex flex-col items-center justify-between gap-4 py-4 sm:flex-row">
           <div className="flex items-center gap-3 text-center sm:text-left">
@@ -2409,7 +2409,7 @@ function UrgencyBand({ isBn, onCta }: { isBn: boolean; onCta: () => void }) {
               <Clock className="h-5 w-5" />
             </div>
             <div>
-              <div className="text-xs font-semibold uppercase tracking-wide text-blue-100">
+              <div className="text-xs font-semibold uppercase tracking-wide text-emerald-100">
                 {L(URGENCY.badge, isBn)}
               </div>
               <div className="text-sm font-bold sm:text-base">
@@ -2420,11 +2420,11 @@ function UrgencyBand({ isBn, onCta }: { isBn: boolean; onCta: () => void }) {
           <div className="flex items-center gap-4">
             <div className="text-center">
               <div className="font-heading text-2xl font-bold">{slots}</div>
-              <div className="text-[10px] uppercase text-blue-100">{L(URGENCY.slotsLabel, isBn)}</div>
+              <div className="text-[10px] uppercase text-emerald-100">{L(URGENCY.slotsLabel, isBn)}</div>
             </div>
             <button
               onClick={onCta}
-              className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-bold text-blue-700 transition-transform hover:scale-105"
+              className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-bold text-emerald-700 transition-transform hover:scale-105"
             >
               <Calendar className="h-4 w-4" />
               {L(URGENCY.cta, isBn)}
@@ -2453,12 +2453,12 @@ function StickyCtaBar({ isBn, onCta }: { isBn: boolean; onCta: () => void }) {
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 flex items-center justify-between border-t border-border bg-background/95 px-4 py-3 shadow-lg backdrop-blur-sm lg:hidden">
       <div>
-        <div className="text-sm font-bold text-blue-600">{L(STICKY_CTA.price, isBn)}</div>
+        <div className="text-sm font-bold text-emerald-600">{L(STICKY_CTA.price, isBn)}</div>
         <div className="text-xs text-muted-foreground">{L(STICKY_CTA.roi, isBn)}</div>
       </div>
       <button
         onClick={onCta}
-        className="inline-flex items-center gap-2 rounded-full bg-blue-600 px-5 py-2.5 text-sm font-bold text-white"
+        className="inline-flex items-center gap-2 rounded-full bg-emerald-600 px-5 py-2.5 text-sm font-bold text-white"
       >
         <PhoneCall className="h-4 w-4" />
         {L(STICKY_CTA.cta, isBn)}
@@ -2522,7 +2522,7 @@ function SectionNavigator({ isBn }: { isBn: boolean }) {
           >
             <span
               className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide opacity-0 transition-opacity group-hover:opacity-100 ${
-                isActive ? 'bg-blue-600 text-white' : 'bg-muted text-muted-foreground'
+                isActive ? 'bg-emerald-600 text-white' : 'bg-muted text-muted-foreground'
               }`}
             >
               {isBn ? item.label.bn : item.label.en}
@@ -2530,8 +2530,8 @@ function SectionNavigator({ isBn }: { isBn: boolean }) {
             <span
               className={`block h-2.5 w-2.5 rounded-full border-2 transition-all ${
                 isActive
-                  ? 'scale-125 border-blue-600 bg-blue-600'
-                  : 'border-muted-foreground/40 bg-background hover:border-blue-400'
+                  ? 'scale-125 border-emerald-600 bg-emerald-600'
+                  : 'border-muted-foreground/40 bg-background hover:border-emerald-400'
               }`}
             />
           </button>
@@ -2579,13 +2579,13 @@ function ExitPopup({ isBn, onClose }: { isBn: boolean; onClose: () => void }) {
           <X className="h-5 w-5" />
         </button>
         <div className="text-center">
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-950/50">
-            <PhoneCall className="h-8 w-8 text-blue-600" />
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-950/50">
+            <PhoneCall className="h-8 w-8 text-emerald-600" />
           </div>
           <h3 className="font-heading text-xl font-bold">{L(EXIT_POPUP.title, isBn)}</h3>
           <p className="mt-2 text-sm text-muted-foreground">{L(EXIT_POPUP.desc, isBn)}</p>
           {done ? (
-            <div className="mt-6 rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm font-semibold text-blue-700 dark:border-blue-900 dark:bg-blue-950/30 dark:text-blue-400">
+            <div className="mt-6 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-semibold text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/30 dark:text-emerald-400">
               <CheckCircle2 className="mx-auto mb-2 h-8 w-8" />
               {L(EXIT_POPUP.success, isBn)}
             </div>
@@ -2604,7 +2604,7 @@ function ExitPopup({ isBn, onClose }: { isBn: boolean; onClose: () => void }) {
               />
               <button
                 type="submit"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-blue-600 py-3 text-sm font-bold text-white transition-colors hover:bg-blue-700"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-emerald-600 py-3 text-sm font-bold text-white transition-colors hover:bg-emerald-700"
               >
                 <Download className="h-4 w-4" />
                 {L(EXIT_POPUP.cta, isBn)}
@@ -2686,7 +2686,7 @@ export function AiVoiceAgentClient() {
       {/* Reading progress bar — sticky at top, above TopBar */}
       <div className="fixed left-0 right-0 top-0 z-[60] h-1 bg-transparent" aria-hidden="true">
         <div
-          className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 transition-[width] duration-150 ease-out"
+          className="h-full bg-gradient-to-r from-emerald-500 to-teal-500 transition-[width] duration-150 ease-out"
           style={{ width: `${scrollProgress}%` }}
         />
       </div>

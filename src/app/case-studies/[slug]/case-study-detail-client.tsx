@@ -32,7 +32,7 @@ export function CaseStudyDetailClient({ slug }: { slug: string }) {
       <article className="mx-auto max-w-4xl px-4 py-10 sm:px-6">
         {/* Hero */}
         <div className="mb-8">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-600/10 px-3 py-1 text-xs font-semibold text-blue-600">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-600/10 px-3 py-1 text-xs font-semibold text-emerald-600">
             <TrendingUp className="h-3.5 w-3.5" /> {tr(cs.industry)}
           </span>
           <h1 className="mt-4 font-heading text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl lg:text-[2.75rem]">
@@ -67,7 +67,7 @@ export function CaseStudyDetailClient({ slug }: { slug: string }) {
         {/* Solution */}
         <section className="mb-10">
           <div className="flex items-center gap-2.5">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600/10 text-blue-600 dark:text-blue-400">
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-600/10 text-emerald-600 dark:text-emerald-400">
               <Lightbulb className="h-5 w-5" />
             </span>
             <h2 className="font-heading text-xl font-bold sm:text-2xl">{t('caseStudies.solution')}</h2>
@@ -95,12 +95,12 @@ export function CaseStudyDetailClient({ slug }: { slug: string }) {
         {/* Testimonial */}
         <section className="mb-10">
           <div className="overflow-hidden rounded-3xl border border-border/60 bg-card p-6 sm:p-8">
-            <Quote className="h-8 w-8 text-blue-600/20" />
+            <Quote className="h-8 w-8 text-emerald-600/20" />
             <div className="prose prose-slate mt-2 max-w-none dark:prose-invert prose-p:text-lg prose-p:font-medium prose-p:leading-relaxed prose-p:text-foreground">
               <p>&ldquo;{cs.testimonial.quote}&rdquo;</p>
             </div>
             <div className="mt-4 flex items-center gap-3 border-t border-border/60 pt-4">
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-cyan-500 text-xs font-bold text-white">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-emerald-600 to-cyan-500 text-xs font-bold text-white">
                 {cs.testimonial.author.charAt(0)}
               </span>
               <div>
@@ -116,7 +116,7 @@ export function CaseStudyDetailClient({ slug }: { slug: string }) {
           <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t('caseStudies.servicesUsed')}</h3>
           <div className="flex flex-wrap gap-2">
             {cs.services.map((s) => (
-              <span key={s} className="rounded-full bg-blue-600/10 px-3 py-1.5 text-sm font-medium text-blue-600">
+              <span key={s} className="rounded-full bg-emerald-600/10 px-3 py-1.5 text-sm font-medium text-emerald-600">
                 {tr(s)}
               </span>
             ))}
@@ -124,14 +124,14 @@ export function CaseStudyDetailClient({ slug }: { slug: string }) {
         </section>
 
         {/* CTA */}
-        <div className="mt-12 overflow-hidden rounded-3xl border border-blue-600/30 bg-gradient-to-br from-blue-600 to-cyan-500 p-6 text-center text-white sm:p-8">
+        <div className="mt-12 overflow-hidden rounded-3xl border border-emerald-600/30 bg-gradient-to-br from-emerald-600 to-cyan-500 p-6 text-center text-white sm:p-8">
           <h3 className="font-heading text-xl font-bold sm:text-2xl">{t('caseStudies.detailCtaTitle')}</h3>
-          <p className="mt-2 text-sm text-blue-50/90">
+          <p className="mt-2 text-sm text-emerald-50/90">
             {t('caseStudies.detailCtaDesc')}
           </p>
           <Link
             href="/#lead-form"
-            className="mt-5 inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 text-sm font-bold text-blue-700 shadow-lg transition-transform hover:scale-[1.02]"
+            className="mt-5 inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 text-sm font-bold text-emerald-700 shadow-lg transition-transform hover:scale-[1.02]"
           >
             {t('caseStudies.detailCtaButton')}
             <ArrowRight className="h-4 w-4" />
@@ -147,12 +147,12 @@ export function CaseStudyDetailClient({ slug }: { slug: string }) {
                 <Link
                   key={rc.slug}
                   href={`/case-studies/${rc.slug}`}
-                  className="group rounded-2xl border border-border/60 bg-card p-5 transition-all hover:border-blue-600/40 hover:shadow-lg"
+                  className="group rounded-2xl border border-border/60 bg-card p-5 transition-all hover:border-emerald-600/40 hover:shadow-lg"
                 >
-                  <span className="rounded-full bg-blue-600/10 px-2.5 py-0.5 text-[10px] font-semibold text-blue-600">
+                  <span className="rounded-full bg-emerald-600/10 px-2.5 py-0.5 text-[10px] font-semibold text-emerald-600">
                     {tr(rc.industry)}
                   </span>
-                  <h4 className="mt-2 font-heading text-sm font-bold leading-snug group-hover:text-blue-600">
+                  <h4 className="mt-2 font-heading text-sm font-bold leading-snug group-hover:text-emerald-600">
                     {tr(rc.title)}
                   </h4>
                   <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{tr(rc.summary)}</p>

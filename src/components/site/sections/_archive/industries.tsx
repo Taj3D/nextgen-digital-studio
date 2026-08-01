@@ -34,14 +34,14 @@ export function Industries() {
             <Reveal key={ind.slug} delay={(i % 4) * 0.05}>
               <button
                 onClick={() => setActive(i)}
-                className="group relative flex h-full w-full flex-col items-start overflow-hidden rounded-2xl border border-border/60 bg-card p-5 text-left card-hover hover:border-blue-600/40 hover:shadow-xl hover:shadow-blue-600/5"
+                className="group relative flex h-full w-full flex-col items-start overflow-hidden rounded-2xl border border-border/60 bg-card p-5 text-left card-hover hover:border-emerald-600/40 hover:shadow-xl hover:shadow-emerald-600/5"
               >
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-600/10 text-blue-600 transition-all group-hover:bg-blue-600 group-hover:text-white">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-600/10 text-emerald-600 transition-all group-hover:bg-emerald-600 group-hover:text-white">
                   <ind.icon className="h-6 w-6" />
                 </div>
                 <h3 className="font-heading text-base font-bold leading-tight">{tr(ind.name)}</h3>
                 <p className="mt-2 line-clamp-3 text-sm text-muted-foreground">{tr(ind.blurb)}</p>
-                <span className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-blue-600 opacity-0 transition-opacity group-hover:opacity-100">
+                <span className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 opacity-0 transition-opacity group-hover:opacity-100">
                   View outcomes <ArrowRight className="h-3 w-3" />
                 </span>
               </button>
@@ -96,7 +96,7 @@ function IndustryModal({
         onClick={(e) => e.stopPropagation()}
         className="relative w-full max-w-md overflow-hidden rounded-3xl border border-border/60 bg-card shadow-2xl"
       >
-        <div className="relative h-24 bg-gradient-to-br from-blue-600 to-cyan-500">
+        <div className="relative h-24 bg-gradient-to-br from-emerald-600 to-cyan-500">
           <div className="absolute inset-0 bg-grid opacity-30" />
           <button
             onClick={onClose}
@@ -106,7 +106,7 @@ function IndustryModal({
           </button>
         </div>
         <div className="px-6 pb-6">
-          <div className="-mt-8 mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border-4 border-card bg-blue-600 text-white shadow-lg">
+          <div className="-mt-8 mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border-4 border-card bg-emerald-600 text-white shadow-lg">
             <ind.icon className="h-8 w-8" />
           </div>
           <h3 className="font-heading text-2xl font-bold">{tr(ind.name)}</h3>
@@ -129,7 +129,7 @@ function IndustryModal({
           <button
             onClick={onBook}
             className={cn(
-              "mt-6 w-full rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/25 transition-transform hover:scale-[1.02]",
+              "mt-6 w-full rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-600/25 transition-transform hover:scale-[1.02]",
             )}
           >
             Get a custom plan for {tr(ind.name)}

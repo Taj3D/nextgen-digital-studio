@@ -29,7 +29,7 @@ export function Careers() {
   return (
     <section id="careers" className="relative scroll-mt-24 overflow-hidden py-20 sm:py-28">
       <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute left-1/3 top-0 h-72 w-72 rounded-full bg-blue-600/10 blur-[100px]" />
+        <div className="absolute left-1/3 top-0 h-72 w-72 rounded-full bg-emerald-600/10 blur-[100px]" />
         <div className="absolute right-1/3 bottom-0 h-72 w-72 rounded-full bg-cyan-500/10 blur-[100px]" />
       </div>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -48,8 +48,8 @@ export function Careers() {
         <div className="mt-12 grid grid-cols-2 gap-4 lg:grid-cols-4">
           {perks.map((p, i) => (
             <Reveal key={p.title} delay={i * 0.06}>
-              <div className="group h-full rounded-2xl border border-border/60 bg-card p-5 text-center card-hover hover:border-blue-600/30">
-                <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500 text-white shadow-lg transition-transform group-hover:scale-110">
+              <div className="group h-full rounded-2xl border border-border/60 bg-card p-5 text-center card-hover hover:border-emerald-600/30">
+                <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-600 to-cyan-500 text-white shadow-lg transition-transform group-hover:scale-110">
                   <p.icon className="h-5 w-5" />
                 </div>
                 <h3 className="font-heading text-sm font-bold">{tr(p.title)}</h3>
@@ -67,17 +67,17 @@ export function Careers() {
               <Reveal key={job.id} delay={(i % 3) * 0.06}>
                 <button
                   onClick={() => setActive(job)}
-                  className="group flex h-full w-full flex-col rounded-2xl border border-border/60 bg-card p-5 text-left card-hover hover:border-blue-600/40 hover:shadow-xl hover:shadow-blue-600/5"
+                  className="group flex h-full w-full flex-col rounded-2xl border border-border/60 bg-card p-5 text-left card-hover hover:border-emerald-600/40 hover:shadow-xl hover:shadow-emerald-600/5"
                 >
                   <div className="mb-3 flex items-center justify-between">
-                    <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-600/10 text-xl transition-all group-hover:bg-blue-600 group-hover:scale-110">
+                    <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-600/10 text-xl transition-all group-hover:bg-emerald-600 group-hover:scale-110">
                       {job.emoji}
                     </span>
                     <span className="rounded-full bg-emerald-500/10 px-2.5 py-1 text-[10px] font-bold text-emerald-600">
                       {job.type}
                     </span>
                   </div>
-                  <h4 className="font-heading text-base font-bold leading-tight group-hover:text-blue-600">{tr(job.title)}</h4>
+                  <h4 className="font-heading text-base font-bold leading-tight group-hover:text-emerald-600">{tr(job.title)}</h4>
                   <p className="mt-1.5 flex-1 text-xs leading-relaxed text-muted-foreground">{tr(job.desc)}</p>
                   <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-border/60 pt-3 text-[11px] text-muted-foreground">
                     <span className="flex items-center gap-1"><Briefcase className="h-3 w-3" /> {job.department}</span>
@@ -94,7 +94,7 @@ export function Careers() {
             {t('careers.dontSeeRole')}{" "}
             <button
               onClick={() => setActive({ id: 'general', title: 'General Application', department: 'General', type: 'Any', location: 'Any', desc: 'Tell us how you can contribute.', emoji: '✨' })}
-              className="font-semibold text-blue-600 underline-offset-4 hover:underline"
+              className="font-semibold text-emerald-600 underline-offset-4 hover:underline"
             >
               {t('careers.sendGeneral')} →
             </button>
@@ -158,7 +158,7 @@ function ApplicationModal({ job, onClose }: { job: JobOpening; onClose: () => vo
         onClick={(e) => e.stopPropagation()}
         className="relative max-h-[90vh] w-full max-w-lg overflow-y-auto scroll-area rounded-3xl border border-border/60 bg-card shadow-2xl"
       >
-        <div className="relative h-24 bg-gradient-to-br from-blue-600 to-cyan-500">
+        <div className="relative h-24 bg-gradient-to-br from-emerald-600 to-cyan-500">
           <div className="absolute inset-0 bg-grid opacity-20" />
           <button
             aria-label="Close"
@@ -186,7 +186,7 @@ function ApplicationModal({ job, onClose }: { job: JobOpening; onClose: () => vo
           ) : (
             <>
               <div className="flex flex-wrap items-center gap-2">
-                <span className="rounded-full bg-blue-600/10 px-3 py-1 text-xs font-semibold text-blue-600">{job.department}</span>
+                <span className="rounded-full bg-emerald-600/10 px-3 py-1 text-xs font-semibold text-emerald-600">{job.department}</span>
                 <span className="flex items-center gap-1 text-xs text-muted-foreground"><Clock className="h-3 w-3" /> {job.type}</span>
                 <span className="flex items-center gap-1 text-xs text-muted-foreground"><MapPin className="h-3 w-3" /> {job.location}</span>
               </div>
@@ -219,7 +219,7 @@ function ApplicationModal({ job, onClose }: { job: JobOpening; onClose: () => vo
                 <Button
                   type="submit"
                   disabled={submitting}
-                  className="mt-1 h-12 w-full rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 font-semibold shadow-lg shadow-blue-600/25"
+                  className="mt-1 h-12 w-full rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-500 font-semibold shadow-lg shadow-emerald-600/25"
                 >
                   {submitting ? (
                     <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Sending...</>

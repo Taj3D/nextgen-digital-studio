@@ -33,13 +33,13 @@ export function PrivacyTermsLayout({
 
       <main className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
         {/* Hero */}
-        <div className="rounded-3xl border border-border/60 bg-gradient-to-br from-blue-600/[0.05] to-cyan-500/[0.05] p-6 sm:p-8">
+        <div className="rounded-3xl border border-border/60 bg-gradient-to-br from-emerald-600/[0.05] to-teal-500/[0.05] p-6 sm:p-8">
           <h2 className="font-heading text-3xl font-extrabold tracking-tight sm:text-4xl">
             {title}
           </h2>
           <p className="mt-2 text-lg text-muted-foreground">{subtitle}</p>
           <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-            <span className="rounded-full bg-blue-600/10 px-3 py-1 font-semibold text-blue-600">
+            <span className="rounded-full bg-emerald-600/10 px-3 py-1 font-semibold text-emerald-600">
               সর্বশেষ আপডেট: {lastUpdated}
             </span>
             <span className="rounded-full bg-emerald-500/10 px-3 py-1 font-semibold text-emerald-600">
@@ -63,13 +63,13 @@ export function PrivacyTermsLayout({
         </div>
 
         {/* Contact CTA */}
-        <div className="mt-8 rounded-2xl border border-blue-600/30 bg-blue-600/[0.04] p-6 text-center">
+        <div className="mt-8 rounded-2xl border border-emerald-600/30 bg-emerald-600/[0.04] p-6 text-center">
           <h3 className="font-heading text-lg font-bold">প্রশ্ন আছে?</h3>
           <p className="mt-1.5 text-sm text-muted-foreground">
             আমাদের সাথে যোগাযোগ করুন — আমরা সাহায্য করতে প্রস্তুত।
           </p>
           <div className="mt-4 flex flex-wrap justify-center gap-3 text-sm">
-            <a href={`mailto:${siteConfig.email}`} className="rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 px-5 py-2.5 font-semibold text-white shadow-lg shadow-blue-600/25 transition-transform hover:scale-[1.02]">
+            <a href={`mailto:${siteConfig.email}`} className="rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 px-5 py-2.5 font-semibold text-white shadow-lg shadow-emerald-600/25 transition-transform hover:scale-[1.02]">
               ইমেইল করুন
             </a>
             <a href={`tel:${siteConfig.phone.replace(/\s/g, "")}`} className="rounded-xl border border-border/60 bg-background px-5 py-2.5 font-semibold hover:bg-muted">

@@ -36,13 +36,13 @@ type Stats = {
 }
 
 const sourceLabels: Record<string, { label: string; icon: typeof Mail; color: string }> = {
-  contact_form: { label: 'Contact Form', icon: Mail, color: 'bg-blue-500' },
-  homepage_lead_form: { label: 'Homepage Lead Form', icon: Mail, color: 'bg-blue-600' },
+  contact_form: { label: 'Contact Form', icon: Mail, color: 'bg-emerald-500' },
+  homepage_lead_form: { label: 'Homepage Lead Form', icon: Mail, color: 'bg-emerald-600' },
   strategy_call: { label: 'Strategy Call', icon: Calendar, color: 'bg-violet-500' },
   ai_audit_tool: { label: 'AI Audit', icon: TrendingUp, color: 'bg-amber-500' },
   free_tools_download: { label: 'Free Tools', icon: Download, color: 'bg-emerald-500' },
   ai_chat_widget: { label: 'AI Chat', icon: Bot, color: 'bg-cyan-500' },
-  ai_training_page: { label: 'AI Training', icon: Users, color: 'bg-indigo-500' },
+  ai_training_page: { label: 'AI Training', icon: Users, color: 'bg-teal-500' },
   cnc_training_page: { label: 'CNC Training', icon: Users, color: 'bg-amber-600' },
   cnc_design_page: { label: 'CNC Design Bundle', icon: Filter, color: 'bg-orange-500' },
   '3d_portrait_page': { label: '3D Portrait', icon: Bot, color: 'bg-violet-600' },
@@ -52,7 +52,7 @@ const sourceLabels: Record<string, { label: string; icon: typeof Mail; color: st
 }
 
 const statusColors: Record<string, string> = {
-  new: 'bg-blue-500/15 text-blue-600',
+  new: 'bg-emerald-500/15 text-emerald-600',
   contacted: 'bg-amber-500/15 text-amber-600',
   qualified: 'bg-violet-500/15 text-violet-600',
   won: 'bg-emerald-500/15 text-emerald-600',
@@ -239,7 +239,7 @@ export default function AdminDashboard() {
             </a>
             <span className="h-4 w-px bg-border" />
             <h1 className="font-heading text-base font-bold">Lead Dashboard</h1>
-            <span className="rounded-full bg-blue-600/10 px-2.5 py-0.5 text-[10px] font-bold uppercase text-blue-600">
+            <span className="rounded-full bg-emerald-600/10 px-2.5 py-0.5 text-[10px] font-bold uppercase text-emerald-600">
               Admin
             </span>
           </div>
@@ -267,7 +267,7 @@ export default function AdminDashboard() {
         {/* Stats cards */}
         {stats && (
           <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-            <StatCard icon={Users} label="Total Leads" value={stats.total} color="from-blue-600 to-cyan-500" />
+            <StatCard icon={Users} label="Total Leads" value={stats.total} color="from-emerald-600 to-cyan-500" />
             <StatCard icon={Bot} label="AI Chats" value={stats.conversations} color="from-violet-500 to-purple-500" />
             <StatCard icon={Mail} label="Newsletter Subs" value={stats.subscribers} color="from-emerald-500 to-teal-500" />
             <StatCard icon={TrendingUp} label="Conversion Rate" value={`${stats.total > 0 ? Math.round((stats.byStatus.find(s => s.status === 'won')?.count ?? 0) / stats.total * 100) : 0}%`} color="from-amber-500 to-orange-500" />
@@ -325,7 +325,7 @@ export default function AdminDashboard() {
           <select
             value={sourceFilter}
             onChange={(e) => setSourceFilter(e.target.value)}
-            className="rounded-lg border border-border/60 bg-card px-3 py-1.5 text-xs font-medium outline-none focus:border-blue-600/50"
+            className="rounded-lg border border-border/60 bg-card px-3 py-1.5 text-xs font-medium outline-none focus:border-emerald-600/50"
           >
             <option value="all">All sources</option>
             <option value="contact_form">Contact Form</option>
@@ -337,7 +337,7 @@ export default function AdminDashboard() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="rounded-lg border border-border/60 bg-card px-3 py-1.5 text-xs font-medium outline-none focus:border-blue-600/50"
+            className="rounded-lg border border-border/60 bg-card px-3 py-1.5 text-xs font-medium outline-none focus:border-emerald-600/50"
           >
             <option value="all">All statuses</option>
             <option value="new">New</option>
@@ -356,14 +356,14 @@ export default function AdminDashboard() {
           <motion.div
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-3 flex flex-wrap items-center gap-2 rounded-xl border border-blue-600/30 bg-blue-600/[0.04] px-4 py-2.5"
+            className="mt-3 flex flex-wrap items-center gap-2 rounded-xl border border-emerald-600/30 bg-emerald-600/[0.04] px-4 py-2.5"
           >
-            <span className="text-xs font-bold text-blue-600">{selectedIds.size} selected</span>
+            <span className="text-xs font-bold text-emerald-600">{selectedIds.size} selected</span>
             <span className="h-4 w-px bg-border" />
             <select
               value={bulkAction}
               onChange={(e) => setBulkAction(e.target.value)}
-              className="rounded-lg border border-border/60 bg-card px-2.5 py-1 text-xs font-medium outline-none focus:border-blue-600/50"
+              className="rounded-lg border border-border/60 bg-card px-2.5 py-1 text-xs font-medium outline-none focus:border-emerald-600/50"
             >
               <option value="">Choose action...</option>
               <optgroup label="Set status">
@@ -383,7 +383,7 @@ export default function AdminDashboard() {
             <button
               onClick={runBulkAction}
               disabled={!bulkAction}
-              className="rounded-lg bg-gradient-to-r from-blue-600 to-cyan-500 px-3 py-1 text-xs font-semibold text-white shadow-md disabled:opacity-50"
+              className="rounded-lg bg-gradient-to-r from-emerald-600 to-cyan-500 px-3 py-1 text-xs font-semibold text-white shadow-md disabled:opacity-50"
             >
               Apply
             </button>
@@ -423,7 +423,7 @@ export default function AdminDashboard() {
                         type="checkbox"
                         checked={selectedIds.size === leads.length && leads.length > 0}
                         onChange={toggleSelectAll}
-                        className="h-4 w-4 cursor-pointer rounded border-border accent-blue-600"
+                        className="h-4 w-4 cursor-pointer rounded border-border accent-emerald-600"
                         aria-label="Select all"
                       />
                     </th>
@@ -446,13 +446,13 @@ export default function AdminDashboard() {
                             type="checkbox"
                             checked={selectedIds.has(lead.id)}
                             onChange={() => toggleSelect(lead.id)}
-                            className="h-4 w-4 cursor-pointer rounded border-border accent-blue-600"
+                            className="h-4 w-4 cursor-pointer rounded border-border accent-emerald-600"
                             aria-label={`Select ${lead.name}`}
                           />
                         </td>
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-2">
-                            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-cyan-500 text-[10px] font-bold text-white">
+                            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-emerald-600 to-cyan-500 text-[10px] font-bold text-white">
                               {lead.name.charAt(0).toUpperCase()}
                             </span>
                             <div>
@@ -463,7 +463,7 @@ export default function AdminDashboard() {
                         </td>
                         <td className="px-4 py-3">
                           <div className="space-y-0.5">
-                            <a href={`mailto:${lead.email}`} onClick={(e) => e.stopPropagation()} className="flex items-center gap-1 text-xs text-blue-600 hover:underline">
+                            <a href={`mailto:${lead.email}`} onClick={(e) => e.stopPropagation()} className="flex items-center gap-1 text-xs text-emerald-600 hover:underline">
                               <Mail className="h-3 w-3" /> <span className="max-w-[140px] truncate">{lead.email}</span>
                             </a>
                             <a href={`tel:${lead.phone}`} onClick={(e) => e.stopPropagation()} className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground">
@@ -483,7 +483,7 @@ export default function AdminDashboard() {
                           <select
                             value={lead.status}
                             onChange={(e) => updateStatus(lead.id, e.target.value)}
-                            className={cn("cursor-pointer rounded-full border-0 px-2.5 py-1 text-[10px] font-bold capitalize outline-none ring-1 ring-inset ring-transparent focus:ring-blue-600/40", statusColors[lead.status] ?? 'bg-muted text-muted-foreground')}
+                            className={cn("cursor-pointer rounded-full border-0 px-2.5 py-1 text-[10px] font-bold capitalize outline-none ring-1 ring-inset ring-transparent focus:ring-emerald-600/40", statusColors[lead.status] ?? 'bg-muted text-muted-foreground')}
                           >
                             <option value="new">New</option>
                             <option value="contacted">Contacted</option>
@@ -497,7 +497,7 @@ export default function AdminDashboard() {
                             value={lead.assignedTo || 'Unassigned'}
                             onChange={(e) => assignLead(lead.id, e.target.value)}
                             className={cn(
-                              "cursor-pointer rounded-full border-0 px-2.5 py-1 text-[10px] font-semibold outline-none ring-1 ring-inset ring-transparent focus:ring-blue-600/40",
+                              "cursor-pointer rounded-full border-0 px-2.5 py-1 text-[10px] font-semibold outline-none ring-1 ring-inset ring-transparent focus:ring-emerald-600/40",
                               lead.assignedTo ? 'bg-violet-500/15 text-violet-600' : 'bg-muted text-muted-foreground'
                             )}
                           >
@@ -551,7 +551,7 @@ export default function AdminDashboard() {
             <div className="space-y-5 p-5">
               {/* Identity */}
               <div className="flex items-center gap-3">
-                <span className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-cyan-500 text-lg font-bold text-white">
+                <span className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-emerald-600 to-cyan-500 text-lg font-bold text-white">
                   {selectedLead.name.charAt(0).toUpperCase()}
                 </span>
                 <div>
@@ -565,11 +565,11 @@ export default function AdminDashboard() {
 
               {/* Contact */}
               <div className="grid gap-2">
-                <a href={`mailto:${selectedLead.email}`} className="flex items-center gap-2 rounded-lg border border-border/60 bg-background px-3 py-2 text-sm hover:border-blue-600/40">
-                  <Mail className="h-4 w-4 text-blue-600" /> {selectedLead.email}
+                <a href={`mailto:${selectedLead.email}`} className="flex items-center gap-2 rounded-lg border border-border/60 bg-background px-3 py-2 text-sm hover:border-emerald-600/40">
+                  <Mail className="h-4 w-4 text-emerald-600" /> {selectedLead.email}
                 </a>
-                <a href={`tel:${selectedLead.phone}`} className="flex items-center gap-2 rounded-lg border border-border/60 bg-background px-3 py-2 text-sm hover:border-blue-600/40">
-                  <Phone className="h-4 w-4 text-blue-600" /> {selectedLead.phone}
+                <a href={`tel:${selectedLead.phone}`} className="flex items-center gap-2 rounded-lg border border-border/60 bg-background px-3 py-2 text-sm hover:border-emerald-600/40">
+                  <Phone className="h-4 w-4 text-emerald-600" /> {selectedLead.phone}
                 </a>
               </div>
 
@@ -582,7 +582,7 @@ export default function AdminDashboard() {
                     updateStatus(selectedLead.id, e.target.value)
                     setSelectedLead({ ...selectedLead, status: e.target.value })
                   }}
-                  className={cn("w-full cursor-pointer rounded-lg border-0 px-3 py-2 text-sm font-bold capitalize outline-none ring-1 ring-inset ring-border focus:ring-blue-600/40", statusColors[selectedLead.status] ?? 'bg-muted')}
+                  className={cn("w-full cursor-pointer rounded-lg border-0 px-3 py-2 text-sm font-bold capitalize outline-none ring-1 ring-inset ring-border focus:ring-emerald-600/40", statusColors[selectedLead.status] ?? 'bg-muted')}
                 >
                   <option value="new">New</option>
                   <option value="contacted">Contacted</option>
@@ -601,7 +601,7 @@ export default function AdminDashboard() {
                     assignLead(selectedLead.id, e.target.value)
                     setSelectedLead({ ...selectedLead, assignedTo: e.target.value === 'Unassigned' ? '' : e.target.value })
                   }}
-                  className="w-full cursor-pointer rounded-lg border-0 bg-background px-3 py-2 text-sm font-medium outline-none ring-1 ring-inset ring-border focus:ring-blue-600/40"
+                  className="w-full cursor-pointer rounded-lg border-0 bg-background px-3 py-2 text-sm font-medium outline-none ring-1 ring-inset ring-border focus:ring-emerald-600/40"
                 >
                   {teamMembers.map((m) => (
                     <option key={m} value={m}>{m}</option>
@@ -639,12 +639,12 @@ export default function AdminDashboard() {
                   onChange={(e) => setNotesDraft(e.target.value)}
                   rows={4}
                   placeholder="Add notes about this lead..."
-                  className="w-full rounded-lg border border-border/60 bg-background px-3 py-2 text-sm outline-none focus:border-blue-600/50 focus:ring-2 focus:ring-blue-600/15"
+                  className="w-full rounded-lg border border-border/60 bg-background px-3 py-2 text-sm outline-none focus:border-emerald-600/50 focus:ring-2 focus:ring-emerald-600/15"
                 />
                 <button
                   onClick={saveNotes}
                   disabled={savingNotes}
-                  className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-500 px-4 py-2 text-sm font-semibold text-white shadow-md transition-transform hover:scale-[1.01] disabled:opacity-50"
+                  className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-emerald-600 to-cyan-500 px-4 py-2 text-sm font-semibold text-white shadow-md transition-transform hover:scale-[1.01] disabled:opacity-50"
                 >
                   {savingNotes ? "Saving..." : "Save Notes"}
                 </button>
@@ -664,7 +664,7 @@ export default function AdminDashboard() {
                         <div className="flex flex-col items-center">
                           <span className={cn(
                             "mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[9px]",
-                            a.type === 'status_change' ? 'bg-blue-500/15 text-blue-600' :
+                            a.type === 'status_change' ? 'bg-emerald-500/15 text-emerald-600' :
                             a.type === 'assignment' ? 'bg-violet-500/15 text-violet-600' :
                             a.type === 'note_added' ? 'bg-amber-500/15 text-amber-600' :
                             a.type === 'deleted' ? 'bg-rose-500/15 text-rose-500' :

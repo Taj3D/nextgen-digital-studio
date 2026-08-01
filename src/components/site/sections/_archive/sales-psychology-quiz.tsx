@@ -251,7 +251,7 @@ export function SalesPsychologyQuiz() {
     <section id="sales-psychology" className="relative scroll-mt-24 overflow-hidden py-20 sm:py-28">
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute left-1/2 top-0 h-72 w-72 -translate-x-1/2 rounded-full bg-violet-500/10 blur-[100px]" />
-        <div className="absolute right-1/4 bottom-1/4 h-72 w-72 rounded-full bg-blue-600/10 blur-[100px]" />
+        <div className="absolute right-1/4 bottom-1/4 h-72 w-72 rounded-full bg-emerald-600/10 blur-[100px]" />
       </div>
 
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
@@ -346,10 +346,10 @@ export function SalesPsychologyQuiz() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="rounded-3xl border border-violet-500/30 bg-gradient-to-br from-violet-500/5 to-blue-600/5 p-6 shadow-xl sm:p-8"
+              className="rounded-3xl border border-violet-500/30 bg-gradient-to-br from-violet-500/5 to-emerald-600/5 p-6 shadow-xl sm:p-8"
             >
               <div className="mb-6 flex items-center gap-3">
-                <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-blue-600 text-white shadow-lg">
+                <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-emerald-600 text-white shadow-lg">
                   <Brain className="h-7 w-7" />
                 </div>
                 <div>
@@ -388,7 +388,7 @@ export function SalesPsychologyQuiz() {
               </div>
 
               {/* CTA */}
-              <div className="mt-6 rounded-2xl bg-gradient-to-br from-violet-500 to-blue-600 p-6 text-center text-white">
+              <div className="mt-6 rounded-2xl bg-gradient-to-br from-violet-500 to-emerald-600 p-6 text-center text-white">
                 <p className="font-heading text-lg font-bold sm:text-xl">
                   {isBn
                     ? 'আপনার রোডম্যাপ প্রস্তুত — এখন কী করবেন?'

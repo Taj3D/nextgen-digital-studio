@@ -46,9 +46,9 @@ export function TechStack() {
           {row.map((t, i) => (
             <div
               key={`${t.name}-${i}`}
-              className="group flex shrink-0 items-center gap-3 rounded-2xl border border-border/60 bg-card px-5 py-3.5 transition-colors hover:border-blue-600/40"
+              className="group flex shrink-0 items-center gap-3 rounded-2xl border border-border/60 bg-card px-5 py-3.5 transition-colors hover:border-emerald-600/40"
             >
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600/10 to-cyan-500/10 text-lg">
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-600/10 to-cyan-500/10 text-lg">
                 {t.emoji}
               </span>
               <div>

@@ -32,13 +32,13 @@ export function CaseStudies() {
             <Reveal key={cs.slug} delay={(i % 2) * 0.1}>
               <button
                 onClick={() => setActive(cs)}
-                className="group relative flex h-full w-full flex-col overflow-hidden rounded-3xl border border-border/60 bg-card p-7 text-left card-hover hover:border-blue-600/40 hover:shadow-2xl hover:shadow-blue-600/5"
+                className="group relative flex h-full w-full flex-col overflow-hidden rounded-3xl border border-border/60 bg-card p-7 text-left card-hover hover:border-emerald-600/40 hover:shadow-2xl hover:shadow-emerald-600/5"
               >
                 <div className="flex items-center justify-between">
-                  <span className="rounded-full bg-blue-600/10 px-3 py-1 text-xs font-semibold text-blue-600">
+                  <span className="rounded-full bg-emerald-600/10 px-3 py-1 text-xs font-semibold text-emerald-600">
                     {tr(cs.industry)}
                   </span>
-                  <ArrowRight className="h-5 w-5 text-muted-foreground/40 transition-all group-hover:translate-x-0.5 group-hover:text-blue-600" />
+                  <ArrowRight className="h-5 w-5 text-muted-foreground/40 transition-all group-hover:translate-x-0.5 group-hover:text-emerald-600" />
                 </div>
                 <h3 className="mt-4 font-heading text-xl font-bold leading-snug">
                   {tr(cs.title)}
@@ -100,7 +100,7 @@ function CaseStudyModal({
         onClick={(e) => e.stopPropagation()}
         className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-border/60 bg-card shadow-2xl"
       >
-        <div className="relative h-28 bg-gradient-to-br from-blue-600 to-cyan-500">
+        <div className="relative h-28 bg-gradient-to-br from-emerald-600 to-cyan-500">
           <div className="absolute inset-0 bg-grid opacity-30" />
           <button
             onClick={onClose}
@@ -114,7 +114,7 @@ function CaseStudyModal({
           </div>
         </div>
         <div className="p-6 sm:p-7">
-          <p className="text-sm font-semibold text-blue-600">{tr(cs.client)}</p>
+          <p className="text-sm font-semibold text-emerald-600">{tr(cs.client)}</p>
           <h3 className="mt-1 font-heading text-2xl font-bold leading-snug">{tr(cs.title)}</h3>
           <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{tr(cs.summary)}</p>
 
@@ -133,7 +133,7 @@ function CaseStudyModal({
             </p>
             <div className="flex flex-wrap gap-1.5">
               {cs.services.map((s) => (
-                <span key={s} className="rounded-full bg-blue-600/10 px-3 py-1 text-xs font-medium text-blue-600">
+                <span key={s} className="rounded-full bg-emerald-600/10 px-3 py-1 text-xs font-medium text-emerald-600">
                   {tr(s)}
                 </span>
               ))}
@@ -142,7 +142,7 @@ function CaseStudyModal({
 
           <button
             onClick={onBook}
-            className="mt-7 w-full rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/25 transition-transform hover:scale-[1.02]"
+            className="mt-7 w-full rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-600/25 transition-transform hover:scale-[1.02]"
           >
             Get similar results for my business
           </button>

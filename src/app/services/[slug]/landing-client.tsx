@@ -50,8 +50,8 @@ export function LandingClient({ slug, title, short, description, features, gradi
       <main className="flex-1">
         {/* Hero */}
         <section className="relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-blue-50 via-background to-background dark:from-blue-950/30" />
-          <div className="absolute -top-32 -right-32 h-96 w-96 rounded-full bg-blue-500/10 blur-3xl" />
+          <div className="absolute inset-0 bg-gradient-to-b from-emerald-50 via-background to-background dark:from-emerald-950/30" />
+          <div className="absolute -top-32 -right-32 h-96 w-96 rounded-full bg-emerald-500/10 blur-3xl" />
           <div className="absolute -bottom-32 -left-32 h-96 w-96 rounded-full bg-cyan-500/10 blur-3xl" />
 
           <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 sm:px-6 sm:py-16 md:grid-cols-2 md:py-20">
@@ -69,7 +69,7 @@ export function LandingClient({ slug, title, short, description, features, gradi
               <ul className="mt-6 grid gap-2 text-sm">
                 {localisedFeatures.map((f) => (
                   <li key={f} className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-blue-600" /> {f}
+                    <Check className="h-4 w-4 text-emerald-600" /> {f}
                   </li>
                 ))}
               </ul>
@@ -81,7 +81,7 @@ export function LandingClient({ slug, title, short, description, features, gradi
             </div>
 
             <div className="relative">
-              <div className="absolute -inset-3 rounded-3xl bg-gradient-to-tr from-blue-500/20 to-cyan-500/20 blur-2xl" />
+              <div className="absolute -inset-3 rounded-3xl bg-gradient-to-tr from-emerald-500/20 to-cyan-500/20 blur-2xl" />
               <div className="relative rounded-3xl border border-border/60 bg-card p-8 shadow-2xl">
                 <div
                   className={`flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br ${gradient} text-white shadow-lg`}
@@ -94,7 +94,7 @@ export function LandingClient({ slug, title, short, description, features, gradi
                 <p className="mt-2 text-sm text-muted-foreground">{localisedShort}</p>
                 <div className="mt-5 grid grid-cols-3 gap-3 text-center">
                   <div className="rounded-xl bg-muted/60 p-3">
-                    <Zap className="mx-auto h-5 w-5 text-blue-600" />
+                    <Zap className="mx-auto h-5 w-5 text-emerald-600" />
                     <div className="mt-1 text-xs font-semibold">
                       {t('serviceLanding.fastSetup')}
                     </div>
@@ -129,7 +129,7 @@ export function LandingClient({ slug, title, short, description, features, gradi
             <div className="mt-8 grid gap-6 sm:grid-cols-2 md:grid-cols-3">
               {localisedFeatures.map((f, i) => (
                 <div key={f} className="rounded-2xl border border-border/60 bg-background p-6 shadow-sm">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500 text-white">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-600 to-cyan-500 text-white">
                     <Check className="h-5 w-5" />
                   </div>
                   <h3 className="mt-3 font-heading font-bold">{f}</h3>
@@ -138,7 +138,7 @@ export function LandingClient({ slug, title, short, description, features, gradi
                       ? `${f}-এ আমরা প্রফেশনাল মানের সমাধান দিই যা আপনার ব্যবসার ফলাফল বাড়ায়।`
                       : `We deliver professional-grade ${f.toLowerCase()} solutions that drive measurable business results.`}
                   </p>
-                  <div className="mt-3 text-xs font-semibold text-blue-600">
+                  <div className="mt-3 text-xs font-semibold text-emerald-600">
                     #{i + 1}{' '}
                     <span className="text-muted-foreground">
                       {t('serviceLanding.priority')}
@@ -152,11 +152,11 @@ export function LandingClient({ slug, title, short, description, features, gradi
 
         {/* CTA */}
         <section className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16">
-          <div className="rounded-3xl bg-gradient-to-br from-blue-600 to-cyan-500 p-8 text-center text-white shadow-xl sm:p-12">
+          <div className="rounded-3xl bg-gradient-to-br from-emerald-600 to-cyan-500 p-8 text-center text-white shadow-xl sm:p-12">
             <h2 className="font-heading text-3xl font-bold sm:text-4xl">
               {t('serviceLanding.readyTitle')}
             </h2>
-            <p className="mx-auto mt-3 max-w-xl text-sm text-blue-50">
+            <p className="mx-auto mt-3 max-w-xl text-sm text-emerald-50">
               {isBn
                 ? `${localisedTitle} সেবা নিয়ে আপনার ব্যবসার জন্য একটি কাস্টম AI রোডম্যাপ পান। ৩০ মিনিট ফ্রি কথা বলুন।`
                 : `Get a custom AI roadmap for your business with ${localisedTitle}. 30-minute free call.`}
@@ -170,7 +170,7 @@ export function LandingClient({ slug, title, short, description, features, gradi
                 )}`}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-blue-700 shadow-lg transition-transform hover:scale-[1.02]"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-emerald-700 shadow-lg transition-transform hover:scale-[1.02]"
               >
                 {t('serviceLanding.chatNow')}
                 <ArrowRight className="h-4 w-4" />

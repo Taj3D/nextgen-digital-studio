@@ -76,12 +76,12 @@ export function PrivacyClient() {
         </div>
       </header>
       <main className="mx-auto max-w-4xl px-4 py-10 sm:px-6">
-        <div className="rounded-3xl border border-border/60 bg-gradient-to-br from-blue-600/[0.05] to-cyan-500/[0.05] p-6 sm:p-8">
+        <div className="rounded-3xl border border-border/60 bg-gradient-to-br from-emerald-600/[0.05] to-cyan-500/[0.05] p-6 sm:p-8">
           <h2 className="font-heading text-3xl font-extrabold tracking-tight sm:text-4xl">Privacy Policy</h2>
           <p className="mt-2 text-lg text-muted-foreground">
             {isBn ? 'আপনার গোপনীয়তা আমাদের অগ্রাধিকার' : 'Your privacy is our priority'}
           </p>
-          <span className="mt-4 inline-block rounded-full bg-blue-600/10 px-3 py-1 font-semibold text-blue-600 text-xs">
+          <span className="mt-4 inline-block rounded-full bg-emerald-600/10 px-3 py-1 font-semibold text-emerald-600 text-xs">
             {isBn ? 'সর্বশেষ আপডেট: জানুয়ারি ২০২৫' : 'Last updated: January 2025'}
           </span>
         </div>
@@ -93,12 +93,12 @@ export function PrivacyClient() {
             </div>
           ))}
         </div>
-        <div className="mt-8 rounded-2xl border border-blue-600/30 bg-blue-600/[0.04] p-6 text-center">
+        <div className="mt-8 rounded-2xl border border-emerald-600/30 bg-emerald-600/[0.04] p-6 text-center">
           <h3 className="font-heading text-lg font-bold">{isBn ? 'প্রশ্ন আছে?' : 'Have questions?'}</h3>
           <p className="mt-1.5 text-sm text-muted-foreground">
             {isBn ? 'আমাদের সাথে যোগাযোগ করুন।' : 'Get in touch with us.'}
           </p>
-          <a href={`mailto:${siteConfig.email}`} className="mt-4 inline-block rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg">
+          <a href={`mailto:${siteConfig.email}`} className="mt-4 inline-block rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg">
             {isBn ? 'ইমেইল করুন' : 'Email Us'}
           </a>
         </div>

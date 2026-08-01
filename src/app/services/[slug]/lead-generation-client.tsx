@@ -113,7 +113,7 @@ function Section({
   const bgClass =
     bg === 'muted' ? 'bg-muted/30' :
     bg === 'dark' ? 'bg-slate-950 text-white' :
-    bg === 'gradient' ? 'bg-gradient-to-br from-blue-600 to-cyan-500 text-white' :
+    bg === 'gradient' ? 'bg-gradient-to-br from-emerald-600 to-cyan-500 text-white' :
     ''
   return (
     <section id={id} className={`relative scroll-mt-20 py-14 sm:py-20 ${bgClass} ${className}`}>
@@ -140,7 +140,7 @@ function SectionHeader({
   return (
     <div className="mx-auto max-w-3xl text-center">
       {badge && (
-        <span className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wider ${light ? 'bg-white/15 text-white' : 'border border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-900 dark:bg-blue-950/50 dark:text-blue-300'}`}>
+        <span className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wider ${light ? 'bg-white/15 text-white' : 'border border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/50 dark:text-emerald-300'}`}>
           {L(badge, isBn)}
         </span>
       )}
@@ -148,7 +148,7 @@ function SectionHeader({
         {L(title, isBn)}
       </h2>
       {subtitle && (
-        <p className={`mt-3 text-[15px] leading-relaxed ${light ? 'text-blue-50' : 'text-muted-foreground'}`}>
+        <p className={`mt-3 text-[15px] leading-relaxed ${light ? 'text-emerald-50' : 'text-muted-foreground'}`}>
           {L(subtitle, isBn)}
         </p>
       )}
@@ -273,7 +273,7 @@ export function LeadGenerationClient() {
 function HeroSection({ isBn, onCta }: { isBn: boolean; onCta: () => void }) {
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-background text-white">
-      <div className="absolute -top-40 -right-40 h-96 w-96 rounded-full bg-blue-500/10 blur-3xl" />
+      <div className="absolute -top-40 -right-40 h-96 w-96 rounded-full bg-emerald-500/10 blur-3xl" />
       <div className="absolute -bottom-40 -left-40 h-96 w-96 rounded-full bg-cyan-500/10 blur-3xl" />
       <Container className="relative py-16 text-center sm:py-24">
         <span className="inline-flex items-center gap-2 rounded-full bg-amber-400 px-4 py-1.5 text-sm font-bold text-slate-900">
@@ -477,7 +477,7 @@ function HormoziSection({ isBn }: { isBn: boolean }) {
             return (
               <div key={i} className="rounded-2xl border border-border/60 bg-card p-6 shadow-sm">
                 <div className="flex items-center gap-3">
-                  <div className={`flex h-12 w-12 items-center justify-center rounded-xl text-white ${isIncrease ? 'bg-gradient-to-br from-emerald-500 to-teal-500' : 'bg-gradient-to-br from-blue-500 to-cyan-500'}`}>
+                  <div className={`flex h-12 w-12 items-center justify-center rounded-xl text-white ${isIncrease ? 'bg-gradient-to-br from-emerald-500 to-teal-500' : 'bg-gradient-to-br from-emerald-500 to-cyan-500'}`}>
                     <Icon className="h-6 w-6" />
                   </div>
                   <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
@@ -515,10 +515,10 @@ function StoryBrandSection({ isBn }: { isBn: boolean }) {
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {STORYBRAND.steps.map((s, i) => (
             <div key={i} className="relative rounded-2xl border border-border/60 bg-card p-5 shadow-sm">
-              <div className="absolute -top-3 left-5 flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-cyan-500 text-sm font-bold text-white shadow">
+              <div className="absolute -top-3 left-5 flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-emerald-600 to-cyan-500 text-sm font-bold text-white shadow">
                 {s.step}
               </div>
-              <div className="mt-3 text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+              <div className="mt-3 text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
                 {L(s.label, isBn)}
               </div>
               <h3 className="mt-1 font-heading text-base font-bold">{L(s.title, isBn)}</h3>
@@ -559,7 +559,7 @@ function OfferStackSection({ isBn, onCta }: { isBn: boolean; onCta: () => void }
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <div className={`flex h-11 w-11 items-center justify-center rounded-xl text-white ${isCore ? 'bg-gradient-to-br from-amber-500 to-orange-500' : 'bg-gradient-to-br from-blue-600 to-cyan-500'}`}>
+                  <div className={`flex h-11 w-11 items-center justify-center rounded-xl text-white ${isCore ? 'bg-gradient-to-br from-amber-500 to-orange-500' : 'bg-gradient-to-br from-emerald-600 to-cyan-500'}`}>
                     <Icon className="h-5 w-5" />
                   </div>
                   <span className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider ${
@@ -579,8 +579,8 @@ function OfferStackSection({ isBn, onCta }: { isBn: boolean; onCta: () => void }
         </div>
 
         {/* Total value summary */}
-        <div className="mx-auto mt-10 max-w-2xl rounded-3xl bg-gradient-to-br from-blue-600 to-cyan-500 p-8 text-center text-white shadow-xl">
-          <p className="text-sm font-medium uppercase tracking-wider text-blue-100">
+        <div className="mx-auto mt-10 max-w-2xl rounded-3xl bg-gradient-to-br from-emerald-600 to-cyan-500 p-8 text-center text-white shadow-xl">
+          <p className="text-sm font-medium uppercase tracking-wider text-emerald-100">
             {L(OFFER_STACK.totalValue, isBn)}
           </p>
           <p className="mt-2 font-heading text-3xl font-extrabold sm:text-4xl">
@@ -589,7 +589,7 @@ function OfferStackSection({ isBn, onCta }: { isBn: boolean; onCta: () => void }
           <Button
             onClick={onCta}
             size="lg"
-            className="mt-5 h-12 rounded-full bg-white px-8 text-base font-bold text-blue-700 hover:bg-blue-50"
+            className="mt-5 h-12 rounded-full bg-white px-8 text-base font-bold text-emerald-700 hover:bg-emerald-50"
           >
             {isBn ? 'এখনই শুরু করুন' : 'Get Started Now'}
             <ArrowRight className="ml-2 h-4 w-4" />
@@ -652,7 +652,7 @@ function ObjectionsSection({ isBn }: { isBn: boolean }) {
             <details key={i} className="group rounded-xl border border-border/60 bg-card p-4 shadow-sm [&_summary]:cursor-pointer">
               <summary className="flex items-center justify-between gap-3 list-none">
                 <span className="flex items-center gap-3 text-sm font-semibold sm:text-base">
-                  <HelpCircle className="h-5 w-5 flex-shrink-0 text-blue-600" />
+                  <HelpCircle className="h-5 w-5 flex-shrink-0 text-emerald-600" />
                   {L(o.q, isBn)}
                 </span>
                 <ChevronDown className="h-5 w-5 flex-shrink-0 text-muted-foreground transition-transform group-open:rotate-180" />
@@ -686,7 +686,7 @@ function SocialProofSection({ isBn }: { isBn: boolean }) {
         <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
           {SOCIAL_PROOF.stats.map((s, i) => (
             <div key={i} className="rounded-2xl border border-border/60 bg-card p-4 text-center shadow-sm">
-              <div className="font-heading text-2xl font-extrabold text-blue-600 dark:text-blue-400 sm:text-3xl">
+              <div className="font-heading text-2xl font-extrabold text-emerald-600 dark:text-emerald-400 sm:text-3xl">
                 {L(s.value, isBn)}
               </div>
               <p className="mt-1 text-xs text-muted-foreground">{L(s.label, isBn)}</p>
@@ -751,7 +751,7 @@ function CaseStudiesSection({ isBn }: { isBn: boolean }) {
               <details key={i} className="group rounded-2xl border border-border/60 bg-card p-5 shadow-sm [&_summary]:cursor-pointer">
                 <summary className="flex items-center justify-between gap-3 list-none">
                   <span className="flex items-center gap-3">
-                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500 text-white">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-600 to-cyan-500 text-white">
                       <Icon className="h-5 w-5" />
                     </div>
                     <div>
@@ -767,7 +767,7 @@ function CaseStudiesSection({ isBn }: { isBn: boolean }) {
                     <p className="mt-1 text-muted-foreground">{L(cs.problem, isBn)}</p>
                   </div>
                   <div>
-                    <p className="text-xs font-bold uppercase tracking-wider text-blue-600">{isBn ? 'সমাধান' : 'Solution'}</p>
+                    <p className="text-xs font-bold uppercase tracking-wider text-emerald-600">{isBn ? 'সমাধান' : 'Solution'}</p>
                     <p className="mt-1 text-muted-foreground">{L(cs.solution, isBn)}</p>
                   </div>
                   <div>
@@ -817,12 +817,12 @@ function PricingSection({ isBn, onCta }: { isBn: boolean; onCta: () => void }) {
               key={i}
               className={`relative flex flex-col rounded-3xl border p-6 shadow-sm ${
                 tier.highlighted
-                  ? 'border-blue-500 bg-card ring-2 ring-blue-500/40 lg:-mt-4 lg:mb-4'
+                  ? 'border-emerald-500 bg-card ring-2 ring-emerald-500/40 lg:-mt-4 lg:mb-4'
                   : 'border-border/60 bg-card'
               }`}
             >
               {tier.badge && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 px-4 py-1 text-xs font-bold text-white shadow">
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-emerald-600 to-cyan-500 px-4 py-1 text-xs font-bold text-white shadow">
                   {L(tier.badge, isBn)}
                 </span>
               )}
@@ -844,7 +844,7 @@ function PricingSection({ isBn, onCta }: { isBn: boolean; onCta: () => void }) {
                 onClick={onCta}
                 className={`mt-6 h-11 w-full rounded-xl text-sm font-bold ${
                   tier.highlighted
-                    ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white'
+                    ? 'bg-gradient-to-r from-emerald-600 to-cyan-500 text-white'
                     : 'bg-muted text-foreground hover:bg-muted/70'
                 }`}
               >
@@ -967,7 +967,7 @@ function RoiSlider({
         step={step}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="mt-3 h-2 w-full cursor-pointer appearance-none rounded-full bg-muted accent-blue-600"
+        className="mt-3 h-2 w-full cursor-pointer appearance-none rounded-full bg-muted accent-emerald-600"
         aria-label={label}
       />
     </div>
@@ -976,7 +976,7 @@ function RoiSlider({
 
 function RoiResultCard({ label, value, tone }: { label: string; value: string; tone: string }) {
   const tones: Record<string, string> = {
-    blue: 'border-blue-500/30 bg-blue-500/[0.04] text-blue-600 dark:text-blue-400',
+    blue: 'border-emerald-500/30 bg-emerald-500/[0.04] text-emerald-600 dark:text-emerald-400',
     emerald: 'border-emerald-500/30 bg-emerald-500/[0.04] text-emerald-600 dark:text-emerald-400',
     amber: 'border-amber-500/30 bg-amber-500/[0.04] text-amber-600 dark:text-amber-400',
     violet: 'border-violet-500/30 bg-violet-500/[0.04] text-violet-600 dark:text-violet-400',
@@ -1050,7 +1050,7 @@ function TechStackSection({ isBn }: { isBn: boolean }) {
             const Icon = getIcon(t.icon)
             return (
               <div key={i} className="flex items-start gap-3 rounded-2xl border border-border/60 bg-card p-4 shadow-sm">
-                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-cyan-500 text-white">
+                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-600 to-cyan-500 text-white">
                   <Icon className="h-5 w-5" />
                 </div>
                 <div>
@@ -1084,7 +1084,7 @@ function TimelineSection({ isBn }: { isBn: boolean }) {
           {TIMELINE.steps.map((s, i) => (
             <div key={i} className="relative rounded-2xl border border-border/60 bg-card p-5 shadow-sm">
               {/* Phase badge */}
-              <span className="inline-block rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 px-3 py-1 text-xs font-bold text-white">
+              <span className="inline-block rounded-full bg-gradient-to-r from-emerald-600 to-cyan-500 px-3 py-1 text-xs font-bold text-white">
                 {L(s.phase, isBn)}
               </span>
               <h3 className="mt-3 font-heading text-base font-bold">{L(s.title, isBn)}</h3>
@@ -1138,7 +1138,7 @@ function ComparisonSection({ isBn }: { isBn: boolean }) {
                 <th className="border-b border-border/60 p-4 text-center font-heading font-bold text-muted-foreground">
                   {L(COMPARISON.headers.diy, isBn)}
                 </th>
-                <th className="border-b border-border/60 bg-blue-500/10 p-4 text-center font-heading font-bold text-blue-600 dark:text-blue-400">
+                <th className="border-b border-border/60 bg-emerald-500/10 p-4 text-center font-heading font-bold text-emerald-600 dark:text-emerald-400">
                   {L(COMPARISON.headers.nextgen, isBn)}
                 </th>
               </tr>
@@ -1151,7 +1151,7 @@ function ComparisonSection({ isBn }: { isBn: boolean }) {
                   <td className="border-b border-border/40 p-4 text-center text-muted-foreground">{L(row.freelancer, isBn)}</td>
                   <td className="border-b border-border/40 p-4 text-center text-muted-foreground">{L(row.inhouse, isBn)}</td>
                   <td className="border-b border-border/40 p-4 text-center text-muted-foreground">{L(row.diy, isBn)}</td>
-                  <td className="border-b border-border/40 bg-blue-500/5 p-4 text-center font-semibold text-blue-700 dark:text-blue-300">
+                  <td className="border-b border-border/40 bg-emerald-500/5 p-4 text-center font-semibold text-emerald-700 dark:text-emerald-300">
                     <span className="inline-flex items-center gap-1.5">
                       <Check className="h-4 w-4 text-emerald-500" />
                       {L(row.nextgen, isBn)}
@@ -1173,7 +1173,7 @@ function ComparisonSection({ isBn }: { isBn: boolean }) {
                 <div className="flex justify-between gap-2"><span className="text-muted-foreground">{L(COMPARISON.headers.freelancer, isBn)}:</span><span className="text-right">{L(row.freelancer, isBn)}</span></div>
                 <div className="flex justify-between gap-2"><span className="text-muted-foreground">{L(COMPARISON.headers.inhouse, isBn)}:</span><span className="text-right">{L(row.inhouse, isBn)}</span></div>
                 <div className="flex justify-between gap-2"><span className="text-muted-foreground">{L(COMPARISON.headers.diy, isBn)}:</span><span className="text-right">{L(row.diy, isBn)}</span></div>
-                <div className="flex justify-between gap-2 rounded-lg bg-blue-500/10 px-2 py-1.5"><span className="font-bold text-blue-600">{L(COMPARISON.headers.nextgen, isBn)}:</span><span className="text-right font-semibold text-blue-700 dark:text-blue-300">{L(row.nextgen, isBn)}</span></div>
+                <div className="flex justify-between gap-2 rounded-lg bg-emerald-500/10 px-2 py-1.5"><span className="font-bold text-emerald-600">{L(COMPARISON.headers.nextgen, isBn)}:</span><span className="text-right font-semibold text-emerald-700 dark:text-emerald-300">{L(row.nextgen, isBn)}</span></div>
               </div>
             </div>
           ))}
@@ -1203,7 +1203,7 @@ function FaqSection({ isBn, onCta }: { isBn: boolean; onCta: () => void }) {
             return (
               <div key={gi}>
                 <div className="mb-3 flex items-center gap-2">
-                  <GIcon className="h-5 w-5 text-blue-600" />
+                  <GIcon className="h-5 w-5 text-emerald-600" />
                   <h3 className="font-heading text-lg font-bold">{L(group.category, isBn)}</h3>
                 </div>
                 <div className="space-y-2">
@@ -1224,7 +1224,7 @@ function FaqSection({ isBn, onCta }: { isBn: boolean; onCta: () => void }) {
           })}
         </div>
         <div className="mt-8 text-center">
-          <Button onClick={onCta} className="h-11 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 px-6 text-sm font-bold text-white">
+          <Button onClick={onCta} className="h-11 rounded-full bg-gradient-to-r from-emerald-600 to-cyan-500 px-6 text-sm font-bold text-white">
             {isBn ? 'আরও প্রশ্ন? ফ্রি কল বুক করুন' : 'More questions? Book a free call'}
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
@@ -1352,14 +1352,14 @@ function FinalCtaSection({ isBn, onCta }: { isBn: boolean; onCta: () => void }) 
         <h2 className="mx-auto max-w-3xl font-heading text-3xl font-extrabold text-white sm:text-4xl md:text-5xl">
           {L(FINAL_CTA.title, isBn)}
         </h2>
-        <p className="mx-auto mt-4 max-w-2xl text-base text-blue-50 sm:text-lg">
+        <p className="mx-auto mt-4 max-w-2xl text-base text-emerald-50 sm:text-lg">
           {L(FINAL_CTA.subtitle, isBn)}
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
           <Button
             onClick={onCta}
             size="lg"
-            className="h-14 rounded-full bg-white px-8 text-base font-bold text-blue-700 shadow-lg hover:bg-blue-50"
+            className="h-14 rounded-full bg-white px-8 text-base font-bold text-emerald-700 shadow-lg hover:bg-emerald-50"
           >
             <CalendarCheck className="mr-2 h-5 w-5" />
             {L(FINAL_CTA.primaryCta, isBn)}
@@ -1379,8 +1379,8 @@ function FinalCtaSection({ isBn, onCta }: { isBn: boolean; onCta: () => void }) 
             {L(FINAL_CTA.tertiaryCta, isBn)}
           </a>
         </div>
-        <p className="mt-6 text-sm text-blue-100">{L(FINAL_CTA.micro, isBn)}</p>
-        <div className="mt-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-blue-100">
+        <p className="mt-6 text-sm text-emerald-100">{L(FINAL_CTA.micro, isBn)}</p>
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-emerald-100">
           {FINAL_CTA.badges.map((b, i) => (
             <span key={i} className="inline-flex items-center gap-1.5">
               <Star className="h-3.5 w-3.5 fill-amber-300 text-amber-300" />
@@ -1416,7 +1416,7 @@ function StickyCtaBar({ isBn, onCta }: { isBn: boolean; onCta: () => void }) {
         </div>
         <Button
           onClick={onCta}
-          className="h-11 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 px-6 text-sm font-bold text-white"
+          className="h-11 rounded-full bg-gradient-to-r from-emerald-600 to-cyan-500 px-6 text-sm font-bold text-white"
         >
           <CalendarCheck className="mr-2 h-4 w-4" />
           {L(STICKY_CTA.button, isBn)}

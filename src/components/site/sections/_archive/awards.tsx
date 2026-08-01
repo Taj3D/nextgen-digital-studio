@@ -45,7 +45,7 @@ export function Awards() {
         <Reveal delay={0.2} className="mt-12">
           <div className="overflow-hidden rounded-3xl border border-border/60 bg-gradient-to-br from-muted/40 to-background p-6 sm:p-8">
             <div className="mb-5 flex items-center justify-center gap-2 text-center">
-              <Newspaper className="h-4 w-4 text-blue-600" />
+              <Newspaper className="h-4 w-4 text-emerald-600" />
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
                 {t('awards.certifiedPartners')}
               </p>
@@ -53,8 +53,8 @@ export function Awards() {
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
               {certifications.map((c, i) => (
                 <Reveal key={c.name} delay={i * 0.05}>
-                  <div className="group flex flex-col items-center gap-2 rounded-xl border border-border/50 bg-card p-3 text-center transition-colors hover:border-blue-600/30">
-                    <BadgeCheck className="h-7 w-7 text-blue-600 transition-transform group-hover:scale-110" />
+                  <div className="group flex flex-col items-center gap-2 rounded-xl border border-border/50 bg-card p-3 text-center transition-colors hover:border-emerald-600/30">
+                    <BadgeCheck className="h-7 w-7 text-emerald-600 transition-transform group-hover:scale-110" />
                     <div>
                       <p className="text-[11px] font-bold leading-tight">{c.name}</p>
                       <p className="mt-0.5 text-[10px] text-muted-foreground">{c.desc}</p>

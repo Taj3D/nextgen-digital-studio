@@ -5,24 +5,28 @@
  * "social proof" activity (other Bangladeshis booking calls, subscribing,
  * ordering AI training, etc.). Increases perceived demand & conversions.
  *
- * Behaviour:
- *   - Shows one toast at a time, bottom-left, ABOVE the chat widget area
- *     (the WhatsApp button is bottom-right; the chat widget is bottom-right
- *     above it; so bottom-left is free real estate).
- *   - A new toast appears every 20-30 seconds (randomized) up to a maximum
- *     of 3 per session (localStorage-tracked so returning users aren't
- *     spammed).
- *   - Each toast auto-dismisses after 6 seconds.
- *   - User can dismiss manually via the X button (also counts toward the
- *     session cap).
+ * Behaviour (updated per founder request — reduce customer annoyance):
+ *   - Shows one toast at a time, bottom-left, ABOVE the chat widget area.
+ *   - A new toast appears every **30 seconds** (fixed interval, no longer
+ *     randomized).
+ *   - Maximum **2 toasts** per session (reduced from 3).
+ *   - After the customer manually dismisses **2 times** (clicks the X
+ *     button), no more toasts appear for the rest of the session.
+ *   - If the customer submits an email **anywhere** on the site (newsletter,
+ *     lead form, or exit-intent popup), ALL toasts stop immediately and
+ *     permanently (cross-component signal via `popup-state.ts`).
+ *   - Each toast auto-dismisses after 6 seconds (auto-dismiss does NOT count
+ *     as a manual dismissal).
  *   - Hidden on mobile (< 640px) — sm:hidden — because the screen is too
  *     crowded with the chat widget + WhatsApp button + sticky book bar.
  *
  * Persistence:
- *   - localStorage key 'ng-socialproof-shown' tracks how many toasts have
- *     been shown in the current session (reset when the user closes the tab
- *     and returns — actually localStorage persists across sessions, so we
- *     also store a session-start timestamp and reset if older than 30 min).
+ *   - localStorage key 'ng-socialproof-state' tracks how many toasts have
+ *     been shown + manually dismissed in the current session (reset when
+ *     older than 30 min).
+ *   - localStorage key 'ng-user-engaged' (managed by popup-state.ts) tracks
+ *     whether the user has submitted an email — persists across sessions so
+ *     returning engaged customers are never re-spammed.
  */
 
 import * as React from 'react'
@@ -30,6 +34,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X, CheckCircle2, UserCheck, Star, ShoppingCart } from 'lucide-react'
 
 import { useLang } from '@/components/site/language-provider'
+import { hasUserEngaged, onUserEngaged } from '@/lib/popup-state'
 
 type ProofAction = 'booked' | 'subscribed' | 'ordered' | 'reviewed'
 
@@ -59,20 +64,26 @@ const PROOF_MESSAGES: ProofMessage[] = [
 ]
 
 const STORAGE_KEY = 'ng-socialproof-state'
-const MAX_PER_SESSION = 3
+const MAX_SHOWN = 2 // max toasts per session (reduced from 3)
+const MAX_MANUAL_DISMISS = 2 // stop after 2 manual X-button dismissals
 const AUTO_DISMISS_MS = 6000
-const MIN_INTERVAL_MS = 20000 // 20s
-const MAX_INTERVAL_MS = 30000 // 30s
+const INTERVAL_MS = 30000 // fixed 30s between toasts (was 20-30s random)
 const SESSION_TTL_MS = 30 * 60 * 1000 // 30 min — reset count after this
 
-type StoredState = { count: number; sessionStart: number; lastShownIdx: number }
+type StoredState = {
+  count: number // total toasts shown this session
+  manualDismissCount: number // manual X-button dismissals this session
+  sessionStart: number
+  lastShownIdx: number
+}
 
 function loadState(): StoredState {
-  if (typeof window === 'undefined') return { count: 0, sessionStart: Date.now(), lastShownIdx: -1 }
+  const fresh = { count: 0, manualDismissCount: 0, sessionStart: Date.now(), lastShownIdx: -1 }
+  if (typeof window === 'undefined') return fresh
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY)
     if (raw) {
-      const parsed = JSON.parse(raw) as StoredState
+      const parsed = JSON.parse(raw) as Partial<StoredState>
       if (
         typeof parsed.count === 'number' &&
         typeof parsed.sessionStart === 'number' &&
@@ -80,13 +91,18 @@ function loadState(): StoredState {
       ) {
         // Reset count if the session is older than the TTL
         if (Date.now() - parsed.sessionStart > SESSION_TTL_MS) {
-          return { count: 0, sessionStart: Date.now(), lastShownIdx: -1 }
+          return fresh
         }
-        return parsed
+        return {
+          count: parsed.count,
+          manualDismissCount: typeof parsed.manualDismissCount === 'number' ? parsed.manualDismissCount : 0,
+          sessionStart: parsed.sessionStart,
+          lastShownIdx: parsed.lastShownIdx,
+        }
       }
     }
   } catch {}
-  return { count: 0, sessionStart: Date.now(), lastShownIdx: -1 }
+  return fresh
 }
 
 function saveState(state: StoredState) {
@@ -101,7 +117,7 @@ function actionConfig(action: ProofAction): { icon: typeof CheckCircle2; key: st
     case 'booked':
       return { icon: CheckCircle2, key: 'socialProof.actionBooked', color: 'text-emerald-500' }
     case 'subscribed':
-      return { icon: UserCheck, key: 'socialProof.actionSubscribed', color: 'text-blue-500' }
+      return { icon: UserCheck, key: 'socialProof.actionSubscribed', color: 'text-teal-500' }
     case 'ordered':
       return { icon: ShoppingCart, key: 'socialProof.actionOrdered', color: 'text-amber-500' }
     case 'reviewed':
@@ -112,14 +128,18 @@ function actionConfig(action: ProofAction): { icon: typeof CheckCircle2; key: st
 export function SocialProof() {
   const { t, lang } = useLang()
   const [current, setCurrent] = React.useState<ProofMessage | null>(null)
-  const stateRef = React.useRef<StoredState>({ count: 0, sessionStart: Date.now(), lastShownIdx: -1 })
+  const stateRef = React.useRef<StoredState>({ count: 0, manualDismissCount: 0, sessionStart: Date.now(), lastShownIdx: -1 })
   const hideTimerRef = React.useRef<number | null>(null)
   const showTimerRef = React.useRef<number | null>(null)
 
   // Pick the next proof message (cycle through the list, never the same twice in a row)
   const pickNext = React.useCallback((): ProofMessage | null => {
     const state = stateRef.current
-    if (state.count >= MAX_PER_SESSION) return null
+    // Stop if we've shown the max, or the user has manually dismissed enough,
+    // or the user has submitted an email anywhere on the site.
+    if (state.count >= MAX_SHOWN) return null
+    if (state.manualDismissCount >= MAX_MANUAL_DISMISS) return null
+    if (hasUserEngaged()) return null
     let idx = state.lastShownIdx
     // Pick a random different message
     if (PROOF_MESSAGES.length > 1) {
@@ -142,11 +162,12 @@ export function SocialProof() {
     if (showTimerRef.current != null) {
       window.clearTimeout(showTimerRef.current)
     }
-    // Random interval between 20s and 30s
-    const delay = MIN_INTERVAL_MS + Math.floor(Math.random() * (MAX_INTERVAL_MS - MIN_INTERVAL_MS + 1))
+    // Don't schedule if the user has engaged (email submitted) — final guard.
+    if (hasUserEngaged()) return
+    // Fixed 30s interval (was 20-30s randomized — now predictable per spec)
     showTimerRef.current = window.setTimeout(() => {
       showNextRef.current()
-    }, delay)
+    }, INTERVAL_MS)
   }, [])
 
   const showNext = React.useCallback(() => {
@@ -182,10 +203,14 @@ export function SocialProof() {
   }, [showNext, scheduleNext])
 
   // Initial mount: load state, schedule the first toast (after 8s — feels
-  // less aggressive than showing immediately).
+  // less aggressive than showing immediately). Skip entirely if the user has
+  // already submitted an email anywhere.
   React.useEffect(() => {
     stateRef.current = loadState()
-    if (stateRef.current.count >= MAX_PER_SESSION) return
+    // If user already engaged (email submitted), never show popups.
+    if (hasUserEngaged()) return
+    if (stateRef.current.count >= MAX_SHOWN) return
+    if (stateRef.current.manualDismissCount >= MAX_MANUAL_DISMISS) return
 
     const initialDelay = 8000
     showTimerRef.current = window.setTimeout(() => {
@@ -198,12 +223,36 @@ export function SocialProof() {
     }
   }, [])
 
+  // Live-listen for the "user engaged" signal: if the user submits an email
+  // anywhere on the site (newsletter, lead form, exit popup), immediately
+  // hide the current toast and stop all future scheduling.
+  React.useEffect(() => {
+    return onUserEngaged(() => {
+      if (hideTimerRef.current != null) {
+        window.clearTimeout(hideTimerRef.current)
+        hideTimerRef.current = null
+      }
+      if (showTimerRef.current != null) {
+        window.clearTimeout(showTimerRef.current)
+        showTimerRef.current = null
+      }
+      setCurrent(null)
+    })
+  }, [])
+
   const dismissManually = () => {
     if (hideTimerRef.current != null) {
       window.clearTimeout(hideTimerRef.current)
       hideTimerRef.current = null
     }
+    // Track the manual dismissal — after 2, stop showing for the rest of
+    // the session (per founder request to reduce customer annoyance).
+    const state = stateRef.current
+    state.manualDismissCount = state.manualDismissCount + 1
+    saveState(state)
     setCurrent(null)
+    // scheduleNext → showNext → pickNext will return null if the dismissal
+    // cap is reached, naturally stopping the cycle.
     scheduleNext()
   }
 

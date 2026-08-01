@@ -51,7 +51,7 @@ export function FreeTools() {
               <Reveal key={r.id} delay={(i % 3) * 0.06}>
                 <button
                   onClick={() => setActive(r)}
-                  className="group relative flex h-full w-full flex-col overflow-hidden rounded-2xl border border-border/60 bg-card p-6 text-left card-hover hover:border-blue-600/40 hover:shadow-xl hover:shadow-blue-600/5"
+                  className="group relative flex h-full w-full flex-col overflow-hidden rounded-2xl border border-border/60 bg-card p-6 text-left card-hover hover:border-emerald-600/40 hover:shadow-xl hover:shadow-emerald-600/5"
                 >
                   <div className="mb-4 flex items-center justify-between">
                     <div className={cn("flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br text-white shadow-lg transition-transform group-hover:scale-110", r.color)}>
@@ -61,7 +61,7 @@ export function FreeTools() {
                       {r.type}
                     </span>
                   </div>
-                  <h3 className="font-heading text-base font-bold leading-tight group-hover:text-blue-600">
+                  <h3 className="font-heading text-base font-bold leading-tight group-hover:text-emerald-600">
                     {tr(r.title)}
                   </h3>
                   <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">
@@ -73,7 +73,7 @@ export function FreeTools() {
                       <Download className="h-3 w-3" /> {r.downloads} downloads
                     </span>
                   </div>
-                  <div className="mt-3 flex items-center gap-1.5 text-xs font-semibold text-blue-600 opacity-0 transition-opacity group-hover:opacity-100">
+                  <div className="mt-3 flex items-center gap-1.5 text-xs font-semibold text-emerald-600 opacity-0 transition-opacity group-hover:opacity-100">
                     Download free <ArrowRight className="h-3.5 w-3.5" />
                   </div>
                 </button>
@@ -174,7 +174,7 @@ function DownloadModal({ resource, onClose }: { resource: FreeResource; onClose:
                   download
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/25 transition-transform hover:scale-[1.02]"
+                  className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-600/25 transition-transform hover:scale-[1.02]"
                 >
                   <Download className="h-4 w-4" /> Download now
                 </a>
@@ -183,14 +183,14 @@ function DownloadModal({ resource, onClose }: { resource: FreeResource; onClose:
             </div>
           ) : (
             <>
-              <span className="rounded-full bg-blue-600/10 px-3 py-1 text-xs font-semibold text-blue-600">
+              <span className="rounded-full bg-emerald-600/10 px-3 py-1 text-xs font-semibold text-emerald-600">
                 {resource.type} · {resource.size}
               </span>
               <h3 className="mt-2 font-heading text-xl font-bold leading-snug">{tr(resource.title)}</h3>
               <p className="mt-1.5 text-sm text-muted-foreground">{tr(resource.desc)}</p>
 
-              <div className="mt-4 flex items-center gap-2 rounded-lg bg-blue-600/5 px-3 py-2 text-xs text-muted-foreground">
-                <Sparkles className="h-3.5 w-3.5 text-blue-600" />
+              <div className="mt-4 flex items-center gap-2 rounded-lg bg-emerald-600/5 px-3 py-2 text-xs text-muted-foreground">
+                <Sparkles className="h-3.5 w-3.5 text-emerald-600" />
                 Enter your details — we&apos;ll email the file + automation tips.
               </div>
 
@@ -210,7 +210,7 @@ function DownloadModal({ resource, onClose }: { resource: FreeResource; onClose:
                 <Button
                   type="submit"
                   disabled={submitting}
-                  className="mt-1 h-12 w-full rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 font-semibold shadow-lg shadow-blue-600/25"
+                  className="mt-1 h-12 w-full rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-500 font-semibold shadow-lg shadow-emerald-600/25"
                 >
                   {submitting ? (
                     <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Sending...</>

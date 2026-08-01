@@ -12,6 +12,7 @@ import { Loader2, CheckCircle2, MessageCircle, Facebook, Linkedin, Instagram, Yo
 import { toast } from 'sonner'
 import { PaymentInstructions } from './payment-instructions'
 import { normalizePhone } from '@/lib/phone'
+import { markUserEngaged } from '@/lib/popup-state'
 
 /* -------------------------------------------------------------------------- */
 /*  Social icons                                                              */
@@ -151,6 +152,8 @@ export function LandingLeadForm({
       setDone(true)
       toast.success(t('landing.toastSuccess'))
       form.reset()
+      // Mark the user as engaged — stops all popup toasts site-wide.
+      markUserEngaged()
     } catch {
       toast.error(t('landing.toastErrorGeneric'))
     } finally {
@@ -227,7 +230,7 @@ export function LandingLeadForm({
       <Button
         type="submit"
         disabled={submitting}
-        className="h-12 w-full rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 text-[15px] font-semibold shadow-lg shadow-blue-600/25 transition-transform hover:scale-[1.01]"
+        className="h-12 w-full rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 text-[15px] font-semibold shadow-lg shadow-emerald-600/25 transition-transform hover:scale-[1.01]"
       >
         {submitting ? (
           <>
@@ -352,7 +355,7 @@ export function LandingFooter({ isBn }: { isBn: boolean }) {
 
 export function LandingEyebrow({ children }: { children: React.ReactNode }) {
   return (
-    <span className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-blue-700 dark:border-blue-900 dark:bg-blue-950/50 dark:text-blue-300">
+    <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/50 dark:text-emerald-300">
       {children}
     </span>
   )

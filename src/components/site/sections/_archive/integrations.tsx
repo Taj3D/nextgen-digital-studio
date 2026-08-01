@@ -48,7 +48,7 @@ export function Integrations() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder={t('integrations.searchPlaceholder')}
-              className="h-12 w-full rounded-xl border border-border/60 bg-card pl-11 pr-10 text-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-blue-600/50 focus:ring-2 focus:ring-blue-600/15"
+              className="h-12 w-full rounded-xl border border-border/60 bg-card pl-11 pr-10 text-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-emerald-600/50 focus:ring-2 focus:ring-emerald-600/15"
             />
             {query && (
               <button
@@ -68,8 +68,8 @@ export function Integrations() {
                 className={cn(
                   "rounded-full px-3 py-1.5 text-xs font-semibold transition-all",
                   category === c
-                    ? "bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-md shadow-blue-600/25"
-                    : "border border-border/60 text-muted-foreground hover:border-blue-600/40 hover:text-foreground",
+                    ? "bg-gradient-to-r from-emerald-600 to-cyan-500 text-white shadow-md shadow-emerald-600/25"
+                    : "border border-border/60 text-muted-foreground hover:border-emerald-600/40 hover:text-foreground",
                 )}
               >
                 {c}
@@ -89,9 +89,9 @@ export function Integrations() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 onClick={() => setActive(int)}
-                className="group flex flex-col items-center gap-2 rounded-2xl border border-border/60 bg-card p-4 text-center transition-all hover:border-blue-600/40 hover:shadow-lg hover:shadow-blue-600/5"
+                className="group flex flex-col items-center gap-2 rounded-2xl border border-border/60 bg-card p-4 text-center transition-all hover:border-emerald-600/40 hover:shadow-lg hover:shadow-emerald-600/5"
               >
-                <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600/10 to-cyan-500/10 text-2xl transition-transform group-hover:scale-110">
+                <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-600/10 to-cyan-500/10 text-2xl transition-transform group-hover:scale-110">
                   {int.emoji}
                 </span>
                 <span className="text-sm font-bold leading-tight">{tr(int.name)}</span>
@@ -108,9 +108,9 @@ export function Integrations() {
         )}
 
         <Reveal delay={0.2} className="mt-12">
-          <div className="flex flex-col items-center justify-between gap-4 rounded-2xl border border-border/60 bg-gradient-to-r from-blue-600/5 to-cyan-500/5 p-6 sm:flex-row">
+          <div className="flex flex-col items-center justify-between gap-4 rounded-2xl border border-border/60 bg-gradient-to-r from-emerald-600/5 to-cyan-500/5 p-6 sm:flex-row">
             <div className="flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500 text-white">
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-600 to-cyan-500 text-white">
                 <Plug className="h-5 w-5" />
               </div>
               <div>
@@ -120,7 +120,7 @@ export function Integrations() {
             </div>
             <Button
               onClick={() => openWith("Custom integration request")}
-              className="shrink-0 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 px-5 font-semibold shadow-lg shadow-blue-600/25"
+              className="shrink-0 rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-500 px-5 font-semibold shadow-lg shadow-emerald-600/25"
             >
               {t('integrations.requestIntegration')}
               <ArrowRight className="ml-2 h-4 w-4" />
@@ -147,7 +147,7 @@ export function Integrations() {
               onClick={(e) => e.stopPropagation()}
               className="relative w-full max-w-sm overflow-hidden rounded-3xl border border-border/60 bg-card shadow-2xl"
             >
-              <div className="relative h-24 bg-gradient-to-br from-blue-600 to-cyan-500">
+              <div className="relative h-24 bg-gradient-to-br from-emerald-600 to-cyan-500">
                 <div className="absolute inset-0 bg-grid opacity-20" />
                 <button
                   aria-label="Close"
@@ -161,7 +161,7 @@ export function Integrations() {
                 </div>
               </div>
               <div className="p-6 pt-9">
-                <span className="rounded-full bg-blue-600/10 px-3 py-1 text-xs font-semibold text-blue-600">
+                <span className="rounded-full bg-emerald-600/10 px-3 py-1 text-xs font-semibold text-emerald-600">
                   {active.category}
                 </span>
                 <h3 className="mt-2 font-heading text-xl font-bold">{tr(active.name)}</h3>
@@ -174,7 +174,7 @@ export function Integrations() {
                     setActive(null)
                     openWith(`Integration: ${active.name}`)
                   }}
-                  className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/25 transition-transform hover:scale-[1.02]"
+                  className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-600/25 transition-transform hover:scale-[1.02]"
                 >
                   Build this integration
                   <ArrowRight className="h-4 w-4" />

@@ -35,9 +35,9 @@ export function Comparison() {
                 </span>
               </div>
               <div className="relative border-x border-border/60 px-4 py-5 sm:px-6">
-                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-600 to-cyan-500" />
+                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-600 to-cyan-500" />
                 <div className="flex items-center gap-1.5">
-                  <Sparkles className="h-4 w-4 text-blue-600" />
+                  <Sparkles className="h-4 w-4 text-emerald-600" />
                   <span className="font-heading text-sm font-extrabold text-foreground sm:text-base">
                     NextGen
                   </span>
@@ -61,13 +61,13 @@ export function Comparison() {
               {comparisonRows.map((row, i) => (
                 <div
                   key={row.feature}
-                  className="grid grid-cols-[1.4fr_1fr_1fr] transition-colors hover:bg-blue-600/[0.02]"
+                  className="grid grid-cols-[1.4fr_1fr_1fr] transition-colors hover:bg-emerald-600/[0.02]"
                 >
                   <div className="flex items-center px-4 py-4 text-sm font-medium text-foreground sm:px-6 sm:text-[15px]">
                     {tr(row.feature)}
                   </div>
-                  <div className="flex items-start gap-2 border-x border-border/60 bg-blue-600/[0.03] px-4 py-4 sm:px-6">
-                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-cyan-500 text-white">
+                  <div className="flex items-start gap-2 border-x border-border/60 bg-emerald-600/[0.03] px-4 py-4 sm:px-6">
+                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-emerald-600 to-cyan-500 text-white">
                       <Check className="h-3 w-3" strokeWidth={3} />
                     </span>
                     <span className="text-xs font-medium text-foreground sm:text-sm">
@@ -106,7 +106,7 @@ export function Comparison() {
             </div>
             <Button
               onClick={() => openWith("Comparison → Strategy Call")}
-              className="shrink-0 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 px-5 font-semibold shadow-lg shadow-blue-600/25"
+              className="shrink-0 rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-500 px-5 font-semibold shadow-lg shadow-emerald-600/25"
             >
               Start risk-free
               <ArrowRight className="ml-2 h-4 w-4" />

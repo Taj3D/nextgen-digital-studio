@@ -20,9 +20,9 @@ export function PricingFaq() {
     <section className="relative py-16 sm:py-20">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <Reveal className="text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-blue-600/20 bg-blue-600/5 px-3.5 py-1.5">
-            <HelpCircle className="h-3.5 w-3.5 text-blue-600" />
-            <span className="text-xs font-semibold uppercase tracking-wider text-blue-600">
+          <div className="inline-flex items-center gap-2 rounded-full border border-emerald-600/20 bg-emerald-600/5 px-3.5 py-1.5">
+            <HelpCircle className="h-3.5 w-3.5 text-emerald-600" />
+            <span className="text-xs font-semibold uppercase tracking-wider text-emerald-600">
               {t('pricingFaq.eyebrow')}
             </span>
           </div>
@@ -41,7 +41,7 @@ export function PricingFaq() {
               <AccordionItem
                 key={i}
                 value={`p-item-${i}`}
-                className="rounded-2xl border border-border/60 bg-card px-5 data-[state=open]:border-blue-600/30 data-[state=open]:shadow-lg data-[state=open]:shadow-blue-600/5"
+                className="rounded-2xl border border-border/60 bg-card px-5 data-[state=open]:border-emerald-600/30 data-[state=open]:shadow-lg data-[state=open]:shadow-emerald-600/5"
               >
                 <AccordionTrigger className="text-left font-heading text-[15px] font-bold hover:no-underline">
                   {tr(f.q)}
@@ -57,7 +57,7 @@ export function PricingFaq() {
         <Reveal delay={0.2} className="mt-8 text-center">
           <Button
             onClick={() => openWith("Pricing FAQ → call")}
-            className="h-12 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 px-6 font-semibold shadow-lg shadow-blue-600/25"
+            className="h-12 rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-500 px-6 font-semibold shadow-lg shadow-emerald-600/25"
           >
             {t('pricingFaq.stillHaveQuestions')}
             <ArrowRight className="ml-2 h-4 w-4" />

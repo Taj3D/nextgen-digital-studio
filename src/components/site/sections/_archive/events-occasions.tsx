@@ -112,7 +112,7 @@ const events: EventCard[] = [
     withAI: "AI registration assistant, instant agenda answers, speaker FAQs. Auto-reminders + post-event nurture. Lead capture + scoring for sponsors. Result: 2x attendance + qualified sponsors.",
     withAIBn: "এআই রেজিস্ট্রেশন অ্যাসিস্ট্যান্ট, তাৎক্ষণিক এজেন্ডা উত্তর, স্পিকার FAQ। অটো-রিমাইন্ডার + ইভেন্ট-পরবর্তী নার্সার। স্পন্সরদের জন্য লিড ক্যাপচার + স্কোরিং। ফলাফল: ২x উপস্থিতি + যোগ্য স্পন্সর।",
     profitLift: "2x attendance",
-    gradient: "from-blue-500 to-cyan-500",
+    gradient: "from-emerald-500 to-cyan-500",
   },
   {
     icon: Music,
@@ -152,7 +152,7 @@ export function EventsOccasions() {
   return (
     <section id="events-occasions" className="relative scroll-mt-24 overflow-hidden py-20 sm:py-28">
       <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute left-1/2 top-0 h-72 w-72 -translate-x-1/2 rounded-full bg-blue-600/10 blur-[100px]" />
+        <div className="absolute left-1/2 top-0 h-72 w-72 -translate-x-1/2 rounded-full bg-emerald-600/10 blur-[100px]" />
         <div className="absolute right-1/4 bottom-1/4 h-72 w-72 rounded-full bg-cyan-500/10 blur-[100px]" />
       </div>
 
@@ -184,8 +184,8 @@ export function EventsOccasions() {
               className={cn(
                 "inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-xs font-semibold transition-all sm:text-sm",
                 active === i
-                  ? "border-blue-600 bg-blue-600 text-white shadow-lg shadow-blue-600/25"
-                  : "border-border/60 bg-card text-muted-foreground hover:border-blue-600/40 hover:text-foreground"
+                  ? "border-emerald-600 bg-emerald-600 text-white shadow-lg shadow-emerald-600/25"
+                  : "border-border/60 bg-card text-muted-foreground hover:border-emerald-600/40 hover:text-foreground"
               )}
             >
               <span className="text-base">{e.emoji}</span>
@@ -211,20 +211,20 @@ export function EventsOccasions() {
 
         {/* CTA */}
         <Reveal delay={0.2} className="mx-auto mt-14 max-w-2xl text-center">
-          <div className="rounded-3xl bg-gradient-to-br from-blue-600 to-cyan-500 p-8 text-white shadow-2xl shadow-blue-600/25">
+          <div className="rounded-3xl bg-gradient-to-br from-emerald-600 to-cyan-500 p-8 text-white shadow-2xl shadow-emerald-600/25">
             <p className="font-heading text-xl font-bold sm:text-2xl">
               {lang === 'bn'
                 ? 'আপনার পরবর্তী বড় ইভেন্ট কোনটি?'
                 : "What's your next big event?"}
             </p>
-            <p className="mt-2 text-sm text-blue-50/90">
+            <p className="mt-2 text-sm text-emerald-50/90">
               {lang === 'bn'
                 ? 'ফ্রি স্ট্র্যাটেজি কলে জানুন কিভাবে এআই আপনার ইভেন্টে দ্বিগুণ মুনাফা আনবে।'
                 : "Book a free strategy call to learn how AI doubles your event profits."}
             </p>
             <button
               onClick={() => openWith("Events → strategy call")}
-              className="mt-5 inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 text-sm font-bold text-blue-600 shadow-lg transition-transform hover:scale-[1.03]"
+              className="mt-5 inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 text-sm font-bold text-emerald-600 shadow-lg transition-transform hover:scale-[1.03]"
             >
               {lang === 'bn' ? 'ফ্রি স্ট্র্যাটেজি কল বুক করুন' : 'Book a free strategy call'}
               <ArrowRight className="h-4 w-4" />
@@ -298,7 +298,7 @@ function EventDetail({ event, lang, onBook }: { event: EventCard; lang: 'en' | '
       <div className="border-t border-border/60 bg-muted/30 p-6 text-center">
         <button
           onClick={onBook}
-          className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-blue-600/25 transition-transform hover:scale-[1.02]"
+          className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-500 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-emerald-600/25 transition-transform hover:scale-[1.02]"
         >
           <TrendingUp className="h-4 w-4" />
           {lang === 'bn' ? 'এই ইভেন্টের জন্য এআই স্ট্র্যাটেজি পান' : 'Get an AI strategy for this event'}

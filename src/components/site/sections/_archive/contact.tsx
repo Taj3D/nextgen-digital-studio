@@ -159,7 +159,7 @@ export function Contact() {
                     <Button
                       type="submit"
                       disabled={submitting}
-                      className="h-12 w-full rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 font-semibold shadow-lg shadow-blue-600/25 transition-transform hover:scale-[1.01]"
+                      className="h-12 w-full rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-500 font-semibold shadow-lg shadow-emerald-600/25 transition-transform hover:scale-[1.01]"
                     >
                       {submitting ? (
                         <>
@@ -187,9 +187,9 @@ export function Contact() {
                     href={c.href}
                     target={c.href.startsWith("http") ? "_blank" : undefined}
                     rel="noreferrer"
-                    className="group flex items-start gap-3 rounded-2xl border border-border/60 bg-card p-4 transition-colors hover:border-blue-600/40"
+                    className="group flex items-start gap-3 rounded-2xl border border-border/60 bg-card p-4 transition-colors hover:border-emerald-600/40"
                   >
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-600/10 text-blue-600 transition-colors group-hover:bg-blue-600 group-hover:text-white">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-600/10 text-emerald-600 transition-colors group-hover:bg-emerald-600 group-hover:text-white">
                       <c.icon className="h-5 w-5" />
                     </div>
                     <div>
@@ -224,7 +224,7 @@ export function Contact() {
                       target="_blank"
                       rel="noreferrer"
                       aria-label={s.name}
-                      className="flex h-9 w-9 items-center justify-center rounded-lg border border-border/60 text-muted-foreground transition-colors hover:border-blue-600/40 hover:bg-blue-600/10 hover:text-blue-600"
+                      className="flex h-9 w-9 items-center justify-center rounded-lg border border-border/60 text-muted-foreground transition-colors hover:border-emerald-600/40 hover:bg-emerald-600/10 hover:text-emerald-600"
                     >
                       <s.icon className="h-4 w-4" />
                     </a>

@@ -23,7 +23,7 @@ export function SystemToolkit() {
   return (
     <section id="system-toolkit" className="relative scroll-mt-24 overflow-hidden py-20 sm:py-28">
       <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute left-1/3 top-0 h-72 w-72 rounded-full bg-blue-600/10 blur-[100px]" />
+        <div className="absolute left-1/3 top-0 h-72 w-72 rounded-full bg-emerald-600/10 blur-[100px]" />
         <div className="absolute right-1/3 bottom-0 h-72 w-72 rounded-full bg-cyan-500/10 blur-[100px]" />
       </div>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -42,8 +42,8 @@ export function SystemToolkit() {
         <div className="mt-14 grid grid-cols-2 gap-4 lg:grid-cols-4">
           {toolkitFeatures.map((f, i) => (
             <Reveal key={f.title} delay={i * 0.06}>
-              <div className="group h-full rounded-2xl border border-border/60 bg-card p-5 text-center card-hover hover:border-blue-600/30">
-                <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500 text-white shadow-lg transition-transform group-hover:scale-110">
+              <div className="group h-full rounded-2xl border border-border/60 bg-card p-5 text-center card-hover hover:border-emerald-600/30">
+                <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-600 to-cyan-500 text-white shadow-lg transition-transform group-hover:scale-110">
                   <f.icon className="h-5 w-5" />
                 </div>
                 <h3 className="font-heading text-sm font-bold">{f.title}</h3>
@@ -59,12 +59,12 @@ export function SystemToolkit() {
             <Reveal key={plan.name} delay={i * 0.1} className="h-full">
               <div className={`relative flex h-full flex-col rounded-3xl border p-7 transition-all duration-300 ${
                 plan.popular
-                  ? "border-blue-600/40 bg-gradient-to-b from-blue-600/[0.06] to-cyan-500/[0.03] shadow-xl shadow-blue-600/10 lg:-mt-4"
+                  ? "border-emerald-600/40 bg-gradient-to-b from-emerald-600/[0.06] to-cyan-500/[0.03] shadow-xl shadow-emerald-600/10 lg:-mt-4"
                   : "border-border/60 bg-card hover:border-border"
               }`}>
                 {plan.popular && (
                   <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-white shadow-lg">
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-emerald-600 to-cyan-500 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-white shadow-lg">
                       <Star className="h-3 w-3" /> {t('common.popular')}
                     </span>
                   </div>
@@ -93,7 +93,7 @@ export function SystemToolkit() {
                   rel="noreferrer"
                   className={`mt-7 flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-transform hover:scale-[1.02] ${
                     plan.popular
-                      ? "bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg shadow-blue-600/25"
+                      ? "bg-gradient-to-r from-emerald-600 to-cyan-500 text-white shadow-lg shadow-emerald-600/25"
                       : "border border-border bg-background hover:bg-muted"
                   }`}
                 >
@@ -115,7 +115,7 @@ export function SystemToolkit() {
               <Zap className="h-4 w-4 text-amber-500" /> ১ ঘন্টায় ডেলিভারি
             </span>
             <span className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground">
-              <Check className="h-4 w-4 text-blue-600" /> ৭ দিনের রিফান্ড
+              <Check className="h-4 w-4 text-emerald-600" /> ৭ দিনের রিফান্ড
             </span>
             <span className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground">
               <Globe className="h-4 w-4 text-cyan-500" /> লাইফটাইম আপডেট

@@ -254,7 +254,7 @@ export const services: Service[] = [
     description:
       'End-to-end AI sales engines that qualify leads, send personalised follow-ups, and hand hot prospects to your team — 24/7.',
     features: ['AI lead scoring', 'Auto follow-up sequences', 'CRM pipeline sync', 'Meeting booking'],
-    gradient: 'from-blue-500 to-indigo-500',
+    gradient: 'from-emerald-500 to-teal-500',
   },
   {
     slug: 'ai-chat-agent',
@@ -264,7 +264,7 @@ export const services: Service[] = [
     description:
       'Deploy a GPT-powered chat agent on your website & WhatsApp that answers questions, captures leads and books calls instantly.',
     features: ['Trained on your data', 'Multilingual', 'Lead capture & routing', 'Human handoff'],
-    gradient: 'from-cyan-500 to-blue-500',
+    gradient: 'from-cyan-500 to-emerald-500',
   },
   {
     slug: 'ai-voice-agent',
@@ -324,7 +324,7 @@ export const services: Service[] = [
     description:
       'We design, build and optimise complete sales funnels — from landing pages to email sequences to booking.',
     features: ['Funnel strategy', 'Landing pages', 'Email/SMS sequences', 'A/B testing'],
-    gradient: 'from-blue-500 to-cyan-500',
+    gradient: 'from-emerald-500 to-cyan-500',
   },
   {
     slug: 'business-automation',
@@ -344,7 +344,7 @@ export const services: Service[] = [
     description:
       'Premium, conversion-focused websites and web apps built with modern tech — optimised for speed, SEO and sales.',
     features: ['Next.js & React', 'SEO optimised', 'CMS integration', 'Core Web Vitals'],
-    gradient: 'from-indigo-500 to-blue-600',
+    gradient: 'from-teal-500 to-emerald-600',
   },
   {
     slug: 'landing-page-design',

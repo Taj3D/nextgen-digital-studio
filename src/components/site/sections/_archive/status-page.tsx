@@ -112,7 +112,7 @@ export function StatusPage() {
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600/10 text-blue-600">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-600/10 text-emerald-600">
                     <s.icon className="h-4 w-4" />
                   </span>
                   <span className="text-sm font-semibold">{tr(s.name)}</span>
@@ -132,7 +132,7 @@ export function StatusPage() {
         {/* Recent incidents */}
         <Reveal delay={0.25} className="mt-8">
           <h3 className="mb-4 flex items-center gap-2 font-heading text-lg font-bold">
-            <Clock className="h-5 w-5 text-blue-600" />
+            <Clock className="h-5 w-5 text-emerald-600" />
             {t('status.recentIncidents')}
           </h3>
           <div className="space-y-3">
@@ -158,7 +158,7 @@ export function StatusPage() {
         <Reveal delay={0.3} className="mt-6 text-center">
           <p className="text-xs text-muted-foreground">
             {t('status.haveIssue')}{" "}
-            <a href="#contact" className="font-semibold text-blue-600 underline-offset-4 hover:underline">
+            <a href="#contact" className="font-semibold text-emerald-600 underline-offset-4 hover:underline">
               Contact our team →
             </a>
           </p>

@@ -17,7 +17,7 @@ export function LanguageToggle({ className, compact = false }: { className?: str
         className,
       )}
     >
-      {!compact && <Languages className="h-3.5 w-3.5 text-blue-600" />}
+      {!compact && <Languages className="h-3.5 w-3.5 text-emerald-600" />}
       <span className={cn("transition-opacity", lang === 'en' ? 'opacity-100' : 'opacity-50')}>
         EN
       </span>

@@ -273,7 +273,7 @@ Tanvir,tanvir@example.com,...`,
 
 const methodColors: Record<string, string> = {
   GET: "bg-emerald-500/15 text-emerald-600",
-  POST: "bg-blue-500/15 text-blue-600",
+  POST: "bg-emerald-500/15 text-emerald-600",
   PATCH: "bg-amber-500/15 text-amber-600",
   DELETE: "bg-rose-500/15 text-rose-500",
 }
@@ -294,7 +294,7 @@ export function ApiDocs() {
             </Link>
             <span className="h-4 w-px bg-border" />
             <h1 className="font-heading text-base font-bold">API Documentation</h1>
-            <span className="rounded-full bg-blue-600/10 px-2.5 py-0.5 text-[10px] font-bold uppercase text-blue-600">
+            <span className="rounded-full bg-emerald-600/10 px-2.5 py-0.5 text-[10px] font-bold uppercase text-emerald-600">
               v1
             </span>
           </div>
@@ -309,10 +309,10 @@ export function ApiDocs() {
 
       <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
         {/* Intro */}
-        <div className="rounded-3xl border border-border/60 bg-gradient-to-br from-blue-600/[0.05] to-cyan-500/[0.05] p-6 sm:p-8">
+        <div className="rounded-3xl border border-border/60 bg-gradient-to-br from-emerald-600/[0.05] to-cyan-500/[0.05] p-6 sm:p-8">
           <div className="flex items-center gap-2">
-            <Terminal className="h-5 w-5 text-blue-600" />
-            <span className="text-xs font-semibold uppercase tracking-wider text-blue-600">REST API</span>
+            <Terminal className="h-5 w-5 text-emerald-600" />
+            <span className="text-xs font-semibold uppercase tracking-wider text-emerald-600">REST API</span>
           </div>
           <h2 className="mt-3 font-heading text-2xl font-extrabold sm:text-3xl">
             NextGen Digital Studio API
@@ -324,7 +324,7 @@ export function ApiDocs() {
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
             <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-600">17 Endpoints</span>
-            <span className="rounded-full bg-blue-500/10 px-3 py-1 text-xs font-semibold text-blue-600">13 Lead Sources</span>
+            <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-600">13 Lead Sources</span>
             <span className="rounded-full bg-violet-500/10 px-3 py-1 text-xs font-semibold text-violet-600">AI-Powered</span>
           </div>
         </div>

@@ -71,12 +71,12 @@ export function TermsClient() {
         </div>
       </header>
       <main className="mx-auto max-w-4xl px-4 py-10 sm:px-6">
-        <div className="rounded-3xl border border-border/60 bg-gradient-to-br from-blue-600/[0.05] to-cyan-500/[0.05] p-6 sm:p-8">
+        <div className="rounded-3xl border border-border/60 bg-gradient-to-br from-emerald-600/[0.05] to-cyan-500/[0.05] p-6 sm:p-8">
           <h2 className="font-heading text-3xl font-extrabold tracking-tight sm:text-4xl">Terms of Service</h2>
           <p className="mt-2 text-lg text-muted-foreground">
             {isBn ? 'আমাদের সেবার শর্তাবলী' : 'The terms of our services'}
           </p>
-          <span className="mt-4 inline-block rounded-full bg-blue-600/10 px-3 py-1 font-semibold text-blue-600 text-xs">
+          <span className="mt-4 inline-block rounded-full bg-emerald-600/10 px-3 py-1 font-semibold text-emerald-600 text-xs">
             {isBn ? 'সর্বশেষ আপডেট: জানুয়ারি ২০২৫' : 'Last updated: January 2025'}
           </span>
         </div>

@@ -184,7 +184,7 @@ function Section({
     bg === 'muted' ? 'bg-muted/30' :
     bg === 'dark' ? 'bg-slate-950 text-white' :
     bg === 'whatsapp' ? 'bg-gradient-to-br from-emerald-600 to-teal-600 text-white' :
-    bg === 'gradient' ? 'bg-gradient-to-br from-blue-600 to-cyan-500 text-white' :
+    bg === 'gradient' ? 'bg-gradient-to-br from-emerald-600 to-cyan-500 text-white' :
     ''
   return (
     <section id={id} className={`relative scroll-mt-20 py-14 sm:py-20 ${bgClass} ${className}`}>
@@ -211,7 +211,7 @@ function SectionHeader({
     ? 'bg-white/15 text-white'
     : accent === 'emerald'
     ? 'border border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/50 dark:text-emerald-300'
-    : 'border border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-900 dark:bg-blue-950/50 dark:text-blue-300'
+    : 'border border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/50 dark:text-emerald-300'
   return (
     <div className="mx-auto max-w-3xl text-center">
       {badge && (
@@ -1122,7 +1122,7 @@ function RoiCalculatorSection({ isBn }: { isBn: boolean }) {
   ]
 
   const results = [
-    { label: ROI_CALCULATOR.results.opened.label, value: opened.toLocaleString(), color: 'text-blue-600' },
+    { label: ROI_CALCULATOR.results.opened.label, value: opened.toLocaleString(), color: 'text-emerald-600' },
     { label: ROI_CALCULATOR.results.replies.label, value: replies.toLocaleString(), color: 'text-emerald-600' },
     { label: ROI_CALCULATOR.results.revenue.label, value: fmtBDT(revenue), color: 'text-emerald-600' },
     { label: ROI_CALCULATOR.results.roi.label, value: roi.toFixed(1) + 'x', color: roi >= 3 ? 'text-emerald-600' : 'text-amber-600' },

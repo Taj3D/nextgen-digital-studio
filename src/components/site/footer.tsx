@@ -25,6 +25,7 @@ import { Input } from '@/components/ui/input'
 import { useLang } from '@/components/site/language-provider'
 import { waLink } from '@/lib/whatsapp'
 import { siteConfig } from '@/lib/site-data'
+import { markUserEngaged } from '@/lib/popup-state'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -114,6 +115,8 @@ function NewsletterForm() {
       setState('success')
       toast.success(t('footer.newsletterSuccess'))
       setEmail('')
+      // Mark the user as engaged — stops all popup toasts site-wide.
+      markUserEngaged()
     } catch {
       setState('error')
       toast.error(t('footer.newsletterError'))

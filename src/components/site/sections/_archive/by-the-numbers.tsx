@@ -13,11 +13,11 @@ export function ByTheNumbers() {
   const { t, tr } = useLang()
 
   return (
-    <section ref={ref} className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 py-20 text-white sm:py-24">
+    <section ref={ref} className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-emerald-950 to-slate-900 py-20 text-white sm:py-24">
       {/* Animated background */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute inset-0 bg-grid opacity-[0.07]" />
-        <div className="absolute -left-20 top-1/4 h-72 w-72 animate-blob rounded-full bg-blue-600/30 blur-[100px]" />
+        <div className="absolute -left-20 top-1/4 h-72 w-72 animate-blob rounded-full bg-emerald-600/30 blur-[100px]" />
         <div className="absolute -right-20 bottom-1/4 h-72 w-72 animate-blob rounded-full bg-cyan-500/20 blur-[100px] [animation-delay:-8s]" />
       </div>
 
@@ -28,11 +28,11 @@ export function ByTheNumbers() {
           </Eyebrow>
           <h2 className="mt-5 font-heading text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-[2.75rem]">
             {t('byNumbers.title1')}{" "}
-            <span className="bg-gradient-to-r from-cyan-300 to-blue-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-cyan-300 to-emerald-400 bg-clip-text text-transparent">
               {t('byNumbers.title2')}
             </span>
           </h2>
-          <p className="mt-5 text-lg text-blue-100/70">
+          <p className="mt-5 text-lg text-emerald-100/70">
             {t('byNumbers.subtitle')}
           </p>
         </Reveal>
@@ -47,7 +47,7 @@ export function ByTheNumbers() {
                   suffix={s.suffix}
                   start={inView}
                 />
-                <p className="mt-2 text-xs font-medium leading-tight text-blue-100/60 sm:text-sm">
+                <p className="mt-2 text-xs font-medium leading-tight text-emerald-100/60 sm:text-sm">
                   {tr(s.label)}
                 </p>
               </div>
@@ -56,7 +56,7 @@ export function ByTheNumbers() {
         </div>
 
         <Reveal delay={0.3} className="mt-10 text-center">
-          <p className="text-sm text-blue-100/50">
+          <p className="text-sm text-emerald-100/50">
             * Based on aggregated data from 120+ client deployments across Bangladesh, 2023–2025.
           </p>
         </Reveal>
@@ -82,7 +82,7 @@ function CountUp({
       <span className="bg-gradient-to-br from-white via-cyan-100 to-cyan-400 bg-clip-text text-transparent">
         {value.toFixed(decimals)}
       </span>
-      <span className="bg-gradient-to-br from-cyan-300 to-blue-400 bg-clip-text text-transparent">
+      <span className="bg-gradient-to-br from-cyan-300 to-emerald-400 bg-clip-text text-transparent">
         {suffix}
       </span>
     </span>

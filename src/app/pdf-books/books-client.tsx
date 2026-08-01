@@ -41,7 +41,7 @@ const BOOKS: Book[] = [
     descBn: 'সফলতা, ফোকাস ও মানসিক শক্তির জন্য মাইন্ড ট্রেনিং।',
     pages: 120,
     emoji: '🧠',
-    color: 'from-blue-500 to-cyan-500',
+    color: 'from-emerald-500 to-cyan-500',
     Icon: Brain,
   },
   {

@@ -61,7 +61,7 @@ export function KnowledgeBase() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder={t('kb.searchPlaceholder')}
-              className="h-12 w-full rounded-xl border border-border/60 bg-card pl-11 pr-10 text-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-blue-600/50 focus:ring-2 focus:ring-blue-600/15"
+              className="h-12 w-full rounded-xl border border-border/60 bg-card pl-11 pr-10 text-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-emerald-600/50 focus:ring-2 focus:ring-emerald-600/15"
             />
             {query && (
               <button
@@ -81,8 +81,8 @@ export function KnowledgeBase() {
                 className={cn(
                   "rounded-full px-3 py-1.5 text-xs font-semibold transition-all",
                   category === c
-                    ? "bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-md shadow-blue-600/25"
-                    : "border border-border/60 text-muted-foreground hover:border-blue-600/40 hover:text-foreground",
+                    ? "bg-gradient-to-r from-emerald-600 to-cyan-500 text-white shadow-md shadow-emerald-600/25"
+                    : "border border-border/60 text-muted-foreground hover:border-emerald-600/40 hover:text-foreground",
                 )}
               >
                 {c}
@@ -118,17 +118,17 @@ export function KnowledgeBase() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.96 }}
                     onClick={() => setActive(a)}
-                    className="group flex h-full flex-col rounded-2xl border border-border/60 bg-card p-5 text-left card-hover hover:border-blue-600/40 hover:shadow-xl hover:shadow-blue-600/5"
+                    className="group flex h-full flex-col rounded-2xl border border-border/60 bg-card p-5 text-left card-hover hover:border-emerald-600/40 hover:shadow-xl hover:shadow-emerald-600/5"
                   >
                     <div className="mb-3 flex items-center justify-between">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600/10 text-blue-600 transition-all group-hover:bg-blue-600 group-hover:text-white">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-600/10 text-emerald-600 transition-all group-hover:bg-emerald-600 group-hover:text-white">
                         <Icon className="h-5 w-5" />
                       </div>
                       <span className="rounded-full bg-muted px-2.5 py-1 text-[10px] font-semibold text-muted-foreground">
                         {a.category}
                       </span>
                     </div>
-                    <h3 className="font-heading text-base font-bold leading-snug group-hover:text-blue-600">
+                    <h3 className="font-heading text-base font-bold leading-snug group-hover:text-emerald-600">
                       {tr(a.title)}
                     </h3>
                     <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground line-clamp-2">
@@ -138,7 +138,7 @@ export function KnowledgeBase() {
                       <span className="flex items-center gap-1">
                         <Clock className="h-3 w-3" /> {a.readTime} read
                       </span>
-                      <span className="flex items-center gap-1 font-semibold text-blue-600 opacity-0 transition-opacity group-hover:opacity-100">
+                      <span className="flex items-center gap-1 font-semibold text-emerald-600 opacity-0 transition-opacity group-hover:opacity-100">
                         Read <ArrowRight className="h-3 w-3" />
                       </span>
                     </div>
@@ -154,7 +154,7 @@ export function KnowledgeBase() {
             {t('kb.bookCall')}{" "}
             <button
               onClick={() => openWith("Knowledge base → call")}
-              className="font-semibold text-blue-600 underline-offset-4 hover:underline"
+              className="font-semibold text-emerald-600 underline-offset-4 hover:underline"
             >
               {t('kb.bookCallLink')} →
             </button>
@@ -180,7 +180,7 @@ export function KnowledgeBase() {
               onClick={(e) => e.stopPropagation()}
               className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-border/60 bg-card shadow-2xl"
             >
-              <div className="relative h-28 bg-gradient-to-br from-blue-600 to-cyan-500">
+              <div className="relative h-28 bg-gradient-to-br from-emerald-600 to-cyan-500">
                 <div className="absolute inset-0 bg-grid opacity-20" />
                 <button
                   aria-label="Close"
@@ -189,7 +189,7 @@ export function KnowledgeBase() {
                 >
                   <X className="h-4 w-4" />
                 </button>
-                <div className="absolute -bottom-6 left-6 flex h-14 w-14 items-center justify-center rounded-2xl border-4 border-card bg-blue-600 text-white shadow-lg">
+                <div className="absolute -bottom-6 left-6 flex h-14 w-14 items-center justify-center rounded-2xl border-4 border-card bg-emerald-600 text-white shadow-lg">
                   {(() => {
                     const Icon = iconMap[active.icon] ?? BookOpen
                     return <Icon className="h-7 w-7" />
@@ -197,7 +197,7 @@ export function KnowledgeBase() {
                 </div>
               </div>
               <div className="p-6 pt-8">
-                <span className="rounded-full bg-blue-600/10 px-3 py-1 text-xs font-semibold text-blue-600">
+                <span className="rounded-full bg-emerald-600/10 px-3 py-1 text-xs font-semibold text-emerald-600">
                   {active.category}
                 </span>
                 <h3 className="mt-3 font-heading text-xl font-bold leading-snug">{tr(active.title)}</h3>
@@ -210,7 +210,7 @@ export function KnowledgeBase() {
                     setActive(null)
                     openWith("Article → full guide")
                   }}
-                  className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/25 transition-transform hover:scale-[1.02]"
+                  className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-600/25 transition-transform hover:scale-[1.02]"
                 >
                   Get the full guide
                   <ArrowRight className="h-4 w-4" />

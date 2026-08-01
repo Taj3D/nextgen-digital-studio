@@ -19,7 +19,7 @@ export function ClientLogos() {
                 key={`${name}-${i}`}
                 className="group flex shrink-0 items-center gap-2.5 rounded-xl px-3 py-2 opacity-60 grayscale transition-all duration-300 hover:opacity-100 hover:grayscale-0"
               >
-                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600/15 to-cyan-500/15 text-[11px] font-extrabold text-blue-600 transition-all group-hover:from-blue-600 group-hover:to-cyan-500 group-hover:text-white">
+                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-600/15 to-cyan-500/15 text-[11px] font-extrabold text-emerald-600 transition-all group-hover:from-emerald-600 group-hover:to-cyan-500 group-hover:text-white">
                   {name.charAt(0)}
                 </span>
                 <span className="font-heading text-lg font-bold tracking-tight text-muted-foreground transition-colors group-hover:text-foreground">

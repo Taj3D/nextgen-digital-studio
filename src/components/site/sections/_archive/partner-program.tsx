@@ -53,17 +53,17 @@ export function PartnerProgram() {
             <Reveal key={tier.name} delay={i * 0.1}>
               <div className={`group relative flex h-full flex-col rounded-3xl border p-7 transition-all duration-300 ${
                 tier.popular
-                  ? "border-blue-600/40 bg-gradient-to-b from-blue-600/[0.06] to-cyan-500/[0.03] shadow-xl shadow-blue-600/10 lg:-mt-4"
-                  : "border-border/60 bg-card hover:border-blue-600/30"
+                  ? "border-emerald-600/40 bg-gradient-to-b from-emerald-600/[0.06] to-cyan-500/[0.03] shadow-xl shadow-emerald-600/10 lg:-mt-4"
+                  : "border-border/60 bg-card hover:border-emerald-600/30"
               }`}>
                 {tier.popular && (
                   <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-white shadow-lg">
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-emerald-600 to-cyan-500 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-white shadow-lg">
                       <Gift className="h-3 w-3" /> Most Popular
                     </span>
                   </div>
                 )}
-                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500 text-white shadow-lg shadow-blue-600/25 transition-transform group-hover:scale-110">
+                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-600 to-cyan-500 text-white shadow-lg shadow-emerald-600/25 transition-transform group-hover:scale-110">
                   <tier.icon className="h-6 w-6" />
                 </div>
                 <h3 className="font-heading text-xl font-bold">{tr(tier.name)}</h3>
@@ -86,7 +86,7 @@ export function PartnerProgram() {
                   onClick={() => openWith(`Partner Program: ${tier.name}`)}
                   className={`mt-7 flex w-full items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-transform hover:scale-[1.02] ${
                     tier.popular
-                      ? "bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg shadow-blue-600/25"
+                      ? "bg-gradient-to-r from-emerald-600 to-cyan-500 text-white shadow-lg shadow-emerald-600/25"
                       : "border border-border bg-background hover:bg-muted"
                   }`}
                 >
@@ -103,7 +103,7 @@ export function PartnerProgram() {
             Already referring? Track your earnings in real-time.{" "}
             <button
               onClick={() => openWith("Partner — track earnings")}
-              className="font-semibold text-blue-600 underline-offset-4 hover:underline"
+              className="font-semibold text-emerald-600 underline-offset-4 hover:underline"
             >
               {t('partner.getDashboard')} →
             </button>

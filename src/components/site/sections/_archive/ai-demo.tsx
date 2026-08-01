@@ -49,8 +49,8 @@ export function AiDemo() {
                     className={cn(
                       "flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all",
                       active === t.id
-                        ? "bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg shadow-blue-600/25"
-                        : "border border-border/60 bg-card text-muted-foreground hover:border-blue-600/40 hover:text-foreground",
+                        ? "bg-gradient-to-r from-emerald-600 to-cyan-500 text-white shadow-lg shadow-emerald-600/25"
+                        : "border border-border/60 bg-card text-muted-foreground hover:border-emerald-600/40 hover:text-foreground",
                     )}
                   >
                     <t.icon className="h-4 w-4" />
@@ -74,7 +74,7 @@ export function AiDemo() {
 
               <Button
                 onClick={() => openWith("AI Demo → Strategy Call")}
-                className="mt-8 h-12 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 px-6 font-semibold shadow-lg shadow-blue-600/25"
+                className="mt-8 h-12 rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-500 px-6 font-semibold shadow-lg shadow-emerald-600/25"
               >
                 {t('aiDemo.tryOnBusiness')}
                 <ArrowRight className="ml-2 h-4 w-4" />
@@ -85,7 +85,7 @@ export function AiDemo() {
           {/* Right: animated demo */}
           <Reveal delay={0.15}>
             <div className="relative">
-              <div className="absolute -inset-4 -z-10 rounded-[2rem] bg-gradient-to-tr from-blue-600/15 to-cyan-500/15 blur-2xl" />
+              <div className="absolute -inset-4 -z-10 rounded-[2rem] bg-gradient-to-tr from-emerald-600/15 to-cyan-500/15 blur-2xl" />
               <AnimatePresence mode="wait">
                 <motion.div
                   key={active}
@@ -148,7 +148,7 @@ function ChatDemo() {
           >
             <p className={cn(
               "max-w-[80%] rounded-2xl px-3.5 py-2 text-[13px] leading-relaxed shadow-sm",
-              m.role === "user" ? "rounded-br-md bg-gradient-to-br from-blue-600 to-cyan-500 text-white" : "rounded-bl-md bg-muted text-foreground",
+              m.role === "user" ? "rounded-br-md bg-gradient-to-br from-emerald-600 to-cyan-500 text-white" : "rounded-bl-md bg-muted text-foreground",
             )}>
               {m.content}
             </p>
@@ -180,7 +180,7 @@ function VoiceDemo() {
     <div>
       <DemoHeader icon={PhoneCall} title="AI Voice Agent" status="On call · 0:18s" pulse />
       <div className="flex items-center justify-center gap-2 py-5">
-        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-cyan-500 text-white shadow-lg">
+        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-emerald-600 to-cyan-500 text-white shadow-lg">
           <Volume2 className="h-7 w-7 animate-pulse" />
         </div>
       </div>
@@ -189,7 +189,7 @@ function VoiceDemo() {
         {Array.from({ length: 24 }).map((_, i) => (
           <motion.span
             key={i}
-            className="w-1 rounded-full bg-blue-600/60"
+            className="w-1 rounded-full bg-emerald-600/60"
             animate={{ height: [4, 16, 4] }}
             transition={{ duration: 0.6, repeat: Infinity, delay: i * 0.04 }}
           />
@@ -206,9 +206,9 @@ function VoiceDemo() {
           >
             <span className={cn(
               "rounded-lg px-2.5 py-1.5 max-w-[85%]",
-              t.speaker === "AI" ? "bg-blue-600/10 text-foreground" : "bg-muted text-muted-foreground",
+              t.speaker === "AI" ? "bg-emerald-600/10 text-foreground" : "bg-muted text-muted-foreground",
             )}>
-              <span className="font-bold text-blue-600">{t.speaker}</span>
+              <span className="font-bold text-emerald-600">{t.speaker}</span>
               <span className="ml-1.5 text-[10px] text-muted-foreground">{t.time}</span>
               <br />
               {t.text}
@@ -261,9 +261,9 @@ function DemoHeader({ icon: Icon, title, status, pulse, whatsapp }: { icon: type
   return (
     <div className={cn("flex items-center justify-between border-b border-border/40 pb-3", whatsapp && "rounded-t-2xl bg-[#075e54] px-4 py-3 text-white dark:bg-[#202c33]")}>
       <div className="flex items-center gap-3">
-        <div className={cn("relative flex h-10 w-10 items-center justify-center rounded-full", whatsapp ? "bg-white/20" : "bg-gradient-to-br from-blue-600 to-cyan-500")}>
+        <div className={cn("relative flex h-10 w-10 items-center justify-center rounded-full", whatsapp ? "bg-white/20" : "bg-gradient-to-br from-emerald-600 to-cyan-500")}>
           <Icon className={cn("h-5 w-5", whatsapp ? "text-white" : "text-white")} />
-          {pulse && <span className="absolute inset-0 animate-ping rounded-full bg-blue-600/40" />}
+          {pulse && <span className="absolute inset-0 animate-ping rounded-full bg-emerald-600/40" />}
         </div>
         <div>
           <p className={cn("text-sm font-bold leading-tight", whatsapp ? "text-white" : "text-foreground")}>{title}</p>

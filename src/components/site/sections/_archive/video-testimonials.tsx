@@ -17,7 +17,7 @@ export function VideoTestimonials() {
   return (
     <section id="video-testimonials" className="relative scroll-mt-24 overflow-hidden py-20 sm:py-28">
       <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute left-1/2 top-0 h-72 w-72 -translate-x-1/2 rounded-full bg-blue-600/10 blur-[100px]" />
+        <div className="absolute left-1/2 top-0 h-72 w-72 -translate-x-1/2 rounded-full bg-emerald-600/10 blur-[100px]" />
       </div>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <Reveal className="mx-auto max-w-2xl text-center">
@@ -36,7 +36,7 @@ export function VideoTestimonials() {
             <Reveal key={v.name} delay={i * 0.1}>
               <button
                 onClick={() => setActive(v)}
-                className="group relative block h-full w-full overflow-hidden rounded-3xl text-left card-hover hover:shadow-2xl hover:shadow-blue-600/10"
+                className="group relative block h-full w-full overflow-hidden rounded-3xl text-left card-hover hover:shadow-2xl hover:shadow-emerald-600/10"
               >
                 {/* Video thumbnail */}
                 <div className={cn("relative aspect-video overflow-hidden bg-gradient-to-br", v.gradient)}>
@@ -50,7 +50,7 @@ export function VideoTestimonials() {
                   <div className="absolute inset-0 flex items-center justify-center">
                     <span className="relative flex h-16 w-16 items-center justify-center rounded-full bg-white/90 shadow-2xl transition-transform group-hover:scale-110">
                       <span className="absolute inset-0 animate-pulse-ring rounded-full bg-white/60" />
-                      <Play className="ml-1 h-7 w-7 fill-blue-600 text-blue-600" />
+                      <Play className="ml-1 h-7 w-7 fill-emerald-600 text-emerald-600" />
                     </span>
                   </div>
                   {/* Duration */}
@@ -58,7 +58,7 @@ export function VideoTestimonials() {
                     {v.duration}
                   </span>
                   {/* Metric badge */}
-                  <span className="absolute bottom-3 left-3 rounded-full bg-white/90 px-2.5 py-1 text-xs font-bold text-blue-600 shadow">
+                  <span className="absolute bottom-3 left-3 rounded-full bg-white/90 px-2.5 py-1 text-xs font-bold text-emerald-600 shadow">
                     {v.metric}
                   </span>
                 </div>
@@ -73,7 +73,7 @@ export function VideoTestimonials() {
                     &ldquo;{tr(v.quote)}&rdquo;
                   </p>
                   <div className="mt-3 flex items-center gap-2 border-t border-border/60 pt-3">
-                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-cyan-500 text-[10px] font-bold text-white">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-emerald-600 to-cyan-500 text-[10px] font-bold text-white">
                       {v.initials}
                     </span>
                     <div>
@@ -90,7 +90,7 @@ export function VideoTestimonials() {
         <Reveal delay={0.2} className="mt-10 text-center">
           <button
             onClick={() => openWith("Video testimonials → call")}
-            className="text-sm font-semibold text-blue-600 underline-offset-4 hover:underline"
+            className="text-sm font-semibold text-emerald-600 underline-offset-4 hover:underline"
           >
             {t('videoTest.becomeNext')} →
           </button>
@@ -135,13 +135,13 @@ export function VideoTestimonials() {
               </div>
               {/* Content */}
               <div className="p-6">
-                <Quote className="h-8 w-8 text-blue-600/20" />
+                <Quote className="h-8 w-8 text-emerald-600/20" />
                 <p className="mt-2 text-lg font-medium leading-relaxed text-foreground">
                   &ldquo;{tr(active.quote)}&rdquo;
                 </p>
                 <div className="mt-4 flex items-center justify-between border-t border-border/60 pt-4">
                   <div className="flex items-center gap-3">
-                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-cyan-500 text-xs font-bold text-white">
+                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-emerald-600 to-cyan-500 text-xs font-bold text-white">
                       {active.initials}
                     </span>
                     <div>

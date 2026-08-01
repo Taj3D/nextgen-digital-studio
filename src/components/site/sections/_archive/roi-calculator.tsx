@@ -35,7 +35,7 @@ export function RoiCalculator() {
     <section id="roi-calculator" className="relative scroll-mt-24 overflow-hidden py-20 sm:py-28">
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute right-0 top-1/4 h-72 w-72 rounded-full bg-cyan-500/10 blur-[100px]" />
-        <div className="absolute left-0 bottom-1/4 h-72 w-72 rounded-full bg-blue-600/10 blur-[100px]" />
+        <div className="absolute left-0 bottom-1/4 h-72 w-72 rounded-full bg-emerald-600/10 blur-[100px]" />
       </div>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <Reveal className="mx-auto max-w-2xl text-center">
@@ -66,7 +66,7 @@ export function RoiCalculator() {
                         className={cn(
                           "flex flex-col items-center gap-1 rounded-xl border p-3 text-center transition-all",
                           size === b.id
-                            ? "border-blue-600/50 bg-blue-600/5 shadow-md shadow-blue-600/10"
+                            ? "border-emerald-600/50 bg-emerald-600/5 shadow-md shadow-emerald-600/10"
                             : "border-border/60 hover:border-border hover:bg-muted/40",
                         )}
                       >
@@ -105,8 +105,8 @@ export function RoiCalculator() {
                   hint={t('roi.hoursSavedHint')}
                 />
 
-                <div className="mt-6 flex items-start gap-2.5 rounded-xl bg-blue-600/5 px-4 py-3">
-                  <Users className="mt-0.5 h-4 w-4 shrink-0 text-blue-600" />
+                <div className="mt-6 flex items-start gap-2.5 rounded-xl bg-emerald-600/5 px-4 py-3">
+                  <Users className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
                   <p className="text-xs text-muted-foreground">
                     {t('roi.disclaimer')}
                   </p>
@@ -114,13 +114,13 @@ export function RoiCalculator() {
               </div>
 
               {/* Results */}
-              <div className="relative bg-gradient-to-br from-blue-600 to-cyan-500 p-6 text-white sm:p-8">
+              <div className="relative bg-gradient-to-br from-emerald-600 to-cyan-500 p-6 text-white sm:p-8">
                 <div className="absolute inset-0 bg-grid opacity-15" />
                 <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-cyan-400/30 blur-3xl" />
                 <div className="relative">
                   <div className="flex items-center gap-2">
                     <Calculator className="h-5 w-5" />
-                    <span className="text-sm font-semibold uppercase tracking-wider text-blue-50/90">
+                    <span className="text-sm font-semibold uppercase tracking-wider text-emerald-50/90">
                       {t('roi.yourProjected')}
                     </span>
                   </div>
@@ -135,7 +135,7 @@ export function RoiCalculator() {
                     <p className="font-heading text-5xl font-extrabold tracking-tight sm:text-6xl">
                       ৳{Math.round(totalYearly / 1000)}L+
                     </p>
-                    <p className="mt-1 text-sm text-blue-50/90">
+                    <p className="mt-1 text-sm text-emerald-50/90">
                       {t('roi.totalValue')}
                     </p>
                   </motion.div>
@@ -161,7 +161,7 @@ export function RoiCalculator() {
 
                   <div className="mt-6 rounded-2xl bg-white/15 px-4 py-3 backdrop-blur">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-medium text-blue-50/90">
+                      <span className="text-xs font-medium text-emerald-50/90">
                         {t('roi.roiMultiple')}
                       </span>
                       <span className="flex items-center gap-1 font-heading text-xl font-extrabold">
@@ -173,7 +173,7 @@ export function RoiCalculator() {
 
                   <button
                     onClick={() => openWith("ROI Calculator")}
-                    className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-blue-700 shadow-lg transition-transform hover:scale-[1.02]"
+                    className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-emerald-700 shadow-lg transition-transform hover:scale-[1.02]"
                   >
                     {t('roi.getDetailedROI')}
                     <ArrowRight className="h-4 w-4" />
@@ -214,12 +214,12 @@ function Slider({
     <div>
       <div className="mb-2 flex items-center justify-between">
         <span className="flex items-center gap-2 text-sm font-semibold text-foreground">
-          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-600/10 text-blue-600">
+          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-600/10 text-emerald-600">
             {icon}
           </span>
           {label}
         </span>
-        <span className="rounded-lg bg-blue-600/10 px-2.5 py-1 font-heading text-sm font-bold text-blue-600">
+        <span className="rounded-lg bg-emerald-600/10 px-2.5 py-1 font-heading text-sm font-bold text-emerald-600">
           {value}{unit}
         </span>
       </div>
@@ -232,8 +232,8 @@ function Slider({
         onChange={(e) => onChange(Number(e.target.value))}
         className="h-2 w-full cursor-pointer appearance-none rounded-full outline-none
           [&::-webkit-slider-runnable-track]:rounded-full
-          [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:bg-blue-600 [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:transition-transform [&::-webkit-slider-thumb]:hover:scale-110
-          [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:bg-blue-600 [&::-moz-range-thumb]:rounded-full"
+          [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:bg-emerald-600 [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:transition-transform [&::-webkit-slider-thumb]:hover:scale-110
+          [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:bg-emerald-600 [&::-moz-range-thumb]:rounded-full"
         style={{
           background: `linear-gradient(to right, oklch(0.546 0.215 262.88) 0%, oklch(0.715 0.143 194) ${pct}%, oklch(0.92 0 0) ${pct}%, oklch(0.92 0 0) 100%)`,
         }}
@@ -247,7 +247,7 @@ function ResultCard({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-xl bg-white/12 px-3.5 py-3 backdrop-blur">
       <p className="font-heading text-lg font-extrabold leading-none">{value}</p>
-      <p className="mt-1 text-[11px] leading-tight text-blue-50/85">{label}</p>
+      <p className="mt-1 text-[11px] leading-tight text-emerald-50/85">{label}</p>
     </div>
   )
 }

@@ -67,7 +67,7 @@ export function TopBar({ className }: { className?: string }) {
           <Button
             type="button"
             onClick={scrollToForm}
-            className="h-9 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 px-3 text-xs font-semibold shadow-md shadow-blue-600/20 transition-transform hover:scale-[1.02] sm:px-4 sm:text-sm"
+            className="h-9 rounded-full bg-gradient-to-r from-emerald-600 to-cyan-500 px-3 text-xs font-semibold shadow-md shadow-emerald-600/20 transition-transform hover:scale-[1.02] sm:px-4 sm:text-sm"
           >
             <CalendarClock className="mr-1.5 h-3.5 w-3.5" />
             <span className="hidden xs:inline sm:inline">

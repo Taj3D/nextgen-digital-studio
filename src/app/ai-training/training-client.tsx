@@ -428,7 +428,7 @@ function StickyBottomCTA({ isBn, seats }: { isBn: boolean; seats: number }) {
         <button
           type="button"
           onClick={scrollToEnroll}
-          className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 px-5 py-2.5 text-xs font-bold text-white shadow-lg"
+          className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-600 to-cyan-500 px-5 py-2.5 text-xs font-bold text-white shadow-lg"
         >
           <CheckCircle2 className="h-3.5 w-3.5" />
           {t('aiTraining.v2.stickyEnroll')}
@@ -571,7 +571,7 @@ export function TrainingClient() {
                 {isBn ? '১০০% টাকা ফেরত' : '100% Money Back'}
               </span>
               <span className="flex items-center gap-1.5">
-                <Lock className="h-3.5 w-3.5 text-blue-500" />
+                <Lock className="h-3.5 w-3.5 text-emerald-500" />
                 SSL {isBn ? 'নিরাপদ' : 'Secure'}
               </span>
             </div>
@@ -674,7 +674,7 @@ export function TrainingClient() {
                   { icon: Clock, text: t('aiTraining.v2.why3') },
                 ].map(({ icon: Icon, text }, i) => (
                   <li key={i} className="flex items-start gap-3 text-sm sm:text-[15px]">
-                    <Icon className="mt-0.5 h-5 w-5 shrink-0 text-blue-500" />
+                    <Icon className="mt-0.5 h-5 w-5 shrink-0 text-emerald-500" />
                     <span>{text}</span>
                   </li>
                 ))}
@@ -776,7 +776,7 @@ export function TrainingClient() {
         {/* ===== 8. OFFER STACK ===== */}
         <section className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16">
           <div className="relative overflow-hidden rounded-3xl bg-slate-900 p-6 text-white shadow-2xl sm:p-8">
-            <div className="absolute -right-1/4 -top-1/2 h-[200%] w-1/2 rounded-full bg-blue-500/10 blur-3xl" />
+            <div className="absolute -right-1/4 -top-1/2 h-[200%] w-1/2 rounded-full bg-emerald-500/10 blur-3xl" />
             <div className="relative">
               <span className="inline-block rounded-full bg-amber-500 px-4 py-1 text-xs font-bold text-slate-900">
                 <Flame className="mr-1 inline h-3 w-3" />
@@ -1238,7 +1238,7 @@ export function TrainingClient() {
 
         {/* ===== 18. GUARANTEE ===== */}
         <section className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16">
-          <div className="relative overflow-hidden rounded-3xl border border-blue-200/60 bg-blue-50/60 p-6 text-center dark:bg-blue-950/20 sm:p-8">
+          <div className="relative overflow-hidden rounded-3xl border border-emerald-200/60 bg-emerald-50/60 p-6 text-center dark:bg-emerald-950/20 sm:p-8">
             <div className="absolute -bottom-8 -right-8 text-[10rem] opacity-5">🛡️</div>
             <div className="relative">
               <div className="text-4xl">🛡️</div>
@@ -1256,7 +1256,7 @@ export function TrainingClient() {
                 ].map((b) => (
                   <span
                     key={b}
-                    className="rounded-full border border-blue-200 bg-background/70 px-3 py-1 text-xs font-semibold text-blue-700 dark:text-blue-300"
+                    className="rounded-full border border-emerald-200 bg-background/70 px-3 py-1 text-xs font-semibold text-emerald-700 dark:text-emerald-300"
                   >
                     {b}
                   </span>

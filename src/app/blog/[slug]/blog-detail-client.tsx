@@ -85,7 +85,7 @@ export function BlogDetailClient({ slug }: { slug: string }) {
         <h1 className="font-heading text-3xl font-bold">{t('blog.notFound')}</h1>
         <Link
           href="/blog"
-          className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:underline"
+          className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-emerald-600 hover:underline"
         >
           <ArrowLeft className="h-4 w-4" /> {t('blog.backToBlog')}
         </Link>
@@ -115,7 +115,7 @@ export function BlogDetailClient({ slug }: { slug: string }) {
         {/* Hero */}
         <div className="mb-8">
           <div className="flex flex-wrap items-center gap-3 mb-4">
-            <span className="rounded-full bg-blue-600/10 px-3 py-1 text-xs font-semibold text-blue-600">
+            <span className="rounded-full bg-emerald-600/10 px-3 py-1 text-xs font-semibold text-emerald-600">
               {tr(post.category)}
             </span>
             <span className="flex items-center gap-1 text-xs text-muted-foreground">
@@ -130,7 +130,7 @@ export function BlogDetailClient({ slug }: { slug: string }) {
           </h1>
           <p className="mt-4 text-lg text-muted-foreground">{tr(post.excerpt)}</p>
           <div className="mt-5 flex items-center gap-3 border-t border-border/60 pt-5">
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-cyan-500 text-xs font-bold text-white">
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-emerald-600 to-cyan-500 text-xs font-bold text-white">
               {isBn ? 'তাজ' : 'Taj'}
             </span>
             <div>
@@ -141,7 +141,7 @@ export function BlogDetailClient({ slug }: { slug: string }) {
         </div>
 
         {/* Hero banner */}
-        <div className="relative mb-8 aspect-[2/1] overflow-hidden rounded-3xl bg-gradient-to-br from-blue-600 to-cyan-500">
+        <div className="relative mb-8 aspect-[2/1] overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-600 to-cyan-500">
           <div className="absolute inset-0 bg-grid opacity-20" />
           <div className="absolute inset-0 flex items-center justify-center p-8">
             <p className="text-center font-heading text-2xl font-extrabold leading-tight text-white sm:text-3xl">
@@ -160,14 +160,14 @@ export function BlogDetailClient({ slug }: { slug: string }) {
 
         {/* Bengali-mode note: full article body is in English for now */}
         {isBn && (
-          <p className="mt-6 rounded-xl border border-blue-600/20 bg-blue-600/[0.04] px-4 py-3 text-xs text-muted-foreground">
+          <p className="mt-6 rounded-xl border border-emerald-600/20 bg-emerald-600/[0.04] px-4 py-3 text-xs text-muted-foreground">
             📖 সম্পূর্ণ আর্টিকেলটি ইংরেজিতে প্রকাশিত। উপরের সারাংশটি বাংলায় দেখুন।
           </p>
         )}
 
         {/* CTA */}
-        <div className="mt-12 overflow-hidden rounded-3xl border border-blue-600/30 bg-gradient-to-br from-blue-600/[0.06] to-cyan-500/[0.06] p-6 text-center sm:p-8">
-          <Sparkles className="mx-auto h-8 w-8 text-blue-600" />
+        <div className="mt-12 overflow-hidden rounded-3xl border border-emerald-600/30 bg-gradient-to-br from-emerald-600/[0.06] to-cyan-500/[0.06] p-6 text-center sm:p-8">
+          <Sparkles className="mx-auto h-8 w-8 text-emerald-600" />
           <h3 className="mt-3 font-heading text-xl font-bold sm:text-2xl">
             {t('blog.detailCtaTitle')}
           </h3>
@@ -176,7 +176,7 @@ export function BlogDetailClient({ slug }: { slug: string }) {
           </p>
           <Link
             href="/#lead-form"
-            className="mt-5 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-blue-600/25 transition-transform hover:scale-[1.02]"
+            className="mt-5 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-500 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-emerald-600/25 transition-transform hover:scale-[1.02]"
           >
             {t('blog.detailCtaButton')}
             <ArrowRight className="h-4 w-4" />
@@ -192,12 +192,12 @@ export function BlogDetailClient({ slug }: { slug: string }) {
                 <Link
                   key={rp.slug}
                   href={`/blog/${rp.slug}`}
-                  className="group rounded-2xl border border-border/60 bg-card p-5 transition-all hover:border-blue-600/40 hover:shadow-lg"
+                  className="group rounded-2xl border border-border/60 bg-card p-5 transition-all hover:border-emerald-600/40 hover:shadow-lg"
                 >
-                  <span className="rounded-full bg-blue-600/10 px-2.5 py-0.5 text-[10px] font-semibold text-blue-600">
+                  <span className="rounded-full bg-emerald-600/10 px-2.5 py-0.5 text-[10px] font-semibold text-emerald-600">
                     {tr(rp.category)}
                   </span>
-                  <h4 className="mt-2 font-heading text-sm font-bold leading-snug group-hover:text-blue-600">
+                  <h4 className="mt-2 font-heading text-sm font-bold leading-snug group-hover:text-emerald-600">
                     {tr(rp.title)}
                   </h4>
                   <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{tr(rp.excerpt)}</p>

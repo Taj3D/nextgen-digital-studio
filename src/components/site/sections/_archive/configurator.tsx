@@ -58,7 +58,7 @@ export function Configurator() {
   return (
     <section id="configurator" className="relative scroll-mt-24 overflow-hidden py-20 sm:py-28">
       <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute left-1/3 top-0 h-72 w-72 rounded-full bg-blue-600/10 blur-[100px]" />
+        <div className="absolute left-1/3 top-0 h-72 w-72 rounded-full bg-emerald-600/10 blur-[100px]" />
         <div className="absolute right-1/3 bottom-0 h-72 w-72 rounded-full bg-cyan-500/10 blur-[100px]" />
       </div>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -86,8 +86,8 @@ export function Configurator() {
                     className={cn(
                       "rounded-full px-4 py-1.5 text-xs font-semibold transition-all",
                       category === c
-                        ? "bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-md shadow-blue-600/25"
-                        : "border border-border/60 text-muted-foreground hover:border-blue-600/40 hover:text-foreground",
+                        ? "bg-gradient-to-r from-emerald-600 to-cyan-500 text-white shadow-md shadow-emerald-600/25"
+                        : "border border-border/60 text-muted-foreground hover:border-emerald-600/40 hover:text-foreground",
                     )}
                   >
                     {c}
@@ -106,8 +106,8 @@ export function Configurator() {
                       className={cn(
                         "group relative flex flex-col items-start rounded-2xl border p-4 text-left transition-all",
                         isSelected
-                          ? "border-blue-600/50 bg-blue-600/[0.04] shadow-md shadow-blue-600/10"
-                          : "border-border/60 hover:border-blue-600/30 hover:bg-muted/30",
+                          ? "border-emerald-600/50 bg-emerald-600/[0.04] shadow-md shadow-emerald-600/10"
+                          : "border-border/60 hover:border-emerald-600/30 hover:bg-muted/30",
                       )}
                     >
                       {item.popular && (
@@ -118,13 +118,13 @@ export function Configurator() {
                       <div className="mb-3 flex w-full items-center justify-between">
                         <div className={cn(
                           "flex h-10 w-10 items-center justify-center rounded-lg transition-colors",
-                          isSelected ? "bg-gradient-to-br from-blue-600 to-cyan-500 text-white" : "bg-blue-600/10 text-blue-600",
+                          isSelected ? "bg-gradient-to-br from-emerald-600 to-cyan-500 text-white" : "bg-emerald-600/10 text-emerald-600",
                         )}>
                           <Icon className="h-5 w-5" />
                         </div>
                         <span className={cn(
                           "flex h-6 w-6 items-center justify-center rounded-full border-2 transition-all",
-                          isSelected ? "border-blue-600 bg-blue-600 text-white" : "border-border text-transparent",
+                          isSelected ? "border-emerald-600 bg-emerald-600 text-white" : "border-border text-transparent",
                         )}>
                           {isSelected ? <Check className="h-3.5 w-3.5" strokeWidth={3} /> : <Plus className="h-3.5 w-3.5" />}
                         </span>
@@ -143,7 +143,7 @@ export function Configurator() {
 
           {/* Right: summary */}
           <Reveal delay={0.1}>
-            <div className="sticky top-24 overflow-hidden rounded-3xl border border-border/60 bg-gradient-to-br from-blue-600 to-cyan-500 p-6 text-white shadow-2xl shadow-blue-600/20">
+            <div className="sticky top-24 overflow-hidden rounded-3xl border border-border/60 bg-gradient-to-br from-emerald-600 to-cyan-500 p-6 text-white shadow-2xl shadow-emerald-600/20">
               <div className="absolute inset-0 bg-grid opacity-10" />
               <div className="relative">
                 <div className="flex items-center justify-between">
@@ -151,7 +151,7 @@ export function Configurator() {
                   {selected.size > 0 && (
                     <button
                       onClick={reset}
-                      className="flex items-center gap-1 text-xs text-blue-50/80 transition-colors hover:text-white"
+                      className="flex items-center gap-1 text-xs text-emerald-50/80 transition-colors hover:text-white"
                     >
                       <RotateCcw className="h-3 w-3" /> {t('configurator.reset')}
                     </button>
@@ -167,7 +167,7 @@ export function Configurator() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="py-6 text-center text-sm text-blue-50/70"
+                        className="py-6 text-center text-sm text-emerald-50/70"
                       >
                         {t('configurator.selectServices')}
                       </motion.p>
@@ -189,7 +189,7 @@ export function Configurator() {
                             <button
                               aria-label={`Remove ${item.name}`}
                               onClick={() => toggle(item.id)}
-                              className="flex h-5 w-5 items-center justify-center rounded text-blue-50/60 hover:bg-white/20 hover:text-white"
+                              className="flex h-5 w-5 items-center justify-center rounded text-emerald-50/60 hover:bg-white/20 hover:text-white"
                             >
                               ✕
                             </button>
@@ -217,7 +217,7 @@ export function Configurator() {
                 {/* Pricing */}
                 <div className="mt-5 space-y-2 border-t border-white/20 pt-4">
                   {savings > 0 && (
-                    <div className="flex justify-between text-sm text-blue-50/80">
+                    <div className="flex justify-between text-sm text-emerald-50/80">
                       <span>{t('configurator.subtotal')}</span>
                       <span className="line-through">৳{total.toLocaleString()}</span>
                     </div>
@@ -229,7 +229,7 @@ export function Configurator() {
                     </div>
                   )}
                   <div className="flex items-end justify-between">
-                    <span className="text-sm text-blue-50/90">{t('configurator.monthlyTotal')}</span>
+                    <span className="text-sm text-emerald-50/90">{t('configurator.monthlyTotal')}</span>
                     <motion.span
                       key={discountedTotal}
                       initial={{ opacity: 0, y: -8 }}
@@ -247,14 +247,14 @@ export function Configurator() {
                   className={cn(
                     "mt-5 flex w-full items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-bold transition-transform",
                     selectedItems.length > 0
-                      ? "bg-white text-blue-700 shadow-lg hover:scale-[1.02]"
+                      ? "bg-white text-emerald-700 shadow-lg hover:scale-[1.02]"
                       : "cursor-not-allowed bg-white/20 text-white/50",
                   )}
                 >
                   {t('configurator.getThisStack')}
                   <ArrowRight className="h-4 w-4" />
                 </button>
-                <p className="mt-2 text-center text-[11px] text-blue-50/70">
+                <p className="mt-2 text-center text-[11px] text-emerald-50/70">
                   {t('configurator.freeCall')}
                 </p>
               </div>

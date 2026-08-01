@@ -48,8 +48,8 @@ export function Team() {
         <div className="mt-14 grid gap-5 md:grid-cols-3">
           {values.map((v, i) => (
             <Reveal key={v.title} delay={i * 0.08}>
-              <div className="group h-full rounded-2xl border border-border/60 bg-card p-6 card-hover hover:border-blue-600/30 hover:shadow-xl hover:shadow-blue-600/5">
-                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500 text-white shadow-lg shadow-blue-600/25 transition-transform group-hover:scale-110">
+              <div className="group h-full rounded-2xl border border-border/60 bg-card p-6 card-hover hover:border-emerald-600/30 hover:shadow-xl hover:shadow-emerald-600/5">
+                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-600 to-cyan-500 text-white shadow-lg shadow-emerald-600/25 transition-transform group-hover:scale-110">
                   <v.icon className="h-6 w-6" />
                 </div>
                 <h3 className="font-heading text-lg font-bold">{tr(v.title)}</h3>
@@ -71,9 +71,9 @@ export function Team() {
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {teamMembers.map((m, i) => (
               <Reveal key={m.initials} delay={i * 0.08}>
-                <div className="group relative h-full overflow-hidden rounded-2xl border border-border/60 bg-card card-hover hover:border-blue-600/40 hover:shadow-xl hover:shadow-blue-600/5">
+                <div className="group relative h-full overflow-hidden rounded-2xl border border-border/60 bg-card card-hover hover:border-emerald-600/40 hover:shadow-xl hover:shadow-emerald-600/5">
                   {/* Avatar area */}
-                  <div className="relative aspect-[4/5] overflow-hidden bg-gradient-to-br from-blue-600/10 to-cyan-500/10">
+                  <div className="relative aspect-[4/5] overflow-hidden bg-gradient-to-br from-emerald-600/10 to-cyan-500/10">
                     {m.image ? (
                       <img
                         src={m.image}
@@ -95,7 +95,7 @@ export function Team() {
                         target="_blank"
                         rel="noreferrer"
                         aria-label={`${m.name} on LinkedIn`}
-                        className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-white shadow-lg transition-transform hover:scale-110"
+                        className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-600 text-white shadow-lg transition-transform hover:scale-110"
                       >
                         <Linkedin className="h-4 w-4" />
                       </a>
@@ -105,9 +105,9 @@ export function Team() {
                   <div className="p-4">
                     <div className="flex items-center gap-1.5">
                       <h4 className="font-heading text-sm font-bold leading-tight">{tr(m.name)}</h4>
-                      {i === 0 && <Sparkles className="h-3.5 w-3.5 text-blue-600" />}
+                      {i === 0 && <Sparkles className="h-3.5 w-3.5 text-emerald-600" />}
                     </div>
-                    <p className="mt-0.5 text-xs font-medium text-blue-600">{tr(m.role)}</p>
+                    <p className="mt-0.5 text-xs font-medium text-emerald-600">{tr(m.role)}</p>
                     <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{tr(m.bio)}</p>
                   </div>
                 </div>
@@ -121,7 +121,7 @@ export function Team() {
           <Button
             onClick={() => openWith("Team section")}
             size="lg"
-            className="h-13 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 px-7 text-[15px] font-semibold shadow-xl shadow-blue-600/25 transition-transform hover:scale-[1.02]"
+            className="h-13 rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-500 px-7 text-[15px] font-semibold shadow-xl shadow-emerald-600/25 transition-transform hover:scale-[1.02]"
           >
             Work with our team
             <ArrowRight className="ml-2 h-4 w-4" />

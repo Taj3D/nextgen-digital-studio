@@ -125,7 +125,7 @@ export function PaymentInstructions({
         </div>
         {note && (
           <div className="flex items-start gap-2">
-            <Wallet className="mt-0.5 h-3.5 w-3.5 shrink-0 text-blue-600" />
+            <Wallet className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-600" />
             <span className="font-medium">{note}</span>
           </div>
         )}
