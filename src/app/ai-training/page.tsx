@@ -96,6 +96,88 @@ const faqLd = {
   ],
 }
 
+/**
+ * Person schema (founder/instructor) — strengthens entity recognition
+ * for Taj Bhai and boosts E-E-A-T signals.
+ */
+const personLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Taj Bhai',
+  jobTitle: 'AI Implementation Specialist',
+  worksFor: { '@type': 'Organization', name: 'NextGen Digital Studio' },
+  url: 'https://nextgendigitalstudio.com/founder',
+  sameAs: [
+    'https://www.linkedin.com/in/nextgen-digital-studio',
+    'https://github.com/Taj3D',
+  ],
+  knowsAbout: [
+    'Artificial Intelligence',
+    'Automation',
+    'No-Code Development',
+    'Prompt Engineering',
+  ],
+}
+
+/**
+ * BreadcrumbList schema — renders breadcrumb rich result in SERPs.
+ */
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Home',
+      item: 'https://nextgendigitalstudio.com',
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'AI Training',
+      item: 'https://nextgendigitalstudio.com/ai-training',
+    },
+  ],
+}
+
+/**
+ * Event schema — live bootcamp batch. Eligible for Google "Events" rich
+ * results and Discover surfacing.
+ */
+const eventLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Event',
+  name: 'AI Software Builder Bootcamp — Live Batch August 2026',
+  startDate: '2026-08-11T21:00:00+06:00',
+  endDate: '2026-08-17T22:00:00+06:00',
+  eventStatus: 'https://schema.org/EventScheduled',
+  eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
+  location: {
+    '@type': 'VirtualLocation',
+    url: 'https://zoom.us',
+  },
+  image: 'https://nextgendigitalstudio.com/images/og-bootcamp.jpg',
+  description:
+    '1-week intensive AI bootcamp — build software with AI, no coding required. Live Zoom classes daily 9 PM.',
+  offers: {
+    '@type': 'Offer',
+    price: '1000',
+    priceCurrency: 'BDT',
+    availability: 'https://schema.org/InStock',
+    url: 'https://nextgendigitalstudio.com/ai-training',
+  },
+  organizer: {
+    '@type': 'Organization',
+    name: 'NextGen Digital Studio',
+    url: 'https://nextgendigitalstudio.com',
+  },
+  performer: {
+    '@type': 'Person',
+    name: 'Taj Bhai',
+  },
+}
+
 export const metadata: Metadata = {
   title: 'AI Software Builder Bootcamp — 1 Week (1000TK) | NextGen',
   description:
@@ -118,13 +200,23 @@ export const metadata: Metadata = {
       'No coding required. 1-week intensive AI bootcamp. Live Zoom + 3 bonuses. Only 1000TK (85% OFF).',
     type: 'website',
     url: 'https://nextgendigitalstudio.com/ai-training',
+    images: [
+      {
+        url: 'https://nextgendigitalstudio.com/images/og-bootcamp.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'AI Software Builder Bootcamp',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'AI Software Builder Bootcamp — 1000TK, 1 Week',
     description: 'Build your own software with AI — no coding required. 85% OFF limited time.',
+    images: ['https://nextgendigitalstudio.com/images/og-bootcamp.jpg'],
   },
   alternates: { canonical: '/ai-training' },
+  other: { 'theme-color': '#f59e0b' },
 }
 
 export default function AiTrainingPage() {
@@ -137,6 +229,18 @@ export default function AiTrainingPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(personLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(eventLd) }}
       />
       <TrainingClient />
     </>

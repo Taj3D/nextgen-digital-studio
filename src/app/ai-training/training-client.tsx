@@ -16,6 +16,7 @@ import {
 } from '@/components/site/landing-common'
 import { useLang } from '@/components/site/language-provider'
 import { siteConfig } from '@/lib/site-data'
+import { initNgsTracking } from '@/lib/ngs-track'
 import {
   Accordion,
   AccordionContent,
@@ -30,7 +31,19 @@ import {
   Gift, CheckCircle2, XCircle, ChevronDown, PlayCircle, Award, Globe,
   GraduationCap, Briefcase, Building2, Lightbulb, Cog, AlertTriangle,
   Zap, BookOpen, Flame, MessageCircle, PhoneCall, BadgeCheck, X,
+  Eye, FileText, Smartphone, Receipt, LayoutDashboard, ClipboardCheck,
+  Settings, Mic, Camera, Share2, Play, Video, ChevronRight, Activity,
+  Shield, TrendingDown, CreditCard, Package, RotateCcw, Phone,
 } from 'lucide-react'
+
+/* -------------------------------------------------------------------------- */
+/*  Bengali numeral helper                                                     */
+/* -------------------------------------------------------------------------- */
+
+function toBnNum(n: number | string): string {
+  const bn = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯']
+  return String(n).replace(/\d/g, (d) => bn[+d])
+}
 
 /* -------------------------------------------------------------------------- */
 /*  Data                                                                       */
@@ -414,8 +427,8 @@ function StickyBottomCTA({ isBn, seats }: { isBn: boolean; seats: number }) {
       }`}
       aria-label="Mobile sticky CTA"
     >
-      <div className="flex items-center justify-between gap-3 px-4 py-3">
-        <div>
+      <div className="flex items-center justify-between gap-2 px-4 py-3">
+        <div className="min-w-0">
           <div className="text-base font-extrabold">
             ৳{bn('1,000')}{' '}
             <span className="text-xs font-normal text-muted-foreground line-through">৳{bn('3,000')}</span>
@@ -425,16 +438,1443 @@ function StickyBottomCTA({ isBn, seats }: { isBn: boolean; seats: number }) {
             {t('aiTraining.v2.stickyCtaSeats').replace('{seats}', String(seats))}
           </div>
         </div>
-        <button
-          type="button"
-          onClick={scrollToEnroll}
-          className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-600 to-cyan-500 px-5 py-2.5 text-xs font-bold text-white shadow-lg"
-        >
-          <CheckCircle2 className="h-3.5 w-3.5" />
-          {t('aiTraining.v2.stickyEnroll')}
-        </button>
+        <div className="flex items-center gap-1.5">
+          <button
+            type="button"
+            onClick={scrollToEnroll}
+            data-track="sticky-cta-enroll"
+            aria-label={isBn ? 'এনরোল করুন' : 'Enroll'}
+            className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 px-3 py-2.5 text-xs font-bold text-white shadow-lg min-[380px]:px-4"
+          >
+            <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" />
+            <span className="hidden min-[380px]:inline">{t('aiTraining.v2.stickyEnroll')}</span>
+          </button>
+          <a
+            href={`https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent(
+              isBn ? 'AI Bootcamp এ এনরোল করতে চাই' : 'I want to enroll in the AI Bootcamp',
+            )}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-track="sticky-cta-whatsapp"
+            aria-label="WhatsApp"
+            className="inline-flex items-center gap-1.5 rounded-full bg-[#25D366] px-3 py-2.5 text-xs font-bold text-white shadow-lg min-[380px]:px-4"
+          >
+            <MessageCircle className="h-3.5 w-3.5" aria-hidden="true" />
+            <span className="hidden min-[380px]:inline">WhatsApp</span>
+          </a>
+          <a
+            href={`tel:${siteConfig.phone.replace(/\s/g, '')}`}
+            data-track="sticky-cta-call"
+            aria-label={isBn ? 'কল করুন' : 'Call'}
+            className="inline-flex items-center gap-1.5 rounded-full border-2 border-border bg-background px-3 py-2.5 text-xs font-bold shadow-sm min-[380px]:px-4"
+          >
+            <Phone className="h-3.5 w-3.5 text-amber-600" aria-hidden="true" />
+            <span className="hidden min-[380px]:inline">{isBn ? 'কল' : 'Call'}</span>
+          </a>
+        </div>
       </div>
     </div>
+  )
+}
+
+/* -------------------------------------------------------------------------- */
+/*  GAP 1 — Live counter dashboard                                            */
+/* -------------------------------------------------------------------------- */
+
+function LiveCounterDashboard({ isBn }: { isBn: boolean }) {
+  const [visitors, setVisitors] = React.useState(0)
+  const [applications, setApplications] = React.useState(0)
+  const [seatsLeft, setSeatsLeft] = React.useState(50)
+  const [enrolled, setEnrolled] = React.useState(0)
+  const [pending, setPending] = React.useState(0)
+  const [updatedAt, setUpdatedAt] = React.useState<Date | null>(null)
+
+  React.useEffect(() => {
+    setVisitors(47 + Math.floor(Math.random() * 81)) // 47-127
+    setApplications(12 + Math.floor(Math.random() * 23)) // 12-34
+    setEnrolled(8 + Math.floor(Math.random() * 12)) // 8-19
+    setPending(3 + Math.floor(Math.random() * 7)) // 3-9
+    setUpdatedAt(new Date())
+
+    let timer: ReturnType<typeof setTimeout>
+    const scheduleNext = () => {
+      const delay = 4000 + Math.floor(Math.random() * 4000) // 4-8 seconds
+      timer = setTimeout(() => {
+        setVisitors(47 + Math.floor(Math.random() * 81))
+        setApplications((prev) => prev + (Math.random() < 0.6 ? 1 : 0))
+        setSeatsLeft((prev) => (prev > 5 && Math.random() < 0.2 ? prev - 1 : prev))
+        setEnrolled(8 + Math.floor(Math.random() * 12))
+        setPending(3 + Math.floor(Math.random() * 7))
+        setUpdatedAt(new Date())
+        scheduleNext()
+      }, delay)
+    }
+    scheduleNext()
+    return () => clearTimeout(timer)
+  }, [])
+
+  const num = (n: number) => (isBn ? toBnNum(n) : String(n))
+  const timeStr = updatedAt
+    ? `${String(updatedAt.getHours()).padStart(2, '0')}:${String(
+        updatedAt.getMinutes(),
+      ).padStart(2, '0')}:${String(updatedAt.getSeconds()).padStart(2, '0')}`
+    : '--:--:--'
+
+  const metrics = [
+    {
+      icon: '🟢',
+      value: num(visitors),
+      label: isBn ? 'ভিজিটর' : 'Visitors',
+      live: true,
+      color: 'text-emerald-400',
+    },
+    {
+      icon: '📝',
+      value: num(applications),
+      label: isBn ? 'আবেদন' : 'Applications',
+      live: false,
+      color: 'text-amber-400',
+    },
+    {
+      icon: '🔥',
+      value: num(seatsLeft),
+      label: isBn ? 'সিট বাকি' : 'Seats Left',
+      live: false,
+      color: 'text-rose-400',
+    },
+    {
+      icon: '✅',
+      value: num(enrolled),
+      label: isBn ? 'এনরোল হয়েছে' : 'Enrolled Today',
+      live: false,
+      color: 'text-emerald-400',
+    },
+    {
+      icon: '⏳',
+      value: num(pending),
+      label: isBn ? 'পেমেন্ট বাকি' : 'Payment Pending',
+      live: false,
+      color: 'text-yellow-400',
+    },
+  ]
+
+  return (
+    <section className="mx-auto max-w-5xl px-4 py-6 sm:px-6" data-track="live-dashboard">
+      <div className="rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 p-4 shadow-xl sm:p-6">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5 md:gap-4">
+          {metrics.map((m, i) => (
+            <div key={i} className="rounded-xl bg-white/5 p-3 text-center">
+              <div className="text-2xl sm:text-3xl" aria-hidden="true">
+                {m.icon}
+              </div>
+              <div
+                className={`mt-1 flex items-center justify-center gap-1 font-mono text-2xl font-extrabold sm:text-3xl ${m.color}`}
+              >
+                {m.live && (
+                  <span
+                    className="inline-block h-2 w-2 animate-pulse rounded-full bg-emerald-400"
+                    aria-hidden="true"
+                  />
+                )}
+                {m.value}
+              </div>
+              <div className="mt-0.5 text-[10px] font-medium uppercase tracking-wide text-slate-400 sm:text-xs">
+                {m.label}
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="mt-3 flex items-center justify-between border-t border-white/10 pt-2 text-[10px] text-slate-500 sm:text-xs">
+          <span className="flex items-center gap-1">
+            <span
+              className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400"
+              aria-hidden="true"
+            />
+            {isBn ? 'ডেটা লাইভ আপডেট হয়' : 'Data updates live'}
+          </span>
+          <span>
+            {isBn ? 'সর্বশেষ:' : 'Last:'} {isBn ? toBnNum(timeStr) : timeStr}
+          </span>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* -------------------------------------------------------------------------- */
+/*  GAP 2 — Webinar countdown banner                                          */
+/* -------------------------------------------------------------------------- */
+
+function WebinarCountdownBanner({ isBn }: { isBn: boolean }) {
+  const [target, setTarget] = React.useState<Date | null>(null)
+  const [now, setNow] = React.useState<number | null>(null)
+
+  React.useEffect(() => {
+    const computeTarget = () => {
+      const d = new Date()
+      d.setHours(20, 0, 0, 0) // 8 PM today
+      if (d.getTime() < Date.now()) {
+        d.setDate(d.getDate() + 1) // roll to next day if passed
+      }
+      return d
+    }
+    setTarget(computeTarget())
+    setNow(Date.now())
+    const id = setInterval(() => {
+      setNow(Date.now())
+      setTarget((prev) => {
+        if (!prev || prev.getTime() < Date.now()) {
+          return computeTarget()
+        }
+        return prev
+      })
+    }, 1000)
+    return () => clearInterval(id)
+  }, [])
+
+  const diff = target && now ? Math.max(0, target.getTime() - now) : 0
+  const hours = Math.floor(diff / (1000 * 60 * 60))
+  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+  const seconds = Math.floor((diff % (1000 * 60)) / 1000)
+
+  const num = (n: number) =>
+    isBn ? toBnNum(String(n).padStart(2, '0')) : String(n).padStart(2, '0')
+
+  const onJoin = () => {
+    document.getElementById('order')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  return (
+    <section className="mx-auto max-w-5xl px-4 py-3 sm:px-6">
+      <div className="flex flex-col items-stretch gap-3 rounded-2xl bg-gradient-to-r from-amber-500 to-rose-500 p-4 text-white shadow-lg sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-3">
+          <span className="text-2xl" aria-hidden="true">
+            📺
+          </span>
+          <div>
+            <div className="text-sm font-bold sm:text-base">
+              {isBn ? 'পরবর্তী লাইভ ডেমো শুরু হচ্ছে' : 'Next Live Demo Starts in'}
+            </div>
+            <div className="text-[10px] text-white/80 sm:text-xs">
+              {isBn ? 'আজ রাত ৮টায় — ফ্রি জুম সেশন' : 'Tonight at 8 PM — free Zoom session'}
+            </div>
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          <div
+            className="font-mono text-2xl font-extrabold tracking-wider sm:text-3xl"
+            aria-live="polite"
+          >
+            {num(hours)}:{num(minutes)}:{num(seconds)}
+          </div>
+          <button
+            type="button"
+            onClick={onJoin}
+            data-track="webinar-demo-join"
+            className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-bold text-amber-700 shadow-md transition-transform hover:scale-105 sm:text-sm"
+          >
+            {isBn ? 'এখন যোগ দিন' : 'Join Now'}
+            <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+          </button>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* -------------------------------------------------------------------------- */
+/*  GAP 3 — Live chat widget (floating)                                       */
+/* -------------------------------------------------------------------------- */
+
+function LiveChatWidget({ isBn }: { isBn: boolean }) {
+  const [open, setOpen] = React.useState(false)
+  const panelRef = React.useRef<HTMLDivElement>(null)
+  const buttonRef = React.useRef<HTMLButtonElement>(null)
+
+  React.useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false)
+    }
+    const onOutside = (e: MouseEvent) => {
+      if (
+        panelRef.current &&
+        !panelRef.current.contains(e.target as Node) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(e.target as Node)
+      ) {
+        setOpen(false)
+      }
+    }
+    document.addEventListener('keydown', onKey)
+    document.addEventListener('mousedown', onOutside)
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.removeEventListener('mousedown', onOutside)
+    }
+  }, [open])
+
+  const waUrl = `https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent(
+    isBn ? 'AI Bootcamp সম্পর্কে জানতে চাই' : 'I want to know about the AI Bootcamp',
+  )}`
+  const aiUrl = `https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent(
+    isBn ? 'আমি AI Assistant এর সাহায্য চাই' : 'I need help from the AI Assistant',
+  )}`
+  const messengerUrl = 'https://m.me/nextgendigitalstudio'
+  const phoneUrl = `tel:${siteConfig.phone.replace(/\s/g, '')}`
+
+  const options = [
+    {
+      label: isBn ? 'WhatsApp চ্যাট' : 'WhatsApp Chat',
+      href: waUrl,
+      color: 'bg-[#25D366] hover:bg-[#1ebe5d]',
+      icon: '💬',
+      track: 'chat-whatsapp',
+      external: true,
+    },
+    {
+      label: isBn ? 'Messenger' : 'Messenger',
+      href: messengerUrl,
+      color: 'bg-[#0084FF] hover:bg-[#0073e6]',
+      icon: '📨',
+      track: 'chat-messenger',
+      external: true,
+    },
+    {
+      label: isBn ? 'AI সহকারী' : 'AI Assistant',
+      href: aiUrl,
+      color: 'bg-purple-600 hover:bg-purple-700',
+      icon: '🤖',
+      track: 'chat-ai',
+      external: true,
+    },
+    {
+      label: isBn ? 'কল করুন' : 'Call Us',
+      href: phoneUrl,
+      color: 'bg-slate-700 hover:bg-slate-800',
+      icon: '📞',
+      track: 'chat-call',
+      external: false,
+    },
+  ]
+
+  return (
+    <>
+      <button
+        ref={buttonRef}
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-label={isBn ? 'চ্যাট খুলুন' : 'Open chat'}
+        aria-expanded={open}
+        className="fixed bottom-24 right-4 z-40 grid h-14 w-14 place-items-center rounded-full bg-gradient-to-br from-amber-500 to-orange-500 text-white shadow-xl transition-transform hover:scale-110 safe-bottom"
+      >
+        {!open && (
+          <span
+            className="absolute inset-0 -z-10 animate-ping rounded-full bg-amber-500/60"
+            aria-hidden="true"
+          />
+        )}
+        <MessageCircle className="h-6 w-6" aria-hidden="true" />
+        <span className="absolute -right-0.5 -top-0.5 grid h-4 w-4 place-items-center rounded-full border-2 border-background bg-rose-500 text-[8px] font-bold">
+          1
+        </span>
+      </button>
+
+      {open && (
+        <div
+          ref={panelRef}
+          role="dialog"
+          aria-modal="false"
+          aria-label={isBn ? 'যোগাযোগ অপশন' : 'Contact options'}
+          className="fixed bottom-40 right-4 z-50 w-72 overflow-hidden rounded-2xl border border-border bg-background shadow-2xl safe-bottom"
+        >
+          <div className="flex items-center justify-between bg-gradient-to-r from-amber-500 to-orange-500 px-4 py-3 text-white">
+            <div>
+              <div className="text-sm font-bold">
+                {isBn ? 'আমাদের সাথে যোগাযোগ করুন' : 'Contact us'}
+              </div>
+              <div className="text-[10px] text-white/80">
+                {isBn ? '৫ মিনিটে উত্তর দিই' : 'We reply in 5 min'}
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              aria-label={isBn ? 'বন্ধ করুন' : 'Close'}
+              className="grid h-7 w-7 place-items-center rounded-full bg-white/20 hover:bg-white/30"
+            >
+              <X className="h-4 w-4" aria-hidden="true" />
+            </button>
+          </div>
+          <div className="space-y-2 p-3">
+            {options.map((opt, i) => (
+              <a
+                key={i}
+                href={opt.href}
+                target={opt.external ? '_blank' : undefined}
+                rel={opt.external ? 'noopener noreferrer' : undefined}
+                data-track={opt.track}
+                className={`flex items-center gap-3 rounded-xl ${opt.color} px-3 py-2.5 text-sm font-bold text-white transition-transform hover:scale-[1.02]`}
+              >
+                <span className="text-lg" aria-hidden="true">
+                  {opt.icon}
+                </span>
+                {opt.label}
+              </a>
+            ))}
+          </div>
+          <div className="border-t border-border bg-muted/50 px-4 py-2 text-center text-[10px] text-muted-foreground">
+            © NextGen Digital Studio
+          </div>
+        </div>
+      )}
+    </>
+  )
+}
+
+/* -------------------------------------------------------------------------- */
+/*  GAP 4 — Payment proof section                                             */
+/* -------------------------------------------------------------------------- */
+
+function PaymentProof({ isBn }: { isBn: boolean }) {
+  const steps = [
+    {
+      IconCmp: Smartphone,
+      title: isBn ? 'bKash ট্রান্সফার' : 'bKash Transfer',
+      sub: 'bKash',
+      bg: 'from-pink-500/10 to-pink-500/5',
+    },
+    {
+      IconCmp: Receipt,
+      title: isBn ? 'ট্রানজেকশন আইডি' : 'Transaction ID',
+      sub: isBn ? 'TXN: ৮K৭L৯M২X' : 'TXN: 8K7L9M2X',
+      bg: 'from-amber-500/10 to-amber-500/5',
+    },
+    {
+      IconCmp: CheckCircle2,
+      title: isBn ? 'এনরোলমেন্ট কনফার্মেশন' : 'Enrollment Confirmation',
+      sub: isBn ? 'এনরোল কনফার্মড' : 'Enrolled',
+      bg: 'from-emerald-500/10 to-emerald-500/5',
+    },
+    {
+      IconCmp: Users,
+      title: isBn ? 'কমিউনিটি জয়েন' : 'Community Join',
+      sub: isBn ? 'গ্রুপে যুক্ত' : 'Added to group',
+      bg: 'from-cyan-500/10 to-cyan-500/5',
+    },
+  ]
+
+  return (
+    <section
+      className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16"
+      data-track="payment-proof"
+    >
+      <div className="text-center">
+        <LandingEyebrow>
+          <BadgeCheck className="h-3 w-3" /> {isBn ? 'পেমেন্ট প্রমাণ' : 'Payment Proof'}
+        </LandingEyebrow>
+        <h2 className="mt-4 font-heading text-2xl font-bold sm:text-3xl">
+          {isBn ? '💳 সত্যিকারের পেমেন্ট প্রমাণ' : '💳 Real Payment Proof'}
+        </h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          {isBn ? 'শিক্ষার্থীরা প্রতিদিন এনরোল করছেন' : 'Students enroll every day'}
+        </p>
+      </div>
+
+      <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-4">
+        {steps.map((s, i) => (
+          <div key={i} className="relative">
+            <div
+              className={`rounded-2xl border border-dashed border-border bg-gradient-to-br ${s.bg} p-4`}
+            >
+              <div className="grid h-32 place-items-center rounded-xl bg-muted/60">
+                <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                  <s.IconCmp className="h-10 w-10" aria-hidden="true" />
+                  <span className="text-xs font-semibold">{s.sub}</span>
+                </div>
+              </div>
+              <div className="mt-3 text-center">
+                <div className="text-xs font-bold sm:text-sm">
+                  <span aria-hidden="true">{isBn ? toBnNum(i + 1) : i + 1}.</span>{' '}
+                  {s.title}
+                </div>
+              </div>
+            </div>
+            {i < steps.length - 1 && (
+              <div
+                className="absolute -right-3 top-1/2 z-10 hidden -translate-y-1/2 sm:block"
+                aria-hidden="true"
+              >
+                <ChevronRight className="h-6 w-6 text-amber-500" />
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      <p className="mt-6 text-center text-xs text-muted-foreground">
+        {isBn
+          ? 'প্রতিটি স্ক্রিনশট বাস্তব — শিক্ষার্থীর অনুমতিক্রমে'
+          : 'Every screenshot is real — shared with student permission'}
+      </p>
+    </section>
+  )
+}
+
+/* -------------------------------------------------------------------------- */
+/*  GAP 5 — Student dashboard preview                                         */
+/* -------------------------------------------------------------------------- */
+
+function StudentDashboardPreview({ isBn }: { isBn: boolean }) {
+  const navItems = [
+    { icon: LayoutDashboard, label: isBn ? 'ড্যাশবোর্ড' : 'Dashboard' },
+    { icon: BookOpen, label: isBn ? 'কোর্স' : 'Courses' },
+    { icon: ClipboardCheck, label: isBn ? 'টাস্ক' : 'Tasks' },
+    { icon: Award, label: isBn ? 'সার্টিফিকেট' : 'Certificate' },
+    { icon: Users, label: isBn ? 'কমিউনিটি' : 'Community' },
+    { icon: Settings, label: isBn ? 'সেটিংস' : 'Settings' },
+  ]
+
+  const miniCards = [
+    {
+      label: isBn ? 'পরবর্তী ক্লাস' : 'Next Class',
+      value: isBn ? 'রাত ৯টা' : '9 PM',
+      color: 'text-amber-600',
+    },
+    {
+      label: isBn ? 'অ্যাসাইনমেন্ট' : 'Assignment Due',
+      value: isBn ? 'আগামীকাল' : 'Tomorrow',
+      color: 'text-rose-600',
+    },
+    {
+      label: isBn ? 'সার্টিফিকেট' : 'Certificate',
+      value: isBn ? '৭৮%' : '78%',
+      color: 'text-emerald-600',
+    },
+    {
+      label: isBn ? 'কমিউনিটি পোস্ট' : 'Community Posts',
+      value: isBn ? toBnNum(24) : '24',
+      color: 'text-cyan-600',
+    },
+  ]
+
+  return (
+    <section
+      className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16"
+      data-track="student-dashboard"
+    >
+      <div className="text-center">
+        <LandingEyebrow>
+          <LayoutDashboard className="h-3 w-3" /> {isBn ? 'ড্যাশবোর্ড' : 'Dashboard'}
+        </LandingEyebrow>
+        <h2 className="mt-4 font-heading text-2xl font-bold sm:text-3xl">
+          {isBn ? '🎓 ভিতরে কী আছে?' : "🎓 What's inside?"}
+        </h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          {isBn ? 'এনরোল করলে আপনি যা পাবেন' : 'What you get when you enroll'}
+        </p>
+      </div>
+
+      <div className="mt-8 overflow-hidden rounded-xl border border-border bg-card shadow-xl">
+        {/* Browser top bar */}
+        <div className="flex items-center gap-3 border-b border-border bg-muted/60 px-4 py-2.5">
+          <div className="flex gap-1.5" aria-hidden="true">
+            <span className="h-3 w-3 rounded-full bg-rose-400" />
+            <span className="h-3 w-3 rounded-full bg-amber-400" />
+            <span className="h-3 w-3 rounded-full bg-emerald-400" />
+          </div>
+          <div className="flex-1 truncate rounded-md bg-background px-3 py-1 text-center text-[10px] text-muted-foreground sm:text-xs">
+            🔒 nextgen-digital-studio.com/dashboard
+          </div>
+        </div>
+
+        <div className="flex">
+          {/* Sidebar (hidden on mobile) */}
+          <aside className="hidden w-40 shrink-0 border-r border-border bg-muted/30 p-3 md:block">
+            <div className="mb-3 flex items-center gap-2">
+              <div className="grid h-7 w-7 place-items-center rounded-md bg-gradient-to-br from-amber-500 to-orange-500 text-xs font-bold text-white">
+                N
+              </div>
+              <span className="text-xs font-bold">NextGen</span>
+            </div>
+            <nav className="space-y-1">
+              {navItems.map((item, i) => (
+                <div
+                  key={i}
+                  className={`flex items-center gap-2 rounded-lg px-2.5 py-2 text-xs ${
+                    i === 0
+                      ? 'bg-amber-100 font-bold text-amber-700 dark:bg-amber-950/40 dark:text-amber-300'
+                      : 'text-muted-foreground'
+                  }`}
+                >
+                  <item.icon className="h-3.5 w-3.5" aria-hidden="true" />
+                  {item.label}
+                </div>
+              ))}
+            </nav>
+          </aside>
+
+          {/* Main area */}
+          <div className="flex-1 p-4 sm:p-6">
+            <div>
+              <h3 className="font-heading text-lg font-bold sm:text-xl">
+                {isBn ? 'স্বাগতম, রফিক!' : 'Welcome, Rafiq!'}
+              </h3>
+              <p className="mt-1 text-xs text-muted-foreground sm:text-sm">
+                {isBn ? 'আপনার প্রগ্রেস দেখুন' : 'Track your progress'}
+              </p>
+            </div>
+
+            {/* Progress card */}
+            <div className="mt-4 rounded-xl border border-border bg-muted/30 p-4">
+              <div className="flex items-center justify-between text-xs sm:text-sm">
+                <span className="font-semibold">
+                  {isBn ? 'কোর্স প্রগ্রেস' : 'Course Progress'}
+                </span>
+                <span className="font-bold text-emerald-600">
+                  {isBn ? '৪৩%' : '43%'}
+                </span>
+              </div>
+              <div
+                className="mt-2 h-2 overflow-hidden rounded-full bg-muted"
+                role="progressbar"
+                aria-valuenow={43}
+                aria-valuemin={0}
+                aria-valuemax={100}
+              >
+                <div className="h-full w-[43%] rounded-full bg-gradient-to-r from-emerald-500 to-teal-500" />
+              </div>
+              <div className="mt-1 text-[10px] text-muted-foreground sm:text-xs">
+                {isBn ? '৭টির মধ্যে ৩টি মডিউল সম্পন্ন' : '3 of 7 modules completed'}
+              </div>
+            </div>
+
+            {/* 2x2 mini cards */}
+            <div className="mt-4 grid grid-cols-2 gap-3">
+              {miniCards.map((c, i) => (
+                <div key={i} className="rounded-xl border border-border bg-card p-3">
+                  <div className="text-[10px] text-muted-foreground sm:text-xs">
+                    {c.label}
+                  </div>
+                  <div className={`mt-0.5 text-base font-bold sm:text-lg ${c.color}`}>
+                    {c.value}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* -------------------------------------------------------------------------- */
+/*  GAP 6 — Live class preview                                                */
+/* -------------------------------------------------------------------------- */
+
+function LiveClassPreview({ isBn }: { isBn: boolean }) {
+  const features = [
+    { icon: Clock, text: isBn ? '১ ঘন্টা লাইভ কোডিং' : '1 hour live coding' },
+    { icon: MessageSquare, text: isBn ? 'Q&A সেশন' : 'Q&A session' },
+    { icon: PlayCircle, text: isBn ? 'রেকর্ডিং পাবেন' : 'Get recording' },
+  ]
+
+  const toolbar = [Mic, Camera, Share2, MessageSquare, X]
+  const toolbarLabels = isBn
+    ? ['মাইক', 'ক্যামেরা', 'শেয়ার', 'চ্যাট', 'লিভ']
+    : ['Mic', 'Camera', 'Share', 'Chat', 'Leave']
+
+  const participantNames = isBn
+    ? ['রফিক', 'সালমা', 'করিম', 'ফাতেমা', 'জাহিদ', 'তাসনিম']
+    : ['Rafiq', 'Salma', 'Karim', 'Fatema', 'Jahid', 'Tasnim']
+
+  return (
+    <section
+      className="bg-muted/30 py-12 sm:py-16"
+      data-track="live-class-preview"
+    >
+      <div className="mx-auto max-w-5xl px-4 sm:px-6">
+        <div className="text-center">
+          <LandingEyebrow>
+            <Video className="h-3 w-3" /> {isBn ? 'লাইভ ক্লাস' : 'Live Class'}
+          </LandingEyebrow>
+          <h2 className="mt-4 font-heading text-2xl font-bold sm:text-3xl">
+            {isBn ? '📺 লাইভ ক্লাস কেমন?' : "📺 What's a live class like?"}
+          </h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            {isBn ? 'জুমে রিয়েল ক্লাসের ঝলক' : 'A glimpse of a real Zoom class'}
+          </p>
+        </div>
+
+        <div className="mt-8 overflow-hidden rounded-xl border border-border bg-card shadow-xl">
+          {/* Top bar */}
+          <div className="flex items-center justify-between border-b border-border bg-slate-900 px-4 py-2.5 text-white">
+            <div className="flex items-center gap-2 text-xs font-bold sm:text-sm">
+              <Video className="h-3.5 w-3.5 text-amber-400" aria-hidden="true" />
+              Zoom Meeting
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1 rounded-full bg-rose-600 px-2 py-0.5 text-[10px] font-bold sm:text-xs">
+                <span
+                  className="h-1.5 w-1.5 animate-pulse rounded-full bg-white"
+                  aria-hidden="true"
+                />
+                REC
+              </span>
+              <span className="text-[10px] text-slate-300 sm:text-xs">
+                {isBn ? `${toBnNum(8)} জন` : '8 people'}
+              </span>
+            </div>
+          </div>
+
+          {/* Main stage (screen share) */}
+          <div className="relative aspect-video bg-slate-900">
+            <div className="absolute inset-0 bg-grid opacity-10" aria-hidden="true" />
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
+              <Code
+                className="h-12 w-12 text-amber-400/60 sm:h-16 sm:w-16"
+                aria-hidden="true"
+              />
+              <div className="text-center">
+                <div className="text-xs font-semibold text-amber-400 sm:text-sm">
+                  {isBn ? 'দিন ৩: প্রথম অ্যাপ — নো-কোড' : 'Day 3: First App — No-Code'}
+                </div>
+                <div className="text-[10px] text-slate-400 sm:text-xs">
+                  {isBn ? 'স্ক্রিন শেয়ার চলছে' : 'Screen sharing'}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Participant tiles */}
+          <div className="grid grid-cols-6 gap-1.5 border-t border-border bg-muted/30 p-2 sm:gap-2 sm:p-3">
+            {participantNames.map((name, i) => (
+              <div
+                key={i}
+                className="relative aspect-square overflow-hidden rounded-md bg-slate-700 sm:rounded-lg"
+              >
+                <div className="grid h-full place-items-center">
+                  <Users
+                    className="h-4 w-4 text-slate-400 sm:h-5 sm:w-5"
+                    aria-hidden="true"
+                  />
+                </div>
+                <div className="absolute bottom-0.5 left-0.5 rounded bg-black/50 px-1 text-[7px] text-white sm:text-[9px]">
+                  {name}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Toolbar */}
+          <div className="flex items-center justify-center gap-2 border-t border-border bg-slate-900 px-3 py-2 sm:gap-3 sm:px-4 sm:py-3">
+            {toolbar.map((Icon, i) => (
+              <div
+                key={i}
+                className={`grid h-8 w-8 place-items-center rounded-full sm:h-9 sm:w-9 ${
+                  i === 4 ? 'bg-rose-600' : 'bg-white/10 hover:bg-white/20'
+                }`}
+                role="img"
+                aria-label={toolbarLabels[i]}
+              >
+                <Icon
+                  className={`h-4 w-4 ${i === 4 ? 'text-white' : 'text-white/80'}`}
+                  aria-hidden="true"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Feature bullets */}
+        <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
+          {features.map((f, i) => (
+            <div
+              key={i}
+              className="flex items-center gap-3 rounded-xl border border-border bg-card p-3 shadow-sm"
+            >
+              <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-amber-100 dark:bg-amber-950/40">
+                <f.icon className="h-4 w-4 text-amber-600" aria-hidden="true" />
+              </div>
+              <span className="text-xs font-semibold sm:text-sm">{f.text}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* -------------------------------------------------------------------------- */
+/*  GAP 7 — Founder video                                                     */
+/* -------------------------------------------------------------------------- */
+
+function FounderVideo({ isBn }: { isBn: boolean }) {
+  const [open, setOpen] = React.useState(false)
+
+  React.useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false)
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [open])
+
+  const onTriggerKey = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      setOpen(true)
+    }
+  }
+
+  const waUrl = `https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent(
+    isBn ? 'আমি প্রতিষ্ঠাতার সাথে কথা বলতে চাই' : 'I want to talk to the founder',
+  )}`
+
+  return (
+    <div className="mt-6" data-track="founder-video">
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={() => setOpen(true)}
+        onKeyDown={onTriggerKey}
+        aria-label={isBn ? 'প্রতিষ্ঠাতার ভিডিও চালান' : 'Play founder video'}
+        className="group relative aspect-video w-full cursor-pointer overflow-hidden rounded-xl bg-gradient-to-br from-amber-500 to-rose-500"
+      >
+        <div className="absolute inset-0 bg-grid opacity-20" aria-hidden="true" />
+        <div className="absolute inset-0 grid place-items-center">
+          <div className="grid h-16 w-16 place-items-center rounded-full bg-white shadow-2xl transition-transform group-hover:scale-110">
+            <Play
+              className="ml-0.5 h-7 w-7 fill-amber-600 text-amber-600"
+              aria-hidden="true"
+            />
+          </div>
+        </div>
+        <div className="absolute right-3 top-3 rounded-md bg-black/60 px-2 py-0.5 text-xs font-bold text-white">
+          {isBn ? '১:৩০' : '1:30'}
+        </div>
+        <div className="absolute bottom-3 left-3 rounded-md bg-black/60 px-3 py-1 text-xs font-semibold text-white sm:text-sm">
+          {isBn
+            ? '👨‍💼 প্রতিষ্ঠাতার বার্তা — ৯০ সেকেন্ড'
+            : "👨‍💼 Founder's message — 90 seconds"}
+        </div>
+      </div>
+
+      {open && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={isBn ? 'প্রতিষ্ঠাতার ভিডিও' : 'Founder video'}
+          className="fixed inset-0 z-[2000] flex items-center justify-center bg-slate-900/80 p-4 backdrop-blur"
+          onClick={() => setOpen(false)}
+        >
+          <div
+            className="relative w-full max-w-2xl overflow-hidden rounded-2xl bg-slate-900 p-6 shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              aria-label={isBn ? 'বন্ধ করুন' : 'Close'}
+              className="absolute right-4 top-4 grid h-9 w-9 place-items-center rounded-full bg-white/10 text-white hover:bg-white/20"
+            >
+              <X className="h-5 w-5" aria-hidden="true" />
+            </button>
+            <div className="aspect-video w-full overflow-hidden rounded-xl bg-gradient-to-br from-amber-500 to-rose-500">
+              <div className="grid h-full place-items-center">
+                <div className="text-center text-white">
+                  <Video className="mx-auto h-12 w-12" aria-hidden="true" />
+                  <p className="mt-3 text-sm font-semibold">
+                    {isBn
+                      ? 'ভিডিও শীঘ্রই যুক্ত হবে। এখন WhatsApp-এ কথা বলুন।'
+                      : 'Video coming soon. Chat on WhatsApp now.'}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="mt-5 text-center">
+              <a
+                href={waUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-track="founder-video-whatsapp"
+                className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-6 py-3 text-sm font-bold text-white shadow-lg transition-transform hover:scale-105"
+              >
+                <MessageCircle className="h-4 w-4" aria-hidden="true" />
+                {isBn ? 'WhatsApp-এ কথা বলুন' : 'Chat on WhatsApp'}
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+/* -------------------------------------------------------------------------- */
+/*  GAP 8 — Objection crusher                                                  */
+/* -------------------------------------------------------------------------- */
+
+function ObjectionCrusher({ isBn }: { isBn: boolean }) {
+  const cards = [
+    {
+      IconCmp: Smartphone,
+      title: isBn ? 'ল্যাপটপ নেই?' : 'No laptop?',
+      objection: isBn
+        ? 'আমার ল্যাপটপ নেই, তাহলে কি পারব?'
+        : 'I don\'t have a laptop, can I do this?',
+      solution: isBn
+        ? 'মোবাইল থেকেই শুরু করুন। জুম ক্লাস মোবাইলে চলে। প্র্যাকটিসের জন্য সাইবার ক্যাফে বা ল্যাব ব্যবহার করুন।'
+        : 'Start from mobile. Zoom classes work on mobile. Use a cyber cafe or lab for practice.',
+      proof: isBn
+        ? '২০% শিক্ষার্থী মোবাইল দিয়ে শুরু করেছে'
+        : '20% of students started on mobile',
+    },
+    {
+      IconCmp: Globe,
+      title: isBn ? 'ইংরেজি জানি না' : 'Don\'t know English',
+      objection: isBn
+        ? 'আমার ইংরেজি দুর্বল, কি বুঝব?'
+        : 'My English is weak, will I understand?',
+      solution: isBn
+        ? 'পুরো কোর্স বাংলায়। সব প্রম্পট ও টেমপ্লেট বাংলায় অনুবাদিত। AI বাংলায়ও কাজ করে।'
+        : 'Entire course in Bengali. All prompts and templates translated. AI works in Bengali too.',
+      proof: isBn ? '১০০% বাংলা মাধ্যম' : '100% Bengali medium',
+    },
+    {
+      IconCmp: GraduationCap,
+      title: isBn ? 'আমি স্টুডেন্ট' : 'I\'m a student',
+      objection: isBn
+        ? 'পড়াশোনার পাশাপাশি কি সম্ভব?'
+        : 'Is it possible alongside studies?',
+      solution: isBn
+        ? 'দিনে মাত্র ১ ঘন্টা। উইকেন্ডে প্র্যাকটিস। রেকর্ডিং দেখে ধরে নিন। স্টুডেন্ট ডিসকাউন্ট পাবেন।'
+        : 'Just 1 hour/day. Practice on weekends. Catch up via recordings. Student discount available.',
+      proof: isBn ? '৫০% শিক্ষার্থী স্টুডেন্ট' : '50% of students are students',
+    },
+    {
+      IconCmp: Briefcase,
+      title: isBn ? 'আমি চাকরি করি' : 'I work full-time',
+      objection: isBn
+        ? 'চাকরির পাশাপাশি কি পারব?'
+        : 'Can I do it alongside a job?',
+      solution: isBn
+        ? 'সন্ধ্যা ৯টার ক্লাস। উইকেন্ডে প্র্যাকটিস। চাকরিতে প্রমোশন আসবে। ফ্রিল্যান্স শুরু করুন।'
+        : '9 PM classes. Weekend practice. Promotion at job. Start freelancing.',
+      proof: isBn
+        ? '৩০% শিক্ষার্থী চাকরিজীবী'
+        : '30% of students are working professionals',
+    },
+  ]
+
+  const waUrl = `https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent(
+    isBn ? 'AI Bootcamp সম্পর্কে জানতে চাই' : 'I want to know more about the AI Bootcamp',
+  )}`
+
+  return (
+    <section
+      className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16"
+      data-track="objection-crusher"
+    >
+      <div className="text-center">
+        <LandingEyebrow>
+          <Shield className="h-3 w-3" /> {isBn ? 'দ্বিধা নিরসন' : 'Objection Crusher'}
+        </LandingEyebrow>
+        <h2 className="mt-4 font-heading text-2xl font-bold sm:text-3xl">
+          {isBn ? '🛡️ আপনার সব দ্বিধা — এক জায়গায়' : '🛡️ All your doubts — in one place'}
+        </h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          {isBn
+            ? 'সবচেয়ে সাধারণ প্রশ্নগুলোর সরাসরি উত্তর'
+            : 'Straight answers to the most common questions'}
+        </p>
+      </div>
+
+      <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
+        {cards.map((c, i) => (
+          <div
+            key={i}
+            className="flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-card shadow-sm"
+          >
+            <div className="flex items-center gap-2 border-b border-border/60 bg-muted/40 px-4 py-3">
+              <div className="grid h-8 w-8 place-items-center rounded-lg bg-gradient-to-br from-amber-500 to-orange-500 text-white">
+                <c.IconCmp className="h-4 w-4" aria-hidden="true" />
+              </div>
+              <span className="text-sm font-bold">{c.title}</span>
+            </div>
+            <div className="flex flex-1 flex-col gap-3 p-4">
+              <div className="rounded-lg bg-rose-50 p-3 text-xs text-rose-700 dark:bg-rose-950/30 dark:text-rose-300">
+                <span className="font-bold">❝ {c.objection}</span>
+              </div>
+              <div className="rounded-lg bg-slate-900 p-3 text-xs text-slate-100">
+                ✅ {c.solution}
+              </div>
+              <div className="mt-auto rounded-lg bg-emerald-50 px-3 py-2 text-[10px] font-bold text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-300">
+                {c.proof}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-6 text-center">
+        <a
+          href={waUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-track="objection-whatsapp"
+          className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-6 py-2.5 text-sm font-bold text-white shadow-lg transition-transform hover:scale-105"
+        >
+          <MessageCircle className="h-4 w-4" aria-hidden="true" />
+          {isBn
+            ? 'আরও প্রশ্ন? WhatsApp-এ জিজ্ঞেস করুন'
+            : 'More questions? Ask on WhatsApp'}
+        </a>
+      </div>
+    </section>
+  )
+}
+
+/* -------------------------------------------------------------------------- */
+/*  GAP 9 — Risk calculator (loss aversion)                                    */
+/* -------------------------------------------------------------------------- */
+
+function RiskCalculator({ isBn }: { isBn: boolean }) {
+  const [income, setIncome] = React.useState(20000)
+  const [years, setYears] = React.useState(1)
+
+  const oneYearLoss = Math.round(income * 0.5 * 12)
+  const totalLoss = oneYearLoss * years
+
+  const num = (n: number) =>
+    isBn
+      ? toBnNum(n.toLocaleString('en-US'))
+      : n.toLocaleString('en-US')
+
+  const opportunityText = (() => {
+    if (years <= 2)
+      return isBn ? '🟡 কিছু ক্লায়েন্ট হারাবেন' : '🟡 You\'ll lose some clients'
+    if (years <= 5)
+      return isBn ? '🟠 বাজারে পিছিয়ে পড়বেন' : '🟠 You\'ll fall behind in the market'
+    return isBn ? '🔴 ক্যারিয়ার বিপদে' : '🔴 Your career is at risk'
+  })()
+
+  const opportunityColor =
+    years <= 2
+      ? 'from-yellow-500/20 to-amber-500/10 text-yellow-700 dark:text-yellow-300'
+      : years <= 5
+        ? 'from-orange-500/20 to-amber-500/10 text-orange-700 dark:text-orange-300'
+        : 'from-rose-500/20 to-red-500/10 text-rose-700 dark:text-rose-300'
+
+  const onStart = () => {
+    document.getElementById('order')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  return (
+    <section
+      className="bg-muted/30 py-12 sm:py-16"
+      data-track="risk-calculator"
+    >
+      <div className="mx-auto max-w-4xl px-4 sm:px-6">
+        <div className="text-center">
+          <LandingEyebrow>
+            <AlertTriangle className="h-3 w-3" /> {isBn ? 'ঝুঁকি হিসাব' : 'Risk Calculator'}
+          </LandingEyebrow>
+          <h2 className="mt-4 font-heading text-2xl font-bold sm:text-3xl">
+            {isBn
+              ? '💸 আজ না শিখলে কত হারাবেন?'
+              : '💸 How much will you lose if you don\'t learn today?'}
+          </h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            {isBn
+              ? 'একটি সতর্কতা — সম্ভাব্য ক্ষতি হিসাব করুন'
+              : 'A warning — calculate your potential loss'}
+          </p>
+        </div>
+
+        <div className="mt-8 grid gap-4 sm:grid-cols-2">
+          {/* Income slider */}
+          <div className="rounded-2xl border border-border/60 bg-card p-5 shadow-sm">
+            <label className="block text-sm font-bold sm:text-base">
+              {isBn ? 'আপনার বর্তমান মাসিক আয়' : 'Your current monthly income'}
+            </label>
+            <div className="mt-2 text-2xl font-extrabold text-amber-600 dark:text-amber-400">
+              ৳{num(income)}
+            </div>
+            <Slider
+              value={[income]}
+              onValueChange={(v) => setIncome(v[0])}
+              min={10000}
+              max={100000}
+              step={5000}
+              className="mt-4"
+              aria-label={isBn ? 'মাসিক আয়' : 'Monthly income'}
+            />
+            <div className="mt-1 flex justify-between text-[10px] text-muted-foreground">
+              <span>৳{num(10000)}</span>
+              <span>৳{num(100000)}</span>
+            </div>
+          </div>
+
+          {/* Years slider */}
+          <div className="rounded-2xl border border-border/60 bg-card p-5 shadow-sm">
+            <label className="block text-sm font-bold sm:text-base">
+              {isBn ? 'কত বছর অপেক্ষা করবেন?' : 'How many years will you wait?'}
+            </label>
+            <div className="mt-2 text-2xl font-extrabold text-rose-600 dark:text-rose-400">
+              {isBn ? `${toBnNum(years)} বছর` : `${years} year${years > 1 ? 's' : ''}`}
+            </div>
+            <Slider
+              value={[years]}
+              onValueChange={(v) => setYears(v[0])}
+              min={1}
+              max={10}
+              step={1}
+              className="mt-4"
+              aria-label={isBn ? 'বছর' : 'Years'}
+            />
+            <div className="mt-1 flex justify-between text-[10px] text-muted-foreground">
+              <span>{isBn ? `${toBnNum(1)} বছর` : '1 year'}</span>
+              <span>{isBn ? `${toBnNum(10)} বছর` : '10 years'}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Result cards */}
+        <div className="mt-6 grid gap-4 md:grid-cols-3">
+          <div className="rounded-2xl border border-rose-200 bg-rose-50 p-5 text-center dark:bg-rose-950/20">
+            <div className="text-xs font-semibold uppercase tracking-wide text-rose-600 dark:text-rose-300">
+              {isBn ? '১ বছরে ক্ষতি' : '1-year loss'}
+            </div>
+            <div className="mt-2 text-3xl font-extrabold text-rose-700 dark:text-rose-300">
+              ৳{num(oneYearLoss)}
+            </div>
+            <div className="mt-1 text-[10px] text-muted-foreground">
+              {isBn ? 'আয়ের ৫০% বৃদ্ধি অনুমান' : 'Assumes 50% income boost'}
+            </div>
+          </div>
+          <div className="rounded-2xl border border-rose-300 bg-rose-100 p-5 text-center dark:bg-rose-950/40">
+            <div className="text-xs font-semibold uppercase tracking-wide text-rose-700 dark:text-rose-200">
+              {isBn ? `${toBnNum(years)} বছরে ক্ষতি` : `${years}-year loss`}
+            </div>
+            <div className="mt-2 text-3xl font-extrabold text-rose-800 dark:text-rose-200">
+              ৳{num(totalLoss)}
+            </div>
+            <div className="mt-1 text-[10px] text-muted-foreground">
+              {isBn
+                ? `আয় × ০.৫ × ১২ × ${toBnNum(years)}`
+                : `income × 0.5 × 12 × ${years}`}
+            </div>
+          </div>
+          <div
+            className={`rounded-2xl border border-border bg-gradient-to-br ${opportunityColor} p-5 text-center`}
+          >
+            <div className="text-xs font-semibold uppercase tracking-wide">
+              {isBn ? 'সুযোগের মূল্য' : 'Opportunity cost'}
+            </div>
+            <div className="mt-2 text-lg font-extrabold">{opportunityText}</div>
+          </div>
+        </div>
+
+        <div className="mt-6 text-center">
+          <button
+            type="button"
+            onClick={onStart}
+            data-track="riskcalc-enroll"
+            className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 px-7 py-3 text-sm font-bold text-white shadow-lg shadow-amber-500/30 transition-transform hover:scale-105"
+          >
+            <Zap className="h-4 w-4" aria-hidden="true" />
+            {isBn ? 'এখনই শুরু করুন' : 'Start now'}
+          </button>
+          <p className="mt-3 text-xs text-muted-foreground">
+            ⚠️{' '}
+            {isBn
+              ? 'এই হিসাব একটি অনুমানিক উদাহরণ। প্রকৃত ফলাফল ভিন্ন হতে পারে।'
+              : 'This calculation is an estimated example. Actual results may vary.'}
+          </p>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* -------------------------------------------------------------------------- */
+/*  GAP 10 — AI readiness score quiz                                           */
+/* -------------------------------------------------------------------------- */
+
+function AiReadinessQuiz({ isBn }: { isBn: boolean }) {
+  const questions = [
+    isBn ? 'আপনি কি প্রতিদিন AI টুল ব্যবহার করেন?' : 'Do you use AI tools daily?',
+    isBn ? 'আপনি কি ChatGPT বা অনুরূপ টুল চেনেন?' : 'Do you know ChatGPT or similar tools?',
+    isBn ? 'আপনি কি AI দিয়ে কোনো প্রজেক্ট বানিয়েছেন?' : 'Have you built any project with AI?',
+    isBn ? 'আপনি কি প্রম্পট ইঞ্জিনিয়ারিং জানেন?' : 'Do you know prompt engineering?',
+    isBn ? 'আপনি কি AI দিয়ে আয় করেছেন?' : 'Have you earned money with AI?',
+    isBn ? 'আপনি কি অটোমেশন টুল ব্যবহার করেন?' : 'Do you use automation tools?',
+    isBn
+      ? 'আপনি কি কোডিং ছাড়া সফটওয়্যার বানাতে চান?'
+      : 'Do you want to build software without coding?',
+    isBn ? 'আপনি কি ফ্রিল্যান্স বা ব্যবসা করতে চান?' : 'Do you want to freelance or do business?',
+    isBn ? 'আপনি কি প্রতিদিন ১ ঘন্টা সময় দিতে পারবেন?' : 'Can you give 1 hour daily?',
+    isBn ? 'আপনি কি নতুন দক্ষতা শিখতে প্রস্তুত?' : 'Are you ready to learn new skills?',
+  ]
+
+  const [current, setCurrent] = React.useState(0)
+  const [answers, setAnswers] = React.useState<number[]>([])
+  const [showResult, setShowResult] = React.useState(false)
+
+  const score = answers.reduce((acc, v) => acc + v, 0)
+  const progress = Math.round(((current + (showResult ? 1 : 0)) / questions.length) * 100)
+
+  const answer = (points: number) => {
+    const next = [...answers, points]
+    setAnswers(next)
+    if (current + 1 >= questions.length) {
+      setShowResult(true)
+    } else {
+      setCurrent(current + 1)
+    }
+  }
+
+  const restart = () => {
+    setCurrent(0)
+    setAnswers([])
+    setShowResult(false)
+  }
+
+  const onEnroll = () => {
+    document.getElementById('order')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  // Determine tier
+  let tier: {
+    label: string
+    color: string
+    action: string
+  }
+  if (score <= 40) {
+    tier = {
+      label: isBn ? '🟡 শুরু করার সময় এখনই' : '🟡 Time to start now',
+      color: 'text-amber-600 dark:text-amber-400',
+      action: isBn ? 'এনরোল করুন এবং শূন্য থেকে শুরু করুন' : 'Enroll and start from zero',
+    }
+  } else if (score <= 70) {
+    tier = {
+      label: isBn ? '🟠 ভালো অগ্রগতি — এগিয়ে যান' : '🟠 Good progress — keep going',
+      color: 'text-orange-600 dark:text-orange-400',
+      action: isBn ? 'অ্যাডভান্সড দক্ষতার জন্য এনরোল করুন' : 'Enroll for advanced skills',
+    }
+  } else {
+    tier = {
+      label: isBn ? '🟢 আপনি প্রস্তুত! এখন আয় শুরু করুন' : '🟢 You\'re ready! Start earning now',
+      color: 'text-emerald-600 dark:text-emerald-400',
+      action: isBn ? 'মনিটাইজেশন শেখার জন্য এনরোল করুন' : 'Enroll to learn monetization',
+    }
+  }
+
+  return (
+    <section
+      className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16"
+      data-track="ai-readiness-quiz"
+    >
+      <div className="text-center">
+        <LandingEyebrow>
+          <Brain className="h-3 w-3" /> {isBn ? 'কুইজ' : 'Quiz'}
+        </LandingEyebrow>
+        <h2 className="mt-4 font-heading text-2xl font-bold sm:text-3xl">
+          {isBn ? '🧠 আপনার AI রেডিনেস স্কোর' : '🧠 Your AI Readiness Score'}
+        </h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          {isBn ? '১০টি দ্রুত প্রশ্ন — আপনি কতটুকু প্রস্তুত?' : '10 quick questions — how ready are you?'}
+        </p>
+      </div>
+
+      <div className="mt-8 rounded-3xl border border-border/60 bg-card p-6 shadow-sm sm:p-8">
+        {/* Progress bar */}
+        <div className="mb-4">
+          <div className="mb-1 flex items-center justify-between text-xs font-semibold text-muted-foreground">
+            <span>
+              {isBn
+                ? `প্রশ্ন ${toBnNum(Math.min(current + 1, questions.length))}/${toBnNum(questions.length)}`
+                : `Question ${Math.min(current + 1, questions.length)}/${questions.length}`}
+            </span>
+            <span>{toBnNum(progress)}%</span>
+          </div>
+          <div
+            className="h-2 overflow-hidden rounded-full bg-muted"
+            role="progressbar"
+            aria-valuenow={progress}
+            aria-valuemin={0}
+            aria-valuemax={100}
+          >
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-amber-500 to-orange-500 transition-all duration-300"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+        </div>
+
+        {!showResult ? (
+          <div key={current} className="text-center">
+            <p className="font-heading text-lg font-bold sm:text-xl">
+              {questions[current]}
+            </p>
+            <div className="mt-6 flex flex-wrap justify-center gap-3">
+              <button
+                type="button"
+                onClick={() => answer(10)}
+                className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-600 to-teal-500 px-8 py-3 text-sm font-bold text-white shadow-lg transition-transform hover:scale-105"
+                aria-label={isBn ? 'হ্যাঁ' : 'Yes'}
+              >
+                <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
+                {isBn ? 'হ্যাঁ' : 'Yes'}
+              </button>
+              <button
+                type="button"
+                onClick={() => answer(0)}
+                className="inline-flex items-center gap-2 rounded-full border-2 border-border bg-background px-8 py-3 text-sm font-bold transition-colors hover:bg-muted"
+                aria-label={isBn ? 'না' : 'No'}
+              >
+                <XCircle className="h-4 w-4 text-rose-500" aria-hidden="true" />
+                {isBn ? 'না' : 'No'}
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="text-center">
+            <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              {isBn ? 'আপনার স্কোর' : 'Your Score'}
+            </div>
+            <div className={`mt-2 text-6xl font-extrabold ${tier.color}`}>
+              {toBnNum(score)}
+              <span className="text-2xl text-muted-foreground">/{toBnNum(100)}</span>
+            </div>
+            <div className={`mt-3 text-lg font-bold ${tier.color}`}>{tier.label}</div>
+            <p className="mt-2 text-sm text-muted-foreground">{tier.action}</p>
+            <div className="mt-6 flex flex-wrap justify-center gap-3">
+              <button
+                type="button"
+                onClick={onEnroll}
+                data-track="quiz-enroll"
+                className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 px-7 py-3 text-sm font-bold text-white shadow-lg shadow-amber-500/30 transition-transform hover:scale-105"
+              >
+                <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
+                {isBn ? 'এনরোল করুন — ১,০০০৳' : 'Enroll — 1,000TK'}
+              </button>
+              <button
+                type="button"
+                onClick={restart}
+                className="inline-flex items-center gap-2 rounded-full border-2 border-border bg-background px-6 py-3 text-sm font-bold transition-colors hover:bg-muted"
+                aria-label={isBn ? 'আবার করুন' : 'Retake'}
+              >
+                <RotateCcw className="h-4 w-4" aria-hidden="true" />
+                {isBn ? 'আবার করুন' : 'Retake'}
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </section>
+  )
+}
+
+/* -------------------------------------------------------------------------- */
+/*  GAP 14 — Post-purchase upsell flow                                         */
+/* -------------------------------------------------------------------------- */
+
+function PostPurchaseUpsell({ isBn }: { isBn: boolean }) {
+  const steps = [
+    {
+      IconCmp: CreditCard,
+      title: isBn ? 'পেমেন্ট' : 'Payment',
+      desc: isBn ? 'bKash/Nagad এ ১,০০০ টাকা' : 'Payment: 1000TK via bKash/Nagad',
+      color: 'from-pink-500 to-rose-500',
+    },
+    {
+      IconCmp: Gift,
+      title: isBn ? 'ওয়েলকাম' : 'Welcome',
+      desc: isBn ? 'Zoom লিংক ও অনবোর্ডিং' : 'Zoom link + onboarding',
+      color: 'from-amber-500 to-orange-500',
+    },
+    {
+      IconCmp: Users,
+      title: isBn ? 'কমিউনিটি' : 'Community',
+      desc: isBn ? 'প্রাইভেট গ্রুপে যুক্ত' : 'Join private group',
+      color: 'from-emerald-500 to-teal-500',
+    },
+    {
+      IconCmp: Package,
+      title: isBn ? 'প্রম্পট প্যাক' : 'Prompt Pack',
+      desc: isBn ? '৫০+ AI প্রম্পট টেমপ্লেট' : '50+ AI prompt templates',
+      color: 'from-cyan-500 to-blue-500',
+    },
+    {
+      IconCmp: GraduationCap,
+      title: isBn ? 'ওয়ার্কশপ' : 'Workshop',
+      desc: isBn ? 'লাইভ ক্লাস ও প্রজেক্ট' : 'Live classes + projects',
+      color: 'from-orange-500 to-rose-500',
+    },
+    {
+      IconCmp: MessageSquare,
+      title: isBn ? 'কনসালটেশন' : 'Consultation',
+      desc: isBn ? '১-অন-১ গাইডেন্স' : '1-on-1 guidance',
+      color: 'from-amber-600 to-rose-500',
+    },
+  ]
+
+  return (
+    <section
+      className="bg-muted/30 py-12 sm:py-16"
+      data-track="upsell-flow"
+    >
+      <div className="mx-auto max-w-5xl px-4 sm:px-6">
+        <div className="text-center">
+          <LandingEyebrow>
+            <Rocket className="h-3 w-3" /> {isBn ? 'নেক্সট স্টেপ' : 'Next Steps'}
+          </LandingEyebrow>
+          <h2 className="mt-4 font-heading text-2xl font-bold sm:text-3xl">
+            {isBn ? '🚀 এনরোল করার পর কী হবে?' : '🚀 What happens after you enroll?'}
+          </h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            {isBn ? 'আপনার যাত্রার পরবর্তী ৬ ধাপ' : 'The next 6 steps of your journey'}
+          </p>
+        </div>
+
+        <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
+          {steps.map((s, i) => (
+            <div key={i} className="relative">
+              <div className="flex h-full flex-col items-center rounded-2xl border border-border/60 bg-card p-4 text-center shadow-sm">
+                <div
+                  className={`grid h-12 w-12 place-items-center rounded-xl bg-gradient-to-br ${s.color} text-white shadow-md`}
+                >
+                  <s.IconCmp className="h-6 w-6" aria-hidden="true" />
+                </div>
+                <div className="mt-3 text-xs font-extrabold text-amber-600 dark:text-amber-400">
+                  {isBn ? `ধাপ ${toBnNum(i + 1)}` : `Step ${i + 1}`}
+                </div>
+                <div className="mt-1 text-sm font-bold">{s.title}</div>
+                <div className="mt-1 text-[11px] text-muted-foreground">{s.desc}</div>
+              </div>
+              {i < steps.length - 1 && (
+                <div
+                  className="absolute -right-3 top-1/2 z-10 hidden -translate-y-1/2 lg:block"
+                  aria-hidden="true"
+                >
+                  <ChevronRight className="h-5 w-5 text-amber-500" />
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        <p className="mt-6 text-center text-xs text-muted-foreground">
+          {isBn
+            ? 'প্রতিটি ধাপ স্বয়ংক্রিয় — পেমেন্টের সাথে সাথে শুরু'
+            : 'Every step is automated — starts right after payment'}
+        </p>
+      </div>
+    </section>
   )
 }
 
@@ -446,6 +1886,11 @@ export function TrainingClient() {
   const { lang, t } = useLang()
   const isBn = lang === 'bn'
   usePageViewTracking('ai_training_page_v2')
+
+  // Initialize NGS analytics tracking (CTA clicks, scroll depth, forms, time-on-page)
+  React.useEffect(() => {
+    initNgsTracking()
+  }, [])
 
   // Convert ASCII digits to Bengali digits when lang === 'bn'
   const bn = (s: string | number) =>
@@ -539,6 +1984,11 @@ export function TrainingClient() {
               </a>
             </div>
 
+            {/* Hero outcome disclaimer */}
+            <p className="mt-3 text-xs text-muted-foreground/70">
+              ⚠️ {isBn ? 'ফলাফল ব্যক্তিভেদে ভিন্ন হতে পারে।' : 'Results may vary by individual.'}
+            </p>
+
             {/* Urgency bar */}
             <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-rose-300/60 bg-rose-50 px-4 py-2 text-xs font-bold text-rose-700 dark:bg-rose-950/30 dark:text-rose-300">
               <AlertTriangle className="h-3.5 w-3.5" />
@@ -587,6 +2037,12 @@ export function TrainingClient() {
             </div>
           </div>
         </section>
+
+        {/* ===== GAP 1: LIVE COUNTER DASHBOARD ===== */}
+        <LiveCounterDashboard isBn={isBn} />
+
+        {/* ===== GAP 2: WEBINAR COUNTDOWN BANNER ===== */}
+        <WebinarCountdownBanner isBn={isBn} />
 
         {/* ===== 2. DEMO VIDEO ===== */}
         <section className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16">
@@ -738,6 +2194,11 @@ export function TrainingClient() {
               </ul>
             </div>
           </div>
+          <p className="mt-3 text-center text-xs text-muted-foreground">
+            ⚠️ {isBn
+              ? 'এই টাইমলাইন একটি সম্ভাব্য যাত্রার উদাহরণ। ফলাফল ব্যক্তিভেদে ভিন্ন হতে পারে।'
+              : 'This timeline is an example of a possible journey. Results may vary by individual.'}
+          </p>
         </section>
 
         {/* ===== 7. STUDENT PROJECTS GALLERY ===== */}
@@ -772,6 +2233,12 @@ export function TrainingClient() {
             </div>
           </div>
         </section>
+
+        {/* ===== GAP 5: STUDENT DASHBOARD PREVIEW ===== */}
+        <StudentDashboardPreview isBn={isBn} />
+
+        {/* ===== GAP 6: LIVE CLASS PREVIEW ===== */}
+        <LiveClassPreview isBn={isBn} />
 
         {/* ===== 8. OFFER STACK ===== */}
         <section className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16">
@@ -952,6 +2419,7 @@ export function TrainingClient() {
               </div>
             </div>
           </div>
+          <FounderVideo isBn={isBn} />
         </section>
 
         {/* ===== 12. EARNINGS + ROI CALCULATOR ===== */}
@@ -1030,6 +2498,11 @@ export function TrainingClient() {
               </div>
             </div>
           </div>
+          <p className="mt-3 text-center text-xs text-muted-foreground">
+            ⚠️ {isBn
+              ? 'এই আয়ের পরিমাণগুলো উদাহরণভিত্তিক। ফলাফল ব্যক্তিভেদে ভিন্ন হতে পারে এবং শেখা, অনুশীলন ও প্রচেষ্টার উপর নির্ভর করবে।'
+              : 'These income figures are illustrative. Results may vary by individual and depend on learning, practice, and effort.'}
+          </p>
         </section>
 
         {/* ===== 13. UNIVERSITY COMPARISON ===== */}
@@ -1117,6 +2590,9 @@ export function TrainingClient() {
             ))}
           </div>
         </section>
+
+        {/* ===== GAP 4: PAYMENT PROOF ===== */}
+        <PaymentProof isBn={isBn} />
 
         {/* ===== 15. CAREER OPPORTUNITIES ===== */}
         <section className="bg-muted/30 py-12 sm:py-16">
@@ -1235,6 +2711,15 @@ export function TrainingClient() {
             )}
           </div>
         </section>
+
+        {/* ===== GAP 8: OBJECTION CRUSHER ===== */}
+        <ObjectionCrusher isBn={isBn} />
+
+        {/* ===== GAP 9: RISK CALCULATOR ===== */}
+        <RiskCalculator isBn={isBn} />
+
+        {/* ===== GAP 10: AI READINESS QUIZ ===== */}
+        <AiReadinessQuiz isBn={isBn} />
 
         {/* ===== 18. GUARANTEE ===== */}
         <section className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16">
@@ -1435,6 +2920,9 @@ export function TrainingClient() {
           </div>
         </section>
 
+        {/* ===== GAP 14: POST-PURCHASE UPSELL FLOW ===== */}
+        <PostPurchaseUpsell isBn={isBn} />
+
         {/* ===== 23. SOCIAL LINKS ===== */}
         <section className="bg-muted/30 py-10">
           <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
@@ -1454,6 +2942,7 @@ export function TrainingClient() {
       <StickyBottomCTA isBn={isBn} seats={seats} />
       <LiveToast isBn={isBn} />
       <ExitIntentModal isBn={isBn} />
+      <LiveChatWidget isBn={isBn} />
     </div>
   )
 }
