@@ -18,8 +18,9 @@ const courseLd = {
   },
   instructor: {
     '@type': 'Person',
-    name: 'Taj Bhai',
-    jobTitle: 'AI Implementation Specialist',
+    name: 'MD. Nazmul Islam Taj',
+    alternateName: ['তাজ ভাই', 'Nazmul Islam Taj', 'Md. Nazmul Islam Taj'],
+    jobTitle: 'Founder & Lead Instructor',
     worksFor: { '@type': 'Organization', name: 'NextGen Digital Studio' },
   },
   offers: {
@@ -33,17 +34,17 @@ const courseLd = {
   aggregateRating: {
     '@type': 'AggregateRating',
     ratingValue: '5.0',
-    reviewCount: '120',
+    reviewCount: '1700',
     bestRating: '5',
     worstRating: '1',
   },
   hasCourseInstance: {
     '@type': 'CourseInstance',
     courseMode: 'online',
-    startDate: '2026-08-11',
-    endDate: '2026-08-17',
+    startDate: '2026-08-15',
+    endDate: '2026-08-21',
     duration: 'P7D',
-    instructor: { '@type': 'Person', name: 'Taj Bhai' },
+    instructor: { '@type': 'Person', name: 'MD. Nazmul Islam Taj' },
     location: {
       '@type': 'VirtualLocation',
       url: 'https://zoom.us',
@@ -98,15 +99,17 @@ const faqLd = {
 
 /**
  * Person schema (founder/instructor) — strengthens entity recognition
- * for Taj Bhai and boosts E-E-A-T signals.
+ * for MD. Nazmul Islam Taj and boosts E-E-A-T signals.
  */
 const personLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
-  name: 'Taj Bhai',
-  jobTitle: 'AI Implementation Specialist',
+  name: 'MD. Nazmul Islam Taj',
+  alternateName: ['তাজ ভাই', 'Nazmul Islam Taj', 'Md. Nazmul Islam Taj'],
+  jobTitle: 'Founder & Lead Instructor',
   worksFor: { '@type': 'Organization', name: 'NextGen Digital Studio' },
   url: 'https://nextgendigitalstudio.com/founder',
+  image: 'https://nextgendigitalstudio.com/founder.png',
   sameAs: [
     'https://www.linkedin.com/in/nextgen-digital-studio',
     'https://github.com/Taj3D',
@@ -116,6 +119,7 @@ const personLd = {
     'Automation',
     'No-Code Development',
     'Prompt Engineering',
+    'Software Development',
   ],
 }
 
@@ -149,8 +153,8 @@ const eventLd = {
   '@context': 'https://schema.org',
   '@type': 'Event',
   name: 'AI Software Builder Bootcamp — Live Batch August 2026',
-  startDate: '2026-08-11T21:00:00+06:00',
-  endDate: '2026-08-17T22:00:00+06:00',
+  startDate: '2026-08-15T21:00:00+06:00',
+  endDate: '2026-08-21T22:00:00+06:00',
   eventStatus: 'https://schema.org/EventScheduled',
   eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
   location: {
@@ -174,7 +178,7 @@ const eventLd = {
   },
   performer: {
     '@type': 'Person',
-    name: 'Taj Bhai',
+    name: 'MD. Nazmul Islam Taj',
   },
 }
 
@@ -192,7 +196,7 @@ const reviewLd = {
   aggregateRating: {
     '@type': 'AggregateRating',
     ratingValue: '5.0',
-    reviewCount: '120',
+    reviewCount: '1700',
     bestRating: '5',
     worstRating: '1',
   },

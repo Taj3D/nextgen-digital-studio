@@ -2560,7 +2560,7 @@ export function TrainingClient() {
                     ))}
                   </div>
                   <p className="mt-1 text-[10px] font-semibold text-muted-foreground">
-                    {isBn ? '৫.০ রেটিং · ১২০+ ছাত্র' : '5.0 rating · 120+ students'}
+                    {isBn ? '৫.০/৫ রেটিং · ১,৭০০+ শিক্ষার্থী' : '5.0/5 rating · 1,700+ students'}
                   </p>
                 </div>
               </div>

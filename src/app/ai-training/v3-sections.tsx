@@ -12,6 +12,7 @@ import {
   Package, RotateCcw, Phone, MapPin, Trophy, Handshake, UserCheck,
   Laptop, Languages, Network, Calendar, Users2,
 } from 'lucide-react'
+import Image from 'next/image'
 
 // Bengali numeral helper — converts every ASCII digit in a string/number to its Bengali form
 const bn = (s: string | number) => String(s).replace(/\d/g, (d) => '০১২৩৪৫৬৭৮৯'[+d])
@@ -397,32 +398,40 @@ export function ProofGallery({ isBn }: { isBn: boolean }) {
 export function FounderStorySection({ isBn }: { isBn: boolean }) {
   const badges = isBn
     ? [
-        { label: 'অভিজ্ঞতা', value: '৫+ বছর', icon: Clock },
+        { label: 'অভিজ্ঞতা', value: '১৭+ বছর', icon: Clock },
+        { label: 'শিক্ষার্থী', value: '১,৭০০+', icon: GraduationCap },
+        { label: 'রেটিং', value: '৫.০/৫', icon: Star },
         { label: 'প্রজেক্ট', value: '১২০+', icon: Briefcase },
-        { label: 'শিক্ষাদান', value: '৫০০+ ছাত্র', icon: GraduationCap },
         { label: 'মিশন', value: 'শেখানো', icon: Target },
-        { label: 'মূল্যবোধ', value: 'সততা', icon: Heart },
       ]
     : [
-        { label: 'Experience', value: '5+ years', icon: Clock },
+        { label: 'Experience', value: '17+ years', icon: Clock },
+        { label: 'Students', value: '1,700+', icon: GraduationCap },
+        { label: 'Rating', value: '5.0/5', icon: Star },
         { label: 'Projects', value: '120+', icon: Briefcase },
-        { label: 'Teaching', value: '500+ students', icon: GraduationCap },
         { label: 'Mission', value: 'Teach', icon: Target },
-        { label: 'Values', value: 'Honesty', icon: Heart },
       ]
 
   return (
     <section data-track="founder-story" className="mx-auto w-full max-w-5xl px-4 py-12">
       <div className="grid grid-cols-1 items-center gap-6 md:grid-cols-5">
-        {/* Photo placeholder */}
+        {/* Real founder photo */}
         <div className="md:col-span-2">
-          <div className="mx-auto flex aspect-square w-full max-w-xs items-center justify-center rounded-2xl bg-gradient-to-br from-amber-400 via-orange-500 to-rose-500 shadow-xl">
-            <div className="flex h-32 w-32 items-center justify-center rounded-full bg-white/20 backdrop-blur">
-              <span className="text-5xl font-bold text-white">T</span>
-            </div>
+          <div className="relative mx-auto aspect-square w-full max-w-xs overflow-hidden rounded-2xl border border-amber-200/60 bg-gradient-to-br from-amber-400 via-orange-500 to-rose-500 shadow-xl dark:border-amber-900/40">
+            <Image
+              src="/founder.png"
+              alt={isBn ? 'মোঃ নাজমুল ইসলাম তাজ — প্রতিষ্ঠাতা' : 'MD. Nazmul Islam Taj — Founder'}
+              fill
+              sizes="(max-width: 768px) 80vw, 320px"
+              className="object-cover"
+              priority
+            />
           </div>
-          <p className="mt-3 text-center text-sm font-semibold">
-            {isBn ? 'তাজ ভাই — প্রতিষ্ঠাতা' : 'Taj Bhai — Founder'}
+          <p className="mt-3 text-center text-sm font-bold">
+            {isBn ? 'মোঃ নাজমুল ইসলাম তাজ' : 'MD. Nazmul Islam Taj'}
+          </p>
+          <p className="text-center text-xs font-semibold text-amber-600 dark:text-amber-400">
+            {isBn ? 'প্রতিষ্ঠাতা · NextGen Digital Studio' : 'Founder · NextGen Digital Studio'}
           </p>
         </div>
 
@@ -468,14 +477,14 @@ export function FounderStorySection({ isBn }: { isBn: boolean }) {
 export function InstructorAuthorityGrid({ isBn }: { isBn: boolean }) {
   const cards = isBn
     ? [
-        { title: 'অভিজ্ঞতা', value: '৫+ বছর', desc: 'AI ইমপ্লিমেন্টেশনে', icon: Clock },
+        { title: 'অভিজ্ঞতা', value: '১৭+ বছর', desc: 'সফটওয়্যার ও AI-এ', icon: Clock },
+        { title: 'শিক্ষার্থী', value: '১,৭০০+', desc: 'প্রশিক্ষিত', icon: GraduationCap },
         { title: 'প্রজেক্ট', value: '১২০+', desc: 'ক্লায়েন্ট কাজ সম্পন্ন', icon: Briefcase },
-        { title: 'কোম্পানি', value: '২৫+', desc: 'সঙ্গে কাজ করেছেন', icon: Building2 },
       ]
     : [
-        { title: 'Experience', value: '5+ years', desc: 'in AI implementation', icon: Clock },
+        { title: 'Experience', value: '17+ years', desc: 'in software & AI', icon: Clock },
+        { title: 'Students', value: '1,700+', desc: 'trained', icon: GraduationCap },
         { title: 'Projects', value: '120+', desc: 'client works completed', icon: Briefcase },
-        { title: 'Companies', value: '25+', desc: 'worked with', icon: Building2 },
       ]
 
   const projects = isBn
