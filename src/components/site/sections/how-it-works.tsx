@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { motion } from 'framer-motion'
-import { Calendar } from 'lucide-react'
+import { Calendar, ArrowRight } from 'lucide-react'
 import {
   Reveal,
   SectionShell,
@@ -10,6 +10,13 @@ import {
   staggerItem,
 } from '@/components/site/reveal'
 import { useLang } from '@/components/site/language-provider'
+import { Button } from '@/components/ui/button'
+
+function scrollToId(id: string) {
+  if (typeof document === 'undefined') return
+  const el = document.getElementById(id)
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
 
 type DayEntry = {
   titleKey: string
@@ -49,7 +56,8 @@ function splitDay(full: string): { dayLabel: string; titleText: string } {
 }
 
 export function HowItWorks() {
-  const { t } = useLang()
+  const { t, lang } = useLang()
+  const isBn = lang === 'bn'
 
   return (
     <SectionShell id="how" className="relative" aria-label={t('aria.howItWorks')}>
@@ -125,6 +133,20 @@ export function HowItWorks() {
           )
         })}
       </motion.ol>
+
+      {/* CTA — exit point to lead form */}
+      <Reveal delay={0.15}>
+        <div className="mt-12 flex justify-center">
+          <Button
+            onClick={() => scrollToId('lead-form')}
+            className="gradient-brand text-white"
+            size="lg"
+          >
+            {isBn ? 'আপনার প্রজেক্ট শুরু করুন' : 'Start Your Project'}
+            <ArrowRight className="h-4 w-4" />
+          </Button>
+        </div>
+      </Reveal>
     </SectionShell>
   )
 }

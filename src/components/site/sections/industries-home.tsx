@@ -2,9 +2,17 @@
 
 import * as React from 'react'
 import { motion } from 'framer-motion'
+import { ArrowRight } from 'lucide-react'
 import { Reveal, SectionShell, staggerContainer, staggerItem } from '@/components/site/reveal'
 import { useLang } from '@/components/site/language-provider'
+import { Button } from '@/components/ui/button'
 import { INDUSTRIES } from '@/lib/site-data'
+
+function scrollToId(id: string) {
+  if (typeof document === 'undefined') return
+  const el = document.getElementById(id)
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
 
 export function IndustriesSection() {
   const { t, lang } = useLang()
@@ -52,6 +60,20 @@ export function IndustriesSection() {
           </motion.div>
         ))}
       </motion.div>
+
+      {/* CTA — exit point to lead form */}
+      <Reveal delay={0.15}>
+        <div className="mt-12 flex justify-center">
+          <Button
+            onClick={() => scrollToId('lead-form')}
+            className="gradient-brand text-white"
+            size="lg"
+          >
+            {isBn ? 'আপনার ইন্ডাস্ট্রি শুরু করুন' : 'Start in Your Industry'}
+            <ArrowRight className="h-4 w-4" />
+          </Button>
+        </div>
+      </Reveal>
     </SectionShell>
   )
 }

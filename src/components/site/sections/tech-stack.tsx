@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { motion } from 'framer-motion'
-import { Cpu } from 'lucide-react'
+import { Cpu, ArrowRight } from 'lucide-react'
 import {
   Reveal,
   SectionShell,
@@ -10,6 +10,13 @@ import {
   staggerItem,
 } from '@/components/site/reveal'
 import { useLang } from '@/components/site/language-provider'
+import { Button } from '@/components/ui/button'
+
+function scrollToId(id: string) {
+  if (typeof document === 'undefined') return
+  const el = document.getElementById(id)
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
 
 const CATEGORIES: { titleKey: string; dot: string; techs: string[] }[] = [
   {
@@ -92,6 +99,20 @@ export function TechStack() {
       {/* Footnote */}
       <Reveal delay={0.1}>
         <p className="text-center text-xs text-muted-foreground mt-8">{note}</p>
+      </Reveal>
+
+      {/* CTA — exit point to lead form */}
+      <Reveal delay={0.15}>
+        <div className="mt-8 flex justify-center">
+          <Button
+            onClick={() => scrollToId('lead-form')}
+            className="gradient-brand text-white"
+            size="lg"
+          >
+            {isBn ? 'আপনার AI সিস্টেম শুরু করুন' : 'Build Your AI Stack'}
+            <ArrowRight className="h-4 w-4" />
+          </Button>
+        </div>
       </Reveal>
     </SectionShell>
   )

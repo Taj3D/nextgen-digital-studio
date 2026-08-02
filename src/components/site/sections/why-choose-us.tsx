@@ -8,6 +8,7 @@ import {
   ShieldCheck,
   Wrench,
   Users,
+  ArrowRight,
   type LucideIcon,
 } from 'lucide-react'
 import {
@@ -18,6 +19,13 @@ import {
 } from '@/components/site/reveal'
 import { useLang } from '@/components/site/language-provider'
 import { Card, CardContent } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+
+function scrollToId(id: string) {
+  if (typeof document === 'undefined') return
+  const el = document.getElementById(id)
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
 
 const REASONS: { icon: LucideIcon; titleKey: string; descKey: string }[] = [
   { icon: MapPin, titleKey: 'why.r1Title', descKey: 'why.r1Desc' },
@@ -27,7 +35,8 @@ const REASONS: { icon: LucideIcon; titleKey: string; descKey: string }[] = [
 ]
 
 export function WhyChooseUs() {
-  const { t } = useLang()
+  const { t, lang } = useLang()
+  const isBn = lang === 'bn'
 
   return (
     <SectionShell id="why" className="relative" aria-label={t('aria.whyChooseUs')}>
@@ -78,6 +87,20 @@ export function WhyChooseUs() {
           )
         })}
       </motion.div>
+
+      {/* CTA — exit point to lead form */}
+      <Reveal delay={0.15}>
+        <div className="mt-12 flex justify-center">
+          <Button
+            onClick={() => scrollToId('lead-form')}
+            className="gradient-brand text-white"
+            size="lg"
+          >
+            {isBn ? 'আপনার প্রজেক্ট শুরু করুন' : 'Start Your Project'}
+            <ArrowRight className="h-4 w-4" />
+          </Button>
+        </div>
+      </Reveal>
     </SectionShell>
   )
 }

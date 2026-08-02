@@ -50,7 +50,7 @@ export function LeadMagnetSection() {
               {t('leadMagnet.assessmentDesc')}
             </p>
             <Button
-              onClick={() => scrollToId('lead-form')}
+              onClick={() => scrollToId('ai-readiness-score')}
               className="gradient-brand text-white w-fit"
               size="lg"
             >

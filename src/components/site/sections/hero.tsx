@@ -291,7 +291,7 @@ export function HeroSection() {
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={() => scrollToId('lead-magnets')}
+                  onClick={() => scrollToId('ai-readiness-score')}
                   className="h-14 px-8 text-base w-full sm:w-auto border-emerald-500/40 text-foreground hover:bg-emerald-500/10 hover:text-foreground"
                   size="lg"
                 >
