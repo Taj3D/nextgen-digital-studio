@@ -33,6 +33,8 @@ import {
   MessengerFunnelSection,
   DiscoveryCallCTA,
   LeadMagnetSection,
+  AuthorityProofSection,
+  SocialReviewsSection,
 } from '@/app/ai-training/v3-sections'
 import {
   Accordion,
@@ -2533,6 +2535,9 @@ export function TrainingClient() {
         {/* ===== V3: INSTRUCTOR AUTHORITY GRID — Expanded proof ===== */}
         <InstructorAuthorityGrid isBn={isBn} />
 
+        {/* ===== V4: AUTHORITY PROOF SECTION — Real visual proof (certs, GitHub, badges) ===== */}
+        <AuthorityProofSection isBn={isBn} />
+
         {/* ===== 11. INSTRUCTOR ===== */}
         <section className="bg-muted/30 py-12 sm:py-16">
           <div className="mx-auto max-w-5xl px-4 sm:px-6">
@@ -2747,6 +2752,9 @@ export function TrainingClient() {
 
         {/* ===== V3: COMMUNITY SECTION — People buy community, not courses ===== */}
         <CommunitySection isBn={isBn} />
+
+        {/* ===== V4: SOCIAL REVIEWS — LinkedIn / Google / Facebook + website screenshots ===== */}
+        <SocialReviewsSection isBn={isBn} />
 
         {/* ===== 14. TESTIMONIALS ===== */}
         <section className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16">

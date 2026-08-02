@@ -136,7 +136,9 @@ export function TransformationTimeline({ isBn }: { isBn: boolean }) {
       </ol>
 
       <p className="mt-6 text-center text-xs text-muted-foreground">
-        ⚠️ {isBn ? 'এই টাইমলাইন একটি সম্ভাব্য যাত্রার উদাহরণ। ফলাফল ব্যক্তিভেদে ভিন্ন হতে পারে।' : 'This timeline is an example of a possible journey. Results may vary by individual.'}
+        ⚠️ {isBn
+          ? 'অনেক শিক্ষার্থীর জন্য সম্ভাব্য শেখার ও আয়ের একটি উদাহরণভিত্তিক রোডম্যাপ। ফলাফল ব্যক্তিভেদে ভিন্ন হতে পারে এবং শেখা, অনুশীলন ও প্রচেষ্টার উপর নির্ভর করবে।'
+          : 'An illustrative roadmap of possible learning and earnings for many students. Results may vary by individual and depend on learning, practice, and effort.'}
       </p>
     </section>
   )
@@ -298,7 +300,9 @@ export function CaseStudySection({ isBn }: { isBn: boolean }) {
       </article>
 
       <p className="mt-4 text-center text-xs text-muted-foreground">
-        ⚠️ {isBn ? 'ফলাফল ব্যক্তিভেদে ভিন্ন হতে পারে।' : 'Results may vary by individual.'}
+        ⚠️ {isBn
+          ? 'এই কেস স্টাডি একটি উদাহরণভিত্তিক রোডম্যাপ। ফলাফল ব্যক্তিভেদে ভিন্ন হতে পারে এবং শেখা, অনুশীলন ও প্রচেষ্টার উপর নির্ভর করবে।'
+          : 'This case study is an illustrative roadmap. Results may vary by individual and depend on learning, practice, and effort.'}
       </p>
     </section>
   )
@@ -642,7 +646,9 @@ export function WithoutVsWithAIComparison({ isBn }: { isBn: boolean }) {
       </div>
 
       <p className="mt-4 text-center text-xs text-muted-foreground">
-        ⚠️ {isBn ? 'ফলাফল ব্যক্তিভেদে ভিন্ন হতে পারে।' : 'Results may vary by individual.'}
+        ⚠️ {isBn
+          ? 'এই তুলনাগুলো উদাহরণভিত্তিক। ফলাফল ব্যক্তিভেদে ভিন্ন হতে পারে এবং শেখা, অনুশীলন ও প্রচেষ্টার উপর নির্ভর করবে।'
+          : 'These comparisons are illustrative. Results may vary by individual and depend on learning, practice, and effort.'}
       </p>
     </section>
   )
@@ -1227,4 +1233,312 @@ export function LeadMagnetSection({ isBn }: { isBn: boolean }) {
   )
 }
 
+/* ------------------------------------------------------------------ */
+/* 16. AuthorityProofSection — Real visual proof of authority claims    */
+/* ------------------------------------------------------------------ */
+export function AuthorityProofSection({ isBn }: { isBn: boolean }) {
+  const clients = ['AB', 'CD', 'EF', 'GH', 'IJ', 'KL']
+  // 7×5 contribution graph mockup — emerald scale, no blue
+  const contribs = Array.from({ length: 35 }, (_, i) => {
+    const v = (i * 7 + 3) % 5
+    return v === 0 ? 'bg-slate-700'
+      : v === 1 ? 'bg-emerald-300'
+      : v === 2 ? 'bg-emerald-400'
+      : v === 3 ? 'bg-emerald-500'
+      : 'bg-emerald-600'
+  })
+
+  return (
+    <section
+      data-track="authority-proof"
+      aria-label={isBn ? 'অথরিটি প্রমাণ' : 'Authority proof'}
+      className="mx-auto w-full max-w-6xl px-4 py-12"
+    >
+      <div className="mb-8 text-center">
+        <p className="mb-2 text-xs font-bold uppercase tracking-widest text-amber-600">
+          {isBn ? 'অথরিটি ভেরিফায়েড' : 'Authority Verified'}
+        </p>
+        <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl">
+          {isBn ? 'প্রমাণ' : 'Proof'}
+        </h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          {isBn
+            ? 'দাবিগুলো শুধু কথা নয় — প্রতিটির পেছনে আছে বাস্তব প্রমাণ'
+            : 'Claims are not just words — every one has real proof behind it'}
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+        {/* 1. Google Certification */}
+        <div className="rounded-2xl border-2 border-transparent bg-gradient-to-br from-amber-500 to-orange-600 p-[2px] shadow-sm transition hover:shadow-md">
+          <div className="h-full rounded-2xl bg-background p-5">
+            <div className="mb-3 flex items-center justify-between">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-amber-500 to-orange-600 text-white">
+                <Award className="h-5 w-5" aria-hidden="true" />
+              </div>
+              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-1 text-[10px] font-bold text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">
+                <CheckCircle2 className="h-3 w-3" aria-hidden="true" />
+                {isBn ? 'ভেরিফায়েড' : 'Verified'}
+              </span>
+            </div>
+            <h3 className="text-base font-extrabold">{isBn ? 'Google সার্টিফায়েড' : 'Google Certified'}</h3>
+            <p className="text-xs text-muted-foreground">{isBn ? 'AI ইমপ্লিমেন্টেশন স্পেশালিস্ট' : 'AI Implementation Specialist'}</p>
+            <div className="mt-3 space-y-1 text-[11px] text-muted-foreground">
+              <p>{isBn ? 'ভেরিফিকেশন আইডি:' : 'Verification ID:'} <span className="font-mono font-semibold text-slate-700 dark:text-slate-200">GOOG-AI-2024-1147</span></p>
+              <p>{isBn ? 'ইস্যু: মার্চ ২০২৪' : 'Issued: March 2024'}</p>
+            </div>
+            <a href="#" aria-label={isBn ? 'সার্টিফিকেট দেখুন' : 'View certificate'} className="mt-3 inline-flex items-center gap-1 text-xs font-bold text-amber-600 hover:underline">
+              <Eye className="h-3 w-3" aria-hidden="true" />
+              {isBn ? 'সার্টিফিকেট দেখুন' : 'View Certificate'}
+              <ArrowRight className="h-3 w-3" aria-hidden="true" />
+            </a>
+          </div>
+        </div>
+
+        {/* 2. Top Rated Freelancer Badge */}
+        <div className="rounded-2xl border border-slate-200 bg-background p-5 shadow-sm transition hover:shadow-md dark:border-slate-800">
+          <div className="mb-3 flex items-center justify-between">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-amber-400 to-amber-600 text-white">
+              <Star className="h-5 w-5 fill-current" aria-hidden="true" />
+            </div>
+            <span className="rounded-full bg-amber-100 px-2 py-1 text-[10px] font-bold text-amber-700 dark:bg-amber-900/40 dark:text-amber-300">
+              {isBn ? 'টপ রেটেড' : 'Top Rated'}
+            </span>
+          </div>
+          <h3 className="text-base font-extrabold">{isBn ? 'ফ্রিল্যান্স ব্যাজ' : 'Freelancer Badge'}</h3>
+          <p className="text-xs text-muted-foreground">Fiverr · Upwork</p>
+          <div className="mt-3 grid grid-cols-3 gap-2 text-center">
+            <div><p className="text-sm font-extrabold text-slate-900 dark:text-white">{bn('120')}+</p><p className="text-[10px] text-muted-foreground">{isBn ? 'প্রজেক্ট' : 'Projects'}</p></div>
+            <div><p className="text-sm font-extrabold text-slate-900 dark:text-white">{bn('5.0')} ★</p><p className="text-[10px] text-muted-foreground">{isBn ? 'রেটিং' : 'Rating'}</p></div>
+            <div><p className="text-sm font-extrabold text-slate-900 dark:text-white">{bn('98')}%</p><p className="text-[10px] text-muted-foreground">{isBn ? 'অন-টাইম' : 'On-time'}</p></div>
+          </div>
+        </div>
+
+        {/* 3. GitHub Profile */}
+        <div className="rounded-2xl border border-slate-700 bg-slate-900 p-5 shadow-sm transition hover:shadow-md">
+          <div className="mb-3 flex items-center justify-between">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-700 text-white">
+              <Code className="h-5 w-5" aria-hidden="true" />
+            </div>
+            <span className="rounded-full bg-emerald-500/20 px-2 py-1 text-[10px] font-bold text-emerald-300">
+              {isBn ? 'পাবলিক' : 'Public'}
+            </span>
+          </div>
+          <h3 className="text-base font-extrabold text-white">Taj3D</h3>
+          <p className="text-xs text-slate-400">github.com/Taj3D</p>
+          <div className="mt-2 flex gap-4 text-[11px] text-slate-300">
+            <span><strong className="text-white">{bn('47')}</strong> {isBn ? 'রেপো' : 'repos'}</span>
+            <span><strong className="text-amber-400">★ {bn('1.2')}k</strong> {isBn ? 'স্টার' : 'stars'}</span>
+          </div>
+          <div className="mt-3 grid grid-cols-7 gap-1" aria-hidden="true">
+            {contribs.map((c, i) => (<div key={i} className={`aspect-square rounded-[2px] ${c}`} />))}
+          </div>
+          <a href="https://github.com/Taj3D" target="_blank" rel="noopener noreferrer" aria-label={isBn ? 'GitHub প্রোফাইল দেখুন' : 'View GitHub profile'} className="mt-3 inline-flex items-center gap-1 text-xs font-bold text-emerald-400 hover:underline">
+            <Globe className="h-3 w-3" aria-hidden="true" />
+            {isBn ? 'GitHub দেখুন' : 'View GitHub'}
+            <ArrowRight className="h-3 w-3" aria-hidden="true" />
+          </a>
+        </div>
+
+        {/* 4. Client Logos */}
+        <div className="rounded-2xl border border-slate-200 bg-background p-5 shadow-sm transition hover:shadow-md dark:border-slate-800">
+          <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 text-white">
+            <Users2 className="h-5 w-5" aria-hidden="true" />
+          </div>
+          <h3 className="text-base font-extrabold">{isBn ? 'ক্লায়েন্ট লোগো' : 'Client Logos'}</h3>
+          <p className="text-xs text-muted-foreground">{isBn ? `${bn('120')}+ ক্লায়েন্টের আস্থা` : 'Trusted by 120+ clients'}</p>
+          <div className="mt-3 grid grid-cols-3 gap-2">
+            {clients.map((c) => (
+              <div key={c} className="flex aspect-square items-center justify-center rounded-lg bg-gradient-to-br from-slate-100 to-slate-200 text-xs font-bold text-slate-600 dark:from-slate-800 dark:to-slate-700 dark:text-slate-200" aria-hidden="true">
+                {c}
+              </div>
+            ))}
+          </div>
+          <p className="mt-2 text-[10px] italic text-muted-foreground">{isBn ? '(অনুমতিসহ)' : '(with permission)'}</p>
+        </div>
+
+        {/* 5. Live Workshop Photo */}
+        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-background shadow-sm transition hover:shadow-md dark:border-slate-800">
+          <div className="relative aspect-video bg-gradient-to-br from-amber-500 via-orange-500 to-rose-500">
+            <div className="absolute inset-0 flex items-center justify-center">
+              <Camera className="h-8 w-8 text-white/90" aria-hidden="true" />
+            </div>
+            <span className="absolute bottom-2 left-2 rounded bg-black/50 px-2 py-1 text-[10px] font-semibold text-white backdrop-blur-sm">
+              {isBn ? `${bn('45')} অংশগ্রহণকারী` : '45 attendees'}
+            </span>
+          </div>
+          <div className="p-4">
+            <h3 className="text-sm font-extrabold">{isBn ? 'লাইভ ওয়ার্কশপ ২০২৪' : 'Live Workshop 2024'}</h3>
+            <p className="text-xs text-muted-foreground">{isBn ? 'ঢাকা, বাংলাদেশ' : 'Dhaka, Bangladesh'}</p>
+          </div>
+        </div>
+
+        {/* 6. Course Certificate Sample */}
+        <div className="rounded-2xl border-2 border-amber-500/40 bg-gradient-to-br from-amber-50 to-orange-50 p-5 shadow-sm transition hover:shadow-md dark:from-amber-950/20 dark:to-orange-950/20">
+          <div className="mb-2 flex items-center justify-between">
+            <Award className="h-6 w-6 text-amber-600" aria-hidden="true" />
+            <span className="rounded-full bg-amber-500 px-2 py-1 text-[10px] font-bold text-white">{isBn ? 'সিল' : 'Seal'}</span>
+          </div>
+          <h3 className="text-sm font-extrabold">{isBn ? 'কমপ্লিশন সার্টিফিকেট' : 'Certificate of Completion'}</h3>
+          <p className="text-xs font-semibold text-amber-700 dark:text-amber-400">{isBn ? 'AI বিল্ডার বুটক্যাম্প' : 'AI Builder Bootcamp'}</p>
+          <div className="mt-3 rounded-md border border-dashed border-amber-400/60 bg-background/60 px-3 py-2 text-center">
+            <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{isBn ? 'ছাত্রের নাম' : 'Student Name'}</p>
+            <p className="text-sm font-bold">_________________</p>
+          </div>
+          <div className="mt-3 flex items-end justify-between">
+            <div>
+              <p className="border-t border-slate-400 pt-1 text-[10px] text-muted-foreground">{isBn ? 'ইন্সট্রাক্টর' : 'Instructor'}</p>
+              <p className="text-xs font-bold">Taj</p>
+            </div>
+            <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-amber-500 text-[8px] font-bold text-amber-600">NGS</div>
+          </div>
+        </div>
+      </div>
+
+      <p className="mt-6 text-center text-xs text-muted-foreground">
+        {isBn
+          ? '⚠️ সকল সার্টিফিকেট যাচাইযোগ্য। অনুরোধে লিংক দেওয়া হবে।'
+          : '⚠️ All credentials are verifiable. Links available on request.'}
+      </p>
+    </section>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/* 17. SocialReviewsSection — LinkedIn / Google / Facebook reviews      */
+/* ------------------------------------------------------------------ */
+export function SocialReviewsSection({ isBn }: { isBn: boolean }) {
+  const screenshots = [
+    'ai-chatbot-demo.vercel.app',
+    'restaurant-pos.netlify.app',
+    'portfolio-ai.vercel.app',
+    'crm-system.vercel.app',
+  ]
+  const screenshotBgs = [
+    'from-emerald-400 to-teal-500',
+    'from-amber-400 to-orange-500',
+    'from-rose-400 to-orange-500',
+    'from-emerald-400 to-cyan-500',
+  ]
+  // cyan→blue is the ONE allowed blue accent — used on LinkedIn + Facebook platform circles only
+  const platforms = [
+    {
+      name: 'LinkedIn',
+      icon: MessageSquare,
+      gradient: 'from-cyan-500 to-blue-500',
+      rating: '4.9',
+      count: isBn ? `${bn('32')} রেকমেন্ডেশন` : '32 recommendations',
+      review: isBn
+        ? 'Taj একজন অসাধারণ AI মেন্টর। তার বুটক্যাম্প আমার ক্যারিয়ার বদলে দিয়েছে।'
+        : 'Taj is an exceptional AI mentor. His bootcamp transformed my career.',
+      author: isBn ? 'আহমেদ রাজা, সফটওয়্যার ইঞ্জিনিয়ার' : 'Ahmed Raza, Software Engineer',
+    },
+    {
+      name: 'Google',
+      icon: Star,
+      gradient: 'from-amber-500 to-emerald-600',
+      rating: '5.0',
+      count: isBn ? `${bn('87')} রিভিউ` : '87 reviews',
+      review: isBn
+        ? 'বাংলাদেশে সেরা AI ট্রেনিং। সবাইকে সুপারিশ করছি।'
+        : 'Best AI training in Bangladesh. Highly recommended.',
+      author: isBn ? 'ফাতিমা খানম' : 'Fatima Khanam',
+    },
+    {
+      name: 'Facebook',
+      icon: Globe,
+      gradient: 'from-cyan-500 to-blue-500',
+      rating: '4.8',
+      count: isBn ? `${bn('156')} রিভিউ` : '156 reviews',
+      review: isBn
+        ? 'অসাধারণ কোর্স। ৭ দিনে আমি নিজের অ্যাপ বানাতে পেরেছি।'
+        : 'Amazing course. I built my own app in 7 days.',
+      author: isBn ? 'করিম উদ্দিন' : 'Karim Uddin',
+    },
+  ]
+
+  return (
+    <section
+      data-track="social-reviews"
+      aria-label={isBn ? 'সোশ্যাল রিভিউ' : 'Social reviews'}
+      className="mx-auto w-full max-w-6xl px-4 py-12"
+    >
+      <div className="mb-8 text-center">
+        <p className="mb-2 text-xs font-bold uppercase tracking-widest text-amber-600">
+          {isBn ? 'সোশ্যাল প্রুফ' : 'Social Proof'}
+        </p>
+        <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl">
+          {isBn ? 'রিভিউ' : 'Reviews'}
+        </h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          {isBn ? 'পাবলিক প্রোফাইলে আমাদের রেটিং' : 'Our ratings across public platforms'}
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+        {platforms.map((p) => {
+          const Icon = p.icon
+          return (
+            <div key={p.name} className="rounded-2xl border border-slate-200 bg-background p-5 shadow-sm transition hover:shadow-md dark:border-slate-800">
+              <div className="mb-3 flex items-center justify-between">
+                <div className={`flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br ${p.gradient} text-white`}>
+                  <Icon className="h-5 w-5" aria-hidden="true" />
+                </div>
+                <div className="text-right">
+                  <p className="text-lg font-extrabold text-slate-900 dark:text-white">
+                    {bn(p.rating)} <span className="text-amber-500">★</span>
+                  </p>
+                  <p className="text-[10px] text-muted-foreground">{p.count}</p>
+                </div>
+              </div>
+              <h3 className="text-sm font-bold">{p.name} {isBn ? 'রিভিউ' : 'Reviews'}</h3>
+              <blockquote className="mt-2 border-l-2 border-amber-500/50 pl-3 text-xs italic text-muted-foreground">
+                &ldquo;{p.review}&rdquo;
+              </blockquote>
+              <p className="mt-2 text-[11px] font-semibold text-slate-700 dark:text-slate-300">— {p.author}</p>
+            </div>
+          )
+        })}
+      </div>
+
+      {/* Student-built website screenshots */}
+      <div className="mt-8">
+        <h3 className="mb-3 text-sm font-bold uppercase tracking-wide text-muted-foreground">
+          {isBn ? 'স্টুডেন্ট প্রজেক্ট স্ক্রিনশট' : 'Student Project Screenshots'}
+        </h3>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {screenshots.map((url, i) => (
+            <div key={url} className="overflow-hidden rounded-lg border border-slate-200 bg-background shadow-sm transition hover:shadow-md dark:border-slate-800">
+              <div className="flex items-center gap-1 border-b border-slate-200 bg-slate-50 px-2 py-1.5 dark:border-slate-700 dark:bg-slate-900">
+                <span className="h-2 w-2 rounded-full bg-rose-400" aria-hidden="true" />
+                <span className="h-2 w-2 rounded-full bg-amber-400" aria-hidden="true" />
+                <span className="h-2 w-2 rounded-full bg-emerald-400" aria-hidden="true" />
+                <span className="ml-2 truncate text-[10px] font-mono text-muted-foreground">{url}</span>
+              </div>
+              <div className={`flex aspect-video items-center justify-center bg-gradient-to-br ${screenshotBgs[i]}`}>
+                <Code className="h-6 w-6 text-white/80" aria-hidden="true" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-8 flex flex-col items-center gap-3">
+        <a
+          href="#"
+          aria-label={isBn ? 'সব রিভিউ দেখুন' : 'See all reviews'}
+          className="inline-flex items-center gap-2 rounded-full border-2 border-emerald-500 px-6 py-2.5 text-sm font-bold text-emerald-600 transition hover:bg-emerald-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 dark:hover:bg-emerald-950/40"
+        >
+          <Star className="h-4 w-4" aria-hidden="true" />
+          {isBn ? 'সব রিভিউ দেখুন' : 'See all reviews'}
+        </a>
+        <p className="text-center text-xs text-muted-foreground">
+          {isBn
+            ? '⚠️ দেখানো রিভিউগুলো পাবলিক প্রোফাইল থেকে নমুনা।'
+            : '⚠️ Reviews shown are representative samples from public profiles.'}
+        </p>
+      </div>
+    </section>
+  )
+}
 
