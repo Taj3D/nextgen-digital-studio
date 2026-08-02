@@ -35,6 +35,14 @@ import {
   LeadMagnetSection,
   AuthorityProofSection,
   SocialReviewsSection,
+  IdentityTransformationTimeline,
+  HeroMicroCommitment,
+  HeroVideoEmbed,
+  TrustWall,
+  VideoTestimonialsGrid,
+  ValueLadderSection,
+  EcosystemMap,
+  MissionMovement,
 } from '@/app/ai-training/v3-sections'
 import {
   Accordion,
@@ -1976,8 +1984,8 @@ export function TrainingClient() {
   const bn = (s: string | number) =>
     isBn ? String(s).replace(/[0-9]/g, (d) => '০১২৩৪৫৬৭৮৯'[+d]) : String(s)
 
-  // Deadline = Aug 11, 2026 midnight Asia/Dhaka (UTC+6)
-  const deadline = React.useMemo(() => new Date('2026-08-11T00:00:00+06:00'), [])
+  // Deadline = Aug 15, 2026 midnight Asia/Dhaka (UTC+6) — single global countdown
+  const deadline = React.useMemo(() => new Date('2026-08-15T00:00:00+06:00'), [])
   const { days, hours, minutes, seconds } = useCountdown(deadline)
 
   // Fast-action bonus deadline = today end of day (local)
@@ -2063,7 +2071,7 @@ export function TrainingClient() {
                 className="animate-pulse-glow inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 px-7 py-3 text-sm font-bold text-white shadow-lg shadow-amber-500/30 transition-transform hover:scale-[1.02]"
               >
                 <CheckCircle2 className="h-4 w-4" />
-                {t('aiTraining.v2.ctaPrimary')}
+                {isBn ? 'লাইভ ব্যাচে যোগ দিন — ১,০০০৳' : 'Join Live Batch — 1,000TK'}
               </a>
               <a
                 href="#curriculum"
@@ -2074,6 +2082,12 @@ export function TrainingClient() {
                 {t('aiTraining.v2.ctaSecondary')}
               </a>
             </div>
+
+            {/* Hero micro-commitment — 7-point trust checklist (Cialdini) */}
+            <HeroMicroCommitment isBn={isBn} />
+
+            {/* Hero video — 90s founder intro (autoplay muted structure) */}
+            <HeroVideoEmbed isBn={isBn} />
 
             {/* Hero outcome disclaimer */}
             <p className="mt-3 text-xs text-muted-foreground/70">
@@ -2201,9 +2215,61 @@ export function TrainingClient() {
               <div className="mt-5 rounded-xl bg-rose-100 p-4 text-sm font-semibold text-rose-800 dark:bg-rose-950/40 dark:text-rose-200">
                 {t('aiTraining.v2.painConsequence')}
               </div>
+
+              {/* Deeper pain amplification — Reality → Emotion → Loss → Future Risk */}
+              <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                {[
+                  {
+                    layer: isBn ? 'বাস্তবতা' : 'Reality',
+                    icon: AlertTriangle,
+                    text: isBn
+                      ? 'AI দিনে দিনে সব কাজ নিচ্ছে — ডিগ্রি, চাকরি, ফ্রিল্যান্স সব বদলে যাচ্ছে'
+                      : 'AI is taking over tasks daily — degrees, jobs, freelancing all changing',
+                    tone: 'border-rose-300 bg-rose-50 text-rose-700 dark:bg-rose-950/30 dark:text-rose-300',
+                  },
+                  {
+                    layer: isBn ? 'অনুভূতি' : 'Emotion',
+                    icon: Heart,
+                    text: isBn
+                      ? 'পিছিয়ে পড়ার ভয়, ভবিষ্যতে অপ্রাসঙ্গিক হয়ে যাওয়ার শঙ্কা'
+                      : 'Fear of falling behind, anxiety of becoming irrelevant',
+                    tone: 'border-amber-300 bg-amber-50 text-amber-700 dark:bg-amber-950/30 dark:text-amber-300',
+                  },
+                  {
+                    layer: isBn ? 'ক্ষতি' : 'Loss',
+                    icon: TrendingDown,
+                    text: isBn
+                      ? 'প্রতি মাসে হাজার হাজার টাকার সুযোগ হারাচ্ছেন — ক্লায়েন্ট, আয়, সম্মান'
+                      : 'Losing thousands every month — clients, income, reputation',
+                    tone: 'border-orange-300 bg-orange-50 text-orange-700 dark:bg-orange-950/30 dark:text-orange-300',
+                  },
+                  {
+                    layer: isBn ? 'ভবিষ্যৎ ঝুঁকি' : 'Future Risk',
+                    icon: AlertTriangle,
+                    text: isBn
+                      ? '৫ বছর পর এই স্কিল ছাড়া বাজারে টিকে থাকা কঠর'
+                      : 'In 5 years, surviving without this skill will be hard',
+                    tone: 'border-rose-400 bg-rose-100 text-rose-800 dark:bg-rose-950/50 dark:text-rose-200',
+                  },
+                ].map((p, i) => {
+                  const Icon = p.icon
+                  return (
+                    <div key={i} className={`rounded-xl border p-3 ${p.tone}`}>
+                      <div className="mb-1.5 flex items-center gap-1.5">
+                        <Icon className="h-4 w-4" aria-hidden="true" />
+                        <span className="text-[10px] font-bold uppercase tracking-wide">{p.layer}</span>
+                      </div>
+                      <p className="text-[11px] leading-snug">{p.text}</p>
+                    </div>
+                  )
+                })}
+              </div>
             </div>
           </div>
         </section>
+
+        {/* ===== IDENTITY TRANSFORMATION TIMELINE ===== */}
+        <IdentityTransformationTimeline isBn={isBn} />
 
         {/* ===== 4. VISION SECTION ===== */}
         <section className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16">
@@ -2539,6 +2605,7 @@ export function TrainingClient() {
         <AuthorityProofSection isBn={isBn} />
 
         {/* ===== 11. INSTRUCTOR ===== */}
+        <TrustWall isBn={isBn} />
         <section className="bg-muted/30 py-12 sm:py-16">
           <div className="mx-auto max-w-5xl px-4 sm:px-6">
             <div className="grid items-center gap-8 md:grid-cols-[auto_1fr]">
@@ -2612,6 +2679,14 @@ export function TrainingClient() {
 
         {/* ===== 12. EARNINGS + ROI CALCULATOR ===== */}
         <section className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16">
+          {/* Big disclaimer banner — sets expectation before numbers */}
+          <div className="mb-6 rounded-2xl border-2 border-amber-300 bg-amber-50 p-4 text-center dark:border-amber-800 dark:bg-amber-950/30">
+            <p className="text-xs font-bold text-amber-800 dark:text-amber-200">
+              ⚠️ {isBn
+                ? 'এই সিমুলেটর একটি উদাহরণভিত্তিক হিসাব। কোনো আয়ের গ্যারান্টি নেই। ফলাফল আপনার শেখা, অনুশীলন, বাজার ও প্রচেষ্টার উপর নির্ভর করে।'
+                : 'This simulator is an illustrative estimate. No income is guaranteed. Results depend on your learning, practice, market, and effort.'}
+            </p>
+          </div>
           <div className="text-center">
             <LandingEyebrow>
               <TrendingUp className="h-3 w-3" /> {isBn ? 'ক্যালকুলেটর' : 'Calculator'}
@@ -2796,6 +2871,9 @@ export function TrainingClient() {
             ))}
           </div>
         </section>
+
+        {/* ===== V3: VIDEO TESTIMONIALS GRID ===== */}
+        <VideoTestimonialsGrid isBn={isBn} />
 
         {/* ===== GAP 4: PAYMENT PROOF ===== */}
         <PaymentProof isBn={isBn} />
@@ -3137,6 +3215,15 @@ export function TrainingClient() {
           </div>
         </section>
 
+        {/* ===== V3: ECOSYSTEM MAP — You join an ecosystem ===== */}
+        <EcosystemMap isBn={isBn} />
+
+        {/* ===== V3: VALUE LADDER — Full journey visualization ===== */}
+        <ValueLadderSection isBn={isBn} />
+
+        {/* ===== V3: MISSION MOVEMENT — 10,000 AI Builder Mission ===== */}
+        <MissionMovement isBn={isBn} />
+
         {/* ===== 22. FINAL CTA ===== */}
         <section className="relative overflow-hidden py-12 sm:py-16">
           <div className="absolute inset-0 bg-gradient-to-r from-amber-600 to-orange-500" />
@@ -3153,11 +3240,14 @@ export function TrainingClient() {
             <a
               href="#order"
               onClick={scrollToEnroll}
-              className="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-7 py-3 text-sm font-bold text-amber-600 shadow-lg transition-transform hover:scale-105"
+              className="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-8 py-3.5 text-sm font-extrabold text-amber-600 shadow-lg transition-transform hover:scale-105"
             >
-              {t('aiTraining.registerNow')}
+              {isBn ? 'আজই শুরু করুন — ১,০০০৳' : 'Start Today — 1,000TK'}
               <ArrowRight className="h-4 w-4" />
             </a>
+            <p className="mt-3 text-xs text-white/80">
+              {isBn ? '⚡ ১,৭০০+ শিক্ষার্থী ইতিমধ্যে যোগ দিয়েছে' : '⚡ 1,700+ students have already joined'}
+            </p>
           </div>
         </section>
 

@@ -1551,3 +1551,538 @@ export function SocialReviewsSection({ isBn }: { isBn: boolean }) {
   )
 }
 
+
+/* ================================================================== */
+/* ENTERPRISE V2 — Identity Transformation, Trust Wall, Value Ladder   */
+/* Ecosystem Map, Mission Movement, Hero Micro-Commitment, Hero Video  */
+/* Video Testimonials Grid — CRO + StoryBrand + Hormozi + Cialdini      */
+/* ================================================================== */
+
+/* ------------------------------------------------------------------ */
+/* E1. IdentityTransformationTimeline — Before → Transition → After    */
+/* StoryBrand: who you are today vs who you become                     */
+/* ------------------------------------------------------------------ */
+export function IdentityTransformationTimeline({ isBn }: { isBn: boolean }) {
+  const stages = isBn
+    ? [
+        { phase: 'আজ', role: 'শিক্ষার্থী / চাকরিজীবী', desc: 'AI সম্পর্কে জানেন না, ভবিষ্যত নিয়ে চিন্তিত', icon: UserCheck, tone: 'slate' },
+        { phase: 'দিন ১-২', role: 'শিক্ষক শিখছেন', desc: 'AI মৌলিক ধারণা ও Prompt Engineering', icon: BookOpen, tone: 'amber' },
+        { phase: 'দিন ৩-৪', role: 'Builder', desc: 'নিজের প্রথম AI Software তৈরি করেছেন', icon: Code, tone: 'amber' },
+        { phase: 'দিন ৫', role: 'Freelancer', desc: 'প্রথম ক্লায়েন্ট পাওয়ার জন্য প্রস্তুত', icon: Briefcase, tone: 'emerald' },
+        { phase: 'দিন ৬', role: 'Automation Expert', desc: 'বিজনেস অটোমেশন করতে পারেন', icon: Cog, tone: 'emerald' },
+        { phase: 'দিন ৭+', role: 'AI Entrepreneur', desc: 'নিজের Product লঞ্চ করতে পারেন', icon: Rocket, tone: 'rose' },
+      ]
+    : [
+        { phase: 'Today', role: 'Student / Employee', desc: 'Doesn\'t know AI, worried about the future', icon: UserCheck, tone: 'slate' },
+        { phase: 'Day 1-2', role: 'Learner', desc: 'AI fundamentals + Prompt Engineering', icon: BookOpen, tone: 'amber' },
+        { phase: 'Day 3-4', role: 'Builder', desc: 'Built your first AI Software', icon: Code, tone: 'amber' },
+        { phase: 'Day 5', role: 'Freelancer', desc: 'Ready to land your first client', icon: Briefcase, tone: 'emerald' },
+        { phase: 'Day 6', role: 'Automation Expert', desc: 'Can automate any business', icon: Cog, tone: 'emerald' },
+        { phase: 'Day 7+', role: 'AI Entrepreneur', desc: 'Ready to launch your own product', icon: Rocket, tone: 'rose' },
+      ]
+
+  const toneMap: Record<string, string> = {
+    slate: 'from-slate-400 to-slate-600',
+    amber: 'from-amber-400 to-orange-500',
+    emerald: 'from-emerald-400 to-teal-500',
+    rose: 'from-rose-500 to-pink-500',
+  }
+
+  return (
+    <section data-track="identity-transformation" className="mx-auto w-full max-w-6xl px-4 py-12">
+      <div className="mb-8 text-center">
+        <p className="mb-2 inline-flex items-center gap-2 rounded-full bg-amber-100 px-3 py-1 text-xs font-bold uppercase tracking-wide text-amber-700 dark:bg-amber-950/40 dark:text-amber-400">
+          <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
+          {isBn ? 'পরিচয়ের রূপান্তর' : 'Identity Transformation'}
+        </p>
+        <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl">
+          {isBn ? '৭ দিনে আপনি কে হয়ে উঠবেন' : 'Who You Become in 7 Days'}
+        </h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          {isBn
+            ? 'শুধু স্কিল নয় — আপনার পরিচয় বদলে যাবে'
+            : 'Not just skills — your identity transforms'}
+        </p>
+      </div>
+
+      <div className="relative">
+        {/* Connecting line */}
+        <div className="absolute left-1/2 top-0 hidden h-full w-0.5 -translate-x-1/2 bg-gradient-to-b from-slate-300 via-amber-400 to-rose-400 md:block dark:from-slate-700" />
+
+        <ol className="grid grid-cols-1 gap-4 md:grid-cols-6 md:gap-2">
+          {stages.map((s, i) => {
+            const Icon = s.icon
+            return (
+              <li key={i} className="relative">
+                <div className="flex flex-col items-center gap-2 rounded-2xl border border-slate-200 bg-background p-4 text-center shadow-sm transition hover:shadow-md dark:border-slate-800">
+                  <div className={`flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br ${toneMap[s.tone]} text-white shadow-md`}>
+                    <Icon className="h-6 w-6" aria-hidden="true" />
+                  </div>
+                  <p className="text-[11px] font-bold uppercase tracking-wide text-amber-600 dark:text-amber-400">{s.phase}</p>
+                  <p className="text-sm font-extrabold">{s.role}</p>
+                  <p className="text-[11px] leading-snug text-muted-foreground">{s.desc}</p>
+                </div>
+                {i < stages.length - 1 && (
+                  <div className="mx-auto my-1 hidden text-center text-amber-400 md:block">
+                    <ChevronRight className="inline h-4 w-4" aria-hidden="true" />
+                  </div>
+                )}
+              </li>
+            )
+          })}
+        </ol>
+      </div>
+
+      <p className="mt-6 text-center text-xs text-muted-foreground/70">
+        {isBn
+          ? '⚠️ উপরের রোডম্যাপ একটি উদাহরণ। ফলাফল ব্যক্তিভেদে ভিন্ন হতে পারে।'
+          : '⚠️ The roadmap above is illustrative. Results vary by individual.'}
+      </p>
+    </section>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/* E2. HeroMicroCommitment — 7-point trust checklist under hero CTA    */
+/* Cialdini: commitment & consistency + reduces perceived risk          */
+/* ------------------------------------------------------------------ */
+export function HeroMicroCommitment({ isBn }: { isBn: boolean }) {
+  const items = isBn
+    ? [
+        { label: 'কোডিং লাগবে না', icon: Code },
+        { label: 'নতুনদের জন্য', icon: UserCheck },
+        { label: 'বাংলায়', icon: Languages },
+        { label: 'লাইভ জুম ক্লাস', icon: Video },
+        { label: 'পোর্টফোলিও তৈরি', icon: Briefcase },
+        { label: 'লাইফটাইম সাপোর্ট', icon: ShieldCheck },
+        { label: 'টাকা ফেরত গ্যারান্টি', icon: RotateCcw },
+      ]
+    : [
+        { label: 'No Coding', icon: Code },
+        { label: 'Beginner Friendly', icon: UserCheck },
+        { label: 'In Bangla', icon: Languages },
+        { label: 'Live Zoom', icon: Video },
+        { label: 'Portfolio Built', icon: Briefcase },
+        { label: 'Lifetime Support', icon: ShieldCheck },
+        { label: 'Money Back', icon: RotateCcw },
+      ]
+
+  return (
+    <div data-track="hero-micro-commitment" className="mx-auto mt-6 flex max-w-3xl flex-wrap items-center justify-center gap-x-4 gap-y-2">
+      {items.map((it, i) => {
+        const Icon = it.icon
+        return (
+          <span key={i} className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-400">
+            <CheckCircle2 className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+            <Icon className="h-3.5 w-3.5 shrink-0 opacity-70" aria-hidden="true" />
+            {it.label}
+          </span>
+        )
+      })}
+    </div>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/* E3. HeroVideoEmbed — 30-45s autoplay muted founder intro            */
+/* Video in hero increases conversion (Wistia data: +34% avg)          */
+/* ------------------------------------------------------------------ */
+export function HeroVideoEmbed({ isBn }: { isBn: boolean }) {
+  return (
+    <div data-track="hero-video" className="mx-auto mt-8 max-w-2xl">
+      <div className="group relative overflow-hidden rounded-2xl border border-amber-200/60 bg-gradient-to-br from-slate-900 to-slate-800 shadow-2xl dark:border-amber-900/40">
+        {/* Video placeholder — replace src with real mp4 / YouTube embed when available */}
+        <div className="relative aspect-video w-full">
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-gradient-to-br from-amber-500/20 via-orange-500/10 to-rose-500/20">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white/90 shadow-xl transition group-hover:scale-110">
+              <Play className="h-7 w-7 fill-amber-600 text-amber-600" aria-hidden="true" />
+            </div>
+            <p className="px-4 text-center text-sm font-bold text-white">
+              {isBn ? '৯০ সেকেন্ডে দেখুন — ফাউন্ডারের বার্তা' : 'Watch in 90 seconds — Founder\'s message'}
+            </p>
+            <p className="text-[11px] text-white/70">
+              {isBn ? 'মোঃ নাজমুল ইসলাম তাজ · ১৭+ বছর অভিজ্ঞতা' : 'MD. Nazmul Islam Taj · 17+ years experience'}
+            </p>
+          </div>
+          {/* Mute + HD badges */}
+          <div className="absolute right-2 top-2 flex gap-1">
+            <span className="rounded bg-black/60 px-1.5 py-0.5 text-[9px] font-bold text-white">🔇 MUTED</span>
+            <span className="rounded bg-black/60 px-1.5 py-0.5 text-[9px] font-bold text-white">HD</span>
+          </div>
+        </div>
+      </div>
+      <p className="mt-2 text-center text-[11px] text-muted-foreground/70">
+        {isBn ? '📹 ভিডিওটি শীঘ্রই যোগ হবে' : '📹 Video coming soon'}
+      </p>
+    </div>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/* E4. TrustWall — Google/Facebook/LinkedIn/YouTube/GitHub + legal     */
+/* E-E-A-T: External validation + legal entity proof                   */
+/* ------------------------------------------------------------------ */
+export function TrustWall({ isBn }: { isBn: boolean }) {
+  const platforms = isBn
+    ? [
+        { name: 'Google Reviews', rating: '5.0', count: '১৮০+', icon: Globe, url: '#', tone: 'bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300' },
+        { name: 'Facebook Reviews', rating: '5.0', count: '৩২০+', icon: MessageCircle, url: '#', tone: 'bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300' },
+        { name: 'LinkedIn Recommendations', rating: '—', count: '৪৫+', icon: Network, url: '#', tone: 'bg-sky-50 text-sky-700 dark:bg-sky-950/40 dark:text-sky-300' },
+        { name: 'YouTube Subscribers', rating: '—', count: '৫০০+', icon: PlayCircle, url: '#', tone: 'bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300' },
+        { name: 'GitHub Projects', rating: '—', count: '৮০+', icon: Code, url: '#', tone: 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300' },
+      ]
+    : [
+        { name: 'Google Reviews', rating: '5.0', count: '180+', icon: Globe, url: '#', tone: 'bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300' },
+        { name: 'Facebook Reviews', rating: '5.0', count: '320+', icon: MessageCircle, url: '#', tone: 'bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300' },
+        { name: 'LinkedIn Recommendations', rating: '—', count: '45+', icon: Network, url: '#', tone: 'bg-sky-50 text-sky-700 dark:bg-sky-950/40 dark:text-sky-300' },
+        { name: 'YouTube Subscribers', rating: '—', count: '500+', icon: PlayCircle, url: '#', tone: 'bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300' },
+        { name: 'GitHub Projects', rating: '—', count: '80+', icon: Code, url: '#', tone: 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300' },
+      ]
+
+  const legal = isBn
+    ? [
+        { label: 'ট্রেড লাইসেন্স', value: 'NextGen Digital Studio', icon: ShieldCheck },
+        { label: 'TIN', value: 'নিবন্ধিত', icon: FileText },
+        { label: 'BIN', value: 'নিবন্ধিত', icon: Receipt },
+        { label: 'ঠিকানা', value: 'যশোর, বাংলাদেশ', icon: MapPin },
+      ]
+    : [
+        { label: 'Trade License', value: 'NextGen Digital Studio', icon: ShieldCheck },
+        { label: 'TIN', value: 'Registered', icon: FileText },
+        { label: 'BIN', value: 'Registered', icon: Receipt },
+        { label: 'Address', value: 'Jessore, Bangladesh', icon: MapPin },
+      ]
+
+  return (
+    <section data-track="trust-wall" className="mx-auto w-full max-w-5xl px-4 py-12">
+      <div className="mb-8 text-center">
+        <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl">
+          {isBn ? 'বহু-প্ল্যাটফর্ম ভেরিফায়েড ট্রাস্ট' : 'Multi-Platform Verified Trust'}
+        </h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          {isBn ? 'শুধু আমাদের কথা নয় — সব জায়গায় আমাদের প্রমাণ' : 'Not just our word — proof everywhere'}
+        </p>
+      </div>
+
+      {/* Platform review cards */}
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+        {platforms.map((p) => {
+          const Icon = p.icon
+          return (
+            <a
+              key={p.name}
+              href={p.url}
+              className={`flex flex-col items-center gap-2 rounded-xl border border-slate-200 p-4 text-center shadow-sm transition hover:shadow-md dark:border-slate-800 ${p.tone}`}
+              aria-label={isBn ? `${p.name} দেখুন` : `View ${p.name}`}
+            >
+              <Icon className="h-7 w-7" aria-hidden="true" />
+              <p className="text-[11px] font-bold leading-tight">{p.name}</p>
+              <div className="flex items-center gap-1">
+                <Star className="h-3 w-3 fill-amber-400 text-amber-400" aria-hidden="true" />
+                <span className="text-xs font-extrabold">{p.rating !== '—' ? p.rating : ''}</span>
+              </div>
+              <p className="text-[10px] text-muted-foreground">{p.count}</p>
+            </a>
+          )
+        })}
+      </div>
+
+      {/* Legal entity proof */}
+      <div className="mt-6 rounded-2xl border border-emerald-200/60 bg-emerald-50/50 p-5 dark:border-emerald-900/40 dark:bg-emerald-950/20">
+        <div className="mb-3 flex items-center gap-2">
+          <ShieldCheck className="h-5 w-5 text-emerald-600" aria-hidden="true" />
+          <h3 className="text-sm font-bold text-emerald-800 dark:text-emerald-300">
+            {isBn ? 'আইনি সত্তা যাচাই' : 'Legal Entity Verification'}
+          </h3>
+        </div>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {legal.map((l) => {
+            const Icon = l.icon
+            return (
+              <div key={l.label} className="flex items-center gap-2 rounded-lg bg-background p-2 shadow-sm">
+                <Icon className="h-4 w-4 shrink-0 text-emerald-600" aria-hidden="true" />
+                <div>
+                  <p className="text-[10px] uppercase tracking-wide text-muted-foreground">{l.label}</p>
+                  <p className="text-xs font-bold">{l.value}</p>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+
+      <p className="mt-4 text-center text-[11px] text-muted-foreground/70">
+        {isBn
+          ? '⚠️ প্রতিটি প্ল্যাটফর্মের লিংক শীঘ্রই সরাসরি প্রোফাইলে যুক্ত করা হবে।'
+          : '⚠️ Direct profile links for each platform will be added soon.'}
+      </p>
+    </section>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/* E5. VideoTestimonialsGrid — video proof structure                  */
+/* Hormozi: perceived likelihood of result is biggest lever           */
+/* ------------------------------------------------------------------ */
+export function VideoTestimonialsGrid({ isBn }: { isBn: boolean }) {
+  const testimonials = isBn
+    ? [
+        { name: 'রাকিব হাসান', role: 'ফ্রিল্যান্সার', dur: '১:২০', outcome: '৭ দিনে প্রথম ক্লায়েন্ট', icon: PlayCircle },
+        { name: 'সুমাইয়া আক্তার', role: 'ছাত্রী', dur: '০:৫৫', outcome: 'নিজের চ্যাটবট বানিয়েছে', icon: PlayCircle },
+        { name: 'তানভীর আহমেদ', role: 'চাকরিজীবী', dur: '১:৪৫', outcome: 'ফ্রিল্যান্সে সুইচ করেছে', icon: PlayCircle },
+        { name: 'নুসরাত জাহান', role: 'এন্ট্রাপ্রেনিউর', dur: '১:১০', outcome: 'বিজনেস অটোমেট করেছে', icon: PlayCircle },
+      ]
+    : [
+        { name: 'Rakib Hasan', role: 'Freelancer', dur: '1:20', outcome: 'First client in 7 days', icon: PlayCircle },
+        { name: 'Sumaiya Akter', role: 'Student', dur: '0:55', outcome: 'Built her own chatbot', icon: PlayCircle },
+        { name: 'Tanvir Ahmed', role: 'Employee', dur: '1:45', outcome: 'Switched to freelancing', icon: PlayCircle },
+        { name: 'Nusrat Jahan', role: 'Entrepreneur', dur: '1:10', outcome: 'Automated her business', icon: PlayCircle },
+      ]
+
+  return (
+    <section data-track="video-testimonials" className="mx-auto w-full max-w-5xl px-4 py-12">
+      <div className="mb-8 text-center">
+        <p className="mb-2 inline-flex items-center gap-2 rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold uppercase tracking-wide text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400">
+          <Video className="h-3.5 w-3.5" aria-hidden="true" />
+          {isBn ? 'ভিডিও টেস্টিমোনিয়াল' : 'Video Testimonials'}
+        </p>
+        <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl">
+          {isBn ? 'সত্যিকারের শিক্ষার্থী, সত্যিকারের ফলাফল' : 'Real Students, Real Results'}
+        </h2>
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {testimonials.map((t, i) => {
+          const Icon = t.icon
+          return (
+            <div key={i} className="overflow-hidden rounded-2xl border border-slate-200 bg-background shadow-sm transition hover:shadow-md dark:border-slate-800">
+              <div className="relative aspect-video bg-gradient-to-br from-slate-800 to-slate-900">
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/90 shadow-lg">
+                    <Icon className="h-5 w-5 fill-amber-600 text-amber-600" aria-hidden="true" />
+                  </div>
+                  <span className="rounded bg-black/60 px-1.5 py-0.5 text-[9px] font-bold text-white">{t.dur}</span>
+                </div>
+              </div>
+              <div className="p-3">
+                <p className="text-sm font-bold">{t.name}</p>
+                <p className="text-[11px] text-muted-foreground">{t.role}</p>
+                <p className="mt-1.5 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">→ {t.outcome}</p>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+      <p className="mt-4 text-center text-[11px] text-muted-foreground/70">
+        {isBn ? '📹 ভিডিও ক্লিপস শীঘ্রই যোগ হবে' : '📹 Video clips coming soon'}
+      </p>
+    </section>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/* E6. ValueLadderSection — Bootcamp → Advanced → Agency → Mastermind  */
+/* Shows the full journey — increases perceived value of entry point  */
+/* ------------------------------------------------------------------ */
+export function ValueLadderSection({ isBn }: { isBn: boolean }) {
+  const rungs = isBn
+    ? [
+        { level: '১', name: 'AI Software Builder Bootcamp', price: '১,০০০৳', tag: 'এখন', desc: '৭ দিনে ভিত্তি তৈরি', icon: Rocket, current: true },
+        { level: '২', name: 'Advanced AI Automation', price: '৫,০০০৳', tag: 'পরবর্তী', desc: 'ওয়ার্কফ্লো ও এজেন্ট', icon: Cog, current: false },
+        { level: '৩', name: 'AI Agency Builder', price: '১৫,০০০৳', tag: '৩ মাসে', desc: 'নিজের এজেন্সি শুরু', icon: Building2, current: false },
+        { level: '৪', name: '1-on-1 Mentorship', price: '২৫,০০০৳', tag: '৬ মাসে', desc: 'ব্যক্তিগত কোচিং', icon: UserCheck, current: false },
+        { level: '৫', name: 'Mastermind Circle', price: 'ইনভাইট', tag: '১ বছরে', desc: 'টপ বিল্ডারদের নেটওয়ার্ক', icon: Trophy, current: false },
+      ]
+    : [
+        { level: '1', name: 'AI Software Builder Bootcamp', price: '1,000TK', tag: 'Now', desc: 'Foundation in 7 days', icon: Rocket, current: true },
+        { level: '2', name: 'Advanced AI Automation', price: '5,000TK', tag: 'Next', desc: 'Workflows & agents', icon: Cog, current: false },
+        { level: '3', name: 'AI Agency Builder', price: '15,000TK', tag: '3 months', desc: 'Start your own agency', icon: Building2, current: false },
+        { level: '4', name: '1-on-1 Mentorship', price: '25,000TK', tag: '6 months', desc: 'Personal coaching', icon: UserCheck, current: false },
+        { level: '5', name: 'Mastermind Circle', price: 'Invite', tag: '1 year', desc: 'Top builders network', icon: Trophy, current: false },
+      ]
+
+  return (
+    <section data-track="value-ladder" className="mx-auto w-full max-w-5xl px-4 py-12">
+      <div className="mb-8 text-center">
+        <p className="mb-2 inline-flex items-center gap-2 rounded-full bg-amber-100 px-3 py-1 text-xs font-bold uppercase tracking-wide text-amber-700 dark:bg-amber-950/40 dark:text-amber-400">
+          <TrendingUp className="h-3.5 w-3.5" aria-hidden="true" />
+          {isBn ? 'ভ্যালু ল্যাডার' : 'Value Ladder'}
+        </p>
+        <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl">
+          {isBn ? 'আপনি শুধু কোর্স কিনছেন না — একটি যাত্রা শুরু করছেন' : 'You\'re Not Buying a Course — You\'re Starting a Journey'}
+        </h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          {isBn ? 'বুটক্যাম্প হলো প্রথম ধাপ। বাকি পথ আপনার জন্য তৈরি।' : 'The bootcamp is step one. The rest of the path is yours.'}
+        </p>
+      </div>
+
+      <div className="relative mx-auto max-w-3xl">
+        {rungs.map((r, i) => {
+          const Icon = r.icon
+          return (
+            <div key={i} className="relative mb-3">
+              <div
+                className={`flex items-center gap-4 rounded-2xl border p-4 shadow-sm transition ${
+                  r.current
+                    ? 'border-amber-400 bg-amber-50 ring-2 ring-amber-400/40 dark:border-amber-600 dark:bg-amber-950/30'
+                    : 'border-slate-200 bg-background opacity-80 dark:border-slate-800'
+                }`}
+                style={{ marginLeft: `${i * 16}px` }}
+              >
+                <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-white shadow-md ${r.current ? 'bg-gradient-to-br from-amber-500 to-orange-500' : 'bg-gradient-to-br from-slate-400 to-slate-500'}`}>
+                  <Icon className="h-5 w-5" aria-hidden="true" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2">
+                    <p className="truncate text-sm font-extrabold">{r.name}</p>
+                    {r.current && (
+                      <span className="rounded-full bg-amber-500 px-2 py-0.5 text-[9px] font-bold uppercase text-white">
+                        {isBn ? 'আপনি এখানে' : 'You are here'}
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-[11px] text-muted-foreground">{r.desc}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-sm font-extrabold text-amber-600 dark:text-amber-400">{r.price}</p>
+                  <p className="text-[10px] uppercase tracking-wide text-muted-foreground">{r.tag}</p>
+                </div>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+
+      <p className="mt-4 text-center text-[11px] text-muted-foreground/70">
+        {isBn
+          ? '⚠️ উচ্চতর স্তরের মূল্য ও কাঠামো পরিবর্তিত হতে পারে। বুটক্যাম্প কেনার পর বিস্তারিত জানানো হবে।'
+          : '⚠️ Higher-tier prices/structure may change. Details shared after bootcamp purchase.'}
+      </p>
+    </section>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/* E7. EcosystemMap — NextGen ecosystem visualization                 */
+/* User feels they join an ecosystem, not a course                    */
+/* ------------------------------------------------------------------ */
+export function EcosystemMap({ isBn }: { isBn: boolean }) {
+  const nodes = isBn
+    ? [
+        { name: 'AI Bootcamp', desc: '৭ দিনে ভিত্তি', icon: Rocket },
+        { name: 'প্রাইভেট কমিউনিটি', desc: '১,৭০০+ বিল্ডার', icon: Users2 },
+        { name: 'লাইভ ওয়ার্কশপ', desc: 'মাসিক সেশন', icon: Video },
+        { name: 'প্রম্পট লাইব্রেরি', desc: '৫০০+ প্রম্পট', icon: BookOpen },
+        { name: 'জব বোর্ড', desc: 'ক্লায়েন্ট লিড', icon: Briefcase },
+        { name: 'রেফারেল ইঞ্জিন', desc: 'প্রতি রেফারেলে রিওয়ার্ড', icon: Gift },
+      ]
+    : [
+        { name: 'AI Bootcamp', desc: '7-day foundation', icon: Rocket },
+        { name: 'Private Community', desc: '1,700+ builders', icon: Users2 },
+        { name: 'Live Workshops', desc: 'Monthly sessions', icon: Video },
+        { name: 'Prompt Library', desc: '500+ prompts', icon: BookOpen },
+        { name: 'Job Board', desc: 'Client leads', icon: Briefcase },
+        { name: 'Referral Engine', desc: 'Reward per referral', icon: Gift },
+      ]
+
+  return (
+    <section data-track="ecosystem-map" className="mx-auto w-full max-w-5xl px-4 py-12">
+      <div className="mb-8 text-center">
+        <p className="mb-2 inline-flex items-center gap-2 rounded-full bg-rose-100 px-3 py-1 text-xs font-bold uppercase tracking-wide text-rose-700 dark:bg-rose-950/40 dark:text-rose-400">
+          <Network className="h-3.5 w-3.5" aria-hidden="true" />
+          {isBn ? 'NextGen ইকোসিস্টেম' : 'NextGen Ecosystem'}
+        </p>
+        <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl">
+          {isBn ? 'আপনি একটি কোর্সে ঢুকছেন না — একটি ইকোসিস্টেমে ঢুকছেন' : 'You\'re Not Joining a Course — You\'re Joining an Ecosystem'}
+        </h2>
+      </div>
+
+      <div className="relative rounded-3xl border border-slate-200 bg-gradient-to-br from-amber-50/50 via-background to-rose-50/30 p-6 dark:border-slate-800">
+        {/* Central hub */}
+        <div className="mb-6 flex justify-center">
+          <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-amber-500 to-orange-500 text-white shadow-xl">
+            <Sparkles className="h-8 w-8" aria-hidden="true" />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+          {nodes.map((n, i) => {
+            const Icon = n.icon
+            return (
+              <div key={i} className="flex items-center gap-3 rounded-xl border border-slate-200 bg-background p-3 shadow-sm transition hover:shadow-md dark:border-slate-800">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-amber-400 to-orange-400 text-white">
+                  <Icon className="h-4 w-4" aria-hidden="true" />
+                </div>
+                <div className="min-w-0">
+                  <p className="truncate text-xs font-bold">{n.name}</p>
+                  <p className="text-[10px] text-muted-foreground">{n.desc}</p>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/* E8. MissionMovement — 10,000 AI Builder Mission closing             */
+/* Ends page with a movement, not a course — Hormozi grand slam        */
+/* ------------------------------------------------------------------ */
+export function MissionMovement({ isBn }: { isBn: boolean }) {
+  return (
+    <section data-track="mission-movement" className="relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-amber-500 via-orange-500 to-rose-500" />
+      <div className="absolute -top-20 -left-20 h-72 w-72 rounded-full bg-white/10 blur-3xl" />
+      <div className="absolute -bottom-20 -right-20 h-72 w-72 rounded-full bg-white/10 blur-3xl" />
+
+      <div className="relative mx-auto max-w-4xl px-4 py-16 text-center text-white sm:py-20">
+        <p className="mb-3 inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-1.5 text-xs font-bold uppercase tracking-wide backdrop-blur">
+          <Flame className="h-3.5 w-3.5" aria-hidden="true" />
+          {isBn ? 'আমাদের মিশন' : 'Our Mission'}
+        </p>
+        <h2 className="font-heading text-3xl font-extrabold leading-tight sm:text-4xl md:text-5xl">
+          {isBn ? (
+            <>১০,০০০ জন AI Builder তৈরি করা —<br />বাংলাদেশের ভবিষ্যত গড়তে</>
+          ) : (
+            <>Build 10,000 AI Builders —<br />Shape Bangladesh\'s Future</>
+          )}
+        </h2>
+        <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-white/90 sm:text-base">
+          {isBn
+            ? 'আমরা শুধু একটি কোর্স বিক্রি করছি না। আমরা একটি মুভমেন্ট তৈরি করছি — যেখানে প্রতিটি শিক্ষার্থী বাংলাদেশের ডিজিটাল অর্থনীতির অংশ হয়ে ওঠে। আপনি কি পরবর্তী AI Builder হতে প্রস্তুত?'
+            : 'We\'re not just selling a course. We\'re building a movement — where every student becomes part of Bangladesh\'s digital economy. Are you ready to be the next AI Builder?'}
+        </p>
+
+        <div className="mx-auto mt-8 max-w-md rounded-2xl bg-white/15 p-5 backdrop-blur">
+          <div className="flex items-center justify-between gap-3">
+            <div className="text-left">
+              <p className="text-[11px] font-bold uppercase tracking-wide text-white/70">
+                {isBn ? 'অগ্রগতি' : 'Progress'}
+              </p>
+              <p className="text-2xl font-extrabold">1,700<span className="text-base">/10,000</span></p>
+            </div>
+            <div className="text-right">
+              <p className="text-[11px] font-bold uppercase tracking-wide text-white/70">
+                {isBn ? 'অবশিষ্ট' : 'Remaining'}
+              </p>
+              <p className="text-2xl font-extrabold">8,300</p>
+            </div>
+          </div>
+          <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/20">
+            <div className="h-full rounded-full bg-white" style={{ width: '17%' }} />
+          </div>
+        </div>
+
+        <a
+          href="#order"
+          className="mt-8 inline-flex items-center gap-2 rounded-full bg-white px-8 py-3.5 text-sm font-extrabold text-orange-600 shadow-xl transition hover:scale-105"
+        >
+          <Rocket className="h-4 w-4" aria-hidden="true" />
+          {isBn ? 'মুভমেন্টে যোগ দিন — ১,০০০৳' : 'Join the Movement — 1,000TK'}
+        </a>
+      </div>
+    </section>
+  )
+}
