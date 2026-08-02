@@ -18,6 +18,23 @@ import { useLang } from '@/components/site/language-provider'
 import { siteConfig } from '@/lib/site-data'
 import { initNgsTracking } from '@/lib/ngs-track'
 import {
+  HeroPromiseBox,
+  TransformationTimeline,
+  FutureJourneyInfographic,
+  CaseStudySection,
+  ProofGallery,
+  FounderStorySection,
+  InstructorAuthorityGrid,
+  WithoutVsWithAIComparison,
+  TraditionalVsAIBuilder,
+  ReferralSection,
+  CommunitySection,
+  SalesFunnelDiagram,
+  MessengerFunnelSection,
+  DiscoveryCallCTA,
+  LeadMagnetSection,
+} from '@/app/ai-training/v3-sections'
+import {
   Accordion,
   AccordionContent,
   AccordionItem,
@@ -221,6 +238,67 @@ const FAQS = [
     q_en: 'Will this offer come back?',
     a_bn: 'না, এই দাম আর পাবেন না। পরবর্তী ব্যাচে দাম ৩,০০০৳ হবে।',
     a_en: 'No — this price won\'t come back. Next batch will be 3,000TK.',
+  },
+  // ===== V3: Objection-based FAQs (Hormozi order: Price → Time → Skill → Laptop → English → Refund → Support → Career) =====
+  {
+    q_bn: '১,০০০ টাকা কেন? এত সস্তা হলে মান কি?',
+    q_en: 'Why only 1,000TK? Is the quality low because it\'s cheap?',
+    a_bn: 'না, মান কম না। এটি প্রথম ব্যাচের ইন্ট্রোডাক্টরি দাম। পরের ব্যাচে ৩,০০০৳ হবে। আমরা চাই বেশি মানুষ উপকৃত হোক।',
+    a_en: 'No, quality is not low. This is an introductory price for the first batch. Next batch will be 3,000TK. We want more people to benefit.',
+  },
+  {
+    q_bn: 'আমি চাকরি করি, সময় পাব?',
+    q_en: 'I work full-time — will I have time?',
+    a_bn: 'হ্যাঁ। ক্লাস রাত ৯টায়, মাত্র ১ ঘন্টা। রেকর্ডিং থাকে, তাই মিস করলেও সপ্তাহান্তে দেখতে পারবেন।',
+    a_en: 'Yes. Classes are at 9 PM, just 1 hour. Recordings are available, so you can watch on weekends if you miss.',
+  },
+  {
+    q_bn: 'আমি AI একদম বুঝি না, পারব?',
+    q_en: 'I don\'t understand AI at all — can I do this?',
+    a_bn: 'হ্যাঁ, এটাই আমাদের মূল টার্গেট। শূন্য থেকে শুরু করে ৭ দিনে অ্যাপ বানানো শেখানো হয়।',
+    a_en: 'Yes, that\'s our main target. We teach from zero to building an app in 7 days.',
+  },
+  {
+    q_bn: 'আমার কোনো ল্যাপটপ নেই, কি পারব?',
+    q_en: 'I don\'t have a laptop — can I still join?',
+    a_bn: 'ল্যাপটপ থাকলে ভালো, তবে মোবাইল বা সাইবার ক্যাফে থেকেও শুরু করতে পারবেন। ক্লাস রেকর্ডিং মোবাইলেই দেখা যায়।',
+    a_en: 'A laptop is ideal, but you can start from mobile or a cyber café. Class recordings can be watched on mobile.',
+  },
+  {
+    q_bn: 'আমি ইংরেজি পারি না, কি সমস্যা হবে?',
+    q_en: 'I don\'t know English — will that be a problem?',
+    a_bn: 'না। ক্লাস পুরো বাংলায়। টুলগুলো ইংরেজিতে হলেও, আমরা প্রতিটি স্টেপ বাংলায় বুঝিয়ে দেব।',
+    a_en: 'No. Classes are fully in Bengali. Even though tools are in English, we explain every step in Bengali.',
+  },
+  {
+    q_bn: 'আমি স্টুডেন্ট, এই কোর্স কি আমার জন্য?',
+    q_en: 'I\'m a student — is this course for me?',
+    a_bn: 'একদম হ্যাঁ। স্টুডেন্টরাই সবচেয়ে বেশি উপকৃত হয় — স্কিল শেখেন, পকেটমানি কামান, এবং ভবিষ্যতে চাকরি/ফ্রিল্যান্সে সুবিধা পান।',
+    a_en: 'Absolutely yes. Students benefit the most — learn skills, earn pocket money, and get advantages in future jobs/freelancing.',
+  },
+  {
+    q_bn: 'কোডিং জানি না, তবু সফটওয়্যার বানাতে পারব?',
+    q_en: 'I don\'t know coding — can I still build software?',
+    a_bn: 'হ্যাঁ! এটাই আমাদের পুরো পয়েন্ট। AI দিয়ে নো-কোডে সফটওয়্যার বানানো শেখানো হয়।',
+    a_en: 'Yes! That\'s our entire point. We teach building software with AI, no-code.',
+  },
+  {
+    q_bn: 'রিফান্ড পেতে কী করতে হবে?',
+    q_en: 'What do I need to do for a refund?',
+    a_bn: 'প্রথম ক্লাস করুন, অ্যাসাইনমেন্ট করুন, প্রশ্ন করুন। তারপরও সন্তুষ্ট না হলে WhatsApp-এ জানান, ২৪ ঘন্টায় রিফান্ড।',
+    a_en: 'Attend the first class, do the assignment, ask questions. If still unsatisfied, message on WhatsApp for refund within 24 hours.',
+  },
+  {
+    q_bn: 'ক্লাসের পর সাপোর্ট পাব?',
+    q_en: 'Will I get support after classes?',
+    a_bn: 'হ্যাঁ, প্রাইভেট কমিউনিটিতে লাইফটাইম সাপোর্ট। মাসিক লাইভ Q&A ওয়েবিনারও আছে।',
+    a_en: 'Yes, lifetime support in the private community. Monthly live Q&A webinars too.',
+  },
+  {
+    q_bn: 'এই স্কিল দিয়ে কি ক্যারিয়ার হবে?',
+    q_en: 'Will this skill build a career?',
+    a_bn: 'হ্যাঁ। AI বিল্ডার, ফ্রিল্যান্সার, অটোমেশন এক্সপার্ট, এজেন্সি ওনার — সব পথ খোলা।',
+    a_en: 'Yes. AI builder, freelancer, automation expert, agency owner — all paths open.',
   },
 ] as const
 
@@ -1964,6 +2042,17 @@ export function TrainingClient() {
               {t('aiTraining.v2.heroSubSub')}
             </p>
 
+            {/* Identity Shift — Hormozi: people buy Identity, not courses */}
+            <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-amber-300/60 bg-amber-50 px-5 py-2 text-sm font-extrabold text-amber-700 dark:bg-amber-950/30 dark:text-amber-300">
+              <Sparkles className="h-4 w-4" />
+              {isBn ? '৭ দিনে AI Software Builder হয়ে উঠুন' : 'Become an AI Software Builder in 7 Days'}
+            </div>
+
+            {/* Promise Box — Dream Outcome made tangible */}
+            <div className="mx-auto mt-6 max-w-2xl">
+              <HeroPromiseBox isBn={isBn} />
+            </div>
+
             {/* CTA buttons */}
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
               <a
@@ -2010,11 +2099,11 @@ export function TrainingClient() {
               ))}
             </div>
 
-            {/* Trust badges */}
-            <div className="mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-muted-foreground">
+            {/* Trust badges — expanded (Gap 19) */}
+            <div className="mt-5 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-muted-foreground">
               <span className="flex items-center gap-1.5">
                 <Award className="h-3.5 w-3.5 text-amber-500" />
-                {isBn ? 'Google for Startups' : 'Google for Startups'}
+                {isBn ? 'Google Certified' : 'Google Certified'}
               </span>
               <span className="flex items-center gap-1.5">
                 <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" />
@@ -2022,7 +2111,23 @@ export function TrainingClient() {
               </span>
               <span className="flex items-center gap-1.5">
                 <Lock className="h-3.5 w-3.5 text-emerald-500" />
-                SSL {isBn ? 'নিরাপদ' : 'Secure'}
+                {isBn ? 'নিরাপদ পেমেন্ট' : 'Secure Payment'}
+              </span>
+              <span className="flex items-center gap-1.5">
+                <MessageCircle className="h-3.5 w-3.5 text-emerald-500" />
+                {isBn ? 'WhatsApp ভেরিফাইড' : 'WhatsApp Verified'}
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Video className="h-3.5 w-3.5 text-amber-500" />
+                {isBn ? 'লাইভ ক্লাস' : 'Live Class'}
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Users className="h-3.5 w-3.5 text-amber-500" />
+                {isBn ? 'হিউম্যান সাপোর্ট' : 'Human Support'}
+              </span>
+              <span className="flex items-center gap-1.5">
+                <RotateCcw className="h-3.5 w-3.5 text-emerald-500" />
+                {isBn ? 'লাইফটাইম আপডেট' : 'Lifetime Update'}
               </span>
             </div>
 
@@ -2201,6 +2306,15 @@ export function TrainingClient() {
           </p>
         </section>
 
+        {/* ===== V3: PROOF GALLERY — Perceived Likelihood (Hormozi biggest lever) ===== */}
+        <ProofGallery isBn={isBn} />
+
+        {/* ===== V3: TRANSFORMATION TIMELINE — Day 1 → Day 90 journey ===== */}
+        <TransformationTimeline isBn={isBn} />
+
+        {/* ===== V3: CASE STUDY — Before/After proof ===== */}
+        <CaseStudySection isBn={isBn} />
+
         {/* ===== 7. STUDENT PROJECTS GALLERY ===== */}
         <section className="bg-muted/30 py-12 sm:py-16">
           <div className="mx-auto max-w-5xl px-4 sm:px-6">
@@ -2240,8 +2354,8 @@ export function TrainingClient() {
         {/* ===== GAP 6: LIVE CLASS PREVIEW ===== */}
         <LiveClassPreview isBn={isBn} />
 
-        {/* ===== 8. OFFER STACK ===== */}
-        <section className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16">
+        {/* ===== 8. OFFER STACK — Hormozi: 25,000+ perceived value with outcomes ===== */}
+        <section className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16" data-track="offer-stack">
           <div className="relative overflow-hidden rounded-3xl bg-slate-900 p-6 text-white shadow-2xl sm:p-8">
             <div className="absolute -right-1/4 -top-1/2 h-[200%] w-1/2 rounded-full bg-emerald-500/10 blur-3xl" />
             <div className="relative">
@@ -2257,19 +2371,82 @@ export function TrainingClient() {
                 <span className="text-lg text-muted-foreground line-through">৳{bn('3,000')}</span>
               </div>
               <p className="mt-2 text-sm text-slate-300">
-                {t('aiTraining.v2.offerValue')}
+                {isBn
+                  ? 'মূল মান: ৳২৫,০০০+ — আপনি পাচ্ছেন মাত্র ১,০০০ টাকায়!'
+                  : 'Total value: 25,000TK+ — you get it for just 1,000TK!'}
               </p>
 
               <ul className="mt-6 space-y-3">
                 {[
-                  { icon: CheckCircle2, text: t('aiTraining.v2.offerItem1'), color: 'text-emerald-400' },
-                  { icon: Gift, text: t('aiTraining.v2.offerItem2'), color: 'text-amber-400' },
-                  { icon: Gift, text: t('aiTraining.v2.offerItem3'), color: 'text-amber-400' },
-                  { icon: Gift, text: t('aiTraining.v2.offerItem4'), color: 'text-amber-400' },
-                ].map(({ icon: Icon, text, color }, i) => (
-                  <li key={i} className="flex items-start gap-3 text-sm sm:text-[15px]">
-                    <Icon className={`mt-0.5 h-5 w-5 shrink-0 ${color}`} />
-                    <span>{text}</span>
+                  {
+                    icon: CheckCircle2, color: 'text-emerald-400',
+                    text: isBn ? 'কোর বুটক্যাম্প: ৫টি লাইভ জুম ক্লাস + ৩টি প্রজেক্ট + নো-কোড ব্লুপ্রিন্ট (৳৮,০০০)'
+                      : 'Core Bootcamp: 5 live Zoom classes + 3 projects + no-code blueprint (8,000TK)',
+                    outcome: isBn ? '→ যাতে ৭ দিনে নিজের সফটওয়্যার বানাতে পারেন' : '→ So you can build your own software in 7 days',
+                  },
+                  {
+                    icon: Gift, color: 'text-amber-400',
+                    text: isBn ? 'বোনাস ১: ফ্রিল্যান্স AI কিট (৳২,০০০) — ক্লায়েন্ট পাওয়ার টেমপ্লেট'
+                      : 'Bonus 1: Freelance AI Kit (2,000TK) — Client-getting templates',
+                    outcome: isBn ? '→ যাতে প্রথম ক্লায়েন্ট প্রোপোজাল পাঠাতে পারেন' : '→ So you can send your first client proposal',
+                  },
+                  {
+                    icon: Gift, color: 'text-amber-400',
+                    text: isBn ? 'বোনাস ২: বিজনেস অটোমেশন প্লেবুক (৳২,০০০) — ৫০+ অটোমেশন আইডিয়া'
+                      : 'Bonus 2: Business Automation Playbook (2,000TK) — 50+ automation ideas',
+                    outcome: isBn ? '→ যাতে যেকোনো বিজনেস অটোমেট করতে পারেন' : '→ So you can automate any business',
+                  },
+                  {
+                    icon: Gift, color: 'text-amber-400',
+                    text: isBn ? 'বোনাস ৩: প্রাইভেট কমিউনিটি অ্যাক্সেস (৳৩,০০০) — লাইফটাইম সাপোর্ট'
+                      : 'Bonus 3: Private Community Access (3,000TK) — Lifetime support',
+                    outcome: isBn ? '→ যাতে আটকে গেলে সাহায্য পান' : '→ So you get help when stuck',
+                  },
+                  {
+                    icon: Gift, color: 'text-amber-400',
+                    text: isBn ? 'বোনাস ৪: AI প্রম্পট লাইব্রেরি (৳২,০০০) — ২০০+ প্রম্পট'
+                      : 'Bonus 4: AI Prompt Library (2,000TK) — 200+ prompts',
+                    outcome: isBn ? '→ যাতে ২ মিনিটে Facebook Ad লিখতে পারেন' : '→ So you can write Facebook ads in 2 minutes',
+                  },
+                  {
+                    icon: Gift, color: 'text-amber-400',
+                    text: isBn ? 'বোনাস ৫: পোর্টফোলিও বিল্ডার (৳২,০০০) — রেডি-টু-ইউজ টেমপ্লেট'
+                      : 'Bonus 5: Portfolio Builder (2,000TK) — Ready-to-use template',
+                    outcome: isBn ? '→ যাতে চাকরি ও ক্লায়েন্ট পান' : '→ So you can land jobs and clients',
+                  },
+                  {
+                    icon: Gift, color: 'text-amber-400',
+                    text: isBn ? 'বোনাস ৬: ক্লায়েন্ট প্রপোজাল টেমপ্লেট (৳১,৫০০)'
+                      : 'Bonus 6: Client Proposal Template (1,500TK)',
+                    outcome: isBn ? '→ যাতে প্রথম ক্লায়েন্ট পান' : '→ So you can land your first client',
+                  },
+                  {
+                    icon: Gift, color: 'text-amber-400',
+                    text: isBn ? 'বোনাস ৭: AI রিসোর্স ডেটাবেস (৳১,৫০০) — ১০০+ টুল'
+                      : 'Bonus 7: AI Resource Database (1,500TK) — 100+ tools',
+                    outcome: isBn ? '→ যাতে সঠিক টুল বেছে নিতে পারেন' : '→ So you can pick the right tools',
+                  },
+                  {
+                    icon: Gift, color: 'text-amber-400',
+                    text: isBn ? 'বোনাস ৮: লাইফটাইম আপডেট (৳৩,০০০) — নতুন কন্টেন্ট ফ্রি'
+                      : 'Bonus 8: Lifetime Updates (3,000TK) — Free new content',
+                    outcome: isBn ? '→ যাতে সবসময় আপডেটেড থাকেন' : '→ So you stay always updated',
+                  },
+                  {
+                    icon: Gift, color: 'text-amber-400',
+                    text: isBn ? 'বোনাস ৯: মাসিক ওয়েবিনার (৳২,০০০) — লাইভ Q&A'
+                      : 'Bonus 9: Monthly Webinar (2,000TK) — Live Q&A',
+                    outcome: isBn ? '→ যাতে সরাসরি প্রশ্ন করতে পারেন' : '→ So you can ask questions live',
+                  },
+                ].map(({ icon: Icon, text, color, outcome }, i) => (
+                  <li key={i} className="rounded-xl bg-white/5 p-3">
+                    <div className="flex items-start gap-3 text-sm sm:text-[15px]">
+                      <Icon className={`mt-0.5 h-5 w-5 shrink-0 ${color}`} />
+                      <div>
+                        <span className="font-semibold">{text}</span>
+                        <div className="mt-0.5 text-xs text-amber-300/90">{outcome}</div>
+                      </div>
+                    </div>
                   </li>
                 ))}
               </ul>
@@ -2349,6 +2526,12 @@ export function TrainingClient() {
             ))}
           </div>
         </section>
+
+        {/* ===== V3: FOUNDER STORY — Empathy + Authority (StoryBrand Guide) ===== */}
+        <FounderStorySection isBn={isBn} />
+
+        {/* ===== V3: INSTRUCTOR AUTHORITY GRID — Expanded proof ===== */}
+        <InstructorAuthorityGrid isBn={isBn} />
 
         {/* ===== 11. INSTRUCTOR ===== */}
         <section className="bg-muted/30 py-12 sm:py-16">
@@ -2505,6 +2688,15 @@ export function TrainingClient() {
           </p>
         </section>
 
+        {/* ===== V3: WITHOUT AI vs WITH AI comparison ===== */}
+        <WithoutVsWithAIComparison isBn={isBn} />
+
+        {/* ===== V3: TRADITIONAL CODING vs AI BUILDER comparison ===== */}
+        <TraditionalVsAIBuilder isBn={isBn} />
+
+        {/* ===== V3: FUTURE JOURNEY INFOGRAPHIC — Bootcamp → Business Owner ===== */}
+        <FutureJourneyInfographic isBn={isBn} />
+
         {/* ===== 13. UNIVERSITY COMPARISON ===== */}
         <section className="bg-muted/30 py-12 sm:py-16">
           <div className="mx-auto max-w-3xl px-4 sm:px-6">
@@ -2550,6 +2742,12 @@ export function TrainingClient() {
           </div>
         </section>
 
+        {/* ===== V3: LEAD MAGNET — Inline AI Career Starter Kit ===== */}
+        <LeadMagnetSection isBn={isBn} />
+
+        {/* ===== V3: COMMUNITY SECTION — People buy community, not courses ===== */}
+        <CommunitySection isBn={isBn} />
+
         {/* ===== 14. TESTIMONIALS ===== */}
         <section className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
           <div className="text-center">
@@ -2593,6 +2791,9 @@ export function TrainingClient() {
 
         {/* ===== GAP 4: PAYMENT PROOF ===== */}
         <PaymentProof isBn={isBn} />
+
+        {/* ===== V3: DISCOVERY CALL CTA — For high-ticket hesitant buyers ===== */}
+        <DiscoveryCallCTA isBn={isBn} />
 
         {/* ===== 15. CAREER OPPORTUNITIES ===== */}
         <section className="bg-muted/30 py-12 sm:py-16">
@@ -2721,7 +2922,7 @@ export function TrainingClient() {
         {/* ===== GAP 10: AI READINESS QUIZ ===== */}
         <AiReadinessQuiz isBn={isBn} />
 
-        {/* ===== 18. GUARANTEE ===== */}
+        {/* ===== 18. GUARANTEE — Conditional (Hormozi risk reversal) ===== */}
         <section className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16">
           <div className="relative overflow-hidden rounded-3xl border border-emerald-200/60 bg-emerald-50/60 p-6 text-center dark:bg-emerald-950/20 sm:p-8">
             <div className="absolute -bottom-8 -right-8 text-[10rem] opacity-5">🛡️</div>
@@ -2731,7 +2932,30 @@ export function TrainingClient() {
                 {t('aiTraining.v2.guaranteeTitle')}
               </h2>
               <p className="mx-auto mt-3 max-w-xl text-sm text-foreground/80">
-                {t('aiTraining.v2.guaranteeBody')}
+                {isBn
+                  ? 'প্রথম ক্লাস করুন, অ্যাসাইনমেন্ট করুন, প্রশ্ন করুন — তারপরও যদি মনে হয় ভ্যালু পাননি, ১০০% টাকা ফেরত পাবেন। কোনো প্রশ্ন ছাড়াই।'
+                  : 'Attend the first class, do the assignment, ask questions — if you still feel you didn\'t get value, get a 100% refund. No questions asked.'}
+              </p>
+              <div className="mt-5 grid gap-2 sm:grid-cols-3">
+                {(isBn
+                  ? [
+                      { icon: '🎥', text: 'প্রথম ক্লাসে যোগ দিন' },
+                      { icon: '✍️', text: 'অ্যাসাইনমেন্ট করুন' },
+                      { icon: '💬', text: 'প্রশ্ন করুন' },
+                    ]
+                  : [
+                      { icon: '🎥', text: 'Attend first class' },
+                      { icon: '✍️', text: 'Do the assignment' },
+                      { icon: '💬', text: 'Ask questions' },
+                    ]
+                ).map((s, i) => (
+                  <div key={i} className="rounded-xl border border-emerald-200 bg-background/70 p-3 text-xs font-semibold text-emerald-700 dark:text-emerald-300">
+                    <span className="mr-1">{s.icon}</span> {s.text}
+                  </div>
+                ))}
+              </div>
+              <p className="mt-4 text-xs font-bold text-emerald-700 dark:text-emerald-400">
+                {isBn ? 'তারপরও সন্তুষ্ট না হলে → ১০০% রিফান্ড ✅' : 'Still not satisfied → 100% refund ✅'}
               </p>
               <div className="mt-4 flex flex-wrap justify-center gap-2">
                 {[
@@ -2808,6 +3032,15 @@ export function TrainingClient() {
             </a>
           </div>
         </section>
+
+        {/* ===== V3: SALES FUNNEL DIAGRAM — Visual funnel ===== */}
+        <SalesFunnelDiagram isBn={isBn} />
+
+        {/* ===== V3: MESSENGER FUNNEL — Bot automation funnel ===== */}
+        <MessengerFunnelSection isBn={isBn} />
+
+        {/* ===== V3: REFERRAL SECTION — Turn customers into referral sources ===== */}
+        <ReferralSection isBn={isBn} />
 
         {/* ===== 20. WHATSAPP FLOW ===== */}
         <section className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16">

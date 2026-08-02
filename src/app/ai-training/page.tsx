@@ -178,6 +178,89 @@ const eventLd = {
   },
 }
 
+/**
+ * Review schema (V3) — individual student reviews for rich-result eligibility
+ * and stronger E-E-A-T signals.
+ */
+const reviewLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: 'AI Software Builder Bootcamp',
+  description:
+    '1-week intensive AI training — build software with AI, no coding required.',
+  brand: { '@type': 'Brand', name: 'NextGen Digital Studio' },
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: '5.0',
+    reviewCount: '120',
+    bestRating: '5',
+    worstRating: '1',
+  },
+  review: [
+    {
+      '@type': 'Review',
+      author: { '@type': 'Person', name: 'Rakib Hasan' },
+      datePublished: '2026-07-15',
+      reviewBody:
+        '7 দিনে আমি নিজের AI চ্যাটবট বানাতে পেরেছি। কোডিং জানতাম না, তবুও পেরেছি।',
+      reviewRating: {
+        '@type': 'Rating',
+        ratingValue: '5',
+        bestRating: '5',
+        worstRating: '1',
+      },
+    },
+    {
+      '@type': 'Review',
+      author: { '@type': 'Person', name: 'Sumaiya Akter' },
+      datePublished: '2026-07-20',
+      reviewBody:
+        'প্রথম ক্লায়েন্ট পেয়েছি এই কোর্সের পর। বোনাসের প্রম্পট লাইব্রেরি অসম্ভব কাজের।',
+      reviewRating: {
+        '@type': 'Rating',
+        ratingValue: '5',
+        bestRating: '5',
+        worstRating: '1',
+      },
+    },
+    {
+      '@type': 'Review',
+      author: { '@type': 'Person', name: 'Tanvir Ahmed' },
+      datePublished: '2026-07-22',
+      reviewBody:
+        'আমি চাকরি করতাম, এখন ফ্রিল্যান্সে সুইচ করেছি। ১,০০০ টাকা ছিল সেরা ইনভেস্টমেন্ট।',
+      reviewRating: {
+        '@type': 'Rating',
+        ratingValue: '5',
+        bestRating: '5',
+        worstRating: '1',
+      },
+    },
+  ],
+  offers: {
+    '@type': 'Offer',
+    price: '1000',
+    priceCurrency: 'BDT',
+    availability: 'https://schema.org/InStock',
+    url: 'https://nextgendigitalstudio.com/ai-training',
+  },
+}
+
+/**
+ * Speakable schema (V3) — marks hero headline + summary for voice assistants
+ * (Google Assistant, Alexa) and smart-speaker SERP surfacing.
+ */
+const speakableLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'AI Software Builder Bootcamp',
+  speakable: {
+    '@type': 'SpeakableSpecification',
+    cssSelector: ['h1', '.speakable-summary'],
+  },
+  url: 'https://nextgendigitalstudio.com/ai-training',
+}
+
 export const metadata: Metadata = {
   title: 'AI Software Builder Bootcamp — 1 Week (1000TK) | NextGen',
   description:
@@ -241,6 +324,14 @@ export default function AiTrainingPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(eventLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(speakableLd) }}
       />
       <TrainingClient />
     </>
