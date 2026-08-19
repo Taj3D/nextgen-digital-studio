@@ -276,6 +276,8 @@ export function LandingFooter({ isBn }: { isBn: boolean }) {
     { key: 'footer.cncDesign', href: '/cnc-design' },
     { key: 'footer.3dPortrait', href: '/3d-portrait' },
     { key: 'footer.pdfBooks', href: '/pdf-books' },
+    { key: 'footer.pdfEditor', href: '/pdf-editor' },
+    { key: 'footer.qrCode', href: '/qr-code-generator' },
   ]
   return (
     <footer className="mt-auto border-t border-border/60 bg-muted/30">

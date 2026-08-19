@@ -48,6 +48,8 @@ const MORE_ITEMS: NavItem[] = [
   { key: 'nav.more.aiTraining', href: '/ai-training' },
   { key: 'nav.more.cncTraining', href: '/cnc-training' },
   { key: 'nav.more.pdfBooks', href: '/pdf-books' },
+  { key: 'nav.more.pdfEditor', href: '/pdf-editor' },
+  { key: 'nav.more.qrCode', href: '/qr-code-generator' },
 ]
 
 // Anchor links point to homepage sections (`/#services`, `/#how`, etc.) so they
