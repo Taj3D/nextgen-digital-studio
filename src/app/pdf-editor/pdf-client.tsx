@@ -78,6 +78,11 @@ import { toast } from 'sonner'
 import { saveAs } from 'file-saver'
 import { PDFDocument, degrees, StandardFonts, rgb } from 'pdf-lib'
 
+// Phase 1B — Lazy-loaded PDF.js tools (code-split: pdfjs-dist only loads when these tools open)
+const PdfViewerTool = React.lazy(() => import('./tools/pdf-viewer-tool').then(m => ({ default: m.PdfViewerTool })))
+const PdfToTextTool = React.lazy(() => import('./tools/pdf-to-text-tool').then(m => ({ default: m.PdfToTextTool })))
+const ExtractImagesTool = React.lazy(() => import('./tools/extract-images-tool').then(m => ({ default: m.ExtractImagesTool })))
+
 import {
   FileText,
   Merge,
@@ -677,7 +682,7 @@ type FilePickerProps = {
   hint?: string
 }
 
-function FilePicker({ isBn, multiple = false, files, onFiles, hint }: FilePickerProps) {
+export function FilePicker({ isBn, multiple = false, files, onFiles, hint }: FilePickerProps) {
   const [drag, setDrag] = React.useState(false)
   const inputRef = React.useRef<HTMLInputElement>(null)
 
@@ -786,7 +791,7 @@ function FilePicker({ isBn, multiple = false, files, onFiles, hint }: FilePicker
 /*  Tool Dialog shell                                                          */
 /* -------------------------------------------------------------------------- */
 
-function ToolDialog({
+export function ToolDialog({
   tool,
   isBn,
   open,
@@ -4660,6 +4665,23 @@ export function PdfClient() {
       )}
       {activeTool && activeTool.id === 'inspect' && (
         <InspectTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
+      )}
+
+      {/* Phase 1B — Lazy-loaded PDF.js tools (code-split with Suspense) */}
+      {activeTool && activeTool.id === 'viewer' && (
+        <React.Suspense fallback={<div className="fixed inset-0 z-50 grid place-items-center bg-background/80"><Loader2 className="h-8 w-8 animate-spin text-amber-500" /></div>}>
+          <PdfViewerTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
+        </React.Suspense>
+      )}
+      {activeTool && activeTool.id === 'pdf-to-text' && (
+        <React.Suspense fallback={<div className="fixed inset-0 z-50 grid place-items-center bg-background/80"><Loader2 className="h-8 w-8 animate-spin text-amber-500" /></div>}>
+          <PdfToTextTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
+        </React.Suspense>
+      )}
+      {activeTool && activeTool.id === 'extract-images' && (
+        <React.Suspense fallback={<div className="fixed inset-0 z-50 grid place-items-center bg-background/80"><Loader2 className="h-8 w-8 animate-spin text-amber-500" /></div>}>
+          <ExtractImagesTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
+        </React.Suspense>
       )}
 
       {/* Command palette (⌘+K / Ctrl+K) — mounted guard prevents Radix useId hydration mismatch */}
