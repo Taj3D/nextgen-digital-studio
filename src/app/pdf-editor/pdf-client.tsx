@@ -141,6 +141,52 @@ function bn(s: string | number, isBn: boolean): string {
     : String(s)
 }
 
+/**
+ * Validate generated PDF bytes by reopening with pdf-lib.
+ * Returns { ok, pageCount } or { ok: false, error }.
+ * Prevents downloading corrupted output.
+ */
+async function validatePdfBytes(
+  bytes: Uint8Array,
+  expectedPages?: number,
+): Promise<{ ok: true; pageCount: number } | { ok: false; error: string }> {
+  try {
+    const doc = await PDFDocument.load(bytes, { ignoreEncryption: true })
+    const pageCount = doc.getPageCount()
+    if (expectedPages !== undefined && pageCount !== expectedPages) {
+      return {
+        ok: false,
+        error: `Page count mismatch: expected ${expectedPages}, got ${pageCount}`,
+      }
+    }
+    if (pageCount === 0) {
+      return { ok: false, error: 'Generated PDF has 0 pages' }
+    }
+    return { ok: true, pageCount }
+  } catch (err) {
+    return {
+      ok: false,
+      error: err instanceof Error ? err.message : 'Unknown PDF validation error',
+    }
+  }
+}
+
+/** Trigger a download only after validating the PDF bytes. */
+async function downloadValidatedPdf(
+  bytes: Uint8Array,
+  filename: string,
+  expectedPages?: number,
+): Promise<boolean> {
+  const validation = await validatePdfBytes(bytes, expectedPages)
+  if (!validation.ok) {
+    console.error('[PDF Forge] Output validation failed:', validation.error)
+    return false
+  }
+  const outBuf = new Uint8Array(bytes)
+  saveAs(new Blob([outBuf], { type: 'application/pdf' }), filename)
+  return true
+}
+
 /** Human-readable file size in KB / MB. */
 function humanSize(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`
@@ -177,8 +223,8 @@ const WHY_FEATURES: {
   },
   {
     icon: WifiOff,
-    en: { t: 'Works Offline', d: 'Installable as a PWA. Use every tool with zero internet — perfect for travel, flights & rural areas.' },
-    bn: { t: 'অফলাইনে চলে', d: 'PWA হিসেবে ইনস্টল করুন। ইন্টারনেট ছাড়াই সব টুল ব্যবহার করুন — ভ্রমণ, ফ্লাইট ও গ্রামের জন্য দারুণ।' },
+    en: { t: 'Client-side Processing', d: 'All PDF processing happens locally in your browser. Files never leave your device — private and secure.' },
+    bn: { t: 'ক্লায়েন্ট-সাইড প্রসেসিং', d: 'সব পিডিএফ প্রসেসিং আপনার ব্রাউজারেই হয়। ফাইল কখনো ডিভাইস ছাড়ে না — প্রাইভেট ও সিকিউর।' },
   },
   {
     icon: Zap,
@@ -372,8 +418,8 @@ const FAQS: {
   {
     qEn: 'Does PDF Forge work offline?',
     qBn: 'পিডিএফ ফোর্জ কি অফলাইনে চলে?',
-    aEn: 'Yes. PDF Forge is an installable PWA. Once installed, you can use every tool offline — no internet connection required after the initial load.',
-    aBn: 'হ্যাঁ। পিডিএফ ফোর্জ একটি ইনস্টলযোগ্য PWA। ইনস্টল করার পর প্রতিটি টুল অফলাইনে ব্যবহার করতে পারবেন — প্রাথমিক লোডের পর কোনো ইন্টারনেট লাগে না।',
+    aEn: 'The 4 functional tools (Merge, Split, Rotate, Edit Metadata) process PDFs entirely in your browser — no server upload. The app is installable as a PWA. Note: 39 tools are currently roadmap items, not yet functional.',
+    aBn: '৪টি ফাংশনাল টুল (মার্জ, স্প্লিট, রোটেট, মেটাডাটা) সম্পূর্ণ আপনার ব্রাউজারেই পিডিএফ প্রসেস করে — কোনো সার্ভার আপলোড নেই। অ্যাপটি PWA হিসেবে ইনস্টলযোগ্য। তবে ৩৯টি টুল বর্তমানে রোডম্যাপে আছে, এখনো ফাংশনাল নয়।',
   },
   {
     qEn: 'Which devices does PDF Forge support?',
@@ -396,8 +442,8 @@ const FAQS: {
   {
     qEn: 'What makes PDF Forge different from Smallpdf or iLovePDF?',
     qBn: 'পিডিএফ ফোর্জ কীভাবে Smallpdf বা iLovePDF থেকে আলাদা?',
-    aEn: 'PDF Forge is 100% free forever with no account, no upload (files stay on your device), no watermarks, full offline PWA support, open source foundations, and bilingual Bangla + English interface — built by NextGen Digital Studio in Bangladesh.',
-    aBn: 'পিডিএফ ফোর্জ চিরকাল ১০০% ফ্রি — কোনো অ্যাকাউন্ট নেই, কোনো আপলোড নেই (ফাইল আপনার ডিভাইসে থাকে), কোনো ওয়াটারমার্ক নেই, সম্পূর্ণ অফলাইন PWA, ওপেন সোর্স ভিত্তি, ও দ্বিভাষিক বাংলা + ইংরেজি ইন্টারফেস — বাংলাদেশের NextGen Digital Studio তৈরি।',
+    aEn: 'PDF Forge is 100% free forever with no account, no upload (files stay on your device), no watermarks, client-side processing, installable PWA, bilingual Bangla + English interface — built by NextGen Digital Studio. Currently 4 tools are functional; 39 are on the roadmap.',
+    aBn: 'পিডিএফ ফোর্জ চিরকাল ১০০% ফ্রি — কোনো অ্যাকাউন্ট নেই, কোনো আপলোড নেই (ফাইল আপনার ডিভাইসে থাকে), কোনো ওয়াটারমার্ক নেই, ক্লায়েন্ট-সাইড প্রসেসিং, ইনস্টলযোগ্য PWA, দ্বিভাষিক বাংলা + ইংরেজি ইন্টারফেস — NextGen Digital Studio তৈরি। বর্তমানে ৪টি টুল ফাংশনাল; ৩৯টি রোডম্যাপে।',
   },
 ]
 
@@ -817,10 +863,11 @@ function MergeTool({ tool, isBn, open, onOpenChange, initialFiles }: {
         setProgress(Math.round(((i + 1) / files.length) * 95))
       }
       const out = await merged.save()
-      saveAs(
-        new Blob([out], { type: 'application/pdf' }),
-        'merged.pdf',
-      )
+      const expectedPages = merged.getPageCount()
+      const ok = await downloadValidatedPdf(out, 'merged.pdf', expectedPages)
+      if (!ok) {
+        throw new Error('Output validation failed — merge produced an invalid PDF')
+      }
       setProgress(100)
       toast.success(
         isBn
@@ -985,7 +1032,10 @@ function SplitTool({ tool, isBn, open, onOpenChange }: {
           chunks[i].length === 1
             ? `${baseName}-page-${startPage}.pdf`
             : `${baseName}-pages-${startPage}-${endPage}.pdf`
-        saveAs(new Blob([outBytes], { type: 'application/pdf' }), fname)
+        const ok = await downloadValidatedPdf(outBytes, fname, chunks[i].length)
+        if (!ok) {
+          throw new Error(`Output validation failed for ${fname}`)
+        }
         setProgress(Math.round(((i + 1) / chunks.length) * 95))
         // Tiny pause so browsers don't block multi-download
         await new Promise((r) => setTimeout(r, 250))
@@ -1158,10 +1208,11 @@ function RotateTool({ tool, isBn, open, onOpenChange }: {
         setProgress(Math.round(((i + 1) / pages.length) * 95))
       }
       const out = await doc.save()
-      saveAs(
-        new Blob([out], { type: 'application/pdf' }),
-        `rotated-${angle}.pdf`,
-      )
+      const expectedPages = doc.getPageCount()
+      const ok = await downloadValidatedPdf(out, `rotated-${angle}.pdf`, expectedPages)
+      if (!ok) {
+        throw new Error('Output validation failed — rotate produced an invalid PDF')
+      }
       setProgress(100)
       toast.success(
         isBn
@@ -1284,6 +1335,13 @@ function MetadataTool({ tool, isBn, open, onOpenChange }: {
     creator: '',
     producer: '',
   })
+  const [docInfo, setDocInfo] = React.useState<{
+    fileName: string
+    fileSize: string
+    pageCount: number
+    creationDate: string
+    modDate: string
+  } | null>(null)
   const [loaded, setLoaded] = React.useState(false)
   const [busy, setBusy] = React.useState(false)
 
@@ -1303,6 +1361,15 @@ function MetadataTool({ tool, isBn, open, onOpenChange }: {
         keywords: doc.getKeywords() ?? '',
         creator: doc.getCreator() ?? '',
         producer: doc.getProducer() ?? '',
+      })
+      const creationDate = doc.getCreationDate()
+      const modDate = doc.getModificationDate()
+      setDocInfo({
+        fileName: files[0].name,
+        fileSize: humanSize(files[0].size),
+        pageCount: doc.getPageCount(),
+        creationDate: creationDate ? creationDate.toLocaleDateString() : '—',
+        modDate: modDate ? modDate.toLocaleDateString() : '—',
       })
       setLoaded(true)
       toast.success(
@@ -1342,10 +1409,15 @@ function MetadataTool({ tool, isBn, open, onOpenChange }: {
       doc.setProducer(meta.producer)
       doc.setModificationDate(new Date())
       const out = await doc.save()
-      saveAs(
-        new Blob([out], { type: 'application/pdf' }),
+      const expectedPages = doc.getPageCount()
+      const ok = await downloadValidatedPdf(
+        out,
         files[0].name.replace(/\.pdf$/i, '') + '-metadata.pdf',
+        expectedPages,
       )
+      if (!ok) {
+        throw new Error('Output validation failed — metadata save produced an invalid PDF')
+      }
       toast.success(
         isBn
           ? 'মেটাডাটা সংরক্ষণ ও ডাউনলোড হয়েছে।'
@@ -1396,6 +1468,36 @@ function MetadataTool({ tool, isBn, open, onOpenChange }: {
           </Button>
         ) : (
           <div className="space-y-3">
+            {/* Document information panel */}
+            {docInfo && (
+              <div className="rounded-lg border border-border/60 bg-muted/30 p-4">
+                <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  {isBn ? 'ডকুমেন্ট তথ্য' : 'Document Information'}
+                </p>
+                <div className="grid grid-cols-2 gap-2 text-xs sm:grid-cols-3">
+                  <div>
+                    <span className="text-muted-foreground">{isBn ? 'ফাইল:' : 'File:'}</span>
+                    <p className="truncate font-medium" title={docInfo.fileName}>{docInfo.fileName}</p>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">{isBn ? 'সাইজ:' : 'Size:'}</span>
+                    <p className="font-medium">{docInfo.fileSize}</p>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">{isBn ? 'পেজ:' : 'Pages:'}</span>
+                    <p className="font-medium">{bn(docInfo.pageCount, isBn)}</p>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">{isBn ? 'তৈরি:' : 'Created:'}</span>
+                    <p className="font-medium">{docInfo.creationDate}</p>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">{isBn ? 'পরিবর্তিত:' : 'Modified:'}</span>
+                    <p className="font-medium">{docInfo.modDate}</p>
+                  </div>
+                </div>
+              </div>
+            )}
             <div className="grid gap-3 sm:grid-cols-2">
               <div className="space-y-1.5">
                 <Label htmlFor="md-title">{isBn ? 'টাইটেল' : 'Title'}</Label>
@@ -2165,10 +2267,10 @@ function OfflineReadySection({ isBn, onInstall, canInstall }: {
   canInstall: boolean
 }) {
   const features: { en: string; bn: string }[] = [
-    { en: 'All 43+ tools work offline', bn: 'সব ৪৩+ টুল অফলাইনে চলে' },
+    { en: '4 tools functional now (Merge, Split, Rotate, Metadata)', bn: '৪টি টুল এখন ফাংশনাল (মার্জ, স্প্লিট, রোটেট, মেটাডাটা)' },
     { en: 'No data uploaded to any server', bn: 'কোনো সার্ভারে ডাটা আপলোড হয় না' },
-    { en: 'Install on any device in seconds', bn: 'যেকোনো ডিভাইসে সেকেন্ডে ইনস্টল' },
-    { en: 'Auto-updates when online', bn: 'অনলাইনে অটো-আপডেট হয়' },
+    { en: 'Installable as PWA on any device', bn: 'যেকোনো ডিভাইসে PWA ইনস্টলযোগ্য' },
+    { en: '39 tools on the roadmap', bn: '৩৯টি টুল রোডম্যাপে আছে' },
   ]
 
   const platforms: { icon: typeof Monitor; en: string; bn: string }[] = [
@@ -2192,8 +2294,8 @@ function OfflineReadySection({ isBn, onInstall, canInstall }: {
             </h2>
             <p className="mt-3 text-muted-foreground">
               {isBn
-                ? 'PDF Forge ইনস্টল করার পর সম্পূর্ণ অফলাইনে চলে। কোনো ইন্টারনেট কানেকশন লাগে না।'
-                : 'PDF Forge works completely offline once installed. No internet connection needed.'}
+                ? '৪টি ফাংশনাল টুল সম্পূর্ণ আপনার ব্রাউজারেই পিডিএফ প্রসেস করে। অ্যাপটি PWA হিসেবে ইনস্টলযোগ্য।'
+                : 'The 4 functional tools process PDFs entirely in your browser. The app is installable as a PWA for quick access.'}
             </p>
 
             <ul className="mt-6 space-y-2.5">
@@ -2317,11 +2419,11 @@ function ToolCard({ tool, isBn, onOpen, isFavorite, onToggleFavorite }: {
           {tool.functional ? (
             <Badge className="border-emerald-500/30 bg-emerald-500/15 text-emerald-500 hover:bg-emerald-500/20">
               <Check className="mr-1 h-3 w-3" />
-              {isBn ? 'লাইভ' : 'Live'}
+              {isBn ? 'এখনই ব্যবহারযোগ্য' : 'Available Now'}
             </Badge>
           ) : (
-            <Badge variant="outline" className="text-muted-foreground">
-              {isBn ? 'শীঘ্রই' : 'Soon'}
+            <Badge variant="outline" className="border-amber-500/30 text-amber-600 dark:text-amber-400">
+              {isBn ? 'রোডম্যাপ' : 'Roadmap'}
             </Badge>
           )}
         </div>
@@ -2518,8 +2620,8 @@ export function PdfClient() {
     } else {
       toast.info(
         isBn
-          ? `“${tool.nameBn}” টুলটি শীঘ্রই আসছে!`
-          : `“${tool.nameEn}” is coming soon!`,
+          ? `“${tool.nameBn}” এখনো রোডম্যাপে আছে — শীঘ্রই আসতে পারে।`
+          : `“${tool.nameEn}” is on the roadmap — not yet available.`,
       )
     }
   }
@@ -2733,7 +2835,7 @@ export function PdfClient() {
                   c === 'all'
                     ? isBn ? 'সব' : 'All'
                     : c === 'favorites'
-                      ? isBn ? `⭐ পছন্দ (${bn(favorites.length)})` : `⭐ Favorites (${favorites.length})`
+                      ? isBn ? `⭐ পছন্দ (${bn(favorites.length, isBn)})` : `⭐ Favorites (${favorites.length})`
                       : isBn
                         ? CATEGORY_LABELS[c as PdfToolCategory].bn
                         : CATEGORY_LABELS[c as PdfToolCategory].en
@@ -2795,7 +2897,7 @@ export function PdfClient() {
                   <div key={i} className="text-center">
                     <Icon className="mx-auto h-5 w-5 text-amber-500" />
                     <div className="mt-1 font-heading text-2xl font-extrabold sm:text-3xl">
-                      {isBn ? bn(s.value) : s.value}
+                      {isBn ? bn(s.value, isBn) : s.value}
                     </div>
                     <div className="text-xs text-muted-foreground">
                       {isBn ? s.labelBn : s.labelEn}
@@ -3295,13 +3397,15 @@ export function PdfClient() {
         />
       )}
 
-      {/* Command palette (⌘+K / Ctrl+K) */}
-      <CommandPalette
-        open={paletteOpen}
-        onOpenChange={setPaletteOpen}
-        isBn={isBn}
-        onSelect={openTool}
-      />
+      {/* Command palette (⌘+K / Ctrl+K) — mounted guard prevents Radix useId hydration mismatch */}
+      {mounted && (
+        <CommandPalette
+          open={paletteOpen}
+          onOpenChange={setPaletteOpen}
+          isBn={isBn}
+          onSelect={openTool}
+        />
+      )}
     </div>
   )
 }
