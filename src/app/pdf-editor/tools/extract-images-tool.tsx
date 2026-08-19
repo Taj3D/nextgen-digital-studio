@@ -2,11 +2,14 @@
 
 /**
  * ============================================================================
- * Extract Images Tool — Phase 1B
+ * Extract Images Tool — Phase 1B.1 (Hotfix)
  * ----------------------------------------------------------------------------
  * Uses PDF.js operator list to find embedded raster images (JPEG/PNG).
  * Downloads as ZIP using existing jszip@3.10.1.
  * Honestly labeled "Extract embedded raster images" — not vector graphics.
+ *
+ * HOTFIX: Replaced unbounded page.objs.get() callback with a
+ * timeout-wrapped, has()-checked approach that never hangs.
  * ============================================================================
  */
 
@@ -24,6 +27,9 @@ import { saveAs } from 'file-saver'
 import JSZip from 'jszip'
 import type { PdfTool } from '../pdf-tools'
 
+/** Timeout for waiting on a single image object (ms). */
+const IMAGE_TIMEOUT = 5000
+
 export function ExtractImagesTool({ tool, isBn, open, onOpenChange }: {
   tool: PdfTool
   isBn: boolean
@@ -33,11 +39,165 @@ export function ExtractImagesTool({ tool, isBn, open, onOpenChange }: {
   const [files, setFiles] = React.useState<File[]>([])
   const [busy, setBusy] = React.useState(false)
   const [progress, setProgress] = React.useState(0)
-  const [imageCount, setImageCount] = React.useState(0)
   const [extractedImages, setExtractedImages] = React.useState<{ name: string; blob: Blob }[]>([])
+  const [skippedCount, setSkippedCount] = React.useState(0)
 
   const bn = (s: string | number) =>
     isBn ? String(s).replace(/[0-9]/g, (d) => '০১২৩৪৫৬৭৮৯'[Number(d)]) : String(s)
+
+  /**
+   * Attempt to resolve an image object from page.objs with a timeout.
+   * Returns the image data or null if unavailable/unsupported.
+   */
+  const tryGetImage = (page: any, imgName: string): Promise<any | null> => {
+    return new Promise((resolve) => {
+      // Check if already resolved
+      if (page.objs.has(imgName)) {
+        try {
+          const img = page.objs.get(imgName)
+          resolve(img || null)
+        } catch {
+          resolve(null)
+        }
+        return
+      }
+
+      // Also check commonObjs
+      if (page.commonObjs?.has?.(imgName)) {
+        try {
+          const img = page.commonObjs.get(imgName)
+          resolve(img || null)
+        } catch {
+          resolve(null)
+        }
+        return
+      }
+
+      // Object not yet resolved — wait with timeout
+      let resolved = false
+      const timeoutId = setTimeout(() => {
+        if (!resolved) {
+          resolved = true
+          resolve(null)
+        }
+      }, IMAGE_TIMEOUT)
+
+      try {
+        page.objs.get(imgName, (img: any) => {
+          if (!resolved) {
+            resolved = true
+            clearTimeout(timeoutId)
+            resolve(img || null)
+          }
+        })
+      } catch {
+        if (!resolved) {
+          resolved = true
+          clearTimeout(timeoutId)
+          resolve(null)
+        }
+      }
+    })
+  }
+
+  /**
+   * Convert a PDF.js image object to a Blob.
+   * Returns null if the image type is unsupported.
+   */
+  const imageToBlob = (img: any): Promise<Blob | null> => {
+    return new Promise((resolve) => {
+      if (!img) {
+        resolve(null)
+        return
+      }
+
+      // PDF.js v6 may resolve images as ImageBitmap (bitmap key) instead of raw pixel data
+      // Check for bitmap first — it's the preferred v6 approach
+      if (img.bitmap && img.bitmap instanceof ImageBitmap) {
+        try {
+          const canvas = document.createElement('canvas')
+          canvas.width = img.bitmap.width
+          canvas.height = img.bitmap.height
+          const ctx = canvas.getContext('2d')
+          if (!ctx) { resolve(null); return }
+          ctx.drawImage(img.bitmap, 0, 0)
+          canvas.toBlob((blob) => {
+            resolve(blob)
+          }, 'image/png')
+        } catch {
+          resolve(null)
+        }
+        return
+      }
+
+      // Fallback: check for raw pixel data (older PDF.js approach)
+      if (!img.data || !img.width || !img.height || img.width < 2 || img.height < 2) {
+        resolve(null)
+        return
+      }
+
+      try {
+        const canvas = document.createElement('canvas')
+        canvas.width = img.width
+        canvas.height = img.height
+        const ctx = canvas.getContext('2d')
+        if (!ctx) { resolve(null); return }
+
+        const imageData = ctx.createImageData(img.width, img.height)
+        const data = img.data as Uint8Array
+        const kind = img.kind
+
+        if (kind === 3) {
+          // RGBA_32BPP — direct copy
+          imageData.data.set(data)
+        } else if (kind === 2) {
+          // RGB_24BPP — expand to RGBA
+          for (let j = 0, k = 0; j < data.length; j += 3, k += 4) {
+            imageData.data[k] = data[j]
+            imageData.data[k + 1] = data[j + 1]
+            imageData.data[k + 2] = data[j + 2]
+            imageData.data[k + 3] = 255
+          }
+        } else if (kind === 1) {
+          // GRAYSCALE_1BPP — expand to RGBA
+          for (let j = 0; j < data.length; j++) {
+            const byte = data[j]
+            for (let bit = 7; bit >= 0; bit--) {
+              const idx = (j * 8 + (7 - bit)) * 4
+              if (idx >= imageData.data.length) break
+              const val = (byte & (1 << bit)) ? 255 : 0
+              imageData.data[idx] = val
+              imageData.data[idx + 1] = val
+              imageData.data[idx + 2] = val
+              imageData.data[idx + 3] = 255
+            }
+          }
+        } else {
+          // Unknown kind — try treating as RGBA
+          if (data.length === img.width * img.height * 4) {
+            imageData.data.set(data)
+          } else if (data.length === img.width * img.height * 3) {
+            for (let j = 0, k = 0; j < data.length; j += 3, k += 4) {
+              imageData.data[k] = data[j]
+              imageData.data[k + 1] = data[j + 1]
+              imageData.data[k + 2] = data[j + 2]
+              imageData.data[k + 3] = 255
+            }
+          } else {
+            resolve(null)
+            return
+          }
+        }
+
+        ctx.putImageData(imageData, 0, 0)
+        canvas.toBlob((blob) => {
+          resolve(blob)
+        }, 'image/png')
+      } catch {
+        resolve(null)
+      }
+    })
+  }
 
   const run = async () => {
     if (files.length === 0) {
@@ -47,99 +207,86 @@ export function ExtractImagesTool({ tool, isBn, open, onOpenChange }: {
     setBusy(true)
     setProgress(5)
     setExtractedImages([])
-    setImageCount(0)
+    setSkippedCount(0)
+
+    let loadingTask: any = null
 
     try {
       const arrayBuffer = await files[0].arrayBuffer()
-      const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) })
+      loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) })
       const doc = await loadingTask.promise
 
       const images: { name: string; blob: Blob }[] = []
       let imgIndex = 0
+      let skipped = 0
+      let totalFound = 0
+
+      const OPS = pdfjsLib.OPS
+      const imageOps = new Set([
+        OPS.paintImageXObject,
+        OPS.paintXObject,
+        OPS.paintInlineImageXObject,
+        OPS.paintImageXObjectRepeat,
+      ])
 
       for (let pageNum = 1; pageNum <= doc.numPages; pageNum++) {
         const page = await doc.getPage(pageNum)
+
+        // Render the page to a canvas first — this triggers PDF.js to resolve
+        // image objects into page.objs. Without rendering, image XObjects
+        // referenced in the operator list may never be fully resolved with data.
+        // Scale 1.0 is needed — lower scales return placeholder objects without data.
+        const tempCanvas = document.createElement('canvas')
+        const tempCtx = tempCanvas.getContext('2d')
+        if (tempCtx) {
+          const viewport = page.getViewport({ scale: 1.0 })
+          tempCanvas.width = viewport.width
+          tempCanvas.height = viewport.height
+          try {
+            const renderTask = page.render({ canvas: tempCanvas, canvasContext: tempCtx, viewport })
+            await renderTask.promise
+          } catch {
+            // Ignore render errors — we just need image objects resolved
+          }
+        }
+
         const operatorList = await page.getOperatorList()
 
-        // Find image paint operations
-        const OPS = pdfjsLib.OPS
-        const imgPromises: Promise<void>[] = []
-
+        // Find all image paint operations on this page
+        const imageNames: string[] = []
         for (let i = 0; i < operatorList.fnArray.length; i++) {
           const fn = operatorList.fnArray[i]
-          const args = operatorList.argsArray[i]
-
-          // Check for image paint operations
-          if (
-            fn === OPS.paintImageXObject ||
-            fn === OPS.paintXObject ||
-            fn === OPS.paintInlineImageXObject ||
-            fn === OPS.paintImageXObjectRepeat
-          ) {
+          if (imageOps.has(fn)) {
+            const args = operatorList.argsArray[i]
             const imgName = args[0]
-            if (typeof imgName === 'string') {
-              // Get the image object from page.objs
-              const imgPromise = new Promise<void>((resolve) => {
-                page.objs.get(imgName, (img: any) => {
-                  if (img && img.data && img.width && img.height) {
-                    try {
-                      // Determine image type
-                      const isJpeg = img.kind === pdfjsLib.ImageKind.RGB_24BPP || img.kind === 2
-                      const isRgba = img.kind === pdfjsLib.ImageKind.RGBA_32BPP || img.kind === 3
-
-                      // Convert to canvas then to blob
-                      const canvas = document.createElement('canvas')
-                      canvas.width = img.width
-                      canvas.height = img.height
-                      const ctx = canvas.getContext('2d')
-                      if (!ctx) { resolve(); return }
-
-                      if (isRgba) {
-                        const imageData = ctx.createImageData(img.width, img.height)
-                        // PDF.js RGBA data may need channel order fix
-                        for (let j = 0; j < img.data.length; j += 4) {
-                          imageData.data[j] = img.data[j]
-                          imageData.data[j + 1] = img.data[j + 1]
-                          imageData.data[j + 2] = img.data[j + 2]
-                          imageData.data[j + 3] = img.data[j + 3]
-                        }
-                        ctx.putImageData(imageData, 0, 0)
-                      } else {
-                        // RGB → convert to RGBA for canvas
-                        const imageData = ctx.createImageData(img.width, img.height)
-                        for (let j = 0, k = 0; j < img.data.length; j += 3, k += 4) {
-                          imageData.data[k] = img.data[j]
-                          imageData.data[k + 1] = img.data[j + 1]
-                          imageData.data[k + 2] = img.data[j + 2]
-                          imageData.data[k + 3] = 255
-                        }
-                        ctx.putImageData(imageData, 0, 0)
-                      }
-
-                      canvas.toBlob((blob) => {
-                        if (blob) {
-                          imgIndex++
-                          const ext = 'png' // Canvas always produces PNG
-                          const name = `page-${pageNum}-image-${imgIndex}.${ext}`
-                          images.push({ name, blob })
-                          setImageCount(images.length)
-                        }
-                        resolve()
-                      }, 'image/png')
-                    } catch {
-                      resolve()
-                    }
-                  } else {
-                    resolve()
-                  }
-                })
-              })
-              imgPromises.push(imgPromise)
+            if (typeof imgName === 'string' && imgName) {
+              imageNames.push(imgName)
             }
           }
         }
 
-        await Promise.all(imgPromises)
+        totalFound += imageNames.length
+
+        // Process each image with timeout
+        for (const imgName of imageNames) {
+          const img = await tryGetImage(page, imgName)
+          if (img) {
+            const blob = await imageToBlob(img)
+            if (blob) {
+              imgIndex++
+              const name = `page-${pageNum}-image-${imgIndex}.png`
+              images.push({ name, blob })
+              setExtractedImages([...images])
+            } else {
+              skipped++
+              setSkippedCount(skipped)
+            }
+          } else {
+            skipped++
+            setSkippedCount(skipped)
+          }
+        }
+
         setProgress(5 + Math.round((pageNum / doc.numPages) * 90))
         page.cleanup()
       }
@@ -148,13 +295,26 @@ export function ExtractImagesTool({ tool, isBn, open, onOpenChange }: {
 
       if (images.length === 0) {
         setExtractedImages([])
-        toast.info(
+        if (totalFound > 0) {
+          toast.info(
+            isBn
+              ? `${bn(totalFound)}টি ছবি পাওয়া গেছে কিন্তু এক্সট্র্যাক্ট করা যায়নি।`
+              : `Found ${totalFound} image(s) but none could be extracted.`,
+          )
+        } else {
+          toast.info(
+            isBn
+              ? 'এই পিডিএফে কোনো এম্বেডেড রাস্টার ছবি পাওয়া যায়নি।'
+              : 'No embedded raster images found in this PDF.',
+          )
+        }
+      } else if (skipped > 0) {
+        toast.success(
           isBn
-            ? 'এই পিডিএফে কোনো এম্বেডেড রাস্টার ছবি পাওয়া যায়নি।'
-            : 'No embedded raster images found in this PDF.',
+            ? `${bn(images.length)}টি ছবি এক্সট্র্যাক্ট হয়েছে, ${bn(skipped)}টি স্কিপ করা হয়েছে।`
+            : `Extracted ${images.length} image(s), ${skipped} skipped.`,
         )
       } else {
-        setExtractedImages(images)
         toast.success(
           isBn
             ? `${bn(images.length)}টি ছবি এক্সট্র্যাক্ট হয়েছে।`
@@ -169,6 +329,9 @@ export function ExtractImagesTool({ tool, isBn, open, onOpenChange }: {
           : 'Image extraction failed — file may be corrupt or encrypted.',
       )
     } finally {
+      if (loadingTask) {
+        try { loadingTask.destroy(); } catch { /* ignore */ }
+      }
       setBusy(false)
       setTimeout(() => setProgress(0), 1500)
     }
@@ -228,6 +391,11 @@ export function ExtractImagesTool({ tool, isBn, open, onOpenChange }: {
             <div className="rounded-lg border border-border/60 bg-muted/30 p-4">
               <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                 {isBn ? `এক্সট্র্যাক্টেড ছবি (${bn(extractedImages.length)}টি)` : `Extracted Images (${extractedImages.length})`}
+                {skippedCount > 0 && (
+                  <span className="ml-2 text-amber-600 dark:text-amber-400">
+                    {isBn ? `${bn(skippedCount)}টি স্কিপ` : `${skippedCount} skipped`}
+                  </span>
+                )}
               </p>
               <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
                 {extractedImages.slice(0, 8).map((img, i) => (
@@ -257,7 +425,7 @@ export function ExtractImagesTool({ tool, isBn, open, onOpenChange }: {
           </>
         )}
 
-        {extractedImages.length === 0 && !busy && files.length > 0 && imageCount === 0 && (
+        {extractedImages.length === 0 && !busy && files.length > 0 && (
           <p className="text-center text-xs text-muted-foreground">
             {isBn
               ? 'ছবি এক্সট্র্যাক্ট করতে বোতামে ক্লিক করুন।'
