@@ -536,3 +536,13 @@ export const CATEGORY_LABELS: Record<
 }
 
 export const TOTAL_TOOL_COUNT = PDF_TOOLS.length
+
+/** Dynamic tool status counts — derived from the canonical registry, never hard-coded. */
+export const AVAILABLE_NOW_COUNT = PDF_TOOLS.filter(
+  (t) => t.functional && t.status !== 'LIMITED',
+).length
+export const LIMITED_COUNT = PDF_TOOLS.filter(
+  (t) => t.functional && t.status === 'LIMITED',
+).length
+export const ROADMAP_COUNT = PDF_TOOLS.filter((t) => !t.functional).length
+

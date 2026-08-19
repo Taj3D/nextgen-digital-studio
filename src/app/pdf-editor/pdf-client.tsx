@@ -67,6 +67,9 @@ import {
   PDF_TOOLS,
   CATEGORY_LABELS,
   TOTAL_TOOL_COUNT,
+  AVAILABLE_NOW_COUNT,
+  LIMITED_COUNT,
+  ROADMAP_COUNT,
   type PdfTool,
   type PdfToolCategory,
 } from './pdf-tools'
@@ -413,8 +416,8 @@ const FAQS: {
   {
     qEn: 'Does PDF Forge work offline?',
     qBn: 'পিডিএফ ফোর্জ কি অফলাইনে চলে?',
-    aEn: 'The 4 functional tools (Merge, Split, Rotate, Edit Metadata) process PDFs entirely in your browser — no server upload. The app is installable as a PWA. Note: 39 tools are currently roadmap items, not yet functional.',
-    aBn: '৪টি ফাংশনাল টুল (মার্জ, স্প্লিট, রোটেট, মেটাডাটা) সম্পূর্ণ আপনার ব্রাউজারেই পিডিএফ প্রসেস করে — কোনো সার্ভার আপলোড নেই। অ্যাপটি PWA হিসেবে ইনস্টলযোগ্য। তবে ৩৯টি টুল বর্তমানে রোডম্যাপে আছে, এখনো ফাংশনাল নয়।',
+    aEn: `The ${AVAILABLE_NOW_COUNT} functional tools process PDFs entirely in your browser — no server upload. The app is installable as a PWA. Note: ${ROADMAP_COUNT} tools are currently roadmap items, not yet functional.`,
+    aBn: `${AVAILABLE_NOW_COUNT}টি ফাংশনাল টুল সম্পূর্ণ আপনার ব্রাউজারেই পিডিএফ প্রসেস করে — কোনো সার্ভার আপলোড নেই। অ্যাপটি PWA হিসেবে ইনস্টলযোগ্য। তবে ${ROADMAP_COUNT}টি টুল বর্তমানে রোডম্যাপে আছে, এখনো ফাংশনাল নয়।`,
   },
   {
     qEn: 'Which devices does PDF Forge support?',
@@ -437,8 +440,8 @@ const FAQS: {
   {
     qEn: 'What makes PDF Forge different from Smallpdf or iLovePDF?',
     qBn: 'পিডিএফ ফোর্জ কীভাবে Smallpdf বা iLovePDF থেকে আলাদা?',
-    aEn: 'PDF Forge is 100% free forever with no account, no upload (files stay on your device), no watermarks, client-side processing, installable PWA, bilingual Bangla + English interface — built by NextGen Digital Studio. Currently 4 tools are functional; 39 are on the roadmap.',
-    aBn: 'পিডিএফ ফোর্জ চিরকাল ১০০% ফ্রি — কোনো অ্যাকাউন্ট নেই, কোনো আপলোড নেই (ফাইল আপনার ডিভাইসে থাকে), কোনো ওয়াটারমার্ক নেই, ক্লায়েন্ট-সাইড প্রসেসিং, ইনস্টলযোগ্য PWA, দ্বিভাষিক বাংলা + ইংরেজি ইন্টারফেস — NextGen Digital Studio তৈরি। বর্তমানে ৪টি টুল ফাংশনাল; ৩৯টি রোডম্যাপে।',
+    aEn: `PDF Forge is 100% free forever with no account, no upload (files stay on your device), no watermarks, client-side processing, installable PWA, bilingual Bangla + English interface — built by NextGen Digital Studio. Currently ${AVAILABLE_NOW_COUNT} tools are functional; ${ROADMAP_COUNT} are on the roadmap.`,
+    aBn: `পিডিএফ ফোর্জ চিরকাল ১০০% ফ্রি — কোনো অ্যাকাউন্ট নেই, কোনো আপলোড নেই (ফাইল আপনার ডিভাইসে থাকে), কোনো ওয়াটারমার্ক নেই, ক্লায়েন্ট-সাইড প্রসেসিং, ইনস্টলযোগ্য PWA, দ্বিভাষিক বাংলা + ইংরেজি ইন্টারফেস — NextGen Digital Studio তৈরি। বর্তমানে ${AVAILABLE_NOW_COUNT}টি টুল ফাংশনাল; ${ROADMAP_COUNT}টি রোডম্যাপে।`,
   },
 ]
 
@@ -3511,10 +3514,10 @@ function OfflineReadySection({ isBn, onInstall, canInstall }: {
   canInstall: boolean
 }) {
   const features: { en: string; bn: string }[] = [
-    { en: '4 tools functional now (Merge, Split, Rotate, Metadata)', bn: '৪টি টুল এখন ফাংশনাল (মার্জ, স্প্লিট, রোটেট, মেটাডাটা)' },
+    { en: `${AVAILABLE_NOW_COUNT} tools functional now`, bn: `${bn(AVAILABLE_NOW_COUNT, isBn)}টি টুল এখন ফাংশনাল` },
     { en: 'No data uploaded to any server', bn: 'কোনো সার্ভারে ডাটা আপলোড হয় না' },
     { en: 'Installable as PWA on any device', bn: 'যেকোনো ডিভাইসে PWA ইনস্টলযোগ্য' },
-    { en: '39 tools on the roadmap', bn: '৩৯টি টুল রোডম্যাপে আছে' },
+    { en: `${ROADMAP_COUNT} tools on the roadmap`, bn: `${bn(ROADMAP_COUNT, isBn)}টি টুল রোডম্যাপে আছে` },
   ]
 
   const platforms: { icon: typeof Monitor; en: string; bn: string }[] = [
@@ -3538,8 +3541,8 @@ function OfflineReadySection({ isBn, onInstall, canInstall }: {
             </h2>
             <p className="mt-3 text-muted-foreground">
               {isBn
-                ? '৪টি ফাংশনাল টুল সম্পূর্ণ আপনার ব্রাউজারেই পিডিএফ প্রসেস করে। অ্যাপটি PWA হিসেবে ইনস্টলযোগ্য।'
-                : 'The 4 functional tools process PDFs entirely in your browser. The app is installable as a PWA for quick access.'}
+                ? `${bn(AVAILABLE_NOW_COUNT, isBn)}টি ফাংশনাল টুল সম্পূর্ণ আপনার ব্রাউজারেই পিডিএফ প্রসেস করে। অ্যাপটি PWA হিসেবে ইনস্টলযোগ্য।`
+                : `${AVAILABLE_NOW_COUNT} functional tools process PDFs entirely in your browser. The app is installable as a PWA for quick access.`}
             </p>
 
             <ul className="mt-6 space-y-2.5">

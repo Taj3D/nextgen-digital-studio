@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { PdfClient } from './pdf-client'
-import { TOTAL_TOOL_COUNT } from './pdf-tools'
+import { TOTAL_TOOL_COUNT, AVAILABLE_NOW_COUNT, ROADMAP_COUNT } from './pdf-tools'
 
 /**
  * ============================================================================
@@ -24,7 +24,7 @@ const webAppLd = {
   alternateName: 'NextGen PDF Editor',
   url: `${SITE_URL}${PAGE_PATH}`,
   description:
-    'Compress, merge, split, convert, edit, sign and secure your PDFs — all for free. 100% client-side processing, files never leave your device. Installable as a PWA. 4 tools functional now; 39 on the roadmap.',
+    `Compress, merge, split, convert, edit, sign and secure your PDFs — all for free. 100% client-side processing, files never leave your device. Installable as a PWA. ${AVAILABLE_NOW_COUNT} tools functional now; ${ROADMAP_COUNT} on the roadmap.`,
   applicationCategory: 'UtilitiesApplication',
   operatingSystem: 'Web',
   browserRequirements: 'Requires a modern browser with JavaScript enabled.',
@@ -94,7 +94,7 @@ const faqLd = {
       name: 'Does PDF Forge work offline?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'The 4 functional tools (Merge, Split, Rotate, Edit Metadata) process PDFs entirely in your browser. The app is installable as a PWA. Note: 39 tools are currently roadmap items, not yet functional.',
+        text: `The ${AVAILABLE_NOW_COUNT} functional tools process PDFs entirely in your browser. The app is installable as a PWA. Note: ${ROADMAP_COUNT} tools are currently roadmap items, not yet functional.`,
       },
     },
     {
@@ -126,7 +126,7 @@ const faqLd = {
       name: 'What makes PDF Forge different from Smallpdf or iLovePDF?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'PDF Forge is 100% free forever with no account, no upload (files stay on your device), no watermarks, client-side processing, installable PWA, bilingual Bangla + English interface — built by NextGen Digital Studio. Currently 4 tools are functional; 39 are on the roadmap.',
+        text: `PDF Forge is 100% free forever with no account, no upload (files stay on your device), no watermarks, client-side processing, installable PWA, bilingual Bangla + English interface — built by NextGen Digital Studio. Currently ${AVAILABLE_NOW_COUNT} tools are functional; ${ROADMAP_COUNT} are on the roadmap.`,
       },
     },
   ],
@@ -158,7 +158,7 @@ export const metadata: Metadata = {
   title:
     'Free PDF Editor Online — Edit, Merge, Split & Manage PDFs | NextGen Digital Studio',
   description:
-    'Compress, merge, split, convert, edit, sign, and secure your PDFs — all for free. 100% client-side processing — your files never leave your browser. 4 tools functional now; 39 on the roadmap.',
+    `Compress, merge, split, convert, edit, sign, and secure your PDFs — all for free. 100% client-side processing — your files never leave your browser. ${AVAILABLE_NOW_COUNT} tools functional now; ${ROADMAP_COUNT} on the roadmap.`,
   keywords: [
     'free PDF editor',
     'PDF editor Bangladesh',
@@ -200,7 +200,7 @@ export const metadata: Metadata = {
     title:
       'Free PDF Editor Online — Edit, Merge, Split & Manage PDFs | NextGen Digital Studio',
     description:
-      '40+ free PDF tools — merge, split, rotate, edit metadata, compress, convert, sign & secure. 100% client-side. 4 tools functional now; 39 on the roadmap. No account, no upload, no limits.',
+      `40+ free PDF tools — merge, split, rotate, edit metadata, compress, convert, sign & secure. 100% client-side. ${AVAILABLE_NOW_COUNT} tools functional now; ${ROADMAP_COUNT} on the roadmap. No account, no upload, no limits.`,
     type: 'website',
     url: `${SITE_URL}${PAGE_PATH}`,
     siteName: 'NextGen Digital Studio',
@@ -210,7 +210,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Free PDF Editor Online — NextGen Digital Studio',
     description:
-      '40+ free PDF tools. Merge, split, rotate, edit metadata & more. 100% client-side, no account needed. 4 tools functional now; 39 on the roadmap.',
+      `40+ free PDF tools. Merge, split, rotate, edit metadata & more. 100% client-side, no account needed. ${AVAILABLE_NOW_COUNT} tools functional now; ${ROADMAP_COUNT} on the roadmap.`,
   },
   category: 'Productivity',
 }
