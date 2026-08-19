@@ -33,7 +33,7 @@ const webAppLd = {
     'Download as PNG and SVG',
     'Error correction levels: L (7%), M (15%), Q (25%), H (30%)',
     'Module styles: Square, Rounded, Dot',
-    'Size options: Small (200px), Medium (300px), Large (500px)',
+    'Size options: Small (200px), Medium (300px), Large (400px)',
     'Live preview with debounced auto-generate',
     'Scan-test verification using jsQR',
     'Recent history (localStorage, max 8 items)',
@@ -93,7 +93,7 @@ const faqLd = {
       name: 'Can I download the QR code as PNG?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Yes. Every generated QR code can be downloaded as a PNG image with a white background and quiet zone for maximum scannability. Choose Small (200px), Medium (300px) or Large (500px) before downloading.',
+        text: 'Yes. Every generated QR code can be downloaded as a PNG image with a white background and quiet zone for maximum scannability. Choose Small (200px), Medium (300px) or Large (400px) before downloading.',
       },
     },
     {

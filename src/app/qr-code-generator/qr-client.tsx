@@ -46,6 +46,18 @@ import {
 import { Switch } from '@/components/ui/switch'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog'
 import { toast } from 'sonner'
 import { trackClick } from '@/lib/tracking-client'
 
@@ -94,6 +106,8 @@ import {
   Keyboard,
   ScanLine,
   X,
+  HelpCircle,
+  Lightbulb,
 } from 'lucide-react'
 
 /* -------------------------------------------------------------------------- */
@@ -650,8 +664,8 @@ const FAQS = [
   {
     qEn: 'Can I download the QR code as PNG?',
     qBn: 'আমি কি QR কোড PNG হিসেবে ডাউনলোড করতে পারি?',
-    aEn: 'Yes. Every generated QR code can be downloaded as a PNG image with a white background and quiet zone for maximum scannability. Choose Small (200px), Medium (300px) or Large (500px) before downloading.',
-    aBn: 'হ্যাঁ। প্রতিটি QR কোড সাদা ব্যাকগ্রাউন্ড ও কোয়াইট জোন সহ PNG ইমেজ হিসেবে ডাউনলোডযোগ্য। ডাউনলোডের আগে Small (২০০px), Medium (৩০০px) বা Large (৫০০px) বাছাই করুন।',
+    aEn: 'Yes. Every generated QR code can be downloaded as a PNG image with a white background and quiet zone for maximum scannability. Choose Small (200px), Medium (300px) or Large (400px) before downloading.',
+    aBn: 'হ্যাঁ। প্রতিটি QR কোড সাদা ব্যাকগ্রাউন্ড ও কোয়াইট জোন সহ PNG ইমেজ হিসেবে ডাউনলোডযোগ্য। ডাউনলোডের আগে Small (২০০px), Medium (৩০০px) বা Large (৪০০px) বাছাই করুন।',
   },
   {
     qEn: 'Can I download the QR code as SVG?',
@@ -770,6 +784,9 @@ export function QrClient() {
   // Mount guard — prevents Radix Accordion useId hydration mismatch
   const [mounted, setMounted] = React.useState(false)
   React.useEffect(() => setMounted(true), [])
+
+  // Keyboard shortcuts dialog
+  const [showShortcuts, setShowShortcuts] = React.useState(false)
 
   const canvasRef = React.useRef<HTMLCanvasElement>(null)
   const generatorRef = React.useRef<HTMLDivElement>(null)
@@ -1380,22 +1397,35 @@ export function QrClient() {
               </p>
 
               {/* Mode toggle: Generator / Scanner */}
-              <div className="mt-6 inline-flex rounded-full border border-border/60 bg-card/60 p-1">
+              <div className="mt-6 flex flex-wrap items-center gap-3">
+                <div className="inline-flex rounded-full border border-border/60 bg-card/60 p-1">
+                  <button
+                    type="button"
+                    onClick={() => setMode('generator')}
+                    className={`inline-flex items-center rounded-full px-5 py-2 text-sm font-medium transition-colors ${mode === 'generator' ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow' : 'text-muted-foreground hover:text-foreground'}`}
+                  >
+                    <QrCode className="mr-1.5 h-4 w-4" />
+                    {isBn ? 'জেনারেটর' : 'Generator'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setMode('scanner')}
+                    className={`inline-flex items-center rounded-full px-5 py-2 text-sm font-medium transition-colors ${mode === 'scanner' ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow' : 'text-muted-foreground hover:text-foreground'}`}
+                  >
+                    <ScanLine className="mr-1.5 h-4 w-4" />
+                    {isBn ? 'স্ক্যানার' : 'Scanner'}
+                  </button>
+                </div>
+
+                {/* Keyboard shortcuts button */}
                 <button
                   type="button"
-                  onClick={() => setMode('generator')}
-                  className={`inline-flex items-center rounded-full px-5 py-2 text-sm font-medium transition-colors ${mode === 'generator' ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow' : 'text-muted-foreground hover:text-foreground'}`}
+                  onClick={() => setShowShortcuts(true)}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-card/60 px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                  aria-label={isBn ? 'কীবোর্ড শর্টকাট দেখুন' : 'View keyboard shortcuts'}
                 >
-                  <QrCode className="mr-1.5 h-4 w-4" />
-                  {isBn ? 'জেনারেটর' : 'Generator'}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setMode('scanner')}
-                  className={`inline-flex items-center rounded-full px-5 py-2 text-sm font-medium transition-colors ${mode === 'scanner' ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow' : 'text-muted-foreground hover:text-foreground'}`}
-                >
-                  <ScanLine className="mr-1.5 h-4 w-4" />
-                  {isBn ? 'স্ক্যানার' : 'Scanner'}
+                  <Keyboard className="h-4 w-4" />
+                  {isBn ? 'শর্টকাট' : 'Shortcuts'}
                 </button>
               </div>
             </div>
@@ -1449,9 +1479,32 @@ export function QrClient() {
                   <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     {/* Size */}
                     <div className="space-y-1.5">
-                      <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                        {isBn ? 'সাইজ' : 'Size'}
-                      </Label>
+                      <div className="flex items-center gap-1">
+                        <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                          {isBn ? 'সাইজ' : 'Size'}
+                        </Label>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <button
+                              type="button"
+                              className="text-muted-foreground hover:text-foreground"
+                              aria-label={isBn ? 'সাইজ কি?' : 'What is size?'}
+                            >
+                              <HelpCircle className="h-3.5 w-3.5" />
+                            </button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-72 text-xs" side="top">
+                            <p className="font-semibold">
+                              {isBn ? 'QR সাইজ কী?' : 'What is QR Size?'}
+                            </p>
+                            <p className="mt-1 text-muted-foreground">
+                              {isBn
+                                ? 'সাইজ বড় হলে QR কোড বড় হয় এবং দূর থেকে স্ক্যান করা সহজ হয়। Small (২০০px) মোবাইলের জন্য, Medium (৩০০px) সাধারণ ব্যবহারের জন্য, Large (৪০০px) প্রিন্ট ও পোস্টারের জন্য আদর্শ।'
+                                : 'Larger size means a bigger QR code that is easier to scan from a distance. Small (200px) for mobile, Medium (300px) for general use, Large (400px) ideal for print and posters.'}
+                            </p>
+                          </PopoverContent>
+                        </Popover>
+                      </div>
                       <Select value={String(size)} onValueChange={(v) => setSize(Number(v))}>
                         <SelectTrigger className="h-10">
                           <SelectValue />
@@ -1463,8 +1516,8 @@ export function QrClient() {
                           <SelectItem value="300">
                             {isBn ? `মাঝারি (৩০০px)` : 'Medium (300px)'}
                           </SelectItem>
-                          <SelectItem value="500">
-                            {isBn ? `বড় (৫০০px)` : 'Large (500px)'}
+                          <SelectItem value="400">
+                            {isBn ? `বড় (৪০০px)` : 'Large (400px)'}
                           </SelectItem>
                         </SelectContent>
                       </Select>
@@ -2050,6 +2103,60 @@ export function QrClient() {
         </section>
 
         {/* ============================================================ */}
+        {/* ABOUT — What is a QR Code? / Privacy / Tip                   */}
+        {/* ============================================================ */}
+        <section className="py-12 sm:py-16">
+          <div className="mx-auto w-full max-w-5xl px-4 sm:px-6">
+            <div className="grid gap-6 md:grid-cols-3">
+              {/* What is a QR Code? */}
+              <div className="rounded-2xl border border-border/60 bg-card p-6 shadow-sm">
+                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/10">
+                  <QrCode className="h-5 w-5 text-amber-600" />
+                </div>
+                <h3 className="font-heading text-lg font-bold">
+                  {isBn ? 'QR Code কী?' : 'What is a QR Code?'}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  {isBn
+                    ? 'QR Code (Quick Response Code) হলো একটি two-dimensional barcode, যেখানে Text বা URL-এর মতো তথ্য encode করা যায় এবং compatible device দিয়ে scan করা যায়।'
+                    : 'A QR Code (Quick Response Code) is a two-dimensional barcode that stores text, URLs, contact info and more — scannable by any phone camera.'}
+                </p>
+              </div>
+
+              {/* Privacy & Processing */}
+              <div className="rounded-2xl border border-border/60 bg-card p-6 shadow-sm">
+                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10">
+                  <ShieldCheck className="h-5 w-5 text-emerald-600" />
+                </div>
+                <h3 className="font-heading text-lg font-bold">
+                  {isBn ? 'প্রাইভেসি ও প্রসেসিং' : 'Privacy & Processing'}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  {isBn
+                    ? 'QR generation আপনার browser-এই হয়। এই app-এ কোনো backend বা database নেই যেখানে আপনার input সংরক্ষিত হবে। তবে চালু করতে ইন্টারনেট সংযোগ প্রয়োজন।'
+                    : 'QR generation happens in your browser. No backend or database stores your input. An internet connection is needed to initially load the app.'}
+                </p>
+              </div>
+
+              {/* Tip */}
+              <div className="rounded-2xl border border-amber-300/60 bg-gradient-to-br from-amber-50 to-orange-50 p-6 shadow-sm dark:border-amber-800/40 dark:from-amber-950/20 dark:to-orange-950/10">
+                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/10">
+                  <Lightbulb className="h-5 w-5 text-amber-600" />
+                </div>
+                <h3 className="font-heading text-lg font-bold">
+                  {isBn ? 'টিপস' : 'Tip'}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-foreground/80">
+                  {isBn
+                    ? 'QR Code ব্যবহার করার আগে encoded URL বা content যাচাই করুন। উচ্চ error-correction (H) বেশি damage tolerance দেয়।'
+                    : 'Verify the encoded URL or content before using the QR Code. Higher error-correction (H) gives more damage tolerance.'}
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ============================================================ */}
         {/* FAQ                                                           */}
         {/* ============================================================ */}
         <section className="bg-muted/30 py-12 sm:py-16">
@@ -2175,6 +2282,41 @@ export function QrClient() {
       </main>
 
       <LandingFooter isBn={isBn} />
+
+      {/* Keyboard shortcuts dialog */}
+      <Dialog open={showShortcuts} onOpenChange={setShowShortcuts}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Keyboard className="h-5 w-5 text-amber-500" />
+              {isBn ? 'কীবোর্ড শর্টকাট' : 'Keyboard Shortcuts'}
+            </DialogTitle>
+            <DialogDescription>
+              {isBn
+                ? 'দ্রুত কাজের জন্য এই শর্টকাটগুলো ব্যবহার করুন।'
+                : 'Use these shortcuts for faster workflow.'}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3">
+            {[
+              { keys: ['⌘', 'K'], label: isBn ? 'ইনপুট ফিল্ডে ফোকাস' : 'Focus input field' },
+              { keys: ['⌘', '↵'], label: isBn ? 'QR কোড জেনারেট করুন' : 'Generate QR code' },
+              { keys: ['Esc'], label: isBn ? 'ডায়ালগ বন্ধ করুন' : 'Close dialog' },
+            ].map((s, i) => (
+              <div key={i} className="flex items-center justify-between rounded-lg border border-border/60 p-3">
+                <span className="text-sm">{s.label}</span>
+                <div className="flex gap-1">
+                  {s.keys.map((k, j) => (
+                    <kbd key={j} className="rounded-md border border-border bg-muted px-2 py-1 text-xs font-bold">
+                      {k}
+                    </kbd>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

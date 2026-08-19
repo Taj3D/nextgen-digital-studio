@@ -2273,16 +2273,15 @@ function OfflineReadySection({ isBn, onInstall, canInstall }: {
 /*  Tool Card                                                                  */
 /* -------------------------------------------------------------------------- */
 
-function ToolCard({ tool, isBn, onOpen }: {
+function ToolCard({ tool, isBn, onOpen, isFavorite, onToggleFavorite }: {
   tool: PdfTool
   isBn: boolean
   onOpen: (tool: PdfTool) => void
+  isFavorite: boolean
+  onToggleFavorite: (tool: PdfTool) => void
 }) {
   return (
-    <button
-      type="button"
-      onClick={() => onOpen(tool)}
-      aria-label={isBn ? tool.nameBn : tool.nameEn}
+    <div
       className="group relative flex h-full flex-col rounded-xl border border-border/60 bg-card p-4 text-left transition-all hover:-translate-y-0.5 hover:border-amber-500/40 hover:shadow-md"
     >
       {tool.isNew && (
@@ -2291,32 +2290,53 @@ function ToolCard({ tool, isBn, onOpen }: {
           {isBn ? 'নতুন' : 'New'}
         </span>
       )}
-      <div className="mb-3 flex items-start justify-between">
-        <span className="grid h-11 w-11 place-items-center rounded-lg bg-amber-500/15 text-2xl">
-          {tool.icon}
+      {/* Favorite star toggle */}
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation()
+          onToggleFavorite(tool)
+        }}
+        aria-label={isBn ? `পছন্দে ${isFavorite ? 'সরান' : 'যোগ করুন'}` : `${isFavorite ? 'Remove from' : 'Add to'} favorites`}
+        className={`absolute top-3 right-3 z-10 grid h-7 w-7 place-items-center rounded-full border transition-colors ${isFavorite ? 'border-amber-500/40 bg-amber-500/15 text-amber-500' : 'border-border/60 bg-background/80 text-muted-foreground hover:text-amber-500'}`}
+      >
+        <Star className={`h-3.5 w-3.5 ${isFavorite ? 'fill-current' : ''}`} />
+      </button>
+      <button
+        type="button"
+        onClick={() => onOpen(tool)}
+        aria-label={isBn ? tool.nameBn : tool.nameEn}
+        className="flex h-full flex-col text-left"
+      >
+        <div className="mb-3 flex items-start">
+          <span className="grid h-11 w-11 place-items-center rounded-lg bg-amber-500/15 text-2xl">
+            {tool.icon}
+          </span>
+        </div>
+        <div className="mb-1.5 flex items-center gap-1.5">
+          {tool.functional ? (
+            <Badge className="border-emerald-500/30 bg-emerald-500/15 text-emerald-500 hover:bg-emerald-500/20">
+              <Check className="mr-1 h-3 w-3" />
+              {isBn ? 'লাইভ' : 'Live'}
+            </Badge>
+          ) : (
+            <Badge variant="outline" className="text-muted-foreground">
+              {isBn ? 'শীঘ্রই' : 'Soon'}
+            </Badge>
+          )}
+        </div>
+        <h3 className="font-heading text-sm font-semibold leading-tight">
+          {isBn ? tool.nameBn : tool.nameEn}
+        </h3>
+        <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
+          {isBn ? tool.descBn : tool.descEn}
+        </p>
+        <span className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-amber-500 transition-colors group-hover:gap-2">
+          {isBn ? 'টুল ব্যবহার করুন' : 'Use Tool'}
+          <ArrowRight className="h-3 w-3" />
         </span>
-        {tool.functional ? (
-          <Badge className="border-emerald-500/30 bg-emerald-500/15 text-emerald-500 hover:bg-emerald-500/20">
-            <Check className="mr-1 h-3 w-3" />
-            {isBn ? 'লাইভ' : 'Live'}
-          </Badge>
-        ) : (
-          <Badge variant="outline" className="text-muted-foreground">
-            {isBn ? 'শীঘ্রই' : 'Soon'}
-          </Badge>
-        )}
-      </div>
-      <h3 className="font-heading text-sm font-semibold leading-tight">
-        {isBn ? tool.nameBn : tool.nameEn}
-      </h3>
-      <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
-        {isBn ? tool.descBn : tool.descEn}
-      </p>
-      <span className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-amber-500 transition-colors group-hover:gap-2">
-        {isBn ? 'টুল ব্যবহার করুন' : 'Use Tool'}
-        <ArrowRight className="h-3 w-3" />
-      </span>
-    </button>
+      </button>
+    </div>
   )
 }
 
@@ -2329,9 +2349,41 @@ export function PdfClient() {
   const isBn = lang === 'bn'
   usePageViewTracking('pdf_editor_page')
 
-  const [activeCat, setActiveCat] = React.useState<PdfToolCategory | 'all'>('all')
+  const [activeCat, setActiveCat] = React.useState<PdfToolCategory | 'all' | 'favorites'>('all')
   const [query, setQuery] = React.useState('')
   const [activeTool, setActiveTool] = React.useState<PdfTool | null>(null)
+  // Favorites — stored in localStorage
+  const [favorites, setFavorites] = React.useState<string[]>([])
+  React.useEffect(() => {
+    try {
+      const raw = localStorage.getItem('pdf-editor-favorites')
+      if (raw) setFavorites(JSON.parse(raw))
+    } catch {
+      /* ignore */
+    }
+  }, [])
+  const toggleFavorite = React.useCallback((tool: PdfTool) => {
+    setFavorites((prev) => {
+      const next = prev.includes(tool.id)
+        ? prev.filter((id) => id !== tool.id)
+        : [...prev, tool.id]
+      try {
+        localStorage.setItem('pdf-editor-favorites', JSON.stringify(next))
+      } catch {
+        /* ignore */
+      }
+      toast.success(
+        next.includes(tool.id)
+          ? isBn
+            ? `⭐ "${tool.nameBn}" পছন্দে যোগ হয়েছে`
+            : `⭐ "${tool.nameEn}" added to favorites`
+          : isBn
+            ? `"${tool.nameBn}" পছন্দ থেকে সরানো হয়েছে`
+            : `"${tool.nameEn}" removed from favorites`
+      )
+      return next
+    })
+  }, [isBn])
   // Command palette (⌘+K / Ctrl+K)
   const [paletteOpen, setPaletteOpen] = React.useState(false)
   // Pre-loaded files for MergeTool (from hero drag&drop)
@@ -2431,7 +2483,11 @@ export function PdfClient() {
 
   const filtered = React.useMemo(() => {
     return PDF_TOOLS.filter((t) => {
-      if (activeCat !== 'all' && t.category !== activeCat) return false
+      if (activeCat === 'favorites') {
+        if (!favorites.includes(t.id)) return false
+      } else if (activeCat !== 'all' && t.category !== activeCat) {
+        return false
+      }
       if (query.trim()) {
         const q = query.toLowerCase()
         return (
@@ -2443,10 +2499,11 @@ export function PdfClient() {
       }
       return true
     })
-  }, [activeCat, query])
+  }, [activeCat, query, favorites])
 
-  const categories: (PdfToolCategory | 'all')[] = [
+  const categories: (PdfToolCategory | 'all' | 'favorites')[] = [
     'all',
+    'favorites',
     'popular',
     'convert',
     'optimize',
@@ -2492,7 +2549,15 @@ export function PdfClient() {
     <div className="flex min-h-screen flex-col bg-background">
       <TopBar />
 
-      <main className="flex-1">
+      {/* Skip to main content — accessibility */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[200] focus:rounded-lg focus:bg-background focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:shadow-lg"
+      >
+        {isBn ? 'মূল কনটেন্টে যান' : 'Skip to main content'}
+      </a>
+
+      <main id="main-content" className="flex-1">
         {/* ====================================================== */}
         {/* Hero                                                    */}
         {/* ====================================================== */}
@@ -2667,9 +2732,11 @@ export function PdfClient() {
                 const label =
                   c === 'all'
                     ? isBn ? 'সব' : 'All'
-                    : isBn
-                      ? CATEGORY_LABELS[c].bn
-                      : CATEGORY_LABELS[c].en
+                    : c === 'favorites'
+                      ? isBn ? `⭐ পছন্দ (${bn(favorites.length)})` : `⭐ Favorites (${favorites.length})`
+                      : isBn
+                        ? CATEGORY_LABELS[c as PdfToolCategory].bn
+                        : CATEGORY_LABELS[c as PdfToolCategory].en
                 return (
                   <button
                     key={c}
@@ -2702,10 +2769,41 @@ export function PdfClient() {
                     tool={tool}
                     isBn={isBn}
                     onOpen={openTool}
+                    isFavorite={favorites.includes(tool.id)}
+                    onToggleFavorite={toggleFavorite}
                   />
                 ))}
               </div>
             )}
+          </div>
+        </section>
+
+        {/* ====================================================== */}
+        {/* Key Statistics                                         */}
+        {/* ====================================================== */}
+        <section className="border-y border-border/60 bg-muted/30 py-8" aria-label="Key statistics">
+          <div className="mx-auto w-full max-w-5xl px-4 sm:px-6">
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+              {[
+                { value: '43+', labelEn: 'PDF Tools', labelBn: 'পিডিএফ টুল', icon: FileText },
+                { value: '0', labelEn: 'Upload Time', labelBn: 'আপলোড সময়', icon: Zap },
+                { value: '100%', labelEn: 'Private', labelBn: 'প্রাইভেট', icon: ShieldCheck },
+                { value: 'Free', labelEn: 'Always Free', labelBn: 'চিরকাল ফ্রি', icon: Sparkles },
+              ].map((s, i) => {
+                const Icon = s.icon
+                return (
+                  <div key={i} className="text-center">
+                    <Icon className="mx-auto h-5 w-5 text-amber-500" />
+                    <div className="mt-1 font-heading text-2xl font-extrabold sm:text-3xl">
+                      {isBn ? bn(s.value) : s.value}
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      {isBn ? s.labelBn : s.labelEn}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
           </div>
         </section>
 
@@ -3095,6 +3193,63 @@ export function PdfClient() {
           </div>
         </section>
       </main>
+
+      {/* PDF Tools quick-access footer section */}
+      <section className="border-t border-border/60 bg-muted/20 py-8">
+        <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
+          <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-4">
+            <div>
+              <h4 className="text-sm font-bold">{isBn ? 'পিডিএফ টুল' : 'PDF Tools'}</h4>
+              <ul className="mt-3 grid grid-cols-2 gap-1.5 text-xs text-muted-foreground">
+                {PDF_TOOLS.slice(0, 8).map((t) => (
+                  <li key={t.id}>
+                    <button
+                      type="button"
+                      onClick={() => openTool(t)}
+                      className="text-left hover:text-foreground"
+                    >
+                      {isBn ? t.nameBn : t.nameEn}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-sm font-bold">{isBn ? 'আরও টুল' : 'More Tools'}</h4>
+              <ul className="mt-3 grid grid-cols-2 gap-1.5 text-xs text-muted-foreground">
+                {PDF_TOOLS.slice(8, 16).map((t) => (
+                  <li key={t.id}>
+                    <button
+                      type="button"
+                      onClick={() => openTool(t)}
+                      className="text-left hover:text-foreground"
+                    >
+                      {isBn ? t.nameBn : t.nameEn}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-sm font-bold">{isBn ? 'কুইক লিংক' : 'Quick Links'}</h4>
+              <ul className="mt-3 space-y-1.5 text-xs text-muted-foreground">
+                <li><a href="/" className="hover:text-foreground">{isBn ? 'হোম' : 'Home'}</a></li>
+                <li><a href="/ai-training" className="hover:text-foreground">{isBn ? 'এআই ট্রেনিং' : 'AI Training'}</a></li>
+                <li><a href="/qr-code-generator" className="hover:text-foreground">{isBn ? 'কিউআর জেনারেটর' : 'QR Generator'}</a></li>
+                <li><a href="/pdf-books" className="hover:text-foreground">{isBn ? 'পিডিএফ বই' : 'PDF Books'}</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-sm font-bold">{isBn ? 'যোগাযোগ' : 'Contact'}</h4>
+              <ul className="mt-3 space-y-1.5 text-xs text-muted-foreground">
+                <li><a href="mailto:nextgendigitalstudio1@gmail.com" className="hover:text-foreground">nextgendigitalstudio1@gmail.com</a></li>
+                <li><a href="tel:+8801711731354" className="hover:text-foreground">+880 1711-731354</a></li>
+                <li className="text-muted-foreground/70">{isBn ? 'Jessore, বাংলাদেশ' : 'Jessore, Bangladesh'}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <LandingFooter isBn={isBn} />
       <FloatingButtons />
