@@ -27,6 +27,7 @@ export type PdfTool = {
   functional: boolean // true = launches working tool dialog
   comingSoon?: boolean
   isNew?: boolean // true = show "NEW" badge on the card
+  status?: 'AVAILABLE_NOW' | 'LIMITED' | 'ROADMAP'
 }
 
 export const PDF_TOOLS: PdfTool[] = [
@@ -214,8 +215,8 @@ export const PDF_TOOLS: PdfTool[] = [
     descBn: 'পেজ পুনর্বিন্যাস করে নতুন সাজান।',
     category: 'optimize',
     icon: '🗂️',
-    functional: false,
-    comingSoon: true,
+    functional: true,
+    status: 'AVAILABLE_NOW',
   },
   {
     id: 'reverse',
@@ -225,8 +226,8 @@ export const PDF_TOOLS: PdfTool[] = [
     descBn: 'পেজ ক্রম উল্টে দিন — শেষ পেজ আগে।',
     category: 'optimize',
     icon: '↩️',
-    functional: false,
-    comingSoon: true,
+    functional: true,
+    status: 'AVAILABLE_NOW',
   },
   {
     id: 'grayscale',
@@ -269,8 +270,8 @@ export const PDF_TOOLS: PdfTool[] = [
     descBn: 'ফন্ট, মেটাডাটা, সাইজ ও স্ট্রাকচার দেখুন।',
     category: 'optimize',
     icon: '🔬',
-    functional: false,
-    comingSoon: true,
+    functional: true,
+    status: 'AVAILABLE_NOW',
   },
   {
     id: 'pdfa',
@@ -291,8 +292,8 @@ export const PDF_TOOLS: PdfTool[] = [
     descBn: 'যেকোনো পিডিএফের বিস্তারিত টেকনিক্যাল রিপোর্ট।',
     category: 'optimize',
     icon: '🔎',
-    functional: false,
-    comingSoon: true,
+    functional: true,
+    status: 'AVAILABLE_NOW',
   },
   {
     id: 'version-converter',
@@ -321,14 +322,14 @@ export const PDF_TOOLS: PdfTool[] = [
   },
   {
     id: 'watermark',
-    nameEn: 'Watermark',
-    nameBn: 'ওয়াটারমার্ক',
-    descEn: 'Stamp text or image watermarks on every page.',
-    descBn: 'প্রতিটি পেজে টেক্সট বা ছবি ওয়াটারমার্ক দিন।',
+    nameEn: 'Watermark (Text)',
+    nameBn: 'ওয়াটারমার্ক (টেক্সট)',
+    descEn: 'Stamp text watermarks on every page.',
+    descBn: 'প্রতিটি পেজে টেক্সট ওয়াটারমার্ক দিন।',
     category: 'edit',
     icon: '💧',
-    functional: false,
-    comingSoon: true,
+    functional: true,
+    status: 'AVAILABLE_NOW',
   },
   {
     id: 'page-numbers',
@@ -338,8 +339,8 @@ export const PDF_TOOLS: PdfTool[] = [
     descBn: 'কাস্টম পজিশন ও ফরম্যাটে পেজ নম্বর যোগ করুন।',
     category: 'edit',
     icon: '🔢',
-    functional: false,
-    comingSoon: true,
+    functional: true,
+    status: 'AVAILABLE_NOW',
   },
   {
     id: 'sign',
@@ -356,12 +357,12 @@ export const PDF_TOOLS: PdfTool[] = [
     id: 'crop',
     nameEn: 'Crop PDF',
     nameBn: 'পিডিএফ ক্রপ',
-    descEn: 'Trim PDF pages to remove white margins.',
-    descBn: 'সাদা মার্জিন কেটে পিডিএফ পেজ ছোট করুন।',
+    descEn: 'Adjust the visible page area (crop box).',
+    descBn: 'পেজের দৃশ্যমান এলাকা (crop box) পরিবর্তন করুন।',
     category: 'edit',
     icon: '✂️',
-    functional: false,
-    comingSoon: true,
+    functional: true,
+    status: 'LIMITED',
   },
   {
     id: 'metadata',
@@ -381,8 +382,8 @@ export const PDF_TOOLS: PdfTool[] = [
     descBn: 'অানওয়ান্টেড পেজ পিডিএফ থেকে মুছুন।',
     category: 'edit',
     icon: '🗑️',
-    functional: false,
-    comingSoon: true,
+    functional: true,
+    status: 'AVAILABLE_NOW',
   },
   {
     id: 'extract-pages',
@@ -392,8 +393,8 @@ export const PDF_TOOLS: PdfTool[] = [
     descBn: 'নির্বাচিত পেজ আলাদা পিডিএফে বের করুন।',
     category: 'edit',
     icon: '📤',
-    functional: false,
-    comingSoon: true,
+    functional: true,
+    status: 'AVAILABLE_NOW',
   },
   {
     id: 'redact',

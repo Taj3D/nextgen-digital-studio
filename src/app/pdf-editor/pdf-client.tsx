@@ -73,7 +73,7 @@ import {
 
 import { toast } from 'sonner'
 import { saveAs } from 'file-saver'
-import { PDFDocument, degrees } from 'pdf-lib'
+import { PDFDocument, degrees, StandardFonts, rgb } from 'pdf-lib'
 
 import {
   FileText,
@@ -128,6 +128,13 @@ import {
   Apple,
   Terminal,
   MonitorDown,
+  ArrowUp,
+  ArrowDown,
+  Crop,
+  Info,
+  Microscope,
+  Briefcase,
+  Building2,
 } from 'lucide-react'
 
 /* -------------------------------------------------------------------------- */
@@ -347,37 +354,25 @@ const COMPARISON_FEATURES: {
   },
 ]
 
-const TESTIMONIALS: {
-  nameEn: string
-  nameBn: string
-  roleEn: string
-  roleBn: string
-  quoteEn: string
-  quoteBn: string
+const BUILT_FOR: {
+  icon: typeof Cpu
+  en: { t: string; d: string }
+  bn: { t: string; d: string }
 }[] = [
   {
-    nameEn: 'Sarah K.',
-    nameBn: 'সারা কে.',
-    roleEn: 'Marketing Manager',
-    roleBn: 'মার্কেটিং ম্যানেজার',
-    quoteEn: 'I merge a dozen PDF reports every week. PDF Forge does it in seconds — locally, no upload. Replaced three paid tools.',
-    quoteBn: 'আমি প্রতি সপ্তাহে ডজন ডজন পিডিএফ রিপোর্ট মার্জ করি। পিডিএফ ফোর্জ সেকেন্ডে কাজ শেষ করে — লোকালি, কোনো আপলোড নেই। তিনটি পেইড টুল বদলে দিয়েছে।',
+    icon: FileText,
+    en: { t: 'For Students', d: 'Merge lecture notes, add page numbers, extract key pages — all free, all private.' },
+    bn: { t: 'ছাত্রদের জন্য', d: 'লেকচার নোট মার্জ, পেজ নম্বর যোগ, গুরুত্বপূর্ণ পেজ এক্সট্র্যাক্ট — সব ফ্রি, সব প্রাইভেট।' },
   },
   {
-    nameEn: 'James R.',
-    nameBn: 'জেমস আর.',
-    roleEn: 'Freelance Designer',
-    roleBn: 'ফ্রিল্যান্স ডিজাইনার',
-    quoteEn: 'Offline + private + free is the trifecta I never thought I would get. Rotate, split, metadata — all from one tab. Brilliant.',
-    quoteBn: 'অফলাইন + প্রাইভেট + ফ্রি — এই ত্রয়ী আমি ভাবিনি পাব। রোটেট, স্প্লিট, মেটাডাটা — সব এক ট্যাবে। অসাধারণ।',
+    icon: Briefcase,
+    en: { t: 'For Freelancers', d: 'Deliver professional PDFs to clients — watermark, reorder, rotate, inspect.' },
+    bn: { t: 'ফ্রিল্যান্সারদের জন্য', d: 'ক্লায়েন্টের জন্য প্রফেশনাল পিডিএফ তৈরি — ওয়াটারমার্ক, রিঅর্ডার, রোটেট, ইন্সপেক্ট।' },
   },
   {
-    nameEn: 'Priya M.',
-    nameBn: 'প্রিয়া এম.',
-    roleEn: 'Student',
-    roleBn: 'ছাত্রী',
-    quoteEn: 'No signup, no limit, no watermark. As a student with limited data, the offline PWA is a lifesaver. Bengali UI is a bonus.',
-    quoteBn: 'কোনো সাইন-আপ নেই, কোনো লিমিট নেই, কোনো ওয়াটারমার্ক নেই। সীমিত ডাটা প্ল্যানের ছাত্রী হিসেবে অফলাইন PWA আশীর্বাদ। বাংলা UI বোনাস।',
+    icon: Building2,
+    en: { t: 'For Businesses', d: 'Process documents locally — no upload, no server, full privacy compliance.' },
+    bn: { t: 'ব্যবসার জন্য', d: 'ডকুমেন্ট লোকালি প্রসেস — কোনো আপলোড নেই, কোনো সার্ভার নেই, সম্পূর্ণ প্রাইভেসি।' },
   },
 ]
 
@@ -1588,7 +1583,1256 @@ function MetadataTool({ tool, isBn, open, onOpenChange }: {
 }
 
 /* -------------------------------------------------------------------------- */
-/*  Command Palette (⌘+K / Ctrl+K)                                             */
+/*  Functional tool: Delete Pages                                              */
+/* -------------------------------------------------------------------------- */
+
+function DeletePagesTool({ tool, isBn, open, onOpenChange }: {
+  tool: PdfTool
+  isBn: boolean
+  open: boolean
+  onOpenChange: (v: boolean) => void
+}) {
+  const [files, setFiles] = React.useState<File[]>([])
+  const [pageCount, setPageCount] = React.useState(0)
+  const [selected, setSelected] = React.useState<Set<number>>(new Set())
+  const [busy, setBusy] = React.useState(false)
+  const [progress, setProgress] = React.useState(0)
+
+  const loadPageCount = async () => {
+    if (files.length === 0) return
+    try {
+      const bytes = await files[0].arrayBuffer()
+      const doc = await PDFDocument.load(bytes, { ignoreEncryption: true })
+      setPageCount(doc.getPageCount())
+      setSelected(new Set())
+    } catch {
+      toast.error(isBn ? 'পিডিএফ লোড ব্যর্থ।' : 'Failed to load PDF.')
+    }
+  }
+
+  React.useEffect(() => {
+    if (files.length > 0) loadPageCount()
+    else setPageCount(0)
+  }, [files])
+
+  const togglePage = (i: number) => {
+    setSelected((prev) => {
+      const next = new Set(prev)
+      if (next.has(i)) next.delete(i)
+      else next.add(i)
+      return next
+    })
+  }
+
+  const canRun = selected.size > 0 && selected.size < pageCount && !busy
+
+  const run = async () => {
+    if (!canRun) {
+      toast.error(
+        isBn
+          ? 'অন্তত ১টি পেজ রাখতে হবে — সব পেজ ডিলিট করা যাবে না।'
+          : 'Cannot delete all pages — at least 1 must remain.',
+      )
+      return
+    }
+    setBusy(true)
+    setProgress(5)
+    try {
+      const bytes = await files[0].arrayBuffer()
+      const doc = await PDFDocument.load(bytes, { ignoreEncryption: true })
+      const total = doc.getPageCount()
+      // Remove from highest to lowest to preserve indices
+      const sorted = Array.from(selected).sort((a, b) => b - a)
+      let done = 0
+      for (const idx of sorted) {
+        doc.removePage(idx)
+        done++
+        setProgress(5 + Math.round((done / sorted.length) * 90))
+      }
+      const out = await doc.save()
+      const expectedPages = total - selected.size
+      const ok = await downloadValidatedPdf(
+        out,
+        files[0].name.replace(/\.pdf$/i, '') + '-deleted.pdf',
+        expectedPages,
+      )
+      if (!ok) throw new Error('Validation failed')
+      setProgress(100)
+      toast.success(
+        isBn
+          ? `${bn(selected.size, isBn)}টি পেজ ডিলিট হয়েছে — ${bn(expectedPages, isBn)}টি পেজ রয়ে গেছে।`
+          : `Deleted ${selected.size} pages — ${expectedPages} remaining.`,
+      )
+    } catch (err) {
+      console.error(err)
+      toast.error(
+        isBn ? 'ডিলিট ব্যর্থ — ফাইল নষ্ট বা এনক্রিপ্টেড হতে পারে।' : 'Delete failed — file may be corrupt or encrypted.',
+      )
+    } finally {
+      setBusy(false)
+      setTimeout(() => setProgress(0), 1500)
+    }
+  }
+
+  return (
+    <ToolDialog tool={tool} isBn={isBn} open={open} onOpenChange={onOpenChange}>
+      <div className="space-y-4">
+        <FilePicker isBn={isBn} files={files} onFiles={setFiles} />
+        {pageCount > 0 && (
+          <>
+            <p className="text-xs text-muted-foreground">
+              {isBn
+                ? `মোট ${bn(pageCount, isBn)}টি পেজ — ডিলিট করতে চান এমন পেজ বাছুন।`
+                : `${pageCount} pages — select pages to delete.`}
+            </p>
+            <div className="grid grid-cols-5 gap-2 sm:grid-cols-8" role="group" aria-label={isBn ? 'পেজ নির্বাচন' : 'Page selection'}>
+              {Array.from({ length: pageCount }, (_, i) => {
+                const isSelected = selected.has(i)
+                return (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => togglePage(i)}
+                    aria-pressed={isSelected}
+                    aria-label={`${isBn ? 'পেজ' : 'Page'} ${i + 1}${isSelected ? ` — ${isBn ? 'নির্বাচিত' : 'selected'}` : ''}`}
+                    className={`flex aspect-square items-center justify-center rounded-lg border-2 text-sm font-bold transition-colors ${
+                      isSelected
+                        ? 'border-rose-500 bg-rose-500/15 text-rose-600 dark:text-rose-400'
+                        : 'border-border/60 hover:border-rose-500/40'
+                    }`}
+                  >
+                    {bn(i + 1, isBn)}
+                    {isSelected && <span className="sr-only">{isBn ? 'নির্বাচিত' : 'selected'}</span>}
+                  </button>
+                )
+              })}
+            </div>
+            {selected.size > 0 && (
+              <p className="text-xs font-semibold text-rose-600 dark:text-rose-400">
+                {isBn ? `${bn(selected.size, isBn)}টি পেজ ডিলিট হবে।` : `${selected.size} pages will be deleted.`}
+              </p>
+            )}
+          </>
+        )}
+        {busy && (
+          <div className="space-y-2">
+            <Progress value={progress} className="h-2" />
+            <p className="text-center text-xs text-muted-foreground">
+              {isBn ? `প্রসেসিং ${bn(progress, isBn)}%` : `Processing ${progress}%`}
+            </p>
+          </div>
+        )}
+        <DialogFooter>
+          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={busy}>
+            {isBn ? 'বাতিল' : 'Cancel'}
+          </Button>
+          <Button
+            onClick={run}
+            disabled={!canRun}
+            className="bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:opacity-90"
+          >
+            {busy ? (
+              <><Loader2 className="mr-2 h-4 w-4 animate-spin" />{isBn ? 'ডিলিট হচ্ছে…' : 'Deleting…'}</>
+            ) : (
+              <><Trash2 className="mr-2 h-4 w-4" />{isBn ? 'পেজ ডিলিট করুন' : 'Delete Pages'}</>
+            )}
+          </Button>
+        </DialogFooter>
+      </div>
+    </ToolDialog>
+  )
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Functional tool: Extract Pages                                             */
+/* -------------------------------------------------------------------------- */
+
+function ExtractPagesTool({ tool, isBn, open, onOpenChange }: {
+  tool: PdfTool
+  isBn: boolean
+  open: boolean
+  onOpenChange: (v: boolean) => void
+}) {
+  const [files, setFiles] = React.useState<File[]>([])
+  const [pageCount, setPageCount] = React.useState(0)
+  const [rangesStr, setRangesStr] = React.useState('1-1')
+  const [busy, setBusy] = React.useState(false)
+  const [progress, setProgress] = React.useState(0)
+
+  const loadPageCount = async () => {
+    if (files.length === 0) return
+    try {
+      const bytes = await files[0].arrayBuffer()
+      const doc = await PDFDocument.load(bytes, { ignoreEncryption: true })
+      setPageCount(doc.getPageCount())
+    } catch {
+      toast.error(isBn ? 'পিডিএফ লোড ব্যর্থ।' : 'Failed to load PDF.')
+    }
+  }
+
+  React.useEffect(() => {
+    if (files.length > 0) loadPageCount()
+    else setPageCount(0)
+  }, [files])
+
+  function parseRanges(input: string, max: number): number[] {
+    const out: number[] = []
+    for (const part of input.split(',')) {
+      const trimmed = part.trim()
+      if (!trimmed) continue
+      if (trimmed.includes('-')) {
+        const [a, b] = trimmed.split('-').map((s) => parseInt(s.trim(), 10))
+        if (!Number.isFinite(a) || !Number.isFinite(b)) continue
+        const start = Math.max(1, Math.min(a, b))
+        const end = Math.min(max, Math.max(a, b))
+        for (let i = start; i <= end; i++) out.push(i - 1)
+      } else {
+        const n = parseInt(trimmed, 10)
+        if (Number.isFinite(n) && n >= 1 && n <= max) out.push(n - 1)
+      }
+    }
+    return [...new Set(out)]
+  }
+
+  const run = async () => {
+    if (files.length === 0) {
+      toast.error(isBn ? 'একটি পিডিএফ দিন।' : 'Add a PDF.')
+      return
+    }
+    const indices = parseRanges(rangesStr, pageCount)
+    if (indices.length === 0) {
+      toast.error(
+        isBn ? 'সঠিক পেজ রেঞ্জ লিখুন, যেমন: 1-3, 5, 7-9' : 'Enter valid ranges, e.g. 1-3, 5, 7-9',
+      )
+      return
+    }
+    setBusy(true)
+    setProgress(5)
+    try {
+      const bytes = await files[0].arrayBuffer()
+      const src = await PDFDocument.load(bytes, { ignoreEncryption: true })
+      const out = await PDFDocument.create()
+      const copied = await out.copyPages(src, indices)
+      copied.forEach((p) => out.addPage(p))
+      const outBytes = await out.save()
+      const ok = await downloadValidatedPdf(
+        outBytes,
+        files[0].name.replace(/\.pdf$/i, '') + '-extracted.pdf',
+        indices.length,
+      )
+      if (!ok) throw new Error('Validation failed')
+      setProgress(100)
+      toast.success(
+        isBn
+          ? `${bn(indices.length, isBn)}টি পেজ এক্সট্র্যাক্ট হয়েছে।`
+          : `Extracted ${indices.length} pages.`,
+      )
+    } catch (err) {
+      console.error(err)
+      toast.error(
+        isBn ? 'এক্সট্র্যাক্ট ব্যর্থ।' : 'Extract failed.',
+      )
+    } finally {
+      setBusy(false)
+      setTimeout(() => setProgress(0), 1500)
+    }
+  }
+
+  return (
+    <ToolDialog tool={tool} isBn={isBn} open={open} onOpenChange={onOpenChange}>
+      <div className="space-y-4">
+        <FilePicker isBn={isBn} files={files} onFiles={setFiles} />
+        {pageCount > 0 && (
+          <>
+            <p className="text-xs text-muted-foreground">
+              {isBn ? `মোট ${bn(pageCount, isBn)}টি পেজ।` : `${pageCount} pages total.`}
+            </p>
+            <div className="space-y-1.5">
+              <Label>{isBn ? 'পেজ রেঞ্জ' : 'Page Ranges'}</Label>
+              <Input
+                value={rangesStr}
+                onChange={(e) => setRangesStr(e.target.value)}
+                placeholder="1-3, 5, 7-9"
+              />
+              <p className="text-xs text-muted-foreground">
+                {isBn ? 'যেমন: 1-3, 5, 7-9' : 'e.g. 1-3, 5, 7-9'}
+              </p>
+            </div>
+          </>
+        )}
+        {busy && (
+          <div className="space-y-2">
+            <Progress value={progress} className="h-2" />
+            <p className="text-center text-xs text-muted-foreground">
+              {isBn ? `প্রসেসিং ${bn(progress, isBn)}%` : `Processing ${progress}%`}
+            </p>
+          </div>
+        )}
+        <DialogFooter>
+          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={busy}>
+            {isBn ? 'বাতিল' : 'Cancel'}
+          </Button>
+          <Button
+            onClick={run}
+            disabled={files.length === 0 || busy}
+            className="bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:opacity-90"
+          >
+            {busy ? (
+              <><Loader2 className="mr-2 h-4 w-4 animate-spin" />{isBn ? 'এক্সট্র্যাক্ট হচ্ছে…' : 'Extracting…'}</>
+            ) : (
+              <><FilePlus2 className="mr-2 h-4 w-4" />{isBn ? 'পেজ এক্সট্র্যাক্ট করুন' : 'Extract Pages'}</>
+            )}
+          </Button>
+        </DialogFooter>
+      </div>
+    </ToolDialog>
+  )
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Functional tool: Reverse PDF                                               */
+/* -------------------------------------------------------------------------- */
+
+function ReverseTool({ tool, isBn, open, onOpenChange }: {
+  tool: PdfTool
+  isBn: boolean
+  open: boolean
+  onOpenChange: (v: boolean) => void
+}) {
+  const [files, setFiles] = React.useState<File[]>([])
+  const [busy, setBusy] = React.useState(false)
+  const [progress, setProgress] = React.useState(0)
+
+  const run = async () => {
+    if (files.length === 0) {
+      toast.error(isBn ? 'একটি পিডিএফ দিন।' : 'Add a PDF.')
+      return
+    }
+    setBusy(true)
+    setProgress(5)
+    try {
+      const bytes = await files[0].arrayBuffer()
+      const src = await PDFDocument.load(bytes, { ignoreEncryption: true })
+      const pageCount = src.getPageCount()
+      const out = await PDFDocument.create()
+      // Reverse indices: last page first
+      const reversedIndices: number[] = []
+      for (let i = pageCount - 1; i >= 0; i--) reversedIndices.push(i)
+      const copied = await out.copyPages(src, reversedIndices)
+      copied.forEach((p) => out.addPage(p))
+      setProgress(90)
+      const outBytes = await out.save()
+      const ok = await downloadValidatedPdf(
+        outBytes,
+        files[0].name.replace(/\.pdf$/i, '') + '-reversed.pdf',
+        pageCount,
+      )
+      if (!ok) throw new Error('Validation failed')
+      setProgress(100)
+      toast.success(
+        isBn ? `পেজ ক্রম উল্টে দেওয়া হয়েছে।` : `Page order reversed.`,
+      )
+    } catch (err) {
+      console.error(err)
+      toast.error(
+        isBn ? 'রিভার্স ব্যর্থ।' : 'Reverse failed.',
+      )
+    } finally {
+      setBusy(false)
+      setTimeout(() => setProgress(0), 1500)
+    }
+  }
+
+  return (
+    <ToolDialog tool={tool} isBn={isBn} open={open} onOpenChange={onOpenChange}>
+      <div className="space-y-4">
+        <FilePicker isBn={isBn} files={files} onFiles={setFiles} />
+        {busy && (
+          <div className="space-y-2">
+            <Progress value={progress} className="h-2" />
+            <p className="text-center text-xs text-muted-foreground">
+              {isBn ? `প্রসেসিং ${bn(progress, isBn)}%` : `Processing ${progress}%`}
+            </p>
+          </div>
+        )}
+        <DialogFooter>
+          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={busy}>
+            {isBn ? 'বাতিল' : 'Cancel'}
+          </Button>
+          <Button
+            onClick={run}
+            disabled={files.length === 0 || busy}
+            className="bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:opacity-90"
+          >
+            {busy ? (
+              <><Loader2 className="mr-2 h-4 w-4 animate-spin" />{isBn ? 'উল্টে হচ্ছে…' : 'Reversing…'}</>
+            ) : (
+              <><Rewind className="mr-2 h-4 w-4" />{isBn ? 'পেজ উল্টে দিন' : 'Reverse PDF'}</>
+            )}
+          </Button>
+        </DialogFooter>
+      </div>
+    </ToolDialog>
+  )
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Functional tool: Page Numbers                                              */
+/* -------------------------------------------------------------------------- */
+
+type PageNumPosition = 'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right'
+
+function PageNumbersTool({ tool, isBn, open, onOpenChange }: {
+  tool: PdfTool
+  isBn: boolean
+  open: boolean
+  onOpenChange: (v: boolean) => void
+}) {
+  const [files, setFiles] = React.useState<File[]>([])
+  const [position, setPosition] = React.useState<PageNumPosition>('bottom-center')
+  const [startNum, setStartNum] = React.useState(1)
+  const [fontSize, setFontSize] = React.useState(12)
+  const [prefix, setPrefix] = React.useState('')
+  const [suffix, setSuffix] = React.useState('')
+  const [busy, setBusy] = React.useState(false)
+  const [progress, setProgress] = React.useState(0)
+
+  const positions: { value: PageNumPosition; labelEn: string; labelBn: string }[] = [
+    { value: 'top-left', labelEn: 'Top Left', labelBn: 'উপরে বামে' },
+    { value: 'top-center', labelEn: 'Top Center', labelBn: 'উপরে মাঝে' },
+    { value: 'top-right', labelEn: 'Top Right', labelBn: 'উপরে ডানে' },
+    { value: 'bottom-left', labelEn: 'Bottom Left', labelBn: 'নিচে বামে' },
+    { value: 'bottom-center', labelEn: 'Bottom Center', labelBn: 'নিচে মাঝে' },
+    { value: 'bottom-right', labelEn: 'Bottom Right', labelBn: 'নিচে ডানে' },
+  ]
+
+  const run = async () => {
+    if (files.length === 0) {
+      toast.error(isBn ? 'একটি পিডিএফ দিন।' : 'Add a PDF.')
+      return
+    }
+    setBusy(true)
+    setProgress(5)
+    try {
+      const bytes = await files[0].arrayBuffer()
+      const doc = await PDFDocument.load(bytes, { ignoreEncryption: true })
+      const pages = doc.getPages()
+      const font = await doc.embedFont(StandardFonts.Helvetica)
+      const margin = 30
+      for (let i = 0; i < pages.length; i++) {
+        const page = pages[i]
+        const w = page.getWidth()
+        const h = page.getHeight()
+        const num = startNum + i
+        const text = `${prefix}${num}${suffix}`
+        const textWidth = font.widthOfTextAtSize(text, fontSize)
+        let x: number, y: number
+        if (position.startsWith('top')) {
+          y = h - margin
+        } else {
+          y = margin
+        }
+        if (position.endsWith('left')) {
+          x = margin
+        } else if (position.endsWith('center')) {
+          x = (w - textWidth) / 2
+        } else {
+          x = w - margin - textWidth
+        }
+        page.drawText(text, { x, y, size: fontSize, font, color: rgb(0.3, 0.3, 0.3) })
+        setProgress(5 + Math.round(((i + 1) / pages.length) * 90))
+      }
+      const out = await doc.save()
+      const ok = await downloadValidatedPdf(
+        out,
+        files[0].name.replace(/\.pdf$/i, '') + '-numbered.pdf',
+        pages.length,
+      )
+      if (!ok) throw new Error('Validation failed')
+      setProgress(100)
+      toast.success(
+        isBn ? `${bn(pages.length, isBn)}টি পেজে নম্বর যোগ হয়েছে।` : `Added page numbers to ${pages.length} pages.`,
+      )
+    } catch (err) {
+      console.error(err)
+      toast.error(isBn ? 'পেজ নম্বর যোগ ব্যর্থ।' : 'Page numbering failed.')
+    } finally {
+      setBusy(false)
+      setTimeout(() => setProgress(0), 1500)
+    }
+  }
+
+  return (
+    <ToolDialog tool={tool} isBn={isBn} open={open} onOpenChange={onOpenChange}>
+      <div className="space-y-4">
+        <FilePicker isBn={isBn} files={files} onFiles={setFiles} />
+        <div className="space-y-1.5">
+          <Label>{isBn ? 'পজিশন' : 'Position'}</Label>
+          <Select value={position} onValueChange={(v) => setPosition(v as PageNumPosition)}>
+            <SelectTrigger className="w-full"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              {positions.map((p) => (
+                <SelectItem key={p.value} value={p.value}>
+                  {isBn ? p.labelBn : p.labelEn}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          <div className="space-y-1.5">
+            <Label>{isBn ? 'শুরু নম্বর' : 'Start Number'}</Label>
+            <Input type="number" value={startNum} min={1} onChange={(e) => setStartNum(parseInt(e.target.value) || 1)} />
+          </div>
+          <div className="space-y-1.5">
+            <Label>{isBn ? 'ফন্ট সাইজ' : 'Font Size'}</Label>
+            <Input type="number" value={fontSize} min={6} max={72} onChange={(e) => setFontSize(parseInt(e.target.value) || 12)} />
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          <div className="space-y-1.5">
+            <Label>{isBn ? 'প্রিফিক্স (ঐচ্ছিক)' : 'Prefix (optional)'}</Label>
+            <Input value={prefix} onChange={(e) => setPrefix(e.target.value)} placeholder="Page " />
+          </div>
+          <div className="space-y-1.5">
+            <Label>{isBn ? 'সাফিক্স (ঐচ্ছিক)' : 'Suffix (optional)'}</Label>
+            <Input value={suffix} onChange={(e) => setSuffix(e.target.value)} placeholder=" of 10" />
+          </div>
+        </div>
+        {busy && (
+          <div className="space-y-2">
+            <Progress value={progress} className="h-2" />
+            <p className="text-center text-xs text-muted-foreground">
+              {isBn ? `প্রসেসিং ${bn(progress, isBn)}%` : `Processing ${progress}%`}
+            </p>
+          </div>
+        )}
+        <DialogFooter>
+          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={busy}>
+            {isBn ? 'বাতিল' : 'Cancel'}
+          </Button>
+          <Button onClick={run} disabled={files.length === 0 || busy} className="bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:opacity-90">
+            {busy ? (
+              <><Loader2 className="mr-2 h-4 w-4 animate-spin" />{isBn ? 'যোগ হচ্ছে…' : 'Adding…'}</>
+            ) : (
+              <><Hash className="mr-2 h-4 w-4" />{isBn ? 'পেজ নম্বর যোগ করুন' : 'Add Page Numbers'}</>
+            )}
+          </Button>
+        </DialogFooter>
+      </div>
+    </ToolDialog>
+  )
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Functional tool: Watermark (Text)                                          */
+/* -------------------------------------------------------------------------- */
+
+type WmPosition = 'center' | 'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right'
+
+function WatermarkTool({ tool, isBn, open, onOpenChange }: {
+  tool: PdfTool
+  isBn: boolean
+  open: boolean
+  onOpenChange: (v: boolean) => void
+}) {
+  const [files, setFiles] = React.useState<File[]>([])
+  const [text, setText] = React.useState('CONFIDENTIAL')
+  const [fontSize, setFontSize] = React.useState(50)
+  const [opacity, setOpacity] = React.useState(0.2)
+  const [rotation, setRotation] = React.useState(45)
+  const [position, setPosition] = React.useState<WmPosition>('center')
+  const [busy, setBusy] = React.useState(false)
+  const [progress, setProgress] = React.useState(0)
+
+  const positions: { value: WmPosition; labelEn: string; labelBn: string }[] = [
+    { value: 'center', labelEn: 'Center', labelBn: 'মাঝখানে' },
+    { value: 'top-left', labelEn: 'Top Left', labelBn: 'উপরে বামে' },
+    { value: 'top-center', labelEn: 'Top Center', labelBn: 'উপরে মাঝে' },
+    { value: 'top-right', labelEn: 'Top Right', labelBn: 'উপরে ডানে' },
+    { value: 'bottom-left', labelEn: 'Bottom Left', labelBn: 'নিচে বামে' },
+    { value: 'bottom-center', labelEn: 'Bottom Center', labelBn: 'নিচে মাঝে' },
+    { value: 'bottom-right', labelEn: 'Bottom Right', labelBn: 'নিচে ডানে' },
+  ]
+
+  const run = async () => {
+    if (files.length === 0) {
+      toast.error(isBn ? 'একটি পিডিএফ দিন।' : 'Add a PDF.')
+      return
+    }
+    if (!text.trim()) {
+      toast.error(isBn ? 'ওয়াটারমার্ক টেক্সট দিন।' : 'Enter watermark text.')
+      return
+    }
+    setBusy(true)
+    setProgress(5)
+    try {
+      const bytes = await files[0].arrayBuffer()
+      const doc = await PDFDocument.load(bytes, { ignoreEncryption: true })
+      const pages = doc.getPages()
+      const font = await doc.embedFont(StandardFonts.HelveticaBold)
+      const margin = 50
+      for (let i = 0; i < pages.length; i++) {
+        const page = pages[i]
+        const w = page.getWidth()
+        const h = page.getHeight()
+        const textWidth = font.widthOfTextAtSize(text, fontSize)
+        let x: number, y: number
+        if (position === 'center') {
+          x = (w - textWidth * Math.cos((rotation * Math.PI) / 180)) / 2
+          y = h / 2
+        } else {
+          if (position.startsWith('top')) y = h - margin
+          else y = margin
+          if (position.endsWith('left')) x = margin
+          else if (position.endsWith('center')) x = (w - textWidth) / 2
+          else x = w - margin - textWidth
+        }
+        page.drawText(text, {
+          x, y, size: fontSize, font,
+          color: rgb(0.5, 0.5, 0.5),
+          opacity,
+          rotate: degrees(rotation),
+        })
+        setProgress(5 + Math.round(((i + 1) / pages.length) * 90))
+      }
+      const out = await doc.save()
+      const ok = await downloadValidatedPdf(
+        out,
+        files[0].name.replace(/\.pdf$/i, '') + '-watermarked.pdf',
+        pages.length,
+      )
+      if (!ok) throw new Error('Validation failed')
+      setProgress(100)
+      toast.success(
+        isBn ? `${bn(pages.length, isBn)}টি পেজে ওয়াটারমার্ক যোগ হয়েছে।` : `Watermarked ${pages.length} pages.`,
+      )
+    } catch (err) {
+      console.error(err)
+      toast.error(isBn ? 'ওয়াটারমার্ক ব্যর্থ।' : 'Watermark failed.')
+    } finally {
+      setBusy(false)
+      setTimeout(() => setProgress(0), 1500)
+    }
+  }
+
+  return (
+    <ToolDialog tool={tool} isBn={isBn} open={open} onOpenChange={onOpenChange}>
+      <div className="space-y-4">
+        <FilePicker isBn={isBn} files={files} onFiles={setFiles} />
+        <div className="space-y-1.5">
+          <Label>{isBn ? 'ওয়াটারমার্ক টেক্সট' : 'Watermark Text'}</Label>
+          <Input value={text} onChange={(e) => setText(e.target.value)} placeholder="CONFIDENTIAL" />
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          <div className="space-y-1.5">
+            <Label>{isBn ? 'ফন্ট সাইজ' : 'Font Size'}</Label>
+            <Input type="number" value={fontSize} min={8} max={200} onChange={(e) => setFontSize(parseInt(e.target.value) || 50)} />
+          </div>
+          <div className="space-y-1.5">
+            <Label>{isBn ? 'অপাসিটি' : 'Opacity'} ({bn(Math.round(opacity * 100), isBn)}%)</Label>
+            <input type="range" min={5} max={100} value={Math.round(opacity * 100)} onChange={(e) => setOpacity(parseInt(e.target.value) / 100)} className="w-full" />
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          <div className="space-y-1.5">
+            <Label>{isBn ? 'রোটেশন (ডিগ্রি)' : 'Rotation (degrees)'}</Label>
+            <Input type="number" value={rotation} min={0} max={360} onChange={(e) => setRotation(parseInt(e.target.value) || 0)} />
+          </div>
+          <div className="space-y-1.5">
+            <Label>{isBn ? 'পজিশন' : 'Position'}</Label>
+            <Select value={position} onValueChange={(v) => setPosition(v as WmPosition)}>
+              <SelectTrigger className="w-full"><SelectValue /></SelectTrigger>
+              <SelectContent>
+                {positions.map((p) => (
+                  <SelectItem key={p.value} value={p.value}>{isBn ? p.labelBn : p.labelEn}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+        {busy && (
+          <div className="space-y-2">
+            <Progress value={progress} className="h-2" />
+            <p className="text-center text-xs text-muted-foreground">
+              {isBn ? `প্রসেসিং ${bn(progress, isBn)}%` : `Processing ${progress}%`}
+            </p>
+          </div>
+        )}
+        <DialogFooter>
+          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={busy}>
+            {isBn ? 'বাতিল' : 'Cancel'}
+          </Button>
+          <Button onClick={run} disabled={files.length === 0 || busy || !text.trim()} className="bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:opacity-90">
+            {busy ? (
+              <><Loader2 className="mr-2 h-4 w-4 animate-spin" />{isBn ? 'যোগ হচ্ছে…' : 'Watermarking…'}</>
+            ) : (
+              <><Droplets className="mr-2 h-4 w-4" />{isBn ? 'ওয়াটারমার্ক যোগ করুন' : 'Add Watermark'}</>
+            )}
+          </Button>
+        </DialogFooter>
+      </div>
+    </ToolDialog>
+  )
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Functional tool: Crop PDF (LIMITED — viewport crop only)                    */
+/* -------------------------------------------------------------------------- */
+
+function CropTool({ tool, isBn, open, onOpenChange }: {
+  tool: PdfTool
+  isBn: boolean
+  open: boolean
+  onOpenChange: (v: boolean) => void
+}) {
+  const [files, setFiles] = React.useState<File[]>([])
+  const [pageCount, setPageCount] = React.useState(0)
+  const [origSize, setOrigSize] = React.useState<{ w: number; h: number } | null>(null)
+  const [marginTop, setMarginTop] = React.useState(0)
+  const [marginBottom, setMarginBottom] = React.useState(0)
+  const [marginLeft, setMarginLeft] = React.useState(0)
+  const [marginRight, setMarginRight] = React.useState(0)
+  const [busy, setBusy] = React.useState(false)
+  const [progress, setProgress] = React.useState(0)
+
+  const loadInfo = async () => {
+    if (files.length === 0) return
+    try {
+      const bytes = await files[0].arrayBuffer()
+      const doc = await PDFDocument.load(bytes, { ignoreEncryption: true })
+      setPageCount(doc.getPageCount())
+      const first = doc.getPages()[0]
+      setOrigSize({ w: first.getWidth(), h: first.getHeight() })
+    } catch {
+      toast.error(isBn ? 'পিডিএফ লোড ব্যর্থ।' : 'Failed to load PDF.')
+    }
+  }
+
+  React.useEffect(() => {
+    if (files.length > 0) loadInfo()
+    else { setPageCount(0); setOrigSize(null) }
+  }, [files])
+
+  const newW = origSize ? Math.max(1, origSize.w - marginLeft - marginRight) : 0
+  const newH = origSize ? Math.max(1, origSize.h - marginTop - marginBottom) : 0
+  const canRun = files.length > 0 && origSize !== null && newW > 10 && newH > 10 && !busy
+
+  const run = async () => {
+    if (!canRun) {
+      toast.error(isBn ? 'ক্রপ এরিয়া খুব ছোট — মার্জিন কমান।' : 'Crop area too small — reduce margins.')
+      return
+    }
+    setBusy(true)
+    setProgress(5)
+    try {
+      const bytes = await files[0].arrayBuffer()
+      const doc = await PDFDocument.load(bytes, { ignoreEncryption: true })
+      const pages = doc.getPages()
+      const cropX = marginLeft
+      const cropY = marginBottom
+      const cropW = newW
+      const cropH = newH
+      for (let i = 0; i < pages.length; i++) {
+        pages[i].setCropBox(cropX, cropY, cropW, cropH)
+        setProgress(5 + Math.round(((i + 1) / pages.length) * 90))
+      }
+      const out = await doc.save()
+      const ok = await downloadValidatedPdf(
+        out,
+        files[0].name.replace(/\.pdf$/i, '') + '-cropped.pdf',
+        pages.length,
+      )
+      if (!ok) throw new Error('Validation failed')
+      setProgress(100)
+      toast.success(
+        isBn ? `ক্রপ প্রয়োগ হয়েছে — ভিউয়েবল এরিয়া ${bn(Math.round(cropW), isBn)}×${bn(Math.round(cropH), isBn)}pt।` : `Crop applied — visible area ${Math.round(cropW)}×${Math.round(cropH)}pt.`,
+      )
+    } catch (err) {
+      console.error(err)
+      toast.error(isBn ? 'ক্রপ ব্যর্থ।' : 'Crop failed.')
+    } finally {
+      setBusy(false)
+      setTimeout(() => setProgress(0), 1500)
+    }
+  }
+
+  return (
+    <ToolDialog tool={tool} isBn={isBn} open={open} onOpenChange={onOpenChange}>
+      <div className="space-y-4">
+        <div className="rounded-lg border border-amber-300/60 bg-amber-50 p-3 text-xs dark:bg-amber-950/20">
+          <p className="font-semibold text-amber-700 dark:text-amber-400">
+            ⚠️ {isBn ? 'সীমিত কার্যকারিতা' : 'Limited functionality'}
+          </p>
+          <p className="mt-1 text-amber-700/80 dark:text-amber-400/80">
+            {isBn
+              ? 'এই টুল পেজের ভিউয়েবল এরিয়া (crop box) পরিবর্তন করে — ভেতরের কনটেন্ট মুছে যায় না, শুধু দৃশ্যমান এলাকা সংকুচিত হয়।'
+              : 'This tool adjusts the visible page area (crop box) — underlying content is not removed, only the visible region is narrowed.'}
+          </p>
+        </div>
+        <FilePicker isBn={isBn} files={files} onFiles={setFiles} />
+        {origSize && (
+          <p className="text-xs text-muted-foreground">
+            {isBn
+              ? `পেজ সাইজ: ${bn(Math.round(origSize.w), isBn)}×${bn(Math.round(origSize.h), isBn)}pt · ${bn(pageCount, isBn)}টি পেজ`
+              : `Page size: ${Math.round(origSize.w)}×${Math.round(origSize.h)}pt · ${pageCount} pages`}
+          </p>
+        )}
+        <div className="grid grid-cols-2 gap-3">
+          <div className="space-y-1.5">
+            <Label>{isBn ? 'উপরের মার্জিন (pt)' : 'Top Margin (pt)'}</Label>
+            <Input type="number" value={marginTop} min={0} onChange={(e) => setMarginTop(Math.max(0, parseInt(e.target.value) || 0))} />
+          </div>
+          <div className="space-y-1.5">
+            <Label>{isBn ? 'নিচের মার্জিন (pt)' : 'Bottom Margin (pt)'}</Label>
+            <Input type="number" value={marginBottom} min={0} onChange={(e) => setMarginBottom(Math.max(0, parseInt(e.target.value) || 0))} />
+          </div>
+          <div className="space-y-1.5">
+            <Label>{isBn ? 'বাম মার্জিন (pt)' : 'Left Margin (pt)'}</Label>
+            <Input type="number" value={marginLeft} min={0} onChange={(e) => setMarginLeft(Math.max(0, parseInt(e.target.value) || 0))} />
+          </div>
+          <div className="space-y-1.5">
+            <Label>{isBn ? 'ডান মার্জিন (pt)' : 'Right Margin (pt)'}</Label>
+            <Input type="number" value={marginRight} min={0} onChange={(e) => setMarginRight(Math.max(0, parseInt(e.target.value) || 0))} />
+          </div>
+        </div>
+        {origSize && (
+          <p className="text-xs font-medium">
+            {isBn ? `নতুন সাইজ: ${bn(Math.round(newW), isBn)}×${bn(Math.round(newH), isBn)}pt` : `New size: ${Math.round(newW)}×${Math.round(newH)}pt`}
+          </p>
+        )}
+        {busy && (
+          <div className="space-y-2">
+            <Progress value={progress} className="h-2" />
+            <p className="text-center text-xs text-muted-foreground">
+              {isBn ? `প্রসেসিং ${bn(progress, isBn)}%` : `Processing ${progress}%`}
+            </p>
+          </div>
+        )}
+        <DialogFooter>
+          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={busy}>
+            {isBn ? 'বাতিল' : 'Cancel'}
+          </Button>
+          <Button onClick={run} disabled={!canRun} className="bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:opacity-90">
+            {busy ? (
+              <><Loader2 className="mr-2 h-4 w-4 animate-spin" />{isBn ? 'ক্রপ হচ্ছে…' : 'Cropping…'}</>
+            ) : (
+              <><Crop className="mr-2 h-4 w-4" />{isBn ? 'ক্রপ প্রয়োগ করুন' : 'Apply Crop'}</>
+            )}
+          </Button>
+        </DialogFooter>
+      </div>
+    </ToolDialog>
+  )
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Functional tool: Organize / Reorder Pages                                  */
+/* -------------------------------------------------------------------------- */
+
+function OrganizeTool({ tool, isBn, open, onOpenChange }: {
+  tool: PdfTool
+  isBn: boolean
+  open: boolean
+  onOpenChange: (v: boolean) => void
+}) {
+  const [files, setFiles] = React.useState<File[]>([])
+  const [pageCount, setPageCount] = React.useState(0)
+  const [order, setOrder] = React.useState<number[]>([])
+  const [busy, setBusy] = React.useState(false)
+  const [progress, setProgress] = React.useState(0)
+
+  const loadInfo = async () => {
+    if (files.length === 0) return
+    try {
+      const bytes = await files[0].arrayBuffer()
+      const doc = await PDFDocument.load(bytes, { ignoreEncryption: true })
+      const count = doc.getPageCount()
+      setPageCount(count)
+      setOrder(Array.from({ length: count }, (_, i) => i))
+    } catch {
+      toast.error(isBn ? 'পিডিএফ লোড ব্যর্থ।' : 'Failed to load PDF.')
+    }
+  }
+
+  React.useEffect(() => {
+    if (files.length > 0) loadInfo()
+    else { setPageCount(0); setOrder([]) }
+  }, [files])
+
+  const moveUp = (index: number) => {
+    if (index === 0) return
+    setOrder((prev) => {
+      const next = [...prev]
+      ;[next[index - 1], next[index]] = [next[index], next[index - 1]]
+      return next
+    })
+  }
+
+  const moveDown = (index: number) => {
+    if (index === order.length - 1) return
+    setOrder((prev) => {
+      const next = [...prev]
+      ;[next[index], next[index + 1]] = [next[index + 1], next[index]]
+      return next
+    })
+  }
+
+  const run = async () => {
+    if (files.length === 0 || order.length === 0) {
+      toast.error(isBn ? 'একটি পিডিএফ দিন।' : 'Add a PDF.')
+      return
+    }
+    setBusy(true)
+    setProgress(5)
+    try {
+      const bytes = await files[0].arrayBuffer()
+      const src = await PDFDocument.load(bytes, { ignoreEncryption: true })
+      const out = await PDFDocument.create()
+      const copied = await out.copyPages(src, order)
+      copied.forEach((p) => out.addPage(p))
+      setProgress(90)
+      const outBytes = await out.save()
+      const ok = await downloadValidatedPdf(
+        outBytes,
+        files[0].name.replace(/\.pdf$/i, '') + '-reordered.pdf',
+        order.length,
+      )
+      if (!ok) throw new Error('Validation failed')
+      setProgress(100)
+      toast.success(
+        isBn ? `পেজ ক্রম পরিবর্তন সম্পন্ন।` : `Page order updated.`,
+      )
+    } catch (err) {
+      console.error(err)
+      toast.error(isBn ? 'রিঅর্ডার ব্যর্থ।' : 'Reorder failed.')
+    } finally {
+      setBusy(false)
+      setTimeout(() => setProgress(0), 1500)
+    }
+  }
+
+  return (
+    <ToolDialog tool={tool} isBn={isBn} open={open} onOpenChange={onOpenChange}>
+      <div className="space-y-4">
+        <FilePicker isBn={isBn} files={files} onFiles={setFiles} />
+        {order.length > 0 && (
+          <>
+            <p className="text-xs text-muted-foreground">
+              {isBn ? `${bn(order.length, isBn)}টি পেজ — উপর/নিচ বোতাম দিয়ে সাজান।` : `${order.length} pages — reorder using up/down buttons.`}
+            </p>
+            <div className="max-h-64 space-y-1.5 overflow-y-auto pr-1" role="list" aria-label={isBn ? 'পেজ তালিকা' : 'Page list'}>
+              {order.map((origIdx, displayIdx) => (
+                <div
+                  key={`${origIdx}-${displayIdx}`}
+                  role="listitem"
+                  className="flex items-center justify-between gap-2 rounded-lg border border-border/60 bg-card/50 px-3 py-2 text-sm"
+                >
+                  <span className="flex items-center gap-2">
+                    <span className="grid h-7 w-7 place-items-center rounded-md bg-amber-500/15 text-xs font-bold text-amber-600">
+                      {bn(displayIdx + 1, isBn)}
+                    </span>
+                    <span className="text-muted-foreground">
+                      {isBn ? `পেজ ${bn(origIdx + 1, isBn)}` : `Page ${origIdx + 1}`}
+                    </span>
+                  </span>
+                  <div className="flex gap-1">
+                    <button
+                      type="button"
+                      onClick={() => moveUp(displayIdx)}
+                      disabled={displayIdx === 0 || busy}
+                      aria-label={isBn ? `${bn(displayIdx + 1, isBn)} নম্বর পেজ উপরে নামান` : `Move page ${displayIdx + 1} up`}
+                      className="grid h-8 w-8 place-items-center rounded-md border border-border/60 hover:bg-muted disabled:opacity-30"
+                    >
+                      <ArrowUp className="h-4 w-4" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => moveDown(displayIdx)}
+                      disabled={displayIdx === order.length - 1 || busy}
+                      aria-label={isBn ? `${bn(displayIdx + 1, isBn)} নম্বর পেজ নিচে নামান` : `Move page ${displayIdx + 1} down`}
+                      className="grid h-8 w-8 place-items-center rounded-md border border-border/60 hover:bg-muted disabled:opacity-30"
+                    >
+                      <ArrowDown className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+        {busy && (
+          <div className="space-y-2">
+            <Progress value={progress} className="h-2" />
+            <p className="text-center text-xs text-muted-foreground">
+              {isBn ? `প্রসেসিং ${bn(progress, isBn)}%` : `Processing ${progress}%`}
+            </p>
+          </div>
+        )}
+        <DialogFooter>
+          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={busy}>
+            {isBn ? 'বাতিল' : 'Cancel'}
+          </Button>
+          <Button onClick={run} disabled={files.length === 0 || busy} className="bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:opacity-90">
+            {busy ? (
+              <><Loader2 className="mr-2 h-4 w-4 animate-spin" />{isBn ? 'সাজানো হচ্ছে…' : 'Reordering…'}</>
+            ) : (
+              <><Layers className="mr-2 h-4 w-4" />{isBn ? 'নতুন ক্রমে সেভ করুন' : 'Save New Order'}</>
+            )}
+          </Button>
+        </DialogFooter>
+      </div>
+    </ToolDialog>
+  )
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Functional tool: PDF Analyze (read-only)                                   */
+/* -------------------------------------------------------------------------- */
+
+function AnalyzeTool({ tool, isBn, open, onOpenChange }: {
+  tool: PdfTool
+  isBn: boolean
+  open: boolean
+  onOpenChange: (v: boolean) => void
+}) {
+  const [files, setFiles] = React.useState<File[]>([])
+  const [info, setInfo] = React.useState<{
+    fileName: string
+    fileSize: string
+    pageCount: number
+    pageWidth: number
+    pageHeight: number
+    orientation: string
+    title: string
+    author: string
+    subject: string
+    keywords: string
+    creator: string
+    producer: string
+    creationDate: string
+    modDate: string
+  } | null>(null)
+  const [busy, setBusy] = React.useState(false)
+
+  const analyze = async () => {
+    if (files.length === 0) {
+      toast.error(isBn ? 'একটি পিডিএফ দিন।' : 'Add a PDF.')
+      return
+    }
+    setBusy(true)
+    try {
+      const bytes = await files[0].arrayBuffer()
+      const doc = await PDFDocument.load(bytes, { ignoreEncryption: true })
+      const firstPage = doc.getPages()[0]
+      const w = firstPage.getWidth()
+      const h = firstPage.getHeight()
+      const creationDate = doc.getCreationDate()
+      const modDate = doc.getModificationDate()
+      setInfo({
+        fileName: files[0].name,
+        fileSize: humanSize(files[0].size),
+        pageCount: doc.getPageCount(),
+        pageWidth: Math.round(w),
+        pageHeight: Math.round(h),
+        orientation: w > h ? (isBn ? 'ল্যান্ডস্কেপ' : 'Landscape') : (isBn ? 'পোর্ট্রেট' : 'Portrait'),
+        title: doc.getTitle() ?? '—',
+        author: doc.getAuthor() ?? '—',
+        subject: doc.getSubject() ?? '—',
+        keywords: doc.getKeywords() ?? '—',
+        creator: doc.getCreator() ?? '—',
+        producer: doc.getProducer() ?? '—',
+        creationDate: creationDate ? creationDate.toLocaleString() : '—',
+        modDate: modDate ? modDate.toLocaleString() : '—',
+      })
+    } catch (err) {
+      console.error(err)
+      toast.error(isBn ? 'অ্যানালাইজ ব্যর্থ।' : 'Analysis failed.')
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  const fields = info ? [
+    { labelEn: 'File Name', labelBn: 'ফাইল নাম', value: info.fileName },
+    { labelEn: 'File Size', labelBn: 'ফাইল সাইজ', value: info.fileSize },
+    { labelEn: 'Page Count', labelBn: 'পেজ সংখ্যা', value: bn(info.pageCount, isBn) },
+    { labelEn: 'Page Size', labelBn: 'পেজ সাইজ', value: `${bn(info.pageWidth, isBn)} × ${bn(info.pageHeight, isBn)} pt` },
+    { labelEn: 'Orientation', labelBn: 'ওরিয়েন্টেশন', value: info.orientation },
+    { labelEn: 'Title', labelBn: 'টাইটেল', value: info.title },
+    { labelEn: 'Author', labelBn: 'লেখক', value: info.author },
+    { labelEn: 'Subject', labelBn: 'বিষয়', value: info.subject },
+    { labelEn: 'Keywords', labelBn: 'কিওয়ার্ড', value: info.keywords },
+    { labelEn: 'Creator', labelBn: 'তৈরিকারী', value: info.creator },
+    { labelEn: 'Producer', labelBn: 'প্রযোজক', value: info.producer },
+    { labelEn: 'Created', labelBn: 'তৈরির তারিখ', value: info.creationDate },
+    { labelEn: 'Modified', labelBn: 'পরিবর্তনের তারিখ', value: info.modDate },
+  ] : []
+
+  return (
+    <ToolDialog tool={tool} isBn={isBn} open={open} onOpenChange={onOpenChange}>
+      <div className="space-y-4">
+        <FilePicker isBn={isBn} files={files} onFiles={setFiles} />
+        <Button onClick={analyze} disabled={files.length === 0 || busy} className="w-full" variant="secondary">
+          {busy ? (
+            <><Loader2 className="mr-2 h-4 w-4 animate-spin" />{isBn ? 'বিশ্লেষণ হচ্ছে…' : 'Analyzing…'}</>
+          ) : (
+            <><Info className="mr-2 h-4 w-4" />{isBn ? 'পিডিএফ বিশ্লেষণ করুন' : 'Analyze PDF'}</>
+          )}
+        </Button>
+        {info && (
+          <div className="rounded-lg border border-border/60 bg-muted/30 p-4">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              {isBn ? 'ডকুমেন্ট তথ্য' : 'Document Information'}
+            </p>
+            <dl className="space-y-2">
+              {fields.map((f, i) => (
+                <div key={i} className="flex justify-between gap-3 text-xs">
+                  <dt className="shrink-0 text-muted-foreground">{isBn ? f.labelBn : f.labelEn}</dt>
+                  <dd className="truncate text-right font-medium" title={f.value}>{f.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        )}
+        <DialogFooter>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
+            {isBn ? 'বন্ধ করুন' : 'Close'}
+          </Button>
+        </DialogFooter>
+      </div>
+    </ToolDialog>
+  )
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Functional tool: PDF Inspect (deeper read-only)                            */
+/* -------------------------------------------------------------------------- */
+
+function InspectTool({ tool, isBn, open, onOpenChange }: {
+  tool: PdfTool
+  isBn: boolean
+  open: boolean
+  onOpenChange: (v: boolean) => void
+}) {
+  const [files, setFiles] = React.useState<File[]>([])
+  const [report, setReport] = React.useState<{
+    fileName: string
+    fileSize: string
+    pageCount: number
+    pages: { width: number; height: number; rotation: number; orientation: string }[]
+    title: string
+    author: string
+    subject: string
+    keywords: string
+    creator: string
+    producer: string
+    creationDate: string
+    modDate: string
+  } | null>(null)
+  const [busy, setBusy] = React.useState(false)
+
+  const inspect = async () => {
+    if (files.length === 0) {
+      toast.error(isBn ? 'একটি পিডিএফ দিন।' : 'Add a PDF.')
+      return
+    }
+    setBusy(true)
+    try {
+      const bytes = await files[0].arrayBuffer()
+      const doc = await PDFDocument.load(bytes, { ignoreEncryption: true })
+      const pages = doc.getPages()
+      const creationDate = doc.getCreationDate()
+      const modDate = doc.getModificationDate()
+      setReport({
+        fileName: files[0].name,
+        fileSize: humanSize(files[0].size),
+        pageCount: doc.getPageCount(),
+        pages: pages.map((p) => ({
+          width: Math.round(p.getWidth()),
+          height: Math.round(p.getHeight()),
+          rotation: p.getRotation().angle,
+          orientation: p.getWidth() > p.getHeight() ? (isBn ? 'ল্যান্ডস্কেপ' : 'Landscape') : (isBn ? 'পোর্ট্রেট' : 'Portrait'),
+        })),
+        title: doc.getTitle() ?? '—',
+        author: doc.getAuthor() ?? '—',
+        subject: doc.getSubject() ?? '—',
+        keywords: doc.getKeywords() ?? '—',
+        creator: doc.getCreator() ?? '—',
+        producer: doc.getProducer() ?? '—',
+        creationDate: creationDate ? creationDate.toLocaleString() : '—',
+        modDate: modDate ? modDate.toLocaleString() : '—',
+      })
+    } catch (err) {
+      console.error(err)
+      toast.error(isBn ? 'ইন্সপেকশন ব্যর্থ।' : 'Inspection failed.')
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <ToolDialog tool={tool} isBn={isBn} open={open} onOpenChange={onOpenChange}>
+      <div className="space-y-4">
+        <FilePicker isBn={isBn} files={files} onFiles={setFiles} />
+        <Button onClick={inspect} disabled={files.length === 0 || busy} className="w-full" variant="secondary">
+          {busy ? (
+            <><Loader2 className="mr-2 h-4 w-4 animate-spin" />{isBn ? 'ইন্সপেক্ট হচ্ছে…' : 'Inspecting…'}</>
+          ) : (
+            <><Microscope className="mr-2 h-4 w-4" />{isBn ? 'পিডিএফ ইন্সপেক্ট করুন' : 'Inspect PDF'}</>
+          )}
+        </Button>
+        {report && (
+          <div className="space-y-3">
+            <div className="rounded-lg border border-border/60 bg-muted/30 p-4">
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                {isBn ? 'ফাইল তথ্য' : 'File Information'}
+              </p>
+              <dl className="space-y-1.5 text-xs">
+                <div className="flex justify-between"><dt className="text-muted-foreground">{isBn ? 'নাম' : 'Name'}</dt><dd className="font-medium">{report.fileName}</dd></div>
+                <div className="flex justify-between"><dt className="text-muted-foreground">{isBn ? 'সাইজ' : 'Size'}</dt><dd className="font-medium">{report.fileSize}</dd></div>
+                <div className="flex justify-between"><dt className="text-muted-foreground">{isBn ? 'পেজ' : 'Pages'}</dt><dd className="font-medium">{bn(report.pageCount, isBn)}</dd></div>
+              </dl>
+            </div>
+            <div className="rounded-lg border border-border/60 bg-muted/30 p-4">
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                {isBn ? 'মেটাডাটা' : 'Metadata'}
+              </p>
+              <dl className="space-y-1.5 text-xs">
+                <div className="flex justify-between"><dt className="text-muted-foreground">{isBn ? 'টাইটেল' : 'Title'}</dt><dd className="font-medium">{report.title}</dd></div>
+                <div className="flex justify-between"><dt className="text-muted-foreground">{isBn ? 'লেখক' : 'Author'}</dt><dd className="font-medium">{report.author}</dd></div>
+                <div className="flex justify-between"><dt className="text-muted-foreground">{isBn ? 'বিষয়' : 'Subject'}</dt><dd className="font-medium">{report.subject}</dd></div>
+                <div className="flex justify-between"><dt className="text-muted-foreground">{isBn ? 'কিওয়ার্ড' : 'Keywords'}</dt><dd className="font-medium">{report.keywords}</dd></div>
+                <div className="flex justify-between"><dt className="text-muted-foreground">{isBn ? 'তৈরিকারী' : 'Creator'}</dt><dd className="font-medium">{report.creator}</dd></div>
+                <div className="flex justify-between"><dt className="text-muted-foreground">{isBn ? 'প্রযোজক' : 'Producer'}</dt><dd className="font-medium">{report.producer}</dd></div>
+                <div className="flex justify-between"><dt className="text-muted-foreground">{isBn ? 'তৈরি' : 'Created'}</dt><dd className="font-medium">{report.creationDate}</dd></div>
+                <div className="flex justify-between"><dt className="text-muted-foreground">{isBn ? 'পরিবর্তিত' : 'Modified'}</dt><dd className="font-medium">{report.modDate}</dd></div>
+              </dl>
+            </div>
+            <div className="rounded-lg border border-border/60 bg-muted/30 p-4">
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                {isBn ? 'পেজ-লেভেল তথ্য' : 'Page-Level Details'}
+              </p>
+              <div className="max-h-40 space-y-1 overflow-y-auto text-xs">
+                {report.pages.map((p, i) => (
+                  <div key={i} className="flex justify-between border-b border-border/30 py-1 last:border-0">
+                    <span className="text-muted-foreground">{isBn ? `পেজ ${bn(i + 1, isBn)}` : `Page ${i + 1}`}</span>
+                    <span className="font-medium">{bn(p.width, isBn)}×{bn(p.height, isBn)}pt · {bn(p.rotation, isBn)}° · {p.orientation}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+        <DialogFooter>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
+            {isBn ? 'বন্ধ করুন' : 'Close'}
+          </Button>
+        </DialogFooter>
+      </div>
+    </ToolDialog>
+  )
+}
 /* -------------------------------------------------------------------------- */
 
 function CommandPalette({
@@ -2416,7 +3660,12 @@ function ToolCard({ tool, isBn, onOpen, isFavorite, onToggleFavorite }: {
           </span>
         </div>
         <div className="mb-1.5 flex items-center gap-1.5">
-          {tool.functional ? (
+          {tool.functional && tool.status === 'LIMITED' ? (
+            <Badge className="border-amber-500/30 bg-amber-500/15 text-amber-600 hover:bg-amber-500/20 dark:text-amber-400">
+              <Check className="mr-1 h-3 w-3" />
+              {isBn ? 'সীমিত' : 'Limited'}
+            </Badge>
+          ) : tool.functional ? (
             <Badge className="border-emerald-500/30 bg-emerald-500/15 text-emerald-500 hover:bg-emerald-500/20">
               <Check className="mr-1 h-3 w-3" />
               {isBn ? 'এখনই ব্যবহারযোগ্য' : 'Available Now'}
@@ -3103,43 +4352,29 @@ export function PdfClient() {
           <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
             <div className="mx-auto max-w-2xl text-center">
               <LandingEyebrow>
-                <Star className="h-3.5 w-3.5" />
-                {isBn ? 'ব্যবহারকারীর কথা' : 'Testimonials'}
+                <Sparkles className="h-3.5 w-3.5" />
+                {isBn ? 'যাদের জন্য তৈরি' : 'Built For'}
               </LandingEyebrow>
               <h2 className="mt-4 font-heading text-3xl font-bold sm:text-4xl">
-                {isBn ? 'যারা ভালোবাসেন পিডিএফ ফোর্জ' : 'Loved by PDF Forge Users'}
+                {isBn ? 'ছাত্র, ফ্রিল্যান্সার ও ব্যবসার জন্য' : 'For Students, Freelancers & Businesses'}
               </h2>
             </div>
 
             <div className="mt-10 grid gap-5 md:grid-cols-3">
-              {TESTIMONIALS.map((t) => {
-                const name = isBn ? t.nameBn : t.nameEn
-                const role = isBn ? t.roleBn : t.roleEn
-                const quote = isBn ? t.quoteBn : t.quoteEn
+              {BUILT_FOR.map((item) => {
+                const Icon = item.icon
+                const t = isBn ? item.bn.t : item.en.t
+                const d = isBn ? item.bn.d : item.en.d
                 return (
                   <Card
-                    key={name}
+                    key={t}
                     className="relative flex flex-col border-border/60 bg-card p-6"
                   >
-                    <Quote className="absolute right-5 top-5 h-8 w-8 text-amber-500/20" />
-                    <div className="mb-3 flex items-center gap-1 text-amber-500">
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <Star key={i} className="h-4 w-4 fill-current" />
-                      ))}
+                    <div className="mb-3 grid h-10 w-10 place-items-center rounded-lg bg-amber-500/15">
+                      <Icon className="h-5 w-5 text-amber-500" />
                     </div>
-                    <p className="flex-1 text-sm text-muted-foreground">
-                      “{quote}”
-                    </p>
-                    <Separator className="my-4" />
-                    <div className="flex items-center gap-3">
-                      <div className="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-amber-500 to-orange-500 font-heading text-sm font-bold text-white">
-                        {name.charAt(0)}
-                      </div>
-                      <div>
-                        <p className="text-sm font-semibold">{name}</p>
-                        <p className="text-xs text-muted-foreground">{role}</p>
-                      </div>
-                    </div>
+                    <h3 className="font-heading text-lg font-bold">{t}</h3>
+                    <p className="mt-2 text-sm text-muted-foreground">{d}</p>
                   </Card>
                 )
               })}
@@ -3395,6 +4630,33 @@ export function PdfClient() {
           open={true}
           onOpenChange={closeTool}
         />
+      )}
+      {activeTool && activeTool.id === 'delete-pages' && (
+        <DeletePagesTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
+      )}
+      {activeTool && activeTool.id === 'extract-pages' && (
+        <ExtractPagesTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
+      )}
+      {activeTool && activeTool.id === 'reverse' && (
+        <ReverseTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
+      )}
+      {activeTool && activeTool.id === 'page-numbers' && (
+        <PageNumbersTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
+      )}
+      {activeTool && activeTool.id === 'watermark' && (
+        <WatermarkTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
+      )}
+      {activeTool && activeTool.id === 'crop' && (
+        <CropTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
+      )}
+      {activeTool && activeTool.id === 'organize' && (
+        <OrganizeTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
+      )}
+      {activeTool && activeTool.id === 'analyze' && (
+        <AnalyzeTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
+      )}
+      {activeTool && activeTool.id === 'inspect' && (
+        <InspectTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
       )}
 
       {/* Command palette (⌘+K / Ctrl+K) — mounted guard prevents Radix useId hydration mismatch */}
