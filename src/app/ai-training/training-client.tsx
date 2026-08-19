@@ -690,87 +690,6 @@ function LiveCounterDashboard({ isBn }: { isBn: boolean }) {
 }
 
 /* -------------------------------------------------------------------------- */
-/*  GAP 2 — Webinar countdown banner                                          */
-/* -------------------------------------------------------------------------- */
-
-function WebinarCountdownBanner({ isBn }: { isBn: boolean }) {
-  const [target, setTarget] = React.useState<Date | null>(null)
-  const [now, setNow] = React.useState<number | null>(null)
-
-  React.useEffect(() => {
-    const computeTarget = () => {
-      const d = new Date()
-      d.setHours(20, 0, 0, 0) // 8 PM today
-      if (d.getTime() < Date.now()) {
-        d.setDate(d.getDate() + 1) // roll to next day if passed
-      }
-      return d
-    }
-    setTarget(computeTarget())
-    setNow(Date.now())
-    const id = setInterval(() => {
-      setNow(Date.now())
-      setTarget((prev) => {
-        if (!prev || prev.getTime() < Date.now()) {
-          return computeTarget()
-        }
-        return prev
-      })
-    }, 1000)
-    return () => clearInterval(id)
-  }, [])
-
-  const diff = target && now ? Math.max(0, target.getTime() - now) : 0
-  const hours = Math.floor(diff / (1000 * 60 * 60))
-  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
-  const seconds = Math.floor((diff % (1000 * 60)) / 1000)
-
-  const num = (n: number) =>
-    isBn ? toBnNum(String(n).padStart(2, '0')) : String(n).padStart(2, '0')
-
-  const onJoin = () => {
-    document.getElementById('order')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
-
-  return (
-    <section className="mx-auto max-w-5xl px-4 py-3 sm:px-6">
-      <div className="flex flex-col items-stretch gap-3 rounded-2xl bg-gradient-to-r from-amber-500 to-rose-500 p-4 text-white shadow-lg sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-3">
-          <span className="text-2xl" aria-hidden="true">
-            📺
-          </span>
-          <div>
-            <div className="text-sm font-bold sm:text-base">
-              {isBn ? 'পরবর্তী লাইভ ডেমো শুরু হচ্ছে' : 'Next Live Demo Starts in'}
-            </div>
-            <div className="text-[10px] text-white/80 sm:text-xs">
-              {isBn ? 'আজ রাত ৮টায় — ফ্রি জুম সেশন' : 'Tonight at 8 PM — free Zoom session'}
-            </div>
-          </div>
-        </div>
-        <div className="flex items-center gap-3">
-          <div
-            className="font-mono text-2xl font-extrabold tracking-wider sm:text-3xl"
-            aria-live="polite"
-          >
-            {num(hours)}:{num(minutes)}:{num(seconds)}
-          </div>
-          <button
-            type="button"
-            onClick={onJoin}
-            data-track="webinar-demo-join"
-            className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-bold text-amber-700 shadow-md transition-transform hover:scale-105 sm:text-sm"
-          >
-            {isBn ? 'এখন যোগ দিন' : 'Join Now'}
-            <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
-          </button>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-/* -------------------------------------------------------------------------- */
 /*  GAP 3 — Live chat widget (floating)                                       */
 /* -------------------------------------------------------------------------- */
 
@@ -2162,9 +2081,6 @@ export function TrainingClient() {
         {/* ===== GAP 1: LIVE COUNTER DASHBOARD ===== */}
         <LiveCounterDashboard isBn={isBn} />
 
-        {/* ===== GAP 2: WEBINAR COUNTDOWN BANNER ===== */}
-        <WebinarCountdownBanner isBn={isBn} />
-
         {/* ===== 2. DEMO VIDEO ===== */}
         <section className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16">
           <div className="text-center">
@@ -2592,6 +2508,23 @@ export function TrainingClient() {
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* CTA variation: Book My Seat — ownership psychology (Hormozi) */}
+          <div className="mt-8 text-center">
+            <a
+              href="#order"
+              onClick={scrollToEnroll}
+              data-track="curriculum-book-seat"
+              className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 px-7 py-3 text-sm font-bold text-white shadow-lg shadow-amber-500/30 transition-transform hover:scale-[1.02]"
+            >
+              <CheckCircle2 className="h-4 w-4" />
+              {t('aiTraining.v2.ctaPrimary')}
+              <ArrowRight className="h-4 w-4" />
+            </a>
+            <p className="mt-2 text-xs text-muted-foreground">
+              {isBn ? '⚡ ১,৭০০+ শিক্ষার্থী ইতিমধ্যে বুক করেছেন' : '⚡ 1,700+ students already booked'}
+            </p>
           </div>
         </section>
 
