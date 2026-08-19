@@ -53,6 +53,15 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
+import {
+  Command,
+  CommandDialog,
+  CommandInput,
+  CommandList,
+  CommandItem,
+  CommandGroup,
+  CommandEmpty,
+} from '@/components/ui/command'
 
 import {
   PDF_TOOLS,
@@ -96,6 +105,29 @@ import {
   Trash2,
   Plus,
   ChevronRight,
+  Command as CommandIcon,
+  Keyboard,
+  Activity,
+  TrendingUp,
+  Clock,
+  BarChart3,
+  Workflow,
+  Droplets,
+  Hash,
+  RotateCcw,
+  Smartphone,
+  Lightbulb,
+  HardDrive,
+  RefreshCw,
+  Save,
+  Bookmark,
+  PencilLine,
+  Rewind,
+  Palette,
+  Monitor,
+  Apple,
+  Terminal,
+  MonitorDown,
 } from 'lucide-react'
 
 /* -------------------------------------------------------------------------- */
@@ -370,6 +402,226 @@ const FAQS: {
 ]
 
 /* -------------------------------------------------------------------------- */
+/*  Workflow pipeline templates                                                */
+/* -------------------------------------------------------------------------- */
+
+type WorkflowStep = {
+  id: string
+  labelEn: string
+  labelBn: string
+  icon: string
+}
+
+type WorkflowTemplate = {
+  id: string
+  titleEn: string
+  titleBn: string
+  descEn: string
+  descBn: string
+  icon: typeof Workflow
+  steps: WorkflowStep[]
+}
+
+const WORKFLOW_TEMPLATES: WorkflowTemplate[] = [
+  {
+    id: 'compress-watermark',
+    titleEn: 'Compress & Watermark',
+    titleBn: 'কম্প্রেস ও ওয়াটারমার্ক',
+    descEn: 'Shrink then stamp your brand — perfect for sharing.',
+    descBn: 'আকার কমান ও ব্র্যান্ড স্ট্যাম্প দিন — শেয়ার করার জন্য পারফেক্ট।',
+    icon: Droplets,
+    steps: [
+      { id: 'compress', labelEn: 'Compress', labelBn: 'কম্প্রেস', icon: '🗜️' },
+      { id: 'watermark', labelEn: 'Watermark', labelBn: 'ওয়াটারমার্ক', icon: '💧' },
+      { id: 'page-numbers', labelEn: 'Page Numbers', labelBn: 'পেজ নম্বর', icon: '🔢' },
+    ],
+  },
+  {
+    id: 'office-cleanup',
+    titleEn: 'Office to PDF Cleanup',
+    titleBn: 'অফিস থেকে পিডিএফ ক্লিনআপ',
+    descEn: 'Rotate, shrink and number pages in one pass.',
+    descBn: 'এক ধাপে ঘোরান, সাইজ কমান ও পেজ নম্বর দিন।',
+    icon: RefreshCw,
+    steps: [
+      { id: 'rotate', labelEn: 'Rotate', labelBn: 'রোটেট', icon: '🔄' },
+      { id: 'compress', labelEn: 'Compress', labelBn: 'কম্প্রেস', icon: '🗜️' },
+      { id: 'page-numbers', labelEn: 'Page Numbers', labelBn: 'পেজ নম্বর', icon: '🔢' },
+    ],
+  },
+  {
+    id: 'secure-pdf',
+    titleEn: 'Secure PDF',
+    titleBn: 'সিকিউর পিডিএফ',
+    descEn: 'Watermark, number and flatten before sharing.',
+    descBn: 'শেয়ার করার আগে ওয়াটারমার্ক, নম্বর ও ফ্ল্যাটেন।',
+    icon: Lock,
+    steps: [
+      { id: 'watermark', labelEn: 'Watermark', labelBn: 'ওয়াটারমার্ক', icon: '💧' },
+      { id: 'page-numbers', labelEn: 'Page Numbers', labelBn: 'পেজ নম্বর', icon: '🔢' },
+      { id: 'flatten', labelEn: 'Flatten', labelBn: 'ফ্ল্যাটেন', icon: '🧱' },
+    ],
+  },
+  {
+    id: 'quick-optimize',
+    titleEn: 'Quick Optimize',
+    titleBn: 'দ্রুত অপ্টিমাইজ',
+    descEn: 'Compress, reverse and flatten for archival.',
+    descBn: 'আর্কাইভের জন্য কম্প্রেস, রিভার্স ও ফ্ল্যাটেন।',
+    icon: Zap,
+    steps: [
+      { id: 'compress', labelEn: 'Compress', labelBn: 'কম্প্রেস', icon: '🗜️' },
+      { id: 'reverse', labelEn: 'Reverse Pages', labelBn: 'পেজ উল্টান', icon: '↩️' },
+      { id: 'flatten', labelEn: 'Flatten', labelBn: 'ফ্ল্যাটেন', icon: '🧱' },
+    ],
+  },
+]
+
+/* -------------------------------------------------------------------------- */
+/*  Tool capabilities matrix                                                   */
+/* -------------------------------------------------------------------------- */
+
+type CapRow = {
+  toolEn: string
+  toolBn: string
+  icon: string
+  multi: boolean
+  pageSelect: boolean
+  password: boolean
+  preview: boolean
+  batch: boolean
+}
+
+const CAPABILITIES: CapRow[] = [
+  { toolEn: 'Compress', toolBn: 'কম্প্রেস', icon: '🗜️', multi: false, pageSelect: false, password: false, preview: true, batch: true },
+  { toolEn: 'Merge', toolBn: 'মার্জ', icon: '🔗', multi: true, pageSelect: false, password: false, preview: false, batch: true },
+  { toolEn: 'Split', toolBn: 'স্প্লিট', icon: '✂️', multi: false, pageSelect: true, password: false, preview: false, batch: true },
+  { toolEn: 'PDF to JPG', toolBn: 'পিডিএফ থেকে JPG', icon: '🖼️', multi: false, pageSelect: true, password: false, preview: true, batch: true },
+  { toolEn: 'JPG to PDF', toolBn: 'JPG থেকে পিডিএফ', icon: '📷', multi: true, pageSelect: false, password: false, preview: true, batch: true },
+  { toolEn: 'Rotate', toolBn: 'রোটেট', icon: '🔄', multi: false, pageSelect: false, password: false, preview: true, batch: true },
+  { toolEn: 'Watermark', toolBn: 'ওয়াটারমার্ক', icon: '💧', multi: false, pageSelect: true, password: false, preview: true, batch: true },
+  { toolEn: 'Page Numbers', toolBn: 'পেজ নম্বর', icon: '🔢', multi: false, pageSelect: true, password: false, preview: true, batch: true },
+  { toolEn: 'Protect', toolBn: 'প্রটেক্ট', icon: '🔒', multi: false, pageSelect: false, password: true, preview: false, batch: true },
+  { toolEn: 'Unlock', toolBn: 'আনলক', icon: '🔓', multi: false, pageSelect: false, password: true, preview: false, batch: true },
+  { toolEn: 'Sign', toolBn: 'সাইন', icon: '✍️', multi: false, pageSelect: true, password: false, preview: true, batch: false },
+  { toolEn: 'Organize', toolBn: 'অর্গানাইজ', icon: '🗂️', multi: false, pageSelect: true, password: false, preview: true, batch: false },
+  { toolEn: 'Annotate', toolBn: 'অ্যানোটেট', icon: '🖍️', multi: false, pageSelect: true, password: false, preview: true, batch: false },
+  { toolEn: 'Stamp', toolBn: 'স্ট্যাম্প', icon: '🔖', multi: false, pageSelect: true, password: false, preview: true, batch: true },
+  { toolEn: 'Fill Forms', toolBn: 'ফর্ম পূরণ', icon: '📋', multi: false, pageSelect: false, password: false, preview: true, batch: false },
+  { toolEn: 'Redact', toolBn: 'রিড্যাক্ট', icon: '⬛', multi: false, pageSelect: true, password: false, preview: true, batch: false },
+]
+
+/* -------------------------------------------------------------------------- */
+/*  Pro Tips                                                                   */
+/* -------------------------------------------------------------------------- */
+
+const PRO_TIPS: { en: string; bn: string }[] = [
+  {
+    en: 'Press Ctrl+K (or ⌘+K) — Quickly search any PDF tool by name with the command palette.',
+    bn: 'Ctrl+K (বা ⌘+K) চাপুন — কমান্ড প্যালেট দিয়ে যেকোনো পিডিএফ টুল নাম দিয়ে সার্চ করুন।',
+  },
+  {
+    en: 'All processing is local — Your files never leave your device. Perfect for confidential documents.',
+    bn: 'সব প্রসেসিং লোকাল — আপনার ফাইল কখনো ডিভাইস ছাড়ে না। গোপনীয় ডকুমেন্টের জন্য পারফেক্ট।',
+  },
+  {
+    en: 'Use Workflows — Chain multiple operations like Compress → Watermark → Page Numbers in one pass.',
+    bn: 'ওয়ার্কফ্লো ব্যবহার করুন — কম্প্রেস → ওয়াটারমার্ক → পেজ নম্বর একসাথে চালান।',
+  },
+  {
+    en: 'Install as PWA — Use PDF Forge offline without internet. Works on all devices.',
+    bn: 'PWA হিসেবে ইনস্টল করুন — ইন্টারনেট ছাড়াই পিডিএফ ফোর্জ ব্যবহার করুন। সব ডিভাইসে চলে।',
+  },
+  {
+    en: 'No file limits — Process files as large as your device can handle. No daily caps.',
+    bn: 'কোনো ফাইল লিমিট নেই — আপনার ডিভাইস যত সামলায় তত বড় ফাইল প্রসেস করুন। কোনো ডেইলি ক্যাপ নেই।',
+  },
+  {
+    en: 'Bilingual support — Switch between English and বাংলা anytime.',
+    bn: 'দ্বিভাষিক সাপোর্ট — যেকোনো সময় ইংরেজি ও বাংলার মধ্যে স্যুইচ করুন।',
+  },
+]
+
+/* -------------------------------------------------------------------------- */
+/*  Activity tracking (localStorage)                                           */
+/* -------------------------------------------------------------------------- */
+
+const ACTIVITY_KEY = 'nextgen-pdf-forge-activity'
+
+type ActivityEntry = {
+  toolId: string
+  toolNameEn: string
+  toolNameBn: string
+  icon: string
+  category: PdfToolCategory
+  ts: number // epoch ms
+}
+
+type ActivityStats = {
+  total: number
+  uniqueTools: number
+  mostUsed: ActivityEntry | null
+  lastUsed: ActivityEntry | null
+  todayCount: number
+  byCategory: Record<PdfToolCategory, number>
+}
+
+function loadActivity(): ActivityEntry[] {
+  if (typeof window === 'undefined') return []
+  try {
+    const raw = window.localStorage.getItem(ACTIVITY_KEY)
+    if (!raw) return []
+    const arr = JSON.parse(raw) as ActivityEntry[]
+    return Array.isArray(arr) ? arr : []
+  } catch {
+    return []
+  }
+}
+
+function saveActivity(entries: ActivityEntry[]) {
+  if (typeof window === 'undefined') return
+  try {
+    // Keep at most 100 entries
+    const trimmed = entries.slice(0, 100)
+    window.localStorage.setItem(ACTIVITY_KEY, JSON.stringify(trimmed))
+  } catch {
+    /* ignore quota errors */
+  }
+}
+
+function computeStats(entries: ActivityEntry[]): ActivityStats {
+  const total = entries.length
+  const uniqueTools = new Set(entries.map((e) => e.toolId)).size
+  const byCategory: Record<PdfToolCategory, number> = {
+    popular: 0,
+    convert: 0,
+    optimize: 0,
+    edit: 0,
+    security: 0,
+  }
+  const counts: Record<string, { entry: ActivityEntry; n: number }> = {}
+  for (const e of entries) {
+    byCategory[e.category] = (byCategory[e.category] ?? 0) + 1
+    if (!counts[e.toolId]) counts[e.toolId] = { entry: e, n: 0 }
+    counts[e.toolId].n++
+  }
+  let mostUsed: ActivityEntry | null = null
+  let maxN = 0
+  for (const k of Object.keys(counts)) {
+    if (counts[k].n > maxN) {
+      maxN = counts[k].n
+      mostUsed = counts[k].entry
+    }
+  }
+  const lastUsed = entries.length > 0 ? entries[0] : null
+  // today count
+  const now = new Date()
+  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime()
+  const todayCount = entries.filter((e) => e.ts >= startOfDay).length
+  return { total, uniqueTools, mostUsed, lastUsed, todayCount, byCategory }
+}
+
+/* -------------------------------------------------------------------------- */
 /*  Drag & drop file picker                                                    */
 /* -------------------------------------------------------------------------- */
 
@@ -528,15 +780,23 @@ function ToolDialog({
 /*  Functional tool: Merge PDF                                                 */
 /* -------------------------------------------------------------------------- */
 
-function MergeTool({ tool, isBn, open, onOpenChange }: {
+function MergeTool({ tool, isBn, open, onOpenChange, initialFiles }: {
   tool: PdfTool
   isBn: boolean
   open: boolean
   onOpenChange: (v: boolean) => void
+  initialFiles?: File[]
 }) {
   const [files, setFiles] = React.useState<File[]>([])
   const [busy, setBusy] = React.useState(false)
   const [progress, setProgress] = React.useState(0)
+
+  // Hydrate files from initialFiles when the dialog opens
+  React.useEffect(() => {
+    if (open && initialFiles && initialFiles.length > 0) {
+      setFiles((prev) => (prev.length === 0 ? initialFiles : prev))
+    }
+  }, [open, initialFiles])
 
   const canRun = files.length >= 2 && !busy
 
@@ -1226,6 +1486,790 @@ function MetadataTool({ tool, isBn, open, onOpenChange }: {
 }
 
 /* -------------------------------------------------------------------------- */
+/*  Command Palette (⌘+K / Ctrl+K)                                             */
+/* -------------------------------------------------------------------------- */
+
+function CommandPalette({
+  open,
+  onOpenChange,
+  isBn,
+  onSelect,
+}: {
+  open: boolean
+  onOpenChange: (v: boolean) => void
+  isBn: boolean
+  onSelect: (tool: PdfTool) => void
+}) {
+  const [query, setQuery] = React.useState('')
+
+  // Reset query whenever the palette is opened
+  React.useEffect(() => {
+    if (open) setQuery('')
+  }, [open])
+
+  const filtered = React.useMemo(() => {
+    if (!query.trim()) return PDF_TOOLS
+    const q = query.toLowerCase()
+    return PDF_TOOLS.filter(
+      (t) =>
+        t.nameEn.toLowerCase().includes(q) ||
+        t.nameBn.toLowerCase().includes(q) ||
+        t.descEn.toLowerCase().includes(q) ||
+        t.descBn.toLowerCase().includes(q),
+    )
+  }, [query])
+
+  // Group by category for nicer display
+  const grouped = React.useMemo(() => {
+    const map: Record<PdfToolCategory, PdfTool[]> = {
+      popular: [],
+      convert: [],
+      optimize: [],
+      edit: [],
+      security: [],
+    }
+    for (const t of filtered) map[t.category].push(t)
+    return map
+  }, [filtered])
+
+  const handleSelect = (tool: PdfTool) => {
+    onOpenChange(false)
+    // Defer to allow dialog to close before opening the tool dialog
+    setTimeout(() => onSelect(tool), 10)
+  }
+
+  return (
+    <CommandDialog
+      open={open}
+      onOpenChange={onOpenChange}
+      title={isBn ? 'কমান্ড প্যালেট' : 'Command Palette'}
+      description={isBn ? 'যেকোনো পিডিএফ টুল সার্চ করুন' : 'Search any PDF tool'}
+      className="sm:max-w-lg"
+    >
+      <Command shouldFilter={false}>
+        <CommandInput
+          placeholder={isBn ? 'টুল সার্চ করুন… (যেমন: merge, compress)' : 'Search tools… (e.g. merge, compress)'}
+          value={query}
+          onValueChange={setQuery}
+        />
+        <CommandList>
+          {filtered.length === 0 && (
+            <CommandEmpty>
+              {isBn ? 'কোনো টুল পাওয়া যায়নি।' : 'No tools found.'}
+            </CommandEmpty>
+          )}
+          {(Object.keys(grouped) as PdfToolCategory[]).map((cat) => {
+            const tools = grouped[cat]
+            if (tools.length === 0) return null
+            const label = isBn ? CATEGORY_LABELS[cat].bn : CATEGORY_LABELS[cat].en
+            return (
+              <CommandGroup key={cat} heading={label}>
+                {tools.map((tool) => (
+                  <CommandItem
+                    key={tool.id}
+                    value={tool.id}
+                    onSelect={() => handleSelect(tool)}
+                    className="flex items-center gap-3"
+                  >
+                    <span className="grid h-7 w-7 place-items-center rounded-md bg-amber-500/15 text-base">
+                      {tool.icon}
+                    </span>
+                    <span className="flex flex-col">
+                      <span className="text-sm font-medium">
+                        {isBn ? tool.nameBn : tool.nameEn}
+                      </span>
+                      <span className="text-xs text-muted-foreground line-clamp-1">
+                        {isBn ? tool.descBn : tool.descEn}
+                      </span>
+                    </span>
+                    {tool.functional ? (
+                      <Badge className="ml-auto border-emerald-500/30 bg-emerald-500/15 text-[10px] text-emerald-500">
+                        {isBn ? 'লাইভ' : 'Live'}
+                      </Badge>
+                    ) : tool.isNew ? (
+                      <Badge className="ml-auto bg-amber-500/20 text-[10px] text-amber-500">
+                        {isBn ? 'নতুন' : 'New'}
+                      </Badge>
+                    ) : null}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            )
+          })}
+        </CommandList>
+      </Command>
+    </CommandDialog>
+  )
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Hero drag & drop zone (functional)                                         */
+/* -------------------------------------------------------------------------- */
+
+function HeroDropZone({
+  isBn,
+  onFile,
+  onBrowse,
+}: {
+  isBn: boolean
+  onFile: (file: File) => void
+  onBrowse: () => void
+}) {
+  const [drag, setDrag] = React.useState(false)
+  const inputRef = React.useRef<HTMLInputElement>(null)
+
+  const handleFiles = (list: FileList | null) => {
+    if (!list || list.length === 0) return
+    const file = Array.from(list).find((f) => isPdf(f))
+    if (!file) {
+      toast.error(isBn ? 'শুধু PDF ফাইল গ্রহণযোগ্য।' : 'Only PDF files are accepted.')
+      return
+    }
+    onFile(file)
+  }
+
+  return (
+    <div className="mx-auto mt-12 max-w-2xl">
+      <div
+        role="button"
+        tabIndex={0}
+        aria-label={isBn ? 'পিডিএফ ফাইল টেনে আনুন বা ক্লিক করুন' : 'Drop your PDF here or click to browse'}
+        onClick={() => inputRef.current?.click()}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault()
+            inputRef.current?.click()
+          }
+        }}
+        onDragOver={(e) => {
+          e.preventDefault()
+          setDrag(true)
+        }}
+        onDragLeave={() => setDrag(false)}
+        onDrop={(e) => {
+          e.preventDefault()
+          setDrag(false)
+          handleFiles(e.dataTransfer.files)
+        }}
+        className={`flex cursor-pointer flex-col items-center rounded-2xl border-2 border-dashed p-6 text-center shadow-xl backdrop-blur transition-colors sm:p-10 ${
+          drag
+            ? 'border-amber-500 bg-amber-500/10'
+            : 'border-amber-500/40 bg-background/60 hover:border-amber-500/70 hover:bg-amber-500/5'
+        }`}
+      >
+        <div className="grid h-16 w-16 place-items-center rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-500/25">
+          <FileText className="h-8 w-8" />
+        </div>
+        <p className="mt-4 font-heading text-lg font-semibold">
+          {isBn ? 'পিডিএফ টানুন এবং ছাড়ুন' : 'Drop your PDF here or click to browse'}
+        </p>
+        <p className="mt-1 text-sm text-muted-foreground">
+          {isBn
+            ? 'ফাইল ছাড়লেই অটো মার্জ টুল খুলবে · শুধু PDF'
+            : 'Auto-opens the Merge tool · PDF only'}
+        </p>
+        <Button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation()
+            onBrowse()
+          }}
+          className="mt-5 rounded-full bg-amber-500 text-white hover:bg-amber-600"
+        >
+          {isBn ? 'টুল দেখুন' : 'Browse Tools'}
+          <ArrowRight className="ml-2 h-4 w-4" />
+        </Button>
+        <input
+          ref={inputRef}
+          type="file"
+          accept="application/pdf,.pdf"
+          className="sr-only"
+          onChange={(e) => handleFiles(e.target.files)}
+        />
+      </div>
+    </div>
+  )
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Activity Tracking section                                                  */
+/* -------------------------------------------------------------------------- */
+
+function ActivitySection({ isBn }: { isBn: boolean }) {
+  const [entries, setEntries] = React.useState<ActivityEntry[]>([])
+  const [mounted, setMounted] = React.useState(false)
+
+  React.useEffect(() => {
+    setMounted(true)
+    setEntries(loadActivity())
+
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === ACTIVITY_KEY) setEntries(loadActivity())
+    }
+    window.addEventListener('storage', onStorage)
+    return () => window.removeEventListener('storage', onStorage)
+  }, [])
+
+  // Poll for changes (cross-component updates within same tab)
+  React.useEffect(() => {
+    if (!mounted) return
+    const id = window.setInterval(() => {
+      setEntries(loadActivity())
+    }, 1500)
+    return () => window.clearInterval(id)
+  }, [mounted])
+
+  const stats = React.useMemo(() => computeStats(entries), [entries])
+
+  const clearActivity = () => {
+    if (typeof window !== 'undefined') {
+      window.localStorage.removeItem(ACTIVITY_KEY)
+      setEntries([])
+      toast.success(isBn ? 'অ্যাক্টিভিটি মুছে ফেলা হয়েছে।' : 'Activity cleared.')
+    }
+  }
+
+  const cards: {
+    labelEn: string
+    labelBn: string
+    value: string
+    icon: typeof Activity
+    subEn?: string
+    subBn?: string
+  }[] = [
+    {
+      labelEn: 'Total Operations',
+      labelBn: 'মোট অপারেশন',
+      value: bn(stats.total, isBn),
+      icon: Activity,
+    },
+    {
+      labelEn: 'Most Used Tool',
+      labelBn: 'সবচেয়ে ব্যবহৃত টুল',
+      value: stats.mostUsed
+        ? isBn
+          ? stats.mostUsed.toolNameBn
+          : stats.mostUsed.toolNameEn
+        : isBn
+          ? '—'
+          : '—',
+      icon: TrendingUp,
+      subEn: stats.mostUsed ? `${stats.mostUsed.icon} ${stats.mostUsed.toolNameEn}` : undefined,
+      subBn: stats.mostUsed ? `${stats.mostUsed.icon} ${stats.mostUsed.toolNameBn}` : undefined,
+    },
+    {
+      labelEn: 'Tools Used',
+      labelBn: 'ব্যবহৃত টুল',
+      value: bn(stats.uniqueTools, isBn),
+      icon: BarChart3,
+    },
+    {
+      labelEn: 'Last Used',
+      labelBn: 'সর্বশেষ ব্যবহার',
+      value: stats.lastUsed
+        ? isBn
+          ? stats.lastUsed.toolNameBn
+          : stats.lastUsed.toolNameEn
+        : isBn
+          ? '—'
+          : '—',
+      icon: Clock,
+      subEn: stats.lastUsed ? `${stats.lastUsed.icon} ${stats.lastUsed.toolNameEn}` : undefined,
+      subBn: stats.lastUsed ? `${stats.lastUsed.icon} ${stats.lastUsed.toolNameBn}` : undefined,
+    },
+  ]
+
+  // Category distribution bars (skip empty)
+  const catRows = (Object.keys(stats.byCategory) as PdfToolCategory[])
+    .map((c) => ({
+      cat: c,
+      n: stats.byCategory[c] ?? 0,
+      label: isBn ? CATEGORY_LABELS[c].bn : CATEGORY_LABELS[c].en,
+    }))
+    .filter((r) => r.n > 0)
+
+  const maxCat = Math.max(1, ...catRows.map((r) => r.n))
+
+  return (
+    <section className="bg-muted/30 py-14 sm:py-20">
+      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
+        <div className="mx-auto max-w-2xl text-center">
+          <LandingEyebrow>
+            <Activity className="h-3.5 w-3.5" />
+            {isBn ? 'অ্যাক্টিভিটি' : 'Activity'}
+          </LandingEyebrow>
+          <h2 className="mt-4 font-heading text-3xl font-bold sm:text-4xl">
+            {isBn ? 'আপনার ব্যবহারের পরিসংখ্যান' : 'Your Usage at a Glance'}
+          </h2>
+          <p className="mt-3 text-muted-foreground">
+            {isBn
+              ? 'লোকালি ট্র্যাক করা — আপনার ডিভাইসেই সংরক্ষিত।'
+              : 'Tracked locally — stored only on your device.'}
+          </p>
+        </div>
+
+        {!mounted ? (
+          <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {[0, 1, 2, 3].map((i) => (
+              <div key={i} className="h-32 animate-pulse rounded-2xl bg-muted/60" />
+            ))}
+          </div>
+        ) : entries.length === 0 ? (
+          <div className="mt-10 rounded-2xl border border-dashed border-border/60 bg-card/40 p-10 text-center">
+            <div className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-2xl bg-amber-500/15 text-amber-500">
+              <Activity className="h-7 w-7" />
+            </div>
+            <p className="font-heading text-lg font-semibold">
+              {isBn ? 'এখনও কোনো অ্যাক্টিভিটি নেই' : 'No activity yet'}
+            </p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {isBn
+                ? 'টুল ব্যবহার করা শুরু করুন — পরিসংখ্যান এখানে দেখা যাবে।'
+                : 'Start using tools — your stats will appear here.'}
+            </p>
+          </div>
+        ) : (
+          <>
+            <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {cards.map((c) => (
+                <Card key={c.labelEn} className="border-border/60 bg-card p-5">
+                  <div className="mb-3 flex items-center justify-between">
+                    <span className="grid h-9 w-9 place-items-center rounded-lg bg-amber-500/15 text-amber-500">
+                      <c.icon className="h-4.5 w-4.5" />
+                    </span>
+                  </div>
+                  <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                    {isBn ? c.labelBn : c.labelEn}
+                  </p>
+                  <p className="mt-1 font-heading text-2xl font-bold leading-tight">
+                    {c.value}
+                  </p>
+                  {c.subEn && (
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      {isBn ? c.subBn : c.subEn}
+                    </p>
+                  )}
+                </Card>
+              ))}
+            </div>
+
+            {/* Category distribution */}
+            {catRows.length > 0 && (
+              <Card className="mt-6 border-border/60 bg-card p-5 sm:p-6">
+                <div className="mb-4 flex items-center justify-between">
+                  <h3 className="font-heading text-base font-semibold">
+                    {isBn ? 'ক্যাটেগরি বিতরণ' : 'Category Distribution'}
+                  </h3>
+                  <span className="text-xs text-muted-foreground">
+                    {isBn ? `আজ ${bn(stats.todayCount, isBn)}টি অপারেশন` : `${stats.todayCount} today`}
+                  </span>
+                </div>
+                <div className="space-y-2.5">
+                  {catRows.map((r) => (
+                    <div key={r.cat} className="flex items-center gap-3">
+                      <span className="w-20 shrink-0 text-xs font-medium text-muted-foreground">
+                        {r.label}
+                      </span>
+                      <div className="relative h-2.5 flex-1 overflow-hidden rounded-full bg-muted">
+                        <div
+                          className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-amber-500 to-orange-500"
+                          style={{ width: `${(r.n / maxCat) * 100}%` }}
+                        />
+                      </div>
+                      <span className="w-8 shrink-0 text-right text-xs font-semibold">
+                        {bn(r.n, isBn)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            )}
+
+            <div className="mt-6 text-center">
+              <Button variant="ghost" size="sm" onClick={clearActivity}>
+                <Trash2 className="mr-2 h-3.5 w-3.5" />
+                {isBn ? 'অ্যাক্টিভিটি মুছুন' : 'Clear Activity'}
+              </Button>
+            </div>
+          </>
+        )}
+      </div>
+    </section>
+  )
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Workflow Pipeline section                                                  */
+/* -------------------------------------------------------------------------- */
+
+function WorkflowSection({ isBn }: { isBn: boolean }) {
+  const runTemplate = (tpl: WorkflowTemplate) => {
+    const names = tpl.steps
+      .map((s) => (isBn ? s.labelBn : s.labelEn))
+      .join(' → ')
+    toast.info(
+      isBn
+        ? `ওয়ার্কফ্লো: ${names} — শীঘ্রই এক ক্লিকে চালু হবে!`
+        : `Workflow: ${names} — one-click run coming soon!`,
+    )
+  }
+
+  const customWorkflow = () => {
+    toast.info(
+      isBn
+        ? 'কাস্টম ওয়ার্কফ্লো বিল্ডার শীঘ্রই আসছে!'
+        : 'Custom workflow builder coming soon!',
+    )
+  }
+
+  return (
+    <section className="py-14 sm:py-20">
+      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
+        <div className="mx-auto max-w-2xl text-center">
+          <LandingEyebrow>
+            <Workflow className="h-3.5 w-3.5" />
+            {isBn ? 'পিডিএফ ওয়ার্কফ্লো' : 'PDF Workflows'}
+          </LandingEyebrow>
+          <h2 className="mt-4 font-heading text-3xl font-bold sm:text-4xl">
+            {isBn ? (
+              <>
+                একাধিক অপারেশন এক{' '}
+                <span className="bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent">
+                  পাইপলাইনে
+                </span>
+              </>
+            ) : (
+              <>
+                Chain Multiple Operations into a{' '}
+                <span className="bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent">
+                  Single Pipeline
+                </span>
+              </>
+            )}
+          </h2>
+          <p className="mt-3 text-muted-foreground">
+            {isBn
+              ? 'কম্প্রেস, ওয়াটারমার্ক, রোটেট, পেজ নম্বর ও ফ্ল্যাটেন — একবারেই।'
+              : 'Compress, watermark, rotate, number and flatten — all in one pass.'}
+          </p>
+        </div>
+
+        <div className="mt-10 grid gap-4 sm:grid-cols-2">
+          {WORKFLOW_TEMPLATES.map((tpl) => {
+            const title = isBn ? tpl.titleBn : tpl.titleEn
+            const desc = isBn ? tpl.descBn : tpl.descEn
+            return (
+              <Card
+                key={tpl.id}
+                className="flex flex-col border-border/60 bg-card p-5 transition-shadow hover:shadow-md sm:p-6"
+              >
+                <div className="mb-4 flex items-start gap-3">
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-gradient-to-br from-amber-500/20 to-orange-500/20 text-amber-500">
+                    <tpl.icon className="h-5 w-5" />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="font-heading text-base font-semibold leading-tight">
+                      {title}
+                    </h3>
+                    <p className="mt-0.5 text-xs text-muted-foreground">{desc}</p>
+                  </div>
+                </div>
+
+                {/* Steps visual flow */}
+                <div className="mb-4 flex flex-wrap items-center gap-1.5">
+                  {tpl.steps.map((s, i) => (
+                    <React.Fragment key={s.id}>
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-muted/40 px-2.5 py-1 text-xs font-medium">
+                        <span className="text-sm">{s.icon}</span>
+                        {isBn ? s.labelBn : s.labelEn}
+                      </span>
+                      {i < tpl.steps.length - 1 && (
+                        <ArrowRight className="h-3 w-3 shrink-0 text-amber-500" />
+                      )}
+                    </React.Fragment>
+                  ))}
+                </div>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="mt-auto w-fit"
+                  onClick={() => runTemplate(tpl)}
+                >
+                  {isBn ? 'টেমপ্লেট ব্যবহার করুন' : 'Use template'}
+                  <ArrowRight className="ml-2 h-3.5 w-3.5" />
+                </Button>
+              </Card>
+            )
+          })}
+        </div>
+
+        <div className="mt-8 text-center">
+          <Button
+            variant="outline"
+            size="lg"
+            className="rounded-full border-amber-500/40 px-6 hover:bg-amber-500/5"
+            onClick={customWorkflow}
+          >
+            <Plus className="mr-2 h-4 w-4" />
+            {isBn ? 'কাস্টম ওয়ার্কফ্লো তৈরি করুন' : 'Create Custom Workflow'}
+          </Button>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Tool Capabilities table                                                    */
+/* -------------------------------------------------------------------------- */
+
+function CapabilitiesSection({ isBn }: { isBn: boolean }) {
+  const headers: { en: string; bn: string; key: keyof CapRow }[] = [
+    { en: 'Multi-File', bn: 'মাল্টি-ফাইল', key: 'multi' },
+    { en: 'Page Select', bn: 'পেজ নির্বাচন', key: 'pageSelect' },
+    { en: 'Password', bn: 'পাসওয়ার্ড', key: 'password' },
+    { en: 'Preview', bn: 'প্রিভিউ', key: 'preview' },
+    { en: 'Batch', bn: 'ব্যাচ', key: 'batch' },
+  ]
+
+  return (
+    <section className="bg-muted/30 py-14 sm:py-20">
+      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
+        <div className="mx-auto max-w-2xl text-center">
+          <LandingEyebrow>
+            <BarChart3 className="h-3.5 w-3.5" />
+            {isBn ? 'টুল ক্যাপাবিলিটি' : 'Tool Capabilities'}
+          </LandingEyebrow>
+          <h2 className="mt-4 font-heading text-3xl font-bold sm:text-4xl">
+            {isBn ? 'প্রতিটি টুল যা যা সাপোর্ট করে' : 'What Each Tool Supports'}
+          </h2>
+          <p className="mt-3 text-muted-foreground">
+            {isBn
+              ? 'ফিচার ম্যাট্রিক্স — দ্রুত দেখে নিন কোন টুলে কী আছে।'
+              : 'Feature matrix — quickly see what each tool supports.'}
+          </p>
+        </div>
+
+        <Card className="mt-10 overflow-hidden border-border/60 p-0">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[640px] text-left text-sm">
+              <thead>
+                <tr className="border-b border-border/60 bg-muted/50">
+                  <th className="px-4 py-3 font-semibold">
+                    {isBn ? 'টুল' : 'Tool'}
+                  </th>
+                  {headers.map((h) => (
+                    <th
+                      key={h.key}
+                      className="px-3 py-3 text-center font-medium text-muted-foreground"
+                    >
+                      {isBn ? h.bn : h.en}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {CAPABILITIES.map((row) => (
+                  <tr
+                    key={row.toolEn}
+                    className="border-b border-border/40 last:border-b-0"
+                  >
+                    <td className="px-4 py-3">
+                      <span className="flex items-center gap-2">
+                        <span className="text-base">{row.icon}</span>
+                        <span className="font-medium">
+                          {isBn ? row.toolBn : row.toolEn}
+                        </span>
+                      </span>
+                    </td>
+                    {headers.map((h) => {
+                      const v = row[h.key]
+                      return (
+                        <td key={h.key} className="px-3 py-3 text-center">
+                          {v ? (
+                            <Check className="mx-auto h-4 w-4 text-emerald-500" />
+                          ) : (
+                            <span className="text-muted-foreground/40">—</span>
+                          )}
+                        </td>
+                      )
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Card>
+        <p className="mt-3 text-center text-xs text-muted-foreground">
+          {isBn
+            ? '✅ = সাপোর্টেড · — = প্রযোজ্য নয়'
+            : '✅ = Supported · — = Not applicable'}
+        </p>
+      </div>
+    </section>
+  )
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Pro Tips section                                                           */
+/* -------------------------------------------------------------------------- */
+
+function ProTipsSection({ isBn }: { isBn: boolean }) {
+  return (
+    <section className="py-14 sm:py-20">
+      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
+        <div className="mx-auto max-w-2xl text-center">
+          <LandingEyebrow>
+            <Lightbulb className="h-3.5 w-3.5" />
+            {isBn ? 'প্রো টিপস' : 'Pro Tips'}
+          </LandingEyebrow>
+          <h2 className="mt-4 font-heading text-3xl font-bold sm:text-4xl">
+            {isBn ? 'আরও ভালোভাবে ব্যবহার করুন' : 'Get the Most Out of PDF Forge'}
+          </h2>
+        </div>
+
+        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {PRO_TIPS.map((tip, i) => (
+            <Card
+              key={i}
+              className="relative flex flex-col border-border/60 bg-card p-5 transition-shadow hover:shadow-md"
+            >
+              <div className="mb-3 flex items-center justify-between">
+                <span className="inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-amber-500/20 to-orange-500/20 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-500">
+                  <Lightbulb className="h-3 w-3" />
+                  {isBn ? 'প্রো টিপ' : 'Pro Tip'}
+                </span>
+                <span className="text-xs font-medium text-muted-foreground">
+                  {bn(i + 1, isBn)}/{bn(PRO_TIPS.length, isBn)}
+                </span>
+              </div>
+              <p className="text-sm leading-relaxed text-foreground/90">
+                {isBn ? tip.bn : tip.en}
+              </p>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Offline Ready section                                                      */
+/* -------------------------------------------------------------------------- */
+
+function OfflineReadySection({ isBn, onInstall, canInstall }: {
+  isBn: boolean
+  onInstall: () => void
+  canInstall: boolean
+}) {
+  const features: { en: string; bn: string }[] = [
+    { en: 'All 43+ tools work offline', bn: 'সব ৪৩+ টুল অফলাইনে চলে' },
+    { en: 'No data uploaded to any server', bn: 'কোনো সার্ভারে ডাটা আপলোড হয় না' },
+    { en: 'Install on any device in seconds', bn: 'যেকোনো ডিভাইসে সেকেন্ডে ইনস্টল' },
+    { en: 'Auto-updates when online', bn: 'অনলাইনে অটো-আপডেট হয়' },
+  ]
+
+  const platforms: { icon: typeof Monitor; en: string; bn: string }[] = [
+    { icon: Monitor, en: 'Windows 7/8/10/11', bn: 'উইন্ডোজ ৭/৮/১০/১১' },
+    { icon: Apple, en: 'macOS 10.15+', bn: 'macOS ১০.১৫+' },
+    { icon: Terminal, en: 'Linux', bn: 'লিনাক্স' },
+    { icon: Smartphone, en: 'iOS & Android', bn: 'iOS ও অ্যান্ড্রয়েড' },
+  ]
+
+  return (
+    <section className="bg-muted/30 py-14 sm:py-20">
+      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
+        <div className="grid items-center gap-8 lg:grid-cols-2">
+          <div>
+            <LandingEyebrow>
+              <WifiOff className="h-3.5 w-3.5" />
+              {isBn ? 'অফলাইন রেডি' : 'Offline Ready'}
+            </LandingEyebrow>
+            <h2 className="mt-4 font-heading text-3xl font-bold sm:text-4xl">
+              {isBn ? 'ইন্টারনেট ছাড়াই ব্যবহার করুন' : 'Use Without Internet'}
+            </h2>
+            <p className="mt-3 text-muted-foreground">
+              {isBn
+                ? 'PDF Forge ইনস্টল করার পর সম্পূর্ণ অফলাইনে চলে। কোনো ইন্টারনেট কানেকশন লাগে না।'
+                : 'PDF Forge works completely offline once installed. No internet connection needed.'}
+            </p>
+
+            <ul className="mt-6 space-y-2.5">
+              {features.map((f, i) => (
+                <li key={i} className="flex items-start gap-2.5">
+                  <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-emerald-500/15 text-emerald-500">
+                    <Check className="h-3 w-3" />
+                  </span>
+                  <span className="text-sm text-foreground/90">
+                    {isBn ? f.bn : f.en}
+                  </span>
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-6">
+              <Button
+                size="lg"
+                onClick={onInstall}
+                disabled={!canInstall}
+                className="rounded-full bg-gradient-to-r from-amber-500 to-orange-500 px-7 text-white shadow-lg shadow-amber-500/25 hover:opacity-90"
+              >
+                <MonitorDown className="mr-2 h-4 w-4" />
+                {isBn ? 'এখনই ইনস্টল করুন' : 'Install Now'}
+              </Button>
+              {!canInstall && (
+                <p className="mt-2 text-xs text-muted-foreground">
+                  {isBn
+                    ? 'আপনার ব্রাউজার PWA ইনস্টল সাপোর্ট করছে না বা ইতিমধ্যে ইনস্টলড।'
+                    : 'Your browser does not support PWA install, or it is already installed.'}
+                </p>
+              )}
+            </div>
+          </div>
+
+          <Card className="border-border/60 bg-card p-6">
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              {isBn ? 'সাপোর্টেড প্ল্যাটফর্ম' : 'Supported Platforms'}
+            </p>
+            <div className="mt-4 grid grid-cols-2 gap-3">
+              {platforms.map((p, i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-3 rounded-xl border border-border/60 bg-muted/30 p-3"
+                >
+                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-amber-500/15 text-amber-500">
+                    <p.icon className="h-4.5 w-4.5" />
+                  </span>
+                  <span className="text-sm font-medium leading-tight">
+                    {isBn ? p.bn : p.en}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-5 rounded-xl bg-gradient-to-br from-amber-500/10 to-emerald-500/10 p-4">
+              <div className="flex items-center gap-2">
+                <HardDrive className="h-4 w-4 text-amber-500" />
+                <span className="text-sm font-semibold">
+                  {isBn ? 'সম্পূর্ণ লোকাল স্টোরেজ' : '100% Local Storage'}
+                </span>
+              </div>
+              <p className="mt-1 text-xs text-muted-foreground">
+                {isBn
+                  ? 'আপনার ফাইল কখনো আপনার ডিভাইস ছাড়ে না। সব প্রসেসিং ব্রাউজারেই।'
+                  : 'Your files never leave your device. All processing happens in the browser.'}
+              </p>
+            </div>
+          </Card>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* -------------------------------------------------------------------------- */
 /*  Tool Card                                                                  */
 /* -------------------------------------------------------------------------- */
 
@@ -1241,6 +2285,12 @@ function ToolCard({ tool, isBn, onOpen }: {
       aria-label={isBn ? tool.nameBn : tool.nameEn}
       className="group relative flex h-full flex-col rounded-xl border border-border/60 bg-card p-4 text-left transition-all hover:-translate-y-0.5 hover:border-amber-500/40 hover:shadow-md"
     >
+      {tool.isNew && (
+        <span className="absolute -top-2 -right-2 z-10 inline-flex items-center gap-0.5 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white shadow-md">
+          <Sparkles className="h-2.5 w-2.5" />
+          {isBn ? 'নতুন' : 'New'}
+        </span>
+      )}
       <div className="mb-3 flex items-start justify-between">
         <span className="grid h-11 w-11 place-items-center rounded-lg bg-amber-500/15 text-2xl">
           {tool.icon}
@@ -1282,6 +2332,102 @@ export function PdfClient() {
   const [activeCat, setActiveCat] = React.useState<PdfToolCategory | 'all'>('all')
   const [query, setQuery] = React.useState('')
   const [activeTool, setActiveTool] = React.useState<PdfTool | null>(null)
+  // Command palette (⌘+K / Ctrl+K)
+  const [paletteOpen, setPaletteOpen] = React.useState(false)
+  // Pre-loaded files for MergeTool (from hero drag&drop)
+  const [mergeInitialFiles, setMergeInitialFiles] = React.useState<File[]>([])
+  // PWA install prompt
+  const [deferredPrompt, setDeferredPrompt] = React.useState<
+    Event & { prompt: () => Promise<void>; userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }> }
+  | null>(null)
+  const [canInstall, setCanInstall] = React.useState(false)
+  // Mount guard — prevents Radix Accordion useId hydration mismatch
+  const [mounted, setMounted] = React.useState(false)
+  React.useEffect(() => setMounted(true), [])
+
+  /* ----------------------- Keyboard shortcut (⌘+K / Ctrl+K) -------------- */
+  React.useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
+        e.preventDefault()
+        setPaletteOpen((v) => !v)
+      } else if (e.key === 'Escape' && paletteOpen) {
+        setPaletteOpen(false)
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [paletteOpen])
+
+  /* ----------------------- PWA install prompt listener ------------------ */
+  React.useEffect(() => {
+    const onBeforeInstall = (e: Event) => {
+      e.preventDefault()
+      setDeferredPrompt(
+        e as Event & {
+          prompt: () => Promise<void>
+          userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>
+        },
+      )
+      setCanInstall(true)
+    }
+    const onInstalled = () => {
+      setCanInstall(false)
+      setDeferredPrompt(null)
+      toast.success(
+        isBn
+          ? 'পিডিএফ ফোর্জ ইনস্টল হয়েছে — এখন অফলাইনেও চলবে!'
+          : 'PDF Forge installed — now works offline!',
+      )
+    }
+    window.addEventListener('beforeinstallprompt', onBeforeInstall as EventListener)
+    window.addEventListener('appinstalled', onInstalled)
+    return () => {
+      window.removeEventListener('beforeinstallprompt', onBeforeInstall as EventListener)
+      window.removeEventListener('appinstalled', onInstalled)
+    }
+  }, [isBn])
+
+  const triggerInstall = async () => {
+    if (!deferredPrompt) return
+    try {
+      await deferredPrompt.prompt()
+      const choice = await deferredPrompt.userChoice
+      if (choice.outcome === 'accepted') {
+        toast.success(
+          isBn
+            ? 'ইনস্টলেশন শুরু হয়েছে — ধন্যবাদ!'
+            : 'Installation started — thank you!',
+        )
+      } else {
+        toast.info(isBn ? 'ইনস্টল বাতিল হয়েছে।' : 'Install dismissed.')
+      }
+    } catch {
+      toast.error(isBn ? 'ইনস্টল করতে সমস্যা হয়েছে।' : 'Could not trigger install.')
+    } finally {
+      setDeferredPrompt(null)
+      setCanInstall(false)
+    }
+  }
+
+  /* ----------------------- Log activity to localStorage ----------------- */
+  const logActivity = (tool: PdfTool) => {
+    if (typeof window === 'undefined') return
+    try {
+      const entry: ActivityEntry = {
+        toolId: tool.id,
+        toolNameEn: tool.nameEn,
+        toolNameBn: tool.nameBn,
+        icon: tool.icon,
+        category: tool.category,
+        ts: Date.now(),
+      }
+      const next = [entry, ...loadActivity()]
+      saveActivity(next)
+    } catch {
+      /* ignore */
+    }
+  }
 
   const filtered = React.useMemo(() => {
     return PDF_TOOLS.filter((t) => {
@@ -1311,6 +2457,7 @@ export function PdfClient() {
   const openTool = (tool: PdfTool) => {
     if (tool.functional) {
       setActiveTool(tool)
+      logActivity(tool)
     } else {
       toast.info(
         isBn
@@ -1321,6 +2468,25 @@ export function PdfClient() {
   }
 
   const closeTool = () => setActiveTool(null)
+
+  /* Drop a PDF on the hero zone → open Merge tool pre-loaded with the file */
+  const handleDroppedFile = (file: File) => {
+    const mergeTool = PDF_TOOLS.find((t) => t.id === 'merge')
+    if (!mergeTool) return
+    setMergeInitialFiles([file])
+    setActiveTool(mergeTool)
+    logActivity(mergeTool)
+    toast.success(
+      isBn
+        ? `“${file.name}” মার্জ টুলে লোড হয়েছে — আরও ফাইল যোগ করুন।`
+        : `“${file.name}” loaded into Merge — add more files to combine.`,
+    )
+  }
+
+  const scrollToTools = () => {
+    const el = document.getElementById('tools')
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -1388,10 +2554,36 @@ export function PdfClient() {
                     {isBn ? 'টুল ব্রাউজ করুন' : 'Browse Tools'}
                   </a>
                 </Button>
+                {canInstall && (
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    onClick={triggerInstall}
+                    className="h-12 w-full rounded-full border-amber-500/50 px-7 text-[15px] font-semibold text-amber-500 hover:bg-amber-500/5 sm:w-auto"
+                  >
+                    <MonitorDown className="mr-2 h-4 w-4" />
+                    {isBn ? 'অ্যাপ ইনস্টল করুন' : 'Install App'}
+                  </Button>
+                )}
+              </div>
+
+              {/* Command palette hint */}
+              <div className="mt-5 flex justify-center">
+                <button
+                  type="button"
+                  onClick={() => setPaletteOpen(true)}
+                  className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-background/60 px-3 py-1.5 text-xs text-muted-foreground backdrop-blur transition-colors hover:border-amber-500/40 hover:text-foreground"
+                  aria-label={isBn ? 'কমান্ড প্যালেট খুলুন' : 'Open command palette'}
+                >
+                  <CommandIcon className="h-3.5 w-3.5" />
+                  {isBn
+                    ? 'Ctrl+K (বা ⌘+K) চাপুন — টুল সার্চ করতে'
+                    : 'Press Ctrl+K (or ⌘+K) to search tools'}
+                </button>
               </div>
 
               {/* Trust badges */}
-              <div className="mt-8 flex flex-wrap items-center justify-center gap-2.5">
+              <div className="mt-6 flex flex-wrap items-center justify-center gap-2.5">
                 {[
                   { en: '100% Free', bn: '১০০% ফ্রি', Icon: Sparkles },
                   { en: 'No Sign-up', bn: 'সাইন-আপ নেই', Icon: ShieldCheck },
@@ -1408,33 +2600,12 @@ export function PdfClient() {
               </div>
             </div>
 
-            {/* Drag-drop zone visual */}
-            <div className="mx-auto mt-12 max-w-2xl">
-              <div className="rounded-2xl border border-dashed border-amber-500/40 bg-background/60 p-6 shadow-xl backdrop-blur sm:p-10">
-                <div className="flex flex-col items-center text-center">
-                  <div className="grid h-16 w-16 place-items-center rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-500/25">
-                    <FileText className="h-8 w-8" />
-                  </div>
-                  <p className="mt-4 font-heading text-lg font-semibold">
-                    {isBn ? 'পিডিএফ টানুন এবং ছাড়ুন' : 'Drag & Drop Your PDF'}
-                  </p>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    {isBn
-                      ? 'অথবা নিচের গ্যালারি থেকে একটি টুল বেছে নিন'
-                      : 'Or pick a tool from the gallery below'}
-                  </p>
-                  <Button
-                    asChild
-                    className="mt-5 rounded-full bg-amber-500 text-white hover:bg-amber-600"
-                  >
-                    <a href="#tools">
-                      {isBn ? 'টুল দেখুন' : 'Browse Tools'}
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </a>
-                  </Button>
-                </div>
-              </div>
-            </div>
+            {/* Functional drag-drop zone — opens Merge tool with pre-loaded file */}
+            <HeroDropZone
+              isBn={isBn}
+              onFile={handleDroppedFile}
+              onBrowse={scrollToTools}
+            />
           </div>
         </section>
 
@@ -1537,6 +2708,35 @@ export function PdfClient() {
             )}
           </div>
         </section>
+
+        {/* ====================================================== */}
+        {/* Activity Tracking                                      */}
+        {/* ====================================================== */}
+        <ActivitySection isBn={isBn} />
+
+        {/* ====================================================== */}
+        {/* Workflow Pipeline                                      */}
+        {/* ====================================================== */}
+        <WorkflowSection isBn={isBn} />
+
+        {/* ====================================================== */}
+        {/* Tool Capabilities                                      */}
+        {/* ====================================================== */}
+        <CapabilitiesSection isBn={isBn} />
+
+        {/* ====================================================== */}
+        {/* Pro Tips                                               */}
+        {/* ====================================================== */}
+        <ProTipsSection isBn={isBn} />
+
+        {/* ====================================================== */}
+        {/* Offline Ready                                          */}
+        {/* ====================================================== */}
+        <OfflineReadySection
+          isBn={isBn}
+          onInstall={triggerInstall}
+          canInstall={canInstall}
+        />
 
         {/* ====================================================== */}
         {/* Why NextGen PDF Editor                                  */}
@@ -1833,22 +3033,32 @@ export function PdfClient() {
               </h2>
             </div>
 
-            <Accordion type="single" collapsible className="mt-8">
-              {FAQS.map((f, i) => {
-                const q = isBn ? f.qBn : f.qEn
-                const a = isBn ? f.aBn : f.aEn
-                return (
-                  <AccordionItem key={i} value={`item-${i}`}>
-                    <AccordionTrigger className="text-left text-[15px] font-medium hover:no-underline">
-                      {q}
-                    </AccordionTrigger>
-                    <AccordionContent className="text-sm leading-relaxed text-muted-foreground">
-                      {a}
-                    </AccordionContent>
-                  </AccordionItem>
-                )
-              })}
-            </Accordion>
+            {mounted ? (
+              <Accordion type="single" collapsible className="mt-8">
+                {FAQS.map((f, i) => {
+                  const q = isBn ? f.qBn : f.qEn
+                  const a = isBn ? f.aBn : f.aEn
+                  return (
+                    <AccordionItem key={i} value={`item-${i}`}>
+                      <AccordionTrigger className="text-left text-[15px] font-medium hover:no-underline">
+                        {q}
+                      </AccordionTrigger>
+                      <AccordionContent className="text-sm leading-relaxed text-muted-foreground">
+                        {a}
+                      </AccordionContent>
+                    </AccordionItem>
+                  )
+                })}
+              </Accordion>
+            ) : (
+              <div className="mt-8 space-y-3">
+                {FAQS.map((f, i) => (
+                  <div key={i} className="rounded-lg border border-border/60 p-4">
+                    <p className="text-[15px] font-medium">{isBn ? f.qBn : f.qEn}</p>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </section>
 
@@ -1895,7 +3105,14 @@ export function PdfClient() {
           tool={activeTool}
           isBn={isBn}
           open={true}
-          onOpenChange={closeTool}
+          onOpenChange={(v) => {
+            if (!v) {
+              closeTool()
+              // Clear pre-loaded files shortly after close so the next open starts fresh
+              setTimeout(() => setMergeInitialFiles([]), 300)
+            }
+          }}
+          initialFiles={mergeInitialFiles}
         />
       )}
       {activeTool && activeTool.id === 'split' && (
@@ -1922,6 +3139,14 @@ export function PdfClient() {
           onOpenChange={closeTool}
         />
       )}
+
+      {/* Command palette (⌘+K / Ctrl+K) */}
+      <CommandPalette
+        open={paletteOpen}
+        onOpenChange={setPaletteOpen}
+        isBn={isBn}
+        onSelect={openTool}
+      />
     </div>
   )
 }

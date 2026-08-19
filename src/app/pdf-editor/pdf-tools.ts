@@ -26,6 +26,7 @@ export type PdfTool = {
   icon: string // emoji glyph used on the card
   functional: boolean // true = launches working tool dialog
   comingSoon?: boolean
+  isNew?: boolean // true = show "NEW" badge on the card
 }
 
 export const PDF_TOOLS: PdfTool[] = [
@@ -176,6 +177,7 @@ export const PDF_TOOLS: PdfTool[] = [
     icon: '🧩',
     functional: false,
     comingSoon: true,
+    isNew: true,
   },
   {
     id: 'pdf-to-ebook',
@@ -187,6 +189,7 @@ export const PDF_TOOLS: PdfTool[] = [
     icon: '📚',
     functional: false,
     comingSoon: true,
+    isNew: true,
   },
   {
     id: 'pdf-ocr',
@@ -490,6 +493,7 @@ export const PDF_TOOLS: PdfTool[] = [
     icon: '🖋️',
     functional: false,
     comingSoon: true,
+    isNew: true,
   },
 
   /* ---------------------------------------------------------------------- */
