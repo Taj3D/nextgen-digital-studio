@@ -69,8 +69,11 @@ export interface BaseAnnotation {
   contents: string         // /Contents — plain text
   author: string           // /T — title
   createdAt: number        // epoch ms
-  isExisting?: boolean     // true if annotation existed in source PDF (read-only)
+  isExisting?: boolean     // true if annotation existed in source PDF
   pdfRefId?: number        // pdf-lib PDFRef object number (for removeAnnot)
+  origin?: 'existing' | 'created'  // Wave 2: track annotation origin
+  dirty?: boolean          // Wave 2: true if existing annotation has been modified
+  originalSnapshot?: Annotation  // Wave 2: for undo of edits to existing annotations
 }
 
 export interface HighlightAnnotation extends BaseAnnotation {
@@ -118,7 +121,7 @@ export type AnnotationMap = Record<number, Annotation[]>
 
 /** Undo/redo command. */
 export interface AnnotCommand {
-  type: 'add' | 'delete' | 'move' | 'update'
+  type: 'add' | 'delete' | 'move' | 'update' | 'resize' | 'duplicate'
   annotationId: string
   pageNum: number
   before?: Annotation  // state before change
@@ -165,4 +168,85 @@ export const COLOR_PRESETS: AnnotationColor[] = [
 /** Generate session-unique annotation ID. */
 export function generateAnnotId(): string {
   return `annot-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+}
+
+// =============================================================================
+// Wave 2: Editability helpers
+// =============================================================================
+
+/** Annotation subtypes that can be edited (color/opacity/stroke/text). */
+export const EDITABLE_SUBTYPES: AnnotationSubtype[] = [
+  'Highlight', 'Underline', 'StrikeOut',
+  'Text', 'FreeText', 'Ink', 'Line', 'Square', 'Circle',
+]
+
+/** Annotation subtypes that can be moved. */
+export const MOVABLE_SUBTYPES: AnnotationSubtype[] = [
+  'Text', 'FreeText', 'Ink', 'Line', 'Square', 'Circle',
+  'Highlight', 'Underline', 'StrikeOut',  // limited move (Rect + QuadPoints translation)
+]
+
+/** Annotation subtypes that can be resized. */
+export const RESIZABLE_SUBTYPES: AnnotationSubtype[] = [
+  'Square', 'Circle', 'Line', 'FreeText',
+]
+
+/** Annotation subtypes that can be duplicated. */
+export const DUPLICATABLE_SUBTYPES: AnnotationSubtype[] = [
+  'Highlight', 'Underline', 'StrikeOut',
+  'Text', 'FreeText', 'Ink', 'Line', 'Square', 'Circle',
+]
+
+/** Annotation subtypes that are NEVER editable (preserve only). */
+export const PROTECTED_SUBTYPES = ['Link', 'Widget', 'Stamp', 'Polygon', 'PolyLine'] as const
+
+/** Check if an annotation subtype is editable. */
+export function isEditable(subtype: AnnotationSubtype | string): boolean {
+  return EDITABLE_SUBTYPES.includes(subtype as AnnotationSubtype)
+}
+
+/** Check if an annotation subtype can be resized. */
+export function isResizable(subtype: AnnotationSubtype | string): boolean {
+  return RESIZABLE_SUBTYPES.includes(subtype as AnnotationSubtype)
+}
+
+/** Check if an annotation subtype can be duplicated. */
+export function isDuplicatable(subtype: AnnotationSubtype | string): boolean {
+  return DUPLICATABLE_SUBTYPES.includes(subtype as AnnotationSubtype)
+}
+
+/** Check if an annotation is protected (never editable/deletable). */
+export function isProtected(subtype: AnnotationSubtype | string): boolean {
+  return (PROTECTED_SUBTYPES as readonly string[]).includes(subtype)
+}
+
+/** Get the properties available for a given subtype. */
+export function getEditableProperties(subtype: AnnotationSubtype | string): {
+  color: boolean
+  opacity: boolean
+  strokeWidth: boolean
+  contents: boolean
+  author: boolean
+  fontSize: boolean
+} {
+  const s = subtype as AnnotationSubtype
+  switch (s) {
+    case 'Highlight':
+    case 'Underline':
+    case 'StrikeOut':
+      return { color: true, opacity: true, strokeWidth: s !== 'Highlight', contents: true, author: true, fontSize: false }
+    case 'Text':
+      return { color: true, opacity: true, strokeWidth: false, contents: true, author: true, fontSize: false }
+    case 'FreeText':
+      return { color: true, opacity: true, strokeWidth: false, contents: true, author: true, fontSize: true }
+    case 'Ink':
+      return { color: true, opacity: true, strokeWidth: true, contents: false, author: false, fontSize: false }
+    case 'Line':
+      return { color: true, opacity: true, strokeWidth: true, contents: false, author: false, fontSize: false }
+    case 'Square':
+    case 'Circle':
+      return { color: true, opacity: true, strokeWidth: true, contents: false, author: false, fontSize: false }
+    default:
+      return { color: false, opacity: false, strokeWidth: false, contents: false, author: false, fontSize: false }
+  }
 }

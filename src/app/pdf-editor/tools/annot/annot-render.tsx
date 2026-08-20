@@ -11,8 +11,10 @@
 
 import * as React from 'react'
 import type { Annotation, HighlightAnnotation, StickyNoteAnnotation, FreeTextAnnotation, InkAnnotation, LineAnnotation, ShapeAnnotation } from './annot-types'
+import { isResizable } from './annot-types'
 import type { PageViewport } from 'pdfjs-dist'
 import { pdfRectToCssRect } from './annot-coords'
+import { getResizeHandles, getHandlePosition, type ResizeHandle } from './annot-resize'
 
 interface AnnotRenderProps {
   annotations: Annotation[]
@@ -80,19 +82,27 @@ function AnnotElement({
   // Move transform for live drag preview (CSS pixel offset)
   const moveTransform = moveOffset ? `translate(${moveOffset.dx}px, ${moveOffset.dy}px)` : undefined
 
+  // Resize handles for selected resizable annotations
+  const resizeHandles = isSelected && isResizable(annot.subtype) ? (
+    <ResizeHandles annot={annot} viewport={viewport} />
+  ) : null
+
   // Selection highlight ring
   const selectionRing = isSelected ? (
-    <rect
-      x={cssRect.x - 4}
-      y={cssRect.y - 4}
-      width={cssRect.width + 8}
-      height={cssRect.height + 8}
-      fill="none"
-      stroke="#3b82f6"
-      strokeWidth={1.5}
-      strokeDasharray="4 2"
-      className="pointer-events-none"
-    />
+    <>
+      <rect
+        x={cssRect.x - 4}
+        y={cssRect.y - 4}
+        width={cssRect.width + 8}
+        height={cssRect.height + 8}
+        fill="none"
+        stroke="#3b82f6"
+        strokeWidth={1.5}
+        strokeDasharray="4 2"
+        className="pointer-events-none"
+      />
+      {resizeHandles}
+    </>
   ) : null
 
   const label = `${annot.subtype} - ${annot.contents || (isBn ? 'কোনো টেক্সট নেই' : 'no text')}`
@@ -330,4 +340,31 @@ function getArrowPoints(sx: number, sy: number, ex: number, ey: number, strokeWi
   const p2x = ex + arrowLen * Math.cos(a2)
   const p2y = ey + arrowLen * Math.sin(a2)
   return `${ex},${ey} ${p1x},${p1y} ${p2x},${p2y}`
+}
+
+/** Render resize handles for a selected annotation. */
+function ResizeHandles({ annot, viewport }: { annot: Annotation; viewport: PageViewport }) {
+  const handles = getResizeHandles(annot)
+  if (handles.length === 0) return null
+
+  return (
+    <g className="pointer-events-none">
+      {handles.map(handle => {
+        const pos = getHandlePosition(annot, handle)
+        const [cx, cy] = viewport.convertToViewportPoint(pos.x, pos.y)
+        return (
+          <circle
+            key={handle}
+            cx={cx}
+            cy={cy}
+            r={6}
+            fill="#3b82f6"
+            stroke="#ffffff"
+            strokeWidth={1.5}
+            className="pointer-events-none"
+          />
+        )
+      })}
+    </g>
+  )
 }

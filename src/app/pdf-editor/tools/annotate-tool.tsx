@@ -35,13 +35,16 @@ import type { PageViewport } from 'pdfjs-dist'
 import { useAnnotStore } from './annot/annot-store'
 import { AnnotToolbar } from './annot/annot-toolbar'
 import { AnnotRender } from './annot/annot-render'
+import { AnnotPropertiesPanel } from './annot/annot-properties-panel'
+import { AnnotList } from './annot/annot-list'
 import {
-  generateAnnotId, type Annotation, type ToolType,
+  generateAnnotId, type Annotation, type ToolType, isProtected,
 } from './annot/annot-types'
 import {
   cssToPdf, cssRectToPdfRect, pdfRectToCssRect, getDevicePixelRatio, isMobile,
 } from './annot/annot-coords'
-import { serializeAnnotation } from './annot/annot-serialize'
+import { serializeAnnotation, mutateExistingAnnotation, removeAnnotationByRef } from './annot/annot-serialize'
+import { loadExistingAnnotations } from './annot/annot-load'
 
 export function AnnotateTool({ tool, isBn, open, onOpenChange }: {
   tool: PdfTool
@@ -96,6 +99,11 @@ export function AnnotateTool({ tool, isBn, open, onOpenChange }: {
   const deleteAnnotation = useAnnotStore(s => s.deleteAnnotation)
   const moveAnnotation = useAnnotStore(s => s.moveAnnotation)
   const selectAnnotation = useAnnotStore(s => s.selectAnnotation)
+  // Wave 2: new store actions
+  const loadExisting = useAnnotStore(s => s.loadExistingAnnotations)
+  const editAnnotation = useAnnotStore(s => s.editAnnotation)
+  const resizeAnnotation = useAnnotStore(s => s.resizeAnnotation)
+  const duplicateAnnotation = useAnnotStore(s => s.duplicateAnnotation)
   const undo = useAnnotStore(s => s.undo)
   const redo = useAnnotStore(s => s.redo)
   const undoStack = useAnnotStore(s => s.undoStack)
@@ -148,17 +156,22 @@ export function AnnotateTool({ tool, isBn, open, onOpenChange }: {
         setPageNum(1)
         clearAll()
 
-        // Check for existing annotations
+        // Wave 2: Load existing annotations into store for editing
         try {
-          const page1 = await doc.getPage(1)
-          const annots = await page1.getAnnotations()
-          setHasExistingAnnots(annots.length > 0)
-          if (annots.length > 0) {
+          // Load the original bytes into pdf-lib for annotation reading
+          const pdfLibDoc = await PDFDocument.load(bytesForPdfLib, { ignoreEncryption: true })
+          const existingAnnots = await loadExistingAnnotations(doc, pdfLibDoc)
+          const totalExisting = Object.values(existingAnnots).reduce((sum, arr) => sum + arr.length, 0)
+          setHasExistingAnnots(totalExisting > 0)
+          if (totalExisting > 0) {
+            loadExisting(existingAnnots)
             toast.info(isBn
-              ? `বিদ্যমান অ্যানোটেশন সংরক্ষিত থাকবে (${annots.length}টি)।`
-              : `Existing annotations will be preserved (${annots.length}).`)
+              ? `বিদ্যমান অ্যানোটেশন লোড হয়েছে (${totalExisting}টি)।`
+              : `Loaded ${totalExisting} existing annotation${totalExisting !== 1 ? 's' : ''}.`)
           }
-        } catch {}
+        } catch (err) {
+          console.error('[Annotate] Failed to load existing annotations:', err)
+        }
       } catch (err) {
         console.error('[Annotate] Load failed:', err)
         toast.error(isBn
@@ -644,7 +657,7 @@ export function AnnotateTool({ tool, isBn, open, onOpenChange }: {
     selection.removeAllRanges()
   }, [viewport, activeTool, properties, pageNum, addAnnotation])
 
-  // Save annotations to PDF
+  // Save annotations to PDF (Wave 2: handles existing + created annotations)
   const handleSave = async () => {
     if (!originalBytes || files.length === 0) return
     setSaving(true)
@@ -653,12 +666,25 @@ export function AnnotateTool({ tool, isBn, open, onOpenChange }: {
       const freshBytes = await files[0].arrayBuffer()
       const pdfLibDoc = await PDFDocument.load(freshBytes, { ignoreEncryption: true })
 
-      // Serialize all annotations
+      // Wave 2: Process annotations based on origin + dirty state
       const allAnnots = useAnnotStore.getState().getAllAnnotations()
       let savedCount = 0
+      let mutatedCount = 0
+
       for (const annot of allAnnots) {
-        const ref = serializeAnnotation(pdfLibDoc, annot.pageNum - 1, annot)  // 0-indexed
-        if (ref) savedCount++
+        if (annot.origin === 'existing') {
+          // Existing annotation
+          if (annot.dirty) {
+            // Mutate existing dict in-place + regenerate AP
+            const ok = mutateExistingAnnotation(pdfLibDoc, annot.pageNum - 1, annot)
+            if (ok) mutatedCount++
+          }
+          // If not dirty, do nothing — preserve as-is
+        } else {
+          // Created annotation — use Wave 1 serializeAnnotation (adds new /Annots entry)
+          const ref = serializeAnnotation(pdfLibDoc, annot.pageNum - 1, annot)
+          if (ref) savedCount++
+        }
       }
 
       // Save and validate
@@ -671,9 +697,10 @@ export function AnnotateTool({ tool, isBn, open, onOpenChange }: {
       const filename = files[0].name.replace(/\.pdf$/i, '') + '-annotated.pdf'
       await downloadValidatedPdf(pdfBytes, filename)
 
+      const totalSaved = savedCount + mutatedCount
       toast.success(isBn
-        ? `${bn(savedCount)}টি অ্যানোটেশন সেভ হয়েছে।`
-        : `${savedCount} annotation${savedCount !== 1 ? 's' : ''} saved.`)
+        ? `${bn(totalSaved)}টি অ্যানোটেশন সেভ হয়েছে${mutatedCount > 0 ? ` (${bn(mutatedCount)}টি সম্পাদিত)` : ''}।`
+        : `${totalSaved} annotation${totalSaved !== 1 ? 's' : ''} saved${mutatedCount > 0 ? ` (${mutatedCount} edited)` : ''}.`)
     } catch (err) {
       console.error('[Annotate] Save failed:', err)
       toast.error(isBn
@@ -940,9 +967,46 @@ export function AnnotateTool({ tool, isBn, open, onOpenChange }: {
             {hasExistingAnnots && (
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <CheckCircle2 className="h-3 w-3 text-green-600" />
-                <span>{isBn ? 'বিদ্যমান অ্যানোটেশন সংরক্ষিত (শুধু নতুন যোগ করা হয়েছে)' : 'Existing annotations preserved (new only added)'}</span>
+                <span>{isBn ? 'বিদ্যমান অ্যানোটেশন লোড ও সম্পাদনযোগ্য' : 'Existing annotations loaded and editable'}</span>
               </div>
             )}
+
+            {/* Wave 2: Properties Panel (context-aware) */}
+            {selectedAnnotId && (
+              <AnnotPropertiesPanel
+                annotation={pageAnnots.find(a => a.id === selectedAnnotId) || Object.values(annotations).flat().find(a => a.id === selectedAnnotId) || null}
+                isBn={isBn}
+                onDuplicate={(id, pn) => duplicateAnnotation(id, pn)}
+                onDelete={(id, pn) => {
+                  const annot = Object.values(annotations).flat().find(a => a.id === id)
+                  if (annot && isProtected(annot.subtype)) {
+                    toast.error(isBn ? 'এই অ্যানোটেশন ডিলিট করা যায় না' : 'Cannot delete this annotation type')
+                    return
+                  }
+                  deleteAnnotation(id, pn)
+                }}
+              />
+            )}
+
+            {/* Wave 2: Annotation List */}
+            <AnnotList
+              annotations={Object.values(annotations).flat()}
+              selectedId={selectedAnnotId}
+              onSelect={(id, pn) => {
+                selectAnnotation(id)
+                if (pn !== pageNum) setPageNum(pn)
+              }}
+              onDuplicate={(id, pn) => duplicateAnnotation(id, pn)}
+              onDelete={(id, pn) => {
+                const annot = Object.values(annotations).flat().find(a => a.id === id)
+                if (annot && isProtected(annot.subtype)) {
+                  toast.error(isBn ? 'এই অ্যানোটেশন ডিলিট করা যায় না' : 'Cannot delete this annotation type')
+                  return
+                }
+                deleteAnnotation(id, pn)
+              }}
+              isBn={isBn}
+            />
           </>
         )}
 

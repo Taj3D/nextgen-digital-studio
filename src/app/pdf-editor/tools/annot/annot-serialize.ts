@@ -606,3 +606,161 @@ export function readExistingAnnotations(
     return []
   }
 }
+
+// =============================================================================
+// Wave 2: Existing annotation mutation + AP regeneration
+// =============================================================================
+
+/**
+ * Mutate an existing annotation's dict in-place and regenerate its AP stream.
+ * This is the Wave 2 write path for existing annotations.
+ *
+ * @param pdfDoc - pdf-lib PDFDocument (loaded from original bytes)
+ * @param pageNum - 0-indexed page number
+ * @param annot - Updated annotation record (from store)
+ * @returns true if mutation succeeded
+ */
+export function mutateExistingAnnotation(
+  pdfDoc: PDFDocument,
+  pageNum: number,
+  annot: Annotation,
+): boolean {
+  try {
+    if (!annot.pdfRefId || annot.pdfRefId === 0) {
+      console.warn('[annot-serialize] No pdfRefId for existing annotation — skipping mutation')
+      return false
+    }
+
+    const page = pdfDoc.getPage(pageNum)
+    const annots = page.node.Annots()
+    if (!annots) return false
+
+    // Find the annotation by refId
+    let targetDict: PDFDict | null = null
+    let targetRef: PDFRef | null = null
+    for (let i = 0; i < annots.size(); i++) {
+      const entry = annots.get(i)
+      if (entry instanceof PDFRef && entry.objectNumber === annot.pdfRefId) {
+        targetRef = entry
+        targetDict = pdfDoc.context.lookup(entry) as PDFDict
+        break
+      }
+    }
+
+    if (!targetDict) {
+      console.warn('[annot-serialize] Existing annotation dict not found for refId:', annot.pdfRefId)
+      return false
+    }
+
+    const context = pdfDoc.context
+
+    // Mutate /Rect
+    const rect: [number, number, number, number] = [
+      annot.rect.x,
+      annot.rect.y,
+      annot.rect.x + annot.rect.width,
+      annot.rect.y + annot.rect.height,
+    ]
+    targetDict.set(PDFName.of('Rect'), context.obj(rect))
+
+    // Mutate /C (color)
+    targetDict.set(PDFName.of('C'), context.obj([annot.color.r, annot.color.g, annot.color.b]))
+
+    // Mutate /Contents
+    if (annot.contents) {
+      targetDict.set(PDFName.of('Contents'), encodePdfText(annot.contents))
+    }
+
+    // Mutate /T (author)
+    if (annot.author) {
+      targetDict.set(PDFName.of('T'), encodePdfText(annot.author))
+    }
+
+    // Subtype-specific mutations
+    if (annot.subtype === 'Highlight' || annot.subtype === 'Underline' || annot.subtype === 'StrikeOut') {
+      const h = annot as HighlightAnnotation
+      if (h.quads && h.quads.length > 0) {
+        const quadPoints: number[] = []
+        for (const q of h.quads) {
+          quadPoints.push(q.x1, q.y1, q.x2, q.y2, q.x3, q.y3, q.x4, q.y4)
+        }
+        targetDict.set(PDFName.of('QuadPoints'), context.obj(quadPoints))
+      }
+      // Regenerate AP
+      const quadsArray = h.quads.map(q => [q.x1, q.y1, q.x2, q.y2, q.x3, q.y3, q.x4, q.y4] as [number, number, number, number, number, number, number, number])
+      const apRef = buildTextMarkupAP(context, targetDict, annot.color, annot.opacity, quadsArray, annot.subtype)
+      replaceAP(targetDict, apRef, context)
+    } else if (annot.subtype === 'Text') {
+      const n = annot as StickyNoteAnnotation
+      if (n.icon) {
+        targetDict.set(PDFName.of('Name'), PDFName.of(n.icon))
+      }
+      const size = Math.min(rect[2] - rect[0], rect[3] - rect[1])
+      const apRef = buildStickyNoteAP(context, targetDict, annot.color, size)
+      replaceAP(targetDict, apRef, context)
+    } else if (annot.subtype === 'FreeText') {
+      const ft = annot as FreeTextAnnotation
+      targetDict.set(PDFName.of('DA'), PDFName.of(`/Helv ${ft.fontSize} Tf 0 0 0 rg`))
+      const apRef = buildFreeTextAP(context, targetDict, ft.text, ft.fontSize, annot.color, rect)
+      replaceAP(targetDict, apRef, context)
+    } else if (annot.subtype === 'Ink') {
+      const ink = annot as InkAnnotation
+      const inkList = ink.paths.map(path => context.obj(path.flatMap(p => [p.x, p.y])))
+      targetDict.set(PDFName.of('InkList'), context.obj(inkList))
+      const apRef = buildInkAP(context, targetDict, ink.paths, annot.color, annot.strokeWidth, rect)
+      replaceAP(targetDict, apRef, context)
+    } else if (annot.subtype === 'Line') {
+      const ln = annot as LineAnnotation
+      targetDict.set(PDFName.of('L'), context.obj([ln.start.x, ln.start.y, ln.end.x, ln.end.y]))
+      if (ln.isArrow) {
+        targetDict.set(PDFName.of('LE'), context.obj(['None', 'OpenArrow']))
+      }
+      const apRef = buildLineAP(context, targetDict, ln.start, ln.end, annot.color, annot.strokeWidth, ln.isArrow, rect)
+      replaceAP(targetDict, apRef, context)
+    } else if (annot.subtype === 'Square') {
+      targetDict.set(PDFName.of('BS'), context.obj({ W: annot.strokeWidth, S: 'S' }))
+      const apRef = buildSquareAP(context, targetDict, annot.color, annot.strokeWidth, rect)
+      replaceAP(targetDict, apRef, context)
+    } else if (annot.subtype === 'Circle') {
+      targetDict.set(PDFName.of('BS'), context.obj({ W: annot.strokeWidth, S: 'S' }))
+      const apRef = buildCircleAP(context, targetDict, annot.color, annot.strokeWidth, rect)
+      replaceAP(targetDict, apRef, context)
+    }
+
+    return true
+  } catch (err) {
+    console.error('[annot-serialize] Failed to mutate existing annotation:', err)
+    return false
+  }
+}
+
+/** Replace the /AP entry on a dict with a new AP ref. */
+function replaceAP(dict: PDFDict, apRef: PDFRef, context: PDFContext) {
+  const apDict = context.obj({})
+  apDict.set(PDFName.of('N'), apRef)
+  dict.set(PDFName.of('AP'), apDict)
+}
+
+/**
+ * Delete an existing annotation by its pdfRefId.
+ */
+export function deleteExistingAnnotation(
+  pdfDoc: PDFDocument,
+  pageNum: number,
+  pdfRefId: number,
+): boolean {
+  return removeAnnotationByRef(pdfDoc, pageNum, pdfRefId)
+}
+
+/**
+ * Serialize a duplicated annotation (creates a NEW annotation, not mutating existing).
+ * This reuses the Wave 1 serializeAnnotation path.
+ */
+export function serializeDuplicatedAnnotation(
+  pdfDoc: PDFDocument,
+  pageNum: number,
+  annot: Annotation,
+): PDFRef | null {
+  // Duplicated annotations are treated as 'created' — use existing serializeAnnotation
+  return serializeAnnotation(pdfDoc, pageNum, annot)
+}
