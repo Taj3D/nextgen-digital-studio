@@ -193,7 +193,12 @@ export function AnnotateTool({ tool, isBn, open, onOpenChange }: {
         if (!context) return
 
         const dpr = getDevicePixelRatio()
-        const baseScale = isMobile() ? 1.0 : 1.5
+        // Calculate responsive scale: fit canvas within dialog container width
+        const container = containerRef.current
+        const availableWidth = container ? container.clientWidth - 32 : 500  // minus padding
+        const pageBase = page.getViewport({ scale: 1 })
+        const fitScale = Math.min(availableWidth / pageBase.width, 1.5)  // cap at 1.5x
+        const baseScale = isMobile() ? Math.min(fitScale, 1.0) : Math.max(fitScale, 0.75)
         const viewport = page.getViewport({ scale: baseScale })
         const cssViewport = page.getViewport({ scale: baseScale })  // CSS-scaled viewport
 
@@ -201,6 +206,7 @@ export function AnnotateTool({ tool, isBn, open, onOpenChange }: {
         canvas.height = viewport.height * dpr
         canvas.style.width = `${viewport.width}px`
         canvas.style.height = `${viewport.height}px`
+        canvas.style.maxWidth = '100%'
         context.scale(dpr, dpr)
 
         if (renderTaskRef.current) {
@@ -330,9 +336,12 @@ export function AnnotateTool({ tool, isBn, open, onOpenChange }: {
     const canvas = canvasRef.current
     if (!canvas) return { x: 0, y: 0 }
     const rect = canvas.getBoundingClientRect()
+    // Account for potential CSS scaling (maxWidth: 100% may shrink the canvas)
+    const scaleX = viewport ? viewport.width / rect.width : 1
+    const scaleY = viewport ? viewport.height / rect.height : 1
     return {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
+      x: (e.clientX - rect.left) * scaleX,
+      y: (e.clientY - rect.top) * scaleY,
     }
   }
 
@@ -719,7 +728,7 @@ export function AnnotateTool({ tool, isBn, open, onOpenChange }: {
             <div
               ref={containerRef}
               className="relative overflow-auto rounded-lg border border-border/60 bg-muted/20"
-              style={{ maxHeight: '400px', touchAction: activeTool === 'draw' ? 'none' : 'auto' }}
+              style={{ maxHeight: '250px', touchAction: activeTool === 'draw' ? 'none' : 'auto' }}
               onMouseUp={handleTextSelection}
             >
               <div className="relative inline-block">
