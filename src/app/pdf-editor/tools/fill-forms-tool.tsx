@@ -418,6 +418,9 @@ export function FillFormsTool({ tool, isBn, open, onOpenChange }: {
                             className="text-xs"
                           />
                         )}
+                        <p className="text-[10px] text-muted-foreground">
+                          {isBn ? 'দীর্ঘ টেক্সট ফিল্ডের দৃশ্যমান এলাকার বাইরে গেলে ক্লিপ হতে পারে।' : 'Long text may be clipped if it exceeds the field\u2019s visible area.'}
+                        </p>
                       </div>
                     ) : field.type === 'CheckBox' ? (
                       <div className="flex items-center gap-2">
@@ -438,14 +441,21 @@ export function FillFormsTool({ tool, isBn, open, onOpenChange }: {
                         </SelectContent>
                       </Select>
                     ) : field.type === 'Dropdown' || field.type === 'OptionList' ? (
-                      <Select value={Array.isArray(value) ? value[0] ?? '' : value ?? ''} onValueChange={(v) => updateValue(field.name, field.type === 'OptionList' ? [v] : v)}>
-                        <SelectTrigger className="h-8 text-xs"><SelectValue placeholder={isBn ? 'নির্বাচন করুন' : 'Select'} /></SelectTrigger>
-                        <SelectContent>
-                          {field.options?.map((opt) => (
-                            <SelectItem key={opt} value={opt} className="text-xs">{opt}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <div className="space-y-1">
+                        <Select value={Array.isArray(value) ? value[0] ?? '' : value ?? ''} onValueChange={(v) => updateValue(field.name, field.type === 'OptionList' ? [v] : v)}>
+                          <SelectTrigger className="h-8 text-xs"><SelectValue placeholder={isBn ? 'নির্বাচন করুন' : 'Select'} /></SelectTrigger>
+                          <SelectContent>
+                            {field.options?.map((opt) => (
+                              <SelectItem key={opt} value={opt} className="text-xs">{opt}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        {field.type === 'OptionList' && (
+                          <p className="text-[10px] text-muted-foreground">
+                            {isBn ? 'একটি অপশন নির্বাচন করুন।' : 'Single selection supported.'}
+                          </p>
+                        )}
+                      </div>
                     ) : (
                       <p className="text-xs text-muted-foreground">{field.currentValue}</p>
                     )}
