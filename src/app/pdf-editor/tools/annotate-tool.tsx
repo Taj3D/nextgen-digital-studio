@@ -114,12 +114,14 @@ export function AnnotateTool({ tool, isBn, open, onOpenChange }: {
       setLoading(true)
       try {
         const arrayBuffer = await files[0].arrayBuffer()
-        // Keep original bytes for save (pdf-lib will load from these)
-        const bytes = new Uint8Array(arrayBuffer)
-        setOriginalBytes(bytes)
+        // Clone the ArrayBuffer for pdf-lib (pdfjs transfers/detaches the buffer it receives)
+        const bytesForPdfLib = new Uint8Array(arrayBuffer.slice(0))
+        setOriginalBytes(bytesForPdfLib)
 
+        // Pass a separate copy to pdfjs (it may detach this one)
+        const bytesForPdfjs = new Uint8Array(arrayBuffer.slice(0))
         loadingTask = pdfjsLib.getDocument({
-          data: new Uint8Array(arrayBuffer),
+          data: bytesForPdfjs,
           disableAutoFetch: true,
           disableStream: false,
           // @ts-ignore — enableScripting is a valid DocumentInitParameters option
