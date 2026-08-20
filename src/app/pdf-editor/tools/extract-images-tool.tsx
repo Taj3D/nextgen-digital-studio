@@ -113,14 +113,15 @@ export function ExtractImagesTool({ tool, isBn, open, onOpenChange }: {
 
       // PDF.js v6 may resolve images as ImageBitmap (bitmap key) instead of raw pixel data
       // Check for bitmap first — it's the preferred v6 approach
-      if (img.bitmap && img.bitmap instanceof ImageBitmap) {
+      // Use img.width/img.height for canvas dimensions since bitmap may not have them
+      if (img.bitmap) {
         try {
           const canvas = document.createElement('canvas')
-          canvas.width = img.bitmap.width
-          canvas.height = img.bitmap.height
+          canvas.width = img.width || img.bitmap.width || 100
+          canvas.height = img.height || img.bitmap.height || 100
           const ctx = canvas.getContext('2d')
           if (!ctx) { resolve(null); return }
-          ctx.drawImage(img.bitmap, 0, 0)
+          ctx.drawImage(img.bitmap, 0, 0, canvas.width, canvas.height)
           canvas.toBlob((blob) => {
             resolve(blob)
           }, 'image/png')

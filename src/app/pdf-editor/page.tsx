@@ -200,7 +200,7 @@ export const metadata: Metadata = {
     title:
       'Free PDF Editor Online — Edit, Merge, Split & Manage PDFs | NextGen Digital Studio',
     description:
-      `40+ free PDF tools — merge, split, rotate, edit metadata, compress, convert, sign & secure. 100% client-side. ${AVAILABLE_NOW_COUNT} tools functional now; ${ROADMAP_COUNT} on the roadmap. No account, no upload, no limits.`,
+      `43 free PDF tools — merge, split, rotate, edit metadata, compress, convert, sign & secure. 100% client-side. ${AVAILABLE_NOW_COUNT} tools functional now; ${ROADMAP_COUNT} on the roadmap. No account, no upload, no artificial limits.`,
     type: 'website',
     url: `${SITE_URL}${PAGE_PATH}`,
     siteName: 'NextGen Digital Studio',
@@ -210,7 +210,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Free PDF Editor Online — NextGen Digital Studio',
     description:
-      `40+ free PDF tools. Merge, split, rotate, edit metadata & more. 100% client-side, no account needed. ${AVAILABLE_NOW_COUNT} tools functional now; ${ROADMAP_COUNT} on the roadmap.`,
+      `43 free PDF tools. Merge, split, rotate, edit metadata & more. 100% client-side, no account needed. ${AVAILABLE_NOW_COUNT} tools functional now; ${ROADMAP_COUNT} on the roadmap.`,
   },
   category: 'Productivity',
 }

@@ -1,22 +1,27 @@
-import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
-import { writeFileSync } from 'fs'
+import { PDFDocument, rgb } from 'pdf-lib'
+import { writeFileSync, readFileSync } from 'fs'
+import fontkit from '@pdf-lib/fontkit'
 
-// Note: StandardFonts don't support Bengali Unicode, but pdf-lib will embed the text
-// as best it can. PDF.js getTextContent() will still extract the Unicode strings.
+// Use the MahfujLipi font (Bengali Unicode font already in the project)
+const fontBytes = readFileSync('public/fonts/MahfujLipi.ttf')
+
 const doc = await PDFDocument.create()
-const font = await doc.embedFont(StandardFonts.Helvetica)
+doc.registerFontkit(fontkit)
+const bengaliFont = await doc.embedFont(fontBytes, { subset: true })
 
-const page1 = doc.addPage([595, 842])
-page1.drawText('Bengali Test Page 1', { x: 100, y: 750, size: 16, font, color: rgb(0,0,0) })
-page1.drawText('English: Hello World 12345', { x: 100, y: 700, size: 14, font, color: rgb(0,0,0) })
-page1.drawText('Numbers: 1234567890', { x: 100, y: 670, size: 14, font, color: rgb(0,0,0) })
-page1.drawText('Punctuation: !@#$%^&*()', { x: 100, y: 640, size: 14, font, color: rgb(0,0,0) })
+const page = doc.addPage([595, 842])
 
+// Bengali text
+page.drawText('বাংলাদেশে ডিজিটাল স্কিল শিখুন', { x: 50, y: 750, size: 20, font: bengaliFont, color: rgb(0, 0, 0) })
+page.drawText('NextGen Digital Studio', { x: 50, y: 700, size: 16, font: bengaliFont, color: rgb(0, 0, 0) })
+page.drawText('1234567890', { x: 50, y: 650, size: 16, font: bengaliFont, color: rgb(0, 0, 0) })
+page.drawText('AI · Software · Automation', { x: 50, y: 600, size: 14, font: bengaliFont, color: rgb(0, 0, 0) })
+
+// Page 2
 const page2 = doc.addPage([595, 842])
-page2.drawText('Bengali Test Page 2', { x: 100, y: 750, size: 16, font, color: rgb(0,0,0) })
-page2.drawText('Mixed: ABC123 xyz', { x: 100, y: 700, size: 14, font, color: rgb(0,0,0) })
+page2.drawText('দ্বিতীয় পৃষ্ঠা', { x: 50, y: 750, size: 20, font: bengaliFont, color: rgb(0, 0, 0) })
+page2.drawText('Bengali + English mixed text', { x: 50, y: 700, size: 14, font: bengaliFont, color: rgb(0, 0, 0) })
+page2.drawText('বাংলা এবং English একসাথে', { x: 50, y: 650, size: 14, font: bengaliFont, color: rgb(0, 0, 0) })
 
-doc.setTitle('Bengali Test PDF')
-doc.setAuthor('QA Tester')
-writeFileSync('test-pdfs/pdf-bengali-test.pdf', await doc.save())
-console.log('Created pdf-bengali-test.pdf (2 pages, English + numbers + punctuation)')
+writeFileSync('test-pdfs/pdf-bengali-unicode.pdf', await doc.save())
+console.log('Created pdf-bengali-unicode.pdf (2 pages, real Bengali Unicode text)')

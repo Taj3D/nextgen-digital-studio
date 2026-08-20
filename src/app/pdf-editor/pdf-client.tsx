@@ -228,7 +228,7 @@ const WHY_FEATURES: {
 }[] = [
   {
     icon: Sparkles,
-    en: { t: '100% Free Forever', d: 'No subscriptions, no hidden fees, no trial limits. Every tool, every page, every device — free.' },
+    en: { t: '100% Free Forever', d: 'No subscriptions, no hidden fees, no trial limits. All currently available tools are free to use. No subscription required.' },
     bn: { t: '১০০% চিরকাল ফ্রি', d: 'কোনো সাবস্ক্রিপশন নেই, কোনো লুকানো ফি নেই। প্রতিটি টুল, প্রতিটি পেজ, প্রতিটি ডিভাইসে — ফ্রি।' },
   },
   {
@@ -253,7 +253,7 @@ const WHY_FEATURES: {
   },
   {
     icon: InfinityIcon,
-    en: { t: 'No File Limits', d: 'No size cap, no daily limit, no page restriction. Your hardware is the only ceiling.' },
+    en: { t: 'No Artificial Limits', d: 'No artificial daily usage cap. Practical file limits depend on your device, browser, and available memory.' },
     bn: { t: 'কোনো ফাইল লিমিট নেই', d: 'কোনো সাইজ লিমিট নেই, কোনো ডেইলি ক্যাপ নেই। আপনার হার্ডওয়্যারই একমাত্র সীমা।' },
   },
 ]
@@ -265,7 +265,7 @@ const HOW_STEPS: {
 }[] = [
   {
     icon: MousePointerClick,
-    en: { t: 'Choose a Tool', d: 'Browse 40+ tools, filter by category, search by name — tap to launch instantly.' },
+    en: { t: 'Choose a Tool', d: 'Browse 43 PDF tools, filter by category, search by name — tap to launch instantly.' },
     bn: { t: 'একটি টুল বাছুন', d: '৪০+ টুল ব্রাউজ করুন, ক্যাটেগরি অনুযায়ী ফিল্টার করুন, নাম দিয়ে সার্চ করুন — ট্যাপ করে শুরু করুন।' },
   },
   {
@@ -315,7 +315,7 @@ const COMPARISON_FEATURES: {
   {
     en: 'Number of Tools',
     bn: 'টুলের সংখ্যা',
-    nextgen: '40+',
+    nextgen: '43',
     smallpdf: '21',
     ilovepdf: '25',
     adobe: '30+',
@@ -409,7 +409,7 @@ const FAQS: {
   {
     qEn: 'Is PDF Forge really 100% free?',
     qBn: 'পিডিএফ ফোর্জ কি সত্যিই ১০০% ফ্রি?',
-    aEn: 'Yes. PDF Forge is completely free forever — no subscriptions, no hidden fees, no daily caps. Every tool, including Merge, Split, Rotate and Edit Metadata, is free to use on any device.',
+    aEn: 'Yes. PDF Forge is completely free forever — no subscriptions, no hidden fees, no daily caps. All currently available tools are free to use on any device. No subscription required.',
     aBn: 'হ্যাঁ। পিডিএফ ফোর্জ সম্পূর্ণ চিরকাল ফ্রি — কোনো সাবস্ক্রিপশন নেই, কোনো লুকানো ফি নেই, কোনো ডেইলি ক্যাপ নেই। প্রতিটি টুল — মার্জ, স্প্লিট, রোটেট ও মেটাডাটা — যেকোনো ডিভাইসে ফ্রি।',
   },
   {
@@ -473,55 +473,55 @@ type WorkflowTemplate = {
 
 const WORKFLOW_TEMPLATES: WorkflowTemplate[] = [
   {
-    id: 'compress-watermark',
-    titleEn: 'Compress & Watermark',
-    titleBn: 'কম্প্রেস ও ওয়াটারমার্ক',
-    descEn: 'Shrink then stamp your brand — perfect for sharing.',
-    descBn: 'আকার কমান ও ব্র্যান্ড স্ট্যাম্প দিন — শেয়ার করার জন্য পারফেক্ট।',
+    id: 'rotate-watermark-number',
+    titleEn: 'Rotate → Watermark → Page Numbers',
+    titleBn: 'রোটেট → ওয়াটারমার্ক → পেজ নম্বর',
+    descEn: 'Rotate, stamp your brand, and add page numbers — all Available Now tools.',
+    descBn: 'ঘোরান, ব্র্যান্ড স্ট্যাম্প দিন, পেজ নম্বর যোগ করুন — সব এখনই ব্যবহারযোগ্য।',
     icon: Droplets,
     steps: [
-      { id: 'compress', labelEn: 'Compress', labelBn: 'কম্প্রেস', icon: '🗜️' },
+      { id: 'rotate', labelEn: 'Rotate', labelBn: 'রোটেট', icon: '🔄' },
       { id: 'watermark', labelEn: 'Watermark', labelBn: 'ওয়াটারমার্ক', icon: '💧' },
       { id: 'page-numbers', labelEn: 'Page Numbers', labelBn: 'পেজ নম্বর', icon: '🔢' },
     ],
   },
   {
-    id: 'office-cleanup',
-    titleEn: 'Office to PDF Cleanup',
-    titleBn: 'অফিস থেকে পিডিএফ ক্লিনআপ',
-    descEn: 'Rotate, shrink and number pages in one pass.',
-    descBn: 'এক ধাপে ঘোরান, সাইজ কমান ও পেজ নম্বর দিন।',
+    id: 'organize-rotate-watermark',
+    titleEn: 'Organize → Rotate → Watermark',
+    titleBn: 'অর্গানাইজ → রোটেট → ওয়াটারমার্ক',
+    descEn: 'Reorder pages, fix orientation, then add your watermark.',
+    descBn: 'পেজ সাজান, ঘোরান, তারপর ওয়াটারমার্ক দিন।',
     icon: RefreshCw,
     steps: [
+      { id: 'organize', labelEn: 'Organize', labelBn: 'অর্গানাইজ', icon: '🗂️' },
       { id: 'rotate', labelEn: 'Rotate', labelBn: 'রোটেট', icon: '🔄' },
-      { id: 'compress', labelEn: 'Compress', labelBn: 'কম্প্রেস', icon: '🗜️' },
-      { id: 'page-numbers', labelEn: 'Page Numbers', labelBn: 'পেজ নম্বর', icon: '🔢' },
+      { id: 'watermark', labelEn: 'Watermark', labelBn: 'ওয়াটারমার্ক', icon: '💧' },
     ],
   },
   {
-    id: 'secure-pdf',
-    titleEn: 'Secure PDF',
-    titleBn: 'সিকিউর পিডিএফ',
-    descEn: 'Watermark, number and flatten before sharing.',
-    descBn: 'শেয়ার করার আগে ওয়াটারমার্ক, নম্বর ও ফ্ল্যাটেন।',
+    id: 'inspect-metadata-number',
+    titleEn: 'Inspect → Metadata → Page Numbers',
+    titleBn: 'ইন্সপেক্ট → মেটাডাটা → পেজ নম্বর',
+    descEn: 'Inspect PDF details, edit metadata, then add page numbers.',
+    descBn: 'পিডিএফ বিস্তারিত দেখুন, মেটাডাটা এডিট করুন, পেজ নম্বর যোগ করুন।',
     icon: Lock,
     steps: [
-      { id: 'watermark', labelEn: 'Watermark', labelBn: 'ওয়াটারমার্ক', icon: '💧' },
+      { id: 'inspect', labelEn: 'Inspect', labelBn: 'ইন্সপেক্ট', icon: '🔎' },
+      { id: 'metadata', labelEn: 'Edit Metadata', labelBn: 'মেটাডাটা', icon: '🏷️' },
       { id: 'page-numbers', labelEn: 'Page Numbers', labelBn: 'পেজ নম্বর', icon: '🔢' },
-      { id: 'flatten', labelEn: 'Flatten', labelBn: 'ফ্ল্যাটেন', icon: '🧱' },
     ],
   },
   {
-    id: 'quick-optimize',
-    titleEn: 'Quick Optimize',
-    titleBn: 'দ্রুত অপ্টিমাইজ',
-    descEn: 'Compress, reverse and flatten for archival.',
-    descBn: 'আর্কাইভের জন্য কম্প্রেস, রিভার্স ও ফ্ল্যাটেন।',
+    id: 'reverse-watermark-number',
+    titleEn: 'Reverse → Watermark → Page Numbers',
+    titleBn: 'রিভার্স → ওয়াটারমার্ক → পেজ নম্বর',
+    descEn: 'Reverse page order, add watermark, then number pages.',
+    descBn: 'পেজ ক্রম উল্টে দিন, ওয়াটারমার্ক দিন, পেজ নম্বর যোগ করুন।',
     icon: Zap,
     steps: [
-      { id: 'compress', labelEn: 'Compress', labelBn: 'কম্প্রেস', icon: '🗜️' },
       { id: 'reverse', labelEn: 'Reverse Pages', labelBn: 'পেজ উল্টান', icon: '↩️' },
-      { id: 'flatten', labelEn: 'Flatten', labelBn: 'ফ্ল্যাটেন', icon: '🧱' },
+      { id: 'watermark', labelEn: 'Watermark', labelBn: 'ওয়াটারমার্ক', icon: '💧' },
+      { id: 'page-numbers', labelEn: 'Page Numbers', labelBn: 'পেজ নম্বর', icon: '🔢' },
     ],
   },
 ]
@@ -574,15 +574,15 @@ const PRO_TIPS: { en: string; bn: string }[] = [
     bn: 'সব প্রসেসিং লোকাল — আপনার ফাইল কখনো ডিভাইস ছাড়ে না। গোপনীয় ডকুমেন্টের জন্য পারফেক্ট।',
   },
   {
-    en: 'Use Workflows — Chain multiple operations like Compress → Watermark → Page Numbers in one pass.',
+    en: 'Use Workflows — Chain multiple operations like Rotate → Watermark → Page Numbers in one pass.',
     bn: 'ওয়ার্কফ্লো ব্যবহার করুন — কম্প্রেস → ওয়াটারমার্ক → পেজ নম্বর একসাথে চালান।',
   },
   {
-    en: 'Install as PWA — Use PDF Forge offline without internet. Works on all devices.',
+    en: 'Install as PWA — Install PDF Forge as a PWA for quick access. Client-side processing on all devices.',
     bn: 'PWA হিসেবে ইনস্টল করুন — ইন্টারনেট ছাড়াই পিডিএফ ফোর্জ ব্যবহার করুন। সব ডিভাইসে চলে।',
   },
   {
-    en: 'No file limits — Process files as large as your device can handle. No daily caps.',
+    en: 'No file limits — No artificial daily cap. Practical limits depend on your device and browser memory.',
     bn: 'কোনো ফাইল লিমিট নেই — আপনার ডিভাইস যত সামলায় তত বড় ফাইল প্রসেস করুন। কোনো ডেইলি ক্যাপ নেই।',
   },
   {
@@ -4057,7 +4057,7 @@ export function PdfClient() {
               <p className="mt-3 text-muted-foreground">
                 {isBn
                   ? 'ক্যাটেগরি অনুযায়ী ব্রাউজ করুন বা নাম দিয়ে সার্চ করুন। লাইভ টুলগুলো সম্পূর্ণ কার্যকর।'
-                  : 'Browse by category or search by name. Live tools are fully functional.'}
+                  : 'Browse by category or search by name. Available Now tools are fully functional.'}
               </p>
             </div>
 
@@ -4144,7 +4144,7 @@ export function PdfClient() {
           <div className="mx-auto w-full max-w-5xl px-4 sm:px-6">
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
               {[
-                { value: '43+', labelEn: 'PDF Tools', labelBn: 'পিডিএফ টুল', icon: FileText },
+                { value: '43', labelEn: 'PDF Tools', labelBn: 'পিডিএফ টুল', icon: FileText },
                 { value: '0', labelEn: 'Upload Time', labelBn: 'আপলোড সময়', icon: Zap },
                 { value: '100%', labelEn: 'Private', labelBn: 'প্রাইভেট', icon: ShieldCheck },
                 { value: 'Free', labelEn: 'Always Free', labelBn: 'চিরকাল ফ্রি', icon: Sparkles },
@@ -4723,7 +4723,7 @@ function CompareCell({
     const map: Record<string, string> = {
       Free: 'ফ্রি',
       Freemium: 'ফ্রিমিয়াম',
-      '40+': '৪০+',
+      '43': '৪৩',
       '21': '২১',
       '25': '২৫',
       '30+': '৩০+',
