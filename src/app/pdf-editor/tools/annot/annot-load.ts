@@ -87,6 +87,14 @@ export async function loadExistingAnnotations(
           refId = entry.objectNumber
         } else if (entry instanceof PDFDict) {
           dict = entry
+          // Register the inline dict to get a PDFRef (needed for mutation later)
+          const ref = pdfLibDoc.context.register(entry)
+          refId = ref.objectNumber
+          // Replace the inline dict with the ref in the Annots array
+          pdfLibAnnots.set(i, ref)
+        } else {
+          // Fallback: try to use as dict directly
+          dict = entry as any
         }
 
         if (!dict) continue
@@ -128,8 +136,8 @@ function parseAnnotationDict(dict: PDFDict, refId: number, pdfDoc: PDFDocument):
 
     const rectEntry = dict.get(PDFName.of('Rect'))
     if (!rectEntry) return null
-    // Parse rect array [llx, lly, urx, ury]
-    const rectStr = rectEntry.toString().replace(/[[\]\s]/g, '').split(',').map(Number)
+    // Parse rect array [llx, lly, urx, ury] — pdf-lib uses spaces, not commas
+    const rectStr = rectEntry.toString().replace(/[[\]]/g, '').trim().split(/\s+/).map(Number)
     if (rectStr.length < 4) return null
     const rect: [number, number, number, number] = [rectStr[0], rectStr[1], rectStr[2], rectStr[3]]
 
@@ -163,7 +171,7 @@ function parseAnnotationDict(dict: PDFDict, refId: number, pdfDoc: PDFDocument):
     const colorEntry = dict.get(PDFName.of('C'))
     if (colorEntry) {
       try {
-        const cStr = colorEntry.toString().replace(/[[\]\s]/g, '').split(',').map(Number)
+        const cStr = colorEntry.toString().replace(/[[\]]/g, '').trim().split(/\s+/).map(Number)
         if (cStr.length >= 3) {
           color = { r: cStr[0], g: cStr[1], b: cStr[2] }
         }
@@ -206,7 +214,7 @@ function parseAnnotationDict(dict: PDFDict, refId: number, pdfDoc: PDFDocument):
       const qpEntry = dict.get(PDFName.of('QuadPoints'))
       if (qpEntry) {
         try {
-          const qpStr = qpEntry.toString().replace(/[[\]\s]/g, '').split(',').map(Number)
+          const qpStr = qpEntry.toString().replace(/[[\]]/g, '').trim().split(/\s+/).map(Number)
           const quads: Quad[] = []
           for (let i = 0; i + 7 < qpStr.length; i += 8) {
             quads.push({
@@ -243,7 +251,7 @@ function parseAnnotationDict(dict: PDFDict, refId: number, pdfDoc: PDFDocument):
       const lEntry = dict.get(PDFName.of('L'))
       if (lEntry) {
         try {
-          const lStr = lEntry.toString().replace(/[[\]\s]/g, '').split(',').map(Number)
+          const lStr = lEntry.toString().replace(/[[\]]/g, '').trim().split(/\s+/).map(Number)
           if (lStr.length >= 4) {
             info.lineStart = { x: lStr[0], y: lStr[1] }
             info.lineEnd = { x: lStr[2], y: lStr[3] }
