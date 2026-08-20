@@ -85,6 +85,9 @@ const ExtractImagesTool = React.lazy(() => import('./tools/extract-images-tool')
 const PdfToJpgTool = React.lazy(() => import('./tools/pdf-to-jpg-tool').then(m => ({ default: m.PdfToJpgTool })))
 const PdfToPngTool = React.lazy(() => import('./tools/pdf-to-png-tool').then(m => ({ default: m.PdfToPngTool })))
 const JpgToPdfTool = React.lazy(() => import('./tools/jpg-to-pdf-tool').then(m => ({ default: m.JpgToPdfTool })))
+const StampTool = React.lazy(() => import('./tools/stamp-tool').then(m => ({ default: m.StampTool })))
+const FlattenTool = React.lazy(() => import('./tools/flatten-tool').then(m => ({ default: m.FlattenTool })))
+const QrStampTool = React.lazy(() => import('./tools/qr-stamp-tool').then(m => ({ default: m.QrStampTool })))
 
 import {
   FileText,
@@ -4705,6 +4708,21 @@ export function PdfClient() {
       {activeTool && activeTool.id === 'jpg-to-pdf' && (
         <React.Suspense fallback={<div className="fixed inset-0 z-50 grid place-items-center bg-background/80"><Loader2 className="h-8 w-8 animate-spin text-amber-500" /></div>}>
           <JpgToPdfTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
+        </React.Suspense>
+      )}
+      {activeTool && activeTool.id === 'stamp' && (
+        <React.Suspense fallback={<div className="fixed inset-0 z-50 grid place-items-center bg-background/80"><Loader2 className="h-8 w-8 animate-spin text-amber-500" /></div>}>
+          <StampTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
+        </React.Suspense>
+      )}
+      {activeTool && activeTool.id === 'flatten' && (
+        <React.Suspense fallback={<div className="fixed inset-0 z-50 grid place-items-center bg-background/80"><Loader2 className="h-8 w-8 animate-spin text-amber-500" /></div>}>
+          <FlattenTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
+        </React.Suspense>
+      )}
+      {activeTool && activeTool.id === 'qr-stamp' && (
+        <React.Suspense fallback={<div className="fixed inset-0 z-50 grid place-items-center bg-background/80"><Loader2 className="h-8 w-8 animate-spin text-amber-500" /></div>}>
+          <QrStampTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
         </React.Suspense>
       )}
 
