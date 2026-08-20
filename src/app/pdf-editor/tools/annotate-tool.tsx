@@ -45,6 +45,7 @@ import {
 } from './annot/annot-coords'
 import { serializeAnnotation, mutateExistingAnnotation, removeAnnotationByRef } from './annot/annot-serialize'
 import { loadExistingAnnotations } from './annot/annot-load'
+import { computeResizedRect, computeResizedLine, type ResizeHandle } from './annot/annot-resize'
 
 export function AnnotateTool({ tool, isBn, open, onOpenChange }: {
   tool: PdfTool
@@ -82,6 +83,14 @@ export function AnnotateTool({ tool, isBn, open, onOpenChange }: {
   } | null>(null)
   const [moveDelta, setMoveDelta] = React.useState<{ dx: number; dy: number } | null>(null)
   const moveRafRef = React.useRef<number | null>(null)
+  // Resize state for drag-to-resize
+  const [resizeState, setResizeState] = React.useState<{
+    annotId: string
+    handle: ResizeHandle
+    originalAnnot: Annotation
+  } | null>(null)
+  const [resizePreview, setResizePreview] = React.useState<{ rect: Annotation['rect']; extra?: Partial<Annotation> } | null>(null)
+  const resizeRafRef = React.useRef<number | null>(null)
 
   const canvasRef = React.useRef<HTMLCanvasElement>(null)
   const containerRef = React.useRef<HTMLDivElement>(null)
@@ -432,6 +441,24 @@ export function AnnotateTool({ tool, isBn, open, onOpenChange }: {
     if (!viewport) return
     const pt = getCanvasPoint(e)
 
+    // RESIZE MODE: update preview using requestAnimationFrame
+    if (resizeState) {
+      if (resizeRafRef.current) cancelAnimationFrame(resizeRafRef.current)
+      resizeRafRef.current = requestAnimationFrame(() => {
+        // Convert CSS point to PDF coords
+        const [pdfX, pdfY] = cssToPdf(viewport, pt.x, pt.y)
+        const { annotId, handle, originalAnnot } = resizeState
+        if (originalAnnot.subtype === 'Line') {
+          const result = computeResizedLine(originalAnnot as any, handle as 'start' | 'end', { x: pdfX, y: pdfY })
+          setResizePreview({ rect: result.rect, extra: { start: result.start, end: result.end } as any })
+        } else {
+          const result = computeResizedRect(originalAnnot, handle, { x: pdfX, y: pdfY })
+          setResizePreview({ rect: result.rect })
+        }
+      })
+      return
+    }
+
     // MOVE MODE: update delta using requestAnimationFrame for smoothness
     if (moveState) {
       if (moveRafRef.current) cancelAnimationFrame(moveRafRef.current)
@@ -462,6 +489,20 @@ export function AnnotateTool({ tool, isBn, open, onOpenChange }: {
 
   const handlePointerUp = (e: React.PointerEvent) => {
     if (!viewport) return
+
+    // RESIZE MODE: commit the resize with one undo command
+    if (resizeState && resizePreview) {
+      const { annotId, originalAnnot } = resizeState
+      // Commit the resize to the store (one undo command)
+      resizeAnnotation(annotId, originalAnnot.pageNum, resizePreview.rect, resizePreview.extra)
+      setResizeState(null)
+      setResizePreview(null)
+      if (resizeRafRef.current) {
+        cancelAnimationFrame(resizeRafRef.current)
+        resizeRafRef.current = null
+      }
+      return
+    }
 
     // MOVE MODE: commit the move with one undo command
     if (moveState && moveDelta) {
@@ -904,6 +945,18 @@ export function AnnotateTool({ tool, isBn, open, onOpenChange }: {
                       onSelect={selectAnnotation}
                       isBn={isBn}
                       moveOffset={moveState && moveDelta ? { annotId: moveState.annotId, dx: moveDelta.dx, dy: moveDelta.dy } : null}
+                      onResizeStart={(handle, e) => {
+                        if (!selectedAnnotId || !viewport) return
+                        const annot = pageAnnots.find(a => a.id === selectedAnnotId)
+                        if (!annot) return
+                        setResizeState({
+                          annotId: selectedAnnotId,
+                          handle,
+                          originalAnnot: JSON.parse(JSON.stringify(annot)) as Annotation,
+                        })
+                        setResizePreview(null)
+                        ;(e.target as HTMLElement).setPointerCapture(e.pointerId)
+                      }}
                     />
                     {dragPreview}
                     {inkPreview}

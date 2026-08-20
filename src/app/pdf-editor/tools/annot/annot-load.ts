@@ -141,28 +141,21 @@ function parseAnnotationDict(dict: PDFDict, refId: number, pdfDoc: PDFDocument):
     if (rectStr.length < 4) return null
     const rect: [number, number, number, number] = [rectStr[0], rectStr[1], rectStr[2], rectStr[3]]
 
-    // Contents
+    // Contents — decode PDFName (#XX encoding), PDFHexString, or PDFString
     const contentsEntry = dict.get(PDFName.of('Contents'))
     let contents = ''
     if (contentsEntry) {
       try {
-        const s = contentsEntry.toString()
-        if (s.startsWith('/')) {
-          // Hex string — decode
-          contents = decodePdfHexString(s.slice(1))
-        } else {
-          contents = s
-        }
+        contents = decodePdfText(contentsEntry)
       } catch {}
     }
 
-    // Author (/T)
+    // Author (/T) — decode same way
     const authorEntry = dict.get(PDFName.of('T'))
     let author = ''
     if (authorEntry) {
       try {
-        author = authorEntry.toString().replace(/^\//, '')
-        if (author.startsWith('(')) author = author.slice(1, -1)
+        author = decodePdfText(authorEntry)
       } catch {}
     }
 
@@ -378,27 +371,84 @@ function createAnnotationFromInfo(info: ExistingAnnotationInfo, pageNum: number)
 }
 
 /**
- * Decode a PDF hex string to UTF-8 text.
+ * Decode a PDF text value (PDFName, PDFHexString, or PDFString) to a JS string.
+ *
+ * pdf-lib represents /Contents and /T values as PDFName (e.g. /Existing#20highlight)
+ * where #XX is hex encoding for special characters. This decoder handles:
+ * 1. PDFName: /prefix + #XX encoding → decode #XX to characters
+ * 2. PDFHexString: <hex> → decode hex bytes as UTF-8 or UTF-16BE (if BOM)
+ * 3. PDFString: (text) → extract text from parentheses
+ */
+function decodePdfText(value: any): string {
+  if (!value) return ''
+  try {
+    const s = value.toString()
+    if (!s) return ''
+
+    // PDFName: starts with / and uses #XX for special chars
+    if (s.startsWith('/')) {
+      return decodePdfName(s.slice(1))
+    }
+
+    // PDFString: starts with ( and ends with )
+    if (s.startsWith('(') && s.endsWith(')')) {
+      return s.slice(1, -1).replace(/\\n/g, '\n').replace(/\\r/g, '\r').replace(/\\t/g, '\t').replace(/\\\(/g, '(').replace(/\\\)/g, ')').replace(/\\\\/g, '\\')
+    }
+
+    // PDFHexString: starts with < and ends with >
+    if (s.startsWith('<') && s.endsWith('>')) {
+      return decodePdfHexString(s.slice(1, -1))
+    }
+
+    // Fallback: return as-is
+    return s
+  } catch {
+    return ''
+  }
+}
+
+/**
+ * Decode a PDF Name string (e.g. "Existing#20highlight" → "Existing highlight").
+ * #XX is hex encoding for the byte XX.
+ */
+function decodePdfName(name: string): string {
+  // Decode #XX sequences to characters
+  let result = ''
+  let i = 0
+  while (i < name.length) {
+    if (name[i] === '#' && i + 2 < name.length) {
+      const hex = name.slice(i + 1, i + 3)
+      const code = parseInt(hex, 16)
+      if (!isNaN(code)) {
+        result += String.fromCharCode(code)
+        i += 3
+        continue
+      }
+    }
+    result += name[i]
+    i++
+  }
+  return result
+}
+
+/**
+ * Decode a PDF hex string to text (UTF-8 or UTF-16BE if BOM present).
  */
 function decodePdfHexString(hex: string): string {
   try {
-    // Remove whitespace
     hex = hex.replace(/\s/g, '')
-    // Decode as UTF-16BE if starts with FEFF, else as UTF-8
     const bytes: number[] = []
     for (let i = 0; i + 1 < hex.length; i += 2) {
       bytes.push(parseInt(hex.slice(i, i + 2), 16))
     }
     // Check for UTF-16BE BOM
     if (bytes.length >= 2 && bytes[0] === 0xFE && bytes[1] === 0xFF) {
-      // UTF-16BE
       let str = ''
       for (let i = 2; i + 1 < bytes.length; i += 2) {
         str += String.fromCharCode((bytes[i] << 8) | bytes[i + 1])
       }
       return str
     }
-    // Otherwise treat as UTF-8 / Latin-1
     return new TextDecoder('utf-8').decode(new Uint8Array(bytes))
   } catch {
     return ''

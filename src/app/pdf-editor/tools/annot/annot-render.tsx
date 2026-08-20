@@ -24,9 +24,10 @@ interface AnnotRenderProps {
   onDelete?: (id: string, pageNum: number) => void
   isBn: boolean
   moveOffset?: { annotId: string; dx: number; dy: number } | null
+  onResizeStart?: (handle: ResizeHandle, e: React.PointerEvent) => void
 }
 
-export function AnnotRender({ annotations, viewport, selectedId, onSelect, isBn, moveOffset }: AnnotRenderProps) {
+export function AnnotRender({ annotations, viewport, selectedId, onSelect, isBn, moveOffset, onResizeStart }: AnnotRenderProps) {
   if (!viewport || annotations.length === 0) return null
 
   return (
@@ -46,6 +47,7 @@ export function AnnotRender({ annotations, viewport, selectedId, onSelect, isBn,
           onSelect={onSelect}
           isBn={isBn}
           moveOffset={moveOffset?.annotId === annot.id ? moveOffset : null}
+          onResizeStart={onResizeStart}
         />
       ))}
     </svg>
@@ -59,6 +61,7 @@ function AnnotElement({
   onSelect,
   isBn,
   moveOffset,
+  onResizeStart,
 }: {
   annot: Annotation
   viewport: PageViewport
@@ -66,6 +69,7 @@ function AnnotElement({
   onSelect: (id: string | null) => void
   isBn: boolean
   moveOffset?: { annotId: string; dx: number; dy: number } | null
+  onResizeStart?: (handle: ResizeHandle, e: React.PointerEvent) => void
 }) {
   const cssRect = pdfRectToCssRect(viewport, [
     annot.rect.x,
@@ -84,7 +88,7 @@ function AnnotElement({
 
   // Resize handles for selected resizable annotations
   const resizeHandles = isSelected && isResizable(annot.subtype) ? (
-    <ResizeHandles annot={annot} viewport={viewport} />
+    <ResizeHandles annot={annot} viewport={viewport} onResizeStart={onResizeStart} />
   ) : null
 
   // Selection highlight ring
@@ -343,12 +347,12 @@ function getArrowPoints(sx: number, sy: number, ex: number, ey: number, strokeWi
 }
 
 /** Render resize handles for a selected annotation. */
-function ResizeHandles({ annot, viewport }: { annot: Annotation; viewport: PageViewport }) {
+function ResizeHandles({ annot, viewport, onResizeStart }: { annot: Annotation; viewport: PageViewport; onResizeStart?: (handle: ResizeHandle, e: React.PointerEvent) => void }) {
   const handles = getResizeHandles(annot)
   if (handles.length === 0) return null
 
   return (
-    <g className="pointer-events-none">
+    <g>
       {handles.map(handle => {
         const pos = getHandlePosition(annot, handle)
         const [cx, cy] = viewport.convertToViewportPoint(pos.x, pos.y)
@@ -357,14 +361,31 @@ function ResizeHandles({ annot, viewport }: { annot: Annotation; viewport: PageV
             key={handle}
             cx={cx}
             cy={cy}
-            r={6}
+            r={8}
             fill="#3b82f6"
             stroke="#ffffff"
-            strokeWidth={1.5}
-            className="pointer-events-none"
+            strokeWidth={2}
+            style={{ cursor: getHandleCursor(handle), pointerEvents: 'all' }}
+            onPointerDown={(e) => {
+              e.stopPropagation()
+              if (onResizeStart) onResizeStart(handle, e)
+            }}
+            aria-label={`Resize handle ${handle}`}
           />
         )
       })}
     </g>
   )
+}
+
+/** Get CSS cursor for a resize handle. */
+function getHandleCursor(handle: ResizeHandle): string {
+  switch (handle) {
+    case 'nw': case 'se': return 'nwse-resize'
+    case 'ne': case 'sw': return 'nesw-resize'
+    case 'n': case 's': return 'ns-resize'
+    case 'e': case 'w': return 'ew-resize'
+    case 'start': case 'end': return 'crosshair'
+    default: return 'default'
+  }
 }
