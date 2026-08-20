@@ -738,6 +738,20 @@ export function AnnotateTool({ tool, isBn, open, onOpenChange }: {
                   aria-label={`${isBn ? 'পেজ' : 'Page'} ${bn(pageNum)} ${isBn ? 'এর' : 'of'} ${bn(numPages)}`}
                 />
 
+                {/* Text layer for highlight/underline/strike selection */}
+                {viewport && textLayer && (
+                  <div
+                    ref={(el) => {
+                      if (el && textLayer && !el.contains(textLayer)) {
+                        el.innerHTML = ''
+                        el.appendChild(textLayer)
+                      }
+                    }}
+                    className="absolute inset-0"
+                    style={{ width: viewport.width, height: viewport.height, pointerEvents: 'none' }}
+                  />
+                )}
+
                 {/* SVG annotation overlay */}
                 {viewport && (
                   <div
