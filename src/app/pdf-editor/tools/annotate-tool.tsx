@@ -528,11 +528,12 @@ export function AnnotateTool({ tool, isBn, open, onOpenChange }: {
 
   // Save annotations to PDF
   const handleSave = async () => {
-    if (!originalBytes) return
+    if (!originalBytes || files.length === 0) return
     setSaving(true)
     try {
-      // Load original bytes into pdf-lib
-      const pdfLibDoc = await PDFDocument.load(originalBytes, { ignoreEncryption: true })
+      // Re-read the original file to get fresh bytes (pdfjs may have detached the buffer)
+      const freshBytes = await files[0].arrayBuffer()
+      const pdfLibDoc = await PDFDocument.load(freshBytes, { ignoreEncryption: true })
 
       // Serialize all annotations
       const allAnnots = useAnnotStore.getState().getAllAnnotations()
