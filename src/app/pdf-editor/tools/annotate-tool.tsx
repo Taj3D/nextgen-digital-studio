@@ -171,13 +171,17 @@ export function AnnotateTool({ tool, isBn, open, onOpenChange }: {
 
   // Render current page
   React.useEffect(() => {
-    if (!pdfDoc || !canvasRef.current || pageNum < 1 || pageNum > numPages) return
+    if (!pdfDoc || pageNum < 1 || pageNum > numPages) return
 
     let cancelled = false
 
     const renderPage = async () => {
       setRendering(true)
       try {
+        // Wait for canvas to mount (it's conditionally rendered when pdfDoc is set)
+        await new Promise(resolve => setTimeout(resolve, 50))
+        if (cancelled) return
+
         const page = await pdfDoc.getPage(pageNum)
         if (cancelled) return
 
