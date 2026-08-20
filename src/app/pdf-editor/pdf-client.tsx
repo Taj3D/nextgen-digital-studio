@@ -91,6 +91,8 @@ const QrStampTool = React.lazy(() => import('./tools/qr-stamp-tool').then(m => (
 const FillFormsTool = React.lazy(() => import('./tools/fill-forms-tool').then(m => ({ default: m.FillFormsTool })))
 // Phase 2B — Lazy-loaded OCR tool (code-split: tesseract.js + pdfjs-dist only loads when this tool opens)
 const PdfOcrTool = React.lazy(() => import('./tools/pdf-ocr-tool').then(m => ({ default: m.PdfOcrTool })))
+// Phase 2C Wave 1 — Lazy-loaded Annotate tool (code-split: pdfjs-dist + pdf-lib only loads when this tool opens)
+const AnnotateTool = React.lazy(() => import('./tools/annotate-tool').then(m => ({ default: m.AnnotateTool })))
 
 import {
   FileText,
@@ -4736,6 +4738,11 @@ export function PdfClient() {
       {activeTool && activeTool.id === 'pdf-ocr' && (
         <React.Suspense fallback={<div className="fixed inset-0 z-50 grid place-items-center bg-background/80"><Loader2 className="h-8 w-8 animate-spin text-amber-500" /></div>}>
           <PdfOcrTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
+        </React.Suspense>
+      )}
+      {activeTool && activeTool.id === 'annotate' && (
+        <React.Suspense fallback={<div className="fixed inset-0 z-50 grid place-items-center bg-background/80"><Loader2 className="h-8 w-8 animate-spin text-amber-500" /></div>}>
+          <AnnotateTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
         </React.Suspense>
       )}
 
