@@ -82,6 +82,9 @@ import { PDFDocument, degrees, StandardFonts, rgb } from 'pdf-lib'
 const PdfViewerTool = React.lazy(() => import('./tools/pdf-viewer-tool').then(m => ({ default: m.PdfViewerTool })))
 const PdfToTextTool = React.lazy(() => import('./tools/pdf-to-text-tool').then(m => ({ default: m.PdfToTextTool })))
 const ExtractImagesTool = React.lazy(() => import('./tools/extract-images-tool').then(m => ({ default: m.ExtractImagesTool })))
+const PdfToJpgTool = React.lazy(() => import('./tools/pdf-to-jpg-tool').then(m => ({ default: m.PdfToJpgTool })))
+const PdfToPngTool = React.lazy(() => import('./tools/pdf-to-png-tool').then(m => ({ default: m.PdfToPngTool })))
+const JpgToPdfTool = React.lazy(() => import('./tools/jpg-to-pdf-tool').then(m => ({ default: m.JpgToPdfTool })))
 
 import {
   FileText,
@@ -187,7 +190,7 @@ async function validatePdfBytes(
 }
 
 /** Trigger a download only after validating the PDF bytes. */
-async function downloadValidatedPdf(
+export async function downloadValidatedPdf(
   bytes: Uint8Array,
   filename: string,
   expectedPages?: number,
@@ -203,7 +206,7 @@ async function downloadValidatedPdf(
 }
 
 /** Human-readable file size in KB / MB. */
-function humanSize(bytes: number): string {
+export function humanSize(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
   return `${(bytes / (1024 * 1024)).toFixed(2)} MB`
@@ -680,20 +683,26 @@ type FilePickerProps = {
   files: File[]
   onFiles: (files: File[]) => void
   hint?: string
+  accept?: string
+  fileValidator?: (file: File) => boolean
+  rejectMessage?: (fileName: string) => string
 }
 
-export function FilePicker({ isBn, multiple = false, files, onFiles, hint }: FilePickerProps) {
+export function FilePicker({ isBn, multiple = false, files, onFiles, hint, accept, fileValidator, rejectMessage }: FilePickerProps) {
   const [drag, setDrag] = React.useState(false)
   const inputRef = React.useRef<HTMLInputElement>(null)
 
   const handleFiles = (list: FileList | null) => {
     if (!list) return
     const arr = Array.from(list).filter((f) => {
-      if (!isPdf(f)) {
+      const valid = fileValidator ? fileValidator(f) : isPdf(f)
+      if (!valid) {
         toast.error(
-          isBn
-            ? `শুধু PDF ফাইল গ্রহণযোগ্য: ${f.name}`
-            : `Only PDF files are accepted: ${f.name}`,
+          rejectMessage
+            ? rejectMessage(f.name)
+            : isBn
+              ? `শুধু PDF ফাইল গ্রহণযোগ্য: ${f.name}`
+              : `Only PDF files are accepted: ${f.name}`,
         )
         return false
       }
@@ -747,7 +756,7 @@ export function FilePicker({ isBn, multiple = false, files, onFiles, hint }: Fil
         <input
           ref={inputRef}
           type="file"
-          accept="application/pdf,.pdf"
+          accept={accept ?? "application/pdf,.pdf"}
           multiple={multiple}
           className="sr-only"
           onChange={(e) => handleFiles(e.target.files)}
@@ -4681,6 +4690,21 @@ export function PdfClient() {
       {activeTool && activeTool.id === 'extract-images' && (
         <React.Suspense fallback={<div className="fixed inset-0 z-50 grid place-items-center bg-background/80"><Loader2 className="h-8 w-8 animate-spin text-amber-500" /></div>}>
           <ExtractImagesTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
+        </React.Suspense>
+      )}
+      {activeTool && activeTool.id === 'pdf-to-jpg' && (
+        <React.Suspense fallback={<div className="fixed inset-0 z-50 grid place-items-center bg-background/80"><Loader2 className="h-8 w-8 animate-spin text-amber-500" /></div>}>
+          <PdfToJpgTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
+        </React.Suspense>
+      )}
+      {activeTool && activeTool.id === 'pdf-to-png' && (
+        <React.Suspense fallback={<div className="fixed inset-0 z-50 grid place-items-center bg-background/80"><Loader2 className="h-8 w-8 animate-spin text-amber-500" /></div>}>
+          <PdfToPngTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
+        </React.Suspense>
+      )}
+      {activeTool && activeTool.id === 'jpg-to-pdf' && (
+        <React.Suspense fallback={<div className="fixed inset-0 z-50 grid place-items-center bg-background/80"><Loader2 className="h-8 w-8 animate-spin text-amber-500" /></div>}>
+          <JpgToPdfTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
         </React.Suspense>
       )}
 
