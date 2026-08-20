@@ -42,8 +42,8 @@ export const PDF_TOOLS: PdfTool[] = [
     descBn: 'কোয়ালিটি নষ্ট না করে পিডিএফ সাইজ কমান।',
     category: 'popular',
     icon: '🗜️',
-    functional: false,
-    comingSoon: true,
+    functional: true,
+    status: 'AVAILABLE_NOW',
   },
   {
     id: 'merge',
@@ -258,8 +258,8 @@ export const PDF_TOOLS: PdfTool[] = [
     descBn: 'নষ্ট বা ভাঙা পিডিএফ ফাইল ঠিক করুন।',
     category: 'optimize',
     icon: '🛠️',
-    functional: false,
-    comingSoon: true,
+    functional: true,
+    status: 'AVAILABLE_NOW',
   },
   {
     id: 'analyze',
@@ -302,8 +302,8 @@ export const PDF_TOOLS: PdfTool[] = [
     descBn: 'PDF 1.4, 1.7, 2.0 ইত্যাদির মধ্যে কনভার্ট করুন।',
     category: 'optimize',
     icon: '🔁',
-    functional: false,
-    comingSoon: true,
+    functional: true,
+    status: 'AVAILABLE_NOW',
   },
 
   /* ---------------------------------------------------------------------- */
@@ -458,8 +458,8 @@ export const PDF_TOOLS: PdfTool[] = [
     descBn: 'পিডিএফ আউটলাইন বুকমার্ক যোগ/এডিট করুন।',
     category: 'edit',
     icon: '📑',
-    functional: false,
-    comingSoon: true,
+    functional: true,
+    status: 'AVAILABLE_NOW',
   },
   {
     id: 'bookmarks-from-text',

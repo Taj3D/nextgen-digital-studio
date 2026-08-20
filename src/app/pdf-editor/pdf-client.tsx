@@ -93,6 +93,11 @@ const FillFormsTool = React.lazy(() => import('./tools/fill-forms-tool').then(m 
 const PdfOcrTool = React.lazy(() => import('./tools/pdf-ocr-tool').then(m => ({ default: m.PdfOcrTool })))
 // Phase 2C Wave 1 — Lazy-loaded Annotate tool (code-split: pdfjs-dist + pdf-lib only loads when this tool opens)
 const AnnotateTool = React.lazy(() => import('./tools/annotate-tool').then(m => ({ default: m.AnnotateTool })))
+// Phase 2C Wave 3A — Lazy-loaded tools
+const VersionConverterTool = React.lazy(() => import('./tools/version-converter-tool').then(m => ({ default: m.VersionConverterTool })))
+const RepairTool = React.lazy(() => import('./tools/repair-tool').then(m => ({ default: m.RepairTool })))
+const CompressTool = React.lazy(() => import('./tools/compress-tool').then(m => ({ default: m.CompressTool })))
+const ManageBookmarksTool = React.lazy(() => import('./tools/manage-bookmarks-tool').then(m => ({ default: m.ManageBookmarksTool })))
 
 import {
   FileText,
@@ -4743,6 +4748,26 @@ export function PdfClient() {
       {activeTool && activeTool.id === 'annotate' && (
         <React.Suspense fallback={<div className="fixed inset-0 z-50 grid place-items-center bg-background/80"><Loader2 className="h-8 w-8 animate-spin text-amber-500" /></div>}>
           <AnnotateTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
+        </React.Suspense>
+      )}
+      {activeTool && activeTool.id === 'version-converter' && (
+        <React.Suspense fallback={<div className="fixed inset-0 z-50 grid place-items-center bg-background/80"><Loader2 className="h-8 w-8 animate-spin text-amber-500" /></div>}>
+          <VersionConverterTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
+        </React.Suspense>
+      )}
+      {activeTool && activeTool.id === 'repair' && (
+        <React.Suspense fallback={<div className="fixed inset-0 z-50 grid place-items-center bg-background/80"><Loader2 className="h-8 w-8 animate-spin text-amber-500" /></div>}>
+          <RepairTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
+        </React.Suspense>
+      )}
+      {activeTool && activeTool.id === 'compress' && (
+        <React.Suspense fallback={<div className="fixed inset-0 z-50 grid place-items-center bg-background/80"><Loader2 className="h-8 w-8 animate-spin text-amber-500" /></div>}>
+          <CompressTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
+        </React.Suspense>
+      )}
+      {activeTool && activeTool.id === 'manage-bookmarks' && (
+        <React.Suspense fallback={<div className="fixed inset-0 z-50 grid place-items-center bg-background/80"><Loader2 className="h-8 w-8 animate-spin text-amber-500" /></div>}>
+          <ManageBookmarksTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
         </React.Suspense>
       )}
 
