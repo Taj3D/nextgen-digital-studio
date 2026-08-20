@@ -135,8 +135,9 @@ function getIcon(name?: string): React.ElementType {
 /*  Helpers                                                                    */
 /* -------------------------------------------------------------------------- */
 
-function L(b: Bilingual | undefined, isBn: boolean): string {
+function L(b: Bilingual | string | undefined, isBn: boolean): string {
   if (!b) return ''
+  if (typeof b === 'string') return b
   return isBn ? b.bn : b.en
 }
 

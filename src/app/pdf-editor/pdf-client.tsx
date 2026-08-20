@@ -89,6 +89,8 @@ const StampTool = React.lazy(() => import('./tools/stamp-tool').then(m => ({ def
 const FlattenTool = React.lazy(() => import('./tools/flatten-tool').then(m => ({ default: m.FlattenTool })))
 const QrStampTool = React.lazy(() => import('./tools/qr-stamp-tool').then(m => ({ default: m.QrStampTool })))
 const FillFormsTool = React.lazy(() => import('./tools/fill-forms-tool').then(m => ({ default: m.FillFormsTool })))
+// Phase 2B — Lazy-loaded OCR tool (code-split: tesseract.js + pdfjs-dist only loads when this tool opens)
+const PdfOcrTool = React.lazy(() => import('./tools/pdf-ocr-tool').then(m => ({ default: m.PdfOcrTool })))
 
 import {
   FileText,
@@ -4729,6 +4731,11 @@ export function PdfClient() {
       {activeTool && activeTool.id === 'fill-forms' && (
         <React.Suspense fallback={<div className="fixed inset-0 z-50 grid place-items-center bg-background/80"><Loader2 className="h-8 w-8 animate-spin text-amber-500" /></div>}>
           <FillFormsTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
+        </React.Suspense>
+      )}
+      {activeTool && activeTool.id === 'pdf-ocr' && (
+        <React.Suspense fallback={<div className="fixed inset-0 z-50 grid place-items-center bg-background/80"><Loader2 className="h-8 w-8 animate-spin text-amber-500" /></div>}>
+          <PdfOcrTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
         </React.Suspense>
       )}
 

@@ -195,12 +195,12 @@ export const PDF_TOOLS: PdfTool[] = [
     id: 'pdf-ocr',
     nameEn: 'PDF OCR',
     nameBn: 'পিডিএফ OCR',
-    descEn: 'Make scanned PDFs searchable with OCR.',
-    descBn: 'স্ক্যান করা পিডিএফকে OCR দিয়ে সার্চেবল বানান।',
+    descEn: 'Extract text from scanned PDFs with OCR.',
+    descBn: 'স্ক্যান করা পিডিএফ থেকে OCR দিয়ে টেক্সট বের করুন।',
     category: 'convert',
     icon: '🔍',
-    functional: false,
-    comingSoon: true,
+    functional: true,
+    status: 'AVAILABLE_NOW',
   },
 
   /* ---------------------------------------------------------------------- */

@@ -126,8 +126,9 @@ function getIcon(name?: string): React.ElementType {
 /*  Helpers                                                                    */
 /* -------------------------------------------------------------------------- */
 
-function L(b: Bilingual | undefined, isBn: boolean): string {
+function L(b: Bilingual | string | undefined, isBn: boolean): string {
   if (!b) return ''
+  if (typeof b === 'string') return b
   return isBn ? b.bn : b.en
 }
 
@@ -198,15 +199,17 @@ function Container({ children, className = '' }: { children: React.ReactNode; cl
 }
 
 function SectionHeader({
-  badge, title, subtitle, isBn, light = false, accent = 'blue',
+  badge, eyebrow, title, subtitle, isBn = false, light = false, accent = 'blue',
 }: {
-  badge?: Bilingual
-  title: Bilingual
-  subtitle?: Bilingual
-  isBn: boolean
+  badge?: Bilingual | string
+  eyebrow?: Bilingual | string
+  title: Bilingual | string
+  subtitle?: Bilingual | string
+  isBn?: boolean
   light?: boolean
   accent?: 'blue' | 'emerald'
 }) {
+  const badgeText = badge || eyebrow
   const badgeClass = light
     ? 'bg-white/15 text-white'
     : accent === 'emerald'
@@ -214,9 +217,9 @@ function SectionHeader({
     : 'border border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/50 dark:text-emerald-300'
   return (
     <div className="mx-auto max-w-3xl text-center">
-      {badge && (
+      {badgeText && (
         <span className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wider ${badgeClass}`}>
-          {L(badge, isBn)}
+          {L(badgeText, isBn)}
         </span>
       )}
       <h2 className={`mt-4 font-heading text-3xl font-bold tracking-tight sm:text-4xl ${light ? 'text-white' : ''}`}>

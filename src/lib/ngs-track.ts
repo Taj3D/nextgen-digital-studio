@@ -24,7 +24,7 @@ export function ngsTrack(event: TrackEvent, data?: Record<string, unknown>) {
   window.dataLayer = window.dataLayer || []
   window.dataLayer.push({ event, ...data })
   // Debug log
-  if ((window as { NGS_DEBUG?: boolean }).NGS_DEBUG && window.console?.log) {
+  if ((window as { NGS_DEBUG?: boolean }).NGS_DEBUG && typeof window.console?.log === 'function') {
     console.log('[ngsTrack]', event, data || {})
   }
   // Optional: send to /api/track endpoint (uncomment if exists)
