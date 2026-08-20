@@ -112,11 +112,13 @@ export function AnnotateTool({ tool, isBn, open, onOpenChange }: {
 
     const loadPdf = async () => {
       setLoading(true)
+      console.log('[Annotate] loadPdf starting, file:', files[0]?.name)
       try {
         const arrayBuffer = await files[0].arrayBuffer()
         // Keep original bytes for save (pdf-lib will load from these)
         const bytes = new Uint8Array(arrayBuffer)
         setOriginalBytes(bytes)
+        console.log('[Annotate] bytes loaded:', bytes.length)
 
         loadingTask = pdfjsLib.getDocument({
           data: new Uint8Array(arrayBuffer),
@@ -125,7 +127,9 @@ export function AnnotateTool({ tool, isBn, open, onOpenChange }: {
           // @ts-ignore — enableScripting is a valid DocumentInitParameters option
           enableScripting: false,  // SECURITY: never execute PDF JavaScript
         } as any)
+        console.log('[Annotate] loadingTask created, awaiting promise...')
         const doc = await loadingTask.promise
+        console.log('[Annotate] doc loaded, pages:', doc.numPages)
         if (cancelled) {
           try { doc.cleanup(); } catch {}
           try { doc.loadingTask.destroy(); } catch {}
