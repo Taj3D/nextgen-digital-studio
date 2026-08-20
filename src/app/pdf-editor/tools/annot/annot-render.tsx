@@ -21,9 +21,10 @@ interface AnnotRenderProps {
   onSelect: (id: string | null) => void
   onDelete?: (id: string, pageNum: number) => void
   isBn: boolean
+  moveOffset?: { annotId: string; dx: number; dy: number } | null
 }
 
-export function AnnotRender({ annotations, viewport, selectedId, onSelect, isBn }: AnnotRenderProps) {
+export function AnnotRender({ annotations, viewport, selectedId, onSelect, isBn, moveOffset }: AnnotRenderProps) {
   if (!viewport || annotations.length === 0) return null
 
   return (
@@ -42,6 +43,7 @@ export function AnnotRender({ annotations, viewport, selectedId, onSelect, isBn 
           isSelected={selectedId === annot.id}
           onSelect={onSelect}
           isBn={isBn}
+          moveOffset={moveOffset?.annotId === annot.id ? moveOffset : null}
         />
       ))}
     </svg>
@@ -54,12 +56,14 @@ function AnnotElement({
   isSelected,
   onSelect,
   isBn,
+  moveOffset,
 }: {
   annot: Annotation
   viewport: PageViewport
   isSelected: boolean
   onSelect: (id: string | null) => void
   isBn: boolean
+  moveOffset?: { annotId: string; dx: number; dy: number } | null
 }) {
   const cssRect = pdfRectToCssRect(viewport, [
     annot.rect.x,
@@ -72,6 +76,9 @@ function AnnotElement({
   const strokeColor = fillColor
   const opacity = annot.opacity ?? 0.5
   const strokeWidth = annot.strokeWidth ?? 2
+
+  // Move transform for live drag preview (CSS pixel offset)
+  const moveTransform = moveOffset ? `translate(${moveOffset.dx}px, ${moveOffset.dy}px)` : undefined
 
   // Selection highlight ring
   const selectionRing = isSelected ? (
@@ -102,7 +109,7 @@ function AnnotElement({
       const h = annot as HighlightAnnotation
       // Render each quad as a rectangle
       return (
-        <g key={annot.id} onClick={handleClick} style={{ cursor: 'pointer', pointerEvents: 'all' }}>
+        <g key={annot.id} onClick={handleClick} style={{ cursor: 'pointer', pointerEvents: 'all', transform: moveTransform }}>
           <title>{label}</title>
           {h.quads.map((quad, i) => {
             const quadRect = pdfRectToCssRect(viewport, [
@@ -160,7 +167,7 @@ function AnnotElement({
     case 'Text': {
       // Sticky note icon
       return (
-        <g key={annot.id} onClick={handleClick} style={{ cursor: 'pointer', pointerEvents: 'all' }}>
+        <g key={annot.id} onClick={handleClick} style={{ cursor: 'pointer', pointerEvents: 'all', transform: moveTransform }}>
           <title>{label}</title>
           <rect
             x={cssRect.x}
@@ -185,7 +192,7 @@ function AnnotElement({
     case 'FreeText': {
       const ft = annot as FreeTextAnnotation
       return (
-        <g key={annot.id} onClick={handleClick} style={{ cursor: 'pointer', pointerEvents: 'all' }}>
+        <g key={annot.id} onClick={handleClick} style={{ cursor: 'pointer', pointerEvents: 'all', transform: moveTransform }}>
           <title>{label}</title>
           <rect
             x={cssRect.x}
@@ -213,7 +220,7 @@ function AnnotElement({
     case 'Ink': {
       const ink = annot as InkAnnotation
       return (
-        <g key={annot.id} onClick={handleClick} style={{ cursor: 'pointer', pointerEvents: 'all' }}>
+        <g key={annot.id} onClick={handleClick} style={{ cursor: 'pointer', pointerEvents: 'all', transform: moveTransform }}>
           <title>{label}</title>
           {ink.paths.map((path, i) => {
             if (path.length < 2) return null
@@ -244,7 +251,7 @@ function AnnotElement({
       const [sx, sy] = viewport.convertToViewportPoint(ln.start.x, ln.start.y)
       const [ex, ey] = viewport.convertToViewportPoint(ln.end.x, ln.end.y)
       return (
-        <g key={annot.id} onClick={handleClick} style={{ cursor: 'pointer', pointerEvents: 'all' }}>
+        <g key={annot.id} onClick={handleClick} style={{ cursor: 'pointer', pointerEvents: 'all', transform: moveTransform }}>
           <title>{label}</title>
           <line
             x1={sx}
@@ -270,7 +277,7 @@ function AnnotElement({
 
     case 'Square': {
       return (
-        <g key={annot.id} onClick={handleClick} style={{ cursor: 'pointer', pointerEvents: 'all' }}>
+        <g key={annot.id} onClick={handleClick} style={{ cursor: 'pointer', pointerEvents: 'all', transform: moveTransform }}>
           <title>{label}</title>
           <rect
             x={cssRect.x}
@@ -289,7 +296,7 @@ function AnnotElement({
 
     case 'Circle': {
       return (
-        <g key={annot.id} onClick={handleClick} style={{ cursor: 'pointer', pointerEvents: 'all' }}>
+        <g key={annot.id} onClick={handleClick} style={{ cursor: 'pointer', pointerEvents: 'all', transform: moveTransform }}>
           <title>{label}</title>
           <ellipse
             cx={cssRect.x + cssRect.width / 2}

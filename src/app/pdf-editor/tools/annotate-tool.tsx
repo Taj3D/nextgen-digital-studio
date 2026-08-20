@@ -39,7 +39,7 @@ import {
   generateAnnotId, type Annotation, type ToolType,
 } from './annot/annot-types'
 import {
-  cssToPdf, cssRectToPdfRect, getDevicePixelRatio, isMobile,
+  cssToPdf, cssRectToPdfRect, pdfRectToCssRect, getDevicePixelRatio, isMobile,
 } from './annot/annot-coords'
 import { serializeAnnotation } from './annot/annot-serialize'
 
@@ -70,6 +70,15 @@ export function AnnotateTool({ tool, isBn, open, onOpenChange }: {
   const [inkPath, setInkPath] = React.useState<{ x: number; y: number }[] | null>(null)
   const [noteInput, setNoteInput] = React.useState<{ x: number; y: number; type: 'note' | 'text' } | null>(null)
   const [noteText, setNoteText] = React.useState('')
+  // Move state for drag-to-move in Select mode
+  const [moveState, setMoveState] = React.useState<{
+    annotId: string
+    startCssX: number
+    startCssY: number
+    originalAnnot: Annotation
+  } | null>(null)
+  const [moveDelta, setMoveDelta] = React.useState<{ dx: number; dy: number } | null>(null)
+  const moveRafRef = React.useRef<number | null>(null)
 
   const canvasRef = React.useRef<HTMLCanvasElement>(null)
   const containerRef = React.useRef<HTMLDivElement>(null)
@@ -85,6 +94,7 @@ export function AnnotateTool({ tool, isBn, open, onOpenChange }: {
   const selectedAnnotId = useAnnotStore(s => s.selectedAnnotId)
   const addAnnotation = useAnnotStore(s => s.addAnnotation)
   const deleteAnnotation = useAnnotStore(s => s.deleteAnnotation)
+  const moveAnnotation = useAnnotStore(s => s.moveAnnotation)
   const selectAnnotation = useAnnotStore(s => s.selectAnnotation)
   const undo = useAnnotStore(s => s.undo)
   const redo = useAnnotStore(s => s.redo)
@@ -346,8 +356,40 @@ export function AnnotateTool({ tool, isBn, open, onOpenChange }: {
   }
 
   const handlePointerDown = (e: React.PointerEvent) => {
-    if (!viewport || activeTool === 'select') return
+    if (!viewport) return
     const pt = getCanvasPoint(e)
+
+    // MOVE MODE: In Select mode, if clicking on the selected annotation, start drag-to-move
+    if (activeTool === 'select' && selectedAnnotId) {
+      const selected = pageAnnots.find(a => a.id === selectedAnnotId)
+      if (selected) {
+        // Check if pointer is within the annotation's CSS bounds
+        const cssRect = pdfRectToCssRect(viewport, [
+          selected.rect.x,
+          selected.rect.y,
+          selected.rect.x + selected.rect.width,
+          selected.rect.y + selected.rect.height,
+        ])
+        // Add 6px padding for easier grabbing (especially for thin lines/strokes)
+        const padding = 8
+        if (pt.x >= cssRect.x - padding && pt.x <= cssRect.x + cssRect.width + padding &&
+            pt.y >= cssRect.y - padding && pt.y <= cssRect.y + cssRect.height + padding) {
+          // Start move
+          setMoveState({
+            annotId: selectedAnnotId,
+            startCssX: pt.x,
+            startCssY: pt.y,
+            originalAnnot: JSON.parse(JSON.stringify(selected)) as Annotation,
+          })
+          setMoveDelta({ dx: 0, dy: 0 })
+          ;(e.target as HTMLElement).setPointerCapture(e.pointerId)
+          return
+        }
+      }
+    }
+
+    // Drawing mode: return early if in select mode (no annotation was hit for move)
+    if (activeTool === 'select') return
 
     if (activeTool === 'note' || activeTool === 'text') {
       setNoteInput({ x: pt.x, y: pt.y, type: activeTool })
@@ -377,6 +419,18 @@ export function AnnotateTool({ tool, isBn, open, onOpenChange }: {
     if (!viewport) return
     const pt = getCanvasPoint(e)
 
+    // MOVE MODE: update delta using requestAnimationFrame for smoothness
+    if (moveState) {
+      if (moveRafRef.current) cancelAnimationFrame(moveRafRef.current)
+      moveRafRef.current = requestAnimationFrame(() => {
+        setMoveDelta({
+          dx: pt.x - moveState.startCssX,
+          dy: pt.y - moveState.startCssY,
+        })
+      })
+      return
+    }
+
     if (inkPath) {
       // Throttle: only add point if moved > 1px
       const last = inkPath[inkPath.length - 1]
@@ -395,6 +449,61 @@ export function AnnotateTool({ tool, isBn, open, onOpenChange }: {
 
   const handlePointerUp = (e: React.PointerEvent) => {
     if (!viewport) return
+
+    // MOVE MODE: commit the move with one undo command
+    if (moveState && moveDelta) {
+      const { annotId, originalAnnot } = moveState
+      // Convert CSS delta to PDF delta
+      const [pdfDx, pdfDy] = cssToPdf(viewport, moveDelta.dx, moveDelta.dy)
+      // Calculate the zero-delta in PDF coords (to get just the delta)
+      const [pdfZeroX, pdfZeroY] = cssToPdf(viewport, 0, 0)
+      const realDx = pdfDx - pdfZeroX
+      const realDy = pdfDy - pdfZeroY
+
+      // Compute new rect
+      const newRect = {
+        x: originalAnnot.rect.x + realDx,
+        y: originalAnnot.rect.y + realDy,
+        width: originalAnnot.rect.width,
+        height: originalAnnot.rect.height,
+      }
+
+      // For Line/Arrow, also update start/end points
+      if (originalAnnot.subtype === 'Line') {
+        const ln = originalAnnot as any
+        const updatedAnnot = {
+          ...originalAnnot,
+          rect: newRect,
+          start: { x: ln.start.x + realDx, y: ln.start.y + realDy },
+          end: { x: ln.end.x + realDx, y: ln.end.y + realDy },
+        } as Annotation
+        moveAnnotation(annotId, pageNum, newRect)
+        // Also update start/end via updateAnnotation
+        useAnnotStore.getState().updateAnnotation(annotId, pageNum, {
+          start: { x: ln.start.x + realDx, y: ln.start.y + realDy },
+          end: { x: ln.end.x + realDx, y: ln.end.y + realDy },
+        } as any)
+      } else if (originalAnnot.subtype === 'Ink') {
+        // For Ink, translate all paths
+        const ink = originalAnnot as any
+        const newPaths = ink.paths.map((path: { x: number; y: number }[]) =>
+          path.map(p => ({ x: p.x + realDx, y: p.y + realDy }))
+        )
+        moveAnnotation(annotId, pageNum, newRect)
+        useAnnotStore.getState().updateAnnotation(annotId, pageNum, { paths: newPaths } as any)
+      } else {
+        // Rectangle, Circle, Sticky Note, FreeText, Highlight, etc.
+        moveAnnotation(annotId, pageNum, newRect)
+      }
+
+      setMoveState(null)
+      setMoveDelta(null)
+      if (moveRafRef.current) {
+        cancelAnimationFrame(moveRafRef.current)
+        moveRafRef.current = null
+      }
+      return
+    }
 
     if (inkPath && inkPath.length > 1) {
       // Convert CSS points to PDF coords
@@ -767,6 +876,7 @@ export function AnnotateTool({ tool, isBn, open, onOpenChange }: {
                       selectedId={selectedAnnotId}
                       onSelect={selectAnnotation}
                       isBn={isBn}
+                      moveOffset={moveState && moveDelta ? { annotId: moveState.annotId, dx: moveDelta.dx, dy: moveDelta.dy } : null}
                     />
                     {dragPreview}
                     {inkPreview}
