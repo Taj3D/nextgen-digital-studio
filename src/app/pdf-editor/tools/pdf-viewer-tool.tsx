@@ -68,7 +68,8 @@ export function PdfViewerTool({ tool, isBn, open, onOpenChange }: {
       setLoading(true)
       try {
         const arrayBuffer = await files[0].arrayBuffer()
-        loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) })
+        loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer), // @ts-ignore — enableScripting is a valid DocumentInitParameters option
+      enableScripting: false as any })
         const doc = await loadingTask.promise
         if (cancelled) {
           try { doc.cleanup(); } catch { /* ignore */ }

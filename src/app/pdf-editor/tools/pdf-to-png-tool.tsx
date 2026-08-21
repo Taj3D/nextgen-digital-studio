@@ -72,7 +72,8 @@ export function PdfToPngTool({ tool, isBn, open, onOpenChange }: {
 
     try {
       const arrayBuffer = await files[0].arrayBuffer()
-      loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) })
+      loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer), // @ts-ignore — enableScripting is a valid DocumentInitParameters option
+      enableScripting: false as any })
       const doc = await loadingTask.promise
       const scale = SCALE_MAP[quality]
 

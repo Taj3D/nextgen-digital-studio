@@ -48,7 +48,8 @@ export function PdfToTextTool({ tool, isBn, open, onOpenChange }: {
     setExtractedText('')
     try {
       const arrayBuffer = await files[0].arrayBuffer()
-      const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) })
+      const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer), // @ts-ignore — enableScripting is a valid DocumentInitParameters option
+      enableScripting: false as any })
       const doc = await loadingTask.promise
       setPageCount(doc.numPages)
 

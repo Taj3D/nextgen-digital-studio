@@ -104,7 +104,8 @@ export function PdfOcrTool({ tool, isBn, open, onOpenChange }: {
     try {
       // 1. Load PDF.js document
       const arrayBuffer = await files[0].arrayBuffer()
-      const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) })
+      const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer), // @ts-ignore — enableScripting is a valid DocumentInitParameters option
+      enableScripting: false as any })
       doc = await loadingTask.promise
       setTotalPages(doc.numPages)
 
