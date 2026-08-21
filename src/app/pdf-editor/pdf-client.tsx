@@ -101,6 +101,9 @@ const ManageBookmarksTool = React.lazy(() => import('./tools/manage-bookmarks-to
 // Phase 2C Wave 3B — Lazy-loaded tools
 const BookmarksFromTextTool = React.lazy(() => import('./tools/bookmarks-from-text-tool').then(m => ({ default: m.BookmarksFromTextTool })))
 const CompareTool = React.lazy(() => import('./tools/compare-tool').then(m => ({ default: m.CompareTool })))
+// Phase 2C Wave 3C — Lazy-loaded tools (LIMITED)
+const GrayscaleTool = React.lazy(() => import('./tools/grayscale-tool').then(m => ({ default: m.GrayscaleTool })))
+const SignTool = React.lazy(() => import('./tools/sign-tool').then(m => ({ default: m.SignTool })))
 
 import {
   FileText,
@@ -4781,6 +4784,16 @@ export function PdfClient() {
       {activeTool && activeTool.id === 'compare' && (
         <React.Suspense fallback={<div className="fixed inset-0 z-50 grid place-items-center bg-background/80"><Loader2 className="h-8 w-8 animate-spin text-amber-500" /></div>}>
           <CompareTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
+        </React.Suspense>
+      )}
+      {activeTool && activeTool.id === 'grayscale' && (
+        <React.Suspense fallback={<div className="fixed inset-0 z-50 grid place-items-center bg-background/80"><Loader2 className="h-8 w-8 animate-spin text-amber-500" /></div>}>
+          <GrayscaleTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
+        </React.Suspense>
+      )}
+      {activeTool && activeTool.id === 'sign' && (
+        <React.Suspense fallback={<div className="fixed inset-0 z-50 grid place-items-center bg-background/80"><Loader2 className="h-8 w-8 animate-spin text-amber-500" /></div>}>
+          <SignTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
         </React.Suspense>
       )}
 

@@ -236,8 +236,8 @@ export const PDF_TOOLS: PdfTool[] = [
     descBn: 'কালার পিডিএফকে গ্রেস্কেল করে সাইজ বাঁচান।',
     category: 'optimize',
     icon: '⚪',
-    functional: false,
-    comingSoon: true,
+    functional: true,
+    status: 'LIMITED',
   },
   {
     id: 'flatten',
@@ -349,8 +349,8 @@ export const PDF_TOOLS: PdfTool[] = [
     descBn: 'আঁকা বা আপলোড করা স্বাক্ষর পিডিএফে বসান।',
     category: 'edit',
     icon: '✍️',
-    functional: false,
-    comingSoon: true,
+    functional: true,
+    status: 'LIMITED',
   },
   {
     id: 'crop',
