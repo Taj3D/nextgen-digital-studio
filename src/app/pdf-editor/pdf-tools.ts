@@ -254,7 +254,7 @@ export const PDF_TOOLS: PdfTool[] = [
     id: 'repair',
     nameEn: 'Repair PDF',
     nameBn: 'পিডিএফ রিপেয়ার',
-    descEn: 'Fix corrupt or broken PDF files.',
+    descEn: 'Normalize and rebuild PDF structure.',
     descBn: 'নষ্ট বা ভাঙা পিডিএফ ফাইল ঠিক করুন।',
     category: 'optimize',
     icon: '🛠️',
