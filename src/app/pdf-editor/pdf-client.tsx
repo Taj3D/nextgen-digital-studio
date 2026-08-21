@@ -98,6 +98,9 @@ const VersionConverterTool = React.lazy(() => import('./tools/version-converter-
 const RepairTool = React.lazy(() => import('./tools/repair-tool').then(m => ({ default: m.RepairTool })))
 const CompressTool = React.lazy(() => import('./tools/compress-tool').then(m => ({ default: m.CompressTool })))
 const ManageBookmarksTool = React.lazy(() => import('./tools/manage-bookmarks-tool').then(m => ({ default: m.ManageBookmarksTool })))
+// Phase 2C Wave 3B — Lazy-loaded tools
+const BookmarksFromTextTool = React.lazy(() => import('./tools/bookmarks-from-text-tool').then(m => ({ default: m.BookmarksFromTextTool })))
+const CompareTool = React.lazy(() => import('./tools/compare-tool').then(m => ({ default: m.CompareTool })))
 
 import {
   FileText,
@@ -4768,6 +4771,16 @@ export function PdfClient() {
       {activeTool && activeTool.id === 'manage-bookmarks' && (
         <React.Suspense fallback={<div className="fixed inset-0 z-50 grid place-items-center bg-background/80"><Loader2 className="h-8 w-8 animate-spin text-amber-500" /></div>}>
           <ManageBookmarksTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
+        </React.Suspense>
+      )}
+      {activeTool && activeTool.id === 'bookmarks-from-text' && (
+        <React.Suspense fallback={<div className="fixed inset-0 z-50 grid place-items-center bg-background/80"><Loader2 className="h-8 w-8 animate-spin text-amber-500" /></div>}>
+          <BookmarksFromTextTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
+        </React.Suspense>
+      )}
+      {activeTool && activeTool.id === 'compare' && (
+        <React.Suspense fallback={<div className="fixed inset-0 z-50 grid place-items-center bg-background/80"><Loader2 className="h-8 w-8 animate-spin text-amber-500" /></div>}>
+          <CompareTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
         </React.Suspense>
       )}
 

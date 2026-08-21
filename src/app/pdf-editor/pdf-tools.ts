@@ -414,8 +414,8 @@ export const PDF_TOOLS: PdfTool[] = [
     descBn: 'দুটি পিডিএফ তুলনা করে পার্থক্য দেখান।',
     category: 'edit',
     icon: '🆚',
-    functional: false,
-    comingSoon: true,
+    functional: true,
+    status: 'AVAILABLE_NOW',
   },
   {
     id: 'fill-forms',
@@ -469,8 +469,8 @@ export const PDF_TOOLS: PdfTool[] = [
     descBn: 'হেডিং থেকে অটো বুকমার্ক তৈরি করুন।',
     category: 'edit',
     icon: '🧷',
-    functional: false,
-    comingSoon: true,
+    functional: true,
+    status: 'AVAILABLE_NOW',
   },
   {
     id: 'qr-stamp',
