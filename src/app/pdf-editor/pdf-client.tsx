@@ -109,6 +109,9 @@ const PdfToWordTool = React.lazy(() => import('./tools/pdf-to-word-tool').then(m
 const PdfToExcelTool = React.lazy(() => import('./tools/pdf-to-excel-tool').then(m => ({ default: m.PdfToExcelTool })))
 const PdfToPptTool = React.lazy(() => import('./tools/pdf-to-ppt-tool').then(m => ({ default: m.PdfToPptTool })))
 const PdfToEbookTool = React.lazy(() => import('./tools/pdf-to-ebook-tool').then(m => ({ default: m.PdfToEbookTool })))
+// Phase 2C Wave 4C — Lazy-loaded security tools
+const ProtectTool = React.lazy(() => import('./tools/protect-tool').then(m => ({ default: m.ProtectTool })))
+const UnlockTool = React.lazy(() => import('./tools/unlock-tool').then(m => ({ default: m.UnlockTool })))
 
 import {
   FileText,
@@ -4819,6 +4822,16 @@ export function PdfClient() {
       {activeTool && activeTool.id === 'pdf-to-ebook' && (
         <React.Suspense fallback={<div className="fixed inset-0 z-50 grid place-items-center bg-background/80"><Loader2 className="h-8 w-8 animate-spin text-amber-500" /></div>}>
           <PdfToEbookTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
+        </React.Suspense>
+      )}
+      {activeTool && activeTool.id === 'protect' && (
+        <React.Suspense fallback={<div className="fixed inset-0 z-50 grid place-items-center bg-background/80"><Loader2 className="h-8 w-8 animate-spin text-amber-500" /></div>}>
+          <ProtectTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
+        </React.Suspense>
+      )}
+      {activeTool && activeTool.id === 'unlock' && (
+        <React.Suspense fallback={<div className="fixed inset-0 z-50 grid place-items-center bg-background/80"><Loader2 className="h-8 w-8 animate-spin text-amber-500" /></div>}>
+          <UnlockTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
         </React.Suspense>
       )}
 

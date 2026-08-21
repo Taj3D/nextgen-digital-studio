@@ -507,8 +507,8 @@ export const PDF_TOOLS: PdfTool[] = [
     descBn: 'পাসওয়ার্ড ও এনক্রিপশন যোগ করুন।',
     category: 'security',
     icon: '🔒',
-    functional: false,
-    comingSoon: true,
+    functional: true,
+    status: 'AVAILABLE_NOW',
   },
   {
     id: 'unlock',
@@ -518,8 +518,8 @@ export const PDF_TOOLS: PdfTool[] = [
     descBn: 'পিডিএফ থেকে পাসওয়ার্ড ও রেস্ট্রিকশন সরান।',
     category: 'security',
     icon: '🔓',
-    functional: false,
-    comingSoon: true,
+    functional: true,
+    status: 'AVAILABLE_NOW',
   },
 ]
 
