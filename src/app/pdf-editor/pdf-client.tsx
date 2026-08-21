@@ -117,6 +117,8 @@ const RedactTool = React.lazy(() => import('./tools/redact-tool').then(m => ({ d
 const EditTextTool = React.lazy(() => import('./tools/edit-text-tool').then(m => ({ default: m.EditTextTool })))
 // Phase 5A — HTML→PDF (genuine Chromium rendering via @sparticuz/chromium)
 const HtmlToPdfTool = React.lazy(() => import('./tools/html-to-pdf-tool').then(m => ({ default: m.HtmlToPdfTool })))
+// Phase 5B — Native PDF Text Editor (flagship: direct in-document editing)
+const NativeTextEditorTool = React.lazy(() => import('./tools/native-editor-tool').then(m => ({ default: m.NativeTextEditorTool })))
 
 import {
   FileText,
@@ -4846,7 +4848,7 @@ export function PdfClient() {
       )}
       {activeTool && activeTool.id === 'edit-text' && (
         <React.Suspense fallback={<div className="fixed inset-0 z-50 grid place-items-center bg-background/80"><Loader2 className="h-8 w-8 animate-spin text-amber-500" /></div>}>
-          <EditTextTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
+          <NativeTextEditorTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
         </React.Suspense>
       )}
       {activeTool && activeTool.id === 'html-to-pdf' && (
