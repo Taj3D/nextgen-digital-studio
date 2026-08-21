@@ -115,6 +115,8 @@ const UnlockTool = React.lazy(() => import('./tools/unlock-tool').then(m => ({ d
 // Phase 2C Wave 4D — True redaction + true edit-text (content-stream surgery)
 const RedactTool = React.lazy(() => import('./tools/redact-tool').then(m => ({ default: m.RedactTool })))
 const EditTextTool = React.lazy(() => import('./tools/edit-text-tool').then(m => ({ default: m.EditTextTool })))
+// Phase 5A — HTML→PDF (genuine Chromium rendering via @sparticuz/chromium)
+const HtmlToPdfTool = React.lazy(() => import('./tools/html-to-pdf-tool').then(m => ({ default: m.HtmlToPdfTool })))
 
 import {
   FileText,
@@ -4845,6 +4847,11 @@ export function PdfClient() {
       {activeTool && activeTool.id === 'edit-text' && (
         <React.Suspense fallback={<div className="fixed inset-0 z-50 grid place-items-center bg-background/80"><Loader2 className="h-8 w-8 animate-spin text-amber-500" /></div>}>
           <EditTextTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
+        </React.Suspense>
+      )}
+      {activeTool && activeTool.id === 'html-to-pdf' && (
+        <React.Suspense fallback={<div className="fixed inset-0 z-50 grid place-items-center bg-background/80"><Loader2 className="h-8 w-8 animate-spin text-amber-500" /></div>}>
+          <HtmlToPdfTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
         </React.Suspense>
       )}
 

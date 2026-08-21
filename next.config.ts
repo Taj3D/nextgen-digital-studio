@@ -11,6 +11,10 @@ const nextConfig: NextConfig = {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [],
   },
+  // Keep heavy native binaries out of the bundled server build.
+  // @sparticuz/chromium ships a 67MB brotli-compressed binary that must
+  // be loaded at runtime, not bundled by Turbopack.
+  serverExternalPackages: ["@sparticuz/chromium", "puppeteer-core"],
   // Allow the sandbox preview panel domain (and any *.space-z.ai subdomain)
   // to load /_next/* dev chunks. Without this, Next.js 16 treats the preview
   // origin as cross-origin and the browser throws ChunkLoadError +
