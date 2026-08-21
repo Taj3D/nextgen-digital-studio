@@ -132,8 +132,8 @@ export const PDF_TOOLS: PdfTool[] = [
     descBn: 'এডিটযোগ্য Word (.docx) ফাইল তৈরি করুন।',
     category: 'convert',
     icon: '📄',
-    functional: false,
-    comingSoon: true,
+    functional: true,
+    status: 'LIMITED',
   },
   {
     id: 'pdf-to-excel',
@@ -143,8 +143,8 @@ export const PDF_TOOLS: PdfTool[] = [
     descBn: 'টেবিলগুলো Excel স্প্রেডশিটে বের করুন।',
     category: 'convert',
     icon: '📊',
-    functional: false,
-    comingSoon: true,
+    functional: true,
+    status: 'LIMITED',
   },
   {
     id: 'pdf-to-ppt',
@@ -154,8 +154,8 @@ export const PDF_TOOLS: PdfTool[] = [
     descBn: 'পিডিএফ স্লাইডকে PPTX ডেকে রূপান্তর করুন।',
     category: 'convert',
     icon: '📈',
-    functional: false,
-    comingSoon: true,
+    functional: true,
+    status: 'LIMITED',
   },
   {
     id: 'pdf-to-png',
@@ -187,8 +187,8 @@ export const PDF_TOOLS: PdfTool[] = [
     descBn: 'পিডিএফকে EPUB ই-বুক ফরম্যাটে রূপান্তর করুন।',
     category: 'convert',
     icon: '📚',
-    functional: false,
-    comingSoon: true,
+    functional: true,
+    status: 'LIMITED',
     isNew: true,
   },
   {

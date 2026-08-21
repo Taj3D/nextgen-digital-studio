@@ -104,6 +104,11 @@ const CompareTool = React.lazy(() => import('./tools/compare-tool').then(m => ({
 // Phase 2C Wave 3C — Lazy-loaded tools (LIMITED)
 const GrayscaleTool = React.lazy(() => import('./tools/grayscale-tool').then(m => ({ default: m.GrayscaleTool })))
 const SignTool = React.lazy(() => import('./tools/sign-tool').then(m => ({ default: m.SignTool })))
+// Phase 2C Wave 4A — Lazy-loaded conversion tools (LIMITED)
+const PdfToWordTool = React.lazy(() => import('./tools/pdf-to-word-tool').then(m => ({ default: m.PdfToWordTool })))
+const PdfToExcelTool = React.lazy(() => import('./tools/pdf-to-excel-tool').then(m => ({ default: m.PdfToExcelTool })))
+const PdfToPptTool = React.lazy(() => import('./tools/pdf-to-ppt-tool').then(m => ({ default: m.PdfToPptTool })))
+const PdfToEbookTool = React.lazy(() => import('./tools/pdf-to-ebook-tool').then(m => ({ default: m.PdfToEbookTool })))
 
 import {
   FileText,
@@ -4794,6 +4799,26 @@ export function PdfClient() {
       {activeTool && activeTool.id === 'sign' && (
         <React.Suspense fallback={<div className="fixed inset-0 z-50 grid place-items-center bg-background/80"><Loader2 className="h-8 w-8 animate-spin text-amber-500" /></div>}>
           <SignTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
+        </React.Suspense>
+      )}
+      {activeTool && activeTool.id === 'pdf-to-word' && (
+        <React.Suspense fallback={<div className="fixed inset-0 z-50 grid place-items-center bg-background/80"><Loader2 className="h-8 w-8 animate-spin text-amber-500" /></div>}>
+          <PdfToWordTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
+        </React.Suspense>
+      )}
+      {activeTool && activeTool.id === 'pdf-to-excel' && (
+        <React.Suspense fallback={<div className="fixed inset-0 z-50 grid place-items-center bg-background/80"><Loader2 className="h-8 w-8 animate-spin text-amber-500" /></div>}>
+          <PdfToExcelTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
+        </React.Suspense>
+      )}
+      {activeTool && activeTool.id === 'pdf-to-ppt' && (
+        <React.Suspense fallback={<div className="fixed inset-0 z-50 grid place-items-center bg-background/80"><Loader2 className="h-8 w-8 animate-spin text-amber-500" /></div>}>
+          <PdfToPptTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
+        </React.Suspense>
+      )}
+      {activeTool && activeTool.id === 'pdf-to-ebook' && (
+        <React.Suspense fallback={<div className="fixed inset-0 z-50 grid place-items-center bg-background/80"><Loader2 className="h-8 w-8 animate-spin text-amber-500" /></div>}>
+          <PdfToEbookTool tool={activeTool} isBn={isBn} open={true} onOpenChange={closeTool} />
         </React.Suspense>
       )}
 
