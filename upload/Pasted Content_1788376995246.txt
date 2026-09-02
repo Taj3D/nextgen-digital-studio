@@ -1,0 +1,1734 @@
+You are an Expert Senior Full-Stack Web Developer, UX/UI Designer, Conversion Rate Optimization (CRO) Specialist, SEO Strategist, Brand Designer, Accessibility Specialist, and Technical QA Engineer.
+
+Your task is to BUILD, NOT merely describe, a production-ready Consulting landing page for:
+
+https://nextgendigitalstudio.com/consulting
+
+Business:
+NextGen Digital Studio (NGS)
+
+Founder:
+MD Nazmul Islam Taj
+
+==================================================
+PROJECT OBJECTIVE
+==================================================
+
+Create a premium, modern, high-converting Consulting page that positions NextGen Digital Studio as a diagnosis-first consulting guide.
+
+This must NOT look like a generic agency service page.
+
+The central positioning is:
+
+"আপনার Problem বুঝুন। Bottleneck খুঁজে বের করুন। Priority ঠিক করুন। তারপর Action নিন।"
+
+English positioning:
+
+"Clarity Before Action.
+Strategy Before Execution.
+Diagnosis First."
+
+The customer must be positioned as the HERO.
+
+NGS must be positioned as the GUIDE.
+
+Do NOT make NGS the hero of the story.
+
+The page must communicate:
+
+Customer Problem
+→ Diagnosis
+→ Bottleneck
+→ Priority
+→ Strategy
+→ Action
+→ Implementation
+→ Review
+
+==================================================
+IMPORTANT EXECUTION RULE
+==================================================
+
+DO NOT immediately start writing random code.
+
+First inspect the existing project.
+
+Analyze:
+
+1. Existing folder structure
+2. Existing framework
+3. Existing components
+4. Existing CSS/design system
+5. Existing typography
+6. Existing color variables
+7. Existing navigation
+8. Existing footer
+9. Existing responsive system
+10. Existing reusable buttons/cards
+11. Existing SEO setup
+12. Existing image assets
+13. Existing routing
+14. Existing deployment configuration
+15. Existing accessibility patterns
+
+DO NOT destroy or unnecessarily rewrite existing components.
+
+Reuse the existing architecture whenever practical.
+
+If the existing project is a static HTML/CSS/JS website, maintain that architecture unless there is a strong technical reason to change it.
+
+If it is Next.js/React, follow the existing component architecture.
+
+Preserve existing routes and functionality.
+
+Before changing anything, create a clear internal implementation plan.
+
+Then implement the page.
+
+==================================================
+BRAND SYSTEM
+==================================================
+
+Brand:
+NextGen Digital Studio
+
+Brand personality:
+
+- Professional
+- Strategic
+- Modern
+- Intelligent
+- Human
+- Trustworthy
+- Practical
+- Customer-centric
+- Implementation-oriented
+- No hype
+
+Primary colors:
+
+BLACK
+WHITE
+EMERALD GREEN
+
+Secondary accent:
+
+SUBTLE ELECTRIC CYAN
+
+Do not overuse cyan.
+
+Use emerald as the primary conversion/action accent.
+
+The design should feel:
+
+Premium
+Minimal
+Technical
+Strategic
+Modern
+High-trust
+
+Avoid:
+
+- Generic corporate template appearance
+- Excessive gradients
+- Excessive glassmorphism
+- Neon-heavy UI
+- Excessive animations
+- Fake 3D holograms
+- Stock-photo-looking people
+- Luxury-business clichés
+- Fake revenue screenshots
+- Fake client logos
+- Fake testimonials
+- Fake statistics
+- Fake awards
+- Fake certifications
+- Fake social proof
+
+==================================================
+TYPOGRAPHY
+==================================================
+
+The page must support Bengali typography properly.
+
+Use a highly readable Bengali web font if the project already uses one.
+
+If adding a font is necessary, choose a professional Unicode Bengali font with excellent mobile readability.
+
+Headings:
+
+Large
+Bold
+High contrast
+Short lines
+
+Body:
+
+Comfortable line height
+Readable on mobile
+Not overly dense
+
+Use English strategically for framework terminology:
+
+Diagnosis
+Bottleneck
+Priority
+Action
+Implementation
+Review
+Consulting
+Assessment
+
+Do not randomly mix English everywhere.
+
+==================================================
+PAGE PRIMARY GOAL
+==================================================
+
+Primary conversion:
+
+"Request a Consulting Assessment"
+
+Secondary conversion:
+
+"Consulting কীভাবে কাজ করে?"
+
+The entire page should guide the user toward the primary conversion.
+
+Do not create multiple competing primary CTAs.
+
+Primary CTA variations may be:
+
+"আপনার Problem Diagnose করুন →"
+
+"Request a Consulting Assessment →"
+
+But visually they must belong to the same CTA hierarchy.
+
+==================================================
+TARGET AUDIENCES
+==================================================
+
+The page should serve four primary audiences:
+
+1. BUSINESS OWNER
+2. FREELANCER
+3. JOB HOLDER / CAREER PROFESSIONAL
+4. ENTREPRENEUR / BEGINNER
+
+Secondary audience:
+
+Students who need structured career, skill or entrepreneurship direction.
+
+Do NOT make the page feel like it is trying to sell to everyone simultaneously.
+
+Use category-specific problem recognition.
+
+==================================================
+CORE CONSULTING FRAMEWORK
+==================================================
+
+Use this framework throughout the page:
+
+CURRENT SITUATION
+↓
+DESIRED OUTCOME
+↓
+PROBLEM GAP
+↓
+BOTTLENECK
+↓
+PRIORITY
+↓
+ACTION PLAN
+↓
+IMPLEMENTATION
+↓
+REVIEW
+
+Also use the NGS 7D Consulting Framework:
+
+DISCOVER
+DEFINE
+DIAGNOSE
+DETECT
+DECIDE
+DESIGN
+DEPLOY
+
+These are proprietary NGS positioning frameworks.
+
+Present them visually and elegantly.
+
+Do not make the framework look like a boring bullet list.
+
+==================================================
+PAGE ARCHITECTURE
+==================================================
+
+Build the following sections in this exact strategic order:
+
+01. HEADER / NAVIGATION
+02. HERO
+03. TRUST STRIP
+04. PROBLEM RECOGNITION
+05. "YOU MAY NOT NEED MORE INFORMATION"
+06. WHAT IS NGS CONSULTING?
+07. NGS CONSULTING FRAMEWORK
+08. NGS 7D FRAMEWORK
+09. CONSULTING CATEGORIES
+10. WHO IS THIS FOR?
+11. WHO IS THIS NOT FOR?
+12. WHAT YOU GET
+13. CONSULTING LEVELS
+14. HOW CONSULTING WORKS
+15. WHAT HAPPENS IN A SESSION
+16. 5 DIAGNOSIS QUESTIONS
+17. SOCIAL PROOF / CASE STUDIES
+18. FOUNDER / GUIDE
+19. WHY NGS?
+20. CONSULTING VS TRAINING
+21. CONSULTING VS DONE-FOR-YOU SERVICE
+22. PRIMARY CTA
+23. FAQ
+24. FINAL CTA
+25. FOOTER
+
+==================================================
+SECTION 01 — HEADER
+==================================================
+
+Create a clean responsive navigation.
+
+Suggested navigation:
+
+Logo
+Home
+Services
+Training
+Consulting
+Founder
+
+Primary right-side CTA:
+
+"Problem Diagnose করুন →"
+
+Desktop:
+Clean horizontal navigation.
+
+Mobile:
+Hamburger menu.
+
+The Consulting page should make the current Consulting navigation item visually active.
+
+Do not make the header unnecessarily tall.
+
+On scroll, use a subtle sticky header if consistent with the existing website.
+
+==================================================
+SECTION 02 — HERO
+==================================================
+
+Hero headline:
+
+"আপনি অনেক কিছু করছেন—
+কিন্তু ঠিক কোন জায়গায় আটকে আছেন?"
+
+Supporting copy:
+
+"আপনার Career, Freelancing, Business বা নতুন Idea—যেখানেই আপনি থাকুন না কেন, আগে বুঝুন আপনার আসল Problem কোথায়, কোন Bottleneck আপনাকে আটকে রাখছে এবং এখন কোন কাজটিকে Priority দেওয়া উচিত।"
+
+Primary CTA:
+
+"আপনার Problem Diagnose করুন →"
+
+Secondary CTA:
+
+"Consulting কীভাবে কাজ করে ↓"
+
+Micro trust statement:
+
+"No guaranteed income. No motivational hype. Diagnosis first."
+
+Hero visual:
+
+Create a premium diagnostic pathway:
+
+CURRENT SITUATION
+↓
+PROBLEM
+↓
+BOTTLENECK
+↓
+PRIORITY
+↓
+ACTION
+
+This should feel like a strategic consulting system.
+
+Use subtle Emerald/Cyan visual connectors.
+
+Do not create a busy illustration.
+
+==================================================
+SECTION 03 — TRUST STRIP
+==================================================
+
+Create four compact trust cards:
+
+Diagnosis First
+"আগে Problem বুঝি।"
+
+Customer-Centric
+"আপনার Situation থেকেই শুরু।"
+
+Action-Oriented
+"শুধু Advice নয়—Next Action পরিষ্কার করি।"
+
+No False Promises
+"Guaranteed Income বা unrealistic result নয়।"
+
+Use icons sparingly.
+
+==================================================
+SECTION 04 — PROBLEM RECOGNITION
+==================================================
+
+Headline:
+
+"সমস্যা সবসময় 'কী করতে হবে' নয়।
+অনেক সময় সমস্যা হলো—আগে কোনটা করতে হবে।"
+
+Explain that people often:
+
+- Learn many skills
+- Try freelancing
+- Create content
+- Think about business
+- Run marketing
+- Try AI tools
+- Want more income
+
+But still remain stuck.
+
+The issue may be:
+
+WRONG PRIORITY
+
+Create four/five problem cards.
+
+Card 1:
+
+"আমি অনেক কিছু শিখছি, কিন্তু Income হচ্ছে না।"
+
+Possible bottleneck:
+
+Skill → Offer → Customer → Sales
+
+Card 2:
+
+"আমি Business শুরু করতে চাই, কিন্তু কোথা থেকে শুরু করব বুঝি না।"
+
+Possible bottleneck:
+
+Idea → Customer → Problem → Validation
+
+Card 3:
+
+"আমি Freelancer, কিন্তু Client নিয়মিত পাই না।"
+
+Possible bottleneck:
+
+Positioning → Offer → Lead → Communication → Sales
+
+Card 4:
+
+"আমি চাকরি করি, কিন্তু Side Business শুরু করার সময় পাই না।"
+
+Possible bottleneck:
+
+Time → Priority → Model → Execution
+
+Card 5:
+
+"আমি জানি কী করতে হবে, কিন্তু কাজ শুরু করতে পারি না।"
+
+Possible bottleneck:
+
+Clarity → System → Execution → Review
+
+Make these cards visually interactive on hover, but keep interaction subtle.
+
+==================================================
+SECTION 05 — INFORMATION VS DIAGNOSIS
+==================================================
+
+Headline:
+
+"হয়তো আপনার আরও Information দরকার নেই।"
+
+Large statement:
+
+"হয়তো দরকার—আপনার বর্তমান Situation থেকে কোন Problem-টা আগে Solve করতে হবে সেটা পরিষ্কার করা।"
+
+Create a visual:
+
+INFORMATION
+↓
+What do you know?
+
+DIAGNOSIS
+↓
+Where are you stuck?
+
+ACTION
+↓
+What should you do next?
+
+Make this section visually powerful.
+
+==================================================
+SECTION 06 — WHAT IS NGS CONSULTING?
+==================================================
+
+Headline:
+
+"NGS Consulting আসলে কী?"
+
+Definition:
+
+"NGS Consulting হলো একটি structured problem-solving process যেখানে আপনার বর্তমান Situation, Desired Outcome, Problem Gap এবং Bottleneck বিশ্লেষণ করে Priority ও Action Direction পরিষ্কার করা হয়।"
+
+Create three "NOT" cards:
+
+Consulting ≠ Motivation
+Consulting ≠ Random Advice
+Consulting ≠ Information Dump
+
+Then:
+
+Consulting =
+Diagnosis
++
+Strategy
++
+Priority
++
+Action Direction
+
+Use strong visual hierarchy.
+
+==================================================
+SECTION 07 — CORE CONSULTING FRAMEWORK
+==================================================
+
+Headline:
+
+"আমরা আপনার Problem কীভাবে দেখি?"
+
+Create a large interactive visual:
+
+01 CURRENT SITUATION
+↓
+02 DESIRED OUTCOME
+↓
+03 PROBLEM GAP
+↓
+04 BOTTLENECK
+↓
+05 PRIORITY
+↓
+06 ACTION PLAN
+↓
+07 IMPLEMENTATION
+↓
+08 REVIEW
+
+Each node should have a short explanation.
+
+Make the visual responsive.
+
+Desktop:
+horizontal/diagonal visual flow if appropriate.
+
+Mobile:
+vertical timeline.
+
+Use scroll animation only if performance remains excellent.
+
+==================================================
+SECTION 08 — NGS 7D
+==================================================
+
+Headline:
+
+"NGS 7D Consulting Framework"
+
+Create seven cards:
+
+DISCOVER
+"আপনার বর্তমান Situation বুঝি।"
+
+DEFINE
+"Problem-টি পরিষ্কার করি।"
+
+DIAGNOSE
+"Root Bottleneck খুঁজে বের করি।"
+
+DETECT
+"Risk, Gap এবং Constraint শনাক্ত করি।"
+
+DECIDE
+"কোন Priority আগে নিতে হবে ঠিক করি।"
+
+DESIGN
+"Action Direction তৈরি করি।"
+
+DEPLOY
+"Implementation ও Review-এর দিকে এগিয়ে যাই।"
+
+Use numbered visual system.
+
+==================================================
+SECTION 09 — CONSULTING CATEGORIES
+==================================================
+
+Headline:
+
+"আপনি কোন Situation-এর মধ্যে আছেন?"
+
+Create four premium cards.
+
+BUSINESS GROWTH
+
+For Business Owners.
+
+Problems:
+
+Customer Acquisition
+Sales
+Offer
+Marketing
+Lead Generation
+Positioning
+Execution
+Growth Direction
+
+CTA:
+"Business Problem Diagnose করুন →"
+
+FREELANCER GROWTH
+
+For Freelancers.
+
+Problems:
+
+Client Acquisition
+Positioning
+Offer
+Pricing
+Sales Communication
+Portfolio
+Workflow
+
+CTA:
+"Freelancing Bottleneck বুঝুন →"
+
+CAREER & SIDE-INCOME
+
+For Job Holders.
+
+Problems:
+
+Skill Development
+Career Direction
+Side Income
+Time
+Career Transition
+Risk
+Action
+
+CTA:
+"Career Situation Assess করুন →"
+
+IDEA & ENTREPRENEURSHIP
+
+For Entrepreneurs / Beginners.
+
+Problems:
+
+Business Idea
+Customer Problem
+Validation
+Offer
+MVP
+Market Direction
+Priority
+
+CTA:
+"Idea Diagnose করুন →"
+
+Do not make these cards look like separate agency services.
+
+They are consulting situations.
+
+==================================================
+SECTION 10 — WHO IS THIS FOR?
+==================================================
+
+Headline:
+
+"এই Consulting কার জন্য?"
+
+Use checkmark list:
+
+- অনেক চেষ্টা করেও আটকে আছেন
+- একসাথে অনেক কিছু করতে গিয়ে confused
+- Problem জানেন কিন্তু Priority জানেন না
+- Strategy আছে কিন্তু execution আটকে আছে
+- Business/Career decision নিতে চান
+- নিজের Situation নিয়ে structured diagnosis চান
+
+Use a calm premium layout.
+
+==================================================
+SECTION 11 — WHO IS THIS NOT FOR?
+==================================================
+
+Headline:
+
+"এই Consulting সবার জন্য নয়।"
+
+Create negative/qualification cards:
+
+NOT FOR:
+
+Overnight Success seekers
+Guaranteed Income seekers
+Motivational speech seekers
+Advice collectors
+People unwilling to share real situation
+
+Closing statement:
+
+"আমরা আপনাকে যা শুনতে ভালো লাগে তা বলার জন্য নয়—আপনার Situation অনুযায়ী যা আগে বোঝা দরকার, সেটি পরিষ্কার করার জন্য কাজ করি।"
+
+Make this section strong but not aggressive.
+
+==================================================
+SECTION 12 — WHAT YOU GET
+==================================================
+
+Headline:
+
+"একটি Consulting Session-এর পর আপনি কী পরিষ্কারভাবে বুঝতে পারবেন?"
+
+Create seven benefits:
+
+Problem Clarity
+Bottleneck Clarity
+Priority Clarity
+Decision Clarity
+Action Direction
+Implementation Direction
+Review Structure
+
+Each card should contain:
+
+Title
+One-sentence explanation
+Minimal icon
+
+==================================================
+SECTION 13 — CONSULTING LEVELS
+==================================================
+
+Create three levels.
+
+LEVEL 01
+
+CONSULTING ASSESSMENT
+
+Focus:
+Diagnosis
+
+Includes:
+
+Situation
+Problem
+Bottleneck
+Priority
+
+LEVEL 02
+
+STRATEGIC CONSULTING
+
+Focus:
+Strategy
+
+Includes:
+
+Strategic Direction
+Priority
+Roadmap
+Decision Framework
+
+LEVEL 03
+
+IMPLEMENTATION CONSULTING
+
+Focus:
+Execution
+
+Includes:
+
+Implementation Guidance
+Execution Support
+Review
+Adjustment
+
+Important:
+
+Do not invent prices.
+
+If no pricing exists in the existing project, use:
+
+"Assessment Required"
+
+or
+
+"Request Assessment"
+
+Do not fabricate prices.
+
+==================================================
+SECTION 14 — HOW IT WORKS
+==================================================
+
+Headline:
+
+"NGS Consulting কীভাবে কাজ করে?"
+
+Create six-step timeline:
+
+01 APPLY
+"আপনার Situation ও Problem জানান।"
+
+02 ASSESSMENT
+"আপনার information review করা হবে।"
+
+03 DIAGNOSIS
+"Core Problem + Bottleneck identify করা হবে।"
+
+04 CONSULTING
+"Priority + Strategy + Action Direction নিয়ে কাজ হবে।"
+
+05 IMPLEMENTATION
+"আপনি plan execute করবেন।"
+
+06 REVIEW
+"Progress অনুযায়ী next decision নেওয়া হবে।"
+
+Use timeline animation if subtle.
+
+==================================================
+SECTION 15 — SESSION EXPERIENCE
+==================================================
+
+Headline:
+
+"Consulting Session-এ কী নিয়ে কথা হবে?"
+
+Create an elegant diagnostic interview interface.
+
+Questions:
+
+"আপনি এখন কোথায়?"
+
+"আপনি কোথায় যেতে চান?"
+
+"আপনার সবচেয়ে বড় Problem কী?"
+
+"আপনি আগে কী চেষ্টা করেছেন?"
+
+"কী আপনাকে আটকে রাখছে?"
+
+"সব সমস্যার মধ্যে কোনটি আগে solve করা উচিত?"
+
+"এখন আপনার Next Best Action কী?"
+
+Make this section feel like an actual consulting experience.
+
+==================================================
+SECTION 16 — FIVE DIAGNOSIS QUESTIONS
+==================================================
+
+Headline:
+
+"নিজেকেই এই ৫টি প্রশ্ন করুন"
+
+01
+"আমি এখন কোথায় আছি?"
+
+02
+"আমি আসলে কোথায় যেতে চাই?"
+
+03
+"আমার সবচেয়ে বড় Problem কী?"
+
+04
+"কেন আমি এখনও সেই Problem solve করতে পারিনি?"
+
+05
+"আগামী ৭ দিনে কোন একটি কাজ করলে আমি সবচেয়ে বেশি এগোতে পারব?"
+
+Below:
+
+"নিজের Problem আরও গভীরভাবে Diagnose করতে চান?"
+
+CTA:
+
+"Request a Consulting Assessment →"
+
+==================================================
+SECTION 17 — SOCIAL PROOF
+==================================================
+
+CRITICAL:
+
+DO NOT invent testimonials.
+
+DO NOT invent clients.
+
+DO NOT invent numbers.
+
+DO NOT invent case studies.
+
+If real testimonials/case studies are NOT present in the project, use:
+
+"Consulting আপনাকে কী পরিষ্কার করতে সাহায্য করতে পারে"
+
+Show:
+
+BEFORE:
+"আমি অনেক কিছু করছি, কিন্তু বুঝতে পারছি না কোনটা আগে করব।"
+
+AFTER:
+"আমার primary bottleneck হলো X, তাই এখন আমার priority Y।"
+
+Add a placeholder structure for future real case studies:
+
+Situation
+Problem
+Diagnosis
+Action
+Outcome
+
+Clearly mark any placeholder content internally so it cannot accidentally appear as fake proof.
+
+==================================================
+SECTION 18 — FOUNDER / GUIDE
+==================================================
+
+Headline:
+
+"আপনার Problem-এর Guide"
+
+Founder:
+
+MD Nazmul Islam Taj
+
+Role:
+
+Founder — NextGen Digital Studio
+
+Copy:
+
+"NextGen Digital Studio-এর লক্ষ্য শুধু আরও information দেওয়া নয়। আমরা চেষ্টা করি একজন ব্যক্তি বা business-এর বর্তমান Situation বুঝে কোন Problem আগে solve করা উচিত, সেটি পরিষ্কার করতে।"
+
+Authority areas:
+
+Digital Strategy
+AI & Automation
+Digital Skills
+Business Growth
+Marketing
+Technology
+Implementation
+
+Positioning statement:
+
+"Guide, not Guru."
+
+IMPORTANT:
+
+If no founder image exists in the project, DO NOT generate a fake person.
+
+Use a clean image placeholder or existing approved founder asset.
+
+==================================================
+SECTION 19 — WHY NGS?
+==================================================
+
+Headline:
+
+"কেন NGS Consulting?"
+
+Six reasons:
+
+Diagnosis First
+Customer-Centric
+Structured
+Action-Oriented
+Multi-Domain Perspective
+Honest
+
+Create a strong visual comparison:
+
+Random Advice
+vs
+Structured Diagnosis
+
+==================================================
+SECTION 20 — CONSULTING VS TRAINING
+==================================================
+
+Create a comparison table.
+
+TRAINING
+
+"আমি কী শিখব?"
+
+CONSULTING
+
+"আমার বর্তমান Problem কী এবং আগে কী করা উচিত?"
+
+Rows:
+
+Knowledge
+Diagnosis
+Curriculum
+Situation-specific
+Decision clarity
+Action direction
+
+Make the table responsive.
+
+On mobile, convert it into stacked comparison cards.
+
+==================================================
+SECTION 21 — CONSULTING VS DONE-FOR-YOU
+==================================================
+
+Explain:
+
+CONSULTING
+
+NGS helps understand,
+decide,
+plan,
+and guide implementation.
+
+DONE-FOR-YOU SERVICE
+
+NGS executes a specific service for the customer.
+
+Examples:
+
+"Need Facebook Ads executed?"
+→ Digital Marketing Service
+
+"Need to understand why lead generation is not working?"
+→ Consulting
+
+Make this distinction clear.
+
+==================================================
+SECTION 22 — PRIMARY CTA
+==================================================
+
+Create a premium high-contrast CTA section.
+
+Headline:
+
+"আপনার Problem হয়তো আরও বড় নয়।
+হয়তো শুধু এখনও ঠিকভাবে Diagnose করা হয়নি।"
+
+Supporting copy:
+
+"আপনার বর্তমান Situation জানান। আমরা প্রথমে বুঝব আপনার জন্য Consulting appropriate কি না।"
+
+CTA:
+
+"Request a Consulting Assessment →"
+
+Secondary microcopy:
+
+"Application ≠ Automatic Acceptance"
+
+Do not use fake urgency.
+
+Do not use countdown timers.
+
+Do not use "Only 3 seats left".
+
+Do not use manipulative scarcity.
+
+==================================================
+SECTION 23 — FAQ
+==================================================
+
+Create accordion FAQ.
+
+Questions:
+
+1. Consulting আর Training-এর মধ্যে পার্থক্য কী?
+
+2. Consulting কি সবাই নিতে পারবে?
+
+3. আপনারা কি আমার হয়ে কাজ করবেন?
+
+4. Income guarantee করেন?
+
+5. Business না থাকলেও Consulting নিতে পারি?
+
+6. Student কি Consulting নিতে পারে?
+
+7. Online Consulting আছে?
+
+8. Consulting-এর দাম কত?
+
+Answers should be honest and concise.
+
+Do not invent unsupported delivery methods or pricing.
+
+If pricing is not defined:
+
+"Consulting requirement ও scope অনুযায়ী assessment-এর পর appropriate option জানানো হবে।"
+
+==================================================
+SECTION 24 — FINAL CTA
+==================================================
+
+Headline:
+
+"আরও Information নয়।
+আগে বুঝুন—আপনার Next Best Action কী।"
+
+Supporting copy:
+
+"আপনার Situation আমাদের জানান। আমরা আগে Problem এবং Bottleneck বুঝব। তারপর আপনার জন্য appropriate next step নির্ধারণ করব।"
+
+Primary CTA:
+
+"Request Your Consulting Assessment →"
+
+Secondary CTA:
+
+"Explore NGS Services"
+
+Visual:
+
+Problem
+→
+Diagnosis
+→
+Priority
+→
+Action
+
+==================================================
+SECTION 25 — FOOTER
+==================================================
+
+Use the existing website footer if available.
+
+Do not redesign the entire site footer unless necessary.
+
+Include:
+
+NextGen Digital Studio
+
+Relevant navigation
+
+Consulting
+
+Founder
+
+Services
+
+Contact
+
+Social links if already configured
+
+Copyright
+
+==================================================
+CONSULTING APPLICATION ROUTE
+==================================================
+
+The primary CTA should route to:
+
+/consulting/apply
+
+If that route does not exist:
+
+Create it as a separate page or prepare the routing structure cleanly.
+
+Application fields:
+
+Name
+Email
+Phone / WhatsApp
+Category
+Current Situation
+Biggest Problem
+Desired Outcome
+What have you tried?
+Why now?
+Consulting Need
+
+Options:
+
+Problem Diagnosis
+Strategy
+Implementation
+Not Sure
+
+Consent checkbox:
+
+"আমি বুঝি যে Consulting কোনো guaranteed income/result promise নয় এবং আমাকে আমার Situation সম্পর্কে accurate information দিতে হবে।"
+
+Submit:
+
+"Request My Consulting Assessment →"
+
+IMPORTANT:
+
+Do not expose API keys in frontend code.
+
+Do not send form data to an imaginary endpoint.
+
+If backend/email integration is not already configured, build the frontend form and validation cleanly and clearly document the integration point.
+
+==================================================
+USER EXPERIENCE
+==================================================
+
+Desktop:
+
+Premium consulting experience.
+
+Mobile:
+
+Mobile-first.
+
+Must work at:
+
+320px
+360px
+375px
+390px
+414px
+768px
+1024px
+1280px
+1440px+
+
+Avoid horizontal overflow.
+
+No text clipping.
+
+No broken cards.
+
+No tiny buttons.
+
+Touch targets must be comfortably clickable.
+
+==================================================
+RESPONSIVE DESIGN
+==================================================
+
+Desktop:
+
+Two-column hero.
+
+Multi-column cards.
+
+Large framework visualization.
+
+Mobile:
+
+Single-column layout.
+
+Hero visual below CTA.
+
+Cards stacked.
+
+Framework becomes vertical timeline.
+
+Comparison tables become cards.
+
+Navigation becomes hamburger.
+
+Do not simply shrink desktop layout.
+
+Actually redesign responsive composition.
+
+==================================================
+ANIMATION SYSTEM
+==================================================
+
+Use restrained premium motion.
+
+Allowed:
+
+Fade-in
+Slide-up
+Subtle hover
+Framework path reveal
+Button micro-interaction
+
+Avoid:
+
+Constant floating elements
+Excessive parallax
+Heavy particle systems
+Infinite animations
+Distracting text effects
+Scroll hijacking
+
+Respect:
+
+prefers-reduced-motion
+
+If reduced motion is enabled, disable nonessential animations.
+
+==================================================
+ACCESSIBILITY
+==================================================
+
+Implement:
+
+Semantic HTML
+Correct heading hierarchy
+Accessible buttons
+Keyboard navigation
+Visible focus states
+ARIA only where necessary
+Alt text
+Color contrast
+Form labels
+Form validation messages
+Accessible accordion
+Accessible mobile navigation
+
+Do not use color as the only way to communicate meaning.
+
+==================================================
+SEO
+==================================================
+
+Implement page-level SEO.
+
+Title:
+
+"NGS Consulting | Business, Freelancer, Career & Entrepreneurship Consulting"
+
+Meta description:
+
+"Identify your core problem, find your bottleneck, set the right priority and create a clear action direction with NextGen Digital Studio Consulting."
+
+Canonical URL:
+
+https://nextgendigitalstudio.com/consulting
+
+H1:
+
+"আপনি অনেক কিছু করছেন—কিন্তু ঠিক কোন জায়গায় আটকে আছেন?"
+
+Use logical H2/H3 hierarchy.
+
+Include relevant natural keywords:
+
+Business Consulting
+Freelancer Consulting
+Career Consulting
+Entrepreneurship Consulting
+Business Problem Diagnosis
+Strategy Consulting
+Digital Business Consulting
+
+Do NOT keyword stuff.
+
+==================================================
+OPEN GRAPH
+==================================================
+
+If the project supports metadata:
+
+Create appropriate Open Graph title:
+
+"NGS Consulting — Problem → Diagnosis → Priority → Action"
+
+Description:
+
+"আপনার Problem বুঝুন। Bottleneck খুঁজে বের করুন। Priority ঠিক করুন। তারপর Action নিন।"
+
+Use existing approved brand image if available.
+
+Do not generate fake founder imagery.
+
+==================================================
+PERFORMANCE
+==================================================
+
+Target:
+
+Fast initial load
+Low JavaScript overhead
+Optimized images
+Lazy-load below-fold images
+Avoid unnecessary libraries
+Avoid huge animation libraries
+Avoid unnecessary dependencies
+
+If the project already has a framework:
+
+Use its native optimization features.
+
+If images are added:
+
+Use modern formats where supported.
+
+==================================================
+SECURITY
+==================================================
+
+Never expose:
+
+API keys
+Secrets
+Environment variables
+Private endpoints
+Admin credentials
+
+Do not hard-code secrets.
+
+Sanitize and validate form input.
+
+If a backend exists, follow its existing security architecture.
+
+==================================================
+ANALYTICS
+==================================================
+
+Prepare or implement event hooks for:
+
+consulting_page_view
+hero_cta_click
+framework_view
+category_click
+faq_open
+application_start
+application_submit
+
+If analytics is already configured:
+
+Reuse it.
+
+Do not add duplicate analytics systems.
+
+If analytics is not configured:
+
+Create clean placeholder event functions or document where analytics should be connected.
+
+==================================================
+INTERNAL LINKING
+==================================================
+
+Connect the Consulting page naturally to existing NGS pages.
+
+Potential links:
+
+/
+ /ai-training
+ /cnc-training
+ /cnc-design
+ /3d-portrait
+ /pdf-books
+ /founder
+
+Only link to routes that actually exist.
+
+Do not invent routes.
+
+Use contextual internal linking.
+
+==================================================
+COPYWRITING RULES
+==================================================
+
+Customer-centric.
+
+Clear.
+
+Specific.
+
+No hype.
+
+No fake claims.
+
+No guaranteed results.
+
+No unrealistic income claims.
+
+No fear manipulation.
+
+No fake urgency.
+
+No fake scarcity.
+
+No fake authority.
+
+No "10x your income" unless supported by actual evidence.
+
+Do not overuse words like:
+
+Revolutionary
+Game-changing
+Guaranteed
+Instant
+Secret
+Ultimate
+
+Use practical language.
+
+==================================================
+DESIGN LANGUAGE
+==================================================
+
+Visual hierarchy should communicate:
+
+PROBLEM
+↓
+RECOGNITION
+↓
+DIAGNOSIS
+↓
+CLARITY
+↓
+ACTION
+↓
+CONSULTING
+
+Use large typography for key ideas.
+
+Use whitespace strategically.
+
+Do not fill every empty space.
+
+Cards should have consistent:
+
+Padding
+Border radius
+Border
+Typography
+Icon treatment
+
+Use a consistent 8px spacing system where appropriate.
+
+==================================================
+TECHNICAL QUALITY
+==================================================
+
+After implementation:
+
+1. Run build
+2. Run lint if available
+3. Run type check if available
+4. Check console errors
+5. Check broken imports
+6. Check missing assets
+7. Check broken links
+8. Check responsive layout
+9. Check navigation
+10. Check buttons
+11. Check forms
+12. Check accordion
+13. Check accessibility
+14. Check SEO metadata
+15. Check performance
+
+Do not stop after code generation.
+
+==================================================
+BROWSER VERIFICATION
+==================================================
+
+Use the built-in browser/testing capability if available.
+
+Open:
+
+http://localhost:<PORT>/consulting
+
+or the project's actual local route.
+
+Verify:
+
+Desktop
+Tablet
+Mobile
+
+Inspect the actual rendered page.
+
+Look for:
+
+Horizontal overflow
+Broken layout
+Text clipping
+Incorrect spacing
+Missing images
+Console errors
+Broken buttons
+Broken navigation
+Bad contrast
+Unusable mobile menu
+Bad typography
+CTA visibility
+Framework layout problems
+
+Fix every issue you find.
+
+Then test:
+
+/consulting/apply
+
+if created.
+
+==================================================
+VISUAL QA
+==================================================
+
+Perform a final visual review.
+
+Ask:
+
+1. Does this look like a premium consulting page?
+2. Does it look different from a generic agency page?
+3. Is the customer clearly the hero?
+4. Is NGS clearly the guide?
+5. Is Diagnosis First obvious?
+6. Is the primary CTA obvious?
+7. Is the page too text-heavy?
+8. Is mobile readability excellent?
+9. Are there fake claims?
+10. Are there unnecessary animations?
+11. Does the page feel trustworthy?
+12. Does the page feel actionable?
+
+Fix problems before finishing.
+
+==================================================
+IMPORTANT: DO NOT OVERBUILD
+==================================================
+
+Do NOT add:
+
+- Blog
+- Pricing calculator
+- Live chat
+- AI chatbot
+- User dashboard
+- Login system
+- CRM
+- Payment system
+- Complex backend
+
+unless those systems already exist and are required by the current project.
+
+The goal is a high-quality Consulting acquisition page.
+
+==================================================
+FINAL IMPLEMENTATION REQUIREMENT
+==================================================
+
+Do not merely return the code in chat.
+
+Actually modify the project files.
+
+Create reusable components where appropriate.
+
+Keep the code clean.
+
+Keep components maintainable.
+
+Avoid giant monolithic files when the existing architecture supports reusable components.
+
+After implementation, provide a concise implementation report containing:
+
+1. Files changed
+2. Files created
+3. Main components created
+4. Routes added
+5. SEO implemented
+6. Responsive behavior
+7. Form status
+8. Analytics status
+9. Tests performed
+10. Any remaining manual configuration required
+
+If something cannot be implemented because the existing project lacks the required backend/configuration, DO NOT fake it.
+
+Clearly document the missing integration point.
+
+==================================================
+MOST IMPORTANT FINAL PRINCIPLE
+==================================================
+
+The page should make the visitor think:
+
+"এই মানুষ/এই brand আমার সমস্যা বুঝতে পারছে।"
+
+Then:
+
+"আমার আসল bottleneck কী সেটা বুঝতে সাহায্য করতে পারে।"
+
+Then:
+
+"আমার এখন কী করা উচিত সেটা পরিষ্কার করতে পারে।"
+
+Then:
+
+"আমি একটি Consulting Assessment request করতে চাই।"
+
+The emotional journey should be:
+
+CONFUSION
+→ RECOGNITION
+→ CLARITY
+→ TRUST
+→ ACTION
+
+Build the page around this journey.
+
+Now:
+
+FIRST inspect the existing project.
+
+SECOND create the implementation plan.
+
+THIRD implement the complete /consulting page.
+
+FOURTH create /consulting/apply if necessary.
+
+FIFTH run build/lint/type checks.
+
+SIXTH open the page in the browser and visually inspect it.
+
+SEVENTH fix all discovered issues.
+
+EIGHTH perform a final QA review.
+
+Do not finish until the page is genuinely production-ready.
