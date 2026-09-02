@@ -1,0 +1,1915 @@
+MASTER PROMPT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ROLE
+
+You are a world-class B2B Consulting Strategist, Conversion Copywriter,
+UX/UI Designer, CRO Specialist, AI Business Transformation Consultant,
+Offer Architect, Funnel Strategist and Senior Web Product Designer.
+
+You are responsible for completely redesigning and rebuilding the
+"AI Business Consulting" landing page for:
+
+NEXTGEN DIGITAL STUDIO
+Jessore, Bangladesh
+
+Website:
+https://nextgendigitalstudio.com/
+
+Primary Consulting URL:
+https://nextgendigitalstudio.com/consulting
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. PRIMARY OBJECTIVE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Do NOT create a generic AI consulting page.
+
+Build a premium, high-trust, conversion-focused B2B consulting landing
+page whose primary purpose is:
+
+VISITOR
+↓
+UNDERSTANDS BUSINESS PROBLEM
+↓
+REALIZES COST OF INACTION
+↓
+UNDERSTANDS THAT AI IS NOT THE STRATEGY — IT IS THE LEVER
+↓
+SEES NEXTGEN AS THE STRATEGIC GUIDE
+↓
+COMPLETES AI BUSINESS GROWTH AUDIT / QUALIFICATION
+↓
+BOOKS A STRATEGY SESSION
+↓
+RECEIVES A CUSTOM AI ROADMAP
+↓
+BECOMES A CONSULTING CLIENT
+↓
+CAN LATER BECOME AN IMPLEMENTATION / AUTOMATION CLIENT
+
+The page must sell CONSULTING FIRST.
+
+Do NOT make the consulting page look like an AI agency service page.
+
+The distinction must be crystal clear:
+
+CONSULTING =
+Diagnose → Prioritize → Strategize → Roadmap → Decision
+
+IMPLEMENTATION =
+Build → Integrate → Deploy → Automate → Optimize
+
+TRAINING =
+Teach → Practice → Adopt → Improve
+
+The visitor should immediately understand:
+
+"We don't need to buy AI tools today.
+First, we need to understand where AI actually makes sense
+for our business."
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2. CORE POSITIONING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Primary positioning:
+
+"আপনার Business-এ AI কোথায় বসবে—
+আমরা সেটা বের করে দিই।"
+
+Alternative strategic positioning:
+
+"Your Business Doesn't Need More AI Tools.
+It Needs the Right AI Strategy."
+
+Bangla explanation:
+
+"AI দিয়ে সবকিছু automate করা দরকার নেই।
+আপনার business-এর কোথায় revenue leak,
+সময় অপচয়, manual work, follow-up failure,
+customer experience gap বা operational bottleneck আছে—
+আমরা প্রথমে সেটা খুঁজে বের করি।
+
+তারপর data, process এবং business priority-এর ভিত্তিতে
+ঠিক করি কোথায় AI ব্যবহার করলে বাস্তব business impact
+তৈরি হওয়ার সম্ভাবনা সবচেয়ে বেশি।"
+
+DO NOT position NextGen as:
+- another chatbot company
+- another automation agency
+- another AI tools reseller
+- generic digital marketing agency
+- generic IT consultancy
+
+POSITION NEXTGEN AS:
+
+AI Business Strategy + Revenue Systems + Automation Transformation Advisor
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3. BRAND ROLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Follow Donald Miller / StoryBrand principles.
+
+CUSTOMER = HERO
+
+Customer is:
+- Founder
+- CEO
+- Business Owner
+- Managing Director
+- Decision Maker
+- Growth Leader
+
+NEXTGEN = GUIDE
+
+Never make NextGen the hero.
+
+NextGen's job is to:
+- understand the business
+- identify bottlenecks
+- simplify complexity
+- reveal opportunities
+- create priorities
+- design roadmap
+- reduce decision risk
+- guide implementation when appropriate
+
+Use the messaging hierarchy:
+
+CUSTOMER PROBLEM
+→ BUSINESS IMPACT
+→ CLARITY
+→ STRATEGY
+→ ROADMAP
+→ ACTION
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4. TARGET CUSTOMER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Primary ICP:
+
+Bangladesh-based growth-oriented businesses.
+
+Ideal customer characteristics:
+
+- already operating business
+- existing customers
+- existing sales process
+- existing team
+- receives leads/inquiries
+- has repetitive operational work
+- wants growth
+- feels business is becoming difficult to manage manually
+- wants to adopt AI but doesn't know where to start
+- does not want random AI tools
+- wants measurable business outcomes
+
+Primary decision makers:
+
+1. Founder
+2. CEO
+3. Managing Director
+4. Business Owner
+5. COO
+6. Head of Sales
+7. Operations Leader
+
+Potential industries:
+
+- Real Estate
+- Healthcare
+- Education
+- E-commerce
+- Manufacturing
+- Professional Services
+- Construction
+- Retail
+- Travel
+- Hospitality
+- Automotive
+- Financial/Professional Services where appropriate
+- Other service businesses
+
+Do NOT claim that every industry is equally suitable.
+
+Explain that suitability depends on:
+- process maturity
+- data availability
+- lead volume
+- repetitive workflows
+- team structure
+- business economics
+- implementation readiness
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5. CORE CUSTOMER PROBLEMS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Build the problem section around real business problems, not AI jargon.
+
+Examples:
+
+PROBLEM 1:
+Leads আসছে, কিন্তু follow-up consistently হচ্ছে না।
+
+PROBLEM 2:
+Owner/team repetitive কাজেই সময় ব্যয় করছে।
+
+PROBLEM 3:
+Sales process ব্যক্তি-নির্ভর।
+
+PROBLEM 4:
+Customer response slow বা inconsistent।
+
+PROBLEM 5:
+Business data scattered across WhatsApp, Messenger,
+spreadsheets, notebooks and multiple tools।
+
+PROBLEM 6:
+Management জানে AI important,
+কিন্তু কোথা থেকে শুরু করবে জানে না।
+
+PROBLEM 7:
+অনেক AI tools আছে,
+কিন্তু কোনটা business-এর জন্য সত্যিই দরকার বুঝতে পারছে না।
+
+PROBLEM 8:
+Automation করতে গিয়ে ভুল জায়গায় টাকা খরচ হওয়ার ভয়।
+
+PROBLEM 9:
+Business grow করছে,
+কিন্তু existing process scale করতে পারছে না।
+
+PROBLEM 10:
+Founder নিজেই অনেক operational decision-এর bottleneck হয়ে গেছে।
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6. CORE INSIGHT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+The page must communicate:
+
+"AI adoption is not a technology decision first.
+It is a business strategy decision."
+
+Strong messaging:
+
+"প্রশ্নটা AI লাগবে কি না—
+প্রশ্নটা হলো আপনার Business-এর কোন জায়গায় AI
+সবচেয়ে বেশি Business Value তৈরি করতে পারে?"
+
+Also communicate:
+
+MORE AI ≠ MORE GROWTH
+
+RIGHT AI + RIGHT PROCESS + RIGHT PRIORITY = BUSINESS IMPACT
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7. SIGNATURE CONSULTING OFFER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Create a productized consulting offer:
+
+AI BUSINESS GROWTH AUDIT™
+
+Optional premium name:
+
+NextGen AI Business Growth Audit™
+
+The offer must be clearly explained.
+
+The audit should evaluate:
+
+1. Business Model
+2. Customer Journey
+3. Lead Generation
+4. Lead Capture
+5. Lead Qualification
+6. Sales Process
+7. Follow-up
+8. Customer Support
+9. Operations
+10. Team Productivity
+11. Data Flow
+12. Existing Technology Stack
+13. Automation Opportunities
+14. AI Opportunities
+15. Revenue Leakage
+16. Cost Leakage
+17. Time Leakage
+18. Customer Experience Gaps
+
+Then prioritize opportunities based on:
+
+BUSINESS IMPACT
++
+IMPLEMENTATION EFFORT
++
+URGENCY
++
+RISK
++
+DATA READINESS
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+8. DELIVERABLES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+The consulting offer must provide tangible deliverables.
+
+Include:
+
+1. Business Bottleneck Audit
+
+2. Customer Journey Analysis
+
+3. Revenue Leakage Map
+
+4. AI Opportunity Map
+
+5. Automation Opportunity Map
+
+6. Process Prioritization Matrix
+
+7. AI Readiness Assessment
+
+8. Technology / Tool Stack Review
+
+9. ROI Opportunity Estimate
+
+10. Risk & Feasibility Review
+
+11. AI Implementation Priority Plan
+
+12. 90-Day AI Growth Roadmap
+
+13. Executive Strategy Session
+
+14. Recommended Next Steps
+
+The customer should finish the engagement thinking:
+
+"এখন আমি জানি—
+কী করব,
+কেন করব,
+কোনটা আগে করব,
+কতটা investment দরকার,
+এবং কোথায় AI ব্যবহার করা উচিত নয়।"
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+9. SIGNATURE FRAMEWORK
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Create and visually present a proprietary consulting framework:
+
+NEXTGEN AI BUSINESS TRANSFORMATION FRAMEWORK™
+
+STAGE 01 — ASSESS
+Business + Process + Revenue + Customer Journey Audit
+
+STAGE 02 — IDENTIFY
+Bottlenecks + Leakage + AI Opportunities
+
+STAGE 03 — PRIORITIZE
+Impact vs Effort vs Risk
+
+STAGE 04 — DESIGN
+AI + Automation + Process Architecture
+
+STAGE 05 — ROADMAP
+30 / 60 / 90 Day Action Plan
+
+STAGE 06 — DECIDE
+Build Internally / NextGen Implementation / Hybrid / Don't Automate Yet
+
+The last option is important.
+
+NEXTGEN MUST be willing to say:
+
+"এখানে AI দরকার নেই।"
+
+This increases trust.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+10. HERO SECTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Create a powerful premium hero.
+
+Primary headline:
+
+"আপনার Business-এ AI কোথায় বসবে—
+আমরা সেটা বের করে দিই।"
+
+Supporting headline:
+
+"আরও AI Tools নয়।
+প্রথমে দরকার সঠিক Business Strategy."
+
+Body:
+
+"আপনার sales, marketing, customer journey, operations এবং team workflow
+audit করে আমরা identify করি—
+কোথায় AI ও automation বাস্তব business impact তৈরি করতে পারে,
+কোথায় investment করা উচিত,
+আর কোথায় AI ব্যবহার না করাই ভালো।"
+
+Primary CTA:
+
+"আমার AI Business Growth Audit শুরু করুন"
+
+Secondary CTA:
+
+"৩০ মিনিটের Strategy Session বুক করুন"
+
+Trust microcopy:
+
+"No pressure. No random tool recommendations.
+Just business-first AI strategy."
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+11. HERO VISUAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Do NOT use generic:
+- robot
+- humanoid AI
+- glowing brain
+- futuristic blue AI background
+- random chatbot illustration
+
+Instead create a premium B2B strategic visual.
+
+Concept:
+
+Business process map / revenue flow / decision architecture.
+
+Visual should communicate:
+
+Business
+→ Customer Journey
+→ Revenue Funnel
+→ Bottlenecks
+→ AI Opportunities
+→ Automation
+→ Growth
+
+Design language:
+
+- premium
+- executive
+- minimal
+- sophisticated
+- technology-driven
+- Bangladesh business context
+- dark/light high-end SaaS aesthetic
+- strong visual hierarchy
+
+Use diagrams and dashboards where useful.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+12. PROBLEM SECTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Headline:
+
+"আপনার Business-এ সমস্যা AI-এর অভাবে নয়।
+সমস্যা হতে পারে—কোথায় AI ব্যবহার করবেন সেটা না জানায়।"
+
+Show 6–8 business pain cards.
+
+Each card must contain:
+
+Problem
+→ Hidden Cost
+→ Strategic Question
+
+Example:
+
+"Lead আসছে, কিন্তু Follow-up হচ্ছে না"
+
+Hidden Cost:
+"Lost opportunities + wasted ad spend"
+
+Strategic Question:
+"কতটা follow-up AI automate করতে পারে?"
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+13. COST OF INACTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Create a "Cost of Inaction" section.
+
+Do NOT fabricate percentages.
+
+Do NOT invent statistics.
+
+Instead create a calculation model.
+
+Examples:
+
+Missed Leads
+×
+Average Customer Value
+=
+Potential Revenue Leakage
+
+Hours of Repetitive Work
+×
+Hourly Team Cost
+=
+Operational Cost
+
+Slow Response
+×
+Lead Volume
+×
+Estimated Conversion Impact
+=
+Potential Opportunity Loss
+
+Add disclaimer:
+
+"These are planning estimates, not guaranteed outcomes.
+Actual impact depends on your business data and implementation."
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+14. THE BIG IDEA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Create a strong educational section:
+
+"AI আপনার Business-এর জন্য কী করতে পারে?"
+
+But categorize by business function:
+
+MARKETING
+- lead capture
+- content workflow
+- campaign support
+- segmentation
+
+SALES
+- lead qualification
+- follow-up
+- appointment booking
+- sales assistance
+
+CUSTOMER EXPERIENCE
+- instant responses
+- FAQ
+- support triage
+- multilingual communication
+
+OPERATIONS
+- repetitive workflow automation
+- reporting
+- task routing
+- documentation
+
+MANAGEMENT
+- dashboards
+- insights
+- forecasting support
+- decision intelligence
+
+TEAM
+- AI copilots
+- knowledge access
+- productivity
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+15. AI OPPORTUNITY MAP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Create an interactive or visual matrix:
+
+HIGH IMPACT / LOW EFFORT
+→ DO FIRST
+
+HIGH IMPACT / HIGH EFFORT
+→ PLAN
+
+LOW IMPACT / LOW EFFORT
+→ OPTIONAL
+
+LOW IMPACT / HIGH EFFORT
+→ AVOID
+
+This is a key differentiator.
+
+Explain:
+
+"We don't automate everything.
+We prioritize what matters."
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+16. WHAT THE CLIENT GETS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Create a premium "You Walk Away With" section.
+
+Show:
+
+✓ Business Bottleneck Report
+✓ AI Opportunity Map
+✓ Revenue Leakage Map
+✓ Automation Priority Matrix
+✓ AI Readiness Score
+✓ Technology Stack Recommendations
+✓ ROI Opportunity Estimate
+✓ 90-Day Roadmap
+✓ Executive Strategy Session
+✓ Recommended Implementation Plan
+
+Use visual mockups of:
+
+- audit report
+- roadmap
+- matrix
+- scorecard
+- process map
+
+Do NOT show fake dashboards presented as real client results.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+17. CONSULTING PROCESS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Use:
+
+STEP 01
+DISCOVER
+
+Understand business, goals, challenges and current workflow.
+
+STEP 02
+AUDIT
+
+Map customer journey, sales, operations and technology.
+
+STEP 03
+IDENTIFY
+
+Find bottlenecks, leakage and AI opportunities.
+
+STEP 04
+PRIORITIZE
+
+Rank opportunities based on impact, effort, urgency and risk.
+
+STEP 05
+ROADMAP
+
+Build a practical 30/60/90-day strategy.
+
+STEP 06
+DECIDE
+
+Choose:
+- Build internally
+- Work with NextGen
+- Hybrid
+- Wait / Don't automate yet
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+18. CONSULTING VS IMPLEMENTATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+This section is mandatory.
+
+Title:
+
+"Consulting আর Implementation এক জিনিস নয়।"
+
+Create comparison:
+
+CONSULTING
+
+Question:
+"What should we do?"
+
+Includes:
+- Audit
+- Strategy
+- Prioritization
+- Roadmap
+- Decision support
+
+IMPLEMENTATION
+
+Question:
+"How do we build it?"
+
+Includes:
+- AI Agents
+- CRM
+- Automation
+- Integrations
+- Deployment
+- Optimization
+
+TRAINING
+
+Question:
+"How does our team use it?"
+
+Includes:
+- AI literacy
+- workflows
+- tools
+- adoption
+- team enablement
+
+CTA:
+"আপনার এখন কোন পর্যায়ে আছেন?"
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+19. CASE STUDIES / PROOF
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Use ONLY verified case studies supplied by NextGen.
+
+Do NOT invent:
+- clients
+- revenue
+- ROI
+- conversion rates
+- testimonials
+- screenshots
+- media features
+
+For every case study structure:
+
+CLIENT
+→ BUSINESS PROBLEM
+→ WHAT WAS ANALYZED
+→ WHAT WAS CHANGED
+→ MEASURABLE RESULT
+→ TIMEFRAME
+→ SOURCE / VERIFICATION STATUS
+
+If evidence is unavailable:
+
+Do NOT fabricate.
+
+Instead write:
+
+"Case study data available upon request"
+
+or
+
+"Illustrative example — not a client result."
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+20. SOCIAL PROOF
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Use only substantiated proof.
+
+Possible proof types:
+
+- verified client count
+- verified projects
+- verified case studies
+- client testimonials
+- founder credentials
+- actual implementation screenshots
+- documented outcomes
+
+Avoid excessive vanity metrics.
+
+Priority:
+
+Specific proof > generic claims.
+
+Real case study > huge number.
+
+Client evidence > marketing statement.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+21. FOUNDER POSITIONING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Introduce:
+
+Md. Najmul Islam Taj
+Founder & CEO
+NextGen Digital Studio
+
+Position him as:
+
+AI Business Strategist
+AI Revenue Systems Architect
+Business Transformation Advisor
+
+Story:
+
+Engineer → Business Builder → Digital Systems → AI Transformation
+
+But do not make the section overly autobiographical.
+
+Focus on:
+
+Why should a business owner trust him?
+
+Use:
+
+- business understanding
+- technology understanding
+- systems thinking
+- AI
+- automation
+- revenue processes
+- Bangladesh SME context
+
+CTA:
+
+"Talk to the Strategy Team"
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+22. WHO THIS IS FOR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Create qualification section.
+
+"This Consulting is for you if..."
+
+✓ You already have a functioning business
+✓ You have customers or leads
+✓ You want structured AI adoption
+✓ You have repetitive processes
+✓ You want to improve sales or operations
+✓ You want a roadmap before investing
+✓ You are a founder/decision maker
+✓ You are willing to share business/process information
+
+"This is NOT for you if..."
+
+✗ You only want a cheap chatbot
+✗ You are looking for random AI tools
+✗ You expect instant guaranteed revenue
+✗ You don't want to change existing processes
+✗ You have no meaningful business process to analyze
+✗ You want technology before understanding the problem
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+23. OFFER ARCHITECTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Build a clear offer ladder.
+
+LEVEL 1
+FREE AI READINESS ASSESSMENT
+
+Purpose:
+Low-friction entry.
+
+↓
+
+LEVEL 2
+AI BUSINESS GROWTH AUDIT™
+
+Purpose:
+Paid or qualified diagnostic engagement.
+
+↓
+
+LEVEL 3
+AI STRATEGY / EXECUTIVE CONSULTING
+
+Purpose:
+Deep strategic advisory.
+
+↓
+
+LEVEL 4
+AI IMPLEMENTATION
+
+Purpose:
+Build and deploy.
+
+↓
+
+LEVEL 5
+OPTIMIZATION / RETAINER
+
+Purpose:
+Continuous improvement and scale.
+
+The user should understand the journey.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+24. CTA STRATEGY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Primary CTA throughout page:
+
+"AI Business Growth Audit শুরু করুন"
+
+Secondary CTA:
+
+"৩০ মিনিটের Strategy Session বুক করুন"
+
+Do NOT use generic CTA everywhere:
+
+"Learn More"
+"Submit"
+"Contact Us"
+
+CTA copy must communicate outcome.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+25. LEAD QUALIFICATION FORM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Create a short but high-quality qualification form.
+
+Fields:
+
+1. Name
+2. Business Name
+3. Phone / WhatsApp
+4. Email
+5. Business Type
+6. Team Size
+7. Monthly Lead Volume
+8. Biggest Challenge
+9. Current AI / Automation Usage
+10. Desired 90-Day Outcome
+11. Estimated Monthly Revenue Range
+12. Preferred Consultation Time
+
+Biggest Challenge options:
+
+- Lead Generation
+- Lead Follow-up
+- Sales Conversion
+- Customer Support
+- Operations
+- Team Productivity
+- Reporting / Data
+- CRM
+- Automation
+- AI Strategy
+- Other
+
+Do NOT make the form unnecessarily long.
+
+Use progressive qualification where possible.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+26. QUALIFICATION LOGIC
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Create a qualification scoring model.
+
+Possible dimensions:
+
+Business maturity
+Lead volume
+Team size
+Revenue potential
+Problem urgency
+AI readiness
+Decision-maker status
+Implementation readiness
+
+Classify:
+
+HOT
+→ Strategy Call
+
+WARM
+→ Education + Nurture
+
+EARLY
+→ Free Resources / AI Readiness
+
+NOT FIT
+→ Self-service resources
+
+Do not expose internal scoring unless strategically useful.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+27. ROI CALCULATOR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Include an optional interactive ROI opportunity calculator.
+
+Inputs:
+
+Monthly Leads
+Average Customer Value
+Current Conversion Rate
+Estimated Improvement
+Hours of Repetitive Work
+Team Hourly Cost
+Current Response Time
+Estimated Lead Loss
+
+Output:
+
+Potential Revenue Opportunity
+Potential Time Savings
+Potential Operational Savings
+Potential Annual Opportunity
+
+IMPORTANT:
+
+Never represent the calculation as guaranteed revenue.
+
+Use:
+
+"Estimated Opportunity"
+
+NOT:
+
+"Guaranteed Revenue"
+
+Disclaimer:
+
+"Estimates are planning tools only.
+Actual results depend on business conditions, implementation quality,
+customer behavior and other factors."
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+28. PRICING STRATEGY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Do not blindly copy agency pricing.
+
+Consulting should be positioned separately from implementation.
+
+Possible architecture:
+
+AI Readiness Assessment
+FREE
+
+AI Business Growth Audit
+Starting from ৳X / Custom
+
+Executive AI Strategy
+Custom
+
+90-Day Transformation Roadmap
+Custom
+
+For exact pricing:
+- use verified business pricing
+- otherwise use "Custom"
+- never invent pricing
+
+Make pricing logic transparent.
+
+If the consulting requires significant business analysis,
+do NOT make it look like a free generic consultation.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+29. RISK REVERSAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Do NOT promise guaranteed revenue.
+
+Do NOT use aggressive guarantees unless legally and operationally verified.
+
+Instead use risk reducers:
+
+- clear scope
+- transparent deliverables
+- documented recommendations
+- business-first strategy
+- no unnecessary tool selling
+- decision-ready roadmap
+- clear implementation options
+
+Possible trust statement:
+
+"আমরা আপনাকে সবকিছু automate করতে বলব না।
+যেখানে AI-এর business case নেই,
+সেখানে আমরা সেটাও বলব।"
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+30. SECURITY / PRIVACY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Include a concise section.
+
+Explain:
+
+- client data handling
+- access control
+- minimum necessary access
+- confidentiality
+- responsible AI usage
+- human oversight where necessary
+- third-party tools may have their own policies
+
+Do NOT claim:
+ISO certification
+GDPR compliance
+legal compliance
+specific security certifications
+
+unless verified and documented.
+
+Use:
+
+"Security and privacy practices are applied according to the
+specific project, tools and applicable requirements."
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+31. FAQ
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Create at least 12 strong FAQs.
+
+Questions should include:
+
+1. AI Consulting আসলে কী?
+2. AI Business Growth Audit কী?
+3. আমার business ছোট হলে কি consulting দরকার?
+4. আপনারা কি implementation-ও করেন?
+5. Consulting আর AI automation-এর পার্থক্য কী?
+6. আমার business-এ AI কোথায় ব্যবহার করা উচিত?
+7. আপনারা কি শুধু AI tools recommend করেন?
+8. কতদিনে roadmap পাওয়া যাবে?
+9. Consulting-এর পর কী হবে?
+10. আমি নিজে implementation করতে পারব?
+11. আপনারা কি WhatsApp / CRM / website process audit করেন?
+12. আমার industry-এর জন্য AI suitable কি না?
+13. ROI কীভাবে estimate করেন?
+14. AI ব্যবহার না করেও কি আপনারা recommend করবেন?
+15. Consultation-এর আগে কী প্রস্তুতি দরকার?
+16. Data privacy কীভাবে handle করা হয়?
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+32. CONVERSION PSYCHOLOGY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Apply:
+
+AWARENESS
+→ PROBLEM
+
+INTEREST
+→ POSSIBILITY
+
+DESIRE
+→ BUSINESS OUTCOME
+
+TRUST
+→ PROOF
+
+ACTION
+→ LOW-FRICTION NEXT STEP
+
+Use:
+
+- clarity
+- specificity
+- authority
+- social proof
+- risk reduction
+- urgency without manipulation
+- contrast
+- curiosity
+- commitment
+
+Do NOT use:
+- fake scarcity
+- fake countdown
+- fake testimonials
+- fake revenue claims
+- exaggerated promises
+- fear manipulation
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+33. HORMOZI OFFER PRINCIPLES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Apply value equation:
+
+VALUE
+=
+Dream Outcome × Perceived Likelihood
+/
+Time Delay × Effort & Sacrifice
+
+Increase value through:
+
+- specific outcome
+- tangible deliverables
+- clear process
+- strategic clarity
+- faster decision making
+- reduced uncertainty
+- reduced implementation mistakes
+- personalized roadmap
+
+Do not sell hours.
+
+Sell:
+
+CLARITY
++
+DECISION
++
+ROADMAP
++
+BUSINESS VALUE
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+34. BRIAN TRACY SALES PRINCIPLES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Structure the consulting conversation around:
+
+GOAL
+→ CURRENT REALITY
+→ PROBLEM
+→ GAP
+→ PRIORITY
+→ SOLUTION
+→ ACTION
+→ DECISION
+
+The page should naturally prepare the prospect for this conversation.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+35. STORYBRAND PRINCIPLES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Use:
+
+Character
+→ Problem
+→ Guide
+→ Plan
+→ Call to Action
+→ Success
+→ Failure
+
+Character:
+Business Owner
+
+External Problem:
+Manual process / lost leads / fragmented operations
+
+Internal Problem:
+"I don't know where to start."
+
+Philosophical Problem:
+"Business owners should not have to waste resources
+on technology that doesn't solve real problems."
+
+Guide:
+NextGen
+
+Plan:
+Assess → Identify → Prioritize → Design → Roadmap → Decide
+
+Success:
+Clarity + efficiency + scalable systems + better decision making
+
+Failure:
+Random AI tools + wasted money + fragmented automation
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+36. CONTENT FORMULA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Use the existing NextGen content philosophy:
+
+PROBLEM
+→ AWARENESS
+→ EDUCATION
+→ CLARITY
+→ MOTIVATION
+→ ACTION
+→ SOLUTION
+→ CONSULTING / PRODUCT AWARENESS
+
+The landing page should follow the same psychological journey.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+37. UX STRUCTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Recommended page architecture:
+
+01 — Announcement / Trust Bar
+
+02 — Hero
+
+03 — Immediate CTA
+
+04 — Problem Recognition
+
+05 — Cost of Inaction
+
+06 — Why AI Strategy First?
+
+07 — AI Opportunity Areas
+
+08 — NextGen Consulting Framework
+
+09 — AI Business Growth Audit™
+
+10 — What You Get
+
+11 — Interactive Opportunity Matrix
+
+12 — Consulting vs Implementation vs Training
+
+13 — Case Studies / Proof
+
+14 — Founder / Authority
+
+15 — Who This Is For
+
+16 — Who This Is NOT For
+
+17 — Process
+
+18 — Offer
+
+19 — ROI Opportunity Calculator
+
+20 — FAQ
+
+21 — Final CTA
+
+22 — Footer
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+38. MOBILE-FIRST REQUIREMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+The page must be designed mobile-first.
+
+Especially optimize for:
+
+Bangladesh users
+Facebook traffic
+WhatsApp users
+mobile browsers
+
+Requirements:
+
+- sticky CTA
+- WhatsApp CTA
+- fast loading
+- compressed images
+- minimal heavy animation
+- readable Bengali typography
+- large tap targets
+- short form
+- clear section hierarchy
+- no unnecessary scrolling friction
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+39. PERFORMANCE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Target:
+
+LCP < 2.5 sec
+CLS < 0.1
+INP < 200ms
+
+Use:
+- optimized images
+- lazy loading
+- minimal JavaScript
+- code splitting
+- optimized fonts
+- semantic HTML
+- accessible components
+
+Do not sacrifice conversion for visual effects.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+40. SEO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Primary keyword concepts:
+
+AI Consulting Bangladesh
+AI Business Consulting Bangladesh
+AI Strategy Consultant Bangladesh
+AI Business Transformation
+AI Automation Consulting
+AI Revenue Strategy
+AI Consultant for Business
+AI Consulting for SMEs Bangladesh
+
+Create:
+
+- SEO title
+- meta description
+- H1
+- H2 hierarchy
+- internal links
+- FAQ schema where appropriate
+- Organization schema where appropriate
+- Person schema where appropriate
+- Breadcrumb schema where appropriate
+
+Do not keyword-stuff.
+
+Write for humans first.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+41. COPY STYLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Language:
+
+Bangla + natural English business terminology.
+
+But when Bengali copy is used,
+write common English business terms phonetically in Bengali script
+where appropriate.
+
+Examples:
+
+Business → বিজনেস
+Strategy → স্ট্র্যাটেজি
+Consulting → কনসালটিং
+AI → এআই
+Automation → অটোমেশন
+Revenue → রেভিনিউ
+Lead → লিড
+Sales → সেলস
+Customer → কাস্টমার
+Process → প্রসেস
+Workflow → ওয়ার্কফ্লো
+Roadmap → রোডম্যাপ
+Audit → অডিট
+Conversion → কনভার্সন
+Growth → গ্রোথ
+
+Tone:
+
+- premium
+- intelligent
+- confident
+- strategic
+- simple
+- business-first
+- trustworthy
+- practical
+
+Avoid:
+- unnecessary hype
+- "revolutionary"
+- "game changer" everywhere
+- "guaranteed 10x"
+- vague AI buzzwords
+- fake urgency
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+42. DESIGN SYSTEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Design should communicate:
+
+TRUST
++
+AUTHORITY
++
+INTELLIGENCE
++
+PRECISION
++
+MODERNITY
+
+Visual references:
+
+Premium B2B SaaS
+Executive consulting
+AI strategy
+Enterprise technology
+McKinsey-style clarity
+Modern SaaS dashboards
+High-end technology consultancy
+
+But do NOT copy any company's design.
+
+Use:
+
+- strong typography
+- generous whitespace
+- clean cards
+- strategic diagrams
+- subtle motion
+- data visualization
+- process maps
+- premium CTA treatment
+- clear contrast
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+43. ACCESSIBILITY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Follow WCAG principles.
+
+Ensure:
+
+- readable font sizes
+- sufficient contrast
+- keyboard navigation
+- form labels
+- error messages
+- alt text
+- focus states
+- reduced motion option
+- semantic heading structure
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+44. ANALYTICS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Track:
+
+page_view
+hero_cta_click
+audit_cta_click
+strategy_call_click
+whatsapp_click
+form_start
+form_complete
+roi_calculator_start
+roi_calculator_complete
+case_study_view
+faq_expand
+scroll_25
+scroll_50
+scroll_75
+scroll_90
+
+Create conversion funnel:
+
+VISIT
+→ ENGAGE
+→ CTA
+→ FORM
+→ QUALIFIED LEAD
+→ STRATEGY CALL
+→ AUDIT
+→ CONSULTING
+→ IMPLEMENTATION
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+45. A/B TESTING PLAN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Prepare experiments for:
+
+H1:
+
+A:
+"আপনার Business-এ AI কোথায় বসবে—
+আমরা সেটা বের করে দিই।"
+
+B:
+"আরও AI Tools নয়।
+আপনার Business-এর জন্য দরকার সঠিক AI Strategy."
+
+CTA:
+
+A:
+"AI Business Growth Audit শুরু করুন"
+
+B:
+"আমার Business-এর AI Opportunity খুঁজে দিন"
+
+Form:
+
+Short vs qualification-heavy
+
+Hero:
+
+Problem-led vs outcome-led
+
+Create a prioritized testing roadmap.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+46. TRUST & CLAIM VALIDATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+This is CRITICAL.
+
+Before publishing any quantitative claim,
+classify it:
+
+VERIFIED
+→ Can publish.
+
+UNVERIFIED
+→ Remove, qualify or request evidence.
+
+ESTIMATE
+→ Clearly label as estimate.
+
+ILLUSTRATIVE
+→ Clearly label as illustrative.
+
+NEVER invent proof.
+
+Audit all existing claims such as:
+
+- client numbers
+- revenue influenced
+- ROI
+- sales growth
+- response time
+- retention
+- industry statistics
+- guarantees
+- media recognition
+- certifications
+- security standards
+
+If evidence cannot be established,
+do not use the claim as fact.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+47. IMPORTANT BUSINESS RULE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Never sell AI for the sake of AI.
+
+Use this principle:
+
+BUSINESS PROBLEM
+→ PROCESS
+→ DATA
+→ ECONOMICS
+→ AI OPPORTUNITY
+→ AUTOMATION
+→ MEASUREMENT
+
+Not:
+
+AI TOOL
+→ FIND A PROBLEM
+
+This principle must be visible throughout the page.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+48. FINAL CTA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+End with a high-conviction CTA.
+
+Headline:
+
+"আপনার Business-এর জন্য AI কোথায় সবচেয়ে বেশি Value তৈরি করতে পারে—
+চলুন সেটা আগে বের করি।"
+
+Supporting copy:
+
+"আপনাকে আজই কোনো AI system কিনতে হবে না।
+প্রথমে বুঝুন—
+কোথায় opportunity,
+কোথায় bottleneck,
+কী automate করা উচিত,
+কী automate করা উচিত নয়,
+এবং আগামী ৯০ দিনে কোন কাজগুলো আগে করা দরকার।"
+
+CTA:
+
+"আমার AI Business Growth Audit শুরু করুন"
+
+Secondary:
+
+"৩০ মিনিটের Strategy Session বুক করুন"
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+49. FOOTER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Include:
+
+NextGen Digital Studio
+
+AI Business Strategy
+AI Consulting
+AI Automation
+AI Implementation
+AI Training
+
+Location:
+Jessore, Bangladesh
+
+Serving:
+Bangladesh + Remote
+
+Links:
+About
+Founder
+Consulting
+AI Automation
+Training
+Case Studies
+Resources
+Contact
+Privacy
+Terms
+
+WhatsApp CTA
+
+Email CTA
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+50. TECHNICAL IMPLEMENTATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+If generating code:
+
+Use modern production-grade architecture.
+
+Preferred:
+
+Next.js
+TypeScript
+Tailwind CSS
+accessible component system
+optimized image loading
+SEO metadata
+structured data
+analytics events
+responsive design
+
+Keep content modular.
+
+Create reusable components:
+
+Hero
+TrustBar
+ProblemCards
+CostCalculator
+OpportunityMatrix
+Framework
+AuditOffer
+Deliverables
+CaseStudy
+Founder
+Qualification
+Pricing
+FAQ
+CTA
+Footer
+
+Do not create one giant component.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+51. FINAL OUTPUT REQUIREMENT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Before producing the final page, perform a complete internal audit.
+
+CHECK:
+
+[ ] Consulting positioning is clear
+[ ] Consulting ≠ Implementation
+[ ] Customer is Hero
+[ ] NextGen is Guide
+[ ] Problem is specific
+[ ] Cost of inaction is understandable
+[ ] Offer is tangible
+[ ] Deliverables are clear
+[ ] Framework is proprietary
+[ ] Proof is evidence-based
+[ ] No fabricated claims
+[ ] CTA is clear
+[ ] Lead qualification exists
+[ ] ROI is presented as estimate
+[ ] Risk is reduced
+[ ] FAQ handles objections
+[ ] Mobile experience is excellent
+[ ] SEO is implemented
+[ ] Accessibility is implemented
+[ ] Analytics events are defined
+[ ] Page speed is considered
+[ ] WhatsApp journey is considered
+[ ] Facebook traffic journey is considered
+[ ] Consulting-to-implementation journey is clear
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+52. OUTPUT FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Do NOT immediately write code.
+
+First provide:
+
+PHASE 1
+Strategic Diagnosis
+
+PHASE 2
+Final Positioning
+
+PHASE 3
+Ideal Customer Profile
+
+PHASE 4
+Offer Architecture
+
+PHASE 5
+Complete Page Wireframe
+
+PHASE 6
+Complete Conversion Copy
+
+PHASE 7
+UX/UI Design System
+
+PHASE 8
+Technical Architecture
+
+PHASE 9
+Lead Qualification Logic
+
+PHASE 10
+Analytics & CRO Plan
+
+PHASE 11
+Trust/Claim Audit
+
+PHASE 12
+Final QA Checklist
+
+ONLY AFTER ALL OF THESE ARE COMPLETE:
+
+Build the final production-ready consulting page.
+
+The final page must feel like a premium strategic consulting company,
+NOT an AI tool vendor.
+
+The visitor should leave with one clear thought:
+
+"NextGen বুঝতে পারে আমার Business কোথায় আটকে আছে,
+AI কোথায় কাজে লাগবে,
+এবং আমাকে কী করতে হবে—এটা পরিষ্কার করে দিতে পারে."
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+END MASTER PROMPT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
