@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { LanguageProvider } from "@/components/site/language-provider";
 import { AnalyticsPixels } from "@/components/site/analytics-pixels";
 import { siteConfig, faqs } from "@/lib/site-data";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
@@ -322,6 +323,7 @@ export default function RootLayout({
             <SonnerToaster position="bottom-right" />
           </LanguageProvider>
         </ThemeProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
