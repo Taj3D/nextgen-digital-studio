@@ -1,177 +1,257 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import { Toaster as SonnerToaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "@/components/theme-provider";
+import { LanguageProvider } from "@/components/site/language-provider";
+import { AnalyticsPixels } from "@/components/site/analytics-pixels";
+import { siteConfig, faqs } from "@/lib/site-data";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const jakarta = Plus_Jakarta_Sans({
+  variable: "--font-jakarta",
   subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500", "600", "700", "800"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "NextGen Digital Studio - ইঞ্জিনিয়ার মোঃ নাজমুল ইসলাম তাজ (তাজ ভাই) | যশোরের প্রথম ডিজিটাল ইঞ্জিনিয়ার",
-  description: "যশোরের প্রথম ডিজিটাল ইঞ্জিনিয়ার ইঞ্জিনিয়ার মোঃ নাজমুল ইসলাম তাজ (তাজ ভাই)। ১৭+ বছরের ইঞ্জিনিয়ারিং অভিজ্ঞতা, ৫০০+ সফল প্রজেক্ট, ১০+ বছর সিএনসি বিশেষজ্ঞ। AI এজেন্ট, মোবাইল অ্যাপ, ওয়েবসাইট, ৩ডি CNC ডিজাইন সেবা।",
-  keywords: ["NextGen Digital", "তাজ ভাই", "ডিজিটাল ইঞ্জিনিয়ার", "যশোর", "সিএনসি", "ওয়েবসাইট", "মোবাইল অ্যাপ", "এআই", "AI Agent", "CNC Design", "বাংলাদেশ"],
-  authors: [{ name: "ইঞ্জিনিয়ার মোঃ নাজমুল ইসলাম তাজ" }],
-  creator: "ইঞ্জিনিয়ার মোঃ নাজমুল ইসলাম তাজ",
+  metadataBase: new URL("https://nextgendigitalstudio.com"),
+  title: {
+    default: "NextGen Digital Studio — Consulting | Training | Digital Solutions | Bangladesh",
+    template: "%s | NextGen Digital Studio",
+  },
+  description:
+    "NextGen Digital Studio — Consulting, Training এবং Digital Solutions। Students, Freelancers ও Business Owners-এর জন্য strategy, practical training ও technology-এর মাধ্যমে এগিয়ে যাওয়া। LEARN · GROW · BUILD · TOGETHER। Jessore, Bangladesh.",
+  keywords: [
+    "Consulting Bangladesh",
+    "Business Consulting Bangladesh",
+    "Training Bangladesh",
+    "AI training Bangladesh",
+    "CNC design Bangladesh",
+    "CNC training Bangladesh",
+    "Digital Solutions Bangladesh",
+    "Website development Bangladesh",
+    "Website development Jessore",
+    "AI chatbot Bangladesh",
+    "WhatsApp automation Bangladesh",
+    "lead generation Bangladesh",
+    "business automation Bangladesh",
+    "NextGen Digital Studio",
+    "digital marketing Bangladesh",
+    "marketing automation Bangladesh",
+    "Free English Speaking Course Bangladesh",
+    "Taj Bhai Jessore",
+    "Nazmul Islam Taj",
+    "software development Bangladesh",
+    "landing page design Bangladesh",
+  ],
+  authors: [{ name: "NextGen Digital Studio", url: "https://nextgendigitalstudio.com" }],
+  creator: "NextGen Digital Studio",
   publisher: "NextGen Digital Studio",
-  robots: { index: true, follow: true },
-  manifest: "/manifest.json",
-  themeColor: "#06b6d4",
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 1,
+  alternates: {
+    canonical: "https://nextgendigitalstudio.com",
+    languages: {
+      'en': 'https://nextgendigitalstudio.com',
+      'bn': 'https://nextgendigitalstudio.com',
+    },
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
   },
   icons: {
-    icon: "/logo.png",
-    apple: "/logo.png",
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/logo.jpg", type: "image/jpeg" },
+    ],
+    apple: "/apple-icon.png",
   },
   openGraph: {
-    title: "NextGen Digital Studio - তাজ ভাই | যশোরের প্রথম ডিজিটাল ইঞ্জিনিয়ার",
-    description: "১৭+ বছরের ইঞ্জিনিয়ারিং অভিজ্ঞতা, ৫০০+ সফল প্রজেক্ট, ১০+ বছর সিএনসি বিশেষজ্ঞ। AI এজেন্ট, মোবাইল অ্যাপ, ওয়েবসাইট, ৩ডি CNC ডিজাইন সেবা।",
     type: "website",
-    locale: "bn_BD",
+    locale: "en_US",
+    alternateLocale: ["bn_BD"],
+    url: "https://nextgendigitalstudio.com",
     siteName: "NextGen Digital Studio",
+    title: "NextGen Digital Studio — Consulting | Training | Digital Solutions | Bangladesh",
+    description: "NextGen Digital Studio — Consulting, Training এবং Digital Solutions। Students, Freelancers ও Business Owners-এর জন্য strategy, practical training ও technology-এর মাধ্যমে এগিয়ে যাওয়া। Jessore, Bangladesh.",
     images: [
       {
-        url: "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?w=1200",
+        url: "/logo.jpg",
         width: 1200,
         height: 630,
-        alt: "NextGen Digital Studio - ইঞ্জিনিয়ার তাজ ভাই",
+        alt: "NextGen Digital Studio — Consulting | Training | Digital Solutions | Bangladesh",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "NextGen Digital Studio - তাজ ভাই",
-    description: "যশোরের প্রথম ডিজিটাল ইঞ্জিনিয়ার। ১৭+ বছরের অভিজ্ঞতা।",
-    images: ["https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?w=1200"],
+    title: "NextGen Digital Studio — Consulting | Training | Digital Solutions",
+    description: "Consulting, Training এবং Digital Solutions। Students, Freelancers ও Business Owners-এর জন্য। LEARN · GROW · BUILD · TOGETHER। Jessore, Bangladesh.",
+    images: [
+      {
+        url: "/logo.jpg",
+        width: 1200,
+        height: 630,
+        alt: "NextGen Digital Studio",
+      },
+    ],
+    creator: "@nextgendigital",
   },
-  alternates: {
-    canonical: "https://nextgendigital.com",
+  verification: {
+    google: "google-site-verification=YOUR_GOOGLE_VERIFICATION_CODE",
   },
+  category: "technology",
 };
 
-// JSON-LD Structured Data
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0F172A" },
+  ],
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+};
+
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "ProfessionalService",
-  "name": "NextGen Digital Studio",
-  "alternateName": "নেক্সটজেন ডিজিটাল স্টুডিও",
-  "url": "https://nextgendigital.com",
-  "logo": "https://nextgendigital.com/logo.png",
-  "image": "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?w=1200",
-  "telephone": "+8801711731354",
-  "email": "concept11art@gmail.com",
-  "priceRange": "৳১,৫০০ - ৳১,৫০,০০০+",
-  "address": {
+  "@type": "Organization",
+  name: "NextGen Digital Studio",
+  alternateName: "নেক্সটজেন ডিজিটাল স্টুডিও",
+  url: "https://nextgendigitalstudio.com",
+  logo: "https://nextgendigitalstudio.com/logo.jpg",
+  image: "https://nextgendigitalstudio.com/logo.jpg",
+  description: "NextGen Digital Studio — Consulting, Training ও Digital Solutions। Students, Freelancers ও Business Owners-এর জন্য strategy, practical training ও technology-এর মাধ্যমে এগিয়ে যাওয়া। Jessore, Bangladesh.",
+  email: "nextgendigitalstudio1@gmail.com",
+  telephone: "+8801711731354",
+  address: {
     "@type": "PostalAddress",
-    "streetAddress": "পুরাতন কসবা, ঘোষপাড়া",
-    "addressLocality": "যশোর",
-    "addressRegion": "খুলনা",
-    "postalCode": "7400",
-    "addressCountry": "BD"
+    addressLocality: "Jessore",
+    addressRegion: "Khulna",
+    addressCountry: "BD",
+    streetAddress: "Mia Barir Mor, Sheikhati, New Market, Jessore 7400",
+    postalCode: "7400",
   },
-  "geo": {
-    "@type": "GeoCoordinates",
-    "latitude": "23.1707",
-    "longitude": "89.2139"
-  },
-  "areaServed": {
-    "@type": "Country",
-    "name": "Bangladesh"
-  },
-  "founder": {
-    "@type": "Person",
-    "name": "মোঃ নাজমুল ইসলাম তাজ",
-    "alternateName": "ইঞ্জিনিয়ার তাজ ভাই",
-    "jobTitle": "প্রধান ইঞ্জিনিয়ার ও ডিজিটাল আর্কিটেক্ট",
-    "description": "যশোরের প্রথম ডিজিটাল ইঞ্জিনিয়ার, ১৭+ বছরের ইঞ্জিনিয়ারিং অভিজ্ঞতা, ৫০০+ সফল প্রজেক্ট, ১০+ বছর সিএনসি বিশেষজ্ঞ"
-  },
-  "foundingDate": "2012",
-  "description": "যশোরের প্রথম ডিজিটাল ইঞ্জিনিয়ার ইঞ্জিনিয়ার মোঃ নাজমুল ইসলাম তাজ (তাজ ভাই) এর ডিজিটাল স্টুডিও। ১৭+ বছরের ইঞ্জিনিয়ারিং অভিজ্ঞতা, ৫০০+ সফল প্রজেক্ট, ১০+ বছর সিএনসি বিশেষজ্ঞ। AI এজেন্ট, মোবাইল অ্যাপ, ওয়েবসাইট, ৩ডি CNC ডিজাইন সেবা।",
-  "slogan": "ইঞ্জিনিয়ারিং প্রিসিশনে ডিজিটাল সলিউশন",
-  "hasOfferCatalog": {
-    "@type": "OfferCatalog",
-    "name": "ডিজিটাল সার্ভিস",
-    "itemListElement": [
-      {
-        "@type": "Offer",
-        "itemOffered": {
-          "@type": "Service",
-          "name": "AI এজেন্ট",
-          "description": "২৪/৭ বিজনেস অটোমেশন - কাস্টম AI চ্যাটবট, অর্ডার ম্যানেজমেন্ট সিস্টেম"
-        },
-        "priceSpecification": {
-          "@type": "PriceSpecification",
-          "priceCurrency": "BDT",
-          "price": "30000"
-        }
-      },
-      {
-        "@type": "Offer",
-        "itemOffered": {
-          "@type": "Service",
-          "name": "মোবাইল অ্যাপ",
-          "description": "iOS ও Android অ্যাপ ডেভেলপমেন্ট"
-        },
-        "priceSpecification": {
-          "@type": "PriceSpecification",
-          "priceCurrency": "BDT",
-          "price": "50000"
-        }
-      },
-      {
-        "@type": "Offer",
-        "itemOffered": {
-          "@type": "Service",
-          "name": "ওয়েবসাইট",
-          "description": "প্রফেশনাল ওয়েবসাইট ডেভেলপমেন্ট"
-        },
-        "priceSpecification": {
-          "@type": "PriceSpecification",
-          "priceCurrency": "BDT",
-          "price": "15000"
-        }
-      },
-      {
-        "@type": "Offer",
-        "itemOffered": {
-          "@type": "Service",
-          "name": "৩ডি সিএনসি ডিজাইন",
-          "description": "৩ডি রিলিফ ডিজাইন, ফার্নিচার ডিজাইন, পোর্ট্রেট আর্ট - ১০+ বছর এক্সপার্ট"
-        },
-        "priceSpecification": {
-          "@type": "PriceSpecification",
-          "priceCurrency": "BDT",
-          "price": "2000"
-        }
-      }
-    ]
-  },
-  "sameAs": [
-    "https://facebook.com/nextgendigital",
-    "https://wa.me/8801711731354"
+  sameAs: [
+    "https://www.facebook.com/nextgendigitalstudio",
+    "https://www.linkedin.com/in/nextgen-digital-studio",
+    "https://github.com/Taj3D",
+    "https://instagram.com/nextgendigitalstudio1",
+    "https://threads.net/nextgendigitalstudio1",
+    "https://www.youtube.com/@NextGenDigitalStudio1",
+    "https://x.com/NextGenDigit",
   ],
-  "openingHoursSpecification": {
-    "@type": "OpeningHoursSpecification",
-    "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-    "opens": "10:00",
-    "closes": "22:00"
+  founder: {
+    "@type": "Person",
+    name: "MD Nazmul Islam Taj",
+    alternateName: "Taj Bhai",
+    jobTitle: "Founder & CEO",
+    worksFor: "NextGen Digital Studio",
   },
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.9",
-    "reviewCount": "500",
-    "bestRating": "5"
-  }
-};
+  areaServed: ["Bangladesh", "Dhaka", "Chittagong", "Khulna", "Jessore"],
+  knowsAbout: [
+    "Business Consulting",
+    "Digital Strategy",
+    "AI & Automation",
+    "Digital Skills Training",
+    "WhatsApp Automation",
+    "CRM Automation",
+    "Lead Generation",
+    "Business Automation",
+    "Performance Marketing",
+    "Sales Funnel Development",
+    "Website Development",
+    "Landing Page Design",
+    "AI Consultation",
+  ],
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: "+8801711731354",
+    contactType: "customer service",
+    email: "nextgendigitalstudio1@gmail.com",
+    availableLanguage: ["English", "Bengali"],
+  },
+  priceRange: "৳৳",
+  foundingDate: "2023",
+  numberOfEmployees: "1-10",
+}
+
+const serviceLd = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  name: "NextGen Digital Studio",
+  image: "https://nextgendigitalstudio.com/logo.jpg",
+  url: "https://nextgendigitalstudio.com",
+  telephone: "+8801711731354",
+  email: "nextgendigitalstudio1@gmail.com",
+  priceRange: "৳৳",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Jessore",
+    addressRegion: "Khulna",
+    addressCountry: "BD",
+    streetAddress: "Mia Barir Mor, Sheikhati, New Market, Jessore 7400",
+    postalCode: "7400",
+  },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: "23.1707",
+    longitude: "89.2117",
+  },
+  openingHoursSpecification: {
+    "@type": "OpeningHoursSpecification",
+    dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+    opens: "09:00",
+    closes: "21:00",
+  },
+  hasOfferCatalog: {
+    "@type": "OfferCatalog",
+    name: "NGS Consulting, Training & Digital Solutions",
+    itemListElement: [
+      { "@type": "Offer", itemOffered: { "@type": "Service", name: "AI Lead Capture" } },
+      { "@type": "Offer", itemOffered: { "@type": "Service", name: "AI Follow-Up Automation" } },
+      { "@type": "Offer", itemOffered: { "@type": "Service", name: "AI Sales Agent (Chatbot)" } },
+      { "@type": "Offer", itemOffered: { "@type": "Service", name: "CRM + Analytics" } },
+      { "@type": "Offer", itemOffered: { "@type": "Service", name: "WhatsApp Automation" } },
+      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Lead Generation" } },
+      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Performance Marketing" } },
+      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Sales Funnel Development" } },
+      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Business Automation" } },
+      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Website Development" } },
+      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Landing Page Design" } },
+      { "@type": "Offer", itemOffered: { "@type": "Service", name: "AI Consultation" } },
+    ],
+  },
+}
+
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: f.a,
+    },
+  })),
+}
 
 export default function RootLayout({
   children,
@@ -179,22 +259,52 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="bn" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+        {/* Preload premium fonts for fast first paint */}
+        <link
+          rel="preload"
+          href="/fonts/MahfujLipi.ttf"
+          as="font"
+          type="font/ttf"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/ForzonDEMO-Italic.ttf"
+          as="font"
+          type="font/ttf"
+          crossOrigin="anonymous"
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
+        />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
-        style={{ fontFamily: "'Hind Siliguri', sans-serif" }}
+        className={`${jakarta.variable} ${inter.variable} font-body antialiased bg-background text-foreground`}
       >
-        {children}
-        <Toaster />
+        <AnalyticsPixels />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <LanguageProvider>
+            {children}
+            <Toaster />
+            <SonnerToaster position="bottom-right" />
+          </LanguageProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

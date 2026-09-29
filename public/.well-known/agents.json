@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "name": "NextGen Digital Studio",
+  "description": "AI Sales Automation Agency in Bangladesh. We help businesses automate marketing, sales, customer communication and operations with Artificial Intelligence. Services include AI chatbots, WhatsApp automation, CRM, lead generation, sales funnels, website development, and AI consultation.",
+  "url": "https://nextgendigitalstudio.com",
+  "contact": "nextgendigitalstudio1@gmail.com",
+  "phone": "+8801711731354",
+  "capabilities": [
+    "contact",
+    "lead-generation",
+    "ai-chatbot",
+    "whatsapp-automation",
+    "crm",
+    "website-development",
+    "ai-training",
+    "cnc-design",
+    "3d-portrait"
+  ],
+  "areas_served": ["Bangladesh", "Dhaka", "Chittagong", "Khulna", "Jessore"],
+  "languages": ["English", "Bengali"],
+  "founding_date": "2023",
+  "founder": {
+    "name": "Md. Nazmul Islam Taj",
+    "role": "Founder & CEO"
+  },
+  "services": [
+    {
+      "name": "AI Lead Capture",
+      "description": "24/7 instant response chatbots on website, Facebook, WhatsApp"
+    },
+    {
+      "name": "AI Sales Agent",
+      "description": "AI that books appointments and qualifies leads"
+    },
+    {
+      "name": "CRM + Analytics",
+      "description": "Track every lead, every taka. Real-time ROI dashboard"
+    },
+    {
+      "name": "WhatsApp Automation",
+      "description": "Official WhatsApp Business API chatbot & broadcasts"
+    },
+    {
+      "name": "Website Development",
+      "description": "Lightning-fast, SEO-ready websites"
+    }
+  ]
+}

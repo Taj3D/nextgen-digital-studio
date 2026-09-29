@@ -1,0 +1,40 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F172A"/>
+      <stop offset="1" stop-color="#1E293B"/>
+    </linearGradient>
+    <linearGradient id="ng" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2563EB"/>
+      <stop offset="1" stop-color="#06B6D4"/>
+    </linearGradient>
+    <linearGradient id="txt" x1="0" y1="0" x2="900" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#06B6D4"/>
+    </linearGradient>
+    <radialGradient id="glow1" cx="0.2" cy="0.3" r="0.6">
+      <stop stop-color="#2563EB" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#2563EB" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="0.85" cy="0.8" r="0.5">
+      <stop stop-color="#06B6D4" stop-opacity="0.3"/>
+      <stop offset="1" stop-color="#06B6D4" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow1)"/>
+  <rect width="1200" height="630" fill="url(#glow2)"/>
+  <g transform="translate(80, 80)">
+    <rect width="96" height="96" rx="24" fill="url(#ng)"/>
+    <path d="M30 66V30h6.9L59.4 54.3V30H66v36h-6.9L36.9 39.6V66H30Z" fill="white"/>
+    <circle cx="72" cy="27" r="6" fill="#06B6D4" stroke="white" stroke-width="3"/>
+  </g>
+  <text x="200" y="145" font-family="Plus Jakarta Sans, Inter, sans-serif" font-size="40" font-weight="700" fill="#FFFFFF">NextGen Digital Studio</text>
+  <text x="82" y="330" font-family="Plus Jakarta Sans, Inter, sans-serif" font-size="78" font-weight="800" fill="url(#txt)">AI Sales Automation</text>
+  <text x="82" y="420" font-family="Plus Jakarta Sans, Inter, sans-serif" font-size="78" font-weight="800" fill="#FFFFFF">Agency in Bangladesh</text>
+  <text x="82" y="500" font-family="Inter, sans-serif" font-size="32" font-weight="400" fill="#94A3B8">Automate marketing, sales &amp; operations with AI.</text>
+  <g transform="translate(82, 545)">
+    <rect width="280" height="50" rx="25" fill="url(#ng)"/>
+    <text x="140" y="33" text-anchor="middle" font-family="Inter, sans-serif" font-size="20" font-weight="600" fill="white">Book a Strategy Call</text>
+  </g>
+</svg>
