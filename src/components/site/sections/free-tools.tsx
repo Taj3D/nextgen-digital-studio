@@ -219,7 +219,7 @@ function DownloadModal({ resource, onClose }: { resource: FreeResource; onClose:
                   )}
                 </Button>
                 <p className="text-center text-[10px] text-muted-foreground">
-                  No spam. Unsubscribe anytime. We respect your privacy.
+                  Your information will be handled according to our Privacy Policy.
                 </p>
               </form>
             </>

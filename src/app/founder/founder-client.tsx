@@ -82,7 +82,7 @@ export function FounderClient() {
                     ))}
                   </div>
                   <p className="mt-1 text-[10px] font-semibold text-muted-foreground">
-                    {isBn ? '১২০+ ক্লায়েন্ট রেটিং' : '120+ client reviews'}
+                    {isBn ? 'Verified founder profile' : 'Verified founder profile'}
                   </p>
                 </div>
               </div>
@@ -94,10 +94,10 @@ export function FounderClient() {
         <section className="border-y border-border/60 bg-muted/30">
           <div className="mx-auto grid max-w-6xl grid-cols-2 gap-6 px-4 py-8 sm:px-6 md:grid-cols-4">
             {[
-              { v: isBn ? '১২০+' : '120+', l: isBn ? 'ক্লায়েন্ট' : 'Clients' },
-              { v: isBn ? '৭+' : '7+', l: isBn ? 'বছরের অভিজ্ঞতা' : 'Years experience' },
-              { v: isBn ? '২.৪M+' : '2.4M+', l: isBn ? 'অটোমেটেড কথোপকথন' : 'AI conversations' },
-              { v: isBn ? '৪.৯/৫' : '4.9/5', l: isBn ? 'গড় রেটিং' : 'Avg rating' },
+              { v: isBn ? 'Consulting' : 'Consulting', l: isBn ? 'Diagnosis ও Strategy' : 'Diagnosis & Strategy' },
+              { v: isBn ? 'Training' : 'Training', l: isBn ? 'Practical skill' : 'Practical skill' },
+              { v: isBn ? 'Digital Solutions' : 'Digital Solutions', l: isBn ? 'Build ও delivery' : 'Build & delivery' },
+              { v: isBn ? 'Together' : 'Together', l: isBn ? 'আপনার journey-এ' : 'In your journey' },
             ].map((s, i) => (
               <div key={i} className="text-center">
                 <div className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-3xl font-extrabold text-transparent sm:text-4xl">
@@ -123,8 +123,8 @@ export function FounderClient() {
             </p>
             <p>
               {isBn
-                ? 'NextGen Digital Studio প্রতিষ্ঠা করার পর আমরা ১২০+ ব্যবসাকে অটোমেট করেছি, ২.৪ মিলিয়ন+ AI কথোপকথন তৈরি করেছি, এবং গড় ROI ৭.২x অর্জন করেছি। কিন্তু এটি শুরুমাত্র — আমার লক্ষ্য বাংলাদেশের প্রতিটি ব্যবসাকে AI-চালিত করা।'
-                : 'After founding NextGen Digital Studio we automated 120+ businesses, generated 2.4M+ AI conversations, and achieved an average ROI of 7.2x. But this is just the beginning — my goal is to make every Bangladeshi business AI-powered.'}
+                ? 'NextGen Digital Studio প্রতিষ্ঠা করে আমি Students, Freelancers, Business Owners ও Entrepreneursদের জন্য strategy, practical training ও digital solutions এক জায়গায় এনেছি। আমার দর্শন — আগে সমস্যা বুঝে তারপর solution। Diagnosis before action.'
+                : 'After founding NextGen Digital Studio, I brought together strategy (Consulting), practical training (Training), and digital build (Digital Solutions) — for Students, Freelancers, Business Owners and Entrepreneurs. My philosophy: understand the problem first, then prescribe. Diagnosis before action.'}
             </p>
             <p>
               {isBn

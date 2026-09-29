@@ -115,6 +115,7 @@ export function HeroSection() {
                 onClick={() => scrollToId('lead-form')}
                 className="gradient-brand animate-pulse-glow h-14 px-8 text-base text-white w-full sm:w-auto hover:opacity-95"
                 size="lg"
+                aria-label={t('final.ctaPrimaryAria')}
               >
                 {t('hero.ctaPrimary')}
                 <ArrowRight className="h-5 w-5" />
@@ -124,6 +125,7 @@ export function HeroSection() {
                 onClick={() => scrollToId('how')}
                 className="h-14 px-8 text-base w-full sm:w-auto border-emerald-500/40 text-foreground hover:bg-emerald-500/10 hover:text-foreground"
                 size="lg"
+                aria-label="Explore Training"
               >
                 <Play className="h-5 w-5" />
                 {t('hero.ctaSecondary')}

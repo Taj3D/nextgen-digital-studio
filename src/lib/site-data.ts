@@ -20,170 +20,6 @@ export const SITE_CONFIG = {
   twitter: 'https://x.com/NextGenDigit',
 }
 
-export type Testimonial = {
-  id: string
-  name: string
-  nameBn: string
-  role: string
-  roleBn: string
-  company: string
-  companyBn: string
-  avatar: string
-  quote: string
-  quoteBn: string
-  metric: string
-  metricBn: string
-  rating: number
-}
-
-export const TESTIMONIALS: Testimonial[] = [
-  {
-    id: 't1',
-    name: 'Rakib Hasan',
-    nameBn: 'রাকিব হাসান',
-    role: 'Founder',
-    roleBn: 'প্রতিষ্ঠাতা',
-    company: 'Jessore Electronics',
-    companyBn: 'যশোর ইলেকট্রনিক্স',
-    avatar: 'RH',
-    quote: 'Before NextGen, I was losing 60% of leads after 8 PM. Now my AI replies in 3 seconds — even at midnight. Sales up 240% in 4 months.',
-    quoteBn: 'নেক্সটজেনের আগে আমি রাত ৮টার পর ৬০% লিড হারাতাম। এখন আমার এআই ৩ সেকেন্ডে রিপ্লাই দেয় — মধ্যরাতেও। ৪ মাসে সেলস ২৪০% বেড়েছে।',
-    metric: '240% sales growth',
-    metricBn: '২৪০% সেলস বৃদ্ধি',
-    rating: 5,
-  },
-  {
-    id: 't2',
-    name: 'Shahana Begum',
-    nameBn: 'শাহানা বেগম',
-    role: 'CEO',
-    roleBn: 'সিইও',
-    company: 'Boutique Bhabna',
-    companyBn: 'বুটিক ভাবনা',
-    avatar: 'SB',
-    quote: 'I used to spend 5 hours daily answering the same questions. Now the AI handles 80% of customer chats. I focus on growing my business.',
-    quoteBn: 'আমি প্রতিদিন ৫ ঘন্টা একই প্রশ্নের উত্তর দিতাম। এখন এআই ৮০% কাস্টমার চ্যাট সামলায়। আমি ব্যবসা বড় করায় মনোযোগ দিই।',
-    metric: '5 hrs saved daily',
-    metricBn: 'দৈনিক ৫ ঘন্টা সাশ্রয়',
-    rating: 5,
-  },
-  {
-    id: 't3',
-    name: 'Tanvir Ahmed',
-    nameBn: 'তানভীর আহমেদ',
-    role: 'Director',
-    roleBn: 'পরিচালক',
-    company: 'Khulna Real Estate',
-    companyBn: 'খুলনা রিয়েল এস্টেট',
-    avatar: 'TA',
-    quote: 'We went from 12 to 47 qualified appointments per month. The AI qualifies leads better than my best salesperson — and never takes a day off.',
-    quoteBn: 'আমরা মাসে ১২ থেকে ৪৭ কোয়ালিফাইড অ্যাপয়েন্টমেন্টে গেলাম। এআই আমার সেরা সেলসম্যানের চেয়ে ভালো লিড কোয়ালিফাই করে — আর কখনো ছুটি নেয় না।',
-    metric: '4x more appointments',
-    metricBn: '৪গুণ বেশি অ্যাপয়েন্টমেন্ট',
-    rating: 5,
-  },
-  {
-    id: 't4',
-    name: 'Nusrat Jahan',
-    nameBn: 'নুসরাত জাহান',
-    role: 'Owner',
-    roleBn: 'মালিক',
-    company: 'Beauty by Nusrat',
-    companyBn: 'বিউটি বাই নুসরাত',
-    avatar: 'NJ',
-    quote: 'My salon bookings doubled in 6 weeks. The AI handles bookings in Bangla perfectly — my customers love it. Best investment I ever made.',
-    quoteBn: '৬ সপ্তাহে আমার সেলুন বুকিং দ্বিগুণ হয়েছে। এআই নিখুঁত বাংলায় বুকিং সামলায় — আমার কাস্টমাররা ভালোবাসে। আমার সেরা ইনভেস্টমেন্ট।',
-    metric: '2x bookings in 6 weeks',
-    metricBn: '৬ সপ্তাহে ২গুণ বুকিং',
-    rating: 5,
-  },
-  {
-    id: 't5',
-    name: 'Imran Khan',
-    nameBn: 'ইমরান খান',
-    role: 'Managing Director',
-    roleBn: 'ব্যবস্থাপনা পরিচালক',
-    company: 'Dhaka Auto Parts',
-    companyBn: 'ঢাকা অটো পার্টস',
-    avatar: 'IK',
-    quote: 'We were spending 3 lakh/month on ads with no idea what worked. Now we know exact ROI per taka. Stopped wasting 1.2 lakh/month instantly.',
-    quoteBn: 'আমরা মাসে ৩ লক্ষ অ্যাডে খরচ করতাম, কিছুই বুঝতাম না। এখন প্রতি টাকার সঠিক ROI জানি। মাসে ১.২ লক্ষ নষ্ট করা সাথে সাথে বন্ধ।',
-    metric: '1.2L saved monthly',
-    metricBn: 'মাসে ১.২লক্ষ সাশ্রয়',
-    rating: 5,
-  },
-  {
-    id: 't6',
-    name: 'Farzana Akter',
-    nameBn: 'ফরজানা আক্তার',
-    role: 'Founder',
-    roleBn: 'প্রতিষ্ঠাতা',
-    company: 'Online Pathshala',
-    companyBn: 'অনলাইন পাঠশালা',
-    avatar: 'FA',
-    quote: 'From 30 to 380 student enrollments per month. The AI follows up with every inquiry for weeks. I just check my dashboard and smile.',
-    quoteBn: 'মাসে ৩০ থেকে ৩৮০ স্টুডেন্ট এনরোলমেন্ট। এআই প্রতিটি ইনকোয়ারি সপ্তাহজুড়ে ফলোআপ করে। আমি শুধু ড্যাশবোর্ড দেখে হাসি।',
-    metric: '12x more enrollments',
-    metricBn: '১২গুণ বেশি এনরোলমেন্ট',
-    rating: 5,
-  },
-]
-
-export type PricingPlan = {
-  id: 'starter' | 'growth' | 'dominant'
-  monthly: number
-  yearly: number
-  features: { en: string; bn: string }[]
-  popular?: boolean
-}
-
-export const PRICING_PLANS: PricingPlan[] = [
-  {
-    id: 'starter',
-    monthly: 15000,
-    yearly: 144000,
-    features: [
-      { en: 'AI Lead Capture (1 channel)', bn: 'এআই লিড ক্যাপচার (১ চ্যানেল)' },
-      { en: 'Up to 500 leads/month', bn: 'মাসে ৫০০ লিড পর্যন্ত' },
-      { en: 'Bangla + English AI chatbot', bn: 'বাংলা + ইংরেজি এআই চ্যাটবট' },
-      { en: 'Basic CRM dashboard', bn: 'বেসিক CRM ড্যাশবোর্ড' },
-      { en: 'Email support', bn: 'ইমেইল সাপোর্ট' },
-      { en: '60-day ROI guarantee', bn: '৬০ দিনের ROI গ্যারান্টি' },
-    ],
-  },
-  {
-    id: 'growth',
-    monthly: 35000,
-    yearly: 336000,
-    popular: true,
-    features: [
-      { en: 'AI Lead Capture (3 channels)', bn: 'এআই লিড ক্যাপচার (৩ চ্যানেল)' },
-      { en: 'Up to 2,500 leads/month', bn: 'মাসে ২,৫০০ লিড পর্যন্ত' },
-      { en: 'AI Follow-Up Automation', bn: 'এআই ফলোআপ অটোমেশন' },
-      { en: 'Advanced CRM + Analytics', bn: 'অ্যাডভান্সড CRM + অ্যানালিটিক্স' },
-      { en: 'Weekly performance reports', bn: 'সাপ্তাহিক পারফরম্যান্স রিপোর্ট' },
-      { en: 'Priority WhatsApp support', bn: 'প্রায়োরিটি হোয়াটসঅ্যাপ সাপোর্ট' },
-      { en: 'Monthly strategy call', bn: 'মাসিক স্ট্র্যাটেজি কল' },
-      { en: '60-day ROI guarantee', bn: '৬০ দিনের ROI গ্যারান্টি' },
-    ],
-  },
-  {
-    id: 'dominant',
-    monthly: 75000,
-    yearly: 720000,
-    features: [
-      { en: 'AI Lead Capture (all channels)', bn: 'এআই লিড ক্যাপচার (সব চ্যানেল)' },
-      { en: 'Unlimited leads', bn: 'আনলিমিটেড লিড' },
-      { en: 'Full AI Sales System', bn: 'ফুল এআই সেলস সিস্টেম' },
-      { en: 'Custom AI training', bn: 'কাস্টম এআই ট্রেইনিং' },
-      { en: 'Dedicated account manager', bn: 'ডেডিকেটেড অ্যাকাউন্ট ম্যানেজার' },
-      { en: '24/7 phone support', bn: '২৪/৭ ফোন সাপোর্ট' },
-      { en: 'Weekly strategy calls', bn: 'সাপ্তাহিক স্ট্র্যাটেজি কল' },
-      { en: 'Custom integrations', bn: 'কাস্টম ইন্টিগ্রেশন' },
-      { en: '60-day ROI guarantee', bn: '৬০ দিনের ROI গ্যারান্টি' },
-    ],
-  },
-]
 
 export type FAQ = {
   q: { en: string; bn: string }
@@ -257,39 +93,39 @@ export type ServiceDetail = {
 
 export const SERVICES: ServiceDetail[] = [
   {
-    id: 'lead-capture',
+    id: 'web-software',
     icon: 'Target',
     features: [
-      { en: '24/7 instant response (under 3 seconds)', bn: '২৪/৭ ইনস্ট্যান্ট রেসপন্স (৩ সেকেন্ডের কম)' },
-      { en: 'Multi-language support (Bangla + English)', bn: 'মাল্টি-ল্যাঙ্গুয়েজ (বাংলা + ইংরেজি)' },
-      { en: 'Smart lead scoring', bn: 'স্মার্ট লিড স্কোরিং' },
+      { en: 'Website development', bn: 'Website development' },
+      { en: 'Landing page design', bn: 'Landing page design' },
+      { en: 'Custom software', bn: 'Custom software' },
     ],
   },
   {
-    id: 'follow-up',
+    id: 'ai-automation',
     icon: 'Repeat',
     features: [
-      { en: '5+ touchpoint sequences', bn: '৫+ টাচপয়েন্ট সিকোয়েন্স' },
-      { en: 'Personalized at scale', bn: 'স্কেলে পার্সোনালাইজড' },
-      { en: 'Auto-revives dead leads', bn: 'ডেড লিড রিভাইভ করে' },
+      { en: 'AI chat agent', bn: 'AI chat agent' },
+      { en: 'WhatsApp Business API', bn: 'WhatsApp Business API' },
+      { en: 'CRM automation', bn: 'CRM automation' },
     ],
   },
   {
-    id: 'chatbot',
+    id: 'marketing-growth',
     icon: 'Bot',
     features: [
-      { en: 'Trained on YOUR business', bn: 'আপনার ব্যবসার উপর ট্রেইনড' },
-      { en: 'Books appointments to your calendar', bn: 'আপনার ক্যালেন্ডারে বুকিং' },
-      { en: 'Hands off to human when needed', bn: 'দরকারে হিউম্যানে হ্যান্ডঅফ' },
+      { en: 'Lead generation', bn: 'Lead generation' },
+      { en: 'Performance marketing', bn: 'Performance marketing' },
+      { en: 'Sales funnel', bn: 'Sales funnel' },
     ],
   },
   {
-    id: 'crm',
+    id: 'creative-3d',
     icon: 'BarChart3',
     features: [
-      { en: 'Live ROI tracking', bn: 'লাইভ ROI ট্র্যাকিং' },
-      { en: 'Pipeline visualization', bn: 'পাইপলাইন ভিজ্যুয়ালাইজেশন' },
-      { en: 'Weekly performance reports', bn: 'সাপ্তাহিক পারফরম্যান্স রিপোর্ট' },
+      { en: '3D portrait sculpt', bn: '3D portrait sculpt' },
+      { en: 'Creative design', bn: 'Creative design' },
+      { en: 'Visual content', bn: 'Visual content' },
     ],
   },
 ]
@@ -529,134 +365,6 @@ export const industries: Industry[] = [
   },
 ]
 
-export type Testimonial = {
-  name: string
-  role: string
-  company: string
-  quote: string
-  rating: number
-  initials: string
-}
-
-export const testimonials: Testimonial[] = [
-  {
-    name: 'Tanvir Ahmed',
-    role: 'Founder',
-    company: 'Dhaka Realty Group',
-    quote:
-      'NextGen Digital Studio built our AI chat agent and within 6 weeks our qualified leads tripled. The bot books site visits while we sleep. Genuinely game-changing.',
-    rating: 5,
-    initials: 'TA',
-  },
-  {
-    name: 'Dr. Nusrat Jahan',
-    role: 'Director',
-    company: 'Medicare Hospital',
-    quote:
-      'Their AI voice agent now handles every appointment call in Bangla and English. No-shows dropped 38% and our reception team can finally breathe.',
-    rating: 5,
-    initials: 'NJ',
-  },
-  {
-    name: 'Rakib Hasan',
-    role: 'CEO',
-    company: 'ShopSmart BD',
-    quote:
-      'The WhatsApp automation recovered over 12,000 abandoned carts in the first quarter alone. ROI was clear in the first month. Best agency we’ve worked with.',
-    rating: 5,
-    initials: 'RH',
-  },
-  {
-    name: 'Farhana Karim',
-    role: 'Marketing Head',
-    company: 'EduFirst School Network',
-    quote:
-      'Admissions enquiries are now handled instantly by AI. Parents love the fast response on WhatsApp and our enrolment grew 45% this year.',
-    rating: 5,
-    initials: 'FK',
-  },
-  {
-    name: 'Sajid Rahman',
-    role: 'Managing Director',
-    company: 'NovaCorp Bangladesh',
-    quote:
-      'They automated our entire sales pipeline on GoHighLevel. We went from chaotic spreadsheets to a predictable lead machine. Highly recommended.',
-    rating: 5,
-    initials: 'SR',
-  },
-  {
-    name: 'Maliha Chowdhury',
-    role: 'Founder',
-    company: 'Bloom Agency',
-    quote:
-      'We white-labelled their AI agents for our clients. The tech is world-class and the team is genuinely invested in our success. A real partnership.',
-    rating: 5,
-    initials: 'MC',
-  },
-]
-
-export type PricingPlan = {
-  name: string
-  tagline: string
-  price: string
-  period: string
-  popular?: boolean
-  features: string[]
-  cta: string
-}
-
-export const pricingPlans: PricingPlan[] = [
-  {
-    name: 'Starter',
-    tagline: 'For small businesses ready to automate.',
-    price: '৳25,000',
-    period: '/month',
-    features: [
-      '1 AI Chat Agent (website)',
-      'WhatsApp automation (1 number)',
-      'Lead capture & CRM setup',
-      '2,000 AI conversations/mo',
-      'Monthly strategy call',
-      'Email support',
-    ],
-    cta: 'Start with Starter',
-  },
-  {
-    name: 'Growth',
-    tagline: 'For scaling companies that need a full system.',
-    price: '৳60,000',
-    period: '/month',
-    popular: true,
-    features: [
-      'AI Chat + Voice Agent',
-      'WhatsApp + SMS automation',
-      'CRM automation (GHL/HubSpot)',
-      '10,000 AI conversations/mo',
-      'Landing page + funnel build',
-      'Performance marketing management',
-      'Weekly strategy calls',
-      'Priority support',
-    ],
-    cta: 'Scale with Growth',
-  },
-  {
-    name: 'Enterprise',
-    tagline: 'Custom AI infrastructure for large organisations.',
-    price: 'Custom',
-    period: '',
-    features: [
-      'Unlimited AI agents & channels',
-      'Custom AI model training',
-      'Full business automation suite',
-      'Dedicated automation engineer',
-      'API & system integrations',
-      'Unlimited strategy sessions',
-      'SLA & 24/7 support',
-      'White-label options',
-    ],
-    cta: 'Talk to Sales',
-  },
-]
 
 export type CaseStudy = {
   slug: string
@@ -984,49 +692,6 @@ export const certifications = [
   { name: 'OpenAI API', desc: 'Authorized integration' },
 ]
 
-export type VideoTestimonial = {
-  name: string
-  role: string
-  company: string
-  quote: string
-  duration: string
-  gradient: string
-  initials: string
-  metric: string
-}
-
-export const videoTestimonials: VideoTestimonial[] = [
-  {
-    name: 'Tanvir Ahmed',
-    role: 'Founder',
-    company: 'Dhaka Realty Group',
-    quote: 'NextGen tripled our qualified leads in 6 weeks. The AI agent books site visits while we sleep.',
-    duration: '2:14',
-    gradient: 'from-blue-600 to-cyan-500',
-    initials: 'TA',
-    metric: '+212% leads',
-  },
-  {
-    name: 'Dr. Nusrat Jahan',
-    role: 'Director',
-    company: 'Medicare Hospital',
-    quote: 'The AI voice agent handles every appointment call in Bangla. No-shows dropped 38%.',
-    duration: '1:48',
-    gradient: 'from-violet-500 to-purple-500',
-    initials: 'NJ',
-    metric: '-38% no-shows',
-  },
-  {
-    name: 'Rakib Hasan',
-    role: 'CEO',
-    company: 'ShopSmart BD',
-    quote: 'WhatsApp automation recovered 12,000+ abandoned carts in one quarter. 7x ROI.',
-    duration: '2:32',
-    gradient: 'from-emerald-500 to-teal-500',
-    initials: 'RH',
-    metric: '7.2x ROI',
-  },
-]
 
 export type KnowledgeArticle = {
   title: string
@@ -1226,7 +891,7 @@ export const siteConfig = {
   name: 'NextGen Digital Studio',
   shortName: 'NextGen',
   url: 'https://nextgendigitalstudio.com',
-  tagline: 'AI Sales Automation Agency in Bangladesh',
+  tagline: 'Consulting | Training | Digital Solutions · Bangladesh',
   description:
     'NextGen Digital Studio helps businesses in Bangladesh automate marketing, sales, customer communication and operations using Artificial Intelligence and Business Automation. Generate qualified leads and book strategy calls.',
   email: 'nextgendigitalstudio1@gmail.com',

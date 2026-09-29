@@ -8,6 +8,7 @@ import {
   ShieldCheck,
   Wrench,
   Users,
+  TrendingUp,
   type LucideIcon,
 } from 'lucide-react'
 import {
@@ -23,7 +24,7 @@ const REASONS: { icon: LucideIcon; titleKey: string; descKey: string }[] = [
   { icon: MapPin, titleKey: 'why.r1Title', descKey: 'why.r1Desc' },
   { icon: ShieldCheck, titleKey: 'why.r2Title', descKey: 'why.r2Desc' },
   { icon: Wrench, titleKey: 'why.r3Title', descKey: 'why.r3Desc' },
-  { icon: Users, titleKey: 'why.r4Title', descKey: 'why.r4Desc' },
+  { icon: TrendingUp, titleKey: 'why.r4Title', descKey: 'why.r4Desc' },
 ]
 
 export function WhyChooseUs() {

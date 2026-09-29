@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import Link from 'next/link'
 import Image from 'next/image'
 import {
   Facebook,
@@ -29,10 +30,13 @@ import { SITE_CONFIG } from '@/lib/site-data'
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 const COMPANY_LINKS = [
-  { key: 'footer.about', href: '#' },
-  { key: 'footer.careers', href: '#' },
-  { key: 'footer.blog', href: '#' },
-  { key: 'footer.caseStudies', href: '#' },
+  // Per ERMOS v4.0 §14: Do NOT route Blog → /consulting or Case Studies → /founder
+  // (semantic mismatch). Removed since genuine Blog/Case Studies index pages
+  // do not exist. Do not create fake pages merely to satisfy navigation.
+  { key: 'footer.about', href: '/founder' },
+  { key: 'footer.consultingNav', href: '/consulting' },
+  { key: 'footer.trainingNav', href: '/ai-training' },
+  { key: 'footer.contact', href: '/#lead-form' },
 ]
 
 const SERVICE_KEYS = [
@@ -40,6 +44,7 @@ const SERVICE_KEYS = [
   'services.s2Title',
   'services.s3Title',
   'services.s4Title',
+  'services.s4ExtraTitle',
 ]
 
 function SocialButton({
@@ -150,13 +155,55 @@ function NewsletterForm() {
       {state === 'error' && (
         <p className="text-xs text-destructive">{t('footer.newsletterError')}</p>
       )}
+
+      {/* Unsubscribe link — real DELETE /api/newsletter endpoint exists */}
+      <p className="text-[10px] text-muted-foreground/70">
+        <button
+          type="button"
+          onClick={async () => {
+            const emailInput = document.querySelector<HTMLInputElement>(
+              'input[placeholder*="email" i], input[placeholder*="ইমেইল" i]'
+            )
+            const email = emailInput?.value?.trim()
+            if (!email) {
+              toast.error(t('footer.unsubscribeEnterEmail'))
+              return
+            }
+            try {
+              const res = await fetch('/api/newsletter', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: email.toLowerCase() }),
+              })
+              const data = await res.json()
+              if (data.ok) {
+                toast.success(t('footer.unsubscribeSuccess'))
+              } else {
+                toast.error(data.error || t('footer.unsubscribeFailed'))
+              }
+            } catch {
+              toast.error(t('footer.genericError'))
+            }
+          }}
+          className="underline underline-offset-2 transition-colors hover:text-foreground"
+        >
+          {t('footer.unsubscribeBtn')}
+        </button>
+      </p>
     </form>
   )
 }
 
-export function SiteFooter() {
+export function SiteFooter({ variant = 'default' }: { variant?: 'default' | 'consulting' } = {}) {
   const { t } = useLang()
   const year = new Date().getFullYear()
+
+  // Consulting variant uses a broader brand statement so the page doesn't end with
+  // a narrower "AI Sales Automation Agency" positioning that conflicts with the
+  // broad Business/Freelancer/Career/Entrepreneurship Consulting offer.
+  const taglineKey = variant === 'consulting' ? 'consulting.footer.tagline' : 'footer.tagline'
+  const newsletterDescKey =
+    variant === 'consulting' ? 'consulting.footer.newsletterDesc' : 'footer.newsletterDesc'
 
   return (
     <footer className="mt-auto w-full border-t border-border/50 bg-card/50 backdrop-blur-sm">
@@ -180,7 +227,7 @@ export function SiteFooter() {
               </span>
             </div>
             <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
-              {t('footer.tagline')}
+              {t(taglineKey)}
             </p>
             <div className="flex items-center gap-2.5 pt-1">
               <SocialButton
@@ -252,20 +299,32 @@ export function SiteFooter() {
               {t('footer.servicesTitle')}
             </h3>
             <ul className="space-y-2">
-              {SERVICE_KEYS.map((key) => (
-                <li key={key}>
-                  <button
-                    onClick={() =>
-                      document
-                        .getElementById('services')
-                        ?.scrollIntoView({ behavior: 'smooth' })
-                    }
-                    className="text-left text-sm text-muted-foreground transition-colors hover:text-primary"
-                  >
-                    {t(key)}
-                  </button>
-                </li>
-              ))}
+              {SERVICE_KEYS.map((key) => {
+                const isCNC = key === 'services.s4ExtraTitle'
+                return (
+                  <li key={key}>
+                    {isCNC ? (
+                      <Link
+                        href="/cnc-design"
+                        className="text-left text-sm text-muted-foreground transition-colors hover:text-primary"
+                      >
+                        {t(key)}
+                      </Link>
+                    ) : (
+                      <button
+                        onClick={() =>
+                          document
+                            .getElementById('services')
+                            ?.scrollIntoView({ behavior: 'smooth' })
+                        }
+                        className="text-left text-sm text-muted-foreground transition-colors hover:text-primary"
+                      >
+                        {t(key)}
+                      </button>
+                    )}
+                  </li>
+                )
+              })}
             </ul>
           </div>
 
@@ -275,7 +334,7 @@ export function SiteFooter() {
               {t('footer.newsletterTitle')}
             </h3>
             <p className="text-sm leading-relaxed text-muted-foreground">
-              {t('footer.newsletterDesc')}
+              {t(newsletterDescKey)}
             </p>
             <NewsletterForm />
           </div>
@@ -292,13 +351,13 @@ export function SiteFooter() {
               © {year} NextGen Digital Studio. {t('footer.rights')}
             </span>
             <span className="mx-1 hidden text-border md:inline">|</span>
-            <a href="#" className="transition-colors hover:text-primary">
+            <Link href="/privacy" className="transition-colors hover:text-primary">
               {t('footer.privacy')}
-            </a>
+            </Link>
             <span className="mx-1 hidden text-border md:inline">|</span>
-            <a href="#" className="transition-colors hover:text-primary">
+            <Link href="/terms" className="transition-colors hover:text-primary">
               {t('footer.terms')}
-            </a>
+            </Link>
           </div>
           <div className="flex items-center gap-1.5">
             <MapPin className="h-3.5 w-3.5 text-primary" />

@@ -2,28 +2,40 @@ import type { Metadata } from 'next'
 import { ConsultingClient } from './consulting-client'
 
 export const metadata: Metadata = {
-  title: 'AI Business Consulting Bangladesh | AI Strategy Consultant — NextGen Digital Studio',
-  description: 'আপনার Business-এ AI কোথায় বসবে—আমরা সেটা বের করে দিই। AI Business Growth Audit, Strategy Roadmap, এবং 90-Day Transformation Plan। Bangladesh-এর AI Business Strategy Consultant।',
+  title: 'Consulting — Problem Diagnosis, Bottleneck & Strategy | NextGen Digital Studio',
+  description:
+    'আপনার Problem বুঝুন। Bottleneck খুঁজে বের করুন। Priority ঠিক করুন। তারপর Action নিন। NGS Consulting — Business, Freelancer, Career ও Entrepreneurship-এর জন্য structured diagnosis-first consulting.',
   keywords: [
-    'AI Consulting Bangladesh',
-    'AI Business Consulting Bangladesh',
-    'AI Strategy Consultant Bangladesh',
-    'AI Business Transformation',
-    'AI Automation Consulting',
-    'AI Revenue Strategy',
-    'AI Consultant for Business',
-    'AI Consulting for SMEs Bangladesh',
-    'Business Automation Consultant',
-    'AI Growth Audit',
+    'Consulting Bangladesh',
+    'Business Consulting Bangladesh',
+    'Freelancer Consulting',
+    'Career Consulting Bangladesh',
+    'Entrepreneurship Consulting',
+    'Problem Diagnosis',
+    'Bottleneck Identification',
+    'Strategy Consulting',
+    'Consulting Assessment',
+    'Growth Strategy Bangladesh',
+    'Business Strategy Jessore',
+    'NextGen Digital Studio Consulting',
   ],
   openGraph: {
-    title: 'AI Business Consulting — NextGen Digital Studio',
-    description: 'আপনার Business-এ AI কোথায় বসবে—আমরা সেটা বের করে দিই। AI Strategy, Growth Audit, 90-Day Roadmap।',
+    title: 'NGS Consulting — Diagnosis First. Strategy Before Execution.',
+    description:
+      'Career, Freelancing, Business অথবা নতুন Idea—আপনি যেখানেই থাকুন, আপনার আসল Problem, Bottleneck এবং Next Best Action পরিষ্কার করার জন্য structured diagnosis-first consulting।',
     url: 'https://nextgendigitalstudio.com/consulting',
     type: 'website',
-    images: [{ url: '/logo.jpg', width: 1200, height: 630, alt: 'AI Business Consulting — NextGen Digital Studio' }],
+    images: [
+      {
+        url: '/logo.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'NGS Consulting — Diagnosis First | NextGen Digital Studio',
+      },
+    ],
   },
   alternates: { canonical: 'https://nextgendigitalstudio.com/consulting' },
+  robots: { index: true, follow: true },
 }
 
 export default function ConsultingPage() {

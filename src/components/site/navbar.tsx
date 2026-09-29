@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import Link from 'next/link'
 import Image from 'next/image'
 import { Menu, Globe, Sparkles } from 'lucide-react'
 
@@ -22,10 +23,12 @@ type NavItem = {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { key: 'nav.services', href: '#services' },
-  { key: 'nav.howItWorks', href: '#how' },
-  { key: 'nav.pricing', href: '#pricing' },
-  { key: 'nav.testimonials', href: '#testimonials' },
+  { key: 'nav.home', href: '/' },
+  { key: 'nav.consultingNav', href: '/consulting' },
+  { key: 'nav.trainingNav', href: '/ai-training' },
+  { key: 'nav.digitalSolutionsNav', href: '/#services' },
+  { key: 'nav.founder', href: '/founder' },
+  { key: 'nav.contact', href: '/#lead-form' },
 ]
 
 function smoothScrollTo(href: string) {
@@ -97,15 +100,30 @@ function DesktopNav() {
   const { t } = useLang()
   return (
     <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
-      {NAV_ITEMS.map((item) => (
-        <button
-          key={item.key}
-          onClick={() => smoothScrollTo(item.href)}
-          className="relative rounded-full px-3.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-        >
-          {t(item.key)}
-        </button>
-      ))}
+      {NAV_ITEMS.map((item) => {
+        const isRoute = item.href.startsWith('/') && !item.href.includes('#')
+        const isHashOnHomepage = item.href.includes('#')
+        if (isRoute) {
+          return (
+            <Link
+              key={item.key}
+              href={item.href}
+              className="relative rounded-full px-3.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+            >
+              {t(item.key)}
+            </Link>
+          )
+        }
+        return (
+          <button
+            key={item.key}
+            onClick={() => smoothScrollTo(item.href.split('#')[1] || '')}
+            className="relative rounded-full px-3.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+          >
+            {t(item.key)}
+          </button>
+        )
+      })}
     </nav>
   )
 }
@@ -186,19 +204,34 @@ export function Navbar() {
               </SheetHeader>
 
               <div className="custom-scrollbar flex max-h-[calc(100vh-180px)] flex-1 flex-col gap-1 overflow-y-auto p-4">
-                {NAV_ITEMS.map((item) => (
-                  <button
-                    key={item.key}
-                    onClick={() => {
-                      setOpen(false)
-                      // wait for sheet close before smooth scroll
-                      setTimeout(() => smoothScrollTo(item.href), 80)
-                    }}
-                    className="flex min-h-[48px] items-center rounded-lg px-3 text-left text-base font-medium text-foreground/90 transition-colors hover:bg-accent/60 hover:text-foreground"
-                  >
-                    {t(item.key)}
-                  </button>
-                ))}
+                {NAV_ITEMS.map((item) => {
+                  const isRoute = item.href.startsWith('/') && !item.href.includes('#')
+                  if (isRoute) {
+                    return (
+                      <Link
+                        key={item.key}
+                        href={item.href}
+                        onClick={() => setOpen(false)}
+                        className="flex min-h-[48px] items-center rounded-lg px-3 text-left text-base font-medium text-foreground/90 transition-colors hover:bg-accent/60 hover:text-foreground"
+                      >
+                        {t(item.key)}
+                      </Link>
+                    )
+                  }
+                  return (
+                    <button
+                      key={item.key}
+                      onClick={() => {
+                        setOpen(false)
+                        // wait for sheet close before smooth scroll
+                        setTimeout(() => smoothScrollTo(item.href.split('#')[1] || ''), 80)
+                      }}
+                      className="flex min-h-[48px] items-center rounded-lg px-3 text-left text-base font-medium text-foreground/90 transition-colors hover:bg-accent/60 hover:text-foreground"
+                    >
+                      {t(item.key)}
+                    </button>
+                  )
+                })}
               </div>
 
               <div className="mt-auto border-t border-border/50 p-4">

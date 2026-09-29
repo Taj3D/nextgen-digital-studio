@@ -18,7 +18,7 @@ import { toast } from "sonner"
 const perks = [
   { icon: Zap, title: 'Cutting-edge AI', desc: 'Work with GPT-4, voice agents & automation daily' },
   { icon: TrendingUp, title: 'Fast growth', desc: 'We are scaling fast — grow your career with us' },
-  { icon: Heart, title: 'Real impact', desc: 'Your work directly grows 120+ Bangladeshi businesses' },
+  { icon: Heart, title: 'Real impact', desc: 'Your work directly helps Students, Freelancers, Business Owners' },
   { icon: Users, title: 'Great team', desc: 'Small, sharp, no-ego team that ships fast' },
 ]
 

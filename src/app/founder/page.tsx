@@ -1,26 +1,23 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'মোঃ নাজমুল ইসলাম তাজ (তাজ ভাই) — AI Business Strategist | NextGen Digital Studio',
-  description: 'মোঃ নাজমুল ইসলাম তাজ — বাংলাদেশের AI বিজনেস স্ট্র্যাটেজিস্ট। ১২০+ ক্লায়েন্ট, ২.৪M+ অটোমেটেড কথোপকথন। NextGen Digital Studio-এর প্রতিষ্ঠাতা।',
+  title: 'MD Nazmul Islam Taj (Taj Bhai) — Founder | NextGen Digital Studio',
+  description: 'MD Nazmul Islam Taj — Founder, NextGen Digital Studio. Consulting | Training | Digital Solutions। Students, Freelancers, Business Owners ও Entrepreneurs-এর জন্য strategy, practical training ও digital solutions।',
   keywords: [
-    'AI Expert Bangladesh',
-    'AI Consultant Bangladesh',
-    'Business Automation Consultant',
-    'AI Speaker Bangladesh',
-    'AI Trainer Bangladesh',
-    'AI Business Strategist',
     'Taj Bhai',
     'Nazmul Islam Taj',
     'NextGen Digital Studio founder',
-    'AI automation Bangladesh',
+    'Consulting Bangladesh',
+    'Training Bangladesh',
+    'Digital Solutions Bangladesh',
+    'Founder Jessore',
   ],
   openGraph: {
-    title: 'মোঃ নাজমুল ইসলাম তাজ — AI Business Strategist | NextGen Digital Studio',
-    description: 'বাংলাদেশের AI বিজনেস ট্রান্সফরমেশন স্ট্র্যাটেজিস্ট। NextGen Digital Studio-এর প্রতিষ্ঠাতা।',
+    title: 'MD Nazmul Islam Taj — Founder, NextGen Digital Studio',
+    description: 'Consulting | Training | Digital Solutions। Founder-led, verified information only।',
     type: 'profile',
     url: 'https://nextgendigitalstudio.com/founder',
-    images: [{ url: '/logo.jpg', width: 1200, height: 630, alt: 'Taj Bhai — AI Business Strategist' }],
+    images: [{ url: '/logo.jpg', width: 1200, height: 630, alt: 'MD Nazmul Islam Taj — Founder, NextGen Digital Studio' }],
   },
   alternates: { canonical: 'https://nextgendigitalstudio.com/founder' },
 }
@@ -32,7 +29,7 @@ export default function FounderPage() {
         src="/founder-enterprise.html"
         className="w-full"
         style={{ minHeight: '100vh', border: 'none' }}
-        title="Founder — Taj Bhai"
+        title="Founder — MD Nazmul Islam Taj"
       />
     </div>
   )

@@ -271,7 +271,7 @@ export function TrainingClient() {
                     ))}
                   </div>
                   <p className="mt-1 text-[10px] font-semibold text-muted-foreground">
-                    {isBn ? '৫.০ রেটিং · ১২০+ ছাত্র' : '5.0 rating · 120+ students'}
+                    {isBn ? 'Founder-led training' : 'Founder-led training'}
                   </p>
                 </div>
               </div>
@@ -281,28 +281,28 @@ export function TrainingClient() {
                   {isBn ? 'তাজ ভাই' : 'Taj Bhai'}
                 </h2>
                 <p className="mt-1 text-sm font-semibold text-blue-600 dark:text-blue-400">
-                  {isBn ? 'NextGen Digital Studio প্রতিষ্ঠাতা · ৭+ বছর অভিজ্ঞতা' : 'Founder of NextGen Digital Studio · 7+ years'}
+                  {isBn ? 'NextGen Digital Studio প্রতিষ্ঠাতা' : 'Founder of NextGen Digital Studio'}
                 </p>
                 <p className="mt-4 text-[15px] leading-relaxed text-muted-foreground">
                   {isBn
-                    ? 'তাজ ভাই ১২০+ ব্যবসাকে এআই ও অটোমেশনে রূপান্তর করেছেন। তার সহজ শেখানোর পদ্ধতিতে যে কেউ জিরো থেকে এআই মাস্টারি করতে পারে। এই ট্রেইনিংয়ে তিনি নিজে হাতে কলমে শেখাবেন কীভাবে এআই দিয়ে সফটওয়্যার তৈরি করতে হয়।'
-                    : 'Taj Bhai has transformed 120+ businesses with AI and automation. His easy teaching method lets anyone master AI from zero. In this training, he personally teaches hands-on how to build software with AI.'}
+                    ? 'তাজ ভাই Students, Freelancers ও Business Owners-এর জন্য practical AI training দিয়ে থাকেন। তার সহজ শেখানোর পদ্ধতিতে যে কেউ জিরো থেকে এআই শিখতে পারে। এই ট্রেইনিংয়ে তিনি নিজে হাতে কলমে শেখাবেন কীভাবে এআই দিয়ে সফটওয়্যার তৈরি করতে হয়।'
+                    : 'Taj Bhai provides practical AI training for Students, Freelancers and Business Owners. His easy teaching method lets anyone learn AI from zero. In this training, he personally teaches hands-on how to build software with AI.'}
                 </p>
                 <div className="mt-5 flex flex-wrap gap-4 text-sm">
                   <div className="flex items-center gap-1.5">
                     <Users className="h-4 w-4 text-blue-600" />
-                    <span className="font-semibold">120+</span>
-                    <span className="text-muted-foreground">{isBn ? 'ছাত্র' : 'students'}</span>
+                    <span className="font-semibold">Practical</span>
+                    <span className="text-muted-foreground">{isBn ? 'hands-on' : 'hands-on'}</span>
                   </div>
                   <div className="flex items-center gap-1.5">
                     <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
-                    <span className="font-semibold">5.0</span>
-                    <span className="text-muted-foreground">{isBn ? 'রেটিং' : 'rating'}</span>
+                    <span className="font-semibold">Personal</span>
+                    <span className="text-muted-foreground">{isBn ? 'teaching' : 'teaching'}</span>
                   </div>
                   <div className="flex items-center gap-1.5">
                     <Clock className="h-4 w-4 text-blue-600" />
-                    <span className="font-semibold">7+</span>
-                    <span className="text-muted-foreground">{isBn ? 'বছর' : 'years'}</span>
+                    <span className="font-semibold">Founder-led</span>
+                    <span className="text-muted-foreground">{isBn ? 'session' : 'session'}</span>
                   </div>
                 </div>
               </div>

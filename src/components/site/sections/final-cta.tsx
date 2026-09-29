@@ -90,6 +90,67 @@ function FloatingParticles() {
   )
 }
 
+type PathwayTone = 'emerald' | 'cyan' | 'amber'
+
+function PathwayCard({
+  badge,
+  title,
+  desc,
+  href,
+  cta,
+  tone,
+  scroll,
+}: {
+  badge: string
+  title: string
+  desc: string
+  href: string
+  cta: string
+  tone: PathwayTone
+  scroll?: boolean
+}) {
+  const toneBorder: Record<PathwayTone, string> = {
+    emerald: 'border-emerald-500/30 hover:border-emerald-500/70',
+    cyan: 'border-cyan-500/30 hover:border-cyan-500/70',
+    amber: 'border-amber-500/30 hover:border-amber-500/70',
+  }
+  const toneBadge: Record<PathwayTone, string> = {
+    emerald: 'text-emerald-600 dark:text-emerald-400',
+    cyan: 'text-cyan-600 dark:text-cyan-400',
+    amber: 'text-amber-600 dark:text-amber-400',
+  }
+  const toneCta: Record<PathwayTone, string> = {
+    emerald: 'text-emerald-500',
+    cyan: 'text-cyan-400',
+    amber: 'text-amber-500',
+  }
+
+  const handleClick = (e: React.MouseEvent) => {
+    if (scroll && href.startsWith('#')) {
+      e.preventDefault()
+      if (typeof document !== 'undefined') {
+        const el = document.getElementById(href.slice(1))
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+    }
+  }
+
+  return (
+    <a
+      href={href}
+      onClick={handleClick}
+      className={`group flex min-h-[140px] flex-col rounded-xl border bg-card/60 p-5 transition-all hover:-translate-y-0.5 hover:shadow-md ${toneBorder[tone]}`}
+    >
+      <p className={`text-[10px] font-bold uppercase tracking-widest ${toneBadge[tone]}`}>{badge}</p>
+      <p className="mt-2 text-sm font-bold leading-snug text-foreground">{title}</p>
+      <p className="mt-1.5 flex-1 text-xs leading-relaxed text-muted-foreground">{desc}</p>
+      <span className={`mt-3 text-xs font-bold ${toneCta[tone]} inline-flex items-center gap-1 transition-all group-hover:gap-2.5`}>
+        {cta}
+      </span>
+    </a>
+  )
+}
+
 export function FinalCta() {
   const { t } = useLang()
 
@@ -161,6 +222,7 @@ export function FinalCta() {
               onClick={() => scrollToId('lead-form')}
               className="gradient-brand animate-pulse-glow h-14 min-w-[16rem] px-8 text-base text-white hover:opacity-95 w-full sm:w-auto"
               size="lg"
+              aria-label={t('final.ctaPrimaryAria')}
             >
               {t('final.ctaPrimary')}
               <ArrowRight className="h-5 w-5" />
@@ -171,12 +233,66 @@ export function FinalCta() {
               className="h-14 min-w-[16rem] px-8 text-base border-amber-400/40 text-foreground hover:bg-amber-400/10 hover:text-foreground w-full sm:w-auto"
               size="lg"
             >
-              <a href={waLink()} target="_blank" rel="noopener noreferrer">
+              <a href={waLink()} target="_blank" rel="noopener noreferrer" aria-label={t('final.ctaSecondaryAria')}>
                 <MessageCircle className="h-5 w-5 text-amber-400" />
                 {t('final.ctaSecondary')}
               </a>
             </Button>
           </div>
+        </Reveal>
+
+        {/* 4 Pathways per NGS-WEB-CORRECTION v1.0 — no "Go" buttons, all meaningful */}
+        <Reveal delay={0.35}>
+          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 max-w-5xl mx-auto">
+            <PathwayCard
+              badge={t('final.path1.badge')}
+              title={t('final.path1.title')}
+              desc={t('final.path1.desc')}
+              href="/consulting"
+              cta={t('final.path1.cta')}
+              tone="emerald"
+            />
+            <PathwayCard
+              badge={t('final.path2.badge')}
+              title={t('final.path2.title')}
+              desc={t('final.path2.desc')}
+              href="/ai-training"
+              cta={t('final.path2.cta')}
+              tone="cyan"
+            />
+            <PathwayCard
+              badge={t('final.path3.badge')}
+              title={t('final.path3.title')}
+              desc={t('final.path3.desc')}
+              href="/free-english-course#register-interest"
+              cta={t('final.path3.cta')}
+              tone="emerald"
+            />
+            <PathwayCard
+              badge={t('final.path4.badge')}
+              title={t('final.path4.title')}
+              desc={t('final.path4.desc')}
+              href="#lead-form"
+              cta={t('final.path4.cta')}
+              tone="amber"
+              scroll
+            />
+          </div>
+        </Reveal>
+
+        {/* Secondary: Workshop / Speaking */}
+        <Reveal delay={0.4}>
+          <p className="mt-8 text-center text-sm text-muted-foreground">
+            {t('final.workshopPrefix')}{' '}
+            <a
+              href={waLink(undefined, 'workshop')}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-emerald-500 underline-offset-4 hover:underline"
+            >
+              {t('final.workshopLink')}
+            </a>
+          </p>
         </Reveal>
 
         {/* Guarantee */}

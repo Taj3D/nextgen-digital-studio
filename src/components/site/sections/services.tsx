@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import {
   Target,
@@ -9,6 +10,7 @@ import {
   BarChart3,
   LayoutGrid,
   Check,
+  ArrowRight,
   type LucideIcon,
 } from 'lucide-react'
 import {
@@ -99,6 +101,31 @@ export function Services() {
           )
         })}
       </motion.div>
+
+      {/* 5th category: CNC Design & Digital Products — verified route /cnc-design */}
+      <Reveal className="mt-6">
+        <Link
+          href="/cnc-design"
+          className="group block rounded-2xl border border-border/60 bg-card/60 backdrop-blur-sm p-6 transition-all duration-300 hover:-translate-y-1 hover:border-emerald-500/40 hover:shadow-glow"
+        >
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex-1">
+              <h3 className="text-lg font-semibold text-foreground">
+                {t('services.s4ExtraTitle')}
+              </h3>
+              <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">
+                {t('services.s4ExtraDesc')}
+              </p>
+            </div>
+            <ArrowRight className="mt-1 h-5 w-5 shrink-0 text-emerald-500 transition-transform group-hover:translate-x-1" />
+          </div>
+          <div className="mt-4 border-t border-border/60 pt-4">
+            <p className="text-xs font-medium text-emerald-600 dark:text-emerald-400">
+              View CNC Design & Digital Products →
+            </p>
+          </div>
+        </Link>
+      </Reveal>
     </SectionShell>
   )
 }

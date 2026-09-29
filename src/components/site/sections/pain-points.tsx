@@ -3,12 +3,12 @@
 import * as React from 'react'
 import { motion } from 'framer-motion'
 import {
-  AlertTriangle,
+  GraduationCap,
+  Laptop,
+  Briefcase,
+  Lightbulb,
   Clock,
-  Repeat,
-  TrendingDown,
-  CalendarOff,
-  StarOff,
+  Workflow,
   type LucideIcon,
 } from 'lucide-react'
 import {
@@ -27,12 +27,12 @@ type PainItem = {
 }
 
 const items: PainItem[] = [
-  { icon: Clock, titleKey: 'pain.item1Title', descKey: 'pain.item1Desc' },
-  { icon: Repeat, titleKey: 'pain.item2Title', descKey: 'pain.item2Desc' },
-  { icon: TrendingDown, titleKey: 'pain.item3Title', descKey: 'pain.item3Desc' },
-  { icon: AlertTriangle, titleKey: 'pain.item4Title', descKey: 'pain.item4Desc' },
-  { icon: CalendarOff, titleKey: 'pain.item5Title', descKey: 'pain.item5Desc' },
-  { icon: StarOff, titleKey: 'pain.item6Title', descKey: 'pain.item6Desc' },
+  { icon: GraduationCap, titleKey: 'pain.item1Title', descKey: 'pain.item1Desc' },
+  { icon: Laptop, titleKey: 'pain.item2Title', descKey: 'pain.item2Desc' },
+  { icon: Briefcase, titleKey: 'pain.item3Title', descKey: 'pain.item3Desc' },
+  { icon: Lightbulb, titleKey: 'pain.item4Title', descKey: 'pain.item4Desc' },
+  { icon: Clock, titleKey: 'pain.item5Title', descKey: 'pain.item5Desc' },
+  { icon: Workflow, titleKey: 'pain.item6Title', descKey: 'pain.item6Desc' },
 ]
 
 export function PainPointsSection() {

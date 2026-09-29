@@ -37,7 +37,10 @@ import {
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
+  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
@@ -58,12 +61,81 @@ type LeadValues = {
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const PHONE_RE = /^(\+?880|0)?1[3-9]\d{8}$/
 
-const SERVICE_OPTIONS = [
-  { value: 'lead-capture', key: 'form.serviceLeadCapture' },
-  { value: 'follow-up', key: 'form.serviceFollowUp' },
-  { value: 'chatbot', key: 'form.serviceChatbot' },
-  { value: 'full', key: 'form.serviceFull' },
-] as const
+// Service ecosystem — canonical English values are submitted to /api/contact
+// so lead qualification stays language-agnostic. Display is localized via t(key).
+// ERMOS v5.5.5: grouped selector reflecting approved Consulting/Training/Digital structure.
+type ServiceOption = { value: string; key: string }
+type ServiceGroupDef = {
+  id: 'consulting' | 'training' | 'digital'
+  labelKey: string
+  descKey: string
+  options: ServiceOption[]
+}
+
+const NOT_SURE: ServiceOption = { value: 'Not sure yet', key: 'svc.notSure' }
+
+const SERVICE_GROUPS: ServiceGroupDef[] = [
+  {
+    id: 'consulting',
+    labelKey: 'svcGroup.consulting.label',
+    descKey: 'svcGroup.consulting.desc',
+    options: [
+      { value: 'Business Consulting', key: 'svc.businessConsulting' },
+      { value: 'Business Strategy & Growth', key: 'svc.businessStrategy' },
+      { value: 'Customer Acquisition & Lead Generation', key: 'svc.customerAcquisition' },
+      { value: 'Sales & Conversion', key: 'svc.salesConversion' },
+      { value: 'Marketing Strategy', key: 'svc.marketingStrategy' },
+      { value: 'Offer Development', key: 'svc.offerDevelopment' },
+      { value: 'Positioning', key: 'svc.positioning' },
+      { value: 'Personal Branding', key: 'svc.personalBranding' },
+      { value: 'Freelancer Growth & Client Acquisition', key: 'svc.freelancerGrowth' },
+      { value: 'AI & Digital Strategy', key: 'svc.aiDigitalStrategy' },
+      { value: 'Productivity & Execution', key: 'svc.productivityExecution' },
+      { value: 'System & Process Thinking', key: 'svc.systemProcess' },
+    ],
+  },
+  {
+    id: 'training',
+    labelKey: 'svcGroup.training.label',
+    descKey: 'svcGroup.training.desc',
+    options: [
+      { value: 'AI & Digital Skills Training', key: 'svc.aiDigitalSkillsTraining' },
+      { value: 'CNC Design Training', key: 'svc.cncDesignTraining' },
+      { value: 'Web Development Training', key: 'svc.webDevTraining' },
+      { value: 'Digital Marketing Training', key: 'svc.digitalMarketingTraining' },
+      { value: 'Free English Speaking Initiative', key: 'svc.freeEnglishInitiative' },
+    ],
+  },
+  {
+    id: 'digital',
+    labelKey: 'svcGroup.digital.label',
+    descKey: 'svcGroup.digital.desc',
+    options: [
+      { value: 'Website & Web Development', key: 'svc.websiteWebDev' },
+      { value: 'Landing Page Development', key: 'svc.landingPage' },
+      { value: 'Custom Software / Web Application', key: 'svc.customSoftware' },
+      { value: 'AI Chatbot & AI Automation', key: 'svc.aiChatbotAutomation' },
+      { value: 'WhatsApp Automation', key: 'svc.whatsappAutomation' },
+      { value: 'AI Voice Agent', key: 'svc.aiVoiceAgent' },
+      { value: 'CRM Automation', key: 'svc.crmAutomation' },
+      { value: 'Lead Generation', key: 'svc.leadGeneration' },
+      { value: 'Performance Marketing', key: 'svc.performanceMarketing' },
+      { value: 'Sales Funnel Development', key: 'svc.salesFunnel' },
+      { value: '3D Portrait & Creative Design', key: 'svc.threeDPortrait' },
+      { value: 'CNC Design & Digital Products', key: 'svc.cncDigitalProducts' },
+    ],
+  },
+]
+
+// Resolve the group description for a selected service value (for the dynamic helper line)
+function descKeyForValue(value: string | undefined): string | null {
+  if (!value) return null
+  if (value === NOT_SURE.value) return null
+  for (const g of SERVICE_GROUPS) {
+    if (g.options.some((o) => o.value === value)) return g.descKey
+  }
+  return null
+}
 
 const TRUST_BADGES = [
   { icon: Star, key: 'form.trust1' },
@@ -97,7 +169,7 @@ export function LeadForm() {
         email: z.string().regex(EMAIL_RE, t('form.errEmail')),
         phone: z.string().regex(PHONE_RE, t('form.errPhone')),
         company: z.string().optional(),
-        service: z.string().optional(),
+        service: z.string().min(1, t('form.errService')),
         message: z.string().optional(),
         website: z.string().optional(), // honeypot
       }),
@@ -227,16 +299,16 @@ export function LeadForm() {
             </div>
 
             {/* Mini testimonial */}
-            <div className="relative rounded-2xl border border-amber-400/20 bg-amber-400/5 p-5">
+            <div className="relative rounded-2xl border border-emerald-400/20 bg-emerald-400/5 p-5">
               <Quote
-                className="absolute -top-2 -left-2 h-6 w-6 text-amber-400/60"
+                className="absolute -top-2 -left-2 h-6 w-6 text-emerald-500/60"
                 aria-hidden
               />
               <p className="pl-4 text-sm italic text-foreground/90 leading-relaxed">
-                &ldquo;{t('form.testimonial')}&rdquo;
+                {t('form.honestNote')}
               </p>
-              <p className="mt-2 pl-4 text-xs font-semibold text-amber-400">
-                {t('form.testimonialAuthor')}
+              <p className="mt-2 pl-4 text-xs font-semibold text-emerald-500">
+                {t('form.honestAuthor')}
               </p>
             </div>
           </div>
@@ -381,38 +453,71 @@ export function LeadForm() {
                           )}
                         />
 
-                        {/* Service select */}
+                        {/* Service select — grouped ecosystem (ERMOS v5.5.5) */}
                         <FormField
                           control={form.control}
                           name="service"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>
-                                {t('form.serviceLabel')}
-                                {optional}
-                              </FormLabel>
-                              <Select
-                                value={field.value}
-                                onValueChange={field.onChange}
-                              >
-                                <FormControl>
-                                  <SelectTrigger className={`h-12 w-full ${inputCls}`}>
-                                    <SelectValue
-                                      placeholder={t('form.servicePlaceholder')}
-                                    />
-                                  </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                  {SERVICE_OPTIONS.map((opt) => (
-                                    <SelectItem key={opt.value} value={opt.value}>
-                                      {t(opt.key)}
+                          render={({ field }) => {
+                            const helpKey = descKeyForValue(field.value)
+                            return (
+                              <FormItem>
+                                <FormLabel>
+                                  {t('form.serviceLabel')}
+                                  {required}
+                                </FormLabel>
+                                <Select
+                                  value={field.value}
+                                  onValueChange={field.onChange}
+                                >
+                                  <FormControl>
+                                    <SelectTrigger className="h-12 w-full">
+                                      <SelectValue
+                                        placeholder={t('form.servicePlaceholder')}
+                                      />
+                                    </SelectTrigger>
+                                  </FormControl>
+                                  <SelectContent
+                                    className="max-h-[min(70vh,24rem)]"
+                                    style={{
+                                      width: 'var(--radix-select-trigger-width)',
+                                      maxWidth: 'calc(100vw - 1.5rem)',
+                                    }}
+                                  >
+                                    {/* Not sure yet — top-level fallback */}
+                                    <SelectItem value={NOT_SURE.value}>
+                                      {t(NOT_SURE.key)}
                                     </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                              <FormMessage />
-                            </FormItem>
-                          )}
+                                    <SelectSeparator />
+                                    {SERVICE_GROUPS.map((group, gi) => (
+                                      <React.Fragment key={group.id}>
+                                        {gi > 0 && <SelectSeparator />}
+                                        <SelectGroup>
+                                          <SelectLabel className="font-semibold uppercase tracking-wide text-foreground/80">
+                                            {t(group.labelKey)}
+                                          </SelectLabel>
+                                          <p className="px-2 pb-1.5 text-[11px] leading-snug text-muted-foreground">
+                                            {t(group.descKey)}
+                                          </p>
+                                          {group.options.map((opt) => (
+                                            <SelectItem key={opt.value} value={opt.value}>
+                                              {t(opt.key)}
+                                            </SelectItem>
+                                          ))}
+                                        </SelectGroup>
+                                      </React.Fragment>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                                {/* Helper line — static + dynamic group description */}
+                                <div className="flex flex-col gap-0.5 text-xs text-muted-foreground">
+                                  <span className="leading-snug">
+                                    {helpKey ? t(helpKey) : t('form.serviceHelp')}
+                                  </span>
+                                </div>
+                                <FormMessage />
+                              </FormItem>
+                            )
+                          }}
                         />
 
                         {/* Message (optional) */}
