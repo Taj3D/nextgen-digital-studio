@@ -6,10 +6,10 @@ generator client {
 }
 
 datasource db {
-  // SQLite locally (db/custom.db) for fast preview panel development.
-  // On Vercel: create a Postgres store, then change provider to "postgresql"
-  // and set DATABASE_URL env var to the Postgres connection string.
-  provider = "sqlite"
+  // ERMOS v5.8.2: production PostgreSQL (Vercel). Local dev should use a local
+  // Postgres or the Vercel preview DB; SQLite is no longer the schema provider.
+  // DATABASE_URL must point to a PostgreSQL connection string.
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
